@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/prosecution.json",
+  "type": "object",
+  "description": "Prosecution Case File Details",
+  "properties": {
+    "caseDetails": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/case-details.json"
+    },
+    "defendants": {
+      "type": "array",
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/defendant.json"
+      }
+    },
+    "channel": {
+      "type": "string",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/pcf-definitions.json#/definitions/channel"
+    },
+    "listNewHearing": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/hearingRequest.json"
+    },
+    "migrationSourceSystem": {
+      "$ref": "http://justice.gov.uk/core/courts/migrationSourceSystem.json"
+    },
+    "externalId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid",
+      "description": "ID originating from the client (SPI or CPPI) for referencing the original message"
+    },
+    "isCivil": {
+      "description": "Marker to indicate that MoJ offence reference data should be used as opposed to criminal offence reference data",
+      "type": "boolean"
+    },
+    "isGroupMember": {
+      "description": "Indicates if a case is part of a group of cases within the hearing",
+      "type": "boolean"
+    },
+    "isGroupMaster": {
+      "description": "Indicates which case within a group (isGroupMember = true) is the master and should be returned by the backend to the UI",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "caseDetails",
+    "defendants",
+    "channel"
+  ],
+  "additionalProperties": false
+}

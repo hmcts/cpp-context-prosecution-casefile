@@ -1,0 +1,31 @@
+{
+  "prosecutionCaseId": "%s",
+  "id": "%s",
+  "defendantIds": [%s],
+  "type": {
+    "id": "cb05a560-48f9-415d-b230-55b78f8cb4a8",
+    "type": "Application for first hearing summons for criminal case",
+    "categoryCode": "CO",
+    "linkType": "FIRST_HEARING",
+    "jurisdiction": "EITHER",
+    "summonsTemplateType": "FIRST_HEARING",
+    "breachType": "NOT_APPLICABLE",
+    "appealFlag": false,
+    "applicantAppellantFlag": false,
+    "pleaApplicableFlag": false,
+    "commrOfOathFlag": false,
+    "courtOfAppealFlag": false,
+    "courtExtractAvlFlag": false,
+    "prosecutorThirdPartyFlag": false,
+    "spiOutApplicableFlag": false,
+    "offenceActiveOrder": "OFFENCE"
+  },
+  "summonsRejectedOutcome": {
+    "reasons": [
+      "first reason",
+      "second reason",
+      "third reason"
+    ],
+    "prosecutorEmailAddress": "prosecutor@mail.com"
+  }
+}

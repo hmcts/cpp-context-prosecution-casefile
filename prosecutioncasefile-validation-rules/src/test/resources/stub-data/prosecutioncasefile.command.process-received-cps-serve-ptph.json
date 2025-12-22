@@ -1,0 +1,29 @@
+{
+  "prosecutionCaseSubject": {
+    "prosecutingAuthority": "The OU Code of the prosecuting authority",
+    "urn": "45MD0000220"
+  },
+  "cpsDefendant": [
+    {
+      "matchingId": "7a7cb8db-a18e-4097-a239-cc1b58226de3",
+      "prosecutorDefendantId": "defendant Id",
+      "asn": "ASN_1",
+      "cpsDefendantId": "CPS_DEFENDANT_ID_1",
+      "forename": "John",
+      "surname": "Lewis",
+      "dateOfBirth": "03-06-1986",
+      "principalCharges": "principalCharges"
+    },
+    {
+      "matchingId": "95f43140-e1f9-47a1-b490-56c51288f8e9",
+      "prosecutorDefendantId": "defendant Id2",
+      "asn": "ASN_2",
+      "cpsDefendantId": "CPS_DEFENDANT_ID_2",
+      "organisationName": "XYZ Limited",
+      "principalCharges": "principalCharges"
+    }
+  ],
+  "tag": "tag",
+  "submissionId": "e85d2c62-af1f-4674-863a-0891e67e325b",
+  "submissionStatus": "PENDING"
+}

@@ -1,0 +1,114 @@
+{
+  "groupProsecutionList": {
+
+    "groupProsecutionWithReferenceDataList": [
+      {
+        "groupProsecution": {
+          "caseDetails": {
+            "caseId": "f9bf63a4-493c-4926-908c-88984a63c905",
+            "classOfCase": "Class 1",
+            "courtReceivedFromCode": "B02NM03",
+            "courtReceivedToCode": "B04NM04",
+            "dateReceived": "2018-07-10",
+            "eitherWayType": "Election of accused",
+            "initiationCode": "S",
+            "originatingOrganisation": "B01NM00",
+            "otherPartyOfficerInCase": {
+              "personalInformation": {
+                "address": {
+                  "address1": "101",
+                  "address2": "56Police House",
+                  "address3": "Letsby Avenue",
+                  "address4": "Avon",
+                  "postcode": "HA1 2ER"
+                },
+                "contactDetails": {
+                  "primaryEmail": "vegaoic@test.dom",
+                  "work": "0117911911"
+                },
+                "firstName": "Vega",
+                "lastName": "OIC",
+                "title": "Mr"
+              }
+            },
+            "prosecutor": {
+              "prosecutingAuthority": "prosAut"
+            },
+            "prosecutorCaseReference": "7cXh2F4c3j",
+            "summonsCode": "A",
+            "trialReceiptType": "Transfer"
+          },
+
+          "defendants": [
+            {
+              "aliasForCorporate": [
+                "FakeCompany",
+                "RealCompany"
+              ],
+              "custodyStatus": "B",
+              "documentationLanguage": "W",
+              "hearingLanguage": "W",
+              "id": "26328df4-823f-41a9-919f-050f81c5420a",
+              "initialHearing": {
+                "courtHearingLocation": "C55BN00",
+                "dateOfHearing": "2050-02-04",
+                "timeOfHearing": "09:05:01.001"
+              },
+              "offences": [
+                {
+                  "alcoholRelatedOffence": {
+                    "alcoholLevelAmount": 100,
+                    "alcoholLevelMethod": "A"
+                  },
+                  "appliedCompensation": 200,
+                  "arrestDate": "2019-04-10",
+                  "chargeDate": "2019-05-10",
+                  "offenceCode": "OFCODE12",
+                  "offenceCommittedDate": "2018-09-10",
+                  "offenceCommittedEndDate": "2018-10-10",
+                  "offenceDateCode": 1,
+                  "offenceId": "74320bc7-77a3-4397-b867-f6b40d861212",
+                  "offenceLocation": "Croydon",
+                  "offenceSequenceNumber": 1,
+                  "offenceWording": "TV Licence not paid"
+                }
+              ],
+              "organisationName": "Ministry of Justice",
+              "postingDate": "2018-09-10",
+              "prosecutorDefendantReference": "TFLDEF001"
+            }
+          ]
+        }
+      }
+    ],
+    "channel": "MCC",
+    "externalId": "c259ee86-fda0-4475-935c-acf2282ad815"
+  },
+  "defendantWarnings": [
+    {
+      "problems": [
+        {
+          "code": "OFFENCE_OUT_OF_TIME",
+          "values": [
+            {
+              "id": "74320bc7-77a3-4397-b867-f6b40d861212",
+              "key": "daysOverdue",
+              "value": "61"
+            },
+            {
+              "id": "74320bc7-77a3-4397-b867-f6b40d861212",
+              "key": "offence_offenceCode",
+              "value": "OFCODE12"
+            },
+            {
+              "id": "74320bc7-77a3-4397-b867-f6b40d861212",
+              "key": "offence_offenceSequenceNo",
+              "value": "1"
+            }
+          ]
+        }
+      ],
+      "prosecutorDefendantReference": "TFLDEF001"
+    }
+  ]
+}

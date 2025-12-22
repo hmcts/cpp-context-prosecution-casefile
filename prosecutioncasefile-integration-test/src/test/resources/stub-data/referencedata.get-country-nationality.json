@@ -1,0 +1,36 @@
+{
+  "countryNationality": [
+    {
+      "id": "22ef7a73-df50-4349-8c72-ca3b9ace6363",
+      "cjsCode": 0,
+      "isoCode": "GBR",
+      "govCode": "GB",
+      "countryName": "United Kingdom",
+      "nationality": "British"
+    },
+    {
+      "id": "05ad4861-7927-437e-8df1-32b4128e369f",
+      "cjsCode": 1,
+      "isoCode": "FRA",
+      "govCode": "FR",
+      "countryName": "France",
+      "nationality": "French"
+    },
+    {
+      "id": "ca2438fd-2eba-4c1b-967d-3fa7c46f24d4",
+      "cjsCode": 3,
+      "isoCode": "ITA",
+      "govCode": "IT",
+      "countryName": "ITALY",
+      "nationality": "Italian"
+    },
+    {
+      "id": "ca2438ed-2eba-4c1b-967d-3fa7c46f24d4",
+      "cjsCode": 4,
+      "isoCode": "POL",
+      "govCode": "PO",
+      "countryName": "POLAND",
+      "nationality": "Polish"
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+#%RAML 0.8
+title: Prosecution Casefile Command Handler
+baseUri: message://command/handler/message/prosecutioncasefile
+
+/prosecutioncasefile.handler.command:
+  post:
+    body:
+      application/vnd.prosecutioncasefile.command.initiate-sjp-prosecution-with-reference-data+json:
+        schema: !include json/schema/prosecutioncasefile.command.initiate-prosecution-with-reference-data.json
+        example: !include json/prosecutioncasefile.command.initiate-prosecution-with-reference-data.json
+      application/vnd.prosecutioncasefile.command.initiate-group-prosecution-with-reference-data+json:
+        schema: !include json/schema/prosecutioncasefile.command.initiate-group-prosecution-with-reference-data.json
+        example: !include json/prosecutioncasefile.command.initiate-group-prosecution-with-reference-data.json
+      application/vnd.prosecutioncasefile.command.associate-enterprise-id+json:
+        schema: !include json/schema/prosecutioncasefile.command.associate-enterprise-id.json
+        example: !include json/prosecutioncasefile.command.associate-enterprise-id.json
+      application/vnd.prosecutioncasefile.command.add-material+json:
+        example: !include json/prosecutioncasefile.command.add-material.json
+        schema:  !include json/schema/prosecutioncasefile.command.add-material.json
+      application/vnd.prosecutioncasefile.command.add-materials+json:
+        example: !include json/prosecutioncasefile.command.add-materials.json
+        schema:  !include json/schema/prosecutioncasefile.command.add-materials.json
+      application/vnd.prosecutioncasefile.command.add-material-v2+json:
+        example: !include json/prosecutioncasefile.command.add-material-v2.json
+        schema:  !include json/schema/prosecutioncasefile.command.add-material-v2.json
+      application/vnd.prosecutioncasefile.command.add-application-material-v2+json:
+        example: !include json/prosecutioncasefile.command.add-application-material-v2.json
+        schema:  !include json/schema/prosecutioncasefile.command.add-application-material-v2.json
+      application/vnd.prosecutioncasefile.command.record-upload-case-document+json:
+        example: !include json/prosecutioncasefile.command.record-upload-case-document.json
+        schema:  !include json/schema/prosecutioncasefile.command.record-upload-case-document.json
+      application/vnd.prosecutioncasefile.command.accept-case+json:
+        schema: !include json/schema/prosecutioncasefile.command.accept-case.json
+        example: !include json/prosecutioncasefile.command.accept-case.json
+      application/vnd.prosecutioncasefile.command.check-pending-events-for-new-defendants+json:
+        schema: !include json/schema/prosecutioncasefile.command.check-pending-events-for-new-defendants.json
+        example: !include json/prosecutioncasefile.command.check-pending-events-for-new-defendants.json
+      application/vnd.prosecutioncasefile.command.handler.accept-group-cases+json:
+        schema: !include json/schema/prosecutioncasefile.command.handler.accept-group-cases.json
+        example: !include json/prosecutioncasefile.command.handler.accept-group-cases.json
+      application/vnd.prosecutioncasefile.command.handler.reject-group-cases+json:
+        schema: !include json/schema/prosecutioncasefile.command.handler.reject-group-cases.json
+        example: !include json/prosecutioncasefile.command.handler.reject-group-cases.json
+      application/vnd.prosecutioncasefile.command.expire-pending-material+json:
+        schema: !include json/schema/prosecutioncasefile.command.expire-pending-material.json
+        example: !include json/prosecutioncasefile.command.expire-pending-material.json
+      application/vnd.prosecutioncasefile.command.expire-pending-idpc-material+json:
+        schema: !include json/schema/prosecutioncasefile.command.expire-pending-idpc-material.json
+        example: !include json/prosecutioncasefile.command.expire-pending-idpc-material.json
+      application/vnd.prosecutioncasefile.command.record-decision-to-refer-case-for-court-hearing-saved+json:
+        schema: !include json/schema/prosecutioncasefile.command.record-decision-to-refer-case-for-court-hearing-saved.json
+        example: !include json/prosecutioncasefile.command.record-decision-to-refer-case-for-court-hearing-saved.json
+      application/vnd.prosecutioncasefile.command.record-refer-prosecution-cases-to-court-accepted+json:
+        schema: !include json/schema/prosecutioncasefile.command.record-refer-prosecution-cases-to-court-accepted.json
+        example: !include json/prosecutioncasefile.command.record-refer-prosecution-cases-to-court-accepted.json
+      application/vnd.prosecutioncasefile.command.initiate-cc-prosecution-with-reference-data+json:
+        schema: !include json/schema/prosecutioncasefile.command.initiate-prosecution-with-reference-data.json
+        example: !include json/prosecutioncasefile.command.initiate-prosecution-with-reference-data.json
+      application/vnd.prosecutioncasefile.handler.add-idpc-material+json:
+        schema: !include json/schema/prosecutioncasefile.handler.add-idpc-material.json
+        example: !include json/prosecutioncasefile.handler.add-idpc-material.json
+      application/vnd.prosecutioncasefile.command.add-defendant-idpc+json:
+        schema: !include json/schema/prosecutioncasefile.command.add-defendant-idpc.json
+        example: !include json/prosecutioncasefile.command.add-defendant-idpc.json
+      application/vnd.prosecutioncasefile.handler.case-updated-initiate-idpc-match+json:
+        schema: !include json/schema/prosecutioncasefile.handler.case-updated-initiate-idpc-match.json
+        example: !include json/prosecutioncasefile.handler.case-updated-initiate-idpc-match.json
+      application/vnd.prosecutioncasefile.command.handler.resolve-errors+json:
+        schema: !include json/schema/prosecutioncasefile.command.handler.resolve-errors.json
+        example: !include json/prosecutioncasefile.command.handler.resolve-errors.json
+      application/vnd.prosecutioncasefile.command.assign-case+json:
+        schema: !include json/schema/prosecutioncasefile.command.assign-case.json
+        example: !include json/prosecutioncasefile.command.assign-case.json
+      application/vnd.prosecutioncasefile.command.unassign-case+json:
+        schema: !include json/schema/prosecutioncasefile.command.unassign-case.json
+        example: !include json/prosecutioncasefile.command.unassign-case.json
+      application/vnd.prosecutioncasefile.command.expire-bulk-scan-pending-material+json:
+        schema: !include json/schema/prosecutioncasefile.command.expire-bulk-scan-pending-material.json
+        example: !include json/prosecutioncasefile.command.expire-bulk-scan-pending-material.json
+      application/vnd.prosecutioncasefile.command.eject-case+json:
+        schema: !include json/schema/prosecutioncasefile.command.eject-case.json
+        example: !include json/prosecutioncasefile.command.eject-case.json
+      application/vnd.prosecutioncasefile.command.handler.add-cps-material+json:
+        schema: !include json/schema/prosecutioncasefile.command.handler.add-cps-material.json
+        example: !include json/prosecutioncasefile.command.handler.add-cps-material.json
+      application/vnd.prosecutioncasefile.command.filter-prosecution-case+json:
+        schema: !include json/schema/prosecutioncasefile.command.filter-prosecution-case.json
+        example: !include json/prosecutioncasefile.command.filter-prosecution-case.json
+      application/vnd.prosecutioncasefile.command.record-group-id-for-summons-application+json:
+        schema: !include json/schema/prosecutioncasefile.command.record-group-id-for-summons-application.json
+        example: !include json/prosecutioncasefile.command.record-group-id-for-summons-application.json
+      application/vnd.prosecutioncasefile.command.reject-case-defendants-as-summons-application-rejected+json:
+        schema: !include json/schema/prosecutioncasefile.command.reject-case-defendants-as-summons-application-rejected.json
+        example: !include json/prosecutioncasefile.command.reject-case-defendants-as-summons-application-rejected.json
+      application/vnd.prosecutioncasefile.command.approve-case-defendants-as-summons-application-approved+json:
+        schema: !include json/schema/prosecutioncasefile.command.approve-case-defendants-as-summons-application-approved.json
+        example: !include json/prosecutioncasefile.command.approve-case-defendants-as-summons-application-approved.json
+      application/vnd.prosecutioncasefile.command.add-case-court-document+json:
+        schema: !include json/schema/prosecutioncasefile.command.add-case-court-document.json
+        example: !include json/prosecutioncasefile.command.add-case-court-document.json
+      application/vnd.prosecutioncasefile.command.add-application-court-document+json:
+        schema: !include json/schema/prosecutioncasefile.command.add-application-court-document.json
+        example: !include json/prosecutioncasefile.command.add-application-court-document.json
+      application/vnd.prosecutioncasefile.command.case-defendant-changed+json:
+        schema: !include json/schema/prosecutioncasefile.command.case-defendant-changed.json
+        example: !include json/prosecutioncasefile.command.case-defendant-changed.json
+      application/vnd.prosecutioncasefile.command.update-case-with-defendant+json:
+        schema: !include json/schema/prosecutioncasefile.command.update-case-with-defendant.json
+        example: !include json/prosecutioncasefile.command.update-case-with-defendant.json
+      application/vnd.prosecutioncasefile.command.submit-application+json:
+        schema: !include json/schema/prosecutioncasefile.command.handler.submit-application.json
+        example: !include json/prosecutioncasefile.command.handler.submit-application.json
+      application/vnd.prosecutioncasefile.command.process-received-cps-serve-pet+json:
+          schema: !include json/schema/prosecutioncasefile.command.process-received-cps-serve-pet.json
+      application/vnd.prosecutioncasefile.command.cps-reject-pet-for-timer-expire+json:
+          schema: !include json/schema/prosecutioncasefile.command.cps-reject-pet-for-timer-expire.json
+      application/vnd.prosecutioncasefile.command.process-received-cps-serve-bcm+json:
+          schema: !include json/schema/prosecutioncasefile.command.process-received-cps-serve-bcm.json
+      application/vnd.prosecutioncasefile.command.process-received-cps-serve-ptph+json:
+          schema: !include json/schema/prosecutioncasefile.command.process-received-cps-serve-ptph.json
+      application/vnd.prosecutioncasefile.command.cps-reject-bcm-for-timer-expire+json:
+          schema: !include json/schema/prosecutioncasefile.command.cps-reject-bcm-for-timer-expire.json
+      application/vnd.prosecutioncasefile.command.plead-online+json:
+          schema: !include json/schema/prosecutioncasefile.command.plead-online.json
+          example: !include json/prosecutioncasefile.command.plead-online.json
+      application/vnd.prosecutioncasefile.command.plead-online-pcq-visited+json:
+          schema: !include json/schema/prosecutioncasefile.command.plead-online-pcq-visited.json
+          example: !include json/prosecutioncasefile.command.plead-online-pcq-visited.json
+      application/vnd.prosecutioncasefile.command.process-received-cps-update-cotr+json:
+          schema: !include json/schema/prosecutioncasefile.command.process-received-cps-update-cotr.json
+          example: !include json/prosecutioncasefile.command.process-received-cps-update-cotr.json
+      application/vnd.prosecutioncasefile.command.process-received-cps-serve-cotr+json:
+          schema: !include json/schema/prosecutioncasefile.command.process-received-cps-serve-cotr.json
+      application/vnd.prosecutioncasefile.command.update-application-status+json:
+        schema: !include json/schema/prosecutioncasefile.command.handler.poca-court-application.json
+        example: !include json/prosecutioncasefile.command.handler.poca-court-application.json
+      application/vnd.prosecutioncasefile.command.sjp-prosecution-update-offence-code+json:
+        schema: !include json/schema/prosecutioncasefile.command.sjp-prosecution-update-offence-code.json
+        example: !include json/prosecutioncasefile.command.sjp-prosecution-update-offence-code.json

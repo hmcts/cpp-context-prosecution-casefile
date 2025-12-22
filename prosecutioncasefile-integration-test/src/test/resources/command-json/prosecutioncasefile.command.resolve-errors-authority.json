@@ -1,0 +1,22 @@
+{
+  "errors": [
+    {
+      "fieldName": "summonsCode",
+      "value": "E"
+    },
+    {
+      "id": "0",
+      "fieldName": "caseMarkers",
+      "value": "WP"
+    },
+    {
+      "id": "1",
+      "fieldName": "caseMarkers",
+      "value": "AB"
+    },
+    {
+      "fieldName": "prosecutor_prosecutingAuthority",
+      "value": "GAFTL00"
+    }
+  ]
+}

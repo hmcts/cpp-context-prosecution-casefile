@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/domain/event/sjp-prosecution-initiated-with-warnings.json",
+  "type": "object",
+  "properties": {
+    "prosecution": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/prosecution.json"
+    },
+    "enterpriseId": {
+      "type": "string"
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/problem.json"
+      }
+    }
+  },
+  "required": [
+    "prosecution",
+    "enterpriseId",
+    "warnings"
+  ]
+}

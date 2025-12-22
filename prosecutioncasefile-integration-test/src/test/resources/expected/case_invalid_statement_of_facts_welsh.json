@@ -1,0 +1,47 @@
+{
+  "cases": [
+    {
+      "defendants": [
+        {
+          "chargeDate": "2015-04-04",
+          "hearingDate": "2050-02-04",
+          "id": "c9832007-3413-440c-a2d6-a703ef15fb4f",
+          "errors": [],
+          "offences": [
+            {
+              "id": "032575aa-85e7-11e9-bc42-526af7764f64",
+              "errors": [
+                {
+                  "id": "032575aa-85e7-11e9-bc42-526af7764f64",
+                  "fieldName": "offence_statementOfFactsWelsh",
+                  "errorValue": "",
+                  "displayName": "STATEMENT_OF_FACTS_WELSH_REQUIRED",
+                  "version": 1102
+                }
+              ]
+            }
+          ],
+          "firstName": "John",
+          "lastName": "Smith"
+        }
+      ],
+      "id": "16ec2d88-9d8b-4cbe-bbc7-8569a173b205",
+      "urn": "fxyfTqOlbD",
+      "courtLocation": "C55BN00",
+      "region": "NW",
+      "caseType": "S",
+      "errorDescription": "Multiple Errors",
+      "version": 1103,
+      "errors": [],
+      "caseMarkersErrors": [
+        {
+          "id": "0",
+          "fieldName": "caseMarkers",
+          "errorValue": "ABC",
+          "displayName": "CASE_MARKER_IS_INVALID",
+          "version": 1103
+        }
+      ]
+    }
+  ]
+}

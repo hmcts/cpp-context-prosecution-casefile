@@ -1,0 +1,18 @@
+{
+  "association": {
+    "organisationId": "b482c1cc-cb29-499d-8c4e-baee0d42d35b",
+    "organisationName": "Jedi and Sons LLP",
+    "address": {
+      "address1": "Jedi and Sons LLP",
+      "address2": "35 Bridget Avenue",
+      "address3": "London",
+      "address4": "England",
+      "addressPostcode": "CR5 7UH"
+    },
+    "status": "Active Barrister/Solicitor of record",
+    "startDate": "2023-03-31T12:25:39.239Z",
+    "representationType": "COURT_APPOINTED",
+    "phoneNumber": "01234555666",
+    "email": "jedi@jedi.test.com"
+  }
+}

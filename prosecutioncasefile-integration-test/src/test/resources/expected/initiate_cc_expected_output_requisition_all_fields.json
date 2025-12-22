@@ -1,0 +1,208 @@
+{
+  "initiateCourtProceedings": {
+    "listHearingRequests": [
+      {
+        "courtCentre": {
+          "id": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+          "name": "Port Talbot",
+          "roomId": "9e4932f7-97b2-3010-b942-ddd2624e4dd8",
+          "roomName": "Courtroom 01",
+          "welshName": "Welsh Name"
+        },
+        "estimateMinutes": 20,
+        "hearingType": {
+          "description": "Plea & Trial Preparation",
+          "id": "06b0c2bf-3f98-46ed-ab7e-56efaf9ecced"
+        },
+        "jurisdictionType": "MAGISTRATES",
+        "listDefendantRequests": [
+          {
+            "summonsRequired": "FIRST_HEARING",
+            "defendantId": "e601b71f-d79b-4445-8ef2-c83fa57591b7",
+            "defendantOffences": [
+              "3e6d901f-381d-4410-82b1-27858022335b"
+            ],
+            "hearingLanguageNeeds": "WELSH",
+            "prosecutionCaseId": "e942c351-eb99-4c97-942e-2f6de0262d55"
+          },
+          {
+            "summonsRequired": "FIRST_HEARING",
+            "defendantId": "f3547434-3a5a-4302-a2c3-c3b65fdf9c03",
+            "defendantOffences": [
+              "be08a9a7-83a0-448d-9589-155288c0d6df"
+            ],
+            "hearingLanguageNeeds": "WELSH",
+            "prosecutionCaseId": "e942c351-eb99-4c97-942e-2f6de0262d55"
+          }
+        ],
+        "listedStartDateTime": "2050-02-04T09:05:01.001Z"
+      }
+    ],
+    "prosecutionCases": [
+      {
+        "defendants": [
+          {
+            "associatedPersons": [
+              {
+                "person": {
+                  "dateOfBirth": "2015-04-04",
+                  "ethnicity": {
+                    "observedEthnicityCode": "1",
+                    "observedEthnicityDescription": "White - North European",
+                    "observedEthnicityId": "4aaecac5-222b-402d-9047-84803679edac",
+                    "selfDefinedEthnicityCode": "W1",
+                    "selfDefinedEthnicityDescription": "British",
+                    "selfDefinedEthnicityId": "1daefec3-2f76-8109-82d9-2e60544a6c01"
+                  },
+                  "gender": "MALE",
+                  "lastName": "Brown"
+                },
+                "role": "ParentGuardian"
+              }
+            ],
+            "id": "e601b71f-d79b-4445-8ef2-c83fa57591b7",
+            "prosecutionAuthorityReference": "e601b71f-d79b-4445-8ef2-c83fa57591b7",
+            "masterDefendantId": "e601b71f-d79b-4445-8ef2-c83fa57591b7",
+            "courtProceedingsInitiated": "2020-02-25T23:43:01.811Z",
+            "numberOfPreviousConvictionsCited": 3,
+            "initiationCode": "Q",
+            "offences": [
+              {
+                "chargeDate": "2019-01-10",
+                "count": 0,
+                "endDate": "2018-10-10",
+                "id": "3e6d901f-381d-4410-82b1-27858022335b",
+                "offenceCode": "OFCODE12",
+                "dvlaOffenceCode": "ABC123",
+                "offenceDefinitionId": "04c099cc-eba2-4c80-9eed-7c1ef21d706a",
+                "offenceFacts": {
+                  "alcoholReadingAmount": 100,
+                  "alcoholReadingMethodCode": "A",
+                  "alcoholReadingMethodDescription": "Blood",
+                  "vehicleRegistration": "AA11 ABC",
+                  "vehicleCode": "OTHER"
+                },
+                "offenceTitle": "Obstruct person executing search warrant for TV receiver",
+                "orderIndex": 1,
+                "startDate": "2018-09-10",
+                "wording": "TV Licence not paid",
+                "offenceDateCode": 1,
+                "modeOfTrial": "Summary",
+                "maxPenalty": "Max Penalty"
+              }
+            ],
+            "personDefendant": {
+              "personDetails": {
+                "address": {
+                  "address1": "66 Exeter Street",
+                  "address2": "line 2",
+                  "address3": "line 3",
+                  "address4": "line 4",
+                  "address5": "line 5",
+                  "postcode": "M60 1NW"
+                },
+                "contact": {
+                  "home": "020111223",
+                  "mobile": "07572222943",
+                  "primaryEmail": "scrooge.mcduck@mail.com",
+                  "secondaryEmail": "scrooge.mcduck2@mail.com",
+                  "work": "020111222"
+                },
+                "documentationLanguageNeeds": "WELSH",
+                "hearingLanguageNeeds": "WELSH",
+                "firstName": "John",
+                "gender": "MALE",
+                "lastName": "Smith",
+                "occupation": "Software Developer",
+                "occupationCode": "43",
+                "title": "Baron"
+              }
+            },
+            "prosecutionCaseId": "e942c351-eb99-4c97-942e-2f6de0262d55"
+          },
+          {
+            "aliases": [
+              {
+                "firstName": "John",
+                "lastName": "Smith",
+                "middleName": "James Jerry",
+                "title": "Baron"
+              },
+              {
+                "firstName": "John",
+                "lastName": "Smith",
+                "title": "Baroness"
+              }
+            ],
+            "id": "f3547434-3a5a-4302-a2c3-c3b65fdf9c03",
+            "prosecutionAuthorityReference": "f3547434-3a5a-4302-a2c3-c3b65fdf9c03",
+            "masterDefendantId": "f3547434-3a5a-4302-a2c3-c3b65fdf9c03",
+            "courtProceedingsInitiated": "2020-02-25T23:43:01.811Z",
+            "initiationCode": "Q",
+            "offences": [
+              {
+                "chargeDate": "2019-01-10",
+                "count": 0,
+                "endDate": "2018-10-10",
+                "id": "be08a9a7-83a0-448d-9589-155288c0d6df",
+                "offenceCode": "OFCODE12",
+                "dvlaOffenceCode": "ABC123",
+                "offenceDefinitionId": "04c099cc-eba2-4c80-9eed-7c1ef21d706a",
+                "offenceFacts": {
+                  "alcoholReadingAmount": 100,
+                  "alcoholReadingMethodCode": "A",
+                  "alcoholReadingMethodDescription": "Blood",
+                  "vehicleRegistration": "BB11 ABC"
+                },
+                "offenceTitle": "Obstruct person executing search warrant for TV receiver",
+                "orderIndex": 1,
+                "startDate": "2018-09-10",
+                "wording": "TV Licence not paid",
+                "offenceDateCode": 1,
+                "modeOfTrial": "Summary",
+                "maxPenalty": "Max Penalty"
+              }
+            ],
+            "personDefendant": {
+              "personDetails": {
+                "address": {
+                  "address1": "armagaddon house",
+                  "postcode": "M60 1NW"
+                },
+                "documentationLanguageNeeds": "WELSH",
+                "hearingLanguageNeeds": "WELSH",
+                "firstName": "John",
+                "gender": "MALE",
+                "lastName": "Smith",
+                "title": "Baron"
+              }
+            },
+            "prosecutionCaseId": "e942c351-eb99-4c97-942e-2f6de0262d55"
+          }
+        ],
+        "id": "e942c351-eb99-4c97-942e-2f6de0262d55",
+        "initiationCode": "Q",
+        "originatingOrganisation": "B01NM00",
+        "cpsOrganisation": "A01NM00",
+        "prosecutionCaseIdentifier": {
+          "prosecutionAuthorityCode": "TFL",
+          "prosecutionAuthorityId": "0534ee76-88f6-40e0-ba8f-53588e146675",
+          "caseURN": "qYac2dUn97",
+          "address": {
+            "address1": "6th Floor Windsor House",
+            "postcode": "SW1H 0TL",
+            "address2": "42-50 Victoria Street",
+            "address3": "London"
+          },
+          "majorCreditorCode": "TFL2",
+          "prosecutionAuthorityName": "Transport for London",
+          "prosecutionAuthorityOUCode": "GAFTL00",
+          "contact": {
+            "primaryEmail": "contact@cpp.com"
+          }
+        }
+      }
+    ]
+  },
+  "id" : ""
+}

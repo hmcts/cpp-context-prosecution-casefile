@@ -1,0 +1,190 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/command/handler/staging/process-received-cps-serve-bcm.json",
+  "type": "object",
+  "properties": {
+    "prosecutionCaseSubject": {
+      "type": "object",
+      "properties": {
+        "urn": {
+          "type": "string",
+          "minLength": 1
+        },
+        "prosecutingAuthority": {
+          "type": "string",
+          "description": "The OU Code of the prosecuting authority"
+        }
+      },
+      "required": [
+        "urn",
+        "prosecutingAuthority"
+      ],
+      "additionalProperties": false
+    },
+    "cpsDefendantOffences": {
+      "description": "Identifies the defendant and offences to which the form is associated to",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "matchingId": {
+            "description": "This is randomly generated id for processing only",
+            "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+          },
+          "prosecutorDefendantId": {
+            "description": "A unique reference to a defendant within a prosecution. Provided by the prosecuting authority e.g. DWP",
+            "type": "string",
+            "maxLength": 36
+          },
+          "cpsDefendantId": {
+            "description": "A unique reference to a defendant within a prosecution. Provided by cps when CPS are prosecuting the case",
+            "type": "string",
+            "maxLength": 36
+          },
+          "asn": {
+            "description": "A unique reference to a defendant within a prosecution. Provided by the police force and requested from the police by a non police prosecutor e.g. DWP requests from the police",
+            "type": "string",
+            "maxLength": 21
+          },
+          "title": {
+            "description": "Title by which a defendant is addressed",
+            "type": "string"
+          },
+          "forename": {
+            "description": "The first given name of a defendant",
+            "type": "string",
+            "maxLength": 35
+          },
+          "forename2": {
+            "description": "The second given name of a defendant",
+            "type": "string",
+            "maxLength": 35
+          },
+          "forename3": {
+            "description": "The third given name of a defendant",
+            "type": "string",
+            "maxLength": 35
+          },
+          "surname": {
+            "description": "Surname or Family name",
+            "type": "string",
+            "maxLength": 35
+          },
+          "dateOfBirth": {
+            "description": "The date when the defendant was born",
+            "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date"
+          },
+          "organisationName": {
+            "description": "The name of a defendant that is a legal entity",
+            "type": "string"
+          },
+          "cpsOffenceDetails": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "cjsOffenceCode": {
+                  "type": "string"
+                },
+                "offenceDate": {
+                  "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date"
+                },
+                "offenceWording": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "cjsOffenceCode",
+                "offenceDate",
+                "offenceWording"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "parentGuardianForYouthDefendants": {
+            "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/defendant-parent-guardian.json"
+          },
+          "localAuthorityDetailsForYouthDefendants": {
+            "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/local-authority-details-for-youth-defendants.json"
+          }
+        }
+      }
+    },
+    "validationData": {
+      "type": "object",
+      "properties": {
+        "validOffences": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "defendantIds": {
+          "type": "array",
+          "items": {
+            "properties": {
+              "cpsDefendantId": {
+                "description": "This is CPS Defendant Id",
+                "type": "string"
+              },
+              "defendantId": {
+                "description": "This is the Common Platform unique identifier for the defendant",
+                "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+              }
+            }
+          }
+        }
+      }
+    },
+    "tag": {
+      "type": "string"
+    },
+    "evidencePrePTPH": {
+      "type": "string"
+    },
+    "evidencePostPTPH": {
+      "type": "string"
+    },
+    "otherInformation": {
+      "type": "string"
+    },
+    "submissionId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "submissionStatus": {
+      "type": "string",
+      "enum": [
+        "PENDING",
+        "FAILED",
+        "REJECTED",
+        "SUCCESS",
+        "SUCCESS_WITH_WARNINGS",
+        "EXPIRED"
+      ]
+    }
+  },
+  "required": [
+    "prosecutionCaseSubject",
+    "cpsDefendantOffences",
+    "submissionId",
+    "submissionStatus"
+  ],
+  "anyOf": [
+    {
+      "required": [
+        "evidencePrePTPH"
+      ]
+    },
+    {
+      "required": [
+        "evidencePostPTPH"
+      ]
+    },
+    {
+      "required": [
+        "otherInformation"
+      ]
+    }
+  ],
+  "additionalProperties": true
+}

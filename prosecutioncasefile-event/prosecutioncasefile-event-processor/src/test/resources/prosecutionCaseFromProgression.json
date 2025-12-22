@@ -1,0 +1,585 @@
+{
+  "prosecutionCase": {
+    "caseStatus": "ACTIVE",
+    "cpsOrganisation": "A30AB00",
+    "defendants": [
+      {
+        "courtProceedingsInitiated": "2022-03-17T08:43:30.882Z",
+        "cpsDefendantId": "767dee16-8c84-4dd1-8992-ca35d387f446",
+        "id": "e6fbec75-0c39-459c-8cf9-ccf92528c9b8",
+        "masterDefendantId": "e6fbec75-0c39-459c-8cf9-ccf92528c9b8",
+        "offences": [
+          {
+            "allocationDecision": {
+              "allocationDecisionDate": "2022-03-17",
+              "motReasonCode": "01",
+              "motReasonDescription": "Summary-only offence",
+              "motReasonId": "b8c37e33-defd-351c-b91e-1e03e51657da",
+              "offenceId": "f64abfc0-efb6-49a9-b773-d91e64dac475",
+              "originatingHearingId": "908f7441-8ac9-41ec-9796-c1f51ebff761",
+              "sequenceNumber": 90
+            },
+            "arrestDate": "2020-02-09",
+            "chargeDate": "2020-02-09",
+            "convictingCourt": {
+              "code": "B01LY00",
+              "id": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+              "lja": {
+                "ljaCode": "2577",
+                "ljaName": "South West London Magistrates' Court"
+              },
+              "name": "Lavender Hill Magistrates' Court",
+              "roomId": "9e4932f7-97b2-3010-b942-ddd2624e4dd8"
+            },
+            "convictionDate": "2022-03-17",
+            "count": 0,
+            "endorsableFlag": false,
+            "id": "f64abfc0-efb6-49a9-b773-d91e64dac475",
+            "isDisposed": false,
+            "judicialResults": [
+              {
+                "alwaysPublished": false,
+                "canBeSubjectOfBreach": false,
+                "canBeSubjectOfVariation": false,
+                "category": "INTERMEDIARY",
+                "cjsCode": "4576",
+                "courtClerk": {
+                  "firstName": "Emma",
+                  "lastName": "Cleaner",
+                  "userId": "2781b565-4514-4805-8744-a3e827f0f611"
+                },
+                "d20": false,
+                "excludedFromResults": false,
+                "isAdjournmentResult": false,
+                "isAvailableForCourtExtract": true,
+                "isConvictedResult": false,
+                "isDeleted": false,
+                "isFinancialResult": false,
+                "isNewAmendment": true,
+                "isUnscheduled": true,
+                "judicialResultId": "98614b7d-f344-4c0e-a7f1-af2fd9a6512f",
+                "judicialResultPrompts": [
+                  {
+                    "courtExtract": "Y",
+                    "isFinancialImposition": false,
+                    "judicialResultPromptTypeId": "2fa31208-5fed-4f52-a63e-c3a83cc733fa",
+                    "label": "Basis",
+                    "promptReference": "reasonForArrestIsAFailureToComplyWithThe",
+                    "promptSequence": 100,
+                    "type": "FIXL",
+                    "usergroups": [],
+                    "value": "Failed to comply with the supervision requirements of a detention and training order",
+                    "welshValue": "Failed to comply with the supervision requirements of a detention and training order"
+                  },
+                  {
+                    "courtExtract": "Y",
+                    "isFinancialImposition": false,
+                    "judicialResultPromptTypeId": "66868c04-72c4-46d9-a4fc-860a82107475",
+                    "label": "Courthouse organisation name",
+                    "promptReference": "hCHOUSEOrganisationName",
+                    "promptSequence": 200,
+                    "type": "NAMEADDRESS",
+                    "usergroups": [],
+                    "value": "Lavender Hill Magistrates' Court",
+                    "welshValue": "Lavender Hill Magistrates' Court"
+                  },
+                  {
+                    "courtExtract": "Y",
+                    "isFinancialImposition": false,
+                    "judicialResultPromptTypeId": "66868c04-72c4-46d9-a4fc-860a82107475",
+                    "label": "Courthouse address line 1",
+                    "promptReference": "hCHOUSEAddress1",
+                    "promptSequence": 200,
+                    "type": "NAMEADDRESS",
+                    "usergroups": [],
+                    "value": "176A Lavender Hill",
+                    "welshValue": "176A Lavender Hill"
+                  },
+                  {
+                    "courtExtract": "Y",
+                    "isFinancialImposition": false,
+                    "judicialResultPromptTypeId": "66868c04-72c4-46d9-a4fc-860a82107475",
+                    "label": "Courthouse address line 2",
+                    "promptReference": "hCHOUSEAddress2",
+                    "promptSequence": 200,
+                    "type": "NAMEADDRESS",
+                    "usergroups": [],
+                    "value": "London",
+                    "welshValue": "London"
+                  },
+                  {
+                    "courtExtract": "Y",
+                    "isFinancialImposition": false,
+                    "judicialResultPromptTypeId": "66868c04-72c4-46d9-a4fc-860a82107475",
+                    "label": "Courthouse post code",
+                    "promptReference": "hCHOUSEPostCode",
+                    "promptSequence": 200,
+                    "type": "NAMEADDRESS",
+                    "usergroups": [],
+                    "value": "SW11 1JU",
+                    "welshValue": "SW11 1JU"
+                  },
+                  {
+                    "courtExtract": "N",
+                    "isFinancialImposition": false,
+                    "judicialResultPromptTypeId": "66868c04-72c4-46d9-a4fc-860a82107475",
+                    "label": "Courthouse email address 1",
+                    "promptReference": "hCHOUSEEmailAddress1",
+                    "promptSequence": 200,
+                    "type": "NAMEADDRESS",
+                    "usergroups": [],
+                    "value": "London.magistrates@cps.gov.uk",
+                    "welshValue": "London.magistrates@cps.gov.uk"
+                  },
+                  {
+                    "courtExtract": "N",
+                    "isFinancialImposition": false,
+                    "judicialResultPromptTypeId": "66868c04-72c4-46d9-a4fc-860a82107475",
+                    "label": "Courthouse email address 2",
+                    "promptReference": "hCHOUSEEmailAddress2",
+                    "promptSequence": 200,
+                    "type": "NAMEADDRESS",
+                    "usergroups": [],
+                    "value": "periodicwarrants@geoamey.co.uk",
+                    "welshValue": "periodicwarrants@geoamey.co.uk"
+                  },
+                  {
+                    "courtExtract": "Y",
+                    "isFinancialImposition": false,
+                    "judicialResultPromptTypeId": "a996e41c-3c5d-40cc-9bb0-8af2694dc06b",
+                    "label": "Allocated warrant enforcer is NCES organisation name",
+                    "promptReference": "warrantexecutionallocatedtoOrganisationName",
+                    "promptSequence": 400,
+                    "qualifier": "EO",
+                    "type": "NAMEADDRESS",
+                    "usergroups": [],
+                    "value": "South East",
+                    "welshValue": "South East"
+                  },
+                  {
+                    "courtExtract": "N",
+                    "isFinancialImposition": false,
+                    "judicialResultPromptTypeId": "a996e41c-3c5d-40cc-9bb0-8af2694dc06b",
+                    "label": "Allocated warrant enforcer is NCES email address 1",
+                    "promptReference": "warrantexecutionallocatedtoEmailAddress1",
+                    "promptSequence": 400,
+                    "qualifier": "EO",
+                    "type": "NAMEADDRESS",
+                    "usergroups": [],
+                    "value": "SE-Breach@Justice.gov.uk; LCCCCPBW@justice.gov.uk;",
+                    "welshValue": "SE-Breach@Justice.gov.uk; LCCCCPBW@justice.gov.uk;"
+                  }
+                ],
+                "judicialResultTypeId": "ed34136f-2a13-45a4-8d4f-27075ae3a8a9",
+                "label": "Warrant for arrest for breach of community penalty without bail",
+                "lastSharedDateTime": "2022-03-17",
+                "level": "O",
+                "lifeDuration": false,
+                "orderedDate": "2022-03-17",
+                "orderedHearingId": "908f7441-8ac9-41ec-9796-c1f51ebff761",
+                "postHearingCustodyStatus": "A",
+                "publishedAsAPrompt": false,
+                "publishedForNows": false,
+                "qualifier": "EO,EO",
+                "rank": 94500,
+                "resultDefinitionGroup": "Warrants of arrest, CJ03510",
+                "resultText": "Warrant for arrest for breach of community penalty without bail\nBasis Failed to comply with the supervision requirements of a detention and training order\nCourthouse organisation name Lavender Hill Magistrates' Court\nCourthouse address line 1 176A Lavender Hill\nCourthouse address line 2 London\nCourthouse post code SW11 1JU\nCourthouse email address 1 London.magistrates@cps.gov.uk\nCourthouse email address 2 periodicwarrants@geoamey.co.uk\nAllocated warrant enforcer is NCES organisation name South East\nAllocated warrant enforcer is NCES email address 1 SE-Breach@Justice.gov.uk; LCCCCPBW@justice.gov.uk;",
+                "rollUpPrompts": true,
+                "rootJudicialResultId": "98614b7d-f344-4c0e-a7f1-af2fd9a6512f",
+                "rootJudicialResultTypeId": "ed34136f-2a13-45a4-8d4f-27075ae3a8a9",
+                "terminatesOffenceProceedings": false,
+                "urgent": true,
+                "usergroups": []
+              }
+            ],
+            "listingNumber": 1,
+            "modeOfTrial": "Summary",
+            "offenceCode": "CA03013",
+            "offenceDateCode": 1,
+            "offenceDefinitionId": "062cedf4-b495-3a6c-9148-cec6bef362ef",
+            "offenceLegislation": "Contrary to section 366(8)(a) and (9) of the Communications Act 2003.",
+            "offenceTitle": "Obstruct person executing search warrant for TV receiver",
+            "orderIndex": 1,
+            "plea": {
+              "offenceId": "f64abfc0-efb6-49a9-b773-d91e64dac475",
+              "originatingHearingId": "908f7441-8ac9-41ec-9796-c1f51ebff761",
+              "pleaDate": "2022-03-17",
+              "pleaValue": "GUILTY"
+            },
+            "proceedingsConcluded": false,
+            "startDate": "2020-02-09",
+            "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+          }
+        ],
+        "personDefendant": {
+          "arrestSummonsNumber": "TVL",
+          "bailConditions": "",
+          "bailStatus": {
+            "code": "A",
+            "description": "Not applicable",
+            "id": "86009c70-759d-3308-8de4-194886ff9a77"
+          },
+          "custodialEstablishment": {
+            "custody": "Prison",
+            "id": "33f78496-91c5-366e-b41a-7c15442d6683",
+            "name": "HMP/YOI Nottingham"
+          },
+          "personDetails": {
+            "address": {
+              "address1": "1234",
+              "address2": "StreetDescription",
+              "address3": "Locality2O",
+              "postcode": "DA8 7ND"
+            },
+            "dateOfBirth": "1990-10-23",
+            "documentationLanguageNeeds": "ENGLISH",
+            "firstName": "Marian",
+            "gender": "MALE",
+            "hearingLanguageNeeds": "ENGLISH",
+            "lastName": "Kerluke",
+            "nationalityDescription": "Unknown",
+            "nationalityId": "22ef7a73-df50-4349-8c72-ca3b9ace6363",
+            "title": "Mr"
+          },
+          "policeBailStatus": {
+            "code": "C",
+            "description": "Custody",
+            "id": "12e69486-4d01-3403-a50a-7419ca040635"
+          }
+        },
+        "proceedingsConcluded": false,
+        "prosecutionAuthorityReference": "TVL",
+        "prosecutionCaseId": "96318646-3564-42e7-b346-739dde6300a5"
+      }
+    ],
+    "id": "96318646-3564-42e7-b346-739dde6300a5",
+    "initiationCode": "C",
+    "isCpsOrgVerifyError": false,
+    "originatingOrganisation": "0300000",
+    "prosecutionCaseIdentifier": {
+      "address": {
+        "address1": "Criminal Justice Department",
+        "address2": "Derbyshire Constabulary",
+        "address3": "Butterley Hall",
+        "address4": "Ripley",
+        "address5": "Derby",
+        "postcode": "DE5 3RS"
+      },
+      "contact": {
+        "primaryEmail": "CCSU@derbyshire.pnn.police.uk"
+      },
+      "majorCreditorCode": "PO30",
+      "prosecutionAuthorityCode": "DERPF",
+      "prosecutionAuthorityId": "bdc190e7-c939-37ca-be4b-9f615d6ef40e",
+      "prosecutionAuthorityName": "Derbyshire Police",
+      "prosecutionAuthorityOUCode": "0300000",
+      "caseURN": "22GD5924622"
+    },
+    "prosecutor": {
+      "address": {
+        "address1": "King Edward Court",
+        "address2": "Nottingham",
+        "postcode": "NG1 1EL"
+      },
+      "prosecutorCode": "CPS-EM",
+      "prosecutorId": "42880989-5d09-332e-a711-8797af06ecea",
+      "prosecutorName": "CPS East Midlands"
+    }
+  },
+  "hearingsAtAGlance": {
+    "courtApplications": [],
+    "defendantHearings": [
+      {
+        "defendantId": "e6fbec75-0c39-459c-8cf9-ccf92528c9b8",
+        "defendantName": "Marian Kerluke",
+        "hearingIds": [
+          "908f7441-8ac9-41ec-9796-c1f51ebff761",
+          "d858bc95-c268-40dc-8f95-e4e130108d20"
+        ]
+      }
+    ],
+    "hearings": [
+      {
+        "courtCentre": {
+          "address": {
+            "address1": "176A Lavender Hill",
+            "address2": "London",
+            "address3": "",
+            "address4": "",
+            "address5": "",
+            "postcode": "SW11 1JU"
+          },
+          "code": "B01LY00",
+          "id": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+          "lja": {
+            "ljaCode": "2577",
+            "ljaName": "South West London Magistrates' Court"
+          },
+          "name": "Lavender Hill Magistrates' Court",
+          "roomId": "9e4932f7-97b2-3010-b942-ddd2624e4dd8",
+          "roomName": "Courtroom 01"
+        },
+        "defendantAttendance": [
+          {
+            "attendanceDays": [
+              {
+                "attendanceType": "BY_VIDEO",
+                "day": "2022-03-17"
+              }
+            ],
+            "defendantId": "e6fbec75-0c39-459c-8cf9-ccf92528c9b8"
+          }
+        ],
+        "defendants": [
+          {
+            "address": {
+              "address1": "1234",
+              "address2": "StreetDescription",
+              "address3": "Locality2O",
+              "postcode": "DA8 7ND"
+            },
+            "age": "31",
+            "courtApplications": [],
+            "dateOfBirth": "1990-10-23",
+            "defenceOrganisation": {
+              "defenceCounsels": [],
+              "defendantId": "e6fbec75-0c39-459c-8cf9-ccf92528c9b8"
+            },
+            "id": "e6fbec75-0c39-459c-8cf9-ccf92528c9b8",
+            "judicialResults": [],
+            "name": "Marian Kerluke",
+            "offences": [
+              {
+                "allocationDecision": {
+                  "allocationDecisionDate": "2022-03-17",
+                  "motReasonCode": "01",
+                  "motReasonDescription": "Summary-only offence",
+                  "motReasonId": "b8c37e33-defd-351c-b91e-1e03e51657da",
+                  "offenceId": "f64abfc0-efb6-49a9-b773-d91e64dac475",
+                  "originatingHearingId": "908f7441-8ac9-41ec-9796-c1f51ebff761",
+                  "sequenceNumber": 90
+                },
+                "convictionDate": "2022-03-17",
+                "count": 0,
+                "id": "f64abfc0-efb6-49a9-b773-d91e64dac475",
+                "judicialResults": [
+                  {
+                    "alwaysPublished": false,
+                    "canBeSubjectOfBreach": false,
+                    "canBeSubjectOfVariation": false,
+                    "category": "INTERMEDIARY",
+                    "cjsCode": "4576",
+                    "courtClerk": {
+                      "firstName": "Emma",
+                      "lastName": "Cleaner",
+                      "userId": "2781b565-4514-4805-8744-a3e827f0f611"
+                    },
+                    "d20": false,
+                    "excludedFromResults": false,
+                    "isAdjournmentResult": false,
+                    "isAvailableForCourtExtract": true,
+                    "isConvictedResult": false,
+                    "isDeleted": false,
+                    "isFinancialResult": false,
+                    "isNewAmendment": true,
+                    "isUnscheduled": true,
+                    "judicialResultId": "98614b7d-f344-4c0e-a7f1-af2fd9a6512f",
+                    "judicialResultPrompts": [
+                      {
+                        "courtExtract": "Y",
+                        "isFinancialImposition": false,
+                        "judicialResultPromptTypeId": "2fa31208-5fed-4f52-a63e-c3a83cc733fa",
+                        "label": "Basis",
+                        "promptReference": "reasonForArrestIsAFailureToComplyWithThe",
+                        "promptSequence": 100,
+                        "type": "FIXL",
+                        "usergroups": [],
+                        "value": "Failed to comply with the supervision requirements of a detention and training order",
+                        "welshValue": "Failed to comply with the supervision requirements of a detention and training order"
+                      },
+                      {
+                        "courtExtract": "Y",
+                        "isFinancialImposition": false,
+                        "judicialResultPromptTypeId": "66868c04-72c4-46d9-a4fc-860a82107475",
+                        "label": "Courthouse organisation name",
+                        "promptReference": "hCHOUSEOrganisationName",
+                        "promptSequence": 200,
+                        "type": "NAMEADDRESS",
+                        "usergroups": [],
+                        "value": "Lavender Hill Magistrates' Court",
+                        "welshValue": "Lavender Hill Magistrates' Court"
+                      },
+                      {
+                        "courtExtract": "Y",
+                        "isFinancialImposition": false,
+                        "judicialResultPromptTypeId": "66868c04-72c4-46d9-a4fc-860a82107475",
+                        "label": "Courthouse address line 1",
+                        "promptReference": "hCHOUSEAddress1",
+                        "promptSequence": 200,
+                        "type": "NAMEADDRESS",
+                        "usergroups": [],
+                        "value": "176A Lavender Hill",
+                        "welshValue": "176A Lavender Hill"
+                      },
+                      {
+                        "courtExtract": "Y",
+                        "isFinancialImposition": false,
+                        "judicialResultPromptTypeId": "66868c04-72c4-46d9-a4fc-860a82107475",
+                        "label": "Courthouse address line 2",
+                        "promptReference": "hCHOUSEAddress2",
+                        "promptSequence": 200,
+                        "type": "NAMEADDRESS",
+                        "usergroups": [],
+                        "value": "London",
+                        "welshValue": "London"
+                      },
+                      {
+                        "courtExtract": "Y",
+                        "isFinancialImposition": false,
+                        "judicialResultPromptTypeId": "66868c04-72c4-46d9-a4fc-860a82107475",
+                        "label": "Courthouse post code",
+                        "promptReference": "hCHOUSEPostCode",
+                        "promptSequence": 200,
+                        "type": "NAMEADDRESS",
+                        "usergroups": [],
+                        "value": "SW11 1JU",
+                        "welshValue": "SW11 1JU"
+                      },
+                      {
+                        "courtExtract": "N",
+                        "isFinancialImposition": false,
+                        "judicialResultPromptTypeId": "66868c04-72c4-46d9-a4fc-860a82107475",
+                        "label": "Courthouse email address 1",
+                        "promptReference": "hCHOUSEEmailAddress1",
+                        "promptSequence": 200,
+                        "type": "NAMEADDRESS",
+                        "usergroups": [],
+                        "value": "London.magistrates@cps.gov.uk",
+                        "welshValue": "London.magistrates@cps.gov.uk"
+                      },
+                      {
+                        "courtExtract": "N",
+                        "isFinancialImposition": false,
+                        "judicialResultPromptTypeId": "66868c04-72c4-46d9-a4fc-860a82107475",
+                        "label": "Courthouse email address 2",
+                        "promptReference": "hCHOUSEEmailAddress2",
+                        "promptSequence": 200,
+                        "type": "NAMEADDRESS",
+                        "usergroups": [],
+                        "value": "periodicwarrants@geoamey.co.uk",
+                        "welshValue": "periodicwarrants@geoamey.co.uk"
+                      },
+                      {
+                        "courtExtract": "Y",
+                        "isFinancialImposition": false,
+                        "judicialResultPromptTypeId": "a996e41c-3c5d-40cc-9bb0-8af2694dc06b",
+                        "label": "Allocated warrant enforcer is NCES organisation name",
+                        "promptReference": "warrantexecutionallocatedtoOrganisationName",
+                        "promptSequence": 400,
+                        "qualifier": "EO",
+                        "type": "NAMEADDRESS",
+                        "usergroups": [],
+                        "value": "South East",
+                        "welshValue": "South East"
+                      },
+                      {
+                        "courtExtract": "N",
+                        "isFinancialImposition": false,
+                        "judicialResultPromptTypeId": "a996e41c-3c5d-40cc-9bb0-8af2694dc06b",
+                        "label": "Allocated warrant enforcer is NCES email address 1",
+                        "promptReference": "warrantexecutionallocatedtoEmailAddress1",
+                        "promptSequence": 400,
+                        "qualifier": "EO",
+                        "type": "NAMEADDRESS",
+                        "usergroups": [],
+                        "value": "SE-Breach@Justice.gov.uk; LCCCCPBW@justice.gov.uk;",
+                        "welshValue": "SE-Breach@Justice.gov.uk; LCCCCPBW@justice.gov.uk;"
+                      }
+                    ],
+                    "judicialResultTypeId": "ed34136f-2a13-45a4-8d4f-27075ae3a8a9",
+                    "label": "Warrant for arrest for breach of community penalty without bail",
+                    "lastSharedDateTime": "2022-03-17",
+                    "level": "O",
+                    "lifeDuration": false,
+                    "orderedDate": "2022-03-17",
+                    "orderedHearingId": "908f7441-8ac9-41ec-9796-c1f51ebff761",
+                    "postHearingCustodyStatus": "A",
+                    "publishedAsAPrompt": false,
+                    "publishedForNows": false,
+                    "qualifier": "EO,EO",
+                    "rank": 94500,
+                    "resultDefinitionGroup": "Warrants of arrest, CJ03510",
+                    "resultText": "Warrant for arrest for breach of community penalty without bail\nBasis Failed to comply with the supervision requirements of a detention and training order\nCourthouse organisation name Lavender Hill Magistrates' Court\nCourthouse address line 1 176A Lavender Hill\nCourthouse address line 2 London\nCourthouse post code SW11 1JU\nCourthouse email address 1 London.magistrates@cps.gov.uk\nCourthouse email address 2 periodicwarrants@geoamey.co.uk\nAllocated warrant enforcer is NCES organisation name South East\nAllocated warrant enforcer is NCES email address 1 SE-Breach@Justice.gov.uk; LCCCCPBW@justice.gov.uk;",
+                    "rollUpPrompts": true,
+                    "rootJudicialResultId": "98614b7d-f344-4c0e-a7f1-af2fd9a6512f",
+                    "rootJudicialResultTypeId": "ed34136f-2a13-45a4-8d4f-27075ae3a8a9",
+                    "terminatesOffenceProceedings": false,
+                    "urgent": true,
+                    "usergroups": []
+                  }
+                ],
+                "offenceCode": "CA03013",
+                "offenceDefinitionId": "062cedf4-b495-3a6c-9148-cec6bef362ef",
+                "offenceLegislation": "Contrary to section 366(8)(a) and (9) of the Communications Act 2003.",
+                "offenceTitle": "Obstruct person executing search warrant for TV receiver",
+                "pleas": [
+                  {
+                    "offenceId": "f64abfc0-efb6-49a9-b773-d91e64dac475",
+                    "originatingHearingId": "908f7441-8ac9-41ec-9796-c1f51ebff761",
+                    "pleaDate": "2022-03-17",
+                    "pleaValue": "GUILTY"
+                  }
+                ],
+                "proceedingsConcluded": false,
+                "startDate": "2020-02-09",
+                "verdicts": [],
+                "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+              }
+            ],
+            "proceedingsConcluded": false
+          }
+        ],
+        "hasResultAmended": false,
+        "hearingDays": [
+          {
+            "courtCentreId": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+            "courtRoomId": "9e4932f7-97b2-3010-b942-ddd2624e4dd8",
+            "isCancelled": false,
+            "listedDurationMinutes": 20,
+            "listingSequence": 1,
+            "sittingDay": "2022-03-17T09:01:01.001Z"
+          }
+        ],
+        "hearingListingStatus": "HEARING_RESULTED",
+        "id": "908f7441-8ac9-41ec-9796-c1f51ebff761",
+        "jurisdictionType": "MAGISTRATES",
+        "type": {
+          "description": "First hearing",
+          "id": "4a0e892d-c0c5-3c51-95b8-704d8c781776"
+        }
+      }
+    ],
+    "id": "96318646-3564-42e7-b346-739dde6300a5",
+    "latestHearingJurisdictionType": "MAGISTRATES",
+    "prosecutionCaseIdentifier": {
+      "address": {
+        "address1": "Criminal Justice Department",
+        "address2": "Derbyshire Constabulary",
+        "address3": "Butterley Hall",
+        "address4": "Ripley",
+        "address5": "Derby",
+        "postcode": "DE5 3RS"
+      },
+      "contact": {
+        "primaryEmail": "CCSU@derbyshire.pnn.police.uk"
+      },
+      "majorCreditorCode": "PO30",
+      "prosecutionAuthorityCode": "DERPF",
+      "prosecutionAuthorityId": "bdc190e7-c939-37ca-be4b-9f615d6ef40e",
+      "prosecutionAuthorityName": "Derbyshire Police",
+      "prosecutionAuthorityOUCode": "0300000",
+      "caseURN": "22GD5924622"
+    }
+  },
+  "isCivil": true
+}

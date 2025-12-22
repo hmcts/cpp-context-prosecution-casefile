@@ -1,0 +1,48 @@
+{
+  "policeForces": [
+    {
+      "id": "0d5cc944-3b8d-3203-a8c2-2bfa95cdfa1c",
+      "sequence": 1,
+      "policeForceCode": "0",
+      "policeForceName": "PNC",
+      "validForSpiOut": true
+    },
+    {
+      "id": "419a13f4-f1c6-3e1e-b0f6-f1c162d4c41a",
+      "sequence": 2,
+      "policeForceCode": "1",
+      "policeForceName": "London",
+      "validForSpiOut": true,
+      "oucodeL2Code": "01"
+    },
+    {
+      "id": "47bb2c5d-cde9-3c13-9ae3-b3f5be9177e7",
+      "sequence": 3,
+      "policeForceCode": "2",
+      "policeForceName": "London",
+      "validForSpiOut": true
+    },
+    {
+      "id": "97c89e9d-57dc-3936-a88f-9160a4572e3a",
+      "sequence": 4,
+      "policeForceCode": "3",
+      "policeForceName": "Cumbria",
+      "validForSpiOut": true,
+      "oucodeL2Code": "03"
+    },
+    {
+      "id": "f4ed30bb-e31d-35c3-b9e8-3e5334acd4c8",
+      "sequence": 100,
+      "policeForceCode": "99",
+      "policeForceName": "Criminal Records Office",
+      "validForSpiOut": false
+    },
+    {
+      "id": "e7dbb06b-b5cb-30e6-bb0f-f642a4cdd303",
+      "sequence": 101,
+      "policeForceCode": "2A",
+      "policeForceName": "Departmental Security Unit",
+      "validForSpiOut": false
+    }
+  ]
+}

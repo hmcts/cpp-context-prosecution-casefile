@@ -1,0 +1,14 @@
+{
+  "id": "87a1953c-3b04-495e-a6cd-6f7557b49ccc",
+  "fullName": "MoCorp",
+  "address": {
+    "address1": "address line1",
+    "postcode": "Tn4 9hu",
+    "address2": "",
+    "address3": ""
+  },
+  "contactEmailAddress": "asfd@sd.com",
+  "shortName": "NSP-ORG",
+  "prosecutorCategory": "Local Authorities",
+  "standard": false
+}

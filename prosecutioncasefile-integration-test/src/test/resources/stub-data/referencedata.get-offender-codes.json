@@ -1,0 +1,17 @@
+{
+  "offenderCodes": [
+    {
+      "id": "3925bd06-c6ee-4606-ae21-ab9ba2381e90",
+      "seqNo": 1,
+      "code": "PO",
+      "description": "Persistent Young Offender",
+      "validFrom": "2019-04-29"
+    },
+    {
+      "id": "1eda705b-2321-3600-abff-588ee9249714",
+      "seqNo": 10,
+      "code": "PYO",
+      "description": "Persistent Young Offender"
+    }
+  ]
+}

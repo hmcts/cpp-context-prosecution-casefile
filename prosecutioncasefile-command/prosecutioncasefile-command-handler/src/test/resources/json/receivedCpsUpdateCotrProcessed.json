@@ -1,0 +1,20 @@
+{
+  "caseId": "44884cbc-9659-4ae1-a42e-a8c9839df502",
+  "certificationDate": "1980-01-24",
+  "certifyThatTheProsecutionIsTrialReady": "N",
+  "cotrId": "8b64afd7-686f-4ac8-96f6-ca948d83af3f",
+  "defendantSubject": [
+    {
+      "prosecutorDefendantId": "defendant Id"
+    }
+  ],
+  "formCompletedOnBehalfOfProsecutionBy": "Y",
+  "furtherProsecutionInformationProvidedAfterCertification": "Y",
+  "prosecutionCaseSubject": {
+    "prosecutingAuthority": "The OU Code of the prosecuting authority",
+    "urn": "caseURN"
+  },
+  "submissionId": "4b64afd7-686f-4ac8-96f6-ca948d83af3f",
+  "submissionStatus": "SUCCESS",
+  "tag": "29DI6807874/1"
+}

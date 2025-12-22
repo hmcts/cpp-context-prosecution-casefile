@@ -1,0 +1,15 @@
+{
+  "prosecutionCaseSubject": {
+    "prosecutingAuthority": "The OU Code of the prosecuting authority",
+    "urn": "45MD0000220"
+  },
+  "cpsDefendant": [
+    {
+      "matchingId": "4b64afd7-686f-4ac8-96f6-ca948d83af3f",
+      "cpsDefendantId": "7f8fe782-a287-11eb-bcbc-0242ac130002"
+    }
+  ],
+  "tag": "tag",
+  "submissionId": "e85d2c62-af1f-4674-863a-0891e67e325b",
+  "submissionStatus": "PENDING"
+}

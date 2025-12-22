@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/cc-prosecution.json",
+  "type": "object",
+  "description": "Prosecution Case File Details",
+  "properties": {
+    "caseDetails": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/case-details.json"
+    },
+    "defendants": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/defendant.json"
+      }
+    },
+    "initialHearing": {
+      "$ref": "http://justice.gov.uk/cps/prosecutioncasefile/initial-hearing.json"
+    },
+    "caseMarker": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/case-marker.json"
+    }
+  },
+  "required": [
+    "caseDetails",
+    "defendants",
+    "initialHearing"
+  ],
+  "additionalProperties": false
+}
+

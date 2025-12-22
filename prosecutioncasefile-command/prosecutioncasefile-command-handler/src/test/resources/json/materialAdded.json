@@ -1,0 +1,14 @@
+{
+  "caseId": "51cac7fb-387c-4d19-9c80-8963fa8cf222",
+  "caseType": "UNKNOWN",
+  "documentType": "SJPN",
+  "isCpsCase": false,
+  "material": {
+    "documentType": "SJPN",
+    "fileStoreId": "3042a896-fd3e-478d-bb0e-948dd46191a4",
+    "fileType": "application/pdf"
+  },
+  "prosecutingAuthority": "TVLOUCODE",
+  "prosecutorDefendantId": "TVL_DEF001",
+  "receivedDateTime":"2020-02-04T05:27:17.210Z"
+}

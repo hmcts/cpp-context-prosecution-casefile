@@ -1,0 +1,60 @@
+{
+  "initiationTypes": [
+    {
+      "id": "7e2f843e-d639-40b3-8611-8015f3a18957",
+      "sequence": 1,
+      "description": "Charge",
+      "code": "J",
+      "validFrom": "2017-08-01",
+      "validTo": "2017-08-01"
+    },
+    {
+      "id": "8e2f843e-d639-40b3-8611-8015f3a18958",
+      "sequence": 2,
+      "description": "Summons",
+      "code": "Q",
+      "validFrom": "2017-08-01",
+      "validTo": "2017-08-01"
+    },
+    {
+      "id": "7e2f843e-d639-40b3-8611-8015f3a18957",
+      "sequence": 1,
+      "description": "Charge",
+      "code": "S",
+      "validFrom": "2017-08-01",
+      "validTo": "2017-08-01"
+    },
+    {
+      "id": "7e2f843e-d639-40b3-8611-8015f3a18957",
+      "sequence": 1,
+      "description": "Charge",
+      "code": "C",
+      "validFrom": "2017-08-01",
+      "validTo": "2017-08-01"
+    },
+    {
+      "id": "7e2f843e-d639-40b3-8611-8015f3a18957",
+      "sequence": 1,
+      "description": "Charge",
+      "code": "R",
+      "validFrom": "2017-08-01",
+      "validTo": "2017-08-01"
+    },
+    {
+      "id": "7e2f843e-d639-40b3-8611-8015f3a18957",
+      "sequence": 1,
+      "description": "Charge",
+      "code": "O",
+      "validFrom": "2017-08-01",
+      "validTo": "2017-08-01"
+    },
+    {
+      "id": "7e2f843e-d639-40b3-8611-8015f3a18957",
+      "sequence": 1,
+      "description": "Charge",
+      "code": "O",
+      "validFrom": "2017-08-01",
+      "validTo": "2017-08-01"
+    }
+  ]
+}

@@ -1,0 +1,526 @@
+{
+  "groupProsecutionList": {
+    "groupProsecutionWithReferenceDataList": [
+      {
+        "groupProsecution": {
+          "caseDetails": {
+            "caseId": "CASE_ID1",
+            "caseMarkers": [
+              {
+                "markerTypeCode": "ML"
+              }
+            ],
+            "classOfCase": "Class 1",
+            "cpsOrganisation": "cpsOrganisation",
+            "cpsOrganisationId": "dfd9e505-66bc-42b5-901c-4447ba3bfc54",
+            "initiationCode": "C",
+            "originatingOrganisation": "orignatingOrganisation",
+            "prosecutor": {
+              "prosecutingAuthority": "ProsecutionAuthority",
+              "referenceData": {
+                "address": {
+                  "address1": "address1",
+                  "address2": "address2",
+                  "address3": "address3",
+                  "address4": "address4",
+                  "address5": "address5",
+                  "postcode": "postcode"
+                },
+                "contactEmailAddress": "contact@cpp.co.uk",
+                "fullName": "fullname",
+                "id": "8a8ebff8-186a-4e19-b668-37d9012bb346",
+                "majorCreditorCode": "mojor",
+                "oucode": "Ou"
+              }
+            },
+            "summonsCode": "M",
+            "trialReceiptType": "Transfer",
+            "vehicleOperatorLicenceNumber": "VehicleOperatorLicenseNumber"
+          },
+          "channel": "SPI",
+          "defendants": [
+            {
+              "documentationLanguage": "E",
+              "hearingLanguage": "E",
+              "id": "DEFENDANT_ID1",
+              "individual": {
+                "driverNumber": "2362435",
+                "nationalInsuranceNumber": "1922492",
+                "parentGuardianInformation": {
+                  "observedEthnicity": "1",
+                  "personalInformation": {
+                    "address": {
+                      "address1": "66 Exeter Street",
+                      "address2": "address line 2",
+                      "address3": "address line 3",
+                      "address4": "address line 5",
+                      "postcode": "M60 1NW"
+                    },
+                    "contactDetails": {
+                      "home": "homePhone",
+                      "mobile": "mobile",
+                      "primaryEmail": "primaryemail",
+                      "secondaryEmail": "secondaryemail",
+                      "work": "workPhone"
+                    },
+                    "firstName": "Eugene",
+                    "lastName": "Tooms",
+                    "title": "MR"
+                  },
+                  "selfDefinedEthnicity": "selfDefinedEthnicity"
+                },
+                "perceivedBirthYear": "1970",
+                "personalInformation": {
+                  "address": {
+                    "address1": "66 Exeter Street",
+                    "address2": "address line 2",
+                    "address3": "address line 3",
+                    "address4": "address line 5",
+                    "postcode": "M60 1NW"
+                  },
+                  "contactDetails": {
+                    "home": "homePhone",
+                    "mobile": "mobile",
+                    "primaryEmail": "primaryemail",
+                    "secondaryEmail": "secondaryemail",
+                    "work": "workPhone"
+                  },
+                  "firstName": "Eugene",
+                  "lastName": "Tooms",
+                  "observedEthnicity": 1,
+                  "title": "MR"
+                },
+                "selfDefinedInformation": {
+                  "additionalNationality": "additionalNationality",
+                  "dateOfBirth": "1989-04-18",
+                  "ethnicity": "selfDefinedEthnicity",
+                  "gender": "MALE",
+                  "nationality": "nationality"
+                }
+              },
+              "individualAliases": [
+                {
+                  "firstName": "FirstName",
+                  "givenName2": "   GivenName2 ",
+                  "givenName3": " GivenName3   ",
+                  "lastName": "LastName",
+                  "title": "mr"
+                },
+                {
+                  "firstName": "FirstName",
+                  "givenName2": "GivenName2",
+                  "lastName": "LastName",
+                  "title": "mr"
+                },
+                {
+                  "firstName": "FirstName",
+                  "givenName3": "GivenName3",
+                  "lastName": "LastName",
+                  "title": "mr"
+                },
+                {
+                  "firstName": "FirstName",
+                  "lastName": "LastName",
+                  "title": "mr"
+                }
+              ],
+              "languageRequirement": "No",
+              "numPreviousConvictions": 99,
+              "offences": [
+                {
+                  "alcoholRelatedOffence": {
+                    "alcoholLevelAmount": 500,
+                    "alcoholLevelMethod": "A"
+                  },
+                  "appliedCompensation": 10,
+                  "backDuty": 1,
+                  "backDutyDateFrom": "2012-01-01",
+                  "backDutyDateTo": "2016-01-01",
+                  "chargeDate": "2017-08-15",
+                  "laidDate": "2019-01-01",
+                  "offenceCode": "TVL-ABC",
+                  "offenceCommittedDate": "2018-02-20",
+                  "offenceCommittedEndDate": "2018-03-15",
+                  "offenceDateCode": 4,
+                  "offenceId": "OFFENCE_ID1",
+                  "offenceLocation": "London",
+                  "offenceSequenceNumber": 6,
+                  "offenceWording": "TV LICENSE NOT PAID",
+                  "offenceWordingWelsh": "TV LICENSE NOT PAID IN WELSH",
+                  "referenceData": {
+                    "reportRestrictResultCode": ""
+                  },
+                  "statementOfFacts": "facts",
+                  "statementOfFactsWelsh": "welsh-facts",
+                  "vehicleRelatedOffence": {
+                    "vehicleCode": "vehicleCode",
+                    "vehicleRegistrationMark": "vehicleRegistrationMark"
+                  }
+                }
+              ],
+              "postingDate": "2017-10-20"
+            }
+          ],
+          "groupId": "GROUP_ID",
+          "isCivil": true,
+          "isGroupMaster": true,
+          "isGroupMember": true
+        },
+        "referenceDataVO": {
+          "countryNationalityReferenceData": [
+            {
+              "id": "95e8e9c6-d162-40f3-8213-9c4601a5b5d1",
+              "isoCode": "nationality",
+              "nationality": "description"
+            },
+            {
+              "id": "3ab80d63-5606-4315-83a1-d18bf4725e66",
+              "isoCode": "additionalNationality",
+              "nationality": "description"
+            }
+          ],
+          "selfdefinedEthnicityReferenceData": [
+            {
+              "code": "selfDefinedEthnicity",
+              "description": "description",
+              "id": "34f9c9de-e71c-42ee-81c9-4ec00032c112"
+            }
+          ],
+          "organisationUnitReferenceData": [
+          ],
+          "initiationTypes": [
+          ],
+          "offenceReferenceData": [
+            {
+              "cjsOffenceCode": "TVL-ABC",
+              "legislation": "offenceLegalisation",
+              "maxPenalty": "Max Penalty",
+              "modeOfTrialDerived": "Either Way",
+              "offenceId": "d8c63737-3c60-496b-94bb-30faa761f00a",
+              "title": "Offence Tittle"
+            }
+          ],
+          "caseMarkers": [
+            {
+              "markerTypeCode": "ML",
+              "markerTypeDescription": "Test Case Marker Description",
+              "markerTypeId": "bda277a7-a756-4a5b-a33e-dcf344f4fa14"
+            }
+          ],
+          "observedEthnicityReferenceData": [
+            {
+              "ethnicityCode": "1",
+              "ethnicityDescription": "description",
+              "id": "8e084651-64fb-4c82-902b-14614529c2d3"
+            }
+          ],
+          "vehicleCodesReferenceData": [
+          ],
+          "organisationUnitWithCourtroomReferenceData": {
+            "id": "8435d259-81a6-4f55-88d9-81d606656d79",
+            "oucodeL3Name": "South Western (Lavender Hill)"
+          },
+          "offenderCodeReferenceData": [
+          ],
+          "bailStatusReferenceData": [
+          ],
+          "prosecutorsReferenceData": {
+            "address": {
+              "address1": "address1",
+              "address2": "address2",
+              "address3": "address3",
+              "address4": "address4",
+              "address5": "address5",
+              "postcode": "postcode"
+            },
+            "fullName": "fullName",
+            "id": "6683e1e0-54ee-4596-88f1-60a274e51252",
+            "informantEmailAddress": "test@email.com",
+            "majorCreditorCode": "CreditorCode",
+            "oucode": "oucode",
+            "shortName": "DVLA"
+          },
+          "hearingType": {
+            "hearingDescription": "Preliminary Hearing",
+            "id": "08e6e903-a195-496a-b87e-99d497a01541"
+          },
+          "modeOfTrialReasonsReferenceData": [
+            {
+              "code": "01",
+              "description": "Summary-only offence",
+              "id": "9700f17a-9c9c-4d0e-a68a-c4f40b5fe847",
+              "seqNum": "90"
+            },
+            {
+              "code": "02",
+              "description": "Indictable-only offence)",
+              "id": "3f14d15d-02c9-4401-9abe-5bd96c5a152d",
+              "seqNum": "91"
+            }
+          ]
+        }
+      },
+      {
+        "groupProsecution": {
+          "caseDetails": {
+            "caseId": "CASE_ID2",
+            "caseMarkers": [
+              {
+                "markerTypeCode": "ML"
+              }
+            ],
+            "classOfCase": "Class 1",
+            "cpsOrganisation": "cpsOrganisation",
+            "cpsOrganisationId": "dfd9e505-66bc-42b5-901c-4447ba3bfc54",
+            "initiationCode": "C",
+            "originatingOrganisation": "orignatingOrganisation",
+            "prosecutor": {
+              "prosecutingAuthority": "ProsecutionAuthority",
+              "referenceData": {
+                "address": {
+                  "address1": "address1",
+                  "address2": "address2",
+                  "address3": "address3",
+                  "address4": "address4",
+                  "address5": "address5",
+                  "postcode": "postcode"
+                },
+                "contactEmailAddress": "contact@cpp.co.uk",
+                "fullName": "fullname",
+                "id": "8a8ebff8-186a-4e19-b668-37d9012bb346",
+                "majorCreditorCode": "mojor",
+                "oucode": "Ou"
+              }
+            },
+            "summonsCode": "M",
+            "trialReceiptType": "Transfer",
+            "vehicleOperatorLicenceNumber": "VehicleOperatorLicenseNumber"
+          },
+          "channel": "SPI",
+          "defendants": [
+            {
+              "documentationLanguage": "E",
+              "hearingLanguage": "E",
+              "id": "DEFENDANT_ID2",
+              "individual": {
+                "driverNumber": "2362435",
+                "nationalInsuranceNumber": "1922492",
+                "parentGuardianInformation": {
+                  "observedEthnicity": "1",
+                  "personalInformation": {
+                    "address": {
+                      "address1": "66 Exeter Street",
+                      "address2": "address line 2",
+                      "address3": "address line 3",
+                      "address4": "address line 5",
+                      "postcode": "M60 1NW"
+                    },
+                    "contactDetails": {
+                      "home": "homePhone",
+                      "mobile": "mobile",
+                      "primaryEmail": "primaryemail",
+                      "secondaryEmail": "secondaryemail",
+                      "work": "workPhone"
+                    },
+                    "firstName": "Eugene",
+                    "lastName": "Tooms",
+                    "title": "MR"
+                  },
+                  "selfDefinedEthnicity": "selfDefinedEthnicity"
+                },
+                "perceivedBirthYear": "1970",
+                "personalInformation": {
+                  "address": {
+                    "address1": "66 Exeter Street",
+                    "address2": "address line 2",
+                    "address3": "address line 3",
+                    "address4": "address line 5",
+                    "postcode": "M60 1NW"
+                  },
+                  "contactDetails": {
+                    "home": "homePhone",
+                    "mobile": "mobile",
+                    "primaryEmail": "primaryemail",
+                    "secondaryEmail": "secondaryemail",
+                    "work": "workPhone"
+                  },
+                  "firstName": "Eugene",
+                  "lastName": "Tooms",
+                  "observedEthnicity": 1,
+                  "title": "MR"
+                },
+                "selfDefinedInformation": {
+                  "additionalNationality": "additionalNationality",
+                  "dateOfBirth": "1989-04-18",
+                  "ethnicity": "selfDefinedEthnicity",
+                  "gender": "MALE",
+                  "nationality": "nationality"
+                }
+              },
+              "individualAliases": [
+                {
+                  "firstName": "FirstName",
+                  "givenName2": "   GivenName2 ",
+                  "givenName3": " GivenName3   ",
+                  "lastName": "LastName",
+                  "title": "mr"
+                },
+                {
+                  "firstName": "FirstName",
+                  "givenName2": "GivenName2",
+                  "lastName": "LastName",
+                  "title": "mr"
+                },
+                {
+                  "firstName": "FirstName",
+                  "givenName3": "GivenName3",
+                  "lastName": "LastName",
+                  "title": "mr"
+                },
+                {
+                  "firstName": "FirstName",
+                  "lastName": "LastName",
+                  "title": "mr"
+                }
+              ],
+              "languageRequirement": "No",
+              "numPreviousConvictions": 99,
+              "offences": [
+                {
+                  "alcoholRelatedOffence": {
+                    "alcoholLevelAmount": 500,
+                    "alcoholLevelMethod": "A"
+                  },
+                  "appliedCompensation": 10,
+                  "backDuty": 1,
+                  "backDutyDateFrom": "2012-01-01",
+                  "backDutyDateTo": "2016-01-01",
+                  "chargeDate": "2017-08-15",
+                  "laidDate": "2019-01-01",
+                  "offenceCode": "TVL-ABC",
+                  "offenceCommittedDate": "2018-02-20",
+                  "offenceCommittedEndDate": "2018-03-15",
+                  "offenceDateCode": 4,
+                  "offenceId": "OFFENCE_ID2",
+                  "offenceLocation": "London",
+                  "offenceSequenceNumber": 6,
+                  "offenceWording": "TV LICENSE NOT PAID",
+                  "offenceWordingWelsh": "TV LICENSE NOT PAID IN WELSH",
+                  "referenceData": {
+                    "reportRestrictResultCode": ""
+                  },
+                  "statementOfFacts": "facts",
+                  "statementOfFactsWelsh": "welsh-facts",
+                  "vehicleRelatedOffence": {
+                    "vehicleCode": "vehicleCode",
+                    "vehicleRegistrationMark": "vehicleRegistrationMark"
+                  }
+                }
+              ],
+              "postingDate": "2017-10-20"
+            }
+          ],
+          "groupId": "GROUP_ID",
+          "isCivil": true,
+          "isGroupMaster": false,
+          "isGroupMember": true
+        },
+        "referenceDataVO": {
+          "countryNationalityReferenceData": [
+            {
+              "id": "95e8e9c6-d162-40f3-8213-9c4601a5b5d1",
+              "isoCode": "nationality",
+              "nationality": "description"
+            },
+            {
+              "id": "3ab80d63-5606-4315-83a1-d18bf4725e66",
+              "isoCode": "additionalNationality",
+              "nationality": "description"
+            }
+          ],
+          "selfdefinedEthnicityReferenceData": [
+            {
+              "code": "selfDefinedEthnicity",
+              "description": "description",
+              "id": "34f9c9de-e71c-42ee-81c9-4ec00032c112"
+            }
+          ],
+          "organisationUnitReferenceData": [
+          ],
+          "initiationTypes": [
+          ],
+          "offenceReferenceData": [
+            {
+              "cjsOffenceCode": "TVL-ABC",
+              "legislation": "offenceLegalisation",
+              "maxPenalty": "Max Penalty",
+              "modeOfTrialDerived": "Either Way",
+              "offenceId": "d8c63737-3c60-496b-94bb-30faa761f00a",
+              "title": "Offence Tittle"
+            }
+          ],
+          "caseMarkers": [
+            {
+              "markerTypeCode": "ML",
+              "markerTypeDescription": "Test Case Marker Description",
+              "markerTypeId": "bda277a7-a756-4a5b-a33e-dcf344f4fa14"
+            }
+          ],
+          "observedEthnicityReferenceData": [
+            {
+              "ethnicityCode": "1",
+              "ethnicityDescription": "description",
+              "id": "8e084651-64fb-4c82-902b-14614529c2d3"
+            }
+          ],
+          "vehicleCodesReferenceData": [
+          ],
+          "organisationUnitWithCourtroomReferenceData": {
+            "id": "8435d259-81a6-4f55-88d9-81d606656d79",
+            "oucodeL3Name": "South Western (Lavender Hill)"
+          },
+          "offenderCodeReferenceData": [
+          ],
+          "bailStatusReferenceData": [
+          ],
+          "prosecutorsReferenceData": {
+            "address": {
+              "address1": "address1",
+              "address2": "address2",
+              "address3": "address3",
+              "address4": "address4",
+              "address5": "address5",
+              "postcode": "postcode"
+            },
+            "fullName": "fullName",
+            "id": "6683e1e0-54ee-4596-88f1-60a274e51252",
+            "informantEmailAddress": "test@email.com",
+            "majorCreditorCode": "CreditorCode",
+            "oucode": "oucode",
+            "shortName": "DVLA"
+          },
+          "hearingType": {
+            "hearingDescription": "Preliminary Hearing",
+            "id": "08e6e903-a195-496a-b87e-99d497a01541"
+          },
+          "modeOfTrialReasonsReferenceData": [
+            {
+              "code": "01",
+              "description": "Summary-only offence",
+              "id": "9700f17a-9c9c-4d0e-a68a-c4f40b5fe847",
+              "seqNum": "90"
+            },
+            {
+              "code": "02",
+              "description": "Indictable-only offence)",
+              "id": "3f14d15d-02c9-4401-9abe-5bd96c5a152d",
+              "seqNum": "91"
+            }
+          ]
+        }
+      }
+    ],
+    "externalId": "8db8252d-8fd8-4035-af57-9e0b904f6b22",
+    "channel": "CIVIL"
+  }
+}

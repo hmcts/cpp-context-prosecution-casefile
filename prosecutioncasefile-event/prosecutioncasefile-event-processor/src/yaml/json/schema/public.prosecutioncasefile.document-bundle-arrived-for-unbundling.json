@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/domain/event/public.prosecutioncasefile.document-bundle-arrived-for-unbundling",
+  "type": "object",
+  "properties": {
+    "caseId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "prosecutingAuthority": {
+      "type": "string"
+    },
+    "prosecutorDefendantId": {
+      "type": "string",
+      "maxLength": 36
+    },
+    "cmsDocumentIdentifier": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/cms-document-identifier.json"
+    },
+    "material": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/material.json"
+    },
+    "receivedDateTime": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date-time"
+    },
+    "defendantName": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "caseId",
+    "prosecutorDefendantId",
+    "material",
+    "cmsDocumentIdentifier",
+    "receivedDateTime"
+  ],
+  "additionalProperties": false
+}

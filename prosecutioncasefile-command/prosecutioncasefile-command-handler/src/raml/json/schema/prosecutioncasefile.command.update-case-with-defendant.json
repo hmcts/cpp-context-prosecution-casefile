@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/command/handler/update-case-with-defendant.json",
+  "type": "object",
+  "properties": {
+    "defendantId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid",
+      "description": "The Id of the case to accept"
+    },
+    "caseId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "personDetails": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/personal-information.json"
+    },
+    "dateOfBirth":{
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date"
+    },
+    "organisationName": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "defendantId"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,149 @@
+{
+  "initiateCourtProceedings": {
+    "listHearingRequests": [
+      {
+        "courtCentre": {
+          "id": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+          "name": "Port Talbot",
+          "welshName": "Welsh Name"
+        },
+        "estimateMinutes": 20,
+        "hearingType": {
+          "description": "Plea & Trial Preparation",
+          "id": "06b0c2bf-3f98-46ed-ab7e-56efaf9ecced"
+        },
+        "jurisdictionType": "MAGISTRATES",
+        "listDefendantRequests": [
+          {
+            "defendantId": "DEFENDANT_ID1",
+            "defendantOffences": [
+              "DEFENDANT_ID1"
+            ],
+            "hearingLanguageNeeds": "WELSH",
+            "prosecutionCaseId": "CASE-ID"
+          },
+          {
+            "defendantId": "DEFENDANT_ID2",
+            "defendantOffences": [
+              "DEFENDANT_ID2"
+            ],
+            "hearingLanguageNeeds": "WELSH",
+            "prosecutionCaseId": "CASE-ID"
+          }
+        ],
+        "listedStartDateTime": "2050-02-04T09:05:01.001Z",
+        "listedEndDateTime": "2050-02-04T10:05:01.001Z",
+        "courtScheduleId": "test-courtScheduleId"
+      }
+    ],
+    "prosecutionCases": [
+      {
+        "caseMarkers": [
+          {
+            "id": "CASEMARKER_ID",
+            "markerTypeCode": "ABC",
+            "markerTypeDescription": "Child Abuse",
+            "markerTypeid": "2013c181-7458-4fb2-a637-b596fbe0e781"
+          }
+        ],
+        "defendants": [
+          {
+            "id": "DEFENDANT_ID1",
+            "offences": [
+              {
+                "id": "DEFENDANT_ID1",
+                "arrestDate": "2015-03-04",
+                "chargeDate": "2015-04-04",
+                "count": 0,
+                "endDate": "2018-10-10",
+                "offenceCode": "OFCODE12",
+                "offenceDefinitionId": "04c099cc-eba2-4c80-9eed-7c1ef21d706a",
+                "offenceFacts": {
+                  "alcoholReadingAmount": 100,
+                  "alcoholReadingMethodCode": "A"
+                },
+                "offenceTitle": "Obstruct person executing search warrant for TV receiver",
+                "orderIndex": 1,
+                "startDate": "2018-09-10",
+                "wording": "TV Licence not paid"
+              }
+            ],
+            "personDefendant": {
+              "personDetails": {
+                "address": {
+                  "address1": "66 Exeter Street",
+                  "address2": "line 2",
+                  "address3": "line 3",
+                  "address4": "line 4",
+                  "address5": "line 5",
+                  "postcode": "M60 1NW"
+                },
+                "contact": {
+                  "home": "020111223",
+                  "mobile": "07572222943",
+                  "primaryEmail": "scrooge.mcduck@mail.com",
+                  "secondaryEmail": "scrooge.mcduck2@mail.com",
+                  "work": "020111222"
+                },
+                "documentationLanguageNeeds": "WELSH",
+                "hearingLanguageNeeds": "WELSH",
+                "firstName": "John",
+                "gender": "MALE",
+                "lastName": "Smith",
+                "occupation": "Software Developer",
+                "occupationCode": "43",
+                "title": "Baron"
+              }
+            },
+            "prosecutionAuthorityReference": "TFLDEF001",
+            "prosecutionCaseId": "CASE-ID"
+          },
+          {
+            "id": "DEFENDANT_ID2",
+            "offences": [
+              {
+                "id": "DEFENDANT_ID2",
+                "arrestDate": "2015-03-04",
+                "chargeDate": "2015-04-04",
+                "count": 0,
+                "endDate": "2018-10-10",
+                "offenceCode": "OFCODE12",
+                "offenceDefinitionId": "04c099cc-eba2-4c80-9eed-7c1ef21d706a",
+                "offenceTitle": "Obstruct person executing search warrant for TV receiver",
+                "orderIndex": 1,
+                "startDate": "2018-09-10",
+                "wording": "TV Licence not paid"
+              }
+            ],
+            "personDefendant": {
+              "personDetails": {
+                "address": {
+                  "address1": "armagaddon house",
+                  "postcode": "M60 1NW"
+                },
+                "documentationLanguageNeeds": "WELSH",
+                "hearingLanguageNeeds": "WELSH",
+                "firstName": "John",
+                "gender": "MALE",
+                "lastName": "Smith",
+                "title": "Baron"
+              }
+            },
+            "prosecutionAuthorityReference": "TFLDEF001",
+            "prosecutionCaseId": "CASE-ID"
+          }
+        ],
+        "id": "CASE-ID",
+        "initiationCode": "C",
+        "originatingOrganisation": "B01NM00",
+        "prosecutionCaseIdentifier": {
+          "prosecutionAuthorityCode": "TFL",
+          "prosecutionAuthorityId": "0534ee76-88f6-40e0-ba8f-53588e146675",
+          "caseURN": "CASE-URN"
+        },
+        "statementOfFacts": "statementOfFacts",
+        "statementOfFactsWelsh": "statementOfFactsWelsh"
+      }
+    ]
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/prosecutor.json",
+  "type": "object",
+  "description": "Prosecutor Details",
+  "properties": {
+    "prosecutingAuthority": {
+      "type": "string",
+      "description": "Identifies the Prosecuting Organisation responsible for initiating the case. Valid CJS OU Code.",
+      "maxLength": 10
+    },
+    "informant": {
+      "type": "string",
+      "description": "The person or organisation who provides information sufficient to start a prosecution for a criminal offence.",
+      "maxLength": 92
+    },
+    "prosecutionAuthorityId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "referenceData": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/prosecutors-reference-data.json"
+    }
+  },
+  "additionalProperties": false
+}

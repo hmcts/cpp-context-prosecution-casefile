@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/country-nationalities.json",
+  "type": "object",
+  "properties": {
+    "countryNationality": {
+      "type": "array",
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/reference-data-country-nationality.json"
+      }
+    }
+  },
+  "required": [
+    "countryNationality"
+  ],
+  "additionalProperties": false
+}

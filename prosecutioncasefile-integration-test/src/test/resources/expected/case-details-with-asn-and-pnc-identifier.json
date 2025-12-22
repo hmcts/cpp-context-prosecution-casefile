@@ -1,0 +1,61 @@
+{
+  "caseId": "%s",
+  "prosecutionCaseReference": "%s",
+  "originatingOrganisation":"123",
+  "prosecutorInformant": "Adam",
+  "prosecutionAuthority": "GAEAA01",
+  "defendants": [
+    {
+      "defendantId": "%s",
+      "asn": "ASN",
+      "documentationLanguage": "W",
+      "hearingLanguage": "W",
+      "postingDate": "2018-09-10",
+      "nationalInsuranceNumber": "AB123456C",
+      "appliedProsecutorCosts" : 200,
+      "personalInformation": {
+        "address": {
+          "address1": "armagaddon house"
+        },
+        "contactDetails": {
+          "home": "0207 000 0000",
+          "mobile": "11111 111 111",
+          "primaryEmail": "primary@email.com",
+          "secondaryEmail": "secondary@email.com",
+          "work": "0207 111 1111"
+        },
+        "firstName": "John",
+        "lastName": "Smith",
+        "title": "Baron"
+      },
+      "selfDefinedInformation": {
+        "dateOfBirth": "%s",
+        "ethnicity": "W1",
+        "gender": "MALE",
+        "nationality": "GBR"
+      },
+      "offences": [
+        {
+          "alcoholRelatedOffence": {
+            "alcoholLevelAmount":100,
+            "alcoholLevelMethod":"A"
+          },
+          "appliedCompensation": 200,
+          "backDuty": 340.31,
+          "backDutyDateFrom": "2018-04-30",
+          "backDutyDateTo": "2018-05-30",
+          "chargeDate": "%s",
+          "offenceCode": "OFCODE12",
+          "offenceCommittedDate": "%s",
+          "offenceDateCode": 1,
+          "offenceId": "%s",
+          "offenceSequenceNumber": 1,
+          "offenceWording": "Duty not paid",
+          "vehicleMake": "Ford",
+          "vehicleRegistrationMark": "AB11 ABC"
+        }
+      ],
+      "individualAliases": []
+    }
+  ]
+}

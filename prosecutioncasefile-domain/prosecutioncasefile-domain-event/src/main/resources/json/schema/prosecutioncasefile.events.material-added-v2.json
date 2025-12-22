@@ -1,0 +1,117 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/domain/event/material-added-v2",
+  "type": "object",
+  "properties": {
+    "submissionId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },	  
+    "caseId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "caseType": {
+      "type": "string"
+    },
+    "material": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "materialContentType": {
+      "description": "Specifies the format type of the content",
+      "type": "string"
+    },
+    "materialType": {
+      "description": "Defines if the material is case level or defendant level",
+      "type": "string",
+      "maxLength": 40
+    },
+    "materialName": {
+      "description": "The business description of the material contents",
+      "type": "string",
+      "maxLength": 255
+    },
+    "fileName": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "defendantId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "defendantName": {
+      "type": "string"
+    },
+    "documentTypeId": {
+      "type": "string"
+    },
+    "documentCategory": {
+      "type": "string"
+    },
+    "sectionOrderSequence": {
+      "description": "The sequence in which the material is placed within the required section within the case file",
+      "type": "integer",
+      "maxLength": 6
+    },
+    "caseSubFolderName": {
+      "description": "The name of a subfolder within the relevant section (material type) within the case file in which the material is placed",
+      "type": "string",
+      "maxLength": 35
+    },
+    "exhibit": {
+      "description": "The details of the exhibit when the material provided is an exibit of evidence",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/exhibit.json"
+    },
+    "witnessStatement": {
+      "description": "The details of the witness statement when the material provided is statement provided by the investigating authority",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/witness-statement.json"
+    },
+    "tag": {
+      "description": "A collection of tags that provide further type categorisation and description of the material",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/material-tag.json"
+      },
+      "uniqueItems": true
+    },
+    "courtApplicationSubject": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/court-application-subject.json"
+    },
+    "prosecutionCaseSubject": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/prosecution-case-subject.json"
+    },
+    "isCpsCase": {
+      "type": "boolean"
+    },
+    "cpsFlag": {
+      "type": "boolean"
+    },
+    "receivedDateTime": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date-time"
+    }
+  },
+  "oneOf": [
+    {
+      "required": [
+        "caseId",
+        "caseType",
+        "material",
+        "materialType",
+        "materialContentType",
+        "materialName",
+        "fileName",
+        "prosecutionCaseSubject"
+      ]
+    },
+    {
+      "required": [
+        "caseType",
+        "material",
+        "materialType",
+        "materialContentType",
+        "materialName",
+        "fileName",
+        "courtApplicationSubject"
+      ]
+    }
+  ],
+  "additionalProperties": false
+}

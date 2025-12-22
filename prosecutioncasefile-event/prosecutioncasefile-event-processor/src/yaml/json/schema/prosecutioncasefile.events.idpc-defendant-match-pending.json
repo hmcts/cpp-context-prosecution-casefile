@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/domain/event/idpc-defendant-match-pending",
+  "type": "object",
+  "properties": {
+    "fileServiceId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "caseId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "transactionId": {
+      "type": "string"
+    },
+    "caseUrn": {
+      "type": "string",
+      "maxLength": 36
+    },
+    "responseEmail": {
+      "type": "string"
+    },
+    "materialType": {
+      "type": "string"
+    },
+    "defendant": {
+      "type": "object",
+      "properties": {
+        "defendantId": {
+          "type": "string",
+          "maxLength": 36
+        },
+        "surname": {
+          "type": "string"
+        },
+        "forenames": {
+          "type": "string"
+        },
+        "dob": {
+          "type": "string"
+        },
+        "oucode": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "surname"
+      ]
+    }
+  },
+  "required": [
+    "fileServiceId",
+    "caseId",
+    "caseUrn",
+    "materialType",
+    "defendant"
+  ],
+  "additionalProperties": false
+}

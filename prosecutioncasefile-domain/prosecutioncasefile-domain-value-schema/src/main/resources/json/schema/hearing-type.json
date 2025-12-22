@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/hearing-type.json",
+  "type": "object",
+  "properties":{
+    "id": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "seqId": {
+      "type": "integer"
+    },
+    "hearingCode": {
+      "type": "string",
+      "maxLength": 10
+    },
+    "hearingDescription": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "welshHearingDescription": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "defaultDurationMin": {
+      "type": "integer"
+    },
+    "validFrom": {
+      "type": "string"
+    },
+    "validTo": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "seqId",
+    "hearingCode",
+    "hearingDescription",
+    "welshHearingDescription",
+    "defaultDurationMin"
+  ]
+}

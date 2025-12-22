@@ -1,0 +1,18 @@
+{
+  "_metadata": {
+    "name": "prosecutioncasefile.events.idpc-material-rejected"
+  },
+  "caseId": "52cac7fb-387c-4d19-9c80-8963fa8cf222",
+  "errors": [
+    {
+      "code": "MATERIAL_EXPIRED",
+      "values": [
+        {
+          "key": "expiredAt",
+          "value": "2019-04-17T12:30:43.621Z"
+        }
+      ]
+    }
+  ],
+  "fileServiceId": "65dcccc3-7b25-4928-a8ec-980caa64aa73"
+}

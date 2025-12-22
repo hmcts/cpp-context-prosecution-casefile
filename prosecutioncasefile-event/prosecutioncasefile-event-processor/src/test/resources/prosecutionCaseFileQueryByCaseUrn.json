@@ -1,0 +1,74 @@
+{
+  "caseId": "%CASE_ID%",
+  "prosecutionCaseReference": "28DI6526163",
+  "originatingOrganisation": "130SU01",
+  "prosecutorInformant": "Superintendent John COPPERFIELD",
+  "prosecutionAuthority": "130SU01",
+  "defendants": [
+    {
+      "defendantId": "50278976-d6ad-4440-ab1a-b88617e5c9ae",
+      "asn": "D28GC01126526163",
+      "documentationLanguage": "E",
+      "hearingLanguage": "E",
+      "postingDate": "2020-12-28",
+      "driverNumber": "VANFL002222OW9PH",
+      "prosecutorDefendantReference": "D28GC01126526163",
+      "personalInformation": {
+        "address": {
+          "address1": "9999A9999AAAA",
+          "address2": "Woodlane",
+          "address3": "addressline 3",
+          "address4": "Bristol",
+          "address5": "Avon"
+        },
+        "contactDetails": {
+          "home": "0206526163",
+          "mobile": "07776526163",
+          "primaryEmail": "HARRYPOTTER@gmail.com"
+        },
+        "firstName": "Charlie",
+        "lastName": "Brown",
+        "title": "Mr"
+      },
+      "selfDefinedInformation": {
+        "dateOfBirth": "1990-01-30",
+        "ethnicity": "W1",
+        "gender": "MALE"
+      },
+      "offences": [
+        {
+          "chargeDate": "2020-12-28",
+          "offenceCode": "CA03012",
+          "offenceCommittedDate": "2019-11-28",
+          "offenceDateCode": 1,
+          "offenceId": "058c7194-ef0b-462b-90d8-123bdd45c9fb",
+          "offenceLocation": "Guildford High Street",
+          "offenceSequenceNumber": 1,
+          "offenceWording": "Theft of pedal cycle."
+        },
+        {
+          "chargeDate": "2020-12-28",
+          "offenceCode": "TW01040",
+          "offenceCommittedDate": "2019-11-28",
+          "offenceDateCode": 1,
+          "offenceId": "51721fe0-1697-4b18-a9d2-6b10d78de16c",
+          "offenceLocation": "Guildford High Street",
+          "offenceSequenceNumber": 2,
+          "offenceWording": "Aggravated vehicle taking - ( driver did not take ) and vehicle damage of £5000 or over."
+        },
+        {
+          "chargeDate": "2020-12-28",
+          "offenceCode": "TH68023",
+          "offenceCommittedDate": "2019-11-28",
+          "offenceDateCode": 1,
+          "offenceId": "75d1867a-cb91-4a28-a499-32bd0ebbc7d0",
+          "offenceLocation": "Guildford High Street",
+          "offenceSequenceNumber": 3,
+          "offenceWording": "Use a motor vehicle without third party insurance."
+        }
+      ],
+      "individualAliases": []
+    }
+  ],
+  "isCivil": true
+}

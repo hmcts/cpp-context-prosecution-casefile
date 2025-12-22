@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cpp/json/schemas/prosecutioncasefile/events/public.prosecutioncasefile.submit-application-validation-failed.json",
+  "type": "object",
+  "properties": {
+    "errorDetails": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/error-details.json"
+    },
+    "applicationSubmitted": {
+      "id": "http://http://moj.gov.uk/cps/prosecutioncasefile/domain/event/application-submitted.json",
+      "type": "object",
+      "properties": {
+        "courtApplication": {
+          "description": "The details of the court application for which proceedings are required",
+          "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/court-application.json#"
+        },
+        "boxHearingRequest": {
+          "description": "The details of the required box hearing including agreed appointment details where necessary",
+          "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/box-hearing-request.json#"
+        },
+        "prosecutionCases": {
+          "type": "array",
+          "items": {
+            "$ref": "http://justice.gov.uk/core/courts/prosecutionCase.json#"
+          }
+        }
+      },
+      "required": [
+        "courtApplication",
+        "boxHearingRequest"
+      ]
+    }
+  },
+  "required": [
+    "errorDetails",
+    "applicationSubmitted"
+  ],
+  "additionalProperties": false
+}

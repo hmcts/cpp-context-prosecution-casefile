@@ -1,0 +1,146 @@
+[
+  {
+    "code": "COURT_HEARING_LOCATION_OUCODE_INVALID",
+    "values": [
+      {
+        "key": "initialHearing_courtHearingLocation",
+        "value": "abcd123"
+      }
+    ]
+  },
+  {
+    "code": "DATE_OF_HEARING_EARLIER_THAN_OFFENCE_COMMITTED_DATE",
+    "values": [
+      {
+        "key": "initialHearing_dateOfHearing",
+        "value": "1999-02-04"
+      }
+    ]
+  },
+  {
+    "code": "DEFENDANT_PRIMARY_EMAIL_ADDRESS_INVALID",
+    "values": [
+      {
+        "key": "individual_personalInformation_contactDetails_primaryEmail",
+        "value": "bad@primaryemail"
+      }
+    ]
+  },
+  {
+    "code": "DEFENDANT_SECONDARY_EMAIL_ADDRESS_INVALID",
+    "values": [
+      {
+        "key": "individual_personalInformation_contactDetails_secondaryEmail",
+        "value": "bad@secondaryemail"
+      }
+    ]
+  },
+  {
+    "code": "DEFENDANT_PARENT_GUARDIAN_DATE_OF_BIRTH_IN_FUTURE",
+    "values": [
+      {
+        "key": "individual_parentGuardianInformation_dateOfBirth",
+        "value": "2041-03-03"
+      }
+    ]
+  },
+  {
+    "code": "DEFENDANT_PARENT_GUARDIAN_OBSERVED_ETHNICITY_INVALID",
+    "values": [
+      {
+        "key": "individual_parentGuardianInformation_observedEthnicity",
+        "value": "3"
+      }
+    ]
+  },
+  {
+    "code": "DEFENDANT_PARENT_GUARDIAN_SELF_DEFINED_ETHNICITY_INVALID",
+    "values": [
+      {
+        "key": "individual_parentGuardianInformation_selfDefinedEthnicity",
+        "value": "white"
+      }
+    ]
+  },
+  {
+    "code": "DEFENDANT_PARENT_GUARDIAN_PRIMARY_EMAIL_ADDRESS_INVALID",
+    "values": [
+      {
+        "key": "individual_parentGuardianInformation_personalInformation_contactDetails_primaryEmail",
+        "value": "bad@parentprimaryemail"
+      }
+    ]
+  },
+  {
+    "code": "DEFENDANT_PARENT_GUARDIAN_SECONDARY_EMAIL_ADDRESS_INVALID",
+    "values": [
+      {
+        "key": "individual_parentGuardianInformation_personalInformation_contactDetails_secondaryEmail",
+        "value": "bad@parentsecondaryemail"
+      }
+    ]
+  },
+  {
+    "code": "OFFENDER_CODE_IS_INVALID",
+    "values": [
+      {
+        "key": "individual_offenderCode",
+        "value": "XYZ"
+      }
+    ]
+  },
+  {
+    "code": "DEFENDANT_SELF_DEFINED_ETHNICITY_INVALID",
+    "values": [
+      {
+        "key": "individual_selfDefinedInformation_ethnicity",
+        "value": "whitewhite"
+      }
+    ]
+  },
+  {
+    "code": "DEFENDANT_OBSERVED_ETHNICITY_INVALID",
+    "values": [
+      {
+        "key": "individual_personalInformation_observedEthnicity",
+        "value": "55"
+      }
+    ]
+  },
+  {
+    "code": "DEFENDANT_DOB_IN_FUTURE",
+    "values": [
+      {
+        "key": "individual_selfDefinedInformation_dateOfBirth",
+        "value": "2040-05-03"
+      }
+    ]
+  },
+  {
+    "code": "DEFENDANT_NATIONALITY_INVALID",
+    "values": [
+      {
+        "key": "individual_selfDefinedInformation_nationality",
+        "value": "ABC"
+      }
+    ]
+  },
+  {
+    "code": "DEFENDANT_PERCEIVED_BIRTH_YEAR_IN_FUTURE",
+    "values": [
+      {
+        "key": "individual_perceivedBirthYear",
+        "value": "2040"
+      }
+    ]
+  },
+  {
+    "code": "DATE_OF_HEARING_IN_THE_PAST",
+    "values": [
+      {
+        "key": "initialHearing_dateOfHearing",
+        "value": "1999-02-04"
+      }
+    ]
+  }
+]

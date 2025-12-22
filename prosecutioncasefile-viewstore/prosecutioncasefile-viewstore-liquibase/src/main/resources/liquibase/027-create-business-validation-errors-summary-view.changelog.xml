@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+    <changeSet id="027" author="narender.pal"
+               logicalFilePath="027-create-business-validation-errors-summary-view.changelog.xml">
+        <createView viewName="business_validation_errors_summary_view" replaceIfExists="true">
+            SELECT e.case_id,
+            MIN(e.court_location) as court_location,
+            MIN(e.case_type) as case_type,
+            MIN(e.urn) as urn,
+            MIN(e.defendant_hearing_date) as defendant_hearing_date,
+            MIN(e.defendant_bail_status) as defendant_bail_status
+            FROM business_validation_errors e
+            GROUP BY e.case_id
+        </createView>
+    </changeSet>
+</databaseChangeLog>

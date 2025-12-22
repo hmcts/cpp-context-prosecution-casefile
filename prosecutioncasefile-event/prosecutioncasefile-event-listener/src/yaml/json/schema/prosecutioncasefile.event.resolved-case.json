@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/domain/event/resolved-case.json",
+  "type": "object",
+  "properties": {
+    "caseId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid",
+      "description": "The Id of the case resolved without errors"
+    },
+    "region": {
+      "type": "string"
+    },
+    "courtLocation": {
+      "type": "string"
+    },
+    "caseType": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "caseId",
+    "region",
+    "courtLocation",
+    "caseType"
+  ]
+}

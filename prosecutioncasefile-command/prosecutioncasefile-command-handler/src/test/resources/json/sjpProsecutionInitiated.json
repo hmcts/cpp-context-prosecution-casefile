@@ -1,0 +1,78 @@
+{
+  "enterpriseId": "Z1C3E4GHJQ",
+  "prosecution": {
+    "caseDetails": {
+      "caseId": "51cac7fb-387c-4d19-9c80-8963fa8cf222",
+      "initiationCode": "J",
+      "policeSystemId":"12345",
+      "cpsOrganisation": "A30AB00",
+      "prosecutor": {
+        "informant": "Adam",
+        "prosecutingAuthority": "GAEAA01",
+        "referenceData" : {
+          "id": "3d2d270e-cb52-42f7-b9d7-6e685de1cede",
+          "sequenceNumber": 1,
+          "majorCreditorCode": "TVL2",
+          "shortName": "TVL",
+          "fullName": "TV license",
+          "nameWelsh": "TV license",
+          "oucode": "GAEAA01",
+          "spiInFlag": false,
+          "spiOutFlag": true,
+          "address": {
+            "address1": "6th Floor Windsor House",
+            "address2": "42-50 Victoria Street",
+            "address3": "London",
+            "postcode": "SW1H 0TL"
+          },
+          "sjpFlag": true,
+          "aocpApproved": true
+        }
+      },
+      "prosecutorCaseReference": "TVL12345",
+      "summonsCode": ""
+    },
+    "channel": "SPI",
+    "defendants": [
+      {
+        "documentationLanguage": "W",
+        "hearingLanguage": "W",
+        "id": "257c27b4-69af-4ce0-bf68-f127a66f5c19",
+        "individual": {
+          "personalInformation": {
+            "address": {
+              "address1": "armagaddon house",
+              "postcode": "M60 1NW"
+            },
+            "contactDetails": {},
+            "firstName": "John",
+            "lastName": "Smith",
+            "title": "Baron"
+          },
+          "selfDefinedInformation": {
+            "ethnicity": "white",
+            "gender": "MALE"
+          }
+        },
+        "initialHearing": {
+          "courtHearingLocation": "abcd",
+          "dateOfHearing": "2050-02-04",
+          "timeOfHearing": "09:05:01.001"
+        },
+        "offences": [
+          {
+            "appliedCompensation": 200,
+            "chargeDate": "2015-04-04",
+            "offenceCode": "OFCODE12",
+            "offenceCommittedDate": "2018-09-10",
+            "offenceDateCode": 1,
+            "offenceId": "585134c4-7c1b-49de-851f-131903eeb19d",
+            "offenceSequenceNumber": 1,
+            "offenceWording": "TV Licence not paid"
+          }
+        ],
+        "postingDate": "2018-09-10"
+      }
+    ]
+  }
+}

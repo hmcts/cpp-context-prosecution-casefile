@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/sjp-defendant.json",
+  "type": "object",
+  "description": "Defendant Details",
+  "properties": {
+    "id": {
+      "type": "string",
+      "maxLength": 36
+    },
+    "prosecutorDefendantReference": {
+      "type": "string",
+      "maxLength": 36
+    },
+    "asn": {
+      "type": "string",
+      "description": "Arrest / Summons number",
+      "maxLength": 20
+    },
+    "documentationLanguage": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/language.json"
+    },
+    "hearingLanguage": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/language.json"
+    },
+    "languageRequirement": {
+      "type": "string",
+      "description": "Notes about the defendant’s language needs, e.g. interpreter details",
+      "maxLength": 150
+    },
+    "specificRequirements": {
+      "type": "string",
+      "description": "Notes about any help that the defendant may need when attending court – e.g. wheelchair access.",
+      "maxLength": 150
+    },
+    "numPreviousConvictions": {
+      "type": "integer",
+      "description": "Number of previous conviction cited by prosecutor."
+    },
+    "individual": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/individual.json"
+    },
+    "offences": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/offence.json"
+      }
+    },
+    "postingDate": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date",
+      "description": "Date on which SJP Notice was posted to the defendant."
+    }
+  },
+  "required": [
+    "individual",
+    "offences"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://justice.gov.uk/cps/prosecutioncasefile/initial-hearing.json",
+  "type": "object",
+  "properties": {
+    "courtHearingLocation": {
+      "type": "string"
+    },
+    "roomId": {
+      "type": "string"
+    },
+    "roomName": {
+      "type": "string"
+    },
+    "hearingListingDirection": {
+      "type": "string"
+    },
+    "dateOfHearing": {
+      "type": "string"
+    },
+    "timeOfHearing": {
+      "type": "string"
+    },
+    "hearingDuration": {
+      "type": "integer"
+    },
+    "hearingLanguage": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/language.json"
+    },
+    "hearingTypeCode": {
+      "type": "string",
+      "description": "Code for type of hearing E.g FHG (First hearing)"
+    },
+    "endDate": {
+      "type": "string"
+    },
+    "courtScheduleId": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "courtHearingLocation",
+    "dateOfHearing",
+    "timeOfHearing"
+  ]
+}

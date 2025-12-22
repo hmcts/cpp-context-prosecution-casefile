@@ -1,0 +1,57 @@
+{
+  "prosecution": {
+    "caseDetails": {},
+    "channel": "SPI",
+    "defendants": [
+      {
+        "documentationLanguage": "W",
+        "hearingLanguage": "W",
+        "id": "7f83640a-7bea-4670-af5e-19c1f945b27b",
+        "individual": {
+          "personalInformation": {
+            "contactDetails": {},
+            "firstName": "John",
+            "lastName": "Smith",
+            "title": "Mr"
+          },
+          "selfDefinedInformation": {
+            "ethnicity": "white",
+            "gender": "MALE"
+          }
+        },
+        "offences": [
+          {
+            "appliedCompensation": 200,
+            "chargeDate": "2015-04-04",
+            "offenceCode": "OFCODE12",
+            "offenceCommittedDate": "2018-09-10",
+            "offenceDateCode": 1,
+            "offenceId": "7f83640a-7bea-4670-af5e-19c1f945b27b",
+            "offenceLocation": "No location provided",
+            "offenceSequenceNumber": 1,
+            "offenceWording": "TV Licence not paid",
+            "referenceData": {
+              "locationRequired": "Y"
+            },
+            "vehicleMake": "Ford",
+            "vehicleRegistrationMark": "AB11 ABC"
+          }
+        ],
+        "postingDate": "2018-09-10"
+      }
+    ]
+  },
+  "referenceDataVO": {
+    "countryNationalityReferenceData": [],
+    "selfdefinedEthnicityReferenceData": [],
+    "organisationUnitReferenceData": [],
+    "initiationTypes": [],
+    "offenceReferenceData": [],
+    "caseMarkers": [],
+    "observedEthnicityReferenceData": [],
+    "vehicleCodesReferenceData": [],
+    "offenderCodeReferenceData": [],
+    "bailStatusReferenceData": [],
+    "modeOfTrialReasonsReferenceData": []
+  }
+}

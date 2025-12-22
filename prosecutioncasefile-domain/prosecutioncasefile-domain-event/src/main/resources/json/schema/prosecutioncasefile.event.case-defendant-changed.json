@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/domain/event/case-defendant-changed.json",
+  "type": "object",
+  "properties": {
+    "defendantId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid",
+      "description": "The Id of the case to accept"
+    },
+    "personDetails": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/personal-information.json"
+    },
+    "dateOfBirth":{
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date"
+    }
+  },
+  "required": [
+    "defendantId",
+    "personDetails"
+  ],
+  "additionalProperties": false
+}
+

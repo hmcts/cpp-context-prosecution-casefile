@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/cms-document-identifier.json",
+  "type": "object",
+  "properties": {
+    "materialType": {
+      "type": "integer"
+    },
+    "documentId": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "materialType",
+    "documentId"
+  ],
+  "additionalProperties": false
+}
+
+

@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/third-party.json",
+  "type": "object",
+  "properties": {
+    "summonsRequired": {
+      "description": "Indicates if this party is required to be summonsed",
+      "type": "boolean"
+    },
+    "notificationRequired": {
+      "description": "Indicates if this party is required to be notified of the application proceedings",
+      "type": "boolean"
+    },
+    "appointmentNotificationRequired": {
+      "description": "Indicates if this party is required to be notified of the application proceedings that are planned by telephone appointment.  Typically applies to the subject of the application",
+      "type": "boolean"
+    },
+    "personDetails": {
+      "description": "Provided when the party is a person",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/person.json"
+    },
+    "organisation": {
+      "description": "Provided when the party is an organisation ",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/organisation.json"
+    },
+    "organisationPersons": {
+      "description": "Array of persons in the organisation where the party is an organisation",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/associated-person.json"
+      }
+    }
+  },
+  "required": [
+    "summonsRequired",
+    "notificationRequired",
+    "appointmentNotificationRequired"
+  ],
+  "additionalProperties": false
+}

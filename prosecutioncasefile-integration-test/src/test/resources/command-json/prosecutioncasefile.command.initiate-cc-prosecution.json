@@ -1,0 +1,202 @@
+{
+  "caseDetails": {
+    "originatingOrganisation": "B01NM00",
+    "cpsOrganisation": "A30AB00",
+    "cpsOrganisationId": "2013c181-7458-4fb2-a637-b596fbe0e781",
+    "otherPartyOfficerInCase": {
+      "personalInformation": {
+        "address": {
+          "address1": "101",
+          "address2": "56Police House",
+          "address3": "Letsby Avenue",
+          "address4": "Avon",
+          "postcode": "HA1 2ER"
+        },
+        "contactDetails": {
+          "primaryEmail": "vegaoic@test.dom",
+          "work": "0117911911"
+        },
+        "firstName": "Vega",
+        "lastName": "OIC",
+        "title": "Baron"
+      },
+      "policeOfficerRank": "Constable"
+    },
+    "summonsCode": "A",
+    "caseId": "CASE-ID",
+    "initiationCode": "INITIATION_CODE",
+    "prosecutorCaseReference": "CASE-URN",
+    "policeSystemId": "00101PoliceCaseSystem",
+    "caseMarkers": [
+      {
+        "markerTypeCode": "ABC",
+        "markerTypeDescription": "",
+        "markerTypeId": "2013c181-7458-4fb2-a637-b596fbe0e781"
+      }
+    ],
+    "prosecutor": {
+      "informant": "informant",
+      "prosecutingAuthority": "prosAut"
+    },
+    "dateReceived": "DATE_RECEIVED"
+  },
+  "defendants": [
+    {
+      "id": "DEFENDANT_ID1",
+      "prosecutorDefendantReference": "DEFENDANT_REFERENCE1",
+      "pncIdentifier": "1111.11111111",
+      "croNumber": "aaaaaaaaaa11",
+      "documentationLanguage": "W",
+      "hearingLanguage": "W",
+      "custodyStatus": "B",
+      "numPreviousConvictions": 3,
+      "initialHearing": {
+        "courtHearingLocation": "C55BN00",
+        "dateOfHearing": "2050-02-04",
+        "timeOfHearing": "09:05:01.001",
+        "endDate": "2050-02-04T10:05:01.001Z",
+        "courtScheduleId": "test-courtScheduleId"
+      },
+      "individual": {
+        "personalInformation": {
+          "title": "Baron",
+          "firstName": "John",
+          "lastName": "Smith",
+          "occupation": "Software Developer",
+          "occupationCode": 43,
+          "address": {
+            "address1": "66 Exeter Street",
+            "address2": "line 2",
+            "address3": "line 3",
+            "address4": "line 4",
+            "address5": "line 5",
+            "postcode": "M60 1NW"
+          },
+          "contactDetails": {
+            "work": "020111222",
+            "home": "020111223",
+            "mobile": "07572222943",
+            "primaryEmail": "scrooge.mcduck@mail.com",
+            "secondaryEmail": "scrooge.mcduck2@mail.com"
+          }
+        },
+        "selfDefinedInformation": {
+          "gender": "MALE"
+        },
+        "bailConditions": "Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should buy coffee every day for commissioner Vijay. Defendants Saz and Antonio should. 2500 characters",
+        "parentGuardianInformation": {
+          "selfDefinedEthnicity": "W1",
+          "observedEthnicity": "1",
+          "gender": "MALE",
+          "dateOfBirth": "2015-04-04",
+          "personalInformation": {
+            "lastName": "Brown"
+          }
+        }
+      },
+      "offences": [
+        {
+          "offenceCode": "OFCODE12",
+          "offenceId": "OFFENCE_ID1",
+          "offenceSequenceNumber": 1,
+          "offenceCommittedDate": "2018-09-10",
+          "offenceCommittedEndDate": "2018-10-10",
+          "offenceDateCode": 1,
+          "offenceLocation": "Croydon",
+          "offenceWording": "TV Licence not paid",
+          "chargeDate": "2018-12-04",
+          "arrestDate": "2018-12-04",
+          "appliedCompensation": 200,
+          "alcoholRelatedOffence": {
+            "alcoholLevelMethod": "A",
+            "alcoholLevelAmount": 100
+          },
+          "vehicleRelatedOffence": {
+            "vehicleCode": "O",
+            "vehicleRegistrationMark": "AA11 ABC"
+          },
+          "plea": {
+            "pleaDate": "2018-09-11",
+            "pleaValue": "GUILTY"
+          },
+          "verdict": {
+            "verdictDate": "2018-09-12",
+            "verdictType": {
+              "id": "c4ca4238-a0b9-3382-8dcc-509a6f75849b",
+              "category": "Guilty",
+              "categoryType": "GUILTY"
+            }
+          }
+        }
+      ],
+      "postingDate": "2018-09-10"
+    },
+    {
+      "id": "DEFENDANT_ID2",
+      "prosecutorDefendantReference": "DEFENDANT_REFERENCE2",
+      "individualAliases": [
+        {
+          "title": "Baron",
+          "firstName": "John",
+          "givenName2": "James",
+          "givenName3": "Jerry",
+          "lastName": "Smith"
+        },
+        {
+          "title": "Baroness",
+          "firstName": "John",
+          "lastName": "Smith"
+        }
+      ],
+      "documentationLanguage": "W",
+      "hearingLanguage": "W",
+      "custodyStatus": "B",
+      "bailConditions": "bailConditions",
+      "initialHearing": {
+        "courtHearingLocation": "C55BN00",
+        "dateOfHearing": "2050-02-04",
+        "timeOfHearing": "09:05:01.001"
+      },
+      "individual": {
+        "personalInformation": {
+          "title": "Baron",
+          "firstName": "Johny",
+          "lastName": "Smithy",
+          "address": {
+            "address1": "armagaddon house",
+            "postcode": "M60 1NW"
+          },
+          "contactDetails": {}
+        },
+        "bailConditions": "bailConditions",
+        "selfDefinedInformation": {
+          "gender": "MALE"
+        }
+      },
+      "offences": [
+        {
+          "offenceCode": "OFCODE12",
+          "offenceId": "OFFENCE_ID2",
+          "offenceSequenceNumber": 1,
+          "offenceCommittedDate": "2018-09-10",
+          "offenceCommittedEndDate": "2018-10-10",
+          "offenceDateCode": 1,
+          "offenceLocation": "Croydon",
+          "offenceWording": "TV Licence not paid",
+          "chargeDate": "2018-10-10",
+          "arrestDate": "2018-10-10",
+          "appliedCompensation": 200,
+          "alcoholRelatedOffence": {
+            "alcoholLevelMethod": "A",
+            "alcoholLevelAmount": 100
+          },
+          "vehicleMake": "Toyota",
+          "vehicleRegistrationMark": "BB11 ABC"
+        }
+      ],
+      "postingDate": "2018-09-10"
+    }
+  ],
+  "channel": "SPI",
+  "externalId": "EXTERNAL_ID"
+}

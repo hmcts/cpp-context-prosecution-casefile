@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/policeVictim.json",
+  "type": "object",
+  "description": "Personal Information",
+  "properties": {
+    "personalInformation": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/personal-information.json"
+    },
+    "birthDate": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date",
+      "description": "The date when a person was born."
+    },
+    "gender": {
+      "type": "integer"
+    },
+    "observedEthnicity": {
+      "type": "integer"
+    },
+    "selfDefinedEthnicity": {
+      "type": "string"
+    }
+
+  }
+}

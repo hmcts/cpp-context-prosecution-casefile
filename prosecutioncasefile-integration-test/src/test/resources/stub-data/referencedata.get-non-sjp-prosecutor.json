@@ -1,0 +1,18 @@
+{
+  "id": "0534ee76-88f6-40e0-ba8f-53588e146675",
+  "sequenceNumber": 1,
+  "majorCreditorCode": "nonsjp",
+  "shortName": "nonsjp",
+  "fullName": "nonsjp",
+  "nameWelsh": "nonsjp",
+  "oucode": "nonsjp",
+  "spiInFlag": false,
+  "spiOutFlag": true,
+  "address": {
+    "address1": "6th nonsjp House",
+    "postcode": "SW1H 0TL",
+    "address2": "42-50 nonsjp Street",
+    "address3": "nonsjp"
+  },
+  "sjpFlag": false
+}

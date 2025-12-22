@@ -1,0 +1,20 @@
+{
+  "caseId":"51cac7fb-387c-4d19-9c80-8963fa8cf222",
+  "caseType":"CC",
+  "cmsDocumentIdentifier":{
+    "documentId":"ABCDEF",
+    "materialType":1
+  },
+  "documentCategory":"Case level",
+  "documentType":"IDPC bundle",
+  "documentTypeId":"51cac7fb-387c-4d19-9c80-8963fa8cf223",
+  "isCpsCase":true,
+  "material":{
+    "documentType":"IDPC bundle",
+    "fileStoreId":"3042a896-fd3e-478d-bb0e-948dd46191a4",
+    "fileType":"application/pdf"
+  },
+  "prosecutorDefendantId":"TVL_DEF001",
+  "receivedDateTime":"2020-02-04T05:27:17.210Z",
+  "sectionCode":"IDPC"
+}

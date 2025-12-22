@@ -1,0 +1,193 @@
+{
+  "caseDetails":{
+    "caseId":"CASE-ID",
+    "initiationCode":"S",
+    "summonsCode":"B",
+    "originatingOrganisation":"B01BH00",
+    "cpsOrganisation": "A30AB00",
+    "prosecutor":{
+      "informant":"Adam",
+      "prosecutingAuthority":"B01BH00"
+    },
+    "prosecutorCaseReference": "CASE-URN",
+    "caseMarkers":[
+      {
+        "markerTypeCode":"ABC"
+      }
+    ],
+    "dateReceived": "DATE_RECEIVED",
+    "feeStatus": "OUTSTANDING"
+  },
+  "channel":"CHANNEL",
+  "defendants":[
+    {
+      "id":"DEFENDANT_ID1",
+      "prosecutorDefendantReference":"PROSECUTOR_DEFENDANT_REFERENCE1",
+      "appliedProsecutorCosts": 200,
+      "asn":"SummonsNumber001",
+      "pncIdentifier":"2099/1234567L",
+      "croNumber":"123456/20L",
+      "documentationLanguage":"E",
+      "hearingLanguage":"E",
+      "languageRequirement":"no special language needs",
+      "specificRequirements":"no special needs",
+      "address":{
+        "address1":"Address Line 1",
+        "address2":"Address Line 2",
+        "address3":"Address Line 3",
+        "address4":"Address Line 4",
+        "address5":"Address Line 5",
+        "postcode":"CR0 1XX"
+      },
+      "numPreviousConvictions":3,
+
+      "emailAddress1":"aer@af.com",
+      "emailAddress2":"aer@af.com",
+      "individual":{
+        "driverNumber":"AS",
+        "nationalInsuranceNumber":"SN123456C",
+        "parentGuardianInformation":{
+          "dateOfBirth":"1979-05-23",
+          "gender":"MALE",
+          "observedEthnicity":"1",
+          "personalInformation":{
+            "address":{
+              "address1":"ParentGuardian Address Line 1",
+              "address2":"ParentGuardian Address Line 2",
+              "address3":"ParentGuardian Address Line 3",
+              "address4":"ParentGuardian Address Line 4",
+              "address5":"ParentGuardian Address Line 5",
+              "postcode":"PG0 1XX"
+            },
+            "contactDetails":{
+              "home":"9991231230",
+              "mobile":"9991231230",
+              "primaryEmail":"999aer@test.com",
+              "secondaryEmail":"999aer@test.com",
+              "work":"9991231230"
+            },
+            "firstName":"parentGuardianJack",
+            "givenName2":"parentGuardianAaron",
+            "givenName3":"Sr",
+            "lastName":"parentGuardianReaper",
+            "observedEthnicity":4,
+            "title": "Baron"
+          },
+          "selfDefinedEthnicity":"W1"
+        },
+        "perceivedBirthYear":"1970",
+        "personalInformation":{
+          "address":{
+            "address1":"Address Line 1",
+            "address2":"Address Line 2",
+            "address3":"Address Line 3",
+            "address4":"Address Line 4",
+            "address5":"Address Line 5",
+            "postcode":"CR0 1XX"
+          },
+          "contactDetails":{
+            "home":"1231231230",
+            "mobile":"1231231230",
+            "primaryEmail":"aer@af.com",
+            "secondaryEmail":"aer@af.com",
+            "work":"1231231230"
+          },
+          "firstName":"John",
+          "givenName2":"Adam",
+          "givenName3":"Theodore",
+          "lastName":"SMITH",
+          "occupation":"TA",
+          "occupationCode":666,
+          "title": "Baron"
+        },
+        "selfDefinedInformation":{
+          "additionalNationality":"POL",
+          "dateOfBirth":"1970-02-03",
+          "ethnicity":"W1",
+          "gender":"MALE",
+          "nationality":"GBR"
+        }
+      },
+      "individualAliases":[
+        {
+          "firstName":"FirstName",
+          "lastName":"LastName",
+          "givenName2":"GivenName2",
+          "givenName3":"GivenName3",
+          "title": "Baron"
+        },
+        {
+          "firstName":"FirstName",
+          "lastName":"LastName",
+          "givenName2":"GivenName2",
+          "title":"Lady"
+        },
+        {
+          "firstName":"FirstName",
+          "lastName":"LastName",
+          "givenName3":"GivenName3",
+          "title":"Baroness"
+        },
+        {
+          "firstName":"FirstName",
+          "lastName":"LastName",
+          "title":"Baroness"
+        }
+      ],
+      "initialHearing":{
+        "courtHearingLocation":"C55BN00",
+        "dateOfHearing":"2050-02-04",
+        "timeOfHearing":"09:01:01.001"
+      },
+      "offences":[
+        {
+          "offenceId":"OFFENCE_ID1",
+          "offenceCode":"OFCODE12",
+          "offenceSequenceNumber":1,
+          "offenceCommittedDate":"2019-06-11",
+          "offenceCommittedEndDate":"2020-06-11",
+          "offenceDateCode":4,
+          "offenceLocation":"Croydon",
+          "alcoholRelatedOffence":{
+            "alcoholLevelAmount":3,
+            "alcoholLevelMethod":"B"
+          },
+          "offenceWording":"Test Prosecution charge wording",
+          "offenceWordingWelsh":"Test Prosecution charge wording in Welsh",
+          "appliedCompensation":99.99,
+          "backDuty":340.99,
+          "backDutyDateFrom":"2018-04-09",
+          "backDutyDateTo":"2018-05-09",
+          "statementOfFacts":"1Test Prosecution statements of facts",
+          "statementOfFactsWelsh":"1Welsh -Test Prosecution statements of facts",
+          "vehicleMake": "Ford",
+          "vehicleRegistrationMark": "AA11 ABC"
+        },
+        {
+          "offenceId":"OFFENCE_ID2",
+          "offenceCode":"OFCODE12",
+          "offenceSequenceNumber":2,
+          "offenceCommittedDate":"2017-06-12",
+          "offenceCommittedEndDate":"2019-06-12",
+          "alcoholRelatedOffence":{
+            "alcoholLevelAmount":3,
+            "alcoholLevelMethod":"A"
+          },
+          "offenceDateCode":4,
+          "offenceLocation":"EAST Croydon",
+          "offenceWording":"Second OFfence - Test Prosecution charge wording",
+          "offenceWordingWelsh":"Second OFfence - Test Prosecution charge wording in Welsh",
+          "appliedCompensation":199.99,
+          "backDuty":1340.99,
+          "backDutyDateFrom":"2018-04-19",
+          "backDutyDateTo":"2018-05-19",
+          "statementOfFacts":"2Test Prosecution statements of facts",
+          "statementOfFactsWelsh":"2Welsh -Test Prosecution statements of facts",
+          "vehicleMake": "Toyota",
+          "vehicleRegistrationMark": "BB11 ABC"
+        }
+      ]
+    }
+  ],
+  "externalId": "EXTERNAL_ID_2"
+}

@@ -1,0 +1,17 @@
+package uk.gov.moj.cpp.prosecution.casefile.command.api.accesscontrol;
+
+import uk.gov.moj.cpp.accesscontrol.drools.Outcome;
+import uk.gov.moj.cpp.accesscontrol.drools.Action;
+import uk.gov.moj.cpp.prosecution.casefile.command.api.accesscontrol.RuleConstants;
+
+global uk.gov.moj.cpp.accesscontrol.common.providers.UserAndGroupProvider userAndGroupProvider;
+
+rule "Command - prosecutioncasefile sjp-prosecution-update-offence-code"
+  when
+    $outcome: Outcome();
+    $action: Action(name == "prosecutioncasefile.sjp-prosecution-update-offence-code");
+    eval(userAndGroupProvider.isMemberOfAnyOfTheSuppliedGroups($action, RuleConstants.getInitiateSjpProsecutionGroups()))
+    || eval(userAndGroupProvider.hasPermission($action, RuleConstants.expectedPermissionsForCase()));
+  then
+    $outcome.setSuccess(true);
+end

@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/alcohol-related-offence.json",
+  "type": "object",
+  "properties": {
+    "alcoholLevelMethod": {
+      "type": "string",
+      "description": "Alcohol Level Method"
+    },
+    "alcoholLevelAmount": {
+      "type": "integer",
+      "description": "Alcohol Level Amount"
+    }
+  },
+  "additionalProperties": false
+}

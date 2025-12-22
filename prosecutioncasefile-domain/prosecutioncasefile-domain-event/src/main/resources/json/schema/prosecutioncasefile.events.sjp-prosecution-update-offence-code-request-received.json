@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/domain/event/sjp-prosecution-update-offence-code-request-received.json",
+  "type": "object",
+  "properties": {
+    "defendants": {
+      "type": "array",
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/defendant.json"
+      }
+    },
+    "caseId": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/plea/json/schemas/definitions.json#/definitions/uuid"
+    }
+  },
+  "required": [
+    "defendants",
+    "caseId"
+  ]
+}

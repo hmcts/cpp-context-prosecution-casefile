@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/police-rank-reference-data.json",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "sequence": {
+      "type": "integer"
+    },
+    "rankCode": {
+      "type": "string",
+      "maxLength": 10
+    },
+    "validFrom": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "required": [
+    "id",
+    "sequence",
+    "rankCode"
+  ],
+  "additionalProperties": false
+}

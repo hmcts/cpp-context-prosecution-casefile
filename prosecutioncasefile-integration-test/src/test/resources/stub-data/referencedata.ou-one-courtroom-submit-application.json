@@ -1,0 +1,28 @@
+{
+  "id": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+  "oucode": "C55BN00",
+  "oucodeL1Code": "C",
+  "oucodeL3Code": "B01KR",
+  "oucodeL1Name": "Magistrates' Courts",
+  "oucodeL3Name": "Port Talbot",
+  "oucodeL3WelshName": "Welsh Name",
+  "address1": "The Court House",
+  "address2": "Cramic Way",
+  "address3": "Port Talbot",
+  "address4": "West Glam.",
+  "address5": "address line 5",
+  "postcode": "SA13 1RU",
+  "welshAddress1": "Llys Ynadon",
+  "welshAddress2": "Adeilad y Llys",
+  "welshAddress3": "Adeilad y Llys",
+  "welshAddress4": "Gorllewin Meorgannwgc",
+  "welshAddress5": "Caerdydd",
+  "defaultStartTime": "10:30",
+  "defaultDurationHrs": "10:30",
+  "defaultDuration": "6",
+  "courtRoom": {
+    "id": "9e4932f7-97b2-3010-b942-ddd2624e4dd8",
+    "courtroomId": 2330,
+    "courtroomName": "Courtroom 01"
+  }
+}

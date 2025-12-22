@@ -1,0 +1,42 @@
+{
+  "caseId": "51cac7fb-387c-4d19-9c80-8963fa8cf222",
+  "defendants": [
+    {
+      "asn": "0416BH0000000090557N",
+      "documentationLanguage": "E",
+      "hearingLanguage": "E",
+      "individual": {
+        "personalInformation": {
+          "address": {
+            "address1": "89",
+            "address2": "Palace Walk",
+            "address3": "Humberside",
+            "postcode": "HA1 2ER"
+          },
+          "contactDetails": {},
+          "firstName": "john",
+          "lastName": "RAMBO",
+          "occupation": "Office",
+          "title": "Baron"
+        },
+        "selfDefinedInformation": {
+          "dateOfBirth": "1974-05-03",
+          "ethnicity": "W1",
+          "gender": "MALE"
+        }
+      },
+      "offences": [
+        {
+          "chargeDate": "2004-12-09",
+          "offenceCode": "CA03010",
+          "offenceCommittedDate": "2004-12-09",
+          "offenceDateCode": 1,
+          "offenceLocation": "East Yorkshire",
+          "offenceSequenceNumber": 1,
+          "offenceWording": "On 09/12/2004 at East Yorkshire had in your possession a firearm with intent by means thereof to cause anonymous person to believe that unlawful violence would be used against him or another."
+        }
+      ],
+      "postingDate": "2004-12-09"
+    }
+  ]
+}

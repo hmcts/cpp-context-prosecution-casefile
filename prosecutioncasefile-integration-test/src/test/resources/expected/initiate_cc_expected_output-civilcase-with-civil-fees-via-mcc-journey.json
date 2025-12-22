@@ -1,0 +1,139 @@
+{
+  "initiateCourtProceedings": {
+    "listHearingRequests": [
+      {
+        "courtCentre": {
+          "id": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+          "name": "Port Talbot",
+          "roomId": "9e4932f7-97b2-3010-b942-ddd2624e4dd8",
+          "roomName": "Courtroom 01",
+          "welshName": "Welsh Name"
+        },
+        "estimateMinutes": 20,
+        "hearingType": {
+          "description": "Plea & Trial Preparation",
+          "id": "06b0c2bf-3f98-46ed-ab7e-56efaf9ecced"
+        },
+        "jurisdictionType": "CROWN",
+        "listDefendantRequests": [
+          {
+            "defendantId": "5ab0dd03-9600-4220-9bc9-793f4b7669ad",
+            "defendantOffences": [
+              "79a1a4d7-d466-4bc3-af49-390bc5d18661"
+            ],
+            "hearingLanguageNeeds": "ENGLISH",
+            "prosecutionCaseId": "3f2277ba-a449-48e4-b957-d677af416fe6",
+            "summonsRequired": "FIRST_HEARING"
+          }
+        ],
+        "listedStartDateTime": "LISTED_START_DATE_TIME"
+      }
+    ],
+    "prosecutionCases": [
+      {
+        "civilFees": [
+          {
+            "feeId": "3034e172-99d3-4970-bc5e-fd95dd62c9d6",
+            "feeStatus": "REFUNDED",
+            "feeType": "INITIAL"
+          },
+          {
+            "feeId": "3034e172-99d3-4970-bc5e-fd95dd62c9d7",
+            "feeStatus": "NOT_APPLICABLE",
+            "feeType": "CONTESTED"
+          }
+        ],
+        "initiationCode": "O",
+        "isCivil":"true",
+        "defendants": [
+          {
+            "courtProceedingsInitiated": "2021-07-14T15:08:40.649Z",
+            "id": "5ab0dd03-9600-4220-9bc9-793f4b7669ad",
+            "masterDefendantId": "5ab0dd03-9600-4220-9bc9-793f4b7669ad",
+            "initiationCode": "O",
+            "offences": [
+              {
+                "arrestDate": "2018-12-04",
+
+                "count": 0,
+                "endDate": "2018-10-10",
+                "id": "OFFENCE_ID",
+                "offenceCode": "OFFENCE_CODE",
+                "laidDate": "2018-09-10",
+                "offenceFacts": {
+                  "alcoholReadingAmount": 100,
+                  "alcoholReadingMethodCode": "A",
+                  "alcoholReadingMethodDescription": "Blood",
+                  "vehicleCode": "OTHER",
+                  "vehicleRegistration": "AA11 ABC"
+                },
+                "orderIndex": 1,
+                "plea": {
+                  "offenceId": "79a1a4d7-d466-4bc3-af49-390bc5d18661",
+                  "pleaDate": "2018-09-11",
+                  "pleaValue": "GUILTY"
+                },
+                "startDate": "2018-09-10",
+                "verdict": {
+                  "offenceId": "79a1a4d7-d466-4bc3-af49-390bc5d18661",
+                  "verdictDate": "2018-09-12",
+                  "verdictType": {
+                    "category": "Guilty",
+                    "categoryType": "GUILTY",
+                    "id": "c4ca4238-a0b9-3382-8dcc-509a6f75849b"
+                  }
+                },
+                "wording": "TV Licence not paid",
+                "offenceLegislation" : "In accordance Section 30 Domestic Abuse Act 2021.",
+                "offenceTitle": "Arrested for Breach of Domestic Abuse Protection Notice",
+                "offenceDefinitionId": "OFFENCE_ID",
+                "civilOffence": {
+                  "isExParte": true
+                }
+              }
+            ],
+            "personDefendant": {
+              "personDetails": {
+                "address": {
+                  "address1": "340",
+                  "address2": "8009 Camden Throughway",
+                  "postcode": "SW11 1JU"
+                },
+                "hearingLanguageNeeds": "ENGLISH",
+                "dateOfBirth": "1970-11-11",
+                "documentationLanguageNeeds": "ENGLISH",
+                "firstName": "TyshawnTEST",
+                "gender": "NOT_SPECIFIED",
+                "lastName": "O'Reilly",
+                "middleName": "TorreyTest ",
+                "title": "Mr"
+              }
+            },
+            "prosecutionAuthorityReference": "5ab0dd03-9600-4220-9bc9-793f4b7669ad",
+            "prosecutionCaseId": "3f2277ba-a449-48e4-b957-d677af416fe6"
+          }
+        ],
+        "id": "3f2277ba-a449-48e4-b957-d677af416fe6",
+        "originatingOrganisation": "GAFTL00",
+        "prosecutionCaseIdentifier": {
+          "address": {
+            "address1": "6th Floor Windsor House",
+            "address2": "42-50 Victoria Street",
+            "address3": "London",
+            "postcode": "SW1H 0TL"
+          },
+          "contact": {
+            "primaryEmail": "contact@cpp.com"
+          },
+          "prosecutionAuthorityCode": "TFL",
+          "prosecutionAuthorityId": "0534ee76-88f6-40e0-ba8f-53588e146675",
+          "prosecutionAuthorityName": "Transport for London",
+          "caseURN": "C7DBDYBQQT",
+          "majorCreditorCode": "TFL2",
+          "prosecutionAuthorityOUCode": "GAFTL00"
+        }
+      }
+    ]
+  },
+  "id" : ""
+}

@@ -1,0 +1,53 @@
+{
+  "cases": [
+    {
+      "defendants": [
+        {
+          "chargeDate": "2015-04-04",
+          "hearingDate": "2050-02-04",
+          "id": "dfba5348-1201-4ed6-b4e7-c8b01cd2eb4f",
+          "errors": [
+            {
+              "fieldName": "custodyStatus",
+              "errorValue": "",
+              "displayName": "DEFENDANT_CUSTODY_STATUS_INVALID",
+              "version": 865
+            }
+          ],
+          "offences": [
+            {
+              "id": "OFFENCE_ID1",
+              "errors": [
+                {
+                  "id": "fc8305c6-3807-43ba-812e-b0c578bc1a2a",
+                  "fieldName": "offence_offenceCode",
+                  "errorValue": "XX",
+                  "displayName": "OFFENCE_CODE_IS_INVALID",
+                  "version": 865
+                },
+                {
+                  "id": "fc8305c6-3807-43ba-812e-b0c578bc1a2a",
+                  "fieldName": "offence_offenceSequenceNo",
+                  "errorValue": "1",
+                  "displayName": "OFFENCE_CODE_IS_INVALID",
+                  "version": 865
+                }
+              ]
+            }
+          ],
+          "firstName": "John",
+          "lastName": "Smith"
+        }
+      ],
+      "id": "1138c118-b305-46e3-a7a0-f2446f86c11c",
+      "urn": "EZI9TNGQfO",
+      "courtLocation": "C55BN00",
+      "region": "NW",
+      "caseType": "C",
+      "errorDescription": "Multiple Errors",
+      "version": 865,
+      "errors": [],
+      "caseMarkersErrors": []
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "caseDetails": {
+    "caseId": "${case.id}",
+    "prosecutorCaseReference": "${case.urn}",
+    "originatingOrganisation": "123",
+    "cpsOrganisation": "A30AB00",
+    "initiationCode": "J",
+    "prosecutor": {
+      "prosecutingAuthority": "GAEAA01",
+      "informant": "Adam"
+    }
+  },
+  "defendants": [
+    {
+      "id": "${defendant.id}",
+      "appliedProsecutorCosts": 200,
+      "documentationLanguage": "W",
+      "hearingLanguage": "W",
+      "prosecutorDefendantReference": "TFL001Defendant01",
+      "address": {
+        "address1": "armagaddon house",
+        "postcode": "M60 1NW"
+      },
+      "organisationName": "Susan",
+      "individualAliases": [
+        {
+          "title": "Mr",
+          "firstName": "X",
+          "lastName": "Alias1"
+        },
+        {
+          "title": "Mr",
+          "firstName": "Y",
+          "lastName": "Alias2"
+        }
+      ],
+      "offences": [
+        {
+          "offenceCode": "${offence.code:-OFCODE12}",
+          "offenceSequenceNumber": 1,
+          "offenceCommittedDate": "${offence.committedDate:-2017-11-10}",
+          "offenceDateCode": 1,
+          "offenceWording": "Duty not paid",
+          "chargeDate": "${offence.chargeDate:-2018-02-01}",
+          "appliedCompensation": 200,
+          "alcoholRelatedOffence": {
+            "alcoholLevelMethod": "${offence.alcoholRelatedOffence.alcoholLevelMethod:-A}",
+            "alcoholLevelAmount": 100
+          },
+          "backDuty": 340.31,
+          "backDutyDateFrom": "2018-04-30",
+          "backDutyDateTo": "2018-05-30",
+          "vehicleMake": "Ford",
+          "vehicleRegistrationMark": "AB11 ABC"
+        }
+      ],
+      "postingDate": "2018-09-10"
+    }
+  ],
+  "channel": "CPPI",
+  "externalId": "${external.id}"
+}

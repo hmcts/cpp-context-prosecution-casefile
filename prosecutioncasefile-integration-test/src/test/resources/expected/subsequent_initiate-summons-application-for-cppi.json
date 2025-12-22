@@ -1,0 +1,336 @@
+{
+  "boxHearing": {
+    "applicationDueDate": "2050-01-21",
+    "courtCentre": {
+      "address": {
+        "address1": "The Court House",
+        "address2": "Cramic Way",
+        "address3": "Port Talbot",
+        "address4": "West Glam.",
+        "address5": "address line 5",
+        "postcode": "SA13 1RU",
+        "welshAddress1": "Llys Ynadon",
+        "welshAddress2": "Adeilad y Llys",
+        "welshAddress3": "Adeilad y Llys",
+        "welshAddress4": "Gorllewin Morgannwgc",
+        "welshAddress5": "Caerdydd"
+      },
+      "code": "C55BN00",
+      "courtHearingLocation": "C55BN00",
+      "id": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+      "name": "Port Talbot"
+    },
+    "jurisdictionType": "CROWN"
+  },
+  "courtApplication": {
+    "applicant": {
+      "id": "a20bdd1e-95a6-4557-a9dd-e02ee8fcb057",
+      "notificationRequired": false,
+      "prosecutingAuthority": {
+        "address": {
+          "address1": "6th Floor Windsor House",
+          "address2": "42-50 Victoria Street",
+          "address3": "London",
+          "postcode": "SW1H 0TL"
+        },
+        "name": "Transport for London",
+        "prosecutionAuthorityCode": "TFL",
+        "prosecutionAuthorityId": "0534ee76-88f6-40e0-ba8f-53588e146675",
+        "welshName": "Transport for London",
+        "contact" : {
+          "primaryEmail" : "contact@cpp.com"
+        },
+        "majorCreditorCode": "TFL2",
+        "prosecutionAuthorityOUCode" : "GAFTL00"
+      },
+      "summonsRequired": false
+    },
+    "applicationReceivedDate": "DATE_RECEIVED",
+    "applicationStatus": "LISTED",
+    "courtApplicationCases": [
+      {
+        "offences": [
+          {
+            "count": 0,
+            "dvlaOffenceCode": "ABC123",
+            "endDate": "2020-06-11",
+            "id": "OFFENCE_ID1",
+            "modeOfTrial": "Either Way",
+            "offenceCode": "OFCODE12",
+            "offenceDateCode": 4,
+            "offenceDefinitionId": "04c099cc-eba2-4c80-9eed-7c1ef21d706a",
+            "offenceFacts": {
+              "alcoholReadingAmount": 3,
+              "alcoholReadingMethodCode": "B",
+              "alcoholReadingMethodDescription": "Breath",
+              "vehicleRegistration": "AA11 ABC"
+            },
+            "offenceTitle": "Obstruct person executing search warrant for TV receiver",
+            "orderIndex": 1,
+            "startDate": "2019-06-11",
+            "wording": "Test Prosecution charge wording",
+            "wordingWelsh": "Test Prosecution charge wording in Welsh"
+          },
+          {
+            "count": 0,
+            "dvlaOffenceCode": "ABC123",
+            "endDate": "2019-06-12",
+            "id": "OFFENCE_ID2",
+            "modeOfTrial": "Either Way",
+            "offenceCode": "OFCODE12",
+            "offenceDateCode": 4,
+            "offenceDefinitionId": "04c099cc-eba2-4c80-9eed-7c1ef21d706a",
+            "offenceFacts": {
+              "alcoholReadingAmount": 3,
+              "alcoholReadingMethodCode": "A",
+              "alcoholReadingMethodDescription": "Blood",
+              "vehicleRegistration": "BB11 ABC"
+            },
+            "offenceTitle": "Obstruct person executing search warrant for TV receiver",
+            "orderIndex": 2,
+            "startDate": "2017-06-12",
+            "wording": "Second OFfence - Test Prosecution charge wording",
+            "wordingWelsh": "Second OFfence - Test Prosecution charge wording in Welsh"
+          }
+        ],
+        "prosecutionCaseId": "CASE-ID",
+        "prosecutionCaseIdentifier": {
+          "address": {
+            "address1": "6th Floor Windsor House",
+            "address2": "42-50 Victoria Street",
+            "address3": "London",
+            "postcode": "SW1H 0TL"
+          },
+          "majorCreditorCode": "TFL2",
+          "prosecutionAuthorityCode": "TFL",
+          "prosecutionAuthorityId": "0534ee76-88f6-40e0-ba8f-53588e146675",
+          "prosecutionAuthorityName": "Transport for London",
+          "caseURN": "CASE-URN",
+          "prosecutionAuthorityOUCode" : "GAFTL00",
+          "contact" : {
+            "primaryEmail" : "contact@cpp.com"
+          }
+        },
+        "isSJP": false,
+        "caseStatus" : "ACTIVE"
+      }
+    ],
+    "id": "APPLICATION_ID_2",
+    "respondents": [
+      {
+        "id": "DEFENDANT_ID1",
+        "masterDefendant": {
+          "masterDefendantId": "DEFENDANT_ID1",
+          "prosecutionAuthorityReference": "PROSECUTOR_DEFENDANT_REFERENCE1",
+          "isYouth": false,
+          "personDefendant": {
+            "arrestSummonsNumber": "SummonsNumber001",
+            "driverNumber": "AS",
+            "perceivedBirthYear": 1970,
+            "personDetails": {
+              "additionalNationalityCode": "POL",
+              "additionalNationalityDescription": "Polish",
+              "additionalNationalityId": "ca2438ed-2eba-4c1b-967d-3fa7c46f24d4",
+              "address": {
+                "address1": "Address Line 1",
+                "address2": "Address Line 2",
+                "address3": "Address Line 3",
+                "address4": "Address Line 4",
+                "address5": "Address Line 5",
+                "postcode": "CR0 1XX"
+              },
+              "contact": {
+                "home": "1231231230",
+                "mobile": "1231231230",
+                "primaryEmail": "aer@af.com",
+                "secondaryEmail": "aer@af.com",
+                "work": "1231231230"
+              },
+              "dateOfBirth": "1970-02-03",
+              "documentationLanguageNeeds": "ENGLISH",
+              "hearingLanguageNeeds": "ENGLISH",
+              "ethnicity": {
+                "selfDefinedEthnicityCode": "W1",
+                "selfDefinedEthnicityDescription": "British",
+                "selfDefinedEthnicityId": "1daefec3-2f76-8109-82d9-2e60544a6c01"
+              },
+              "firstName": "John",
+              "gender": "MALE",
+              "interpreterLanguageNeeds": "no special language needs",
+              "lastName": "SMITH",
+              "middleName": "Adam Theodore",
+              "nationalInsuranceNumber": "SN123456C",
+              "nationalityCode": "GBR",
+              "nationalityDescription": "British",
+              "nationalityId": "22ef7a73-df50-4349-8c72-ca3b9ace6363",
+              "occupation": "TA",
+              "occupationCode": "666",
+              "specificRequirements": "no special needs",
+              "title": "Baron"
+            }
+          }
+        },
+        "notificationRequired": false,
+        "summonsRequired": true
+      },
+      {
+        "id": "DEFENDANT_ID2",
+        "masterDefendant": {
+          "masterDefendantId": "DEFENDANT_ID2",
+          "prosecutionAuthorityReference": "PROSECUTOR_DEFENDANT_REFERENCE2",
+          "isYouth": false,
+          "personDefendant": {
+            "arrestSummonsNumber": "SummonsNumber001",
+            "driverNumber": "AS",
+            "perceivedBirthYear": 1970,
+            "personDetails": {
+              "additionalNationalityCode": "ITA",
+              "additionalNationalityDescription": "Italian",
+              "additionalNationalityId": "ca2438fd-2eba-4c1b-967d-3fa7c46f24d4",
+              "address": {
+                "address1": "Address Line 1",
+                "address2": "Address Line 2",
+                "address3": "Address Line 3",
+                "address4": "Address Line 4",
+                "address5": "Address Line 5",
+                "postcode": "CR0 1XX"
+              },
+              "contact": {
+                "home": "1231231230",
+                "mobile": "1231231230",
+                "primaryEmail": "aer@af.com",
+                "secondaryEmail": "aer@af.com",
+                "work": "1231231230"
+              },
+              "dateOfBirth": "1970-02-03",
+              "documentationLanguageNeeds": "ENGLISH",
+              "hearingLanguageNeeds": "ENGLISH",
+              "ethnicity": {
+                "selfDefinedEthnicityCode": "W1",
+                "selfDefinedEthnicityDescription": "British",
+                "selfDefinedEthnicityId": "1daefec3-2f76-8109-82d9-2e60544a6c01"
+              },
+              "firstName": "John",
+              "gender": "MALE",
+              "interpreterLanguageNeeds": "no special language needs",
+              "lastName": "SMITH",
+              "middleName": "Adam Theodore",
+              "nationalInsuranceNumber": "SN123456C",
+              "nationalityCode": "GBR",
+              "nationalityDescription": "British",
+              "nationalityId": "22ef7a73-df50-4349-8c72-ca3b9ace6363",
+              "occupation": "TA",
+              "occupationCode": "666",
+              "specificRequirements": "no special needs",
+              "title": "Baron"
+            }
+          }
+        },
+        "notificationRequired": false,
+        "summonsRequired": true
+      },
+      {
+        "id": "DEFENDANT_ID3",
+        "masterDefendant": {
+          "legalEntityDefendant": {
+            "organisation": {
+              "address": {
+                "address1": "Address Line 1",
+                "address2": "Address Line 2",
+                "address3": "Address Line 3",
+                "address4": "Address Line 4",
+                "address5": "Address Line 5",
+                "postcode": "CR0 1XX"
+              },
+              "contact": {
+                "work": "07894278021"
+              },
+              "name": "HMCTS"
+            }
+          },
+          "masterDefendantId": "DEFENDANT_ID3",
+          "isYouth": false,
+          "prosecutionAuthorityReference": "PROSECUTOR_DEFENDANT_REFERENCE3"
+        },
+        "notificationRequired": false,
+        "summonsRequired": true
+      }
+    ],
+    "subject": {
+      "id": "DEFENDANT_ID1",
+      "masterDefendant": {
+        "masterDefendantId": "DEFENDANT_ID1",
+        "prosecutionAuthorityReference": "PROSECUTOR_DEFENDANT_REFERENCE1",
+        "isYouth": false,
+        "personDefendant": {
+          "arrestSummonsNumber": "SummonsNumber001",
+          "driverNumber": "AS",
+          "perceivedBirthYear": 1970,
+          "personDetails": {
+            "additionalNationalityCode": "POL",
+            "additionalNationalityDescription": "Polish",
+            "additionalNationalityId": "ca2438ed-2eba-4c1b-967d-3fa7c46f24d4",
+            "address": {
+              "address1": "Address Line 1",
+              "address2": "Address Line 2",
+              "address3": "Address Line 3",
+              "address4": "Address Line 4",
+              "address5": "Address Line 5",
+              "postcode": "CR0 1XX"
+            },
+            "contact": {
+              "home": "1231231230",
+              "mobile": "1231231230",
+              "primaryEmail": "aer@af.com",
+              "secondaryEmail": "aer@af.com",
+              "work": "1231231230"
+            },
+            "dateOfBirth": "1970-02-03",
+            "documentationLanguageNeeds": "ENGLISH",
+            "hearingLanguageNeeds": "ENGLISH",
+            "ethnicity": {
+              "selfDefinedEthnicityCode": "W1",
+              "selfDefinedEthnicityDescription": "British",
+              "selfDefinedEthnicityId": "1daefec3-2f76-8109-82d9-2e60544a6c01"
+            },
+            "firstName": "John",
+            "gender": "MALE",
+            "interpreterLanguageNeeds": "no special language needs",
+            "lastName": "SMITH",
+            "middleName": "Adam Theodore",
+            "nationalInsuranceNumber": "SN123456C",
+            "nationalityCode": "GBR",
+            "nationalityDescription": "British",
+            "nationalityId": "22ef7a73-df50-4349-8c72-ca3b9ace6363",
+            "occupation": "TA",
+            "occupationCode": "666",
+            "specificRequirements": "no special needs",
+            "title": "Baron"
+          }
+        }
+      },
+      "notificationRequired": false,
+      "summonsRequired": true
+    },
+    "type": {
+      "appealFlag": false,
+      "applicantAppellantFlag": false,
+      "breachType": "NOT_APPLICABLE",
+      "categoryCode": "CO",
+      "commrOfOathFlag": false,
+      "courtExtractAvlFlag": false,
+      "courtOfAppealFlag": false,
+      "id": "cb05a560-48f9-415d-b230-55b78f8cb4a8",
+      "jurisdiction": "EITHER",
+      "linkType": "FIRST_HEARING",
+      "offenceActiveOrder": "OFFENCE",
+      "pleaApplicableFlag": false,
+      "prosecutorThirdPartyFlag": false,
+      "spiOutApplicableFlag": false,
+      "summonsTemplateType": "FIRST_HEARING",
+      "type": "Application for first hearing summons for criminal case",
+      "validFrom": "2019-04-01"
+    }
+  },
+  "summonsApprovalRequired": true
+}

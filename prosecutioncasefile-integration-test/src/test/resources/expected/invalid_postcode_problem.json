@@ -1,0 +1,11 @@
+[
+  {
+    "code": "INVALID_DEFENDANT_INDIVIDUAL_POST_CODE",
+    "values": [
+      {
+        "key": "individual_personalInformation_address_postcode",
+        "value": "CRO 2QX"
+      }
+    ]
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cpp/json/schemas/prosecutioncasefile/events/defendant-validation-failed.json",
+  "type": "object",
+  "properties": {
+
+  },
+  "additionalProperties": true
+}

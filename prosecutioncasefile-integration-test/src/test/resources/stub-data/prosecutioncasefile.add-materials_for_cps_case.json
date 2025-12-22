@@ -1,0 +1,17 @@
+{
+  "prosecutingAuthority": "B01NM00",
+  "prosecutorDefendantId": "%s",
+  "materials": [
+    {
+      "fileStoreId": "26b16077-9d20-4b67-92d6-18f98d4def40",
+      "documentType": "sjpn",
+      "fileType": "application/pdf"
+    },
+    {
+      "fileStoreId": "26b16077-9d20-4b67-92d6-18f98d4def41",
+      "documentType": "sjpn",
+      "fileType": "application/pdf"
+    }
+  ],
+  "isCpsCase": true
+}

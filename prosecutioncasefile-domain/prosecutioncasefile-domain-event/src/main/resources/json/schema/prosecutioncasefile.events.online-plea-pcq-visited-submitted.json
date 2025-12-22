@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/domain/event/online-plea-pcq-visited-submitted.json",
+  "type": "object",
+  "properties": {
+    "caseId": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/plea/json/schemas/definitions.json#/definitions/uuid"
+    },
+    "createdBy": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/plea/json/schemas/definitions.json#/definitions/uuid"
+    },
+    "receivedDateTime": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date-time"
+    },
+    "pleadOnlineVisited": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/plea/json/schemas/plead-online-pcq-visited.json"
+    }
+  },
+  "required": [
+    "caseId",
+    "createdBy",
+    "receivedDateTime",
+    "pleadOnlineVisited"
+  ],
+  "additionalProperties": false
+}

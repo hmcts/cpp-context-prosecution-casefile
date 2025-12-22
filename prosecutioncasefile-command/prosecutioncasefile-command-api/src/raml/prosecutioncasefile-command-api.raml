@@ -1,0 +1,248 @@
+#%RAML 0.8
+title: prosecutioncasefile-command-api - Command API
+baseUri: http://localhost:8080/prosecutioncasefile-command-api/command/api/rest/prosecutioncasefile
+protocols: [ HTTP ]
+
+/initiate-sjp-prosecution:
+  post:
+    description: |
+      Initiates an SJP Prosecution Case.
+      ...
+      (mapping):
+          requestType: application/vnd.prosecutioncasefile.command.initiate-sjp-prosecution+json
+          name: prosecutioncasefile.command.initiate-sjp-prosecution
+      ...
+    body:
+      application/vnd.prosecutioncasefile.command.initiate-sjp-prosecution+json:
+        example:
+          !include json/prosecutioncasefile.command.initiate-prosecution.json
+        schema:
+          !include json/schema/prosecutioncasefile.command.initiate-prosecution.json
+
+/cc-prosecution:
+  post:
+    description: |
+      Initiates an CC Prosecution Case.
+      ...
+      (mapping):
+          requestType: application/vnd.prosecutioncasefile.command.initiate-cc-prosecution+json
+          name: prosecutioncasefile.command.initiate-cc-prosecution
+      ...
+    body:
+      application/vnd.prosecutioncasefile.command.initiate-cc-prosecution+json:
+        example:
+          !include json/prosecutioncasefile.command.initiate-prosecution.json
+        schema:
+          !include json/schema/prosecutioncasefile.command.initiate-prosecution.json
+
+/applications/{applicationId}/material:
+  post:
+    description: |
+      ...
+      (mapping):
+        requestType: application/vnd.prosecutioncasefile.add-application-material-v2+json
+        name: prosecutioncasefile.add-application-material-v2
+      ...
+    body:
+      application/vnd.prosecutioncasefile.add-application-material-v2+json:
+        example:
+          !include json/prosecutioncasefile.add-application-material-v2.json
+        schema:
+          !include json/schema/prosecutioncasefile.add-application-material-v2.json
+    responses:
+      500:
+        description: Internal Server Error
+      202:
+        description: Accepted
+
+/cases/{caseId}/material:
+  post:
+    description: |
+      ...
+      (mapping):
+        requestType: application/vnd.prosecutioncasefile.add-material+json
+        name: prosecutioncasefile.add-material
+
+      (mapping):
+        requestType: application/vnd.prosecutioncasefile.add-materials+json
+        name: prosecutioncasefile.add-materials
+
+      (mapping):
+        requestType: application/vnd.prosecutioncasefile.add-material-v2+json
+        name: prosecutioncasefile.add-material-v2
+
+      (mapping):
+        requestType: application/vnd.prosecutioncasefile.add-idpc-material+json
+        name: prosecutioncasefile.add-idpc-material
+
+      (mapping):
+        requestType: application/vnd.prosecutioncasefile.add-cps-material+json
+        name: prosecutioncasefile.add-cps-material
+      ...
+    body:
+      application/vnd.prosecutioncasefile.add-material+json:
+        example:
+          !include json/prosecutioncasefile.add-material.json
+        schema:
+          !include json/schema/prosecutioncasefile.add-material.json
+
+      application/vnd.prosecutioncasefile.add-materials+json:
+        example:
+          !include json/prosecutioncasefile.add-materials.json
+        schema:
+          !include json/schema/prosecutioncasefile.add-materials.json
+
+      application/vnd.prosecutioncasefile.add-material-v2+json:
+        example:
+          !include json/prosecutioncasefile.add-material-v2.json
+        schema:
+          !include json/schema/prosecutioncasefile.add-material-v2.json
+
+      application/vnd.prosecutioncasefile.add-idpc-material+json:
+        example:
+          !include json/prosecutioncasefile.add-idpc-material.json
+        schema:
+          !include json/schema/prosecutioncasefile.add-idpc-material.json
+
+      application/vnd.prosecutioncasefile.add-cps-material+json:
+        example:
+          !include json/prosecutioncasefile.add-cps-material.json
+        schema:
+          !include json/schema/prosecutioncasefile.add-cps-material.json
+
+    responses:
+      500:
+        description: Internal Server Error
+      202:
+        description: Accepted
+
+
+/cases/{caseId}/resolve-errors:
+  post:
+    description: |
+      ...
+      (mapping):
+        requestType: application/vnd.prosecutioncasefile.command.resolve-errors+json
+        name: prosecutioncasefile.command.resolve-errors
+      ...
+    body:
+      application/vnd.prosecutioncasefile.command.resolve-errors+json:
+        example:
+          !include json/prosecutioncasefile.command.resolve-errors.json
+        schema:
+          !include json/schema/prosecutioncasefile.command.resolve-errors.json
+
+/application:
+  post:
+    description: |
+      Validate application data.
+      ...
+      (mapping):
+          requestType: application/vnd.prosecutioncasefile.command.submit-application+json
+          name: prosecutioncasefile.command.submit-application
+      ...
+    body:
+      application/vnd.prosecutioncasefile.command.submit-application+json:
+        example:
+          !include json/prosecutioncasefile.command.submit-application.json
+        schema:
+          !include json/schema/prosecutioncasefile.command.submit-application.json
+
+/cases/{caseId}/defendants/{defendantId}/plead-online:
+  uriParameters:
+    caseId:
+      description: The ID of the case update
+      type: string
+    defendantId:
+          description: The ID of the defendant
+          type: string
+  post:
+    description: |
+      Receive an online plea
+      ...
+      (mapping):
+          requestType: application/vnd.prosecutioncasefile.plead-online+json
+          name: prosecutioncasefile.plead-online
+      ...
+    body:
+      application/vnd.prosecutioncasefile.plead-online+json:
+        example:
+          !include json/prosecutioncasefile.plead-online.json
+        schema:
+          !include json/schema/prosecutioncasefile.plead-online.json
+    responses:
+      500:
+        description: Internal Server Error
+      202:
+        description: Accepted
+/cases/{caseId}/defendants/{defendantId}/pcq/{pcqId}/plead-online:
+  uriParameters:
+    caseId:
+      description: The ID of the case update
+      type: string
+    defendantId:
+         description: The ID of the defendant
+         type: string
+    pcqId:
+         description: The ID of the PCQ
+         type: string
+  post:
+    description: |
+      Receives pcq-visited flag for an online plea
+      ...
+      (mapping):
+          requestType: application/vnd.prosecutioncasefile.plead-online-pcq-visited+json
+          name: prosecutioncasefile.plead-online-pcq-visited
+      ...
+    body:
+      application/vnd.prosecutioncasefile.plead-online-pcq-visited+json:
+        example:
+          !include json/prosecutioncasefile.plead-online-pcq-visited.json
+        schema:
+          !include json/schema/prosecutioncasefile.plead-online-pcq-visited.json
+    responses:
+      500:
+        description: Internal Server Error
+      202:
+        description: Accepted
+
+/initiate-group-prosecution:
+  post:
+    description: |
+      Initiates a Group Prosecution.
+      ...
+      (mapping):
+          requestType: application/vnd.prosecutioncasefile.command.initiate-group-prosecution+json
+          name: prosecutioncasefile.command.initiate-group-prosecution
+      ...
+    body:
+      application/vnd.prosecutioncasefile.command.initiate-group-prosecution+json:
+        example:
+          !include json/prosecutioncasefile.command.initiate-group-prosecution.json
+        schema:
+          !include json/schema/prosecutioncasefile.command.initiate-group-prosecution.json
+
+/cases/{caseId}:
+  uriParameters:
+    caseId:
+      description: The ID of the case to update
+      type: string
+  post:
+    description: |
+      Update the offence code to the given offence code
+      ...
+      (mapping):
+          requestType: application/vnd.prosecutioncasefile.sjp-prosecution-update-offence-code+json
+          name: prosecutioncasefile.sjp-prosecution-update-offence-code
+      ...
+    body:
+      application/vnd.prosecutioncasefile.sjp-prosecution-update-offence-code+json:
+        example:
+          !include json/prosecutioncasefile.sjp-prosecution-update-offence-code.json
+        schema:
+          !include json/schema/prosecutioncasefile.sjp-prosecution-update-offence-code.json
+    responses:
+      500:
+        description: Internal Server Error
+      202:
+        description: Accepted

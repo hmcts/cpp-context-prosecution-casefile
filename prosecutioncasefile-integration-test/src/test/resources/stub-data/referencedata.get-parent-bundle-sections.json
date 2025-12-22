@@ -1,0 +1,65 @@
+{
+  "id": "7e2f843e-d639-40b3-8611-8015f3a13444",
+  "seqNum": 10,
+  "cpsBundleCode": "1",
+  "parentBundleCode": "IDPC",
+  "parentBundleDescription": "IDPC",
+  "targetSectionCode": "IDPC",
+  "unbundleFlag": true,
+  "bundleAcceptanceFlag": true,
+  "validFrom": "2019-12-01",
+  "validTo": "2021-12-01",
+  "bundleSections": [
+    {
+      "seqNum": 10,
+      "bundleSectionCode": "CH",
+      "bundleSectionName": "Charges",
+      "splitBundleSubSection": false,
+      "targetSectionCode": "CH",
+      "validFrom": "2020-01-01",
+      "validTo": "2020-11-01"
+    },
+    {
+      "seqNum": 20,
+      "bundleSectionCode": "CS",
+      "bundleSectionName": "Case Summary",
+      "splitBundleSubSection": false,
+      "targetSectionCode": "CS"
+    },
+    {
+      "seqNum": 30,
+      "bundleSectionCode": "KWS",
+      "bundleSectionName": "Key Witness Statement",
+      "splitBundleSubSection": true,
+      "targetSectionCode": "KWS"
+    },
+    {
+      "seqNum": 40,
+      "bundleSectionCode": "KE",
+      "bundleSectionName": "Key Exhibits",
+      "splitBundleSubSection": true,
+      "targetSectionCode": "KE"
+    },
+    {
+      "seqNum": 50,
+      "bundleSectionCode": "TAI",
+      "bundleSectionName": "Transcripts ABE interviews",
+      "splitBundleSubSection": true,
+      "targetSectionCode": "TAI"
+    },
+    {
+      "seqNum": 60,
+      "bundleSectionCode": "SFR",
+      "bundleSectionName": "Streamlined Forensic Reports",
+      "splitBundleSubSection": true,
+      "targetSectionCode": "SFR"
+    },
+    {
+      "seqNum": 70,
+      "bundleSectionCode": "PC",
+      "bundleSectionName": "Pre Cons",
+      "splitBundleSubSection": false,
+      "targetSectionCode": "PC"
+    }
+  ]
+}

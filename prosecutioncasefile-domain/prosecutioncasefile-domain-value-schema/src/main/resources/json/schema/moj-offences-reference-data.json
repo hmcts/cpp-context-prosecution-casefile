@@ -1,0 +1,137 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/moj-offences.json",
+  "properties": {
+    "mojOffences": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/mojOffence"
+      },
+      "minItems": 0
+    }
+  },
+  "required": [
+    "mojOffences"
+  ],
+  "definitions": {
+    "mojOffence": {
+      "type": "object",
+      "properties": {
+        "offenceId": {
+          "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+        },
+        "pssOffenceId": {
+          "type": "integer"
+        },
+        "cjsOffenceCode": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "titleWelsh": {
+          "type": "string"
+        },
+        "legislation": {
+          "type": "string"
+        },
+        "legislationWelsh": {
+          "type": "string"
+        },
+        "offenceWording": {
+          "type": "string"
+        },
+        "offenceWordingWelsh": {
+          "type": "string"
+        },
+        "statementOfFact": {
+          "type": "string"
+        },
+        "statementOfFactWelsh": {
+          "type": "string"
+        },
+        "dvlaCode": {
+          "type": "string"
+        },
+        "endorsableFlag": {
+          "type": "boolean"
+        },
+        "locationFlag": {
+          "type": "string",
+          "maxLength": 1
+        },
+        "offenceType": {
+          "type": "string"
+        },
+        "misCode": {
+          "type": "string"
+        },
+        "misDescription": {
+          "type": "string"
+        },
+        "mojStatCode": {
+          "type": "string"
+        },
+        "hoClass": {
+          "type": "string"
+        },
+        "hoSubClass": {
+          "type": "string"
+        },
+        "maxPenalty": {
+          "type": "string"
+        },
+        "terminalEntry": {
+          "type": "string"
+        },
+        "canBeBulk": {
+          "type": "boolean"
+        },
+        "applicationSynonyms": {
+          "type": "string"
+        },
+        "initialFeeApplicable": {
+          "type": "boolean"
+        },
+        "contestedFeeApplicable": {
+          "type": "boolean"
+        },
+        "exparteFlag": {
+          "type": "boolean"
+        },
+        "sowRef": {
+          "type": "string"
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "endDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "changeDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "lastModifiedTs": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "search": {
+          "type": "string"
+        },
+        "custodialIndicator": {
+          "type": "string"
+        },
+        "recordable": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "offenceId"
+      ]
+    }
+  }
+}

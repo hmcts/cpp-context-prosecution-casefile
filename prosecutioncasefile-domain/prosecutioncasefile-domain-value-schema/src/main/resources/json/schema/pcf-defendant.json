@@ -1,0 +1,121 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/defendant.json",
+  "type": "object",
+  "description": "Defendant Details",
+  "properties": {
+    "id": {
+      "type": "string",
+      "maxLength": 36
+    },
+    "prosecutorDefendantReference": {
+      "type": "string",
+      "maxLength": 36
+    },
+    "asn": {
+      "type": "string",
+      "description": "Arrest / Summons number",
+      "maxLength": 20
+    },
+    "appliedProsecutorCosts": {
+      "type": "number",
+      "description": "Prosecution costs applied."
+    },
+    "custodyStatus": {
+      "type": "string",
+      "maxLength": 1
+    },
+    "custodyTimeLimit": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date",
+      "description": ""
+    },
+    "documentationLanguage": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/language.json"
+    },
+    "hearingLanguage": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/language.json"
+    },
+    "initialHearing": {
+      "$ref": "http://justice.gov.uk/cps/prosecutioncasefile/initial-hearing.json"
+    },
+    "languageRequirement": {
+      "type": "string",
+      "description": "Notes about the defendant’s language needs, e.g. interpreter details",
+      "maxLength": 150
+    },
+    "specificRequirements": {
+      "type": "string",
+      "description": "Notes about any help that the defendant may need when attending court – e.g. wheelchair access.",
+      "maxLength": 150
+    },
+    "numPreviousConvictions": {
+      "type": "integer",
+      "description": "Number of previous conviction cited by prosecutor."
+    },
+    "individual": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/individual.json"
+    },
+    "offences": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/offence.json"
+      }
+
+    },
+    "postingDate": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date",
+      "description": "Date on which SJP Notice was posted to the defendant."
+    },
+    "emailAddress1": {
+      "type": "string"
+    },
+
+    "emailAddress2": {
+      "type": "string"
+    },
+
+    "organisationName": {
+      "type": "string"
+    },
+
+    "pncIdentifier": {
+      "type": "string"
+    },
+
+    "telephoneNumberBusiness": {
+      "type": "string"
+    },
+    "croNumber": {
+      "type": "string"
+    },
+
+    "individualAliases": {
+      "type": "array",
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/individual-alias.json"
+      }
+    },
+    "aliasForCorporate": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "address": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/address.json"
+    },
+    "initiationCode": {
+      "type": "string"
+    },
+    "libraReferenceNumber": {
+      "type": "string",
+      "description": "Original reference number with exactly 10 digits.",
+      "pattern": "^[0-9]{10}$"
+    }
+
+  },
+  "required": [
+    "offences"
+  ]
+}

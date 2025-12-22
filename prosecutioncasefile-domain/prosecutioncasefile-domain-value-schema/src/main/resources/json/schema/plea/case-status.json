@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/plea/json/schemas/case-status.json",
+  "type": "string",
+  "enum": [
+    "NO_PLEA_RECEIVED",
+    "NO_PLEA_RECEIVED_READY_FOR_DECISION",
+    "PLEA_RECEIVED_READY_FOR_DECISION",
+    "PLEA_RECEIVED_NOT_READY_FOR_DECISION",
+    "SET_ASIDE_READY_FOR_DECISION",
+    "WITHDRAWAL_REQUEST_READY_FOR_DECISION",
+    "REFERRED_FOR_COURT_HEARING",
+    "COMPLETED",
+    "REOPENED_IN_LIBRA",
+    "COMPLETED_APPLICATION_PENDING",
+    "RELISTED",
+    "APPEALED",
+    "UNKNOWN"
+  ]
+}

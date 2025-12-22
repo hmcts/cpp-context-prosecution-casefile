@@ -1,0 +1,28 @@
+{
+  "custodyStatuses": [
+    {
+      "id": "a5e5df07-c729-3f95-bf12-957c018eb526",
+      "sequence": 10,
+      "statusCode": "B",
+      "statusDescription": "Conditional Bail"
+    },
+    {
+      "id": "4cfa861d-2931-30a6-a505-ddb91c95ab74",
+      "sequence": 20,
+      "statusCode": "U",
+      "statusDescription": "Unconditional Bail"
+    },
+    {
+      "id": "42db3b24-7bf5-383a-b14a-161bee5701e4",
+      "sequence": 30,
+      "statusCode": "C",
+      "statusDescription": "Custody"
+    },
+    {
+      "id": "5e026bc1-f24c-3cae-b33d-b331db5c43e2",
+      "sequence": 40,
+      "statusCode": "R",
+      "statusDescription": "Re-arrested after release on bail"
+    }
+  ]
+}

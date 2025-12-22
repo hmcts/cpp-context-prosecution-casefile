@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cpp/json/schemas/prosecutioncasefile/events/defendant-idpc-added.json",
+  "type": "object",
+  "properties": {
+    "caseId": {
+      "id": "/caseId",
+      "type": "string"
+    },
+    "caseDocument": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "materialId": {
+          "type": "string"
+        },
+        "documentType": {
+          "type": "string"
+        },
+        "addedAt": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true,
+      "required": [
+        "id",
+        "materialId",
+        "addedAt"
+      ]
+    },
+    "defendantId": {
+      "id": "/caseId",
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "required": [
+    "caseId",
+    "caseDocument",
+    "defendantId"
+  ]
+}

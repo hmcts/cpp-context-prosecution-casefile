@@ -1,0 +1,19 @@
+{
+  "defendants": [
+    {
+      "id": "DEF_ID",
+      "errors": [
+        {
+          "id": "OFFENCE_ID",
+          "fieldName": "offence_alcoholRelatedOffence_alcoholLevelMethod",
+          "value": "A"
+        },
+        {
+          "id": "OFFENCE_ID",
+          "fieldName": "offence_alcoholRelatedOffence_alcoholLevelAmount",
+          "value": "5"
+        }
+      ]
+    }
+  ]
+}

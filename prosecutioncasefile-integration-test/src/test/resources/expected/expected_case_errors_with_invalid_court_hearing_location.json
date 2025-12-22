@@ -1,0 +1,151 @@
+{
+  "cases": [
+    {
+      "defendants": [
+        {
+          "chargeDate": "2022-04-04",
+          "hearingDate": "1999-02-04",
+          "id": "f1fb1b61-be1a-4222-a7a3-a9d3c9128b6e",
+          "errors": [
+            {
+              "fieldName": "initialHearing_courtHearingLocation",
+              "errorValue": "abcd",
+              "displayName": "COURT_HEARING_LOCATION_OUCODE_INVALID",
+              "version": 304
+            },
+            {
+              "fieldName": "initialHearing_dateOfHearing",
+              "errorValue": "1999-02-04",
+              "displayName": "DATE_OF_HEARING_EARLIER_THAN_OFFENCE_COMMITTED_DATE",
+              "version": 304
+            },
+            {
+              "fieldName": "individual_personalInformation_contactDetails_primaryEmail",
+              "errorValue": "bad@primaryemail",
+              "displayName": "DEFENDANT_PRIMARY_EMAIL_ADDRESS_INVALID",
+              "version": 304
+            },
+            {
+              "fieldName": "individual_personalInformation_contactDetails_secondaryEmail",
+              "errorValue": "bad@secondaryemail",
+              "displayName": "DEFENDANT_SECONDARY_EMAIL_ADDRESS_INVALID",
+              "version": 304
+            },
+            {
+              "fieldName": "individual_parentGuardianInformation_dateOfBirth",
+              "errorValue": "2041-03-03",
+              "displayName": "DEFENDANT_PARENT_GUARDIAN_DATE_OF_BIRTH_IN_FUTURE",
+              "version": 304
+            },
+            {
+              "fieldName": "individual_parentGuardianInformation_observedEthnicity",
+              "errorValue": "3",
+              "displayName": "DEFENDANT_PARENT_GUARDIAN_OBSERVED_ETHNICITY_INVALID",
+              "version": 304
+            },
+            {
+              "fieldName": "individual_parentGuardianInformation_selfDefinedEthnicity",
+              "errorValue": "white",
+              "displayName": "DEFENDANT_PARENT_GUARDIAN_SELF_DEFINED_ETHNICITY_INVALID",
+              "version": 304
+            },
+            {
+              "fieldName": "individual_parentGuardianInformation_personalInformation_contactDetails_primaryEmail",
+              "errorValue": "bad@parentprimaryemail",
+              "displayName": "DEFENDANT_PARENT_GUARDIAN_PRIMARY_EMAIL_ADDRESS_INVALID",
+              "version": 304
+            },
+            {
+              "fieldName": "individual_parentGuardianInformation_personalInformation_contactDetails_secondaryEmail",
+              "errorValue": "bad@parentsecondaryemail",
+              "displayName": "DEFENDANT_PARENT_GUARDIAN_SECONDARY_EMAIL_ADDRESS_INVALID",
+              "version": 304
+            },
+            {
+              "fieldName": "individual_offenderCode",
+              "errorValue": "XYZ",
+              "displayName": "OFFENDER_CODE_IS_INVALID",
+              "version": 304
+            },
+            {
+              "fieldName": "individual_selfDefinedInformation_ethnicity",
+              "errorValue": "whitewhite",
+              "displayName": "DEFENDANT_SELF_DEFINED_ETHNICITY_INVALID",
+              "version": 304
+            },
+            {
+              "fieldName": "individual_personalInformation_observedEthnicity",
+              "errorValue": "55",
+              "displayName": "DEFENDANT_OBSERVED_ETHNICITY_INVALID",
+              "version": 304
+            },
+            {
+              "fieldName": "individual_selfDefinedInformation_dateOfBirth",
+              "errorValue": "2040-05-03",
+              "displayName": "DEFENDANT_DOB_IN_FUTURE",
+              "version": 304
+            },
+            {
+              "fieldName": "individual_selfDefinedInformation_nationality",
+              "errorValue": "ABC",
+              "displayName": "DEFENDANT_NATIONALITY_INVALID",
+              "version": 304
+            },
+            {
+              "fieldName": "individual_perceivedBirthYear",
+              "errorValue": "2040",
+              "displayName": "DEFENDANT_PERCEIVED_BIRTH_YEAR_IN_FUTURE",
+              "version": 304
+            },
+            {
+              "fieldName": "initialHearing_dateOfHearing",
+              "errorValue": "1999-02-04",
+              "displayName": "DATE_OF_HEARING_IN_THE_PAST",
+              "version": 304
+            }
+          ],
+          "offences": [],
+          "firstName": "John",
+          "lastName": "Smith"
+        }
+      ],
+      "id": "f5dd30fb-0ccd-44dd-9c5c-99ebf74f8b84",
+      "urn": "UklGUSXlVj",
+      "courtLocation": "abcd",
+      "region": "NW",
+      "caseType": "S",
+      "errorDescription": "Multiple Errors",
+      "version": 305,
+      "errors": [
+        {
+          "fieldName": "summonsCode",
+          "errorValue": "summonsCode",
+          "displayName": "SUMMONS_CODE_INVALID",
+          "version": 305
+        },
+        {
+          "fieldName": "prosecutingAuthority",
+          "errorValue": "123",
+          "displayName": "PROSECUTOR_OUCODE_NOT_RECOGNISED",
+          "version": 305
+        }
+      ],
+      "caseMarkersErrors": [
+        {
+          "id": "0",
+          "fieldName": "caseMarkers",
+          "errorValue": "ABC",
+          "displayName": "CASE_MARKER_IS_INVALID",
+          "version": 305
+        },
+        {
+          "id": "1",
+          "fieldName": "caseMarkers",
+          "errorValue": "BCD",
+          "displayName": "CASE_MARKER_IS_INVALID",
+          "version": 305
+        }
+      ]
+    }
+  ]
+}

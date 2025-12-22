@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/command/handler/add-cps-material.json",
+  "type": "object",
+  "properties": {
+    "caseId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "prosecutingAuthority": {
+      "type": "string"
+    },
+    "prosecutorDefendantId": {
+      "type": "string",
+      "maxLength": 36
+    },
+    "material": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/material.json"
+    },
+    "cmsDocumentIdentifier": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/cms-document-identifier.json"
+    },
+    "receivedDateTime":{
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date-time"
+    }
+  },
+  "required": [
+    "caseId",
+    "material"
+  ],
+  "additionalProperties": false
+}

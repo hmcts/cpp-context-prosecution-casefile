@@ -1,0 +1,160 @@
+{
+  "caseDetails": {
+    "dateReceived": "2018-07-10",
+    "trialReceiptType": "Transfer",
+    "eitherWayType": "Election of accused",
+    "courtReceivedFromCode": "B02NM03",
+    "courtReceivedToCode": "B04NM04",
+    "classOfCase": "Class 1",
+    "originatingOrganisation": "B01NM00",
+    "cpsOrganisation": "A30AB00",
+    "otherPartyOfficerInCase": {
+      "personalInformation": {
+        "address": {
+          "address1": "101",
+          "address2": "56Police House",
+          "address3": "Letsby Avenue",
+          "address4": "Avon",
+          "postcode": "HA1 2ER"
+        },
+        "contactDetails": {
+          "primaryEmail": "vegaoic@test.dom",
+          "work": "0117911911"
+        },
+        "firstName": "Vega",
+        "lastName": "OIC",
+        "title": "Mr"
+      }
+    },
+    "initiationCode": "O",
+    "prosecutor": {
+      "prosecutingAuthority": "prosAut"
+    },
+    "policeForceCode": "1"
+  },
+  "defendants": [
+    {
+      "id": "DEFENDANT_ID1",
+      "pncIdentifier": "2099/1234567L",
+      "croNumber": "SF20/123456M",
+      "prosecutorDefendantReference": "TFL001Defendant01",
+      "documentationLanguage": "W",
+      "hearingLanguage": "W",
+      "custodyStatus": "B",
+      "numPreviousConvictions": 3,
+      "initialHearing": {
+        "courtHearingLocation": "C55BN00",
+        "dateOfHearing": "2050-02-04",
+        "timeOfHearing": "09:05:01.001",
+        "hearingTypeCode": "FPTP"
+      },
+      "individual": {
+        "personalInformation": {
+          "title": "Mr",
+          "firstName": "John",
+          "lastName": "Smith",
+          "occupation": "Software Developer",
+          "occupationCode": 43,
+          "address": {
+            "address1": "66 Exeter Street",
+            "address2": "line 2",
+            "address3": "line 3",
+            "address4": "line 4",
+            "address5": "line 5",
+            "postcode": "M60 1NW"
+          },
+          "contactDetails": {
+            "work": "020111222",
+            "home": "020111223",
+            "mobile": "07572222943",
+            "primaryEmail": "scrooge.mcduck@mail.com",
+            "secondaryEmail": "scrooge.mcduck2@mail.com"
+          }
+        },
+        "selfDefinedInformation": {
+          "gender": "MALE"
+        },
+        "bailConditions": "bailConditions",
+        "parentGuardianInformation": {
+          "selfDefinedEthnicity": "W1",
+          "observedEthnicity": "1",
+          "gender": "MALE",
+          "dateOfBirth": "2015-04-04",
+          "personalInformation": {
+            "lastName": "Brown"
+          }
+        }
+      },
+      "offences": [
+        {
+          "offenceCode": "OFCODE12",
+          "offenceId": "OFFENCE_ID1",
+          "offenceSequenceNumber": 1,
+          "offenceCommittedDate": "2018-09-10",
+          "offenceCommittedEndDate": "2018-10-10",
+          "offenceDateCode": 1,
+          "offenceLocation": "Croydon",
+          "offenceWording": "TV Licence not paid",
+          "chargeDate": "2018-12-04",
+          "arrestDate": "2018-12-04",
+          "appliedCompensation": 200,
+          "alcoholRelatedOffence": {
+            "alcoholLevelMethod": "A",
+            "alcoholLevelAmount": 100
+          },
+          "vehicleRelatedOffence": {
+            "vehicleCode": "O"
+          }
+        }
+      ],
+      "postingDate": "2018-09-10"
+    }
+  ],
+  "listNewHearing": {
+    "listDefendantRequests": [
+      {
+        "defendantId": "DEFENDANT_ID1",
+        "defendantOffences": [
+          "OFFENCE_ID1"
+        ]
+      }
+    ],
+    "hearingType": {
+      "id": "bf8155e1-90b9-4080-b133-bfbad895d6e4",
+      "description": "Trial"
+    },
+    "hearingDateTimeType": "WEEK_COMMENCING",
+    "judiciary": [
+      {
+        "judicialRoleType": {
+          "judiciaryType": "Circuit Judge"
+        },
+        "judicialId": "4e2df740-2822-38cc-be83-4f9cd3324ddc",
+        "firstName": "Nicola Jane",
+        "lastName": "Smith"
+      }
+    ],
+    "courtCentre": {
+      "id": "89592405-c29b-3706-b1d3-b1dd3a08b227",
+      "name": "Blackfriars Crown Court",
+      "roomId": "60853c27-8a9d-349a-aeb5-7f5049a774dd",
+      "roomName": "Courtroom 02"
+    },
+    "estimatedMinutes": 7560,
+    "specialRequirements": [
+      "1",
+      "11",
+      "3"
+    ],
+    "weekCommencingDate": {
+      "startDate": "2025-04-21",
+      "duration": 1
+    },
+    "jurisdictionType": "CROWN"
+  },
+  "channel": "MCC",
+  "migrationSourceSystem": {
+    "migrationSourceSystemName": "XHIBIT",
+    "migrationSourceSystemCaseIdentifier": "XHIBIT-2-HEARINGS"
+  }
+}

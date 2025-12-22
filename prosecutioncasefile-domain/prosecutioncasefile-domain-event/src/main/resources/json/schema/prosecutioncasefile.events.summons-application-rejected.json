@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/domain/event/summons-application-rejected.json",
+  "type": "object",
+  "properties": {
+    "caseId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid",
+      "description": "The Id of the case to accept"
+    },
+    "applicationId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid",
+      "description": "The Id of the application to accept"
+    },
+    "defendantIds": {
+      "type": "array",
+      "items": {
+        "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+      }
+    },
+    "summonsRejectedOutcome": {
+      "$ref": "http://justice.gov.uk/core/courts/summonsRejectedOutcome.json"
+    }
+  },
+  "required": [
+    "caseId",
+    "applicationId",
+    "defendantIds",
+    "summonsRejectedOutcome"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/witness-ptph.json",
+  "type": "object",
+  "properties": {
+    "witnessFirstName": {
+      "type": "string",
+      "maxLength": 35
+    },
+    "witnessLastName": {
+      "type": "string",
+      "maxLength": 35
+    },
+    "relevantDisputedIssue": {
+      "type": "string"
+    },
+    "firstNameOfIntermediaryKnownAtPtph": {
+      "type": "string",
+      "maxLength": 35
+    },
+    "lastNameOfIntermediaryKnownAtPtph": {
+      "type": "string",
+      "maxLength": 35
+    },
+    "policeOfficerSubject": {
+      "description": "Details of police officer witness",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/police-officer-subject.json"
+    },
+    "intermediaryForWitness": {
+      "type": "string",
+      "enum": [
+        "Y",
+        "N"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

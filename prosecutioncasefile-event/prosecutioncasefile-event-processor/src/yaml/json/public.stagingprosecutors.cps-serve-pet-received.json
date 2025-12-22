@@ -1,0 +1,100 @@
+{
+  "cpsDefendantOffences":[
+    {
+      "cpsOffenceDetails":[
+        {
+          "cjsOffenceCode":"offenceCode",
+          "offenceSequenceNo":"123",
+          "offenceWording":"offenceWording"
+        }
+      ],
+      "prosecutorDefendantId":"defendant Id"
+    }
+  ],
+  "petFormData":{
+    "defence":{
+      "defendants":[
+        {
+          "cpsDefendantId":"cpsDefendant Id",
+          "cpsOffences":[
+            {
+              "offenceCode":"offenceCode",
+              "wording":"offenceWording"
+            }
+          ],
+          "id":"d123ed32-ce29-11ec-9d64-0242ac120002",
+          "prosecutorDefendantId":"defendant Id"
+        }
+      ]
+    },
+    "prosecution":{
+      "dynamicFormAnswers":{
+        "applicationsForDirectionsGroup":{
+          "groundRulesQuestioning":"Y",
+          "prosecutorWitnessAssistance":"Y",
+          "prosecutorWitnessAssistanceYesGroup":{
+            "witnessRequiresDetails":"N"
+          },
+          "variationStandardDirectionsProsecutor":"Y",
+          "variationStandardDirectionsProsecutorYesGroup":{
+            "variationStandardDirectionsProsecutorYesGroupDetails":"directionDetails"
+          }
+        },
+        "prosecutorGroup":{
+          "displayEquipment":"Y",
+          "displayEquipmentYesGroup":{
+            "displayEquipmentDetails":"EquipmentDetails"
+          },
+          "pendingLinesOfEnquiry":"N",
+          "pendingLinesOfEnquiryYesGroup":{
+            "pendingLinesOfEnquiryYesGroup":"Details"
+          },
+          "pointOfLaw":"Y",
+          "pointOfLawYesGroup":{
+            "pointOfLawDetails":"LawDetails"
+          },
+          "prosecutionCompliance":"N",
+          "prosecutionComplianceNoGroup":{
+            "prosecutionComplianceDetailsNo":"noComplianceDetails"
+          },
+          "prosecutionComplianceYesGroup":{
+
+          },
+          "prosecutorServeEvidence":"N",
+          "prosecutorServeEvidenceYesGroup":{
+
+          },
+          "slaveryOrExploitation":"N",
+          "slaveryOrExploitationYesGroup":{
+            "slaveryOrExploitationDetails":"SlaveryDetails"
+          }
+        }
+      },
+      "witnesses":[
+        {
+          "age":14,
+          "firstName":"forname",
+          "interpreterRequired":"yes",
+          "languageAndDialect":"welsh",
+          "lastName":"abc",
+          "measuresRequired":[
+            "measureDetails"
+          ],
+          "prosecutionProposesWitnessAttendInPerson":"yes",
+          "specialOtherMeasuresRequired":"Y"
+        }
+      ]
+    }
+  },
+  "prosecutionCaseSubject":{
+    "prosecutingAuthority":"The OU Code of the prosecuting authority",
+    "urn":"vUAVDGTk8y"
+  },
+  "reviewingLawyer":{
+    "email":"cpsreviewinglawyer@email.com",
+    "name":"cps reviewing lawyer",
+    "phone":"1234567890"
+  },
+  "submissionId":"e85d2c62-af1f-4674-863a-0891e67e325b",
+  "submissionStatus":"SUCCESS"
+}

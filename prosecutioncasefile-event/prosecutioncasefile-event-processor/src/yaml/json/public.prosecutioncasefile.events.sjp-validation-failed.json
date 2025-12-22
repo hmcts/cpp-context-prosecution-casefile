@@ -1,0 +1,147 @@
+{
+  "prosecution": {
+    "caseDetails": {
+      "caseId": "b32bb895-9b31-4661-a2a5-89f91e007ca3",
+      "caseMarker": {
+        "markerTypeCode": "ABC",
+        "markerTypeDescription": "Child Abuse",
+        "markerTypeId": "2013c181-7458-4fb2-a637-b596fbe0e781"
+      },
+      "initialHearing": {
+        "courtHearingLocation": "abcd",
+        "dateOfHearing": "1978-02-04",
+        "timeOfHearing": "09:05:01.001"
+      },
+      "initiationCode": "XX",
+      "originatingOrganisation": "B01NM00",
+      "otherPartyOfficerInCase": {
+        "personalInformation": {
+          "address": {
+            "address1": "101",
+            "address2": "56Police House",
+            "address3": "Letsby Avenue",
+            "address4": "Avon",
+            "postcode": "HA1 2ER"
+          },
+          "contactDetails": {
+            "primaryEmail": "vegaoic@test.dom",
+            "work": "0117911911"
+          },
+          "firstName": "Vega",
+          "lastName": "OIC",
+          "title": "Baron"
+        },
+        "policeOfficerRank": "Constable"
+      },
+      "prosecutor": {
+        "informant": "informant",
+        "prosecutingAuthority": "prosAut"
+      },
+      "prosecutorCaseReference": "Qf6RAf7rqp",
+      "statementOfFacts": "statementOfFacts",
+      "statementOfFactsWelsh": "statementOfFactsWelsh",
+      "summonsCode": "summonsCode"
+    },
+    "defendants": [
+      {
+        "documentationLanguage": "W",
+        "hearingLanguage": "W",
+        "id": "5249d1fb-72b8-4fe2-a071-46d99efe3800",
+        "individual": {
+          "personalInformation": {
+            "address": {
+              "address1": "66 Exeter Street",
+              "address2": "line 2",
+              "address3": "line 3",
+              "address4": "line 4",
+              "address5": "line 5",
+              "postcode": "M60 1NW"
+            },
+            "contactDetails": {
+              "home": "020111223",
+              "mobile": "07572222943",
+              "primaryEmail": "scrooge.mcduck@mail.com",
+              "secondaryEmail": "scrooge.mcduck2@mail.com",
+              "work": "020111222"
+            },
+            "firstName": "John",
+            "lastName": "Smith",
+            "occupation": "Software Developer",
+            "occupationCode": 43,
+            "title": "Baron"
+          },
+          "selfDefinedInformation": {
+            "ethnicity": "white",
+            "gender": "MALE"
+          }
+        },
+        "offences": [
+          {
+            "alcoholRelatedOffence": {
+              "alcoholLevelAmount": 100,
+              "alcoholLevelMethod": "A"
+            },
+            "appliedCompensation": 200,
+            "chargeDate": "2015-04-04",
+            "offenceCode": "CA03013",
+            "offenceCommittedDate": "2018-09-10",
+            "offenceCommittedEndDate": "2018-10-10",
+            "offenceDateCode": 1,
+            "offenceLocation": "Croydon",
+            "offenceSequenceNumber": 1,
+            "offenceWording": "TV Licence not paid"
+          }
+        ],
+        "postingDate": "2018-09-10"
+      },
+      {
+        "documentationLanguage": "W",
+        "hearingLanguage": "W",
+        "id": "3eb0977f-0f92-4d67-a633-2de559476032",
+        "individual": {
+          "personalInformation": {
+            "address": {
+              "address1": "armagaddon house",
+              "postcode": "M60 1NW"
+            },
+            "contactDetails": {},
+            "firstName": "John",
+            "lastName": "Smith",
+            "title": "Baron"
+          },
+          "selfDefinedInformation": {
+            "ethnicity": "white",
+            "gender": "MALE"
+          }
+        },
+        "offences": [
+          {
+            "appliedCompensation": 200,
+            "chargeDate": "2015-04-04",
+            "offenceCode": "DA03014",
+            "offenceCommittedDate": "2018-09-10",
+            "offenceCommittedEndDate": "2018-10-10",
+            "offenceDateCode": 1,
+            "offenceLocation": "Croydon",
+            "offenceSequenceNumber": 1,
+            "offenceWording": "TV Licence not paid"
+          }
+        ],
+        "postingDate": "2018-09-10"
+      }
+    ]
+  },
+  "problems": [
+    {
+      "code": "DEFENDANT_NATIONALITY_INVALID",
+      "values": [
+        {
+          "key": "nationality",
+          "value": "ABC"
+        }
+      ]
+    }
+  ],
+  "caseId": "20139b43-1a6d-44b8-9cce-677538930dfc",
+  "urn": "kUTGZ5eRWg"
+}

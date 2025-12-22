@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/language.json",
+  "type": "string",
+  "description": "Identifies the language to be used, values E or W (English or Welsh)",
+  "enum": [
+    "ENGLISH",
+    "WELSH",
+    "E",
+    "W"
+  ],
+  "default": "E"
+}

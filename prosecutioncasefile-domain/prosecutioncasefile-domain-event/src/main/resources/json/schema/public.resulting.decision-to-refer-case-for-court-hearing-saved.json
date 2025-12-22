@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/resulting/event/public-decision-to-refer-case-for-court-hearing-saved.json",
+  "type": "object",
+  "properties": {
+    "caseId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "decisionId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "sessionId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "referralReasonId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "hearingTypeId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "estimatedHearingDuration": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 999
+    },
+    "listingNotes": {
+      "type": "string"
+    },
+    "decisionSavedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "caseId",
+    "decisionId",
+    "sessionId",
+    "referralReasonId",
+    "hearingTypeId",
+    "estimatedHearingDuration",
+    "decisionSavedAt"
+  ]
+}

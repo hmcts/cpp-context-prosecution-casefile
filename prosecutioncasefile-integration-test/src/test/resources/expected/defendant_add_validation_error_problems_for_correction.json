@@ -1,0 +1,29 @@
+[
+  {
+    "code": "DEFENDANT_PRIMARY_EMAIL_ADDRESS_INVALID",
+    "values": [
+      {
+        "key": "individual_personalInformation_contactDetails_primaryEmail",
+        "value": "bad@primaryemail"
+      }
+    ]
+  },
+  {
+    "code": "DEFENDANT_SECONDARY_EMAIL_ADDRESS_INVALID",
+    "values": [
+      {
+        "key": "individual_personalInformation_contactDetails_secondaryEmail",
+        "value": "bad@secondaryemail"
+      }
+    ]
+  },
+  {
+    "code": "DEFENDANT_NATIONALITY_INVALID",
+    "values": [
+      {
+        "key": "individual_selfDefinedInformation_nationality",
+        "value": "ABC"
+      }
+    ]
+  }
+]

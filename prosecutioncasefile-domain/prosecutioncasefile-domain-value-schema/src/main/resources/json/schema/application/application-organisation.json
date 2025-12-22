@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/organisation.json",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "incorporationNumber": {
+      "description": "The incorporation details of the organisation",
+      "type": "string"
+    },
+    "registeredCharityNumber": {
+      "description": "The registered charity details",
+      "type": "string"
+    },
+    "address": {
+      "description": "The organisation address details",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/address.json"
+    },
+    "contact": {
+      "description": "The organisation contact details",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/contact-number.json"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "additionalProperties" : false
+}

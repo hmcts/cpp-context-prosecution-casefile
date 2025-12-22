@@ -1,0 +1,125 @@
+{
+  "initiateCourtProceedings": {
+    "listHearingRequests": [
+      {
+        "courtCentre": {
+          "id": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+          "name": "Port Talbot",
+          "welshName": "Welsh Name",
+          "roomId": "9e4932f7-97b2-3010-b942-ddd2624e4dd8",
+          "roomName": "Courtroom 01"
+        },
+        "estimateMinutes": 20,
+        "hearingType": {
+          "description": "Plea & Trial Preparation",
+          "id": "06b0c2bf-3f98-46ed-ab7e-56efaf9ecced"
+        },
+        "jurisdictionType": "MAGISTRATES",
+        "listDefendantRequests": [
+          {
+            "defendantId": "06780d78-368e-4d67-9773-865245e36d93",
+            "defendantOffences": [
+              "2013c181-7458-4fb2-a637-b596fbe0e792"
+            ],
+            "hearingLanguageNeeds": "WELSH",
+            "prosecutionCaseId": "2b2dca14-1a6a-49ba-8bf9-56b53c957ce2"
+          }
+        ],
+        "listedStartDateTime": "2021-02-04T09:05:01.001Z"
+      }
+    ],
+    "prosecutionCases": [
+      {
+        "caseMarkers": [
+          {
+            "id": "83874a1e-f201-4146-a459-e87570187c6b",
+            "markerTypeCode": "WP",
+            "markerTypeDescription": "Prohibited Weapons",
+            "markerTypeid": "80e89021-9a8b-4ee3-b897-456a90480e5f"
+          },
+          {
+            "id": "ce718b70-29e2-45fd-a331-c89dc9eaf28d",
+            "markerTypeCode": "AB",
+            "markerTypeDescription": "Prohibited Weapons",
+            "markerTypeid": "80e89021-9a8b-4ee3-b897-456a90480eab"
+          }
+        ],
+        "defendants": [
+          {
+            "id": "06780d78-368e-4d67-9773-865245e36d93",
+            "masterDefendantId": "06780d78-368e-4d67-9773-865245e36d93",
+            "courtProceedingsInitiated": "2020-02-25T23:43:01.811Z",
+            "offences": [
+              {
+                "arrestDate": "2016-04-04",
+                "chargeDate": "2015-04-04",
+                "count": 0,
+                "endDate": "2015-10-10",
+                "id": "2016c181-7458-4fb2-a637-b596fbe0e792",
+                "offenceCode": "OFCODE12",
+                "dvlaOffenceCode": "ABC123",
+                "offenceDefinitionId": "04c099cc-eba2-4c80-9eed-7c1ef21d706a",
+                "offenceFacts": {
+                  "alcoholReadingAmount": 100,
+                  "alcoholReadingMethodCode": "A",
+                  "alcoholReadingMethodDescription": "Blood"
+                },
+                "offenceTitle": "Obstruct person executing search warrant for TV receiver",
+                "orderIndex": 1,
+                "startDate": "2015-09-10",
+                "wording": "TV Licence not paid",
+                "offenceDateCode": 1,
+                "modeOfTrial": "Summary"
+              }
+            ],
+            "personDefendant": {
+              "personDetails": {
+                "address": {
+                  "address1": "66 Exeter Street",
+                  "address2": "line 2",
+                  "address3": "line 3",
+                  "address4": "line 4",
+                  "address5": "line 5",
+                  "postcode": "M60 1NW"
+                },
+
+                "documentationLanguageNeeds": "WELSH",
+                "hearingLanguageNeeds": "WELSH",
+                "ethnicity": {
+                  "selfDefinedEthnicityCode": "W1",
+                  "selfDefinedEthnicityDescription": "British",
+                  "selfDefinedEthnicityId": "1daefec3-2f76-8109-82d9-2e60544a6c01"
+                },
+                "firstName": "John",
+                "gender": "MALE",
+                "lastName": "Smith",
+                "occupation": "Software Developer",
+                "occupationCode": "43",
+                "title": "Baron"
+              }
+            },
+            "prosecutionCaseId": "2b2dca14-1a6a-49ba-8bf9-56b53c957ce2"
+          }
+        ],
+        "id": "2b2dca14-1a6a-49ba-8bf9-56b53c957ce2",
+        "initiationCode": "R",
+        "originatingOrganisation": "B01NM00",
+        "cpsOrganisation": "A01NM00",
+                    "prosecutionCaseIdentifier":{
+               "address":{
+                  "address1":"6th Floor Windsor House",
+                  "address2":"42-50 Victoria Street",
+                  "address3":"London",
+                  "postcode":"SW1H 0TL"
+               },
+               "majorCreditorCode":"TFL2",
+               "prosecutionAuthorityCode":"TFL",
+               "prosecutionAuthorityId":"0534ee76-88f6-40e0-ba8f-53588e146675",
+               "prosecutionAuthorityName":"Transport for London",
+               "prosecutionAuthorityOUCode":"GAFTL00",
+               "caseURN":"TWJyp7xgDk"
+            }
+      }
+    ]
+  }
+}

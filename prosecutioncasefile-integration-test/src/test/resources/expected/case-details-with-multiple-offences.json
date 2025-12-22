@@ -1,0 +1,60 @@
+{
+  "caseId": "${case.id}",
+  "prosecutionCaseReference": "${prosecution.case.reference}",
+  "appliedProsecutorCosts": 200,
+  "prosecutorInformant": "Adam",
+  "prosecutionAuthority": "GAEAA01",
+  "defendants": [
+    {
+      "defendantId": "${defendant.id}",
+      "documentationLanguage": "W",
+      "hearingLanguage": "W",
+      "postingDate": "2018-09-10",
+      "nationalInsuranceNumber": "AB123456C",
+      "personalInformation": {
+        "address": {
+          "address1": "armagaddon house",
+          "postcode": "M60 1NW"
+        },
+        "contactDetails": {
+          "home": "0207 000 0000",
+          "mobile": "11111 111 111",
+          "primaryEmail": "primary@email.com",
+          "secondaryEmail": "secondary@email.com",
+          "work": "0207 111 1111"
+        },
+        "firstName": "John",
+        "lastName": "Smith",
+        "title": "Mr"
+      },
+      "selfDefinedInformation": {
+        "dateOfBirth": "${date.of.birth}",
+        "ethnicity": "W1",
+        "gender": "MALE",
+        "nationality": "GBR"
+      },
+      "offences": [
+        {
+          "appliedCompensation": 200,
+          "chargeDate": "${charge.date}",
+          "offenceCode": "OFCODE12",
+          "offenceCommittedDate": "${offence.committed.date}",
+          "offenceDateCode": 1,
+          "offenceId": "${offence.id.1}",
+          "offenceSequenceNumber": ${offence.sequence.number.1},
+          "offenceWording": "TV Licence not paid"
+        },
+        {
+          "appliedCompensation": 200,
+          "chargeDate": "${charge.date}",
+          "offenceCode": "OFCODE12",
+          "offenceCommittedDate": "${offence.committed.date}",
+          "offenceDateCode": 1,
+          "offenceId": "${offence.id.2}",
+          "offenceSequenceNumber": ${offence.sequence.number.2},
+          "offenceWording": "TV Licence not paid"
+        }
+      ]
+    }
+  ]
+}

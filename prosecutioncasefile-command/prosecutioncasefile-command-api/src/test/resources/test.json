@@ -1,0 +1,49 @@
+{
+  "caseId": "87350bfb-acfd-4199-8ec2-62635eb504ad",
+  "defendantId": "62494f69-dd6c-4f76-9518-a1f95e322281",
+  "urn": "SNI2937",
+  "initiationCode": "Q",
+  "personalDetails": {
+    "firstName": "Rob",
+    "lastName": "Smith",
+    "dateOfBirth": "1977-11-02",
+    "address": {
+      "address1": "xTvOdwOB8i",
+      "address2": "56Police House",
+      "address3": "StreetDescription",
+      "address4": "Locality2O",
+      "address5": "TownD",
+      "postcode": "TW14 9XD"
+    },
+    "contactDetails": {
+      "email": "robert@gmail.com",
+      "home": "09998021888",
+      "work": "0917894278022",
+      "mobile": "09998021889"
+    }
+  },
+  "offences": [
+    {
+      "id": "e8e216cc-13d1-49d0-acf2-f7f7e40a8178",
+      "plea": "GUILTY",
+      "title": "Fail to carry an animal on a moving escalator on the Tyne and Wear Metro",
+      "mitigation": "test"
+    }
+  ],
+  "comeToCourt": true,
+  "speakWelsh": false,
+  "disabilityNeeds": {
+    "needed": false
+  },
+  "outstandingFines": false,
+  "financialMeans": {
+    "income": {
+      "frequency": "MONTHLY",
+      "amount": 2000
+    },
+    "benefits": {
+      "claimed": false
+    },
+    "employmentStatus": "EMPLOYED"
+  }
+}

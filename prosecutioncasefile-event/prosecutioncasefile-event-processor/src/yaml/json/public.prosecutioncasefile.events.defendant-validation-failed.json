@@ -1,0 +1,67 @@
+{
+  "defendant": {
+    "documentationLanguage": "W",
+    "hearingLanguage": "W",
+    "id": "70d260c8-01cf-4f4e-9121-8aa075eaafab",
+    "individual": {
+      "personalInformation": {
+        "address": {
+          "address1": "66 Exeter Street",
+          "address2": "line 2",
+          "address3": "line 3",
+          "address4": "line 4",
+          "address5": "line 5",
+          "postcode": "M60 1NW"
+        },
+        "contactDetails": {
+          "home": "020111223",
+          "mobile": "07572222943",
+          "primaryEmail": "scrooge.mcduck@mail.com",
+          "secondaryEmail": "scrooge.mcduck2@mail.com",
+          "work": "020111222"
+        },
+        "firstName": "John",
+        "lastName": "Smith",
+        "occupation": "Software Developer",
+        "occupationCode": 43,
+        "title": "Baron"
+      },
+      "selfDefinedInformation": {
+        "ethnicity": "white",
+        "gender": "MALE",
+        "nationality": "ABC"
+      }
+    },
+    "offences": [
+      {
+        "alcoholRelatedOffence": {
+          "alcoholLevelAmount": 100,
+          "alcoholLevelMethod": "A"
+        },
+        "appliedCompensation": 200,
+        "chargeDate": "2015-04-04",
+        "offenceCode": "CA03013",
+        "offenceCommittedDate": "2018-09-10",
+        "offenceCommittedEndDate": "2018-10-10",
+        "offenceDateCode": 1,
+        "offenceLocation": "Croydon",
+        "offenceSequenceNumber": 1,
+        "offenceWording": "TV Licence not paid"
+      }
+    ],
+    "postingDate": "2018-09-10"
+  },
+  "problems": [
+    {
+      "code": "DEFENDANT_NATIONALITY_INVALID",
+      "values": [
+        {
+          "key": "nationality",
+          "value": "ABC"
+        }
+      ]
+    }
+  ],
+  "caseId": "20139b43-1a6d-44b8-9cce-677538930dfc",
+  "urn": "kUTGZ5eRWg"
+}

@@ -1,0 +1,15 @@
+{
+  "caseId": "7719e379-904a-41ba-922e-ab9a3d329977",
+  "prosecutingAuthority": "TFLOUCODE",
+  "prosecutorDefendantId": "TFL_DEF001",
+  "material": {
+    "fileStoreId": "0020146e-e959-43bf-bf1e-bfebbdf55c26",
+    "documentType": "SJPN"
+  },
+  "isCpsCase":false,
+  "cmsDocumentIdentifier": {
+    "materialType": 1,
+    "documentId": "ABCDEF"
+  },
+  "receivedDateTime": "2020-02-04T05:27:17.210Z"
+}

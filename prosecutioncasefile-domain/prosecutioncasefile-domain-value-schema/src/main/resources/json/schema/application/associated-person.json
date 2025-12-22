@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/associated-person.json",
+  "type": "object",
+  "properties": {
+    "person": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/person.json"
+    },
+    "role": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "person"
+  ],
+  "additionalProperties": false
+}

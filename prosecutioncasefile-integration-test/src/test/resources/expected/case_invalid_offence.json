@@ -1,0 +1,47 @@
+{
+  "cases": [
+    {
+      "defendants": [
+        {
+          "chargeDate": "2015-04-04",
+          "hearingDate": "2050-02-04",
+          "id": "038d4655-ea5f-4c38-a94a-f5d99d04dba6",
+          "bailStatus": "C",
+          "errors": [],
+          "offences": [
+            {
+              "id": "OFFENCE_ID1",
+              "errors": [
+                {
+                  "id": "OFFENCE_ID1",
+                  "fieldName": "offence_alcoholRelatedOffence_alcoholLevelMethod",
+                  "errorValue": "",
+                  "displayName": "ALCOHOL_DRUG_LEVEL_METHOD_MISSING",
+                  "version": 1144
+                },
+                {
+                  "id": "OFFENCE_ID1",
+                  "fieldName": "offence_alcoholRelatedOffence_alcoholLevelAmount",
+                  "errorValue": "",
+                  "displayName": "ALCOHOL_DRUG_LEVEL_AMOUNT_MISSING",
+                  "version": 1144
+                }
+              ]
+            }
+          ],
+          "firstName": "John",
+          "lastName": "Smith"
+        }
+      ],
+      "id": "34b67b41-9f7a-4e67-9f4a-f05fdc94bfb6",
+      "urn": "OQHu4xQ3ln",
+      "courtLocation": "C55BN00",
+      "region": "NW",
+      "caseType": "C",
+      "errorDescription": "Multiple Errors",
+      "version": 1144,
+      "errors": [],
+      "caseMarkersErrors": []
+    }
+  ]
+}

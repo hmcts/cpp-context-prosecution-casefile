@@ -1,0 +1,27 @@
+{
+  "enforcingCourtCode": 2222,
+  "accountDivisionCode": 1111,
+  "email": "LCCCCollectionUnit@hmcts.gsi.gov.uk",
+  "phone": "020 7556 8500",
+  "address1": "LCCC Enforcement Unit",
+  "address2": "P.O. Box 31089",
+  "address3": "London",
+  "address4": null,
+  "address5": null,
+  "postcode": "SW1P 3WT",
+  "addressLine1Welsh": "Uned Gorfodi LCCC",
+  "addressLine2Welsh": "Blwch P.O. 31089",
+  "addressLine3Welsh": "Llundain",
+  "addressLine4Welsh": null,
+  "addressLine5Welsh": null,
+  "ukInternal": 1,
+  "nationalPaymentPhone": "030 0790 9901",
+  "ncesArea": "Dorset, Hampshire, Isle of Wight and Wiltshire",
+  "ncesNotificationEmail": "TFOSouthwest@Justice.gov.uk",
+  "localJusticeArea": {
+    "nationalCourtCode": "1080",
+    "name": "Bedfordshire Magistrates' Court",
+    "welshName": "WELSH_NAME"
+  },
+  "areaName": "Cambridgeshire"
+}

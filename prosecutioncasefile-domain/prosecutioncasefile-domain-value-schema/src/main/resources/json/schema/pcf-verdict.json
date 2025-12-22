@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/verdict.json",
+  "description": "The verdict i.e. the court decision",
+  "type": "object",
+  "properties": {
+    "verdictDate": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date"
+    },
+    "verdictType": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/verdictType.json"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "verdictDate",
+    "verdictType"
+  ]
+}

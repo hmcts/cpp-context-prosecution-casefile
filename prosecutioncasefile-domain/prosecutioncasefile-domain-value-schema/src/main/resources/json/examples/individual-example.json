@@ -1,0 +1,33 @@
+{
+  "driverNumber" : "AS",
+  "nationalInsuranceNumber" : "QQ 12 34 56 C",
+  "personalInformation": {
+    "title": "Baron",
+    "firstName": "John",
+    "lastName": "Smith",
+    "occupation": "Software Developer",
+    "occupationCode": 43,
+    "address": {
+      "address1": "66 Exeter Street",
+      "address2": "line 2",
+      "address3": "line 3",
+      "address4": "line 4",
+      "address5": "line 5",
+      "postcode": "M60 1NW"
+    },
+    "contactDetails": {
+      "work" : "020111222",
+      "home" : "020111223",
+      "mobile" : "07572222943",
+      "primaryEmail" : "scrooge.mcduck@mail.com",
+      "secondaryEmail" : "scrooge.mcduck2@mail.com"
+    }
+  },
+  "selfDefinedInformation": {
+    "ethnicity": "white",
+    "gender": "MALE",
+    "dateOfBirth": "1989-04-18",
+    "nationality": "SVK",
+    "additionalNationality": "SVK"
+  }
+}

@@ -1,0 +1,157 @@
+{
+  "documentsTypeAccess" : [
+    {
+      "id": "460f6f7a-c002-11e8-a355-529269fb1459",
+      "section": "CITN",
+      "documentCategory": "Bail and Custody",
+      "sectionCode": "CITN",
+      "actionRequired": false,
+      "validFrom": "1983-05-13",
+      "validTo": "2022-05-13",
+      "courtDocumentTypeRBAC": {
+        "readUserGroups": [
+          {
+            "cppGroup": {
+              "id": "ff9fb2c8-2738-4d77-87e5-56b5781b4113",
+              "groupName": "Legal Advisors"
+            },
+            "validFrom": "1983-05-13",
+            "validTo": "2022-05-13"
+          }
+        ],
+        "uploadUserGroups": [
+          {
+            "cppGroup": {
+              "id": "ff9fb2c8-2738-4d77-87e5-56b5781b4113",
+              "groupName": "Court Admin"
+            },
+            "validFrom": "1983-05-13",
+            "validTo": "2022-05-13"
+          }
+        ],
+        "downloadUserGroups": [
+          {
+            "cppGroup": {
+              "id": "ff9fb2c8-2738-4d77-87e5-56b5781b4113",
+              "groupName": "Crown Court Clerk"
+            },
+            "validFrom": "1983-05-13",
+            "validTo": "2022-05-13"
+          }
+        ],
+        "deleteUserGroups": [
+          {
+            "cppGroup": {
+              "id": "ff9fb2c8-2738-4d77-87e5-56b5781b4113",
+              "groupName": "Listing Officer"
+            },
+            "validFrom": "1983-05-13",
+            "validTo": "2022-05-13"
+          }
+        ]
+      }
+    },
+    {
+      "id": "460f6f7a-c002-11e8-a355-529269fb1459",
+      "section": "SJPN",
+      "documentCategory": "Defendant level",
+      "sectionCode": "SJPN",
+      "actionRequired": false,
+      "validFrom": "1983-05-13",
+      "validTo": "2022-05-13",
+      "courtDocumentTypeRBAC": {
+        "readUserGroups": [
+          {
+            "cppGroup": {
+              "id": "ff9fb2c8-2738-4d77-87e5-56b5781b4113",
+              "groupName": "Legal Advisors"
+            },
+            "validFrom": "1983-05-13",
+            "validTo": "2022-05-13"
+          }
+        ],
+        "uploadUserGroups": [
+          {
+            "cppGroup": {
+              "id": "ff9fb2c8-2738-4d77-87e5-56b5781b4113",
+              "groupName": "Court Admin"
+            },
+            "validFrom": "1983-05-13",
+            "validTo": "2022-05-13"
+          }
+        ],
+        "downloadUserGroups": [
+          {
+            "cppGroup": {
+              "id": "ff9fb2c8-2738-4d77-87e5-56b5781b4113",
+              "groupName": "Crown Court Clerk"
+            },
+            "validFrom": "1983-05-13",
+            "validTo": "2022-05-13"
+          }
+        ],
+        "deleteUserGroups": [
+          {
+            "cppGroup": {
+              "id": "ff9fb2c8-2738-4d77-87e5-56b5781b4113",
+              "groupName": "Listing Officer"
+            },
+            "validFrom": "1983-05-13",
+            "validTo": "2022-05-13"
+          }
+        ]
+      }
+    },
+    {
+      "id": "460f6f7a-c002-11e8-a355-529269fb1452",
+      "section": "ABCD",
+      "documentCategory": "Case level",
+      "sectionCode": "ABCD",
+      "actionRequired": false,
+      "validFrom": "1983-05-13",
+      "validTo": "2022-05-13",
+      "courtDocumentTypeRBAC": {
+        "readUserGroups": [
+          {
+            "cppGroup": {
+              "id": "ff9fb2c8-2738-4d77-87e5-56b5781b4113",
+              "groupName": "Legal Advisors"
+            },
+            "validFrom": "1983-05-13",
+            "validTo": "2022-05-13"
+          }
+        ],
+        "uploadUserGroups": [
+          {
+            "cppGroup": {
+              "id": "ff9fb2c8-2738-4d77-87e5-56b5781b4113",
+              "groupName": "Court Admin"
+            },
+            "validFrom": "1983-05-13",
+            "validTo": "2022-05-13"
+          }
+        ],
+        "downloadUserGroups": [
+          {
+            "cppGroup": {
+              "id": "ff9fb2c8-2738-4d77-87e5-56b5781b4113",
+              "groupName": "Crown Court Clerk"
+            },
+            "validFrom": "1983-05-13",
+            "validTo": "2022-05-13"
+          }
+        ],
+        "deleteUserGroups": [
+          {
+            "cppGroup": {
+              "id": "ff9fb2c8-2738-4d77-87e5-56b5781b4113",
+              "groupName": "Listing Officer"
+            },
+            "validFrom": "1983-05-13",
+            "validTo": "2022-05-13"
+          }
+        ]
+      }
+    }
+  ]
+}

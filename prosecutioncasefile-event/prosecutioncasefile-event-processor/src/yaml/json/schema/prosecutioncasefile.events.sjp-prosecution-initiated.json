@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/domain/event/sjp-prosecution-initiated.json",
+  "type": "object",
+  "properties": {
+    "prosecution": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/prosecution.json"
+    },
+    "enterpriseId": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "prosecution",
+    "enterpriseId"
+  ]
+}

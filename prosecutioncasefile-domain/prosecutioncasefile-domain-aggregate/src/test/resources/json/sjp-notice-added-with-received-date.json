@@ -1,0 +1,17 @@
+{
+  "_metadata": {
+    "name": "prosecutioncasefile.events.material-added"
+  },
+  "caseId": "a4391788-f829-4514-a344-61f1d5d9690c",
+  "caseType": "SJP",
+  "documentType": "SJPN",
+  "material": {
+    "documentType": "SJPN",
+    "fileStoreId": "3042a896-fd3e-478d-bb0e-948dd46191a4",
+    "fileType": "application/pdf"
+  },
+  "prosecutingAuthority": "GAEAA01",
+  "prosecutorDefendantId": "TVL_DEF_001",
+  "isCpsCase":false,
+  "receivedDateTime": "2020-02-04T05:27:17.210Z"
+}

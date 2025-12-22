@@ -1,0 +1,55 @@
+{
+  "id": "%s",
+  "version": 0,
+  "urn": "TFL2041316",
+  "enterpriseId": "2K2SLYFC743H",
+  "witnesses": [],
+  "suspects": [],
+  "policeSummaries": [],
+  "exhibits": [],
+  "defendant": {
+    "id": "cc7498a1-fe13-46f2-924d-9d363216539f",
+    "personalDetails": {
+      "firstName": "David",
+      "lastName": "LLOYD",
+      "dateOfBirth": "1980-07-15",
+      "gender": "Male",
+      "contactDetails": {
+        "home": "02012345678",
+        "mobile": "07777777777",
+        "email": "email@email.com"
+      },
+      "address": {
+        "address1": "14 Tottenham Court Road",
+        "address2": "London",
+        "address3": "England",
+        "address4": "UK",
+        "postcode": "W1T 1JY"
+      }
+    },
+    "offences": [
+      {
+        "id": "%s",
+        "offenceCode": "PS90010",
+        "offenceSequenceNumber": 1,
+        "wording": "On 02/07/2016 At threadneedle street EC2 Being a passenger on a Public service Vehicle operated on behalf of London Bus Services Limited being used for the carriage of passengers at separate fares where the vehicle was being operated by a Driver without a Conductor did not as directed by the Driver an Inspector or a Notice displayed on the vehicle pay the fare for the journey in accordance with the direction  ",
+        "sequenceNumber": 1,
+        "asnSequenceNumber": 1,
+        "startDate": "2016-07-02",
+        "chargeDate": "2016-07-01"
+      }
+    ],
+    "caseId": "8e582195-639d-451d-8220-42777d7cf9f2",
+    "defendantBailDocuments": [],
+    "gobAccountNumber": "123456789"
+  },
+  "caseDecisions": [],
+  "victims": [],
+  "caseDocuments": [],
+  "prosecutingAuthority": "TFL",
+  "caseType": "TFL_PROSECUTED_CASE",
+  "completed": false,
+  "sensitive": false,
+  "ownershipTransferred": false,
+  "caseMarkers": []
+}

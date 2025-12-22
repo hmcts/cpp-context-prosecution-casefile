@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/command/api/sjp-prosecution-update-offence-code.json",
+  "type": "object",
+  "properties": {
+    "offenceCode": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "offenceCode"
+  ],
+  "additionalProperties": false
+}

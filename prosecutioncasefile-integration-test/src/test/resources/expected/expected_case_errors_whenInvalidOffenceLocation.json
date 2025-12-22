@@ -1,0 +1,53 @@
+{
+  "cases": [
+    {
+      "defendants": [
+        {
+          "chargeDate": "2015-04-04",
+          "hearingDate": "2050-02-04",
+          "id": "7d0f33da-6ce3-44d1-b4f6-80b01e113a75",
+          "errors": [],
+          "offences": [
+            {
+              "id": "f3c58bf3-fe06-497e-b41a-3dbeea28f23a",
+              "errors": [
+                {
+                  "id": "f3c58bf3-fe06-497e-b41a-3dbeea28f23a",
+                  "fieldName": "offence_offenceLocation",
+                  "errorValue": "",
+                  "displayName": "OFFENCE_REQUIRES_A_LOCATION",
+                  "version": 1388
+                },
+                {
+                  "id": "f3c58bf3-fe06-497e-b41a-3dbeea28f23a",
+                  "fieldName": "offence_offenceCode",
+                  "errorValue": "OFCODE12",
+                  "displayName": "OFFENCE_REQUIRES_A_LOCATION",
+                  "version": 1388
+                },
+                {
+                  "id": "f3c58bf3-fe06-497e-b41a-3dbeea28f23a",
+                  "fieldName": "offence_offenceSequenceNo",
+                  "errorValue": "1",
+                  "displayName": "OFFENCE_REQUIRES_A_LOCATION",
+                  "version": 1388
+                }
+              ]
+            }
+          ],
+          "firstName": "John",
+          "lastName": "Smith"
+        }
+      ],
+      "id": "ce21e3c5-74e2-41ae-894f-cad659e513b1",
+      "urn": "mJGvW2C299",
+      "courtLocation": "C55BN00",
+      "region": "NW",
+      "caseType": "Q",
+      "errorDescription": "Multiple Errors",
+      "version": 1005,
+      "errors": [],
+      "caseMarkersErrors": []
+    }
+  ]
+}

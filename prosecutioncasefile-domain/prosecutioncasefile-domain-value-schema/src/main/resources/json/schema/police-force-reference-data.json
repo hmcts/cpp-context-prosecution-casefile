@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/police-force-reference-data.json",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "sequence": {
+      "type":"integer"
+    },
+    "policeForceCode": {
+      "type": "string",
+      "maxLength":10
+    },
+    "policeForceName": {
+      "type": "string"
+    },
+    "validForSpiOut": {
+      "type": "boolean"
+    },
+    "oucodeL2Code": {
+      "type": "string",
+      "maxLength":3
+    },
+    "validFrom": {
+      "type": "string",
+      "format": "date"
+    },
+    "validTo": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "required": [
+    "sequence",
+    "policeForceCode",
+    "policeForceName",
+    "validForSpiOut"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "caseId": "fd223cb5-8676-4897-8c19-f8aa7428b5e6",
+  "applicationId": "fd223cb5-8676-4897-8c19-f8aa7428b5e7",
+  "summonsRejectedOutcome": {
+    "reasons": [
+      "first reason",
+      "second reason",
+      "third reason"
+    ],
+    "prosecutorEmailAddress": "test@test.com"
+  }
+}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+    <changeSet id="030" author="sridhar.girimaji"
+               logicalFilePath="030-create-index-case-details-prosecution-case-reference-to-case-details-table.xml">
+        <createIndex tableName="case_details"
+                     indexName="case_details_prosecution_case_reference_idx">
+            <column name="case_details"/>
+        </createIndex>
+
+        <rollback>
+            <dropIndex indexName="case_details_prosecution_case_reference_idx"
+                       tableName="case_details"/>
+        </rollback>
+
+    </changeSet>
+</databaseChangeLog>

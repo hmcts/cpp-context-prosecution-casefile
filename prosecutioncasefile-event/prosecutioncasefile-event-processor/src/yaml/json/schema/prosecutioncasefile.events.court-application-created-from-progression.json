@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/domain/event/court-application-created-from-progression.json",
+  "description": "initiate court application accepted event",
+  "type": "object",
+  "properties": {
+    "courtApplication": {
+      "description": "The details of the court application for which proceedings are required",
+      "$ref": "http://justice.gov.uk/core/courts/courtApplication.json"
+    },
+    "pocaFileId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "senderEmail": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "courtApplication",
+    "pocaFileId"
+  ],
+  "additionalProperties": false
+}

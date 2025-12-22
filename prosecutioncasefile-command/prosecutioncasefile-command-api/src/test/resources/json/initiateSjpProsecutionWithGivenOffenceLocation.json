@@ -1,0 +1,42 @@
+{
+  "caseDetails": {
+    "caseId": "51cac7fb-387c-4d19-9c80-8963fa8cf222",
+    "prosecutorCaseReference": "TVL12345",
+    "appliedProsecutorCosts": 200,
+    "prosecutor": {
+      "prosecutingAuthority": "GAEAA01",
+      "informant": "Adam"
+    }
+  },
+  "defendants": [{
+    "documentationLanguage": "W",
+    "hearingLanguage": "W",
+    "individual": {
+      "personalInformation": {
+        "title": "Mr",
+        "firstName": "John",
+        "lastName": "Smith"
+      },
+      "selfDefinedInformation": {
+        "ethnicity": "white",
+        "gender": "MALE"
+      }
+    },
+    "offences": [
+      {
+        "offenceCode": "OFCODE12",
+        "offenceSequenceNumber": 1,
+        "offenceCommittedDate": "2018-09-10",
+        "offenceDateCode": 1,
+        "offenceWording": "TV Licence not paid",
+        "chargeDate": "2015-04-04",
+        "appliedCompensation": 200,
+        "vehicleMake": "Ford",
+        "offenceLocation": "location1",
+        "vehicleRegistrationMark": "AB11 ABC"
+      }
+    ],
+    "postingDate": "2018-09-10"
+  }],
+  "channel": "%s"
+}

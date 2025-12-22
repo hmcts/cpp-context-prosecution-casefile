@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "id": "http://cpp.moj.gov.uk/prosecutioncasefile/json/schemas/prosecutioncasefile.query.counts-cases-errors.json",
+  "properties": {
+    "casesWithOutstandingErrors": {
+      "type": "integer"
+    },
+    "casesWithErrorsResolvedToday": {
+      "type": "integer"
+    }
+  }
+}

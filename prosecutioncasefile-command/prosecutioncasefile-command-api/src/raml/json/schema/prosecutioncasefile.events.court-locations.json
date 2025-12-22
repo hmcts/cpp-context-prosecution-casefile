@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/command/api/court-location.json",
+  "type": "object",
+  "properties": {
+    "courtLocations": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "locationCode": {
+              "type": "string"
+            },
+            "level1Code": {
+              "type": "string"
+            },
+            "level1Name": {
+              "type": "string"
+            },
+            "level2Code": {
+              "type": "string"
+            },
+            "level2Name": {
+              "type": "string"
+            },
+            "level3Code": {
+              "type": "string"
+            },
+            "level3Name": {
+              "type": "string"
+            },
+            "level4Code": {
+              "type": "string"
+            },
+            "level4Name": {
+              "type": "string"
+            },
+            "startDate": {
+              "type": "string"
+            },
+            "endDate": {
+              "type": "string"
+            },
+            "validFrom": {
+              "type": "string"
+            },
+            "validTo": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "locationCode",
+            "level1Code",
+            "level1Name",
+            "level2Code",
+            "level2Name",
+            "level3Code",
+            "level3Name",
+            "level4Code",
+            "level4Name",
+            "startDate",
+            "endDate",
+            "validFrom",
+            "validTo"
+          ]
+        }
+
+      ]
+    }
+  },
+  "required": [
+    "courtLocations"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "caseId":"51cac7fb-387c-4d19-9c80-8963fa8cf222",
+  "cmsDocumentId":"ABCDEF",
+  "documentType":"OTHER",
+  "errorCodes":[
+    "DOCUMENT_NOT_MATCHED_TO_CASE"
+  ],
+  "fileStoreId":"3042a896-fd3e-478d-bb0e-948dd46191a4",
+  "receivedDateTime":"2020-02-04T05:27:17.210Z",
+  "source":"CPS"
+}

@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/respondent.json",
+  "description": "An array of the parties answering to a matter before the court",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "asn": {
+      "description": "Arrest Summons Number",
+      "type": "string"
+    },
+    "cpsDefendantId": {
+      "description": "The CPS Identifier",
+      "type": "string"
+    },
+    "personDetails": {
+      "description": "Provided when the party is a person",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/person.json"
+    },
+    "organisation": {
+      "description": "Provided when the party is an organisation ",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/organisation.json"
+    },
+    "organisationPersons": {
+      "description": "Array of persons in the organisation where the party is an organisation",
+      "type": "array",
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/associated-person.json"
+      }
+    },
+    "representedOrganisation": {
+      "description": "The organisation details of the appointed representation",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/organisation.json"
+    },
+    "isSubject": {
+      "description": "Flag to indicate if the party is the subject of the application",
+      "type": "boolean"
+    },
+    "isDefendantMatched": {
+      "description": "Flag to indicate if the respondent matched with a defendant on the case.",
+      "type": "boolean"
+    },
+    "isMultipleDefendantMatched": {
+      "description": "Flag to indicate if the respondent matched with multiple defendant on the case.",
+      "type": "boolean"
+    },
+    "defendantId": {
+      "description": "id of the defendant in common platform. Will be there if defendant matching happens.",
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "caseId": {
+      "description": "id of the case in common platform where the respondant is matched with an existing defendant on the case. Will be there if defendant matching happens.",
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    }
+  },
+  "required": [
+    "isSubject"
+  ],
+  "additionalProperties": false
+}

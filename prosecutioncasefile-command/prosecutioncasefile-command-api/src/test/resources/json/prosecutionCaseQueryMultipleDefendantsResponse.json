@@ -1,0 +1,892 @@
+{
+  "prosecutionCase": {
+    "cpsOrganisation": "A30AB00",
+    "defendants": [
+      {
+        "courtProceedingsInitiated": "2022-03-09T09:27:28.857Z",
+        "id": "9163865e-8bd1-47e6-b31c-e55a67f42047",
+        "masterDefendantId": "9163865e-8bd1-47e6-b31c-e55a67f42047",
+        "offences": [
+          {
+            "arrestDate": "2004-12-09",
+            "chargeDate": "2004-12-09",
+            "count": 0,
+            "endorsableFlag": false,
+            "id": "53a78d00-e694-4764-b984-f2faef161f57",
+            "listingNumber": 2,
+            "modeOfTrial": "Summary",
+            "offenceCode": "TW01040",
+            "offenceDateCode": 1,
+            "offenceDefinitionId": "14f241f3-5888-43e0-8f7e-535a84da164b",
+            "offenceLegislation": "Contrary to byelaw 16(6) and 31(1) of the Tyne and Wear Metro Byelaws made under sections 58 and 62 of the Tyneside Metropolitan Railway Act 1973.",
+            "offenceTitle": "Fail to carry an animal on a moving escalator on the Tyne and Wear Metro",
+            "orderIndex": 500,
+            "startDate": "2004-12-09",
+            "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+          },
+          {
+            "arrestDate": "2004-12-09",
+            "chargeDate": "2014-02-09",
+            "count": 0,
+            "endorsableFlag": false,
+            "id": "9f2cc5e8-966b-4c33-944f-8a3f1ac08974",
+            "listingNumber": 2,
+            "modeOfTrial": "Summary",
+            "offenceCode": "TW01046",
+            "offenceDateCode": 1,
+            "offenceDefinitionId": "62fa56a4-3cea-41b7-a062-4d71e8ca74bc",
+            "offenceLegislation": "Contrary to byelaw 19 and 31(1) of the Tyne and Wear Metro Byelaws made under sections 58 and 62 of the Tyneside Metropolitan Railway Act 1973.",
+            "offenceTitle": "Occupy reserved seat / berth without a valid ticket on the Tyne and Wear Metro",
+            "orderIndex": 502,
+            "startDate": "2014-02-09",
+            "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+          }
+        ],
+        "personDefendant": {
+          "arrestSummonsNumber": "DTFL",
+          "bailStatus": {
+            "code": "C",
+            "description": "Custody or remanded into custody",
+            "id": "12e69486-4d01-3403-a50a-7419ca040635"
+          },
+          "personDetails": {
+            "address": {
+              "address1": "7WPchIY9VX",
+              "address2": "56Police House",
+              "address3": "StreetDescription",
+              "address4": "Locality2O",
+              "address5": "TownD",
+              "postcode": "TW14 9XD"
+            },
+            "contact": {
+              "home": "09998021888",
+              "mobile": "09998021889",
+              "primaryEmail": "robert@gmail.com",
+              "secondaryEmail": "ormsby@gmail.com",
+              "work": "0917894278022"
+            },
+            "dateOfBirth": "1997-01-14",
+            "documentationLanguageNeeds": "ENGLISH",
+            "firstName": "David",
+            "gender": "MALE",
+            "hearingLanguageNeeds": "ENGLISH",
+            "lastName": "JONES"
+          },
+          "policeBailStatus": {
+            "code": "C",
+            "description": "Custody or remanded into custody",
+            "id": "12e69486-4d01-3403-a50a-7419ca040635"
+          }
+        },
+        "prosecutionAuthorityReference": "DTFL",
+        "prosecutionCaseId": "55109f7f-fde2-4e5b-b79a-939635616186"
+      },
+      {
+        "aliases": [
+          {
+            "legalEntityName": "Alias0"
+          }
+        ],
+        "courtProceedingsInitiated": "2022-03-09T09:27:28.872Z",
+        "croNumber": "xz7aknGcZDAt",
+        "id": "5662e42f-23d7-41d1-a830-4b06da350103",
+        "legalEntityDefendant": {
+          "organisation": {
+            "address": {
+              "address1": "7WPchIY9VX",
+              "address2": "Southern House",
+              "address3": "Westmister  Street",
+              "address4": "Croydon",
+              "address5": "London",
+              "postcode": "W1 9XD"
+            },
+            "contact": {
+              "primaryEmail": "corp1@test.com",
+              "secondaryEmail": "corp2@test.com",
+              "work": "02012345675"
+            },
+            "name": "ABC Corp"
+          }
+        },
+        "masterDefendantId": "5662e42f-23d7-41d1-a830-4b06da350103",
+        "offences": [
+          {
+            "arrestDate": "2015-11-19",
+            "chargeDate": "2006-05-30",
+            "count": 0,
+            "endorsableFlag": false,
+            "id": "6d01d646-1e85-4f42-acb1-36850c4323e1",
+            "listingNumber": 1,
+            "modeOfTrial": "Summary",
+            "offenceCode": "TW01040",
+            "offenceDateCode": 1,
+            "offenceDefinitionId": "14f241f3-5888-43e0-8f7e-535a84da164b",
+            "offenceLegislation": "Contrary to byelaw 16(6) and 31(1) of the Tyne and Wear Metro Byelaws made under sections 58 and 62 of the Tyneside Metropolitan Railway Act 1973.",
+            "offenceTitle": "Fail to carry an animal on a moving escalator on the Tyne and Wear Metro",
+            "orderIndex": 551,
+            "startDate": "2004-12-09",
+            "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+          },
+          {
+            "arrestDate": "2004-12-09",
+            "chargeDate": "2014-02-09",
+            "count": 0,
+            "endorsableFlag": false,
+            "id": "895685a0-e5c8-48f1-b629-cfe1d65ca711",
+            "listingNumber": 1,
+            "modeOfTrial": "Summary",
+            "offenceCode": "TW01046",
+            "offenceDateCode": 1,
+            "offenceDefinitionId": "62fa56a4-3cea-41b7-a062-4d71e8ca74bc",
+            "offenceLegislation": "Contrary to byelaw 19 and 31(1) of the Tyne and Wear Metro Byelaws made under sections 58 and 62 of the Tyneside Metropolitan Railway Act 1973.",
+            "offenceTitle": "Occupy reserved seat / berth without a valid ticket on the Tyne and Wear Metro",
+            "orderIndex": 502,
+            "startDate": "2014-02-09",
+            "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+          }
+        ],
+        "pncId": "2536.4208255",
+        "prosecutionAuthorityReference": "CORPTFL",
+        "prosecutionCaseId": "55109f7f-fde2-4e5b-b79a-939635616186"
+      }
+    ],
+    "id": "55109f7f-fde2-4e5b-b79a-939635616186",
+    "initiationCode": "C",
+    "originatingOrganisation": "0300000",
+    "prosecutionCaseIdentifier": {
+      "address": {
+        "address1": "Criminal Justice Department",
+        "address2": "Derbyshire Constabulary",
+        "address3": "Butterley Hall",
+        "address4": "Ripley",
+        "address5": "Derby",
+        "postcode": "DE5 3RS"
+      },
+      "contact": {
+        "primaryEmail": "CCSU@derbyshire.pnn.police.uk"
+      },
+      "majorCreditorCode": "PF30",
+      "prosecutionAuthorityCode": "DERPF",
+      "prosecutionAuthorityId": "bdc190e7-c939-37ca-be4b-9f615d6ef40e",
+      "prosecutionAuthorityName": "Derbyshire Police",
+      "prosecutionAuthorityOUCode": "0300000",
+      "caseURN": "24GD4015522"
+    },
+    "caseStatus": "ACTIVE"
+  },
+  "linkedApplicationsSummary": [
+    {
+      "applicationId": "6631b5c0-268a-482a-aa2b-b6a03442acab",
+      "applicationTitle": "Review of community order",
+      "applicationReference": "24GD4015522",
+      "applicationStatus": "IN_PROGRESS",
+      "applicantDisplayName": "David JONES",
+      "isAppeal": false
+    },
+    {
+      "applicationId": "69de3e1b-70a0-4b2b-8d05-86f710b84bdd",
+      "applicationTitle": "Application to revoke a community order and re-sentence",
+      "applicationReference": "24GD4015522",
+      "applicationStatus": "LISTED",
+      "applicantDisplayName": "David JONES",
+      "isAppeal": false
+    }
+  ],
+  "hearingsAtAGlance": {
+    "courtApplications": [
+      {
+        "applicant": {
+          "id": "ee5c094f-96cb-4a42-8fab-408ecea44f83",
+          "masterDefendant": {
+            "defendantCase": [
+              {
+                "caseId": "55109f7f-fde2-4e5b-b79a-939635616186",
+                "caseReference": "24GD4015522",
+                "defendantId": "9163865e-8bd1-47e6-b31c-e55a67f42047"
+              }
+            ],
+            "masterDefendantId": "9163865e-8bd1-47e6-b31c-e55a67f42047",
+            "personDefendant": {
+              "arrestSummonsNumber": "DTFL",
+              "bailStatus": {
+                "code": "C",
+                "description": "Custody or remanded into custody",
+                "id": "12e69486-4d01-3403-a50a-7419ca040635"
+              },
+              "personDetails": {
+                "address": {
+                  "address1": "7WPchIY9VX",
+                  "address2": "56Police House",
+                  "address3": "StreetDescription",
+                  "address4": "Locality2O",
+                  "address5": "TownD",
+                  "postcode": "TW14 9XD"
+                },
+                "contact": {
+                  "home": "09998021888",
+                  "mobile": "09998021889",
+                  "primaryEmail": "robert@gmail.com",
+                  "secondaryEmail": "ormsby@gmail.com",
+                  "work": "0917894278022"
+                },
+                "dateOfBirth": "1997-01-14",
+                "documentationLanguageNeeds": "ENGLISH",
+                "firstName": "David",
+                "gender": "MALE",
+                "hearingLanguageNeeds": "ENGLISH",
+                "lastName": "JONES"
+              },
+              "policeBailStatus": {
+                "code": "C",
+                "description": "Custody or remanded into custody",
+                "id": "12e69486-4d01-3403-a50a-7419ca040635"
+              }
+            }
+          },
+          "notificationRequired": true,
+          "summonsRequired": false
+        },
+        "applicationParticulars": "sdc",
+        "applicationReceivedDate": "2022-03-09",
+        "applicationReference": "24GD4015522",
+        "applicationStatus": "IN_PROGRESS",
+        "commissionerOfOath": false,
+        "courtApplicationCases": [
+          {
+            "caseStatus": "ACTIVE",
+            "isSJP": false,
+            "prosecutionCaseId": "55109f7f-fde2-4e5b-b79a-939635616186",
+            "prosecutionCaseIdentifier": {
+              "address": {
+                "address1": "Criminal Justice Department",
+                "address2": "Derbyshire Constabulary",
+                "address3": "Butterley Hall",
+                "address4": "Ripley",
+                "address5": "Derby",
+                "postcode": "DE5 3RS"
+              },
+              "contact": {
+                "primaryEmail": "CCSU@derbyshire.pnn.police.uk"
+              },
+              "majorCreditorCode": "PF30",
+              "prosecutionAuthorityCode": "DERPF",
+              "prosecutionAuthorityId": "bdc190e7-c939-37ca-be4b-9f615d6ef40e",
+              "prosecutionAuthorityName": "Derbyshire Police",
+              "prosecutionAuthorityOUCode": "0300000",
+              "caseURN": "24GD4015522"
+            }
+          }
+        ],
+        "id": "6631b5c0-268a-482a-aa2b-b6a03442acab",
+        "subject": {
+          "id": "ee5c094f-96cb-4a42-8fab-408ecea44f83",
+          "masterDefendant": {
+            "defendantCase": [
+              {
+                "caseId": "55109f7f-fde2-4e5b-b79a-939635616186",
+                "caseReference": "24GD4015522",
+                "defendantId": "9163865e-8bd1-47e6-b31c-e55a67f42047"
+              }
+            ],
+            "masterDefendantId": "9163865e-8bd1-47e6-b31c-e55a67f42047",
+            "personDefendant": {
+              "arrestSummonsNumber": "DTFL",
+              "bailStatus": {
+                "code": "C",
+                "description": "Custody or remanded into custody",
+                "id": "12e69486-4d01-3403-a50a-7419ca040635"
+              },
+              "personDetails": {
+                "address": {
+                  "address1": "7WPchIY9VX",
+                  "address2": "56Police House",
+                  "address3": "StreetDescription",
+                  "address4": "Locality2O",
+                  "address5": "TownD",
+                  "postcode": "TW14 9XD"
+                },
+                "contact": {
+                  "home": "09998021888",
+                  "mobile": "09998021889",
+                  "primaryEmail": "robert@gmail.com",
+                  "secondaryEmail": "ormsby@gmail.com",
+                  "work": "0917894278022"
+                },
+                "dateOfBirth": "1997-01-14",
+                "documentationLanguageNeeds": "ENGLISH",
+                "firstName": "David",
+                "gender": "MALE",
+                "hearingLanguageNeeds": "ENGLISH",
+                "lastName": "JONES"
+              },
+              "policeBailStatus": {
+                "code": "C",
+                "description": "Custody or remanded into custody",
+                "id": "12e69486-4d01-3403-a50a-7419ca040635"
+              }
+            }
+          },
+          "notificationRequired": true,
+          "summonsRequired": false
+        },
+        "type": {
+          "appealFlag": false,
+          "applicantAppellantFlag": false,
+          "boxworkNotifTemplate": "NOT_APPLICABLE",
+          "breachType": "NOT_APPLICABLE",
+          "categoryCode": "CO",
+          "code": "CJ03521",
+          "commrOfOathFlag": false,
+          "courtExtractAvlFlag": true,
+          "courtOfAppealFlag": false,
+          "hearingCode": "REV",
+          "id": "2650cec5-a28d-370e-b2fd-3070cb74592c",
+          "jurisdiction": "EITHER",
+          "legislation": "In accordance with section 178 of the Criminal Justice Act 2003.",
+          "linkType": "LINKED",
+          "listingNotifTemplate": "POSTAL_NOTIFICATION",
+          "offenceActiveOrder": "NOT_APPLICABLE",
+          "pleaApplicableFlag": false,
+          "prosecutorThirdPartyFlag": false,
+          "spiOutApplicableFlag": true,
+          "summonsTemplateType": "NOT_APPLICABLE",
+          "type": "Review of community order"
+        }
+      },
+      {
+        "allegationOrComplaintEndDate": "2022-03-04",
+        "allegationOrComplaintStartDate": "2022-03-03",
+        "applicant": {
+          "id": "8669c91e-cf3a-4cfd-9ba2-4f7cb2b6bb45",
+          "masterDefendant": {
+            "defendantCase": [
+              {
+                "caseId": "55109f7f-fde2-4e5b-b79a-939635616186",
+                "caseReference": "24GD4015522",
+                "defendantId": "9163865e-8bd1-47e6-b31c-e55a67f42047"
+              }
+            ],
+            "masterDefendantId": "9163865e-8bd1-47e6-b31c-e55a67f42047",
+            "personDefendant": {
+              "arrestSummonsNumber": "DTFL",
+              "bailStatus": {
+                "code": "C",
+                "description": "Custody or remanded into custody",
+                "id": "12e69486-4d01-3403-a50a-7419ca040635"
+              },
+              "personDetails": {
+                "address": {
+                  "address1": "7WPchIY9VX",
+                  "address2": "56Police House",
+                  "address3": "StreetDescription",
+                  "address4": "Locality2O",
+                  "address5": "TownD",
+                  "postcode": "TW14 9XD"
+                },
+                "contact": {
+                  "home": "09998021888",
+                  "mobile": "09998021889",
+                  "primaryEmail": "robert@gmail.com",
+                  "secondaryEmail": "ormsby@gmail.com",
+                  "work": "0917894278022"
+                },
+                "dateOfBirth": "1997-01-14",
+                "documentationLanguageNeeds": "ENGLISH",
+                "firstName": "David",
+                "gender": "MALE",
+                "hearingLanguageNeeds": "ENGLISH",
+                "lastName": "JONES"
+              },
+              "policeBailStatus": {
+                "code": "C",
+                "description": "Custody or remanded into custody",
+                "id": "12e69486-4d01-3403-a50a-7419ca040635"
+              }
+            }
+          },
+          "notificationRequired": true,
+          "summonsRequired": false
+        },
+        "applicationReceivedDate": "2022-03-03",
+        "applicationReference": "24GD4015522",
+        "applicationStatus": "LISTED",
+        "commissionerOfOath": false,
+        "courtApplicationCases": [
+          {
+            "caseStatus": "ACTIVE",
+            "isSJP": false,
+            "prosecutionCaseId": "55109f7f-fde2-4e5b-b79a-939635616186",
+            "prosecutionCaseIdentifier": {
+              "address": {
+                "address1": "Criminal Justice Department",
+                "address2": "Derbyshire Constabulary",
+                "address3": "Butterley Hall",
+                "address4": "Ripley",
+                "address5": "Derby",
+                "postcode": "DE5 3RS"
+              },
+              "contact": {
+                "primaryEmail": "CCSU@derbyshire.pnn.police.uk"
+              },
+              "majorCreditorCode": "PF30",
+              "prosecutionAuthorityCode": "DERPF",
+              "prosecutionAuthorityId": "bdc190e7-c939-37ca-be4b-9f615d6ef40e",
+              "prosecutionAuthorityName": "Derbyshire Police",
+              "prosecutionAuthorityOUCode": "0300000",
+              "caseURN": "24GD4015522"
+            }
+          }
+        ],
+        "id": "69de3e1b-70a0-4b2b-8d05-86f710b84bdd",
+        "subject": {
+          "id": "8669c91e-cf3a-4cfd-9ba2-4f7cb2b6bb45",
+          "masterDefendant": {
+            "defendantCase": [
+              {
+                "caseId": "55109f7f-fde2-4e5b-b79a-939635616186",
+                "caseReference": "24GD4015522",
+                "defendantId": "9163865e-8bd1-47e6-b31c-e55a67f42047"
+              }
+            ],
+            "masterDefendantId": "9163865e-8bd1-47e6-b31c-e55a67f42047",
+            "personDefendant": {
+              "arrestSummonsNumber": "DTFL",
+              "bailStatus": {
+                "code": "C",
+                "description": "Custody or remanded into custody",
+                "id": "12e69486-4d01-3403-a50a-7419ca040635"
+              },
+              "personDetails": {
+                "address": {
+                  "address1": "7WPchIY9VX",
+                  "address2": "56Police House",
+                  "address3": "StreetDescription",
+                  "address4": "Locality2O",
+                  "address5": "TownD",
+                  "postcode": "TW14 9XD"
+                },
+                "contact": {
+                  "home": "09998021888",
+                  "mobile": "09998021889",
+                  "primaryEmail": "robert@gmail.com",
+                  "secondaryEmail": "ormsby@gmail.com",
+                  "work": "0917894278022"
+                },
+                "dateOfBirth": "1997-01-14",
+                "documentationLanguageNeeds": "ENGLISH",
+                "firstName": "David",
+                "gender": "MALE",
+                "hearingLanguageNeeds": "ENGLISH",
+                "lastName": "JONES"
+              },
+              "policeBailStatus": {
+                "code": "C",
+                "description": "Custody or remanded into custody",
+                "id": "12e69486-4d01-3403-a50a-7419ca040635"
+              }
+            }
+          },
+          "notificationRequired": true,
+          "summonsRequired": false
+        },
+        "type": {
+          "appealFlag": false,
+          "applicantAppellantFlag": false,
+          "boxworkNotifTemplate": "NOT_APPLICABLE",
+          "breachType": "GENERIC_BREACH",
+          "categoryCode": "CO",
+          "code": "CJ03520",
+          "commrOfOathFlag": false,
+          "courtExtractAvlFlag": true,
+          "courtOfAppealFlag": false,
+          "hearingCode": "APN",
+          "id": "00201dcc-0480-3d7e-90af-2e5190a62338",
+          "jurisdiction": "EITHER",
+          "legislation": "In accordance with Part 3 of Schedule 8 to the Criminal Justice Act 2003.",
+          "linkType": "LINKED",
+          "listingNotifTemplate": "POSTAL_NOTIFICATION",
+          "offenceActiveOrder": "OFFENCE",
+          "pleaApplicableFlag": false,
+          "prosecutorThirdPartyFlag": false,
+          "resentencingActivationCode": "CJO3522",
+          "spiOutApplicableFlag": true,
+          "summonsTemplateType": "NOT_APPLICABLE",
+          "type": "Application to revoke a community order and re-sentence"
+        }
+      }
+    ],
+    "defendantHearings": [
+      {
+        "defendantId": "9163865e-8bd1-47e6-b31c-e55a67f42047",
+        "defendantName": "David JONES",
+        "hearingIds": [
+          "e9040c48-6c74-4f0e-8939-ddda8bf0df06",
+          "aa2039ca-5b61-4187-b2d3-ba632011c794",
+          "3c539799-97fb-43f9-8771-06812482af80"
+        ]
+      },
+      {
+        "defendantId": "5662e42f-23d7-41d1-a830-4b06da350103",
+        "defendantName": "ABC Corp",
+        "hearingIds": [
+          "aa2039ca-5b61-4187-b2d3-ba632011c794"
+        ]
+      }
+    ],
+    "hearings": [
+      {
+        "courtCentre": {
+          "address": {
+            "address1": "176A Lavender Hill",
+            "address2": "London",
+            "address3": "",
+            "address4": "",
+            "address5": "",
+            "postcode": "SW11 1JU"
+          },
+          "code": "B01LY00",
+          "id": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+          "lja": {
+            "ljaCode": "2577",
+            "ljaName": "South West London Magistrates' Court"
+          },
+          "name": "Lavender Hill Magistrates' Court",
+          "roomId": "9e4932f7-97b2-3010-b942-ddd2624e4dd8",
+          "roomName": "Courtroom 01"
+        },
+        "defendants": [
+          {
+            "address": {
+              "address1": "7WPchIY9VX",
+              "address2": "56Police House",
+              "address3": "StreetDescription",
+              "address4": "Locality2O",
+              "address5": "TownD",
+              "postcode": "TW14 9XD"
+            },
+            "age": "25",
+            "courtApplications": [
+            ],
+            "dateOfBirth": "1997-01-14",
+            "defenceOrganisation": {
+              "defenceCounsels": [
+              ],
+              "defendantId": "9163865e-8bd1-47e6-b31c-e55a67f42047"
+            },
+            "id": "9163865e-8bd1-47e6-b31c-e55a67f42047",
+            "judicialResults": [
+            ],
+            "name": "David JONES",
+            "offences": [
+              {
+                "count": 0,
+                "id": "53a78d00-e694-4764-b984-f2faef161f57",
+                "judicialResults": [
+                ],
+                "offenceCode": "TW01040",
+                "offenceDefinitionId": "14f241f3-5888-43e0-8f7e-535a84da164b",
+                "offenceLegislation": "Contrary to byelaw 16(6) and 31(1) of the Tyne and Wear Metro Byelaws made under sections 58 and 62 of the Tyneside Metropolitan Railway Act 1973.",
+                "offenceTitle": "Fail to carry an animal on a moving escalator on the Tyne and Wear Metro",
+                "pleas": [
+                ],
+                "startDate": "2004-12-09",
+                "verdicts": [
+                ],
+                "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+              },
+              {
+                "count": 0,
+                "id": "9f2cc5e8-966b-4c33-944f-8a3f1ac08974",
+                "judicialResults": [
+                ],
+                "offenceCode": "TW01046",
+                "offenceDefinitionId": "62fa56a4-3cea-41b7-a062-4d71e8ca74bc",
+                "offenceLegislation": "Contrary to byelaw 19 and 31(1) of the Tyne and Wear Metro Byelaws made under sections 58 and 62 of the Tyneside Metropolitan Railway Act 1973.",
+                "offenceTitle": "Occupy reserved seat / berth without a valid ticket on the Tyne and Wear Metro",
+                "pleas": [
+                ],
+                "startDate": "2014-02-09",
+                "verdicts": [
+                ],
+                "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+              }
+            ]
+          },
+          {
+            "address": {
+              "address1": "7WPchIY9VX",
+              "address2": "Southern House",
+              "address3": "Westmister  Street",
+              "address4": "Croydon",
+              "address5": "London",
+              "postcode": "W1 9XD"
+            },
+            "age": "",
+            "courtApplications": [
+            ],
+            "defenceOrganisation": {
+              "defenceCounsels": [
+              ],
+              "defendantId": "5662e42f-23d7-41d1-a830-4b06da350103"
+            },
+            "id": "5662e42f-23d7-41d1-a830-4b06da350103",
+            "judicialResults": [
+            ],
+            "name": "ABC Corp",
+            "offences": [
+              {
+                "count": 0,
+                "id": "6d01d646-1e85-4f42-acb1-36850c4323e1",
+                "judicialResults": [
+                ],
+                "offenceCode": "TW01040",
+                "offenceDefinitionId": "14f241f3-5888-43e0-8f7e-535a84da164b",
+                "offenceLegislation": "Contrary to byelaw 16(6) and 31(1) of the Tyne and Wear Metro Byelaws made under sections 58 and 62 of the Tyneside Metropolitan Railway Act 1973.",
+                "offenceTitle": "Fail to carry an animal on a moving escalator on the Tyne and Wear Metro",
+                "pleas": [
+                ],
+                "startDate": "2004-12-09",
+                "verdicts": [
+                ],
+                "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+              },
+              {
+                "count": 0,
+                "id": "895685a0-e5c8-48f1-b629-cfe1d65ca711",
+                "judicialResults": [
+                ],
+                "offenceCode": "TW01046",
+                "offenceDefinitionId": "62fa56a4-3cea-41b7-a062-4d71e8ca74bc",
+                "offenceLegislation": "Contrary to byelaw 19 and 31(1) of the Tyne and Wear Metro Byelaws made under sections 58 and 62 of the Tyneside Metropolitan Railway Act 1973.",
+                "offenceTitle": "Occupy reserved seat / berth without a valid ticket on the Tyne and Wear Metro",
+                "pleas": [
+                ],
+                "startDate": "2014-02-09",
+                "verdicts": [
+                ],
+                "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+              }
+            ]
+          }
+        ],
+        "hasResultAmended": false,
+        "hearingDays": [
+          {
+            "courtCentreId": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+            "courtRoomId": "9e4932f7-97b2-3010-b942-ddd2624e4dd8",
+            "isCancelled": false,
+            "listedDurationMinutes": 20,
+            "listingSequence": 0,
+            "sittingDay": "2022-03-13T09:01:01.001Z"
+          }
+        ],
+        "hearingListingStatus": "HEARING_INITIALISED",
+        "id": "aa2039ca-5b61-4187-b2d3-ba632011c794",
+        "jurisdictionType": "MAGISTRATES",
+        "type": {
+          "description": "First hearing",
+          "id": "4a0e892d-c0c5-3c51-95b8-704d8c781776"
+        }
+      },
+      {
+        "courtCentre": {
+          "id": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+          "name": "Lavender Hill Magistrates' Court"
+        },
+        "defendants": [
+          {
+            "address": {
+              "address1": "7WPchIY9VX",
+              "address2": "56Police House",
+              "address3": "StreetDescription",
+              "address4": "Locality2O",
+              "address5": "TownD",
+              "postcode": "TW14 9XD"
+            },
+            "age": "25",
+            "courtApplications": [
+            ],
+            "dateOfBirth": "1997-01-14",
+            "defenceOrganisation": {
+              "defenceCounsels": [
+              ],
+              "defendantId": "9163865e-8bd1-47e6-b31c-e55a67f42047"
+            },
+            "id": "9163865e-8bd1-47e6-b31c-e55a67f42047",
+            "judicialResults": [
+            ],
+            "name": "David JONES",
+            "offences": [
+              {
+                "count": 0,
+                "id": "53a78d00-e694-4764-b984-f2faef161f57",
+                "judicialResults": [
+                ],
+                "offenceCode": "TW01040",
+                "offenceDefinitionId": "14f241f3-5888-43e0-8f7e-535a84da164b",
+                "offenceLegislation": "Contrary to byelaw 16(6) and 31(1) of the Tyne and Wear Metro Byelaws made under sections 58 and 62 of the Tyneside Metropolitan Railway Act 1973.",
+                "offenceTitle": "Fail to carry an animal on a moving escalator on the Tyne and Wear Metro",
+                "pleas": [
+                ],
+                "startDate": "2004-12-09",
+                "verdicts": [
+                ],
+                "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+              },
+              {
+                "count": 0,
+                "id": "9f2cc5e8-966b-4c33-944f-8a3f1ac08974",
+                "judicialResults": [
+                ],
+                "offenceCode": "TW01046",
+                "offenceDefinitionId": "62fa56a4-3cea-41b7-a062-4d71e8ca74bc",
+                "offenceLegislation": "Contrary to byelaw 19 and 31(1) of the Tyne and Wear Metro Byelaws made under sections 58 and 62 of the Tyneside Metropolitan Railway Act 1973.",
+                "offenceTitle": "Occupy reserved seat / berth without a valid ticket on the Tyne and Wear Metro",
+                "pleas": [
+                ],
+                "startDate": "2014-02-09",
+                "verdicts": [
+                ],
+                "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+              }
+            ]
+          }
+        ],
+        "hasResultAmended": false,
+        "hearingDays": [
+          {
+            "listedDurationMinutes": 10,
+            "sittingDay": "2022-03-10T00:00:00.000Z"
+          }
+        ],
+        "hearingListingStatus": "HEARING_INITIALISED",
+        "id": "3c539799-97fb-43f9-8771-06812482af80",
+        "isBoxHearing": true,
+        "jurisdictionType": "MAGISTRATES",
+        "type": {
+          "description": "Application",
+          "id": "3449743b-95d6-4836-8941-57f588b52068"
+        }
+      },
+      {
+        "courtCentre": {
+          "address": {
+            "address1": "176A Lavender Hill",
+            "address2": "London",
+            "address3": "",
+            "address4": "",
+            "address5": "",
+            "postcode": "SW11 1JU"
+          },
+          "code": "B01LY00",
+          "id": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+          "lja": {
+            "ljaCode": "2577",
+            "ljaName": "South West London Magistrates' Court"
+          },
+          "name": "Lavender Hill Magistrates' Court",
+          "roomId": "9e4932f7-97b2-3010-b942-ddd2624e4dd8",
+          "roomName": "Courtroom 01"
+        },
+        "defendants": [
+          {
+            "address": {
+              "address1": "7WPchIY9VX",
+              "address2": "56Police House",
+              "address3": "StreetDescription",
+              "address4": "Locality2O",
+              "address5": "TownD",
+              "postcode": "TW14 9XD"
+            },
+            "age": "25",
+            "courtApplications": [
+            ],
+            "dateOfBirth": "1997-01-14",
+            "defenceOrganisation": {
+              "defenceCounsels": [
+              ],
+              "defendantId": "9163865e-8bd1-47e6-b31c-e55a67f42047"
+            },
+            "id": "9163865e-8bd1-47e6-b31c-e55a67f42047",
+            "judicialResults": [
+            ],
+            "name": "David JONES",
+            "offences": [
+              {
+                "count": 0,
+                "id": "53a78d00-e694-4764-b984-f2faef161f57",
+                "judicialResults": [
+                ],
+                "offenceCode": "TW01040",
+                "offenceDefinitionId": "14f241f3-5888-43e0-8f7e-535a84da164b",
+                "offenceLegislation": "Contrary to byelaw 16(6) and 31(1) of the Tyne and Wear Metro Byelaws made under sections 58 and 62 of the Tyneside Metropolitan Railway Act 1973.",
+                "offenceTitle": "Fail to carry an animal on a moving escalator on the Tyne and Wear Metro",
+                "pleas": [
+                ],
+                "startDate": "2004-12-09",
+                "verdicts": [
+                ],
+                "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+              },
+              {
+                "count": 0,
+                "id": "9f2cc5e8-966b-4c33-944f-8a3f1ac08974",
+                "judicialResults": [
+                ],
+                "offenceCode": "TW01046",
+                "offenceDefinitionId": "62fa56a4-3cea-41b7-a062-4d71e8ca74bc",
+                "offenceLegislation": "Contrary to byelaw 19 and 31(1) of the Tyne and Wear Metro Byelaws made under sections 58 and 62 of the Tyneside Metropolitan Railway Act 1973.",
+                "offenceTitle": "Occupy reserved seat / berth without a valid ticket on the Tyne and Wear Metro",
+                "pleas": [
+                ],
+                "startDate": "2014-02-09",
+                "verdicts": [
+                ],
+                "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+              }
+            ]
+          }
+        ],
+        "hasResultAmended": false,
+        "hearingDays": [
+          {
+            "courtCentreId": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+            "courtRoomId": "9e4932f7-97b2-3010-b942-ddd2624e4dd8",
+            "isCancelled": false,
+            "listedDurationMinutes": 1,
+            "listingSequence": 0,
+            "sittingDay": "2022-03-09T10:00:00.000Z"
+          }
+        ],
+        "hearingListingStatus": "HEARING_INITIALISED",
+        "id": "e9040c48-6c74-4f0e-8939-ddda8bf0df06",
+        "jurisdictionType": "MAGISTRATES",
+        "type": {
+          "description": "Application",
+          "id": "3449743b-95d6-4836-8941-57f588b52068"
+        }
+      }
+    ],
+    "id": "55109f7f-fde2-4e5b-b79a-939635616186",
+    "latestHearingJurisdictionType": "MAGISTRATES",
+    "prosecutionCaseIdentifier": {
+      "address": {
+        "address1": "Criminal Justice Department",
+        "address2": "Derbyshire Constabulary",
+        "address3": "Butterley Hall",
+        "address4": "Ripley",
+        "address5": "Derby",
+        "postcode": "DE5 3RS"
+      },
+      "contact": {
+        "primaryEmail": "CCSU@derbyshire.pnn.police.uk"
+      },
+      "majorCreditorCode": "PF30",
+      "prosecutionAuthorityCode": "DERPF",
+      "prosecutionAuthorityId": "bdc190e7-c939-37ca-be4b-9f615d6ef40e",
+      "prosecutionAuthorityName": "Derbyshire Police",
+      "prosecutionAuthorityOUCode": "0300000",
+      "caseURN": "24GD4015522"
+    }
+  }
+}

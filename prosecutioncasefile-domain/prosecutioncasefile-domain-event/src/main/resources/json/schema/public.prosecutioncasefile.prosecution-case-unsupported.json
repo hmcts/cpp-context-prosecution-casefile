@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/domain/event/public-prosecution-case-unsupported.json",
+  "type": "object",
+  "properties": {
+    "externalId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "channel": {
+      "type": "string",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/pcf-definitions.json#/definitions/channel"
+    },
+    "errorMessage": {
+      "type": "string"
+    },
+    "policeSystemId": {
+      "type": "string"
+    },
+    "urn": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "externalId",
+    "channel",
+    "errorMessage"
+  ]
+}

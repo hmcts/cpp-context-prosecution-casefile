@@ -1,0 +1,35 @@
+[
+  {
+    "code": "SUMMONS_CODE_INVALID",
+    "values": [
+      {
+        "key": "summonsCode",
+        "value": "summonsCode"
+      }
+    ]
+  },
+  {
+    "code": "PROSECUTOR_OUCODE_NOT_RECOGNISED",
+    "values": [
+      {
+        "key": "prosecutingAuthority",
+        "value": "123"
+      }
+    ]
+  },
+  {
+    "code": "CASE_MARKER_IS_INVALID",
+    "values": [
+      {
+        "id": "0",
+        "key": "caseMarkers",
+        "value": "ABC"
+      },
+      {
+        "id": "1",
+        "key": "caseMarkers",
+        "value": "BCD"
+      }
+    ]
+  }
+]

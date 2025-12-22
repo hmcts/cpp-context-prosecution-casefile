@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/domain/event/case-document-review-required",
+  "type": "object",
+  "properties": {
+    "fileStoreId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "caseId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "receivedDateTime":{
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date-time"
+    },
+    "cmsDocumentId": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    },
+    "prosecutingAuthority": {
+      "type": "string"
+    },
+
+    "documentType": {
+      "type": "string",
+      "enum": [
+        "APPLICATION",
+        "CORRESPONDENCE",
+        "PLEA",
+        "OTHER"
+      ]
+    },
+    "errorCodes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "fileStoreId"
+  ],
+  "additionalProperties": false
+}
+
+
+

@@ -1,0 +1,21 @@
+{
+  "prosecutionCaseSubject": {
+    "prosecutingAuthority": "The OU Code of the prosecuting authority",
+    "urn": "45MD0000220"
+  },
+  "cpsDefendant": [
+    {
+      "prosecutorDefendantId": "defendant Id"
+    }
+  ],
+  "trialAdvocate": {
+    "email": "test@test.com",
+    "name": "name",
+    "phone": "7778888345"
+  },
+  "tag": "tag",
+  "submissionId": "e85d2c62-af1f-4674-863a-0891e67e325b",
+  "particularsOfAnyRelatedCriminalProceedings": "Particulars Of Any Related Criminal Proceedings",
+  "particularsOfAnyFamily": "Particulars Of Any Family",
+  "submissionStatus": "PENDING"
+}

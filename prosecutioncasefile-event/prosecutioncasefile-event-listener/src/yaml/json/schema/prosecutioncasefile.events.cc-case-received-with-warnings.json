@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/domain/event/prosecutioncasefile.cc-case-received-with-warnings.json",
+  "type": "object",
+  "properties": {
+    "prosecutionWithReferenceData": {
+      "type": "object",
+      "properties": {
+        "prosecution": {
+          "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/prosecution.json"
+        }
+      }
+    },
+    "caseWarnings": {
+      "type": "array",
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/problem.json"
+      }
+    },
+    "defendantWarnings": {
+      "type": "array",
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/defendant-problem.json"
+      }
+    },
+    "externalId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid",
+      "description": "ID originating from the client (SPI or CPPI) for referencing the original message"
+    },
+    "summonsApprovedOutcome": {
+      "$ref": "http://justice.gov.uk/core/courts/summonsApprovedOutcome.json"
+    },
+    "id" : {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    }
+  },
+  "required": [
+    "prosecutionWithReferenceData"
+  ]
+}
+

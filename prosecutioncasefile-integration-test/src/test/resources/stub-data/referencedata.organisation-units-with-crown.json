@@ -1,0 +1,27 @@
+{
+  "organisationunits": [
+    {
+      "id": "faa91bb2-19cb-384b-bcc1-06d31d12cc67",
+      "oucode": "C50EX00",
+      "oucodeL1Code": "C",
+      "oucodeL1Name": "Crown Courts",
+      "oucodeL3Code": "EX",
+      "oucodeL3Name": "Exeter Crown Court",
+      "address1": "Exeter Combined Court Centre",
+      "address2": "Southernhay Gardens",
+      "address3": "Exeter",
+      "postcode": "EX1 1UH",
+      "oucodeL3WelshName": "Llys Y Goron Exeter",
+      "defaultStartTime": "10:30:00",
+      "defaultDurationHrs": "06:00:00",
+      "courtLocationCode": "0423",
+      "courtId": "423",
+      "courtRoom": {
+        "id": "be50f1d8-a3ca-3d12-bb8c-66a1a495e141",
+        "courtroomId": 905,
+        "courtroomName": "Courtroom 01",
+        "venueId": 180
+      }
+    }
+  ]
+}

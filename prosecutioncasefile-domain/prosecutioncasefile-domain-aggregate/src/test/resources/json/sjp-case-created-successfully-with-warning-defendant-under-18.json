@@ -1,0 +1,22 @@
+{
+  "_metadata": {
+    "name": "prosecutioncasefile.events.sjp-case-created-successfully-with-warnings"
+  },
+  "caseId": "51cac7fb-387c-4d19-9c80-8963fa8cf222",
+  "warnings": [
+    {
+      "code": "DEFENDANT_UNDER_18_YEARS_AT_CHARGE_DATE",
+      "values": [
+        {
+          "key": "dateOfBirth",
+          "value": "2000-10-21"
+        },
+        {
+          "key": "chargeDate",
+          "value": "2018-10-10"
+        }
+      ]
+    }
+  ],
+  "channel": "SPI"
+}

@@ -1,0 +1,41 @@
+{
+  "caseId": "51cac7fb-387c-4d19-9c80-8963fa8cf222",
+  "prosecutorCaseReference": "TVL12345",
+  "appliedProsecutorCosts": 200,
+  "prosecutor": {
+    "prosecutingAuthority": "GAEAA01",
+    "informant": "Adam"
+  },
+  "defendant": {
+    "documentationLanguage": "W",
+    "hearingLanguage": "W",
+    "individual": {
+      "personalInformation": {
+        "title": "Baron",
+        "firstName": "John",
+        "lastName": "Smith",
+        "address": {
+          "address1": "armagaddon house",
+          "postcode": "M60 1NW"
+        },
+        "contactDetails": {}
+      },
+      "selfDefinedInformation": {
+        "ethnicity": "white",
+        "gender": "MALE"
+      }
+    },
+    "offences": [
+      {
+        "offenceCode": "OFCODE12",
+        "offenceSequenceNumber": 1,
+        "offenceCommittedDate": "2018-09-10",
+        "offenceDateCode": 1,
+        "offenceWording": "TV Licence not paid",
+        "chargeDate": "2015-04-04",
+        "appliedCompensation": 200
+      }
+    ],
+    "postingDate": "2018-09-10"
+  }
+}

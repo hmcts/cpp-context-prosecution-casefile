@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://justice.gov.uk/core/courts/summonsApprovedOutcome.json",
+  "type": "object",
+  "properties": {
+    "prosecutorCost": {
+      "type": "string",
+      "description": "Prosecutor cost will be surfaced in the summons and defendant is liable to pay this amount.  Should be captured as £300.00"
+    },
+    "prosecutorEmailAddress": {
+      "type": "string",
+      "description": "Email address to be used for sending notification to prosecutor on application approval / rejection"
+    },
+    "summonsSuppressed": {
+      "type": "boolean",
+      "description": "Flag to indicate if the prosecutor will serve summons to the defendant and the court will not do the same"
+    },
+    "personalService": {
+      "type": "boolean",
+      "description": "Flag to indicate if summons will be served to the defendant in person (delivery by hand)"
+    }
+  },
+  "required": [
+    "prosecutorCost",
+    "summonsSuppressed",
+    "personalService",
+    "prosecutorEmailAddress"
+  ],
+  "additionalProperties": false
+}

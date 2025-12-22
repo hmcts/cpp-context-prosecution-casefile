@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="23" author="ATCM/Mojo/gustavo.rojas"
+               logicalFilePath="liquibase/023-police-cases-fields.changelog.xml">
+
+        <addColumn tableName="case_details">
+            <column name="originating_organisation" type="text"/>
+        </addColumn>
+
+        <addColumn tableName="offence">
+            <column name="alcohol_level_amount" type="int"/>
+            <column name="alcohol_level_method" type="VARCHAR(10)"/>
+        </addColumn>
+
+        <createTable tableName="defendant_individual_aliases">
+            <column name="defendant_id" type="varchar(255)"/>
+            <column name="title" type="text"/>
+            <column name="first_name" type="text"/>
+            <column name="given_name_2" type="text"/>
+            <column name="given_name_3" type="text"/>
+            <column name="last_name" type="text"/>
+        </createTable>
+
+        <rollback>
+
+            <dropColumn tableName="case_details">
+                <column name="originating_organisation"/>
+            </dropColumn>
+
+            <dropColumn tableName="offence">
+                <column name="alcohol_level_amount"/>
+                <column name="alcohol_level_method"/>
+            </dropColumn>
+
+            <dropTable tableName="defendant_individual_aliases"/>
+
+        </rollback>
+
+    </changeSet>
+
+</databaseChangeLog>

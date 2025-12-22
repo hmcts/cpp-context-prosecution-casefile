@@ -1,0 +1,29 @@
+{
+  "prosecutionCaseSubject": {
+    "prosecutingAuthority": "The OU Code of the prosecuting authority",
+    "urn": "45MD0000220"
+  },
+  "cpsDefendantOffences": [
+    {
+      "matchingId": "4b64afd7-686f-4ac8-96f6-ca948d83af3f",
+      "prosecutorDefendantId": "7f8fe782-a287-11eb-bcbc-0242ac130002",
+      "title" : "Mr",
+      "forename" : "John",
+      "surname": "Lewis",
+      "dateOfBirth": "1986-06-03",
+      "cpsOffenceDetails": [
+        {
+          "cjsOffenceCode": "CA03013",
+          "offenceDate": "2022-05-11",
+          "offenceWording": "offenceWording"
+        }
+      ]
+    }
+  ],
+  "tag": "tag",
+  "evidencePrePTPH": "evidencePrePTPH text",
+  "evidencePostPTPH": "evidencePostPTPH text",
+  "otherInformation": "otherInformation text",
+  "submissionId": "e85d2c62-af1f-4674-863a-0891e67e325b",
+  "submissionStatus": "PENDING"
+}

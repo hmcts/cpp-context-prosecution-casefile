@@ -1,0 +1,113 @@
+subscriptions_descriptor:
+  spec_version: 1.0.0
+  service: prosecutioncasefile
+  service_component: EVENT_PROCESSOR
+  subscriptions:
+    - name: public event processor publications
+      events:
+        - name: public.prosecutioncasefile.prosecution-rejected
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/public-prosecution-rejected.json
+
+        - name: public.prosecutioncasefile.civil-prosecution-rejected
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/public-civil-prosecution-rejected.json
+
+        - name: public.prosecutioncasefile.group-prosecution-rejected
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/public-group-prosecution-rejected.json
+
+        - name: public.prosecutioncasefile.prosecution-submission-succeeded
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/prosecution-submission-succeeded.json
+
+        - name: public.prosecutioncasefile.civil.prosecution-submission-succeeded
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/public.prosecutioncasefile.civil-prosecution-submission-succeeded.json
+
+        - name: public.prosecutioncasefile.group-submission-succeeded
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/group-submission-succeeded.json
+
+        - name: public.prosecutioncasefile.prosecution-submission-succeeded-with-warnings
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/public.prosecutioncasefile.prosecution-submission-succeeded-with-warnings.json
+
+        - name: public.prosecutioncasefile.material-rejected
+          schema_uri: http://moj.gov.uk/cpp/json/schemas/prosecutioncasefile/events/public.prosecutioncasefile.material-rejected.json
+
+        - name: public.prosecutioncasefile.material-rejected-v2
+          schema_uri: http://moj.gov.uk/cpp/json/schemas/prosecutioncasefile/events/public.prosecutioncasefile.material-rejected-v2.json
+
+        - name: public.prosecutioncasefile.material-rejected-with-warnings
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/processor.public-material-rejected-with-warnings
+
+        - name: public.prosecutioncasefile.material-pending-with-warnings
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/public.prosecutioncasefile.material-pending-with-warnings.json
+
+        - name: public.prosecutioncasefile.cc-case-received
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/processor.public.prosecutioncasefile.cc-case-received.json
+
+        - name: public.prosecutioncasefile.cc-case-received-with-warnings
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/public.prosecutioncasefile.cc-case-received-with-warnings.json
+
+        - name: public.prosecutioncasefile.prosecution-defendants-added
+          schema_uri: http://moj.gov.uk/cpp/json/schemas/prosecutioncasefile/events/public.prosecutioncasefile.prosecution-defendants-added.json
+
+        - name: public.prosecutioncasefile.defendant-idpc-added
+          schema_uri: http://moj.gov.uk/cpp/json/schemas/prosecutioncasefile/events/public.prosecutioncasefile.defendant-idpc-added.json
+
+        - name: public.prosecutioncasefile.events.validation-completed
+          schema_uri: http://moj.gov.uk/cpp/json/schemas/prosecutioncasefile/events/public.prosecutioncasefile.events.validation-completed.json
+
+        - name: public.prosecutioncasefile.bulkscan-material-followup
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/public.prosecutioncasefile.bulkscan-material-followup.json
+
+        - name: public.prosecutioncasefile.manual-case-received
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/public.prosecutioncasefile.manual-case-received.json
+
+        - name: public.prosecutioncasefile.document-bundle-arrived-for-unbundling
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/public.prosecutioncasefile.document-bundle-arrived-for-unbundling
+
+        - name: public.prosecutioncasefile.document-review-required
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/public.prosecutioncasefile.document-review-required.json
+
+        - name: public.prosecutioncasefile.material-added
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/material-added
+
+        - name: public.prosecutioncasefile.material-added-v2
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/material-added-v2
+
+        - name: public.prosecutioncasefile.material-added-with-warnings
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/material-added-with-warnings
+
+        - name: public.prosecutioncasefile.prosecution-case-unsupported
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/public-prosecution-case-unsupported.json
+
+        - name: public.prosecutioncasefile.submit-application-validation-failed
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/public.prosecutioncasefile.submit-application-validation-failed.json
+
+        - name: public.prosecutioncasefile.cps-serve-pet-submitted
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/cps-serve-pet-submitted.json
+
+        - name: public.prosecutioncasefile.cps-serve-ptph-submitted
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/cps-serve-ptph-submitted.json
+
+        - name: public.prosecutioncasefile.cps-serve-bcm-submitted
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/cps-serve-bcm-received.json
+
+        - name: public.prosecutioncasefile.cps-serve-cotr-submitted
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/public.prosecutioncasefile.cps-serve-cotr-submitted.json
+
+        - name: public.prosecutioncasefile.cps-serve-material-status-updated
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/public.prosecutioncasefile.cps-serve-material-status-updated.json
+
+        - name: public.prosecutioncasefile.cps-update-cotr-submitted
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/public.prosecutioncasefile.cps-update-cotr-submitted.json
+
+        - name: public.prosecutioncasefile.events.case-validation-failed
+          schema_uri: http://moj.gov.uk/cpp/json/schemas/prosecutioncasefile/events/public.prosecutioncasefile.events.case-validation-failed.json
+
+        - name: public.prosecutioncasefile.events.defendant-validation-failed
+          schema_uri: http://moj.gov.uk/cpp/json/schemas/prosecutioncasefile/events/public.prosecutioncasefile.events.defendant-validation-failed.json
+
+        - name: public.prosecutioncasefile.events.sjp-validation-failed
+          schema_uri: http://moj.gov.uk/cpp/json/schemas/prosecutioncasefile/events/public.prosecutioncasefile.events.sjp-validation-failed.json
+
+        - name: public.prosecutioncasefile.sjp-plead-online
+          schema_uri: http://justice.gov.uk/core/courts/public.prosecutioncasefile.sjp-plead-online.json
+
+      event_source_name: public

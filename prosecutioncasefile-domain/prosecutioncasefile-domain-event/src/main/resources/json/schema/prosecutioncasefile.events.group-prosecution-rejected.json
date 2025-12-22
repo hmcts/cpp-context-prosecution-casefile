@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/domain/event/group-prosecution-rejected.json",
+  "type": "object",
+  "properties": {
+    "groupProsecutions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/group-prosecution.json"
+      }
+    },
+    "groupCaseErrors": {
+      "type": "array",
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/problem.json"
+      }
+    },
+    "caseErrors": {
+      "type": "array",
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/problem.json"
+      }
+    },
+    "defendantErrors": {
+      "type": "array",
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/defendant-problem.json"
+      }
+    },
+    "externalId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid",
+      "description": "ID originating from the client (SPI or CPPI) for referencing the original message"
+    },
+    "channel": {
+      "type": "string",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/pcf-definitions.json#/definitions/channel"
+    }
+  },
+  "required": [
+    "groupProsecutions",
+    "channel"
+  ]
+}

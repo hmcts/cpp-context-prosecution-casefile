@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/enum-deff.json",
+  "definitions": {
+    "jurisdictionType": {
+      "id": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/jurisdictionType.json",
+      "type": "string",
+      "enum": [
+        "MAGISTRATES",
+        "CROWN"
+      ]
+    },
+    "jurisdiction": {
+      "id": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/jurisdiction.json",
+      "type": "string",
+      "enum": [
+        "MAGISTRATES",
+        "CROWN",
+        "EITHER"
+      ]
+    },
+    "hearingLanguage": {
+      "id": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/hearing-language.json",
+      "type": "string",
+      "enum": [
+        "ENGLISH",
+        "WELSH"
+      ]
+    }
+  }
+}

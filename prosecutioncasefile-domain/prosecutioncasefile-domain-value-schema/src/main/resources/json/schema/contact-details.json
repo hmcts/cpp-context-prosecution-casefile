@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/contact-details.json",
+  "type": "object",
+  "description": "Contact Details",
+  "properties": {
+    "work": {
+      "type": "string",
+      "description": "A business telephone number, including any exchange of location code, at which a person or organisation can be contacted in the UK by telephonic means.",
+      "maxLength": 35
+    },
+    "home": {
+      "type": "string",
+      "description": "A home telephone number, including any exchange of location code, at which a person or organisation can be contacted in the UK by telephonic means.",
+      "maxLength": 35
+    },
+    "mobile": {
+      "type": "string",
+      "description": "A mobile number, including any exchange of location code, at which a person or organisation can be contacted in the UK by telephonic means.",
+      "maxLength": 35
+    },
+    "primaryEmail": {
+      "type": "string",
+      "description": "The identification of the first e-mail address.",
+      "maxLength": 255
+    },
+    "secondaryEmail": {
+      "type": "string",
+      "description": "The identification of the second e-mail address.",
+      "maxLength": 255
+    }
+  },
+  "additionalProperties": false
+}

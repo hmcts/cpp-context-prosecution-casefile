@@ -1,0 +1,117 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/person.json",
+  "type": "object",
+  "properties": {
+    "title": {
+      "description": "The person title",
+      "type": "string"
+    },
+    "firstName": {
+      "description": "The person fore name",
+      "type": "string"
+    },
+    "middleName": {
+      "description": "The person middle name",
+      "type": "string"
+    },
+    "lastName": {
+      "description": "The person last name",
+      "type": "string"
+    },
+    "dateOfBirth": {
+      "description": "The person date of birth",
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date"
+    },
+    "nationalityId": {
+      "description": "The person nationality identifier from reference data",
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "nationalityCode": {
+      "description": "The person nationality code based on reference data",
+      "type": "string"
+    },
+    "nationalityDescription": {
+      "description": "The person nationality description based on reference data",
+      "type": "string"
+    },
+    "additionalNationalityId": {
+      "description": "The person nationality identifier from reference data",
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "additionalNationalityCode": {
+      "description": "The person additional nationality code based on reference data",
+      "type": "string"
+    },
+    "additionalNationalityDescription": {
+      "description": "The person additional nationality description based on reference data",
+      "type": "string"
+    },
+    "disabilityStatus": {
+      "description": "The person disability status",
+      "type": "string"
+    },
+    "ethnicity": {
+      "description": "The person ethnicity details",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/ethnicity.json"
+    },
+    "gender": {
+      "id": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/gender.json",
+      "description": "The person gender",
+      "enum": [
+        "MALE",
+        "FEMALE",
+        "NOT_KNOWN",
+        "NOT_SPECIFIED"
+      ]
+    },
+    "interpreterLanguageNeeds": {
+      "description": "The person interpreter needs",
+      "type": "string"
+    },
+    "documentationLanguageNeeds": {
+      "description": "The person documentation needs.  Indicates the requirement for documentation to be published in non English",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/enum-deff.json#/definitions/hearingLanguage"
+    },
+    "hearingLanguageNeeds": {
+      "description": "The person hearing language needs.  Indicates the language requirement for hearing to be conducted",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/enum-deff.json#/definitions/hearingLanguage"
+    },
+    "nationalInsuranceNumber": {
+      "description": "The person nino",
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/nino"
+    },
+    "occupation": {
+      "description": "The person occupation",
+      "type": "string"
+    },
+    "occupationCode": {
+      "description": "The person occupation code",
+      "type": "string"
+    },
+    "specificRequirements": {
+      "description": "The person special needs indicted any special needs that must be met by the courts process e.g. wheelchair access",
+      "type": "string"
+    },
+    "address": {
+      "description": "The person address details",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/address.json"
+    },
+    "contact": {
+      "description": "The person contact details",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/contact-number.json"
+    },
+    "personMarkers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/marker.json"
+      }
+    }
+  },
+  "required": [
+    "lastName",
+    "gender"
+  ],
+  "additionalProperties": false
+}

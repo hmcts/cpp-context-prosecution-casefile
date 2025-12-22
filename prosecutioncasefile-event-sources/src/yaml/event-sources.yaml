@@ -1,0 +1,11 @@
+event_sources:
+  - name: prosecutioncasefile
+    is_default: true
+    location:
+      jms_uri:  jms:topic:prosecutioncasefile.event
+      rest_uri: http://localhost:8080/prosecutioncasefile-service/event-source-api/rest
+      data_source: java:/app/prosecutioncasefile-service/DS.eventstore
+
+  - name: public
+    location:
+      jms_uri:  jms:topic:public.event

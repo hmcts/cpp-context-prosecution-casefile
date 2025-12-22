@@ -1,0 +1,34 @@
+{
+  "cpsDefendantOffences": [
+    {
+      "matchingId": "4b64afd7-686f-4ac8-96f6-ca948d83af3f",
+      "asn": "%s",
+      "cpsOffenceDetails": [
+        {
+          "cjsOffenceCode": "CA03013",
+          "offenceDate": "2022-05-11",
+          "offenceWording": "offenceWording"
+        }
+      ]
+    },
+    {
+      "matchingId": "6b64afd7-686f-4ac8-96f6-ca948d83af3a",
+      "asn": "%s",
+      "cpsOffenceDetails": [
+        {
+          "cjsOffenceCode": "CA03013",
+          "offenceDate": "2022-05-11",
+          "offenceWording": "offenceWording"
+        }
+      ]
+    }
+  ],
+  "prosecutionCaseSubject": {
+    "prosecutingAuthority": "The OU Code of the prosecuting authority",
+    "urn": "%s"
+  },
+  "tag": "tag",
+  "evidencePrePTPH": "evidencePrePTPH text",
+  "submissionId": "e85d2c62-af1f-4674-863a-0891e67e325b",
+  "submissionStatus": "PENDING"
+}

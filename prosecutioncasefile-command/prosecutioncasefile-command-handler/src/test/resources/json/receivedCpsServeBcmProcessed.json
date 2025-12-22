@@ -1,0 +1,51 @@
+{
+  "caseId": "44884cbc-9659-4ae1-a42e-a8c9839df502",
+  "cpsDefendantOffences": [
+    {
+      "matchingId": "4b64afd7-686f-4ac8-96f6-ca948d83af3f",
+      "cpsDefendantId": "d123ed32-ce29-11ec-9d64-0242ac120002",
+      "prosecutorDefendantId": "prosecutorDefendantId",
+      "asn": "1900NP0004361000203N",
+      "title" : "Mr",
+      "forename" : "John",
+      "surname": "Smith",
+      "dateOfBirth": "1998-09-10",
+      "cpsOffenceDetails": [
+        {
+          "cjsOffenceCode": "TH68023",
+          "offenceDate": "2022-05-11",
+          "offenceWording": "offenceWording"
+        }
+      ]
+    }
+  ],
+  "formData": {
+    "bcmDefendants": [
+      {
+        "id": "68e55356-7683-4cb7-a1a2-d0f94286a6d3",
+        "otherAreasBeforePtph": "otherAreasBeforePtph",
+        "otherAreasAfterPtph": "otherAreasAfterPtph",
+        "anyOther": "anyOther",
+        "prosecutorOffences": [
+          {
+            "offenceCode": "offenceCode",
+            "wording": "wording",
+            "date": "2020-12-10"
+          }
+        ]
+      }
+    ]
+  },
+  "errors":[],
+  "formDefendants": [
+    {
+      "defendantId": "68e55356-7683-4cb7-a1a2-d0f94286a6d3"
+    }
+  ],
+  "prosecutionCaseSubject": {
+    "prosecutingAuthority": "The OU Code of the prosecuting authority",
+    "urn": "caseURN"
+  },
+  "submissionId": "b5784557-e620-4405-a8d3-184410ee1e71",
+  "submissionStatus": "SUCCESS"
+}

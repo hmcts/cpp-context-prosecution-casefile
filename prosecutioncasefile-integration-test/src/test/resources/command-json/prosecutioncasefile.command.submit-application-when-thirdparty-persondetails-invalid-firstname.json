@@ -1,0 +1,273 @@
+{
+  "courtApplication": {
+    "id": "APPLICATION_ID",
+    "courtApplicationCases": [
+      {
+        "caseURN": "CASE_URN",
+        "prosecutorOuCode": "B01AF00"
+      }
+    ],
+    "courtApplicationType": {
+      "code": "SOME-RANDOM-APP-CODE",
+      "categoryCode": "AB",
+      "jurisdiction": "CROWN"
+    },
+    "applicationParticulars": "Some info related to application",
+    "courtApplicationPayment": {
+      "feeStatus":"OUTSTANDING",
+      "paymentReference": "Some reference provided"
+    },
+    "applicationDecisionSoughtByDate": "2022-02-02",
+    "applicant": {
+      "organisation": {
+        "name": "",
+        "incorporationNumber": "",
+        "registeredCharityNumber": "",
+        "address": {
+          "address1": "Address Line 1",
+          "address2": "Address Line 2",
+          "address3": "Address Line 3",
+          "address4": "Address Line 4",
+          "address5": "Address Line 5",
+          "postcode": "CR0 1XX"
+        },
+        "contact": {
+          "work": "02012345678",
+          "home": "02087654321",
+          "mobile": "0789123456",
+          "primaryEmail": "aer@af.com",
+          "secondaryEmail": "aer@af.com",
+          "fax": "02087654321"
+        }
+      },
+      "organisationPersons": [
+        {
+          "person": {
+            "title": "MR",
+            "firstName": "Fred",
+            "middleName": "",
+            "lastName": "Smith",
+            "dateOfBirth": "1979-05-23",
+            "gender": "MALE",
+            "interpreterLanguageNeeds": "ENGLISH",
+            "documentationLanguageNeeds": "ENGLISH",
+            "hearingLanguageNeeds": "ENGLISH",
+            "nationalInsuranceNumber": "AA123456C",
+            "specificRequirements": "no special needs",
+            "address": {
+              "address1": "Address Line 1",
+              "address2": "Address Line 2",
+              "address3": "Address Line 3",
+              "address4": "Address Line 4",
+              "address5": "Address Line 5",
+              "postcode": "CR0 1XX"
+            },
+            "contact": {
+              "work": "02012345678",
+              "home": "02087654321",
+              "mobile": "0789123456",
+              "primaryEmail": "aer@af.com",
+              "secondaryEmail": "aer@af.com",
+              "fax": "02087654321"
+            }
+          },
+          "role": ""
+        }
+      ],
+      "isSubject": false
+    },
+    "respondents": [
+      {
+        "asn": "SummonsNumber001",
+        "cpsDefendantId": "c2330088-539b-4a5c-9509-fee812b43632",
+        "personDetails": {
+          "title": "MR",
+          "firstName": "Fred",
+          "middleName": "",
+          "lastName": "Smith",
+          "dateOfBirth": "1979-05-23",
+          "gender": "MALE",
+          "interpreterLanguageNeeds": "ENGLISH",
+          "documentationLanguageNeeds": "ENGLISH",
+          "hearingLanguageNeeds": "ENGLISH",
+          "nationalInsuranceNumber": "AA123456C",
+          "specificRequirements": "no special needs",
+          "address": {
+            "address1": "Address Line 1",
+            "address2": "Address Line 2",
+            "address3": "Address Line 3",
+            "address4": "Address Line 4",
+            "address5": "Address Line 5",
+            "postcode": "CR0 1XX"
+          },
+          "contact": {
+            "work": "02012345678",
+            "home": "02087654321",
+            "mobile": "0789123456",
+            "primaryEmail": "aer@af.com",
+            "secondaryEmail": "aer@af.com",
+            "fax": "02087654321"
+          }
+        },
+        "organisation": {
+          "name": "",
+          "incorporationNumber": "",
+          "registeredCharityNumber": "",
+          "address": {
+            "address1": "Address Line 1",
+            "address2": "Address Line 2",
+            "address3": "Address Line 3",
+            "address4": "Address Line 4",
+            "address5": "Address Line 5",
+            "postcode": "CR0 1XX"
+          },
+          "contact": {
+            "work": "02012345678",
+            "home": "02087654321",
+            "mobile": "0789123456",
+            "primaryEmail": "aer@af.com",
+            "secondaryEmail": "aer@af.com",
+            "fax": "02087654321"
+          }
+        },
+        "organisationPersons": [
+          {
+            "person": {
+              "title": "MR",
+              "firstName": "Fred",
+              "middleName": "",
+              "lastName": "Smith",
+              "dateOfBirth": "1979-05-23",
+              "gender": "MALE",
+              "interpreterLanguageNeeds": "ENGLISH",
+              "documentationLanguageNeeds": "ENGLISH",
+              "hearingLanguageNeeds": "ENGLISH",
+              "nationalInsuranceNumber": "AA123456C",
+              "specificRequirements": "no special needs",
+              "address": {
+                "address1": "Address Line 1",
+                "address2": "Address Line 2",
+                "address3": "Address Line 3",
+                "address4": "Address Line 4",
+                "address5": "Address Line 5",
+                "postcode": "CR0 1XX"
+              },
+              "contact": {
+                "work": "02012345678",
+                "home": "02087654321",
+                "mobile": "0789123456",
+                "primaryEmail": "aer@af.com",
+                "secondaryEmail": "aer@af.com",
+                "fax": "02087654321"
+              }
+            },
+            "role": ""
+          }
+        ],
+        "representedOrganisation": {
+          "name": "",
+          "incorporationNumber": "",
+          "registeredCharityNumber": "",
+          "address": {
+            "address1": "Address Line 1",
+            "address2": "Address Line 2",
+            "address3": "Address Line 3",
+            "address4": "Address Line 4",
+            "address5": "Address Line 5",
+            "postcode": "CR0 1XX"
+          },
+          "contact": {
+            "work": "02012345678",
+            "home": "02087654321",
+            "mobile": "0789123456",
+            "primaryEmail": "aer@af.com",
+            "secondaryEmail": "aer@af.com",
+            "fax": "02087654321"
+          }
+        },
+        "isSubject": false
+      }
+    ],
+    "thirdParties": [
+      {
+        "summonsRequired": false,
+        "notificationRequired": false,
+        "appointmentNotificationRequired": false,
+        "personDetails": {
+          "title": "MR",
+          "middleName": "",
+          "lastName": "Smith",
+          "dateOfBirth": "1979-05-23",
+          "gender": "MALE",
+          "interpreterLanguageNeeds": "ENGLISH",
+          "documentationLanguageNeeds": "ENGLISH",
+          "hearingLanguageNeeds": "ENGLISH",
+          "nationalInsuranceNumber": "AA123456C",
+          "specificRequirements": "no special needs",
+          "address": {
+            "address1": "Address Line 1",
+            "address2": "Address Line 2",
+            "address3": "Address Line 3",
+            "address4": "Address Line 4",
+            "address5": "Address Line 5",
+            "postcode": "CR0 1XX"
+          },
+          "contact": {
+            "work": "02012345678",
+            "home": "02087654321",
+            "mobile": "0789123456",
+            "primaryEmail": "aer@af.com",
+            "secondaryEmail": "aer@af.com",
+            "fax": "02087654321"
+          }
+        },
+        "organisationPersons": [
+          {
+            "person": {
+              "title": "MR",
+              "firstName": "Fred",
+              "middleName": "",
+              "lastName": "Smith",
+              "dateOfBirth": "1979-05-23",
+              "gender": "MALE",
+              "interpreterLanguageNeeds": "ENGLISH",
+              "documentationLanguageNeeds": "ENGLISH",
+              "hearingLanguageNeeds": "ENGLISH",
+              "nationalInsuranceNumber": "AA123456C",
+              "specificRequirements": "no special needs",
+              "address": {
+                "address1": "Address Line 1",
+                "address2": "Address Line 2",
+                "address3": "Address Line 3",
+                "address4": "Address Line 4",
+                "address5": "Address Line 5",
+                "postcode": "CR0 1XX"
+              },
+              "contact": {
+                "work": "02012345678",
+                "home": "02087654321",
+                "mobile": "0789123456",
+                "primaryEmail": "aer@af.com",
+                "secondaryEmail": "aer@af.com",
+                "fax": "02087654321"
+              }
+            },
+            "role": ""
+          }
+        ]
+      }
+    ],
+    "outOfTimeReason": "Some reason"
+  },
+  "boxHearingRequest": {
+    "id": "daa71e32-2227-448c-9cc7-53d834a009d1",
+    "jurisdictionType": "CROWN",
+    "applicationDueDate": "APPLICATION_DUE_DATE",
+    "courtCentre": {
+      "id": "daa71e32-2227-448c-9cc7-53d834a009d1",
+      "code": "AB",
+      "name": "courtCentre"
+    },
+    "sendAppointmentLetter": false
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "defendant":{
+    "aliases":[
+      {
+        "firstName":"johnny",
+        "lastName":"robber"
+      }
+    ],
+    "associatedPersons":[
+      {
+        "person":{
+          "additionalNationalityCode":"USA",
+          "additionalNationalityId":"9aa0ffba-67a4-4137-b392-3c01951eb9c2",
+          "address":{
+            "address1":"22",
+            "address2":"Acacia Avenue",
+            "address3":"Acacia Town",
+            "address4":"Acacia City",
+            "address5":"Acacia Country",
+            "postcode":"GIR 0AA"
+          },
+          "contact":{
+            "fax":"3425678",
+            "home":"123456",
+            "mobile":"45678910",
+            "primaryEmail":"harry.kane@spurs.co.uk",
+            "secondaryEmail":"harry.kane@hotmail.com",
+            "work":"7891011"
+          },
+          "dateOfBirth":"1990-10-23",
+          "disabilityStatus":"a",
+          "documentationLanguageNeeds":"WELSH",
+          "ethnicity":{
+            "selfDefinedEthnicityCode":"IC1",
+            "selfDefinedEthnicityId":"d36d2ba2-6862-4114-b9f9-0c620e1e903c"
+          },
+          "firstName":"Harry",
+          "gender":"MALE",
+          "interpreterLanguageNeeds":"Welsh",
+          "lastName":"Kane",
+          "middleName":"Jack",
+          "nationalInsuranceNumber":"NH222222B",
+          "nationalityCode":"GBR",
+          "nationalityId":"0f36a570-46ef-41d1-b290-9037a64fa1a4",
+          "occupation":"Footballer",
+          "occupationCode":"F",
+          "title":"DR"
+        },
+        "role":"parent"
+      }
+    ],
+    "id":"%s",
+    "masterDefendantId":"190d16e7-5fc2-4359-ae30-66c8d63793fd",
+    "numberOfPreviousConvictionsCited":5,
+    "personDefendant":{
+      "arrestSummonsNumber":"arrest123",
+      "bailStatus":{
+        "code":"C",
+        "custodyTimeLimit":{
+          "daysSpent":44,
+          "timeLimit":"2018-09-10"
+        },
+        "description":"Remanded into Custody",
+        "id":"2593cf09-ace0-4b7d-a746-0703a29f33b5"
+      },
+      "custodyTimeLimit":"2018-01-01",
+      "driverNumber":"AACC12345",
+      "employerOrganisation":{
+        "address":{
+          "address1":"Disney Road",
+          "address2":"Disney Town",
+          "address3":"Disney District",
+          "address4":"Paris",
+          "address5":"France",
+          "postcode":"CR7 0AA"
+        },
+        "contact":{
+          "fax":"a",
+          "home":"0208 688 8888",
+          "mobile":"07803 654567",
+          "primaryEmail":"person@hotmail.com",
+          "secondaryEmail":"associate@hotmail.com",
+          "work":"0207 654 3246 extn 1234"
+        },
+        "incorporationNumber":"Mickeymouse1",
+        "name":"Disneyland Paris"
+      },
+      "employerPayrollReference":"payyou1234",
+      "perceivedBirthYear":2015,
+      "personDetails":{
+        "additionalNationalityCode":"USA",
+        "additionalNationalityId":"9aa0ffba-67a4-4137-b392-3c01951eb9c2",
+        "address":{
+          "address1":"152",
+          "address2":"Burlton Road",
+          "address3":"Peterboruogh",
+          "address4":"Cabmbridgeshire",
+          "address5":"UK",
+          "postcode":"GIR 0AA"
+        },
+        "contact":{
+          "fax":"3425678",
+          "home":"78234567",
+          "mobile":"78452183",
+          "primaryEmail":"mark@yahoo.com",
+          "secondaryEmail":"harry.kanejunior@hotmail.com",
+          "work":"7891011"
+        },
+        "dateOfBirth":"1990-10-23",
+        "disabilityStatus":"a",
+        "documentationLanguageNeeds":"WELSH",
+        "ethnicity":{
+          "selfDefinedEthnicityCode":"IC1",
+          "selfDefinedEthnicityId":"d36d2ba2-6862-4114-b9f9-0c620e1e903c"
+        },
+        "firstName":"Johnyy",
+        "gender":"MALE",
+        "interpreterLanguageNeeds":"Welsh",
+        "lastName":"Smithyy",
+        "middleName":"Jack",
+        "nationalInsuranceNumber":"NH323232B",
+        "nationalityCode":"GBR",
+        "nationalityId":"0f36a570-46ef-41d1-b290-9037a64fa1a4",
+        "occupation":"private",
+        "occupationCode":"F",
+        "specificRequirements":"Screen",
+        "title":"Baron"
+      }
+    },
+    "pncId":"1234567",
+    "prosecutionAuthorityReference":"TFL12345-ABC",
+    "prosecutionCaseId":"%s"
+  }
+}

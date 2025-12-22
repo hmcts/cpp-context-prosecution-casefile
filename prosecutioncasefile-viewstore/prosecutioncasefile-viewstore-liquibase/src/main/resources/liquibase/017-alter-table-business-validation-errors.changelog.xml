@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="17" author="prosecutioncasefile"
+               logicalFilePath="liquibase/017-alter-table-business-validation-errors.changelog.xml">
+        <addColumn tableName="business_validation_errors">
+            <column name="first_name" type="VARCHAR(130)"/>
+            <column name="last_name" type="VARCHAR(35)"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

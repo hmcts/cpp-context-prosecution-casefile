@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/domain/event/material-added",
+  "type": "object",
+  "properties": {
+    "caseId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "prosecutingAuthority": {
+      "type": "string"
+    },
+    "prosecutorDefendantId": {
+      "type": "string",
+      "maxLength": 36
+    },
+    "defendantId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "defendantName": {
+      "type": "string"
+    },
+    "material": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/material.json"
+    },
+    "caseType": {
+      "type": "string"
+    },
+    "documentTypeId": {
+      "type": "string"
+    },
+    "documentType": {
+      "type": "string"
+    },
+    "documentCategory": {
+      "type": "string"
+    },
+    "isCpsCase": {
+      "type": "boolean"
+    },
+    "cmsDocumentIdentifier": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/cms-document-identifier.json"
+    },
+    "receivedDateTime": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date-time"
+    },
+    "sectionCode": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "caseId",
+    "material",
+    "caseType"
+  ],
+  "additionalProperties": false
+}

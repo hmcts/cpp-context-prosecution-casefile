@@ -1,0 +1,25 @@
+{
+  "_metadata": {
+    "name": "prosecutioncasefile.events.material-rejected"
+  },
+  "caseId": "a4391788-f829-4514-a344-61f1d5d9690c",
+  "material": {
+    "fileStoreId": "3042a896-fd3e-478d-bb0e-948dd46191a4",
+    "documentType": "CITN",
+    "fileType": "application/csv"
+  },
+  "errors": [
+    {
+      "code": "INVALID_FILE_TYPE",
+      "values": [
+        {
+          "key": "fileType",
+          "value": "application/csv"
+        }
+      ]
+    }
+  ],
+  "prosecutingAuthority": "GAEAA01",
+  "prosecutorDefendantId": "TVL_DEF_001",
+  "isCpsCase":false
+}

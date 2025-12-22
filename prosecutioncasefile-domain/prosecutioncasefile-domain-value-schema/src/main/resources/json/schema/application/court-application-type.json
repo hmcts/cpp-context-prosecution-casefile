@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/court-application-type.json",
+  "type": "object",
+  "properties": {
+    "code": {
+      "description": "The code for the type of application",
+      "type": "string",
+      "maxLength": 20
+    },
+    "categoryCode": {
+      "description": "The category code for the type of application",
+      "type": "string",
+      "maxLength": 2
+    },
+    "jurisdiction": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/enum-deff.json#/definitions/jurisdiction"
+    }
+  },
+  "required": [
+    "code",
+    "categoryCode",
+    "jurisdiction"
+  ],
+  "additionalProperties": false
+}

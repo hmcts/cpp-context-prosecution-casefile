@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/plea.json",
+  "type": "object",
+  "properties": {
+    "pleaDate": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date"
+    },
+    "pleaValue": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "pleaDate",
+    "pleaValue"
+  ]
+}

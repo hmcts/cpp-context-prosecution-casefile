@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns="http://java.sun.com/xml/ns/persistence"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+ http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd" version="1.0">
+
+    <persistence-unit name="prosecutioncasefile-persistence-unit">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <jta-data-source>java:/DS.prosecutioncasefile</jta-data-source>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.DefendantLegacy</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.OffenceLegacy</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.CPRDetails</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.DefendantOffenderDetails</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.CaseDetails</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.DefendantDetails</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.OffenceDetails</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.PersonalInformationDetails</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.SelfDefinedInformationDetails</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.BusinessValidationErrorDetails</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.BusinessValidationErrorCaseDetails</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.ResolvedCases</class>
+
+    </persistence-unit>
+</persistence>

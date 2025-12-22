@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/plea/json/schemas/initiation-code.json",
+  "description": "Indicates how a case is initialised. J-SJP Notice, Q-Requisition, S-Summons, C-Charge, R-Remitted, O-Other, Z-SJP Referral",
+  "type": "string",
+  "enum": [
+    "J",
+    "Q",
+    "S",
+    "C",
+    "R",
+    "O",
+    "Z"
+  ],
+  "additionalProperties": false
+}

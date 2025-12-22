@@ -1,0 +1,22 @@
+[
+  {
+    "code": "ALCOHOL_DRUG_LEVEL_METHOD_MISSING",
+    "values": [
+      {
+        "id": "OFFENCE_ID1",
+        "key": "offence_alcoholRelatedOffence_alcoholLevelMethod",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "code": "ALCOHOL_DRUG_LEVEL_AMOUNT_MISSING",
+    "values": [
+      {
+        "id": "OFFENCE_ID1",
+        "key": "offence_alcoholRelatedOffence_alcoholLevelAmount",
+        "value": ""
+      }
+    ]
+  }
+]

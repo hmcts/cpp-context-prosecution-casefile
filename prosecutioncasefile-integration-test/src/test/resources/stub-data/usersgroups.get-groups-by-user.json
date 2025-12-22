@@ -1,0 +1,35 @@
+{
+  "groups": [
+    {
+      "groupId": "c529dac4-1ba8-414e-962d-84af6a4d9ae3",
+      "groupName": "Charging Lawyers"
+    },
+    {
+      "groupId": "5f4543e6-7212-11e7-8cf7-a6006ad3dba0",
+      "groupName": "CMS"
+    },
+    {
+      "groupId": "b5010f22-514e-4691-a5f5-577728f90a94",
+      "groupName": "System Users"
+    },
+    {
+      "groupId": "b5010f22-514e-4691-a5f5-577728f90a95",
+      "groupName": "Crown Court Admin"
+    },
+    {
+      "groupId": "b5010f22-514e-4691-a5f5-577728f90a96",
+      "groupName": "Online Plea System Users"
+    },
+    {
+      "groupId": "b3771470-723f-11ed-a1eb-0242ac120002",
+      "groupName": "Non Police Prosecutors"
+    }
+  ],
+  "permissions": [
+    {
+      "object": "Case",
+      "action": "Create",
+      "permissionId": "7516ffa8-7242-11ed-a1eb-0242ac120002"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+package uk.gov.moj.cpp.prosecution.casefile.query.api.accesscontrol;
+
+import uk.gov.moj.cpp.accesscontrol.drools.Outcome;
+import uk.gov.moj.cpp.accesscontrol.drools.Action;
+import uk.gov.moj.cpp.prosecution.casefile.query.api.accesscontrol.RuleConstants;
+
+global uk.gov.moj.cpp.accesscontrol.common.providers.UserAndGroupProvider userAndGroupProvider;
+
+rule "Command - Rule for Query Case Details"
+  when
+    $outcome: Outcome();
+    $action: Action(name == "prosecutioncasefile.query.case");
+    eval(userAndGroupProvider.isMemberOfAnyOfTheSuppliedGroups($action, RuleConstants.getQueryCaseActionGroups()));
+  then
+    $outcome.setSuccess(true);
+end
+
+rule "Command - Rule for Query Case Details By Prosecution Case Reference"
+  when
+    $outcome: Outcome();
+    $action: Action(name == "prosecutioncasefile.query.case-by-prosecutionCaseReference");
+    eval(userAndGroupProvider.isMemberOfAnyOfTheSuppliedGroups($action, RuleConstants.getQueryCaseByProsecutionReferenceActionGroups()));
+  then
+    $outcome.setSuccess(true);
+end
+
+rule "Command - Rule for Query Case Error Details "
+  when
+    $outcome: Outcome();
+    $action: Action(name == "prosecutioncasefile.query.cases.errors");
+    eval(userAndGroupProvider.isMemberOfAnyOfTheSuppliedGroups($action, RuleConstants.getQueryCaseErrorsActionGroups()));
+  then
+    $outcome.setSuccess(true);
+end
+
+rule "Command - Rule for Query Case Count"
+  when
+    $outcome: Outcome();
+    $action: Action(name == "prosecutioncasefile.query.counts-cases-errors");
+    eval(userAndGroupProvider.isMemberOfAnyOfTheSuppliedGroups($action, RuleConstants.getQueryCountsCasesErrorsActionGroups()));
+  then
+    $outcome.setSuccess(true);
+end
+
+rule "Command - Rule for Query Case for citizen"
+  when
+    $outcome: Outcome();
+    $action: Action(name == "prosecutioncasefile.query.case-for-citizen");
+    eval(userAndGroupProvider.isMemberOfAnyOfTheSuppliedGroups($action, RuleConstants.getQueryCaseForCitizenActionGroups()));
+  then
+    $outcome.setSuccess(true);
+end

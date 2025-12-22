@@ -1,0 +1,585 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/domain/event/received-cps-serve-ptph-processed.json",
+  "type": "object",
+  "properties": {
+    "submissionId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "submissionStatus": {
+      "type": "string",
+      "enum": [
+        "PENDING",
+        "FAILED",
+        "REJECTED",
+        "SUCCESS",
+        "SUCCESS_WITH_WARNINGS",
+        "EXPIRED"
+      ]
+    },
+    "caseId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "prosecutionCaseSubject": {
+      "type": "object",
+      "properties": {
+        "urn": {
+          "type": "string",
+          "minLength": 1
+        },
+        "prosecutingAuthority": {
+          "type": "string",
+          "description": "The OU Code of the prosecuting authority"
+        }
+      },
+      "required": [
+        "urn",
+        "prosecutingAuthority"
+      ],
+      "additionalProperties": false
+    },
+    "cpsDefendant": {
+      "description": "Identifies the defendant and offences to which the form is associated to",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "matchingId": {
+            "description": "This is randomly generated id for processing only",
+            "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+          },
+          "prosecutorDefendantId": {
+            "description": "A unique reference to a defendant within a prosecution. Provided by the prosecuting authority e.g. DWP",
+            "type": "string",
+            "maxLength": 36
+          },
+          "cpsDefendantId": {
+            "description": "A unique reference to a defendant within a prosecution. Provided by cps when CPS are prosecuting the case",
+            "type": "string",
+            "maxLength": 36
+          },
+          "asn": {
+            "description": "A unique reference to a defendant within a prosecution. Provided by the police force and requested from the police by a non police prosecutor e.g. DWP requests from the police",
+            "type": "string",
+            "maxLength": 21
+          },
+          "title": {
+            "description": "Title by which a defendant is addressed",
+            "type": "string"
+          },
+          "forename": {
+            "description": "The first given name of a defendant",
+            "type": "string",
+            "maxLength": 35
+          },
+          "forename2": {
+            "description": "The second given name of a defendant",
+            "type": "string",
+            "maxLength": 35
+          },
+          "forename3": {
+            "description": "The third given name of a defendant",
+            "type": "string",
+            "maxLength": 35
+          },
+          "surname": {
+            "description": "Surname or Family name",
+            "type": "string",
+            "maxLength": 35
+          },
+          "dateOfBirth": {
+            "description": "The date when the defendant was born",
+            "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date"
+          },
+          "parentGuardianForYouthDefendants": {
+            "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/defendant-parent-guardian.json"
+          },
+          "localAuthorityDetailsForYouthDefendants": {
+            "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/local-authority-details-for-youth-defendants.json"
+          },
+          "organisationName": {
+            "description": "The name of a defendant that is a legal entity",
+            "type": "string"
+          },
+          "principalCharges": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/problem.json"
+      }
+    },
+    "formDefendants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "defendantId": {
+            "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+          },
+          "cpsDefendantId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "defendantId"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "ptphFormData": {
+      "type": "object",
+      "properties": {
+        "ptphHeader": {
+          "type": "object",
+          "properties": {
+            "urn": {
+              "type": "string"
+            }
+          }
+        },
+        "ptphFormdefendants": {
+          "type": "array",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "principalCharges": {
+                  "type": "string"
+                },
+                "caseProgressionOfficer": {
+                  "type": "object",
+                  "properties": {
+                    "firstName": {
+                      "type": "string"
+                    },
+                    "lastName": {
+                      "type": "string"
+                    },
+                    "phone": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "advocateAtPTPH": {
+                  "type": "object",
+                  "properties": {
+                    "firstName": {
+                      "type": "string"
+                    },
+                    "lastName": {
+                      "type": "string"
+                    },
+                    "phone": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "advocateForTrial": {
+                  "type": "object",
+                  "properties": {
+                    "firstName": {
+                      "type": "string"
+                    },
+                    "lastName": {
+                      "type": "string"
+                    },
+                    "phone": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "contacts": {
+          "type": "object",
+          "properties": {
+            "advAtPthp": {
+              "type": "object",
+              "properties": {
+                "firstName": {
+                  "type": "string"
+                },
+                "lastName": {
+                  "type": "string"
+                },
+                "phone": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                }
+              }
+            },
+            "advForTrial": {
+              "type": "object",
+              "properties": {
+                "firstName": {
+                  "type": "string"
+                },
+                "lastName": {
+                  "type": "string"
+                },
+                "phone": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                }
+              }
+            },
+            "reviewingLawyer": {
+              "type": "object",
+              "properties": {
+                "firstName": {
+                  "type": "string"
+                },
+                "lastName": {
+                  "type": "string"
+                },
+                "phone": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                }
+              }
+            },
+            "prosCaseProgOfficer": {
+              "type": "object",
+              "properties": {
+                "firstName": {
+                  "type": "string"
+                },
+                "lastName": {
+                  "type": "string"
+                },
+                "phone": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                }
+              }
+            },
+            "cpsOffice": {
+              "type": "object",
+              "properties": {
+                "address1": {
+                  "type": "string"
+                },
+                "address2": {
+                  "type": "string"
+                },
+                "address3": {
+                  "type": "string"
+                },
+                "address4": {
+                  "type": "string"
+                },
+                "address5": {
+                  "type": "string"
+                },
+                "postcode": {
+                  "type": "string"
+                }
+              }
+            },
+            "officerInCase": {
+              "type": "object",
+              "properties": {
+                "firstName": {
+                  "type": "string"
+                },
+                "lastName": {
+                  "type": "string"
+                },
+                "phone": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "prosecutionInformation": {
+          "type": "object",
+          "properties": {
+            "section1Q1Group": {
+              "type": "object",
+              "properties": {
+                "q1": {
+                  "type": "string"
+                },
+                "particulars": {
+                  "type": "string"
+                }
+              }
+            },
+            "section1Q2Group": {
+              "type": "object",
+              "properties": {
+                "q2": {
+                  "type": "string"
+                },
+                "particulars": {
+                  "type": "string"
+                }
+              }
+            },
+            "section1Q3Group": {
+              "type": "object",
+              "properties": {
+                "q3": {
+                  "type": "string"
+                },
+                "particulars": {
+                  "type": "string"
+                }
+              }
+            },
+            "section1Q4Group": {
+              "type": "object",
+              "properties": {
+                "q4": {
+                  "type": "string"
+                },
+                "particulars": {
+                  "type": "string"
+                }
+              }
+            },
+            "section1Q5Group": {
+              "type": "object",
+              "properties": {
+                "q5": {
+                  "type": "string"
+                },
+                "particulars": {
+                  "type": "string"
+                }
+              }
+            },
+            "section1Q6Group": {
+              "type": "object",
+              "properties": {
+                "q6": {
+                  "type": "string"
+                },
+                "particulars": {
+                  "type": "string"
+                }
+              }
+            },
+            "section1Q7Group": {
+              "type": "object",
+              "properties": {
+                "q7": {
+                  "type": "string"
+                },
+                "particulars": {
+                  "type": "string"
+                }
+              }
+            },
+            "section1Q8Group": {
+              "type": "object",
+              "properties": {
+                "q8": {
+                  "type": "string"
+                },
+                "particulars": {
+                  "type": "string"
+                }
+              }
+            },
+            "section1Q9Group": {
+              "type": "object",
+              "properties": {
+                "q9": {
+                  "type": "string"
+                },
+                "particulars": {
+                  "type": "string"
+                }
+              }
+            },
+            "section1Q10Group": {
+              "type": "object",
+              "properties": {
+                "q10": {
+                  "type": "string"
+                },
+                "particulars": {
+                  "type": "string"
+                }
+              }
+            },
+            "section1Q11Group": {
+              "type": "object",
+              "properties": {
+                "q11": {
+                  "type": "string"
+                },
+                "particulars": {
+                  "type": "string"
+                }
+              }
+            },
+            "section1Q12Group": {
+              "type": "object",
+              "properties": {
+                "q12": {
+                  "type": "string"
+                },
+                "particulars": {
+                  "type": "string"
+                }
+              }
+            },
+            "section1Q13Group": {
+              "type": "object",
+              "properties": {
+                "q13": {
+                  "type": "string"
+                },
+                "particulars": {
+                  "type": "string"
+                }
+              }
+            },
+            "section1Q14Group": {
+              "type": "object",
+              "properties": {
+                "q14": {
+                  "type": "string"
+                },
+                "particulars": {
+                  "type": "string"
+                }
+              }
+            },
+            "section1Q15Group": {
+              "type": "object",
+              "properties": {
+                "q15": {
+                  "type": "string"
+                },
+                "particulars": {
+                  "type": "string"
+                }
+              }
+            },
+            "section1Q16Group": {
+              "type": "object",
+              "properties": {
+                "q16": {
+                  "type": "string"
+                },
+                "particulars": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "defenceInformation" : {
+          "description": "To provide defendants information witnesses",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "section2Q1Group": {
+                "type": "object",
+                "properties": {
+                  "q1": {
+                    "type": "string"
+                  }
+                }
+              },
+              "section2Q2Group": {
+                "type": "object",
+                "properties": {
+                  "q2": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "ptphWitnesses": {
+          "description": "To provide prosecution witnesses",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+              },
+              "witnessFirstName": {
+                "type": "string",
+                "maxLength": 35
+              },
+              "witnessLastName": {
+                "type": "string",
+                "maxLength": 35
+              },
+              "relevantDisputedIssue": {
+                "type": "string"
+              },
+              "firstNameOfIntermediaryKnownAtPtph": {
+                "type": "string",
+                "maxLength": 35
+              },
+              "lastNameOfIntermediaryKnownAtPtph": {
+                "type": "string",
+                "maxLength": 35
+              },
+              "policeOfficerSubject": {
+                "description": "Details of police officer witness",
+                "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/police-officer-subject.json"
+              },
+              "intermediaryForWitness": {
+                "type": "string",
+                "enum": [
+                  "Y",
+                  "N"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "submissionId",
+    "submissionStatus",
+    "cpsDefendant"
+  ],
+  "additionalProperties": false
+}

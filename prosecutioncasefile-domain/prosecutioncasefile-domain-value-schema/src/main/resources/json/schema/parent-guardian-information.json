@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/parent-guardian-information.json",
+  "type": "object",
+  "description": "Parent Guardian Information",
+  "oneOf": [
+    {
+      "properties": {
+        "dateOfBirth": {
+          "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date",
+          "description": "The date when a person was born."
+        },
+        "gender": {
+          "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/gender.json",
+          "type": "string",
+          "description": "Gender as stated by the defendant",
+          "enum": [
+            "MALE",
+            "FEMALE",
+            "NOT_KNOWN",
+            "NOT_SPECIFIED"
+          ]
+        },
+        "personalInformation": {
+          "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/personal-information.json"
+        },
+        "selfDefinedEthnicity": {
+          "type": "string"
+        },
+        "observedEthnicity": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+
+    {
+      "properties": {
+        "organisationName": {
+          "type": "string",
+          "description": "Name of an organisation, e.g., Marks and Spencer.",
+          "maxLength": 255
+        },
+        "companyTelephoneNumber": {
+          "type": "string",
+          "description": "",
+          "maxLength": 35
+        },
+        "address": {
+          "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/address.json"
+        }
+      },
+      "additionalProperties": false
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "areThereAnyPendingEnquiriesOrLinesOfInvestigation": "N",
+  "areThereAnyPendingEnquiriesOrLinesOfInvestigationDetails": "Details",
+  "courtToArrangeADiscussionOfGroundRulesForQuestioning": "Y",
+  "defendantOffencesSubjects": [
+    {
+      "defendant": {
+        "prosecutorDefendantId": "defendant Id"
+      },
+      "offence": [
+        {
+          "cjsOffenceCode": "offenceCode",
+          "offenceSequenceNo": "123",
+          "offenceWording": "offenceWording"
+        }
+      ]
+    }
+  ],
+  "doesTheProsecutorIntendToServeMoreEvidence": "N",
+  "expectTheCaseToInvolveAComplexNovelOrUnusualPointOfLawAndOrFact": "Y",
+  "expectTheCaseToInvolveAComplexNovelOrUnusualPointOfLawAndOrFactDetails": "Details",
+  "hasDefendantHasBeenAVictimOfSlaveryOrExploitation": "N",
+  "hasDefendantHasBeenAVictimOfSlaveryOrExploitationDetails": "Details",
+  "hasTheInitialDutyOfDisclosureOfUnusedMaterialBeenCompliedWith": "N",
+  "hasTheInitialDutyOfDisclosureOfUnusedMaterialBeenCompliedWithStateWhenThisWas": "detils",
+  "parentGuardianToAttend": true,
+  "prosecutionCaseSubject": {
+    "prosecutingAuthority": "The OU Code of the prosecuting authority",
+    "urn": "caseURN"
+  },
+  "prosecutionWillRelyOn": [
+    {
+      "arecordOfTheDefendantsInterview": "A record of the defendants interview",
+      "asummaryOfTheDefendantInterview": "A summary of the defendant interview",
+      "badCharacterEvidence": "Bad character evidence",
+      "cctvEvidence": "CCTV evidence",
+      "defendantAdmissionsInInterview": "Defendant admissions in interview",
+      "defendantFailureToMentionFactsInInterviews": "Defendant failure to mention facts in interviews",
+      "diagram": "Diagram",
+      "electronicallyRecordedEvidence": "Electronically recorded evidence",
+      "expertEvidence": "Expert evidence",
+      "hearsayEvidence": "Hearsay evidence",
+      "photos": "Photos",
+      "sketchMap": "Sketch map"
+    }
+  ],
+  "submissionId": "7e2f843e-d639-40b3-8611-8015f3a18958",
+  "submissionStatus": "PENDING",
+  "varyAStandardTrialPreparationTimeLimitOrMakeAnyOtherDirection": "Y",
+  "varyAStandardTrialPreparationTimeLimitOrMakeAnyOtherDirectionDetails": "Details",
+  "willTheProsecutorNeedAnyEquipmentInTheTrialCourtRoom": "Y",
+  "willTheProsecutorNeedAnyEquipmentInTheTrialCourtRoomDetails": "Details",
+  "witnesses": [
+    {
+      "ageIfUnder18": 14,
+      "dateOfBirth": "1980-01-24",
+      "forename": "forname",
+      "forename2": "xyz",
+      "forename3": "abc",
+      "interpreterLanguageDialect": "welsh",
+      "interpreterRequired": true,
+      "prosecutionRequireAttendance": true,
+      "prosecutionWitnessRequiringAssistanceSpecialMeasures": "Y",
+      "prosecutionWitnessRequiringAssistanceSpecialMeasuresDetails": "details",
+      "surname": "abc",
+      "title": "Mr",
+      "welshLanguage": false
+    }
+  ]
+}

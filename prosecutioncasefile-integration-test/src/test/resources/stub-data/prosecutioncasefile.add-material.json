@@ -1,0 +1,11 @@
+{
+  "prosecutingAuthority": "B01NM00",
+  "prosecutorDefendantId": "%s",
+  "material": {
+    "fileStoreId": "%s",
+    "documentType": "%s",
+    "fileType": "%s",
+    "isUnbundledDocument": %s
+  },
+  "isCpsCase":false
+}

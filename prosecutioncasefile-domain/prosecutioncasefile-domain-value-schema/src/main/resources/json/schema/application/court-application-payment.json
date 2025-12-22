@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/court-application-payment.json",
+  "type": "object",
+  "properties": {
+    "feeStatus": {
+      "description": "Indicates status of the fee according to fix list",
+      "$ref": "http://justice.gov.uk/core/courts/courtsDefinitions.json#/definitions/civilFeeStatus"
+    },
+    "paymentReference": {
+      "description": "The reference for the payment or exemption",
+      "type": "string"
+    },
+    "contestedFeeStatus": {
+      "description": "Indicates status of the fee according to fix list",
+      "$ref": "http://justice.gov.uk/core/courts/courtsDefinitions.json#/definitions/civilFeeStatus"
+    },
+    "contestedPaymentReference": {
+      "description": "The reference for the contested payment or exemption",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

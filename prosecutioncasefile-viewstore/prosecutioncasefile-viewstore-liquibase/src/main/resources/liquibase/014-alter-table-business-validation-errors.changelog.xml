@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="14" author="prosecutioncasefile" logicalFilePath="liquibase/014-alter-table-business-validation-errors.changelog.xml">
+        <addColumn tableName="business_validation_errors">
+            <column name="court_name" type="VARCHAR(255)" />
+            <column name="case_type" type="VARCHAR(255)" />
+            <column name="urn" type="VARCHAR(255)" />
+            <column name="defendant_bail_status" type="TEXT" />
+            <column name="defendant_charge_date" type="date" />
+            <column name="defendant_hearing_date" type="date" />
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/individual.json",
+  "type": "object",
+  "description": "Individual Details",
+  "properties": {
+    "driverNumber": {
+      "type": "string",
+      "description": "Driver number for DVLA case?? is this the same as drivingLicenseNumber",
+      "maxLength": 16
+    },
+    "driverLicenceCode": {
+      "type": "string"
+    },
+    "driverLicenceIssue": {
+      "type": "string"
+    },
+    "nationalInsuranceNumber": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/pcf-definitions.json#/definitions/nationalInsuranceNumber"
+    },
+    "selfDefinedInformation": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/self-defined-information.json"
+    },
+    "personalInformation": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/personal-information.json"
+    },
+    "parentGuardianInformation": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/parent-guardian-information.json"
+    },
+    "perceivedBirthYear": {
+      "type": "string"
+    },
+    "custodyStatus": {
+      "type": "string"
+    },
+    "bailConditions": {
+      "type": "string",
+      "maxLength": 2500
+    },
+    "offenderCode": {
+      "type": "string",
+      "description": "Offender Code"
+    }
+  },
+  "required": [
+    "personalInformation",
+    "selfDefinedInformation"
+  ]
+}

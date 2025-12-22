@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://www.activiti.org/test" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test" id="m1450100487238" name="">
+  <process id="upload-file" name="upload-file" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <serviceTask id="upload-file-task" name="Upload file" activiti:delegateExpression="${uploadFile}"></serviceTask>
+    <receiveTask id="wait-for-material-added" name="Wait for material  to be added"></receiveTask>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="upload-file-task"></sequenceFlow>
+    <serviceTask id="add-material-to-case" name="Add material to case" activiti:delegateExpression="${addMaterialToCase}"></serviceTask>
+    <sequenceFlow id="flow3" sourceRef="wait-for-material-added" targetRef="add-material-to-case"></sequenceFlow>
+    <sequenceFlow id="flow4" sourceRef="add-material-to-case" targetRef="endevent1"></sequenceFlow>
+    <sequenceFlow id="flow5" sourceRef="upload-file-task" targetRef="wait-for-material-added"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_upload-file">
+    <bpmndi:BPMNPlane bpmnElement="upload-file" id="BPMNPlane_upload-file">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="30.0" y="160.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="upload-file-task" id="BPMNShape_upload-file-task">
+        <omgdc:Bounds height="55.0" width="105.0" x="100.0" y="150.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="wait-for-material-added" id="BPMNShape_wait-for-material-added">
+        <omgdc:Bounds height="81.0" width="105.0" x="250.0" y="137.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="580.0" y="160.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="add-material-to-case" id="BPMNShape_add-material-to-case">
+        <omgdc:Bounds height="81.0" width="105.0" x="420.0" y="137.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="65.0" y="177.0"></omgdi:waypoint>
+        <omgdi:waypoint x="100.0" y="177.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="355.0" y="177.0"></omgdi:waypoint>
+        <omgdi:waypoint x="420.0" y="177.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="525.0" y="177.0"></omgdi:waypoint>
+        <omgdi:waypoint x="580.0" y="177.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="205.0" y="177.0"></omgdi:waypoint>
+        <omgdi:waypoint x="250.0" y="177.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

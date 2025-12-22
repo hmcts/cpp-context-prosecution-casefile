@@ -1,0 +1,10 @@
+[
+  {
+    "code": "OFFENCE_REQUIRES_A_LOCATION",
+    "values" : [
+      {"id": "OFFENCE_ID1", "key":  "offence_offenceLocation", "value" : ""},
+      {"id": "OFFENCE_ID1", "key":  "offence_offenceCode", "value" : "OFCODE12"},
+      {"id": "OFFENCE_ID1", "key":  "offence_offenceSequenceNo", "value" : "1"}
+    ]
+  }
+]

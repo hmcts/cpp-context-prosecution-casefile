@@ -1,0 +1,178 @@
+{
+  "caseId": "54c4f003-00b1-448f-a6ee-6e3c52d40761",
+  "cpsDefendant": [
+    {
+      "asn": "0L4DzNSIHV2Ff5c3Rnko",
+      "cpsDefendantId": "",
+      "principalCharges": "principal-charges"
+    },
+    {
+      "asn": "ASEC33563LS",
+      "cpsDefendantId": ""
+    }
+  ],
+  "errors": [
+    {
+      "code": "INVALID_DEFENDANTS_PROVIDED",
+      "values": [
+        {
+          "key": "asn",
+          "value": "ASEC33563LS"
+        }
+      ]
+    }
+  ],
+  "formDefendants": [
+    {
+      "defendantId": "1468d696-704c-4075-af26-be97d0e8b16b"
+    }
+  ],
+  "prosecutionCaseSubject": {
+    "prosecutingAuthority": "TheOUC",
+    "urn": "UcQTOTohIB"
+  },
+  "ptphFormData": {
+    "contacts": {
+      "advAtPthp": {
+        "email": "test@test.com",
+        "firstName": "name",
+        "phone": "7778888345"
+      },
+      "advForTrial": {
+        "email": "test@test.com",
+        "firstName": "name",
+        "phone": "7778888345"
+      },
+      "cpsOffice": {
+        "address1": "The Court House",
+        "address2": "Cramic Way",
+        "address3": "Port Talbot",
+        "address4": "West Glam.",
+        "address5": "address line 5",
+        "postcode": "SA13 1RU"
+      },
+      "officerInCase": {
+        "email": "test@test.com",
+        "firstName": "name",
+        "phone": "7778888345"
+      },
+      "prosCaseProgOfficer": {
+        "email": "test@test.com",
+        "firstName": "name",
+        "phone": "7778888345"
+      },
+      "reviewingLawyer": {
+        "email": "test@test.com",
+        "firstName": "name",
+        "lastName" : "lastName",
+        "phone": "7778888345"
+      }
+    },
+    "prosecutionInformation": {
+      "section1Q10Group": {
+        "particulars": "Hear say Notes",
+        "q10": "Y"
+      },
+      "section1Q11Group": {
+        "particulars": "Special Measures Notes",
+        "q11": "Y"
+      },
+      "section1Q12Group": {
+        "particulars": "Criminal Record Notes",
+        "q12": "Y"
+      },
+      "section1Q13Group": {
+        "particulars": "Victim Personal Statement Notes",
+        "q13": "Y"
+      },
+      "section1Q14Group": {
+        "particulars": "Disclosure Management Doc Notes",
+        "q14": "Y"
+      },
+      "section1Q15Group": {
+        "particulars": "Third Party Notes",
+        "q15": "Y"
+      },
+      "section1Q16Group": {
+        "particulars": "Review Disclosable Material Notes",
+        "q16": "Y"
+      },
+      "section1Q1Group": {
+        "particulars": "Draft Indictment Notes",
+        "q1": "Y"
+      },
+      "section1Q2Group": {
+        "particulars": "Summary Of Circumstances Notes",
+        "q2": "Y"
+      },
+      "section1Q3Group": {
+        "particulars": "Statements For P And ICm Notes",
+        "q3": "Y"
+      },
+      "section1Q4Group": {
+        "particulars": "Exhibits For P And ICm Notes",
+        "q4": "Y"
+      },
+      "section1Q5Group": {
+        "particulars": "Cctv Notes",
+        "q5": "Y"
+      },
+      "section1Q6Group": {
+        "particulars": "Streamlined Forensic Report Notes",
+        "q6": "Y"
+      },
+      "section1Q7Group": {
+        "particulars": "Medical Evidence Notes",
+        "q7": "Y"
+      },
+      "section1Q8Group": {
+        "particulars": "Expert Evidence Notes",
+        "q8": "Y"
+      },
+      "section1Q9Group": {
+        "particulars": "Bad Character Notes",
+        "q9": "Y"
+      }
+    },
+    "ptphFormdefendants": [
+      {
+        "advocateAtPTPH": {
+          "email": "test@test.com",
+          "firstName": "name",
+          "phone": "7778888345"
+        },
+        "advocateForTrial": {
+          "email": "test@test.com",
+          "firstName": "name",
+          "phone": "7778888345"
+        },
+        "caseProgressionOfficer": {
+          "email": "test@test.com",
+          "firstName": "name",
+          "phone": "7778888345"
+        },
+        "id": "1468d696-704c-4075-af26-be97d0e8b16b",
+        "principalCharges": "principal-charges"
+      }
+    ],
+    "ptphHeader": {
+      "urn": "UcQTOTohIB"
+    },
+    "ptphWitnesses": [
+      {
+        "firstNameOfIntermediaryKnownAtPtph": "first name",
+        "lastNameOfIntermediaryKnownAtPtph": "last name",
+        "policeOfficerSubject": {
+          "officeCollarNumber": "collar number",
+          "officerInCharge": true,
+          "officerRank": "Rank1"
+        },
+        "relevantDisputedIssue": "Issue 1",
+        "witnessFirstName": "forename",
+        "witnessLastName": "abc"
+      }
+    ]
+  },
+  "submissionId": "e85d2c62-af1f-4674-863a-0891e67e325b",
+  "submissionStatus": "SUCCESS_WITH_WARNINGS"
+}

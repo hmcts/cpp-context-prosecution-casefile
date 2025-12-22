@@ -1,0 +1,121 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "id": "http://justice.gov.uk/hearing/courts/referencedata/enforcementArea.json",
+  "properties": {
+    "enforcingCourtCode": {
+      "type": "integer"
+    },
+    "accountDivisionCode": {
+      "type": "integer"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "address1": {
+      "type": "string"
+    },
+    "address2": {
+      "type": "string"
+    },
+    "address3": {
+      "type": "string"
+    },
+    "address4": {
+      "type": "string"
+    },
+    "postcode": {
+      "type": "string"
+    },
+    "ukInternal": {
+      "type": "integer"
+    },
+    "nationalPaymentPhone": {
+      "type": "string"
+    },
+    "bankAddressLine1": {
+      "type": "string"
+    },
+    "bankAddressLine2": {
+      "type": "string"
+    },
+    "bankAddressLine3": {
+      "type": "string"
+    },
+    "bankAccntSortCode": {
+      "type": "string"
+    },
+    "bankAccntNum": {
+      "type": "integer"
+    },
+    "bankAccntName": {
+      "type": "string"
+    },
+    "paymentQueriesAddress1": {
+      "type": "string"
+    },
+    "paymentQueriesAddress2": {
+      "type": "string"
+    },
+    "paymentQueriesAddress3": {
+      "type": "string"
+    },
+    "paymentQueriesAddress4": {
+      "type": "string"
+    },
+    "paymentQueriesAddress5": {
+      "type": "string"
+    },
+    "paymentQueriesPostcode": {
+      "type": "string"
+    },
+    "remittanceAdviceEmailAddress": {
+      "type": "string"
+    },
+    "localJusticeArea": {
+      "type": "object",
+      "properties": {
+        "nationalCourtCode": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "welshName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "nationalCourtCode",
+        "name"
+      ]
+    }
+  },
+  "required": [
+    "enforcingCourtCode",
+    "accountDivisionCode",
+    "email",
+    "phone",
+    "address1",
+    "address2",
+    "address3",
+    "postcode",
+    "ukInternal",
+    "nationalPaymentPhone",
+    "bankAddressLine1",
+    "bankAddressLine2",
+    "bankAddressLine3",
+    "bankAccntSortCode",
+    "bankAccntNum",
+    "bankAccntName",
+    "paymentQueriesAddress1",
+    "paymentQueriesAddress2",
+    "paymentQueriesAddress3",
+    "paymentQueriesPostcode",
+    "remittanceAdviceEmailAddress",
+    "localJusticeArea"
+  ]
+}

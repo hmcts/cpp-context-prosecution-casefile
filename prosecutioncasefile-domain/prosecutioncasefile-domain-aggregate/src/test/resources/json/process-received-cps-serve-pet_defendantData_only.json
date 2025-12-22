@@ -1,0 +1,100 @@
+{
+  "caseId": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+  "cpsDefendantOffences": [
+    {
+      "matchingId": "90254db1-1683-483e-afb3-b87fde5a0a21",
+      "title": "mr",
+      "forename": "forename",
+      "surname": "surname",
+      "dateOfBirth": "2000-12-10",
+      "cpsOffenceDetails": [
+        {
+          "cjsOffenceCode": "offenceCode",
+          "offenceDate": "2020-12-10",
+          "offenceWording": "offenceWording"
+        }
+      ]
+    }
+  ],
+  "petFormData": {
+    "defence": {
+      "defendants": [
+        {
+          "id": "d123ed32-ce29-11ec-9d64-0242ac120002",
+          "cpsDefendantId": "cpsDefendant Id",
+          "prosecutorDefendantId": "defendant Id",
+          "cpsOffences": [
+            {
+              "offenceCode": "offenceCode",
+              "date": "2020-12-10",
+              "wording": "offenceWording"
+            }
+          ]
+        }
+      ]
+    },
+    "prosecution": {
+      "dynamicFormAnswers": {
+        "applicationsForDirectionsGroup": {
+          "prosecutorWitnessAssistance": "Y",
+          "prosecutorWitnessAssistanceYesGroup": {
+            "witnessRequiresDetails": "N"
+          },
+          "groundRulesQuestioning": "Y",
+          "variationStandardDirectionsProsecutor": "Y",
+          "variationStandardDirectionsProsecutorYesGroup": {
+            "variationStandardDirectionsProsecutorYesGroupDetails": "directionDetails"
+          }
+        },
+        "prosecutorGroup": {
+          "displayEquipment": "Y",
+          "displayEquipmentYesGroup": {
+            "displayEquipmentDetails": "EquipmentDetails"
+          },
+          "pendingLinesOfEnquiry": "N",
+          "pendingLinesOfEnquiryYesGroup": {
+            "pendingLinesOfEnquiryYesGroup": "Details"
+          },
+          "pointOfLaw": "Y",
+          "pointOfLawYesGroup": {
+            "pointOfLawDetails": "LawDetails"
+          },
+          "prosecutionCompliance": "N",
+          "prosecutionComplianceNoGroup": {
+            "prosecutionComplianceDetailsNo": "noComplianceDetails"
+          },
+          "prosecutionComplianceYesGroup": {
+          },
+          "prosecutorServeEvidence": "N",
+          "prosecutorServeEvidenceYesGroup": {
+          },
+          "slaveryOrExploitation": "N",
+          "slaveryOrExploitationYesGroup": {
+            "slaveryOrExploitationDetails": "SlaveryDetails"
+          }
+        }
+      },
+      "witnesses": [
+        {
+          "age": 14,
+          "firstName": "forname",
+          "interpreterRequired": "yes",
+          "languageAndDialect": "welsh",
+          "lastName": "abc",
+          "measuresRequired": [
+            "measureDetails"
+          ],
+          "prosecutionProposesWitnessAttendInPerson": "yes",
+          "specialOtherMeasuresRequired": "Y"
+        }
+      ]
+    }
+  },
+  "prosecutionCaseSubject": {
+    "prosecutingAuthority": "The OU Code of the prosecuting authority",
+    "urn": "caseURN"
+  },
+  "submissionId": "e85d2c62-af1f-4674-863a-0891e67e325b",
+  "submissionStatus": "PENDING",
+  "isYouth": false
+}

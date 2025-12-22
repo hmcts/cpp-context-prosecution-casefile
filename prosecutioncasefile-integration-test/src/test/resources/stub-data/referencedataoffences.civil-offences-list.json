@@ -1,0 +1,28 @@
+{
+  "offences": [
+    {
+      "offenceId": "OFFENCE_ID",
+      "pssOffenceId": 708179,
+      "cjsOffenceCode": "OFFENCE_CODE",
+      "title": "Arrested for Breach of Domestic Abuse Protection Notice",
+      "legislation": "In accordance Section 30 Domestic Abuse Act 2021.",
+      "offenceWording": "Arrested for Breach of Domestic Abuse Protection Notice",
+      "pnldOffenceWording": "On **(..SPECIFY DATE..) at **(..SPECIFY TOWNSHIP..) **(..SPECIFY    THE DETAILS OF THE OFFENCE..)",
+      "endorsableFlag": false,
+      "locationRequired": "N",
+      "offenceType": "VP",
+      "canBeBulk": false,
+      "initialFeeApplicable": false,
+      "contestedFeeApplicable": false,
+      "exParte": true,
+      "sowRef": "MOJ",
+      "startDate": "2024-11-27",
+      "changeDate": "2024-12-18T11:27:21",
+      "custodialIndicator": "N",
+      "recordable": "N",
+      "pnldDateOfLastUpdate": "2024-11-27",
+      "search": "'2021':17 '30':13 'abus':7,15 'accord':11 'act':16 'arrest':2 'breach':4 'da21503':1 'domest':6,14 'notic':9 'protect':8 'section':12",
+      "details": {}
+    }
+  ]
+}

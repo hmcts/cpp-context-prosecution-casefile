@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/local-authority-details-for-youth-defendants.json",
+  "type": "object",
+  "description": "Local authority responsible for a youth defendant",
+  "properties": {
+    "isLookedAfterChild": {
+      "type": "boolean",
+      "description": "Is the defendant a looked after child"
+    },
+    "authority": {
+      "type": "string",
+      "description": "The name of the Local Authority"
+    },
+    "phone": {
+      "pattern": "^[0-9+\\ \\-]{10,}$",
+      "description": "A home telephone number, including any exchange of location code, at which a person or organisation can be contacted in the UK by telephonic means."
+    },
+    "reference": {
+      "type": "string",
+      "description": "Local authority reference identifier"
+    },
+    "address1": {
+      "type": "string",
+      "description": "Address Line 1 for the defendant",
+      "minLength" : 1,
+      "maxLength": 35
+    },
+    "address2": {
+      "type": "string",
+      "description": "Address Line 2 for the defendant",
+      "maxLength": 35
+    },
+    "address3": {
+      "type": "string",
+      "description": "Address Line 3 for the defendant",
+      "maxLength": 35
+    },
+    "address4": {
+      "type": "string",
+      "description": "Address Line 4 for the defendant",
+      "maxLength": 35
+    },
+    "address5": {
+      "type": "string",
+      "description": "Address Line 5 for the defendant",
+      "maxLength": 35
+    },
+    "postcode": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/ukGovPostCode",
+      "description": "UK Post Code (CGS DSC 5.25)"
+    },
+    "title": {
+      "type": "string",
+      "description": "Title by which a person is addressed",
+      "maxLength": 35
+    },
+    "forename": {
+      "type": "string",
+      "description": "Given Name",
+      "maxLength": 35,
+      "pattern": "^(?!.*  ).+",
+      "comments": "Alphanumeric no consecutive spaces (i.e. a space can not appear adjacent to another space)."
+    },
+    "surname": {
+      "type": "string",
+      "description": "Surname or Family name, e.g. Brown (CJS DSC v5 3.39 Family Name)",
+      "maxLength": 35,
+      "pattern": "^(?!.*  ).+",
+      "comments": "Alphanumeric no consecutive spaces (i.e. a space can not appear adjacent to another space)."
+    },
+    "email": {
+      "type": "string",
+      "maxLength": 255
+    }
+  },
+  "required": [
+    "isLookedAfterChild",
+    "authority",
+    "address1",
+    "surname",
+    "forename"
+  ],
+  "additionalProperties": false
+}

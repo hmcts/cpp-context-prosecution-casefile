@@ -1,0 +1,26 @@
+[
+  {
+    "code":"PROSECUTOR_NOT_RECOGNISED_AS_AN_AUTHORISED_SJP_PROSECUTOR",
+    "values":[
+      {
+        "key":"prosecutingAuthority",
+        "value":"nonsjp"
+      }
+    ]
+  },
+  {
+    "code":"OFFENCE_CODE_IS_INVALID",
+    "values":[
+      {
+        "id":"0572d1d1-97ff-4eb8-87da-601334d543d6",
+        "key":"offence_offenceCode",
+        "value":"CA030131"
+      },
+      {
+        "id":"0572d1d1-97ff-4eb8-87da-601334d543d6",
+        "key":"offence_offenceSequenceNo",
+        "value":"1"
+      }
+    ]
+  }
+]

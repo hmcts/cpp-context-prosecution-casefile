@@ -1,0 +1,11 @@
+[
+  {
+    "code": "INVALID_PNC_ID",
+    "values": [
+      {
+        "key": "pncIdentifier",
+        "value": "SF20/123456M"
+      }
+    ]
+  }
+]

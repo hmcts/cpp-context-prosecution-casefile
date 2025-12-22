@@ -1,0 +1,65 @@
+{
+  "enterpriseId": "2K2SLYFC743H",
+  "prosecution": {
+    "caseId": "9680896d-bf1f-4bb0-a573-3621bbb2ce89",
+    "prosecutorCaseReference": "TVL12345",
+    "appliedProsecutorCosts": 200,
+    "prosecutor": {
+      "prosecutingAuthority": "GAEAA01",
+      "informant": "Adam"
+    },
+    "defendant": {
+      "asn": "arrest/summons",
+      "defendantPerson": {
+        "title": "Baron",
+        "forename": "John",
+        "forename2": "Adam",
+        "forename3": "Theodore",
+        "surname": "Smith",
+        "telephoneNumberBusiness": "01509813888",
+        "telephoneNumberHome": "01509813888",
+        "telephoneNumberMobile": "07911123456",
+        "emailAddressPrimary": "aer@af.com",
+        "emailAddressSecondary": "aer@af.com",
+        "dateOfBirth": "1970-02-03",
+        "gender": 1,
+        "occupation": "TA",
+        "occupationCode": 666,
+        "driverNumber": "AS",
+        "address": {
+          "addressLine1": "Line 1",
+          "addressLine2": "Line 2",
+          "addressLine3": "Line 3",
+          "addressLine4": "Line 4",
+          "addressLine5": "Line 5",
+          "postcode": "CR0 1XG"
+        },
+        "selfDefinedEthnicity": "W1",
+        "nationalInsuranceNumber": "AA123456C"
+      },
+      "documentationLanguage": "E",
+      "hearingLanguage": "E",
+      "languageNeeds": "no special language needs",
+      "specialNeeds": "no special needs",
+      "statedNationality": "W1",
+      "numPreviousConvictions": 3,
+      "offences": [
+        {
+          "offenceCode": "PS0001",
+          "offenceSequenceNo": 1,
+          "offenceCommittedDate": "2018-06-20",
+          "chargeDate": "2018-06-21",
+          "offenceDateCode": 1,
+          "offenceLocation": "Croydon",
+          "offenceWording": "Prosecution charge wording",
+          "offenceWordingWelsh": "Prosecution charge wording in Welsh",
+          "statementOfFacts": "Prosecution statements of facts",
+          "prosecutorCompensation": 15.30,
+          "backDuty": 340.30,
+          "backDutyDateFrom": "2018-04-30",
+          "backDutyDateTo": "2018-05-30"
+        }
+      ]
+    }
+  }
+}

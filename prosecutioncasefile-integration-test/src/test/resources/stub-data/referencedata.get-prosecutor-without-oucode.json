@@ -1,0 +1,17 @@
+{
+  "id": "0534ee76-88f6-40e0-ba8f-53588e146675",
+  "sequenceNumber": 1,
+  "majorCreditorCode": "TFL2",
+  "shortName": "TFL",
+  "fullName": "Transport for London",
+  "nameWelsh": "Transport for London",
+  "spiInFlag": false,
+  "spiOutFlag": true,
+  "address": {
+    "address1": "6th Floor Windsor House",
+    "postcode": "SW1H 0TL",
+    "address2": "42-50 Victoria Street",
+    "address3": "London"
+  },
+  "sjpFlag": true
+}

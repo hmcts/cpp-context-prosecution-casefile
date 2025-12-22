@@ -1,0 +1,51 @@
+{
+  "errors": [
+    {
+      "fieldName": "initiationCode",
+      "value": "Q"
+    },
+    {
+      "id": "0",
+      "fieldName": "caseMarkers",
+      "value": "WP"
+    },
+    {
+      "id": "1",
+      "fieldName": "caseMarkers",
+      "value": "AB"
+    }
+  ],
+  "defendants": [
+    {
+      "id": "DEF_ID",
+      "errors": [
+        {
+          "fieldName": "individual_selfDefinedInformation_nationality",
+          "value": "GBR"
+        },
+        {
+          "fieldName": "individual_personalInformation_contactDetails_primaryEmail",
+          "value": "good@primaryemail.com"
+        },
+        {
+          "fieldName": "individual_personalInformation_contactDetails_secondaryEmail",
+          "value": "good@secondaryemail.com"
+        },
+        {
+          "fieldName": "initialHearing_dateOfHearing",
+          "value": "%DATE_OF_HEARING%"
+        },
+        {
+          "id": "2013c181-7458-4fb2-a637-b596fbe0e792",
+          "fieldName": "offence_arrestDate",
+          "value": "2015-04-04"
+        },
+        {
+          "id": "2013c181-7458-4fb2-a637-b596fbe0e792",
+          "fieldName": "offence_chargeDate",
+          "value": "2015-04-04"
+        }
+      ]
+    }
+  ]
+}

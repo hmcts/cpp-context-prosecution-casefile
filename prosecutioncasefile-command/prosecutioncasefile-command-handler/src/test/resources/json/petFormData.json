@@ -1,0 +1,75 @@
+{
+  "defence": {
+    "defendants": [
+      {
+        "id": "d123ed32-ce29-11ec-9d64-0242ac120002",
+        "cpsDefendantId": "cpsDefendant Id",
+        "prosecutorDefendantId": "7f8fe782-a287-11eb-bcbc-0242ac130002",
+        "cpsOffences": [
+          {
+            "offenceCode": "offenceCode",
+            "offenceDate": "2020-12-10",
+            "wording": "offenceWording"
+          }
+        ],
+        "defendantId": "7f8fe782-a287-11eb-bcbc-0242ac130002"
+      }
+    ]
+  },
+  "prosecution": {
+    "dynamicFormAnswers": {
+      "applicationsForDirectionsGroup": {
+        "prosecutorWitnessAssistance": "Y",
+        "prosecutorWitnessAssistanceYesGroup": {
+          "witnessRequiresDetails": "N"
+        },
+        "groundRulesQuestioning": "Y",
+        "variationStandardDirectionsProsecutor": "Y",
+        "variationStandardDirectionsProsecutorYesGroup": {
+          "variationStandardDirectionsProsecutorYesGroupDetails": "directionDetails"
+        }
+      },
+      "prosecutorGroup": {
+        "displayEquipment": "Y",
+        "displayEquipmentYesGroup": {
+          "displayEquipmentDetails": "EquipmentDetails"
+        },
+        "pendingLinesOfEnquiry": "N",
+        "pendingLinesOfEnquiryYesGroup": {
+          "pendingLinesOfEnquiryYesGroup": "Details"
+        },
+        "pointOfLaw": "Y",
+        "pointOfLawYesGroup": {
+          "pointOfLawDetails": "LawDetails"
+        },
+        "prosecutionCompliance": "N",
+        "prosecutionComplianceNoGroup": {
+          "prosecutionComplianceDetailsNo": "noComplianceDetails"
+        },
+        "prosecutionComplianceYesGroup": {
+        },
+        "prosecutorServeEvidence": "N",
+        "prosecutorServeEvidenceYesGroup": {
+        },
+        "slaveryOrExploitation": "N",
+        "slaveryOrExploitationYesGroup": {
+          "slaveryOrExploitationDetails": "SlaveryDetails"
+        }
+      }
+    },
+    "witnesses": [
+      {
+        "age": 14,
+        "firstName": "forname",
+        "interpreterRequired": "yes",
+        "languageAndDialect": "welsh",
+        "lastName": "abc",
+        "measuresRequired": [
+          "measureDetails"
+        ],
+        "prosecutionProposesWitnessAttendInPerson": "yes",
+        "specialOtherMeasuresRequired": "Y"
+      }
+    ]
+  }
+}

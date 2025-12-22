@@ -1,0 +1,114 @@
+{
+  "initiateCourtProceedings": {
+    "listHearingRequests": [
+      {
+        "courtCentre": {
+          "id": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+          "name": "Port Talbot",
+          "welshName": "Welsh Name",
+          "roomId": "9e4932f7-97b2-3010-b942-ddd2624e4dd8",
+          "roomName": "Courtroom 01"
+        },
+        "estimateMinutes": 20,
+        "hearingType": {
+          "description": "Plea & Trial Preparation",
+          "id": "06b0c2bf-3f98-46ed-ab7e-56efaf9ecced"
+        },
+        "jurisdictionType": "MAGISTRATES",
+        "listDefendantRequests": [
+          {
+            "summonsRequired": "FIRST_HEARING",
+            "defendantId": "b20c3cc9-d6ca-4383-b190-f5cc3002e635",
+            "defendantOffences": [
+              "f087bdb1-3125-46e0-8ad6-0a0243dc308c"
+            ],
+            "hearingLanguageNeeds": "WELSH",
+            "prosecutionCaseId": "bd5f0229-68bb-4d73-a160-05bc5285dab0"
+          }
+        ],
+        "listedStartDateTime": "2050-02-04T09:05:01.001Z"
+      }
+    ],
+    "prosecutionCases": [
+      {
+        "caseMarkers": [
+          {
+            "id": "fc4f3c93-cc8c-4dc7-a12f-224bfc822064",
+            "markerTypeCode": "ABC",
+            "markerTypeDescription": "Child Abuse",
+            "markerTypeid": "2013c181-7458-4fb2-a637-b596fbe0e781"
+          }
+        ],
+        "defendants": [
+          {
+            "aliases": [
+              {
+                "legalEntityName": "FakeCompany"
+              },
+              {
+                "legalEntityName": "RealCompany"
+              }
+            ],
+            "id": "b20c3cc9-d6ca-4383-b190-f5cc3002e635",
+            "masterDefendantId": "b20c3cc9-d6ca-4383-b190-f5cc3002e635",
+            "courtProceedingsInitiated": "2020-02-25T23:43:01.811Z",
+            "legalEntityDefendant": {
+              "organisation": {
+                "name": "Ministry of Justice"
+              }
+            },
+            "initiationCode": "Q",
+            "offences": [
+              {
+                "arrestDate": "2018-12-10",
+                "chargeDate": "2018-12-10",
+                "count": 0,
+                "endDate": "2018-10-10",
+                "id": "f087bdb1-3125-46e0-8ad6-0a0243dc308c",
+                "offenceCode": "OFCODE12",
+                "dvlaOffenceCode": "ABC123",
+                "offenceDefinitionId": "04c099cc-eba2-4c80-9eed-7c1ef21d706a",
+                "offenceFacts": {
+                  "alcoholReadingAmount": 100,
+                  "alcoholReadingMethodCode": "A",
+                  "alcoholReadingMethodDescription": "Blood",
+                  "vehicleRegistration": "AA11 ABC"
+                },
+                "offenceTitle": "Obstruct person executing search warrant for TV receiver",
+                "orderIndex": 1,
+                "startDate": "2018-09-10",
+                "wording": "TV Licence not paid",
+                "offenceDateCode": 1,
+                "modeOfTrial": "Summary",
+                "maxPenalty": "Max Penalty"
+              }
+            ],
+            "prosecutionCaseId": "bd5f0229-68bb-4d73-a160-05bc5285dab0"
+          }
+        ],
+        "id": "bd5f0229-68bb-4d73-a160-05bc5285dab0",
+        "initiationCode": "Q",
+        "originatingOrganisation": "B01NM00",
+        "cpsOrganisation": "A01NM00",
+        "prosecutionCaseIdentifier": {
+          "prosecutionAuthorityCode": "TFL",
+          "prosecutionAuthorityId": "0534ee76-88f6-40e0-ba8f-53588e146675",
+          "caseURN": "0QUjdiiCNZ",
+          "address": {
+            "address1": "6th Floor Windsor House",
+            "postcode": "SW1H 0TL",
+            "address2": "42-50 Victoria Street",
+            "address3": "London"
+          },
+          "majorCreditorCode": "TFL2",
+          "prosecutionAuthorityName": "Transport for London",
+          "prosecutionAuthorityOUCode": "GAFTL00",
+          "contact": {
+            "primaryEmail": "contact@cpp.com"
+          }
+        }
+      }
+    ]
+  },
+  "id" : ""
+}

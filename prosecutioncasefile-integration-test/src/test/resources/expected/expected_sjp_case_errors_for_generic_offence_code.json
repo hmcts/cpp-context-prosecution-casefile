@@ -1,0 +1,9 @@
+[
+  {
+    "code": "OFFENCE_CODE_IS_GENERIC",
+    "values" : [
+      {"id": "OFFENCE_ID1", "key":  "offence_offenceCode", "value" : "998"},
+      {"id": "OFFENCE_ID1", "key":  "offence_offenceSequenceNo", "value" : "1"}
+    ]
+  }
+]

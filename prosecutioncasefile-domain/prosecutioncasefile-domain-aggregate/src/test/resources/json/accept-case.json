@@ -1,0 +1,9 @@
+{
+  "caseId": "51cac7fb-387c-4d19-9c80-8963fa8cf222",
+  "defendantIds": [
+    "7b7eeefa-8a99-435b-bf42-86a7f410dd6c"
+  ],
+  "referenceDataQueryService": {
+    "className": "uk.gov.moj.cpp.prosecution.casefile.ReferenceDataQueryServiceStubImpl"
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "prosecution": {
+    "caseDetails": {
+      "caseId": "bc9f0dbb-35ef-4849-af3c-9effc161d4d6",
+      "caseMarkers": [
+        {
+          "markerTypeCode": "ABC",
+          "markerTypeDescription": "Child Abuse",
+          "markerTypeId": "2013c181-7458-4fb2-a637-b596fbe0e781"
+        },
+        {
+          "markerTypeCode": "BCD",
+          "markerTypeDescription": "Child Abuse",
+          "markerTypeId": "2013c181-7458-4fb2-a637-b596fbe0e782"
+        }
+      ],
+      "initiationCode": "S",
+      "originatingOrganisation": "123",
+      "otherPartyOfficerInCase": {
+        "personalInformation": {
+          "address": {
+            "address1": "101",
+            "address2": "56Police House",
+            "address3": "Letsby Avenue",
+            "address4": "Avon",
+            "postcode": "HA1 2ER"
+          },
+          "contactDetails": {
+            "primaryEmail": "vegaoic@test.dom",
+            "work": "0117911911"
+          },
+          "firstName": "Vega",
+          "lastName": "OIC",
+          "title": "Baron"
+        },
+        "policeOfficerRank": "Constable"
+      },
+      "prosecutor": {
+        "informant": "informant",
+        "prosecutingAuthority": "prosAut"
+      },
+      "prosecutorCaseReference": "xdQkeLE1Ll",
+      "statementOfFacts": "statementOfFacts",
+      "statementOfFactsWelsh": "statementOfFactsWelsh",
+      "summonsCode": "summonsCode"
+    },
+    "channel": "SPI",
+    "defendants": [
+      {
+        "documentationLanguage": "W",
+        "hearingLanguage": "W",
+        "id": "ac03e49e-e740-4746-9b19-5855197a9d2a",
+        "individual": {
+          "offenderCode": "XYZ",
+          "parentGuardianInformation": {
+            "dateOfBirth": "2041-03-03",
+            "gender": "MALE",
+            "observedEthnicity": "3",
+            "personalInformation": {
+              "address": {
+                "address1": "122 Jubilee Street",
+                "address2": "line 2",
+                "address3": "line 3",
+                "address4": "line 4",
+                "address5": "line 5",
+                "postcode": "M60 1NW"
+              },
+              "contactDetails": {
+                "home": "020111223",
+                "mobile": "07572222943",
+                "primaryEmail": "scrooge.mcduck@mail.com",
+                "secondaryEmail": "scrooge.mcduck2@mail.com",
+                "work": "020111222"
+              },
+              "firstName": "Joe",
+              "lastName": "Potts",
+              "occupation": "Software Tester",
+              "occupationCode": 45,
+              "title": "Baron"
+            },
+            "selfDefinedEthnicity": "white"
+          },
+          "perceivedBirthYear": "2040",
+          "personalInformation": {
+            "address": {
+              "address1": "66 Exeter Street",
+              "address2": "line 2",
+              "address3": "line 3",
+              "address4": "line 4",
+              "address5": "line 5",
+              "postcode": "M60 1NW"
+            },
+            "contactDetails": {
+              "home": "020111223",
+              "mobile": "07572222943",
+              "primaryEmail": "scrooge.mcduck@mail.com",
+              "secondaryEmail": "scrooge.mcduck2@mail.com",
+              "work": "020111222"
+            },
+            "firstName": "John",
+            "lastName": "Smith",
+            "observedEthnicity": 55,
+            "occupation": "Software Developer",
+            "occupationCode": 43,
+            "title": "Baron"
+          },
+          "selfDefinedInformation": {
+            "dateOfBirth": "2040-05-03",
+            "ethnicity": "whitewhite",
+            "gender": "MALE",
+            "nationality": "ABC"
+          }
+        },
+        "initialHearing": {
+          "courtHearingLocation": "abcd",
+          "dateOfHearing": "1999-02-04",
+          "timeOfHearing": "09:05:01.001"
+        },
+        "offences": [
+          {
+            "alcoholRelatedOffence": {
+              "alcoholLevelAmount": 100,
+              "alcoholLevelMethod": "A"
+            },
+            "appliedCompensation": 200,
+            "arrestDate": "2021-04-04",
+            "chargeDate": "2022-04-04",
+            "offenceCode": "OFCODE12",
+            "offenceCommittedDate": "2018-09-10",
+            "offenceCommittedEndDate": "2018-10-10",
+            "offenceDateCode": 1,
+            "offenceId": "2013c181-7458-4fb2-a637-b596fbe0e792",
+            "offenceLocation": "Croydon",
+            "offenceSequenceNumber": 1,
+            "offenceWording": "TV Licence not paid"
+          }
+        ],
+        "postingDate": "2018-09-10"
+      }
+    ]
+  },
+  "problems": [
+    {
+      "code": "SUMMONS_CODE_INVALID",
+      "values": [
+        {
+          "key": "summonsCode",
+          "value": "summonsCode"
+        }
+      ]
+    },
+    {
+      "code": "PROSECUTOR_OUCODE_NOT_RECOGNISED",
+      "values": [
+        {
+          "key": "originatingOrganisation",
+          "value": "123"
+        }
+      ]
+    },
+    {
+      "code": "CASE_MARKERS_INVALID",
+      "values": [
+        {
+          "id": "0",
+          "key": "caseMarkers",
+          "value": "ABC"
+        },
+        {
+          "id": "1",
+          "key": "caseMarkers",
+          "value": "BCD"
+        }
+      ]
+    }
+  ]
+}

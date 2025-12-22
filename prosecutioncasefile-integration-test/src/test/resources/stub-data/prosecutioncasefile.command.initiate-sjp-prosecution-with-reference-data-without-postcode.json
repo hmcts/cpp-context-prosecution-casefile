@@ -1,0 +1,258 @@
+{
+  "prosecution": {
+    "caseDetails": {
+      "initiationCode": "J",
+      "originatingOrganisation": "123",
+      "cpsOrganisation": "A30AB00",
+      "caseId": "${case.id}",
+      "prosecutor": {
+        "informant": "Adam",
+        "prosecutingAuthority": "GAEAA01",
+        "referenceData" : {
+          "id": "0534ee76-88f6-40e0-ba8f-53588e146675",
+          "sequenceNumber": 1,
+          "majorCreditorCode": "TFL2",
+          "shortName": "TFL",
+          "fullName": "Transport for London",
+          "nameWelsh": "Transport for London",
+          "oucode": "GAFTL00",
+          "spiInFlag": false,
+          "spiOutFlag": true,
+          "address": {
+            "address1": "6th Floor Windsor House",
+            "address2": "42-50 Victoria Street",
+            "address3": "London",
+            "postcode": "SW1H 0TL"
+          },
+          "sjpFlag": true
+        }
+      },
+      "prosecutorCaseReference": "${case.urn}"
+    },
+    "channel": "CPPI",
+    "defendants": [{
+      "id": "${defendant.id}",
+      "appliedProsecutorCosts": 200,
+      "documentationLanguage": "W",
+      "hearingLanguage": "W",
+      "individual": {
+        "personalInformation": {
+          "address": {
+            "address1": "armagaddon house"
+          },
+          "contactDetails": {
+            "home": "0207 000 0000",
+            "mobile": "11111 111 111",
+            "primaryEmail": "primary@email.com",
+            "secondaryEmail": "secondary@email.com",
+            "work": "0207 111 1111"
+          },
+          "firstName": "John",
+          "lastName": "Smith",
+          "title": "Baron"
+        },
+        "selfDefinedInformation": {
+          "dateOfBirth": "${defendant.dob}",
+          "ethnicity": "W1",
+          "gender": "MALE",
+          "nationality": "GBR"
+        },
+        "nationalInsuranceNumber": "AB123456C"
+      },
+      "offences": [
+        {
+          "alcoholRelatedOffence": {
+            "alcoholLevelAmount": 100,
+            "alcoholLevelMethod": "A"
+          },
+          "offenceId": "${offence.id}",
+          "chargeDate": "${offence.chargeDate:-2018-02-01}",
+          "appliedCompensation": 200,
+          "offenceCode": "OFCODE12",
+          "offenceCommittedDate": "${offence.committedDate:-2018-01-01}",
+          "offenceDateCode": 1,
+          "offenceSequenceNumber": 1,
+          "offenceWording": "Duty not paid",
+          "backDuty": 340.31,
+          "backDutyDateFrom": "2018-04-30",
+          "backDutyDateTo": "2018-05-30",
+          "vehicleMake": "Ford",
+          "vehicleRegistrationMark": "AB11 ABC",
+          "referenceData":     {
+            "offenceId": "04c099cc-eba2-4c80-9eed-7c1ef21d706a",
+            "cjsOffenceCode": "OFCODE12",
+            "validFrom": "2017-10-10",
+            "validTo": "2017-12-10",
+            "offenceStartDate": "2001-01-19",
+            "offenceEndDate": "2030-01-25",
+            "cppDateOfLastUpdate": "2017-12-10",
+            "pnldDateOfLastUpdate": "2017-06-10",
+            "drugsOrAlcoholRelated": "Y",
+            "locationRequired": "N",
+            "title": "Obstruct person executing search warrant for TV receiver",
+            "prosecutionTimeLimit": "9",
+            "modeOfTrial": "SNONIMP",
+            "endorsableFlag": false,
+            "details": {
+              "document": {
+                "codes": {
+                  "fptgraduated": 0.0,
+                  "mojstatscode": "108/16",
+                  "mopinoteslink": "D19586",
+                  "cjsoffencecode": "AA06004",
+                  "mopireviewgroup": {
+                    "code": "C",
+                    "description": "Group 3"
+                  },
+                  "notifiabletomoj": {
+                    "code": "Y",
+                    "description": "YES"
+                  },
+                  "seatbeltoffence": {
+                    "code": "N",
+                    "description": "No"
+                  },
+                  "fptgraduatedhigh": 0.0,
+                  "roadsidedeposits": {
+                    "code": "N",
+                    "description": "No"
+                  },
+                  "fptissuedbypolice": 0.0,
+                  "pndissuedbyothers": 0.0,
+                  "pndissuedbypolice": 0.0,
+                  "pncacpooffencecode": "12.1.12.1",
+                  "disqualificationclass": {
+                    "code": "N",
+                    "description": "discretionary disqualification not endorsable"
+                  },
+                  "recordableonpncindicator": {
+                    "code": "Y",
+                    "description": "YES"
+                  },
+                  "pndissuedbylocalauthorities": 0.0
+                },
+                "libra": {
+                  "miscode": {
+                    "code": "SNM",
+                    "description": "Summary Non-Motoring"
+                  },
+                  "fineindicator": {
+                    "code": "Y",
+                    "description": "YES"
+                  },
+                  "libracategory": {
+                    "code": "CS",
+                    "description": "Summary Non-motoring"
+                  },
+                  "maxfinetypemagct": {
+                    "code": "5",
+                    "description": "fine not exceeding level five on the legislative standard scale"
+                  },
+                  "custodialindicator": {
+                    "code": "Y",
+                    "description": "YES"
+                  },
+                  "maxcustodialsentenceunitmagct": {
+                    "code": "Months",
+                    "description": "Months"
+                  },
+                  "maxcustodialsentencelengthmagct": 3
+                },
+                "other": {
+                  "penalty": "Summary: Three months imprisonment and / or a fine not exceeding level five on the standard scale. <br /><br />Time Limit on Prosecutions<br />6 months",
+                  "modeoftrial": {
+                    "code": "SIMP",
+                    "description": "SUMMARY IMPRISONABLE"
+                  },
+                  "powersofarrest": "Arrest without warrant",
+                  "geographicregion": {
+                    "code": "E",
+                    "description": "England"
+                  },
+                  "timelimitforprosecutions": "6 months"
+                },
+                "english": {
+                  "notes": "This CJS Code and Outline Offence Wording document is now OBSOLETE. Revoked by S.I. 2011 / 1197 as from 25/05/11.",
+                  "title": "Obstruct person acting in the execution of these Regulations",
+                  "legislation": "Contrary to regulations 32(a) & 34(3) of the Animals and Animal Products (Import and Export) (England) Regulations 2006",
+                  "pointstoprove": "date and location<br />obstruct person acting in the execution of these Regulations",
+                  "additionalkeywords": {
+                    "additionalkeyword": [
+                      "Animals",
+                      "Animal Products Import",
+                      "Export England Regulations 2006"
+                    ]
+                  },
+                  "investigatoractions": {
+                    "investigatoraction": [
+                      {
+                        "code": "IA27",
+                        "description": "Confirm proposed charge is appropriately authorised (Police or CPS)"
+                      },
+                      {
+                        "code": "IA28",
+                        "description": "Ensure compliance with investigator's obligations re disclosure"
+                      },
+                      {
+                        "code": "IA29",
+                        "description": "Consider if case suitable for referral to Financial Investigation Unit and CPS for asset recovery eg confiscation order"
+                      },
+                      {
+                        "code": "IA2",
+                        "description": "DNA Samples: If crime scene stain present - take evidential sample If no crime scene stain & DNA not confirmed on PNC - take Criminal Justice sample. If DNA confirmed on PNC - CJ sample not required"
+                      },
+                      {
+                        "code": "IA1",
+                        "description": "Fingerprint & photograph"
+                      },
+                      {
+                        "code": "IA4",
+                        "description": "PNC recordable"
+                      },
+                      {
+                        "code": "IA3",
+                        "description": "Tape record interview unless exempt"
+                      }
+                    ]
+                  },
+                  "standardoffencewording": "On **(..SPECIFY DATE..) at **(..SPECIFY TOWNSHIP..), **(..SPECIFY DETAILS OF THE OFFENCE..)",
+                  "policeandcpschargingresponsibilities": "D27968"
+                },
+                "pnldref": "H13001",
+                "ancillary": {
+                  "groups": {
+                    "code": "GV07",
+                    "description": "Animal Byproducts"
+                  },
+                  "lastupdate": "300911 For the information of Gloucestershire Police ONLY - \"Offence Wording Group\" field completed",
+                  "datecreated": "2010-07-29",
+                  "offenceenddate": "2011-05-24",
+                  "legislationcode": {
+                    "link": "S1212"
+                  },
+                  "dateoflastupdate": "2011-09-30",
+                  "offencestartdate": "2006-06-29",
+                  "auditofamendments": "301110 New Offence Code and outline Standard Offence Wording document<br />060711 CJS Code and Outline Offence Wording document is now OBSOLETE. Revoked by S.I. 2011 / 1197 as from 25/05/11.",
+                  "offencewordinggroup": "V07"
+                },
+                "indictment": {
+                  "indictmentindicator": {
+                    "code": "N",
+                    "description": "NO"
+                  },
+                  "structuredindictmentindicator": {
+                    "code": "N",
+                    "description": "NO"
+                  }
+                }
+              }
+            }
+          }
+
+        }
+      ],
+      "postingDate": "2018-09-10"
+    }
+      ]
+  }
+}

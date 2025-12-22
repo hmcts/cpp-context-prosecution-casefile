@@ -1,0 +1,22 @@
+{
+  "cases": [
+    {
+      "defendants": [],
+      "id": "f54ebd89-a394-40d0-86d1-b044c6bdb522",
+      "urn": "CASEURN1234",
+      "region": "NW",
+      "caseType": "Q",
+      "errorDescription": "Single Error",
+      "version": 1038,
+      "errors": [
+        {
+          "fieldName": "urn",
+          "errorValue": "CASEURN1234",
+          "displayName": "DUPLICATED_PROSECUTION",
+          "version": 1038
+        }
+      ],
+      "caseMarkersErrors": []
+    }
+  ]
+}

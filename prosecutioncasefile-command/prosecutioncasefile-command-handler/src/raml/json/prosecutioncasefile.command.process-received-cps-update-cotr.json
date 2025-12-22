@@ -1,0 +1,27 @@
+{
+  "submissionId": "7e2f843e-d639-40b3-8611-8015f3a18958",
+  "prosecutionCaseSubject": {
+    "urn": "caseURN",
+    "prosecutingAuthority": "The OU Code of the prosecuting authority"
+  },
+  "defendantOffencesSubjects": [
+    {
+      "defendant": {
+        "prosecutorDefendantId": "defendant Id"
+      },
+      "offence": [
+        {
+          "cjsOffenceCode": "offenceCode",
+          "offenceDate" : "2021-09-27",
+          "offenceWording": "offenceWording"
+        }
+      ]
+    }
+  ],
+  "furtherProsecutionInformationProvidedAfterCertification": "Further Prosecution Information Provided After Certification",
+  "trialDate": "1980-01-24",
+  "certifyThatTheProsecutionIsTrialReady": "Y",
+  "formCompletedOnBehalfOfProsecutionBy": "Form Completed On Behalf Of Prosecution By",
+  "date": "2022-03-03",
+  "submissionStatus":"SUCCESS"
+}

@@ -1,0 +1,14 @@
+{
+  "prosecutingAuthority": "B01NM00",
+  "prosecutorDefendantId": "%s",
+  "material": {
+    "fileStoreId": "%s",
+    "documentType": "%s",
+    "fileType": "%s"
+  },
+  "cmsDocumentIdentifier": {
+    "materialType": 1,
+    "documentId": "ABCDEF"
+  },
+  "receivedDateTime": "2020-02-04T05:27:17.210Z"
+}

@@ -1,0 +1,72 @@
+{
+  "cases": [
+    {
+      "defendants": [
+        {
+          "chargeDate": "2004-12-09",
+          "hearingDate": "2050-02-04",
+          "id": "6de85539-236c-46e2-b48b-c92a31cf7f7f",
+          "bailStatus": "B",
+          "errors": [
+            {
+              "fieldName": "initialHearing_courtHearingLocation",
+              "errorValue": "abcd",
+              "displayName": "COURT_HEARING_LOCATION_OUCODE_INVALID",
+              "version": 1155
+            }
+          ],
+          "offences": [],
+          "firstName": "john",
+          "lastName": "RAMBO"
+        }
+      ],
+      "id": "17722bce-4438-42b5-91a9-b2968daa2c37",
+      "urn" : "urn",
+      "dateOfBirth": "1974-05-03",
+      "courtLocation": "abcd",
+      "region": "NW",
+      "caseType": "C",
+      "errorDescription": "Single Error",
+      "version": 1155,
+      "errors": [],
+      "caseMarkersErrors": [],
+      "errorCaseDetails": {
+        "defendants": [
+          {
+            "id": "50a3555d-40ae-47de-b02a-5594517e220e",
+            "firstName": "john",
+            "lastName": "RAMBO",
+            "offences": [
+              {
+                "id": "a1519603-0dd3-4753-8698-5380c37d4598",
+                "description": "On 09/12/2004 at East Yorkshire had in your possession a firearm with intent by means thereof to cause anonymous person to believe that unlawful violence would be used against him or another."
+              }
+            ]
+          },
+          {
+            "id": "d1e1e558-4e1e-4f03-9154-6214d43c8f57",
+            "firstName": "John",
+            "lastName": "Smith",
+            "offences": [
+              {
+                "id": "a1519603-0dd3-4753-8698-5380c37d4598",
+                "description": "TV Licence not paid"
+              }
+            ]
+          },
+          {
+            "id": "91fec2a3-4b0b-4469-a7a9-5094e1f74a8a",
+            "firstName": "Johny",
+            "lastName": "Smithy",
+            "offences": [
+              {
+                "id": "f6835520-da77-4142-a3f2-1766bb5839e8",
+                "description": "TV Licence not paid"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

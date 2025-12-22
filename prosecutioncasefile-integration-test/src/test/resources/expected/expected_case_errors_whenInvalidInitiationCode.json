@@ -1,0 +1,23 @@
+{
+  "cases": [
+    {
+      "defendants": [],
+      "id": "CASE-ID",
+      "urn": "CASE-URN",
+      "version": 2651,
+      "region": "NW",
+      "caseType": "XX",
+      "errorDescription": "Single Error",
+      "errors": [
+        {
+          "fieldName": "initiationCode",
+          "errorValue": "XX",
+          "displayName": "CASE_INITIATION_CODE_INVALID",
+          "version": 2651
+        }
+      ],
+      "caseMarkersErrors": [],
+      "hearingDate": "2050-02-04"
+    }
+  ]
+}

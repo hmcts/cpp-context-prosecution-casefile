@@ -1,0 +1,54 @@
+{
+  "prosecution": {
+    "caseDetails": {},
+    "channel": "SPI",
+    "defendants": [
+      {
+        "documentationLanguage": "W",
+        "hearingLanguage": "W",
+        "id": "7f83640a-7bea-4670-af5e-19c1f945b27b",
+        "organisationName": "SUSAN",
+        "address": {
+          "address1": "armagaddon house",
+          "postcode": "M60 1NW"
+        },
+        "offences": [
+          {
+            "appliedCompensation": 200,
+            "backDuty": 340.3,
+            "backDutyDateFrom": "2018-04-30",
+            "backDutyDateTo": "2018-05-30",
+            "chargeDate": "2015-04-04",
+            "offenceCode": "OFCODE12",
+            "offenceCommittedDate": "2018-09-10",
+            "offenceDateCode": 1,
+            "offenceId": "7f83640a-7bea-4670-af5e-19c1f945b27b",
+            "offenceLocation": "No location provided",
+            "offenceSequenceNumber": 1,
+            "offenceWording": "Duty not paid",
+            "referenceData": {
+              "locationRequired": "Y"
+            },
+            "vehicleMake": "Ford",
+            "vehicleRegistrationMark": "AB11 ABC"
+          }
+        ],
+        "postingDate": "2018-09-10"
+      }
+    ]
+  },
+  "referenceDataVO": {
+    "countryNationalityReferenceData": [],
+    "selfdefinedEthnicityReferenceData": [],
+    "organisationUnitReferenceData": [],
+    "initiationTypes": [],
+    "offenceReferenceData": [],
+    "caseMarkers": [],
+    "observedEthnicityReferenceData": [],
+    "vehicleCodesReferenceData": [],
+    "offenderCodeReferenceData": [],
+    "bailStatusReferenceData": [],
+    "modeOfTrialReasonsReferenceData": []
+  },
+  "externalId": "51cac7fb-387c-4d19-9c80-8963fa8cf333"
+}

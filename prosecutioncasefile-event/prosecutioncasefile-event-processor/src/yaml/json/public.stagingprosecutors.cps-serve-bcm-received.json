@@ -1,0 +1,31 @@
+{
+  "prosecutionCaseSubject": {
+    "prosecutingAuthority": "The OU Code of the prosecuting authority",
+    "urn": "45MD0000220"
+  },
+  "cpsDefendantOffences": [
+    {
+      "matchingId": "4b64afd7-686f-4ac8-96f6-ca948d83af3f",
+      "cpsDefendantId": "d123ed32-ce29-11ec-9d64-0242ac120002",
+      "prosecutorDefendantId": "defendant Id",
+      "asn": "1900NP0004361000203N",
+      "title" : "Mr",
+      "forename" : "John",
+      "surname": "Smith",
+      "dateOfBirth": "1998-09-10",
+      "cpsOffenceDetails": [
+        {
+          "cjsOffenceCode": "CA03013",
+          "offenceDate": "2022-05-11",
+          "offenceWording": "offenceWording"
+        }
+      ]
+    }
+  ],
+  "tag": "tag",
+  "evidencePrePTPH": "evidencePrePTPH text",
+  "evidencePostPTPH": "evidencePostPTPH text",
+  "otherInformation": "otherInformation text",
+  "submissionId": "e85d2c62-af1f-4674-863a-0891e67e325b",
+  "submissionStatus": "PENDING"
+}

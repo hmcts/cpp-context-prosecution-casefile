@@ -1,0 +1,16 @@
+{
+  "caseId": "abc78e29-f6a5-44ee-a9e9-feaa049e949f",
+  "errors": [
+    {
+      "code": "DEFENDANT_DOB_IN_FUTURE",
+      "values": [
+        {
+          "key": "dateOfBirth",
+          "value": "2000-01-01"
+        }
+      ]
+    }
+  ],
+  "externalId": "f0576c3a-ab06-45b7-8059-cc29282d33cf",
+  "channel": "CPPI"
+}

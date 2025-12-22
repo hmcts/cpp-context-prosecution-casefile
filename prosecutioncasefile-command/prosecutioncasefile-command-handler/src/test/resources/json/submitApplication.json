@@ -1,0 +1,521 @@
+{
+  "courtApplication": {
+    "id": "%APPLICATION_ID%",
+    "applicationDecisionSoughtByDate": "2022-04-04",
+    "courtApplicationCases": [
+      {
+        "caseURN": "24GD4015522",
+        "prosecutorOuCode": "0300000"
+      }
+    ],
+    "courtApplicationType": {
+      "code": "CJ03521",
+      "categoryCode": "CO",
+      "jurisdiction": "MAGISTRATES"
+    },
+    "applicationParticulars": "Application within Criminal Proceedings",
+    "courtApplicationPayment": {
+      "isFeePaid": true,
+      "isFeeExempt": true,
+      "isFeeUndertakingAttached": false,
+      "paymentReference": "Some reference provided"
+    },
+    "applicant": {
+      "organisation": {
+        "name": "Police",
+        "incorporationNumber": "Police",
+        "registeredCharityNumber": "Police",
+        "address": {
+          "address1": "oYf9BVgFGy",
+          "address2": "StreetDescription",
+          "address3": "Locality2O",
+          "address4": "Locality22",
+          "address5": "Locality24",
+          "postcode": "CR0 5QT"
+        },
+        "contact": {
+          "home": "02012345678",
+          "work": "02012345679",
+          "mobile": "07777777777",
+          "fax": "02011111111",
+          "primaryEmail": "Police@email.com",
+          "secondaryEmail": "Police@email.com"
+        }
+      },
+      "organisationPersons": [
+        {
+          "role": "role",
+          "person": {
+            "title": "Mr",
+            "firstName": "Robert",
+            "lastName": "Ormsby",
+            "dateOfBirth": "1944-03-04",
+            "gender": "MALE",
+            "documentationLanguageNeeds": "ENGLISH",
+            "interpreterLanguageNeeds": "ENGLISH",
+            "nationalInsuranceNumber": "NH222222B",
+            "specificRequirements": "wheelchair access",
+            "address": {
+              "address1": "oYf9BVgFGy",
+              "address2": "StreetDescription",
+              "address3": "Locality2O",
+              "address4": "Locality22",
+              "address5": "Locality24",
+              "postcode": "CR0 5QT"
+            },
+            "contact": {
+              "home": "02012345678",
+              "work": "02012345679",
+              "mobile": "07777777777",
+              "fax": "02011111111",
+              "primaryEmail": "Police@email.com",
+              "secondaryEmail": "Police@email.com"
+            }
+          }
+        }
+      ],
+      "isSubject": false
+    },
+    "respondents": [
+      {
+        "asn": "DTFL",
+        "cpsDefendantId": "c2330088-539b-4a5c-9509-fee812b43632",
+        "personDetails": {
+          "title": "Mr",
+          "firstName": "Robert",
+          "lastName": "Ormsby",
+          "dateOfBirth": "1944-03-04",
+          "gender": "MALE",
+          "documentationLanguageNeeds": "ENGLISH",
+          "interpreterLanguageNeeds": "ENGLISH",
+          "nationalInsuranceNumber": "NH222222B",
+          "specificRequirements": "wheelchair access",
+          "address": {
+            "address1": "oYf9BVgFGy",
+            "address2": "StreetDescription",
+            "address3": "Locality2O",
+            "address4": "Locality22",
+            "address5": "Locality24",
+            "postcode": "CR0 5QT"
+          },
+          "contact": {
+            "home": "02012345678",
+            "work": "02012345679",
+            "mobile": "07777777777",
+            "fax": "02011111111",
+            "primaryEmail": "Police@email.com",
+            "secondaryEmail": "Police@email.com"
+          }
+        },
+        "organisation": {
+          "name": "Police",
+          "incorporationNumber": "Police",
+          "registeredCharityNumber": "Police",
+          "address": {
+            "address1": "oYf9BVgFGy",
+            "address2": "StreetDescription",
+            "address3": "Locality2O",
+            "address4": "Locality22",
+            "address5": "Locality24",
+            "postcode": "CR0 5QT"
+          },
+          "contact": {
+            "home": "02012345678",
+            "work": "02012345679",
+            "mobile": "07777777777",
+            "fax": "02011111111",
+            "primaryEmail": "Police@email.com",
+            "secondaryEmail": "Police@email.com"
+          }
+        },
+        "organisationPersons": [
+          {
+            "role": "role",
+            "person": {
+              "title": "Mr",
+              "firstName": "Robert",
+              "lastName": "Ormsby",
+              "dateOfBirth": "1944-03-04",
+              "gender": "MALE",
+              "documentationLanguageNeeds": "ENGLISH",
+              "interpreterLanguageNeeds": "ENGLISH",
+              "nationalInsuranceNumber": "NH222222B",
+              "specificRequirements": "wheelchair access",
+              "address": {
+                "address1": "oYf9BVgFGy",
+                "address2": "StreetDescription",
+                "address3": "Locality2O",
+                "address4": "Locality22",
+                "address5": "Locality24",
+                "postcode": "CR0 5QT"
+              },
+              "contact": {
+                "home": "02012345678",
+                "work": "02012345679",
+                "mobile": "07777777777",
+                "fax": "02011111111",
+                "primaryEmail": "Police@email.com",
+                "secondaryEmail": "Police@email.com"
+              }
+            }
+          }
+        ],
+        "representedOrganisation": {
+          "address": {
+            "address1": "Flat 4, Armageddon House",
+            "address2": "13 Old Road",
+            "address3": "Giggleswick",
+            "address4": "Merton",
+            "address5": "London",
+            "postcode": "TA23 1AB"
+          },
+          "contact": {
+            "home": "02012345678",
+            "work": "02012345679",
+            "mobile": "07777777777",
+            "fax": "02011111111",
+            "primaryEmail": "Police@email.com",
+            "secondaryEmail": "Police@email.com"
+          },
+          "name": "Police",
+          "incorporationNumber": "Police",
+          "registeredCharityNumber": "Police"
+        },
+        "isSubject": false
+      }
+    ],
+    "thirdParties": [
+      {
+        "summonsRequired": false,
+        "notificationRequired": true,
+        "appointmentNotificationRequired": true,
+        "personDetails": {
+          "title": "Mr",
+          "firstName": "Robert",
+          "lastName": "Ormsby",
+          "dateOfBirth": "1944-03-04",
+          "gender": "MALE",
+          "documentationLanguageNeeds": "ENGLISH",
+          "interpreterLanguageNeeds": "ENGLISH",
+          "nationalInsuranceNumber": "NH222222B",
+          "specificRequirements": "wheelchair access",
+          "address": {
+            "address1": "oYf9BVgFGy",
+            "address2": "StreetDescription",
+            "address3": "Locality2O",
+            "address4": "Locality22",
+            "address5": "Locality24",
+            "postcode": "CR0 5QT"
+          },
+          "contact": {
+            "home": "02012345678",
+            "work": "02012345679",
+            "mobile": "07777777777",
+            "fax": "02011111111",
+            "primaryEmail": "Police@email.com",
+            "secondaryEmail": "Police@email.com"
+          }
+        },
+        "organisation": {
+          "name": "Police",
+          "incorporationNumber": "Police",
+          "registeredCharityNumber": "Police",
+          "address": {
+            "address1": "oYf9BVgFGy",
+            "address2": "StreetDescription",
+            "address3": "Locality2O",
+            "address4": "Locality22",
+            "address5": "Locality24",
+            "postcode": "CR0 5QT"
+          },
+          "contact": {
+            "home": "02012345678",
+            "work": "02012345679",
+            "mobile": "07777777777",
+            "fax": "02011111111",
+            "primaryEmail": "Police@email.com",
+            "secondaryEmail": "Police@email.com"
+          }
+        },
+        "organisationPersons": [
+          {
+            "role": "role",
+            "person": {
+              "title": "Mr",
+              "firstName": "Robert",
+              "lastName": "Ormsby",
+              "dateOfBirth": "1944-03-04",
+              "gender": "MALE",
+              "documentationLanguageNeeds": "ENGLISH",
+              "interpreterLanguageNeeds": "ENGLISH",
+              "nationalInsuranceNumber": "NH222222B",
+              "specificRequirements": "wheelchair access",
+              "address": {
+                "address1": "oYf9BVgFGy",
+                "address2": "StreetDescription",
+                "address3": "Locality2O",
+                "address4": "Locality22",
+                "address5": "Locality24",
+                "postcode": "CR0 5QT"
+              },
+              "contact": {
+                "home": "02012345678",
+                "work": "02012345679",
+                "mobile": "07777777777",
+                "fax": "02011111111",
+                "primaryEmail": "Police@email.com",
+                "secondaryEmail": "Police@email.com"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "outOfTimeReason": "Required if the application is out of time"
+  },
+  "boxHearingRequest": {
+    "jurisdictionType": "MAGISTRATES",
+    "applicationDueDate": "2022-04-04",
+    "sendAppointmentLetter": true,
+    "courtCentre": {
+      "name": "Lavender Hill Magistrates' Court",
+      "code": "B01LY00"
+    }
+  },
+  "prosecutionCases": [
+    {
+      "cpsOrganisation": "A30AB00",
+      "defendants": [
+        {
+          "courtProceedingsInitiated": "2022-03-09T09:27:28.857Z",
+          "id": "9163865e-8bd1-47e6-b31c-e55a67f42047",
+          "masterDefendantId": "9163865e-8bd1-47e6-b31c-e55a67f42047",
+          "offences": [
+            {
+              "arrestDate": "2004-12-09",
+              "chargeDate": "2004-12-09",
+              "count": 0,
+              "endorsableFlag": false,
+              "id": "53a78d00-e694-4764-b984-f2faef161f57",
+              "listingNumber": 2,
+              "modeOfTrial": "Summary",
+              "offenceCode": "TW01040",
+              "offenceDateCode": 1,
+              "offenceDefinitionId": "14f241f3-5888-43e0-8f7e-535a84da164b",
+              "offenceLegislation": "Contrary to byelaw 16(6) and 31(1) of the Tyne and Wear Metro Byelaws made under sections 58 and 62 of the Tyneside Metropolitan Railway Act 1973.",
+              "offenceTitle": "Fail to carry an animal on a moving escalator on the Tyne and Wear Metro",
+              "orderIndex": 500,
+              "startDate": "2004-12-09",
+              "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+            },
+            {
+              "arrestDate": "2004-12-09",
+              "chargeDate": "2014-02-09",
+              "count": 0,
+              "endorsableFlag": false,
+              "id": "9f2cc5e8-966b-4c33-944f-8a3f1ac08974",
+              "listingNumber": 2,
+              "modeOfTrial": "Summary",
+              "offenceCode": "TW01046",
+              "offenceDateCode": 1,
+              "offenceDefinitionId": "62fa56a4-3cea-41b7-a062-4d71e8ca74bc",
+              "offenceLegislation": "Contrary to byelaw 19 and 31(1) of the Tyne and Wear Metro Byelaws made under sections 58 and 62 of the Tyneside Metropolitan Railway Act 1973.",
+              "offenceTitle": "Occupy reserved seat / berth without a valid ticket on the Tyne and Wear Metro",
+              "orderIndex": 502,
+              "startDate": "2014-02-09",
+              "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+            }
+          ],
+          "personDefendant": {
+            "arrestSummonsNumber": "DTFL",
+            "bailStatus": {
+              "code": "C",
+              "description": "Custody or remanded into custody",
+              "id": "12e69486-4d01-3403-a50a-7419ca040635"
+            },
+            "personDetails": {
+              "address": {
+                "address1": "7WPchIY9VX",
+                "address2": "56Police House",
+                "address3": "StreetDescription",
+                "address4": "Locality2O",
+                "address5": "TownD",
+                "postcode": "TW14 9XD"
+              },
+              "contact": {
+                "home": "09998021888",
+                "mobile": "09998021889",
+                "primaryEmail": "robert@gmail.com",
+                "secondaryEmail": "ormsby@gmail.com",
+                "work": "0917894278022"
+              },
+              "dateOfBirth": "1997-01-14",
+              "documentationLanguageNeeds": "ENGLISH",
+              "firstName": "David",
+              "gender": "MALE",
+              "hearingLanguageNeeds": "ENGLISH",
+              "lastName": "JONES"
+            },
+            "policeBailStatus": {
+              "code": "C",
+              "description": "Custody or remanded into custody",
+              "id": "12e69486-4d01-3403-a50a-7419ca040635"
+            }
+          },
+          "prosecutionAuthorityReference": "DTFL",
+          "prosecutionCaseId": "55109f7f-fde2-4e5b-b79a-939635616186"
+        },
+        {
+          "aliases": [
+            {
+              "legalEntityName": "Alias0"
+            }
+          ],
+          "courtProceedingsInitiated": "2022-03-09T09:27:28.872Z",
+          "croNumber": "xz7aknGcZDAt",
+          "id": "5662e42f-23d7-41d1-a830-4b06da350103",
+          "legalEntityDefendant": {
+            "organisation": {
+              "address": {
+                "address1": "7WPchIY9VX",
+                "address2": "Southern House",
+                "address3": "Westmister  Street",
+                "address4": "Croydon",
+                "address5": "London",
+                "postcode": "W1 9XD"
+              },
+              "contact": {
+                "primaryEmail": "corp1@test.com",
+                "secondaryEmail": "corp2@test.com",
+                "work": "02012345675"
+              },
+              "name": "ABC Corp"
+            }
+          },
+          "masterDefendantId": "5662e42f-23d7-41d1-a830-4b06da350103",
+          "offences": [
+            {
+              "arrestDate": "2015-11-19",
+              "chargeDate": "2006-05-30",
+              "count": 0,
+              "endorsableFlag": false,
+              "id": "6d01d646-1e85-4f42-acb1-36850c4323e1",
+              "listingNumber": 1,
+              "modeOfTrial": "Summary",
+              "offenceCode": "TW01040",
+              "offenceDateCode": 1,
+              "offenceDefinitionId": "14f241f3-5888-43e0-8f7e-535a84da164b",
+              "offenceLegislation": "Contrary to byelaw 16(6) and 31(1) of the Tyne and Wear Metro Byelaws made under sections 58 and 62 of the Tyneside Metropolitan Railway Act 1973.",
+              "offenceTitle": "Fail to carry an animal on a moving escalator on the Tyne and Wear Metro",
+              "orderIndex": 551,
+              "startDate": "2004-12-09",
+              "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+            },
+            {
+              "arrestDate": "2004-12-09",
+              "chargeDate": "2014-02-09",
+              "count": 0,
+              "endorsableFlag": false,
+              "id": "895685a0-e5c8-48f1-b629-cfe1d65ca711",
+              "listingNumber": 1,
+              "modeOfTrial": "Summary",
+              "offenceCode": "TW01046",
+              "offenceDateCode": 1,
+              "offenceDefinitionId": "62fa56a4-3cea-41b7-a062-4d71e8ca74bc",
+              "offenceLegislation": "Contrary to byelaw 19 and 31(1) of the Tyne and Wear Metro Byelaws made under sections 58 and 62 of the Tyneside Metropolitan Railway Act 1973.",
+              "offenceTitle": "Occupy reserved seat / berth without a valid ticket on the Tyne and Wear Metro",
+              "orderIndex": 502,
+              "startDate": "2014-02-09",
+              "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+            }
+          ],
+          "pncId": "2536.4208255",
+          "prosecutionAuthorityReference": "CORPTFL",
+          "prosecutionCaseId": "55109f7f-fde2-4e5b-b79a-939635616186"
+        }
+      ],
+      "id": "55109f7f-fde2-4e5b-b79a-939635616186",
+      "initiationCode": "C",
+      "originatingOrganisation": "0300000",
+      "prosecutionCaseIdentifier": {
+        "address": {
+          "address1": "Criminal Justice Department",
+          "address2": "Derbyshire Constabulary",
+          "address3": "Butterley Hall",
+          "address4": "Ripley",
+          "address5": "Derby",
+          "postcode": "DE5 3RS"
+        },
+        "contact": {
+          "primaryEmail": "CCSU@derbyshire.pnn.police.uk"
+        },
+        "majorCreditorCode": "PF30",
+        "prosecutionAuthorityCode": "DERPF",
+        "prosecutionAuthorityId": "bdc190e7-c939-37ca-be4b-9f615d6ef40e",
+        "prosecutionAuthorityName": "Derbyshire Police",
+        "prosecutionAuthorityOUCode": "0300000",
+        "caseURN": "24GD4015522"
+      },
+      "caseStatus": "ACTIVE"
+    }
+  ],
+  "applicationTypes": [
+    {
+      "id": "62fab61d-e166-4e44-9a4e-046866511993",
+      "code": "CJ03564",
+      "type": "Application to amend a community order on change of residence",
+      "legislation": "In accordance with paragraph 16 of Schedule 8 to the Criminal Justice Act 2003.",
+      "categoryCode": "CO",
+      "jurisdiction": "EITHER",
+      "linkType": "LINKED",
+      "appealFlag": true,
+      "summonsTemplateType": "BREACH",
+      "hearingCode": "APL",
+      "validFrom": "2019-04-01",
+      "validTo": "2099-12-01",
+      "applicantAppellantFlag": true,
+      "pleaApplicableFlag": true,
+      "offenceActiveOrder": "OFFENCE",
+      "commrOfOathFlag": true,
+      "breachType": "GENERIC_BREACH",
+      "courtOfAppealFlag": true,
+      "courtExtractAvlFlag": true,
+      "listingNotifTemplate": "Template1,Template2",
+      "boxworkNotifTemplate": "Template1,Template2",
+      "typeWelsh": "Sample Text",
+      "legislationWelsh": "Sample Text",
+      "prosecutorThirdPartyFlag": true,
+      "spiOutApplicableFlag": true,
+      "resentencingActivationCode": "CJO3523",
+      "prefix": "Resentenced"
+    }
+  ],
+  "courtroomReferenceData": {
+    "defaultDuration": "6",
+    "address1": "The Court House",
+    "address2": "Cramic Way",
+    "address3": "Port Talbot",
+    "address4": "West Glam.",
+    "address5": "address line 5",
+    "courtRoom": {
+      "courtroomId": 2330,
+      "courtroomName": "Lavender Hill Magistrates' Court",
+      "id": "9e4932f7-97b2-3010-b942-ddd2624e4dd8"
+    },
+    "defaultStartTime": "10:30",
+    "id": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+    "oucode": "B01LY00",
+    "oucodeL1Code": "C",
+    "oucodeL1Name": "Magistrates' Courts",
+    "oucodeL3Name": "Port Talbot",
+    "oucodeL3WelshName": "Welsh Name",
+    "postcode": "SA13 1RU",
+    "welshAddress1": "Llys Ynadon",
+    "welshAddress2": "Adeilad y Llys",
+    "welshAddress3": "Adeilad y Llys",
+    "welshAddress4": "Gorllewin Meorgannwgc",
+    "welshAddress5": "Caerdydd"
+  },
+  "pocaFileId" : "c11eebd6-7cb3-4b9d-b13e-e553bc713b6f",
+  "senderEmail": "test@test.com"
+}

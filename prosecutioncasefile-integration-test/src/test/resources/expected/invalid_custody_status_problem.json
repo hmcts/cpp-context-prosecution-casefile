@@ -1,0 +1,11 @@
+[
+  {
+    "code": "DEFENDANT_CUSTODY_STATUS_INVALID",
+    "values": [
+      {
+        "key": "custodyStatus",
+        "value": "A"
+      }
+    ]
+  }
+]

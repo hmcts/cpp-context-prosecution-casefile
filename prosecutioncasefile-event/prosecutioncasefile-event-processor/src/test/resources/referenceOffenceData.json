@@ -1,0 +1,201 @@
+{
+  "offenceId": "18affe3a-82be-4a4f-9a13-27f4a23c9a2f",
+  "cjsOffenceCode": "TH68023",
+  "modeOfTrial": "IND",
+  "validFrom": "2020-04-30",
+  "cppDateOfLastUpdate": "2020-04-29",
+  "pnldDateOfLastUpdate": "2019-07-29",
+  "details": {
+    "document": {
+      "type": "H",
+      "codes": {
+        "fptgraduated": 0,
+        "mojstatscode": "034/01",
+        "mopinoteslink": "D19586",
+        "cjsoffencecode": "TH68023",
+        "mopireviewgroup": {
+          "code": "A",
+          "description": "Group 1"
+        },
+        "notifiabletomoj": {
+          "code": "Y",
+          "description": "YES"
+        },
+        "seatbeltoffence": {
+          "code": "N",
+          "description": "No"
+        },
+        "fptgraduatedhigh": 0,
+        "roadsidedeposits": {
+          "code": "N",
+          "description": "No"
+        },
+        "fptissuedbypolice": 0,
+        "pndissuedbyothers": 0,
+        "pndissuedbypolice": 0,
+        "pncacpooffencecode": "5.1.1.1",
+        "disqualificationclass": {
+          "code": "N",
+          "description": "discretionary disqualification not endorsable"
+        },
+        "recordableonpncindicator": {
+          "code": "Y",
+          "description": "YES"
+        },
+        "pndissuedbylocalauthorities": 0
+      },
+      "libra": {
+        "miscode": {
+          "code": "ROB",
+          "description": "Robbery"
+        },
+        "fineindicator": {
+          "code": "N",
+          "description": "NO"
+        },
+        "libracategory": {
+          "code": "CI",
+          "description": "Indictable"
+        },
+        "custodialindicator": {
+          "code": "Y",
+          "description": "YES"
+        },
+        "complexpenaltydetails": "A prior conviction for a 'serious offence' may make him/her liable to a mandatory life sentence under the provisions of section 109 of the Powers of Criminal Courts (Sentencing) Act 2000.",
+        "maxcustodialsentenceunitcrownct": {
+          "code": "Life",
+          "description": "Life"
+        }
+      },
+      "other": {
+        "penalty": "INDICTMENT ONLY - Life imprisonment.<br /><br />See Note (i) above re increase in penalty<br /><br />Time limit for prosecutions:<br />None",
+        "modeoftrial": {
+          "code": "IND",
+          "description": "INDICTABLE"
+        },
+        "powersofarrest": "Arrest without warrant",
+        "geographicregion": {
+          "code": "EW",
+          "description": "England and Wales"
+        },
+        "timelimitforprosecutions": "None"
+      },
+      "welsh": {
+        "welshlegislation": "Yn groes i adran 8(1) Deddf Dwyn 1968.",
+        "welshoffencetitle": "Ysbeilio/Lladrad",
+        "welshstandardoffencewording": "Ar **(..SPECIFY DATE..) yn **(..SPECIFY TOWNSHIP..) bu i chi ysbeilio **(..SPECIFY THE PERSON..) o **(..SPECIFY THE PROPERTY..) <br /><br />(A)_[a oedd werth £ **(..SPECIFY THE VALUE..)]_<br />(B)_[a'i werth yn anhysbys]_"
+      },
+      "english": {
+        "notes": "(i) Officers should carefully check an offender's previous convictions. Provisions under sections 224 to 235 of the Criminal Justice Act 2003 may mean that s/he is liable to receive a longer sentence if certain conditions apply. <br />(ii) See also offence wordings: H433.<br />(iii) The CPS have issued guidance/charging standards for Theft Act crimes.",
+        "title": "Robbery",
+        "legislation": "Contrary to section 8(1) of the Theft Act 1968.",
+        "pointstoprove": "date and location<br />steal property <br />immediately before/at the time and in order to do so used force/put/seek to put<br />a person in fear of then and there being subjected to force",
+        "additionalkeywords": {
+          "additionalkeyword": [
+            "rob",
+            "mug",
+            "mugging",
+            "8",
+            "Theft Act 1968",
+            "theft",
+            "steal",
+            "stole",
+            "stealing",
+            "mogged"
+          ]
+        },
+        "investigatoractions": {
+          "investigatoraction": [
+            {
+              "code": "IA27",
+              "description": "Confirm proposed charge is appropriately authorised (Police or CPS)"
+            },
+            {
+              "code": "IA28",
+              "description": "Ensure compliance with investigator's obligations re disclosure"
+            },
+            {
+              "code": "IA29",
+              "description": "Consider if case suitable for referral to Financial Investigation Unit and CPS for asset recovery eg confiscation order"
+            },
+            {
+              "code": "IA16",
+              "description": "Consider an application for a sexual harm prevention order after conviction"
+            },
+            {
+              "code": "IA2",
+              "description": "DNA Samples: If crime scene stain present - take evidential sample If no crime scene stain & DNA not confirmed on PNC - take Criminal Justice sample. If DNA confirmed on PNC - CJ sample not required"
+            },
+            {
+              "code": "IA22",
+              "description": "Drug testing required after charge"
+            },
+            {
+              "code": "IA1",
+              "description": "Fingerprint & photograph"
+            },
+            {
+              "code": "IA24",
+              "description": "Mandatory drug test required if 18 or over"
+            },
+            {
+              "code": "IA6",
+              "description": "Offences brought to justice scheme"
+            },
+            {
+              "code": "IA4",
+              "description": "PNC recordable"
+            },
+            {
+              "code": "IA5",
+              "description": "Submit a crime report"
+            },
+            {
+              "code": "IA3",
+              "description": "Audio record interview unless exempt"
+            }
+          ]
+        },
+        "standardoffencewording": "On **(..SPECIFY DATE..) at **(..SPECIFY TOWNSHIP..) robbed **(..SPECIFY THE PERSON..) of **(..SPECIFY THE PROPERTY..)<br /><br />(A)_[to the value of **(..SPECIFY THE VALUE..)]_<br />(B)_[of a value unknown]_",
+        "policeandcpschargingresponsibilities": "D27968"
+      },
+      "pnldref": "H432",
+      "ancillary": {
+        "lastupdate": "290719 Notes field amended link",
+        "legislationcode": {
+          "link": "S1"
+        },
+        "dateoflastupdate": "2019-07-29",
+        "offencestartdate": "1969-01-01",
+        "auditofamendments": "010911 Free text fields in offence wording text and internal linking amended<br />300617 Investigator actions updated"
+      },
+      "indictment": {
+        "indictmentindicator": {
+          "code": "N",
+          "description": "NO"
+        },
+        "structuredindictmentindicator": {
+          "code": "N",
+          "description": "NO"
+        }
+      }
+    }
+  },
+  "title": "Robbery",
+  "legislation": "Contrary to section 8(1) of the Theft Act 1968.",
+  "offenceStartDate": "1969-01-01",
+  "locationRequired": "Y",
+  "backDuty": false,
+  "endorsableFlag": false,
+  "mojStatsCode": "034/01",
+  "misCode": "ROB",
+  "misDescription": "Robbery",
+  "pocCode": 0,
+  "reportRestrictedFlag": false,
+  "pssOffenceId": 0,
+  "modeOfTrialDerived": "Indictable",
+  "pnldOffenceWording": "On **(..SPECIFY DATE..) at **(..SPECIFY TOWNSHIP..) robbed **(..SPECIFY THE PERSON..) of **(..SPECIFY THE PROPERTY..)<br /><br />(A)_[to the value of **(..SPECIFY THE VALUE..)]_<br />(B)_[of a value unknown]_",
+  "pnldOffenceWordingWelsh": "Ar **(..SPECIFY DATE..) yn **(..SPECIFY TOWNSHIP..) bu i chi ysbeilio **(..SPECIFY THE PERSON..) o **(..SPECIFY THE PROPERTY..) <br /><br />(A)_[a oedd werth £ **(..SPECIFY THE VALUE..)]_<br />(B)_[a'i werth yn anhysbys]_",
+  "titleWelsh": "Ysbeilio/Lladrad",
+  "legislationWelsh": "Yn groes i adran 8(1) Deddf Dwyn 1968."
+}

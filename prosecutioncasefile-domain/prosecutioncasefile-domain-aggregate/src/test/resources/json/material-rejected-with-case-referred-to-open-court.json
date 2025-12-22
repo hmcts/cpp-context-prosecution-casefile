@@ -1,0 +1,26 @@
+{
+  "_metadata": {
+    "name": "prosecutioncasefile.events.material-rejected"
+  },
+  "caseId": "a4391788-f829-4514-a344-61f1d5d9690c",
+  "material": {
+    "documentType": "SJPN",
+    "fileStoreId": "3042a896-fd3e-478d-bb0e-948dd46191a4",
+    "fileType": "application/pdf"
+  },
+  "errors": [
+    {
+      "code": "DEFENDANT_ID_INVALID",
+      "values": [
+        {
+          "key": "prosecutorDefendantId",
+          "value": "TVL_DEF_001"
+        }
+      ]
+    }
+  ],
+  "prosecutingAuthority": "GAEAA01",
+  "prosecutorDefendantId": "TVL_DEF_001",
+  "isCpsCase":false,
+  "receivedDateTime": "2020-02-04T05:27:17.210Z"
+}

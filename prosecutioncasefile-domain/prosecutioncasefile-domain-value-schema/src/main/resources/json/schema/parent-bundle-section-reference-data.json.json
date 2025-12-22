@@ -1,0 +1,95 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/parent-bundle-section-reference-data.json",
+  "type": "object",
+  "description": "Parent Bundle Section Reference Data",
+  "properties": {
+    "id": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "seqNum": {
+      "type": "integer"
+    },
+    "cpsBundleCode": {
+      "type": "string"
+    },
+    "parentBundleCode": {
+      "type": "string"
+    },
+    "parentBundleDescription": {
+      "type": "string"
+    },
+    "targetSectionCode": {
+      "type": "string"
+    },
+    "unbundleFlag": {
+      "type": "boolean"
+    },
+    "bundleAcceptanceFlag": {
+      "type": "boolean"
+    },
+    "validFrom": {
+      "type": "string",
+      "format": "date"
+    },
+    "validTo": {
+      "type": "string",
+      "format": "date"
+    },
+    "bundleSections": {
+      "$ref": "#/definitions/bundleSection"
+    }
+  },
+  "required": [
+    "id",
+    "seqNum",
+    "cpsBundleCode",
+    "parentBundleCode",
+    "parentBundleDescription",
+    "unbundleFlag",
+    "bundleAcceptanceFlag"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "bundleSection": {
+      "type": "array",
+      "items": {
+        "properties": {
+          "seqNum": {
+            "type": "integer"
+          },
+          "bundleSectionCode": {
+            "type": "string",
+            "maxLength": 10
+          },
+          "bundleSectionName": {
+            "type": "string"
+          },
+          "splitBundleSubSection": {
+            "type": "boolean"
+          },
+          "targetSectionCode": {
+            "type": "string",
+            "maxLength": 10
+          },
+          "validFrom": {
+            "type": "string",
+            "format": "date"
+          },
+          "validTo": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "required": [
+          "seqNum",
+          "bundleSectionCode",
+          "bundleSectionName",
+          "splitBundleSubSection",
+          "targetSectionCode"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}

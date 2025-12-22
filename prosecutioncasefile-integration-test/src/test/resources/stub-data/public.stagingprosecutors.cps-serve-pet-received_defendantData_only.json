@@ -1,0 +1,140 @@
+{
+  "cpsDefendantOffences": [
+    {
+      "matchingId": "4b64afd7-686f-4ac8-96f6-ca948d83af3f",
+      "forename" : "%s",
+      "surname": "%s",
+      "dateOfBirth": "%s",
+      "cpsDefendantId": "CPS_DEFENDANT_ID",
+      "cpsOffenceDetails": [
+        {
+          "cjsOffenceCode": "CA03013",
+          "offenceDate": "2022-05-11",
+          "offenceWording": "offenceWording"
+        }
+      ],
+      "localAuthorityDetailsForYouthDefendants": {
+      "address1": "address1",
+      "authority": "test",
+      "email": "test@test.com",
+      "forename": "forename",
+      "isLookedAfterChild": true,
+      "phone": "1234567890",
+      "postcode": "G5 0TN",
+      "reference": "test",
+      "surname": "surname",
+      "title": "Mr"
+    },
+      "parentGuardianForYouthDefendants": {
+        "address1": "address1",
+        "address2": "address2",
+        "email": "test@test.com",
+        "forename": "parentForename",
+        "phone": "1234567890",
+        "postcode": "G5 0TN",
+        "relationshipToDefendant": "test",
+        "surname": "weterw",
+        "title": "Mr"
+      }
+    }
+  ],
+  "petFormData": {
+    "defence": {
+      "defendants": [
+        {
+          "cpsOffences": [
+            {
+              "offenceCode": "offenceCode",
+              "date": "2022-05-24",
+              "wording": "offenceWording"
+            }
+          ],
+          "associatedPerson": {
+            "authorityDetails": {
+              "address": "address1 G5 0TN",
+              "email": "test@test.com",
+              "name": "forename surname",
+              "phone": "1234567890",
+              "ref": "test",
+              "responsible": "test"
+            },
+            "guardianDetails": {
+              "address": "address1 address2 G5 0TN",
+              "email": "test@test.com",
+              "name": "parentForename surname",
+              "relationship": "test"
+            }
+          }
+        }
+      ]
+    },
+    "prosecution": {
+      "dynamicFormAnswers": {
+        "applicationsForDirectionsGroup": {
+          "prosecutorWitnessAssistance": "Y",
+          "prosecutorWitnessAssistanceYesGroup": {
+            "witnessRequiresDetails": "N"
+          },
+          "groundRulesQuestioning": "Y",
+          "variationStandardDirectionsProsecutor": "Y",
+          "variationStandardDirectionsProsecutorYesGroup": {
+            "variationStandardDirectionsProsecutorYesGroupDetails": "directionDetails"
+          }
+        },
+        "prosecutorGroup": {
+          "displayEquipment": "Y",
+          "displayEquipmentYesGroup": {
+            "displayEquipmentDetails": "EquipmentDetails"
+          },
+          "pendingLinesOfEnquiry": "N",
+          "pendingLinesOfEnquiryYesGroup": {
+            "pendingLinesOfEnquiryYesGroup": "Details"
+          },
+          "pointOfLaw": "Y",
+          "pointOfLawYesGroup": {
+            "pointOfLawDetails": "LawDetails"
+          },
+          "prosecutionCompliance": "N",
+          "prosecutionComplianceNoGroup": {
+            "prosecutionComplianceDetailsNo": "noComplianceDetails"
+          },
+          "prosecutionComplianceYesGroup": {
+          },
+          "prosecutorServeEvidence": "N",
+          "prosecutorServeEvidenceYesGroup": {
+          },
+          "slaveryOrExploitation": "N",
+          "slaveryOrExploitationYesGroup": {
+            "slaveryOrExploitationDetails": "SlaveryDetails"
+          }
+        }
+      },
+      "witnesses": [
+        {
+          "age": 14,
+          "firstName": "forname",
+          "interpreterRequired": "yes",
+          "languageAndDialect": "welsh",
+          "lastName": "abc",
+          "measuresRequired": [
+            "measureDetails"
+          ],
+          "prosecutionProposesWitnessAttendInPerson": "yes",
+          "specialOtherMeasuresRequired": "Y"
+        }
+      ]
+    }
+  },
+  "prosecutionCaseSubject": {
+    "prosecutingAuthority": "The OU Code of the prosecuting authority",
+    "urn": "%s"
+  },
+  "submissionId": "e85d2c62-af1f-4674-863a-0891e67e325b",
+  "submissionStatus": "PENDING",
+  "reviewingLawyer" : {
+    "name" : "cps reviewing lawyer",
+    "phone" : "1234567890",
+    "email" : "cpsreviewinglawyer@email.com"
+  },
+  "isYouth": false
+}

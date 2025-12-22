@@ -1,0 +1,42 @@
+{
+  "cases": [
+    {
+      "defendants": [
+        {
+          "chargeDate": "2015-04-04",
+          "hearingDate": "2050-02-04",
+          "id": "f1fb1b61-be1a-4222-a7a3-a9d3c9128b6e",
+          "bailStatus": "A",
+          "errors": [
+            {
+              "fieldName": "custodyStatus",
+              "errorValue": "A",
+              "displayName": "DEFENDANT_CUSTODY_STATUS_INVALID",
+              "version": 304
+            }
+          ],
+          "offences": [],
+          "firstName": "John",
+          "lastName": "Smith"
+        }
+      ],
+      "id": "f5dd30fb-0ccd-44dd-9c5c-99ebf74f8b84",
+      "urn": "UklGUSXlVj",
+      "courtLocation": "C55BN00",
+      "region": "NW",
+      "caseType": "C",
+      "errorDescription": "Multiple Errors",
+      "version": 305,
+      "errors": [],
+      "caseMarkersErrors": [
+        {
+          "id": "0",
+          "fieldName": "caseMarkers",
+          "errorValue": "ABC",
+          "displayName": "CASE_MARKER_IS_INVALID",
+          "version": 1067
+        }
+      ]
+    }
+  ]
+}

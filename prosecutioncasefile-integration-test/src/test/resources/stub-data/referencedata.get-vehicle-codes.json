@@ -1,0 +1,18 @@
+{
+  "vehicleCodes": [
+    {
+      "id": "4aaecac5-222b-402d-9047-84803679edac",
+      "seqNum": 1,
+      "code": "L",
+      "description": "Large Goods Vehicle",
+      "validFrom": "2019-03-01"
+    },
+    {
+      "id": "4aaecac5-222b-402d-9047-84803679edbc",
+      "seqNum": 2,
+      "code": "O",
+      "description": "Other",
+      "validFrom": "2019-03-01"
+    }
+  ]
+}

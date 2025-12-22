@@ -1,0 +1,152 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/offence.json",
+  "type": "object",
+  "description": "Offences Details",
+  "properties": {
+    "offenceId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "offenceCode": {
+      "type": "string",
+      "description": "Identifies the CJS code applicable to criminal offences as per the CJS Standard section 3.11",
+      "maxLength": 8
+    },
+    "offenceSequenceNumber": {
+      "type": "integer",
+      "description": "Sequence number of the offence",
+      "maxLength": 3
+    },
+    "arrestDate": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date",
+      "description": ""
+    },
+    "chargeDate": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date",
+      "description": ""
+    },
+    "laidDate": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date",
+      "description": ""
+    },
+    "offenceDateCode": {
+      "description": "The code for the offence date to be used within the offence wording, 1 = on or in, 2 = before, 3 = after, 4 = between, 5 = on or about and 6 = on or before",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 6
+    },
+    "offenceCommittedDate": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date",
+      "description": "Date on which the offence is committed"
+    },
+    "offenceCommittedEndDate": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date",
+      "description": "End date for period in which offence committed"
+    },
+    "offenceLocation": {
+      "type": "string",
+      "description": "Offence location",
+      "maxLength": 80
+    },
+    "offenceWording": {
+      "type": "string",
+      "description": "Details of Information or Charge to be laid before the court",
+      "maxLength": 2500
+    },
+    "offenceWordingWelsh": {
+      "type": "string",
+      "description": "Details of Information or Charge to be laid before the court in Welsh",
+      "maxLength": 2500
+    },
+    "offenceTitle": {
+      "type": "string",
+      "description": "Offence Title"
+    },
+    "offenceTitleWelsh": {
+      "type": "string",
+      "description": "Offence Title in Welsh"
+    },
+    "statementOfFacts": {
+      "type": "string",
+      "description": "Statement of facts",
+      "maxLength": 4000
+    },
+    "statementOfFactsWelsh": {
+      "type": "string",
+      "description": "Statement of facts in Welsh",
+      "maxLength": 4000
+    },
+    "appliedCompensation": {
+      "type": "number",
+      "description": "Compensation claimed by the prosecutor"
+    },
+    "backDuty": {
+      "type": "number",
+      "description": "Back duty"
+    },
+    "backDutyDateFrom": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date",
+      "description": "Start date of the period of unpaid back duty"
+    },
+    "backDutyDateTo": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date",
+      "description": "End date of the period of unpaid back duty"
+    },
+    "otherPartyVictim": {
+      "type": "array",
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/policeVictim.json"
+      }
+    },
+    "vehicleRelatedOffence": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/vehicle-related-offence.json"
+    },
+    "alcoholRelatedOffence": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/alcohol-related-offence.json"
+    },
+    "vehicleMake": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/vehicleMake",
+      "description": "Ford, Toyota etc."
+    },
+    "vehicleRegistrationMark": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/vehicleRegistrationMark",
+      "description": "vehicle registration mark like AB11 ABC"
+    },
+    "referenceData": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/offence-reference-data.json"
+    },
+    "plea": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/plea.json"
+    },
+    "verdict": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/verdict.json"
+    },
+    "motReasonId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "maxPenalty": {
+      "description": "Max penalty of offence",
+      "type": "string"
+    },
+    "prosecutorOfferAOCP": {
+      "type": "boolean"
+    },
+    "convictingCourtCode": {
+      "type": "string",
+      "description": "This is the organisation unit oucode. E.g B01BH00"
+    },
+    "civilOffence": {
+      "description": "The Offence data object related to civil cases",
+      "$ref": "http://justice.gov.uk/core/courts/civilOffence.json"
+    }
+  },
+  "required": [
+    "offenceCode",
+    "offenceSequenceNumber",
+    "offenceWording"
+  ],
+  "anyOf": [
+    {"required": ["laidDate"]},
+    {"required": ["offenceCommittedDate"]}
+  ]
+}

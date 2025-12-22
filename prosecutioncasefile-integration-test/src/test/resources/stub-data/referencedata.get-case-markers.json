@@ -1,0 +1,40 @@
+{
+  "caseMarkers": [
+    {
+      "id": "2013c181-7458-4fb2-a637-b596fbe0e781",
+      "sequence": 26,
+      "name": "child-abuse",
+      "code": "CODE_STUB",
+      "label": "Child Abuse",
+      "usage": "C",
+      "owner": "Not_yet_used",
+      "visibility": "Not_yet_used",
+      "exchangeDirection": "CPS_TO_POLICE_ONLY",
+      "startDate": "2015-01-24",
+      "validFrom": "2015-01-24",
+      "validTo": "2015-01-24"
+    },
+    {
+      "id": "80e89021-9a8b-4ee3-b897-456a90480e5f",
+      "sequence": 25,
+      "name": "prohibited-weapons",
+      "label": "Prohibited Weapons",
+      "code": "WP",
+      "usage": "V",
+      "exchangeDirection": "BI_DIRECTIONAL",
+      "startDate": "2015-01-24",
+      "retirementDate": "2015-01-24"
+    },
+    {
+      "id": "80e89021-9a8b-4ee3-b897-456a90480eab",
+      "sequence": 24,
+      "name": "prohibited-weapons",
+      "label": "Prohibited Weapons",
+      "code": "AB",
+      "usage": "V",
+      "exchangeDirection": "BI_DIRECTIONAL",
+      "startDate": "2015-01-24",
+      "retirementDate": "2015-01-24"
+    }
+  ]
+}

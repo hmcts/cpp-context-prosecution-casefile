@@ -1,0 +1,14 @@
+{
+  "caseId": "51cac7fb-387c-4d19-9c80-8963fa8cf222",
+  "caseType": "UNKNOWN",
+  "documentType": "Bail and Custody",
+  "isCpsCase": false,
+  "material": {
+    "documentType": "Bail and Custody",
+    "fileStoreId": "3052a896-fd3e-312d-bb0e-948dd46191a4",
+    "fileType": "application/pdf"
+  },
+  "prosecutingAuthority": "TVLOUCODE",
+  "prosecutorDefendantId": "TVL_DEF001",
+  "receivedDateTime": "2020-02-04T05:27:17.210Z"
+}

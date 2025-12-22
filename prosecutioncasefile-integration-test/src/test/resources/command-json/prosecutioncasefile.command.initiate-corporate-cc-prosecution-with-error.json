@@ -1,0 +1,88 @@
+{
+  "caseDetails": {
+    "originatingOrganisation": "123",
+    "cpsOrganisation": "A30AB00",
+    "otherPartyOfficerInCase": {
+      "personalInformation": {
+        "address": {
+          "address1": "101",
+          "address2": "56Police House",
+          "address3": "Letsby Avenue",
+          "address4": "Avon",
+          "postcode": "HA1 2ER"
+        },
+        "contactDetails": {
+          "primaryEmail": "vegaoic@test.dom",
+          "work": "0117911911"
+        },
+        "firstName": "Vega",
+        "lastName": "OIC",
+        "title": "Baron"
+      },
+      "policeOfficerRank": "Constable"
+    },
+    "summonsCode": "summonsCode",
+    "caseId": "CASE-ID",
+    "initiationCode": "S",
+    "prosecutorCaseReference": "CASE-URN",
+    "caseMarkers": [
+      {
+        "markerTypeCode": "ABC",
+        "markerTypeDescription": "Child Abuse",
+        "markerTypeId": "2013c181-7458-4fb2-a637-b596fbe0e781"
+      },
+      {
+        "markerTypeCode": "BCD",
+        "markerTypeDescription": "Child Abuse",
+        "markerTypeId": "2013c181-7458-4fb2-a637-b596fbe0e782"
+      }
+    ],
+    "prosecutor": {
+      "informant": "informant",
+      "prosecutingAuthority": "123"
+    }
+  },
+  "defendants": [
+    {
+      "id": "DEFENDANT_ID1",
+      "aliasForCorporate": [
+        "FakeCompany",
+        "RealCompany"
+      ],
+      "documentationLanguage": "W",
+      "hearingLanguage": "W",
+      "custodyStatus": "B",
+      "initialHearing": {
+        "courtHearingLocation": "C55BN00",
+        "dateOfHearing": "2050-02-04",
+        "timeOfHearing": "09:05:01.001"
+      },
+      "organisationName": "Ministry of Justice",
+      "emailAddress1": "bad@organisationprimaryemail",
+      "emailAddress2": "bad@organisationsecondaryemail",
+      "selfDefinedEthnicity": "W1",
+      "offences": [
+        {
+          "offenceCode": "OFCODE12",
+          "offenceId": "OFFENCE_ID1",
+          "offenceSequenceNumber": 1,
+          "offenceCommittedDate": "2018-09-10",
+          "offenceCommittedEndDate": "2018-10-10",
+          "offenceDateCode": 1,
+          "offenceLocation": "Croydon",
+          "offenceWording": "TV Licence not paid",
+          "chargeDate": "2018-12-10",
+          "arrestDate": "2018-11-10",
+          "appliedCompensation": 200,
+          "alcoholRelatedOffence": {
+            "alcoholLevelMethod": "A",
+            "alcoholLevelAmount": 100
+          }
+        }
+      ],
+      "postingDate": "2018-09-10"
+    }
+  ],
+  "channel": "SPI",
+  "externalId": "EXTERNAL_ID"
+}

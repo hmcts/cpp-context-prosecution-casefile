@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/domain/event/public.prosecutioncasefile.cc-case-received-with-warnings.json",
+  "type": "object",
+  "properties": {
+    "caseDetails": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/defence-case-details.json"
+    },
+    "defendants": {
+      "type": "array",
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/defence-defendant.json"
+      }
+    },
+    "channel": {
+      "type": "string",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/pcf-definitions.json#/definitions/channel"
+    },
+    "caseWarnings": {
+      "type": "array",
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/problem.json"
+      }
+    },
+    "defendantWarnings": {
+      "type": "array",
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/defendant-problem.json"
+      }
+    }
+  },
+  "required": [
+    "caseDetails",
+    "defendants",
+    "channel"
+  ]
+}

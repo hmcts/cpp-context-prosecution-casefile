@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="13" author="prosecutioncasefile" logicalFilePath="liquibase/prosecutioncasefile-viewstore-db-changelog.xml">
+        <createTable tableName="business_validation_errors">
+            <column name="id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_business_validation_errors" />
+            </column>
+
+            <column name="error_value" type="TEXT"/>
+            <column name="field_id" type="UUID"/>
+            <column name="display_name" type="TEXT"/>
+            <column name="case_id" type="UUID"/>
+            <column name="defendant_id" type="UUID"/>
+            <column name="field_name" type="TEXT"/>
+        </createTable>
+    </changeSet>
+
+
+</databaseChangeLog>

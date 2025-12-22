@@ -1,0 +1,430 @@
+{
+  "prosecutionWithReferenceData": {
+    "prosecution": {
+      "caseDetails": {
+        "caseId": "ee563502-6436-4037-990a-5822af3980f6",
+        "caseMarkers": [{
+          "markerTypeCode": "ABC",
+          "markerTypeDescription": "Child Abuse",
+          "markerTypeId": "2013c181-7458-4fb2-a637-b596fbe0e781"
+        }],
+        "initiationCode": "C",
+        "originatingOrganisation": "B01NM00",
+        "otherPartyOfficerInCase": {
+          "personalInformation": {
+            "address": {
+              "address1": "101",
+              "address2": "56Police House",
+              "address3": "Letsby Avenue",
+              "address4": "Avon",
+              "postcode": "HA1 2ER"
+            },
+            "contactDetails": {
+              "primaryEmail": "vegaoic@test.dom",
+              "work": "0117911911"
+            },
+            "firstName": "Vega",
+            "lastName": "OIC",
+            "title": "Baron"
+          },
+          "policeOfficerRank": "Constable"
+        },
+        "prosecutor": {
+          "informant": "informant",
+          "prosecutingAuthority": "prosAut"
+        },
+        "prosecutorCaseReference": "xJdgaYyM1x",
+        "summonsCode": "A"
+      },
+      "channel": "SPI",
+      "defendants": [{
+        "aliasForCorporate": ["FakeCompany", "RealCompany"],
+        "custodyStatus": "B",
+        "documentationLanguage": "W",
+        "hearingLanguage": "W",
+        "id": "31228e76-dbd2-4fed-a47e-8439624b98e5",
+        "initialHearing": {
+          "courtHearingLocation": "C55BN00",
+          "dateOfHearing": "2050-02-04",
+          "timeOfHearing": "09:05:01.001"
+        },
+        "offences": [{
+          "alcoholRelatedOffence": {
+            "alcoholLevelAmount": 100,
+            "alcoholLevelMethod": "A"
+          },
+          "appliedCompensation": 200,
+          "arrestDate": "2019-04-10",
+          "chargeDate": "2019-05-10",
+          "offenceCode": "OFCODE12",
+          "offenceCommittedDate": "2018-09-10",
+          "offenceCommittedEndDate": "2018-10-10",
+          "offenceDateCode": 1,
+          "offenceId": "b5e9079f-257f-495f-b55d-6bb0268ff39d",
+          "offenceLocation": "Croydon",
+          "offenceSequenceNumber": 1,
+          "offenceWording": "TV Licence not paid"
+        }],
+        "organisationName": "Ministry of Justice",
+        "postingDate": "2018-09-10",
+        "prosecutorDefendantReference": "TFLDEF001"
+      }]
+    },
+    "referenceDataVO": {
+      "countryNationalityReferenceData": [{
+        "cjsCode": 0,
+        "countryName": "United Kingdom",
+        "govCode": "GB",
+        "id": "22ef7a73-df50-4349-8c72-ca3b9ace6363",
+        "isoCode": "GBR",
+        "nationality": "British"
+      }, {
+        "cjsCode": 1,
+        "countryName": "France",
+        "govCode": "FR",
+        "id": "05ad4861-7927-437e-8df1-32b4128e369f",
+        "isoCode": "FRA",
+        "nationality": "French"
+      }, {
+        "cjsCode": 3,
+        "countryName": "ITALY",
+        "govCode": "IT",
+        "id": "ca2438fd-2eba-4c1b-967d-3fa7c46f24d4",
+        "isoCode": "ITA",
+        "nationality": "Italian"
+      }, {
+        "cjsCode": 4,
+        "countryName": "POLAND",
+        "govCode": "PO",
+        "id": "ca2438ed-2eba-4c1b-967d-3fa7c46f24d4",
+        "isoCode": "POL",
+        "nationality": "Polish"
+      }],
+      "offenceReferenceData": [{
+        "cjsOffenceCode": "OFCODE12",
+        "cppDateOfLastUpdate": "2017-12-10",
+        "details": {
+          "document": {
+            "ancillary": {
+              "auditofamendments": "301110 New Offence Code and outline Standard Offence Wording document<br />060711 CJS Code and Outline Offence Wording document is now OBSOLETE. Revoked by S.I. 2011 / 1197 as from 25/05/11.",
+              "datecreated": "2010-07-29",
+              "dateoflastupdate": "2011-09-30",
+              "groups": {
+                "code": "GV07",
+                "description": "Animal Byproducts"
+              },
+              "lastupdate": "300911 For the information of Gloucestershire Police ONLY - \"Offence Wording Group\" field completed",
+              "legislationcode": {
+                "link": "S1212"
+              },
+              "offenceenddate": "2011-05-24",
+              "offencestartdate": "2006-06-29",
+              "offencewordinggroup": "V07"
+            },
+            "codes": {
+              "cjsoffencecode": "AA06004",
+              "disqualificationclass": {
+                "code": "N",
+                "description": "discretionary disqualification not endorsable"
+              },
+              "fptgraduated": 0.0,
+              "fptgraduatedhigh": 0.0,
+              "fptissuedbypolice": 0.0,
+              "mojstatscode": "108/16",
+              "mopinoteslink": "D19586",
+              "mopireviewgroup": {
+                "code": "C",
+                "description": "Group 3"
+              },
+              "notifiabletomoj": {
+                "code": "Y",
+                "description": "YES"
+              },
+              "pncacpooffencecode": "12.1.12.1",
+              "pndissuedbylocalauthorities": 0.0,
+              "pndissuedbyothers": 0.0,
+              "pndissuedbypolice": 0.0,
+              "recordableonpncindicator": {
+                "code": "Y",
+                "description": "YES"
+              },
+              "roadsidedeposits": {
+                "code": "N",
+                "description": "No"
+              },
+              "seatbeltoffence": {
+                "code": "N",
+                "description": "No"
+              }
+            },
+            "english": {
+              "additionalkeywords": {
+                "additionalkeyword": ["Animals", "Animal Products Import", "Export England Regulations 2006"]
+              },
+              "investigatoractions": {
+                "investigatoraction": [{
+                  "code": "IA27",
+                  "description": "Confirm proposed charge is appropriately authorised (Police or CPS)"
+                }, {
+                  "code": "IA28",
+                  "description": "Ensure compliance with investigator's obligations re disclosure"
+                }, {
+                  "code": "IA29",
+                  "description": "Consider if case suitable for referral to Financial Investigation Unit and CPS for asset recovery eg confiscation order"
+                }, {
+                  "code": "IA2",
+                  "description": "DNA Samples: If crime scene stain present - take evidential sample If no crime scene stain & DNA not confirmed on PNC - take Criminal Justice sample. If DNA confirmed on PNC - CJ sample not required"
+                }, {
+                  "code": "IA1",
+                  "description": "Fingerprint & photograph"
+                }, {
+                  "code": "IA4",
+                  "description": "PNC recordable"
+                }, {
+                  "code": "IA3",
+                  "description": "Tape record interview unless exempt"
+                }]
+              },
+              "legislation": "Contrary to regulations 32(a) & 34(3) of the Animals and Animal Products (Import and Export) (England) Regulations 2006",
+              "notes": "This CJS Code and Outline Offence Wording document is now OBSOLETE. Revoked by S.I. 2011 / 1197 as from 25/05/11.",
+              "pointstoprove": "date and location<br />obstruct person acting in the execution of these Regulations",
+              "policeandcpschargingresponsibilities": "D27968",
+              "standardoffencewording": "On **(..SPECIFY DATE..) at **(..SPECIFY TOWNSHIP..), **(..SPECIFY DETAILS OF THE OFFENCE..)",
+              "title": "Obstruct person acting in the execution of these Regulations"
+            },
+            "indictment": {
+              "indictmentindicator": {
+                "code": "N",
+                "description": "NO"
+              },
+              "structuredindictmentindicator": {
+                "code": "N",
+                "description": "NO"
+              }
+            },
+            "libra": {
+              "custodialindicator": {
+                "code": "Y",
+                "description": "YES"
+              },
+              "fineindicator": {
+                "code": "Y",
+                "description": "YES"
+              },
+              "libracategory": {
+                "code": "CS",
+                "description": "Summary Non-motoring"
+              },
+              "maxcustodialsentencelengthmagct": 3,
+              "maxcustodialsentenceunitmagct": {
+                "code": "Months",
+                "description": "Months"
+              },
+              "maxfinetypemagct": {
+                "code": "5",
+                "description": "fine not exceeding level five on the legislative standard scale"
+              },
+              "miscode": {
+                "code": "SNM",
+                "description": "Summary Non-Motoring"
+              }
+            },
+            "other": {
+              "geographicregion": {
+                "code": "E",
+                "description": "England"
+              },
+              "modeoftrial": {
+                "code": "SIMP",
+                "description": "SUMMARY IMPRISONABLE"
+              },
+              "penalty": "Summary: Three months imprisonment and / or a fine not exceeding level five on the standard scale. <br /><br />Time Limit on Prosecutions<br />6 months",
+              "powersofarrest": "Arrest without warrant",
+              "timelimitforprosecutions": "6 months"
+            },
+            "pnldref": "H13001"
+          }
+        },
+        "drugsOrAlcoholRelated": "Y",
+        "locationRequired": "N",
+        "offenceEndDate": "2030-01-25",
+        "offenceId": "04c099cc-eba2-4c80-9eed-7c1ef21d706a",
+        "offenceStartDate": "2001-01-19",
+        "pnldDateOfLastUpdate": "2017-06-10",
+        "prosecutionTimeLimit": "6",
+        "title": "Obstruct person executing search warrant for TV receiver",
+        "validFrom": "2017-10-10",
+        "validTo": "2017-12-10"
+      }],
+      "caseMarkers": [{
+        "markerTypeCode": "ABC",
+        "markerTypeDescription": "Child Abuse",
+        "markerTypeId": "2013c181-7458-4fb2-a637-b596fbe0e781"
+      }, {
+        "markerTypeCode": "WP",
+        "markerTypeDescription": "Prohibited Weapons",
+        "markerTypeId": "80e89021-9a8b-4ee3-b897-456a90480e5f"
+      }, {
+        "markerTypeCode": "AB",
+        "markerTypeDescription": "Prohibited Weapons",
+        "markerTypeId": "80e89021-9a8b-4ee3-b897-456a90480eab"
+      }],
+      "selfdefinedEthnicityReferenceData": [],
+      "observedEthnicityReferenceData": [],
+      "vehicleCodesReferenceData": [],
+      "organisationUnitWithCourtroomsReferenceData": [{
+        "address1": "The Court House",
+        "address2": "Cramic Way",
+        "address3": "Port Talbot",
+        "address4": "West Glam.",
+        "address5": "address line 5",
+        "courtrooms": [{
+          "courtroomId": 294,
+          "courtroomName": "Courtroom 04",
+          "venueName": "BOURNEMOUTH COMBINED COURT",
+          "welshCourtroomName": "Ystafell y Llys 04",
+          "welshVenueName": "COURT CYFFREDINOL BOURNEMOUTH"
+        }, {
+          "courtroomId": 295,
+          "courtroomName": "Courtroom 05",
+          "venueName": "BOURNEMOUTH COMBINED COURT",
+          "welshCourtroomName": "Ystafell y Llys 05",
+          "welshVenueName": "COURT CYFFREDINOL BOURNEMOUTH"
+        }, {
+          "courtroomId": 293,
+          "courtroomName": "Courtroom 03",
+          "venueName": "BOURNEMOUTH COMBINED COURT",
+          "welshCourtroomName": "Ystafell y Llys 03",
+          "welshVenueName": "COURT CYFFREDINOL BOURNEMOUTH"
+        }, {
+          "courtroomId": 291,
+          "courtroomName": "Courtroom 01",
+          "venueName": "BOURNEMOUTH COMBINED COURT",
+          "welshCourtroomName": "Ystafell y Llys 01",
+          "welshVenueName": "COURT CYFFREDINOL BOURNEMOUTH"
+        }],
+        "defaultStartTime": "10:30",
+        "id": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+        "oucode": "C55BN00",
+        "oucodeL1Code": "C",
+        "oucodeL1Name": "Magistrates' Courts",
+        "oucodeL3Name": "Port Talbot",
+        "oucodeL3WelshName": "Welsh Name",
+        "postcode": "SA13 1RU",
+        "welshAddress1": "Llys Ynadon",
+        "welshAddress2": "Adeilad y Llys",
+        "welshAddress3": "Adeilad y Llys",
+        "welshAddress4": "Gorllewin Morgannwgc",
+        "welshAddress5": "Caerdydd"
+      }],
+      "organisationUnitReferenceData": [{
+        "address1": "The Court House",
+        "address2": "Cramic Way",
+        "address3": "Port Talbot",
+        "address4": "West Glam.",
+        "address5": "address line 5",
+        "defaultStartTime": "10:30",
+        "id": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+        "oucode": "C55BN00",
+        "oucodeL1Code": "C",
+        "oucodeL1Name": "Magistrates' Courts",
+        "oucodeL3Name": "Port Talbot",
+        "oucodeL3WelshName": "Welsh Name",
+        "postcode": "SA13 1RU",
+        "welshAddress1": "Llys Ynadon",
+        "welshAddress2": "Adeilad y Llys",
+        "welshAddress3": "Adeilad y Llys",
+        "welshAddress4": "Gorllewin Morgannwgc",
+        "welshAddress5": "Caerdydd"
+      }],
+      "alcoholLevelMethodReferenceData": [{
+        "id": "c4ca4238-a0b9-3382-8dcc-509a6f75849b",
+        "methodCode": "A",
+        "methodDescription": "Blood",
+        "seqNo": 1
+      }, {
+        "id": "c81e728d-9d4c-3f63-af06-7f89cc14862c",
+        "methodCode": "B",
+        "methodDescription": "Breath",
+        "seqNo": 2
+      }, {
+        "id": "eccbc87e-4b5c-32fe-a830-8fd9f2a7baf3",
+        "methodCode": "C",
+        "methodDescription": "Urine",
+        "seqNo": 3
+      }],
+      "offenceDateCodeReferenceData": [{
+        "dateCode": "1",
+        "dateCodeDescription": "on or in",
+        "id": "38b3eff8-baf5-3627-878e-c76a704e9b52",
+        "seqNum": 10
+      }, {
+        "dateCode": "2",
+        "dateCodeDescription": "before",
+        "id": "854d6fae-5ee4-3911-a77c-739ee1734486",
+        "seqNum": 20
+      }, {
+        "dateCode": "3",
+        "dateCodeDescription": "after",
+        "id": "11b9842e-0a27-3ff2-92c1-903e7132cd68",
+        "seqNum": 30
+      }, {
+        "dateCode": "4",
+        "dateCodeDescription": "between",
+        "id": "4f4adcbf-8c6f-36dc-bc8a-3282ac2bf10a",
+        "seqNum": 40
+      }, {
+        "dateCode": "5",
+        "dateCodeDescription": "on or about",
+        "id": "e8c0653f-ea13-391b-b3c4-8159f7c24f78",
+        "seqNum": 50
+      }, {
+        "dateCode": "6",
+        "dateCodeDescription": "on or before",
+        "id": "44c4c173-32ca-3e21-a4a1-a836d9fc4b6f",
+        "seqNum": 60
+      }],
+      "offenderCodeReferenceData": [],
+      "custodyStatusReferenceData": [],
+      "prosecutorsReferenceData": {
+        "address": {
+          "address1": "6th Floor Windsor House",
+          "address2": "42-50 Victoria Street",
+          "address3": "London",
+          "postcode": "SW1H 0TL"
+        },
+        "fullName": "Transport for London",
+        "id": "0534ee76-88f6-40e0-ba8f-53588e146675",
+        "majorCreditorCode": "TFL2",
+        "nameWelsh": "Transport for London",
+        "sequenceNumber": 1,
+        "shortName": "TFL"
+      },
+      "policeRankReferenceData": [{
+        "id": "7e2f843e-d639-40b3-8611-8015f3a13333",
+        "rankCode": "AXE",
+        "sequence": 10,
+        "validFrom": "2013-02-01"
+      }],
+      "hearingType": {
+        "defaultDurationMin": 20,
+        "hearingCode": "FHG",
+        "hearingDescription": "Plea & Trial Preparation",
+        "id": "06b0c2bf-3f98-46ed-ab7e-56efaf9ecced",
+        "seqId": 1,
+        "welshHearingDescription": "Diffynnydd i fynychu i"
+      },
+      "initiationTypes": ["J", "Q", "S", "C", "R", "O", "O"]
+    }
+  },
+  "defendantWarnings": [{
+    "problems": [{
+      "code": "OFFENCE_OUT_OF_TIME",
+      "values": [{
+        "key": "daysOverdue",
+        "value": "61"
+      }]
+    }],
+    "prosecutorDefendantReference": "TFLDEF001"
+  }]
+}

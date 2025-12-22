@@ -1,0 +1,162 @@
+#%RAML 0.8
+title: Prosecution Casefile Query API
+baseUri: http://localhost:8080/prosecutioncasefile-query-api/query/api/rest/prosecutioncasefile
+protocols: [ HTTP, HTTPS ]
+
+/cases/{caseId}:
+  uriParameters:
+        caseId:
+          description: ID of case to get
+          type: string
+  get:
+      description: |
+        Return the case details for the case Id.
+        ...
+        (mapping):
+            responseType: application/vnd.prosecutioncasefile.query.case+json
+            name: prosecutioncasefile.query.case
+        ...
+      responses:
+            200:
+                description: OK
+                body:
+                  application/vnd.prosecutioncasefile.query.case+json:
+                    example:  !include json/prosecutioncasefile.query.case.json
+                    schema:  !include json/schema/prosecutioncasefile.query.case.json
+
+/cases:
+  get:
+    description: |
+      Get case by prosecution case reference
+      ...
+      (mapping):
+          responseType: application/vnd.prosecutioncasefile.query.case-by-prosecutionCaseReference+json
+          name: prosecutioncasefile.query.case-by-prosecutionCaseReference
+      (mapping):
+          responseType: application/vnd.prosecutioncasefile.query.cases.errors+json
+          name: prosecutioncasefile.query.cases.errors
+      ...
+    queryParameters:
+      prosecutionCaseReference:
+        description: prosecution case reference
+        type: string
+        required: false
+      caseId:
+        description: Case Id
+        type: string
+        required: false
+      urn:
+        description: urn
+        type: string
+        required: false
+      court:
+        description: Court Location
+        type: string
+        required: false
+      region:
+        description: Region
+        type: string
+        required: false
+      caseType:
+        description: Case Type
+        type: string
+        required: false
+      hearingDateFrom:
+        description: Hearing Date From
+        type: string
+        required: false
+      hearingDateTo:
+        description: Hearing Date To
+        type: string
+        required: false
+      sortOrder:
+        description: Sort order (ASC / DESC). Default is DESC
+        type: string
+        required: false
+      sortField:
+        description: Sort by field name. Default is hearingDate
+        type: string
+        required: false
+      pageSize:
+        description: Number of item per page. Default is 10
+        type: number
+        required: false
+      pageNumber:
+        description: Current page. Could be 1 or 2 or 3 or ...
+        type: number
+        required: false
+    responses:
+        200:
+          description: OK
+          body:
+                application/vnd.prosecutioncasefile.query.case-by-prosecutionCaseReference+json:
+                    example:  !include json/prosecutioncasefile.query.case.json
+                    schema:  !include json/schema/prosecutioncasefile.query.case.json
+                application/vnd.prosecutioncasefile.query.cases.errors+json:
+                    example:  !include json/prosecutioncasefile.query.cases.errors.json
+                    schema:  !include json/schema/prosecutioncasefile.query.cases.errors.json
+
+/cases-for-citizen:
+  get:
+    description: |
+      Get case by URN, postcode and defendantType
+      ...
+      (mapping):
+          responseType: application/vnd.prosecutioncasefile.query.case-for-citizen+json
+          name: prosecutioncasefile.query.case-for-citizen
+      ...
+    queryParameters:
+      urn:
+        description: URN
+        type: string
+        required: true
+      postcode:
+        description: Postcode
+        type: string
+        required: true
+      defendantType:
+        description: Defendant Type - valid defendant types LEGAL_ENTITY | PERSON
+        type: string
+        required: true
+      dob:
+        description: Date of birth of the individual format 'YYYY-MM-DD'.
+        type: date
+        required: false
+    responses:
+        200:
+          description: OK
+          body:
+                application/vnd.prosecutioncasefile.query.case-for-citizen+json:
+                  schema: !include json/schema/prosecutioncasefile.query.case-for-citizen.json
+                  example: !include json/prosecutioncasefile.query.case-for-citizen.json
+
+
+/counts/cases-errors:
+  get:
+     description: |
+       Return the counts of errors relating to cases.
+       ...
+       (mapping):
+           responseType: application/vnd.prosecutioncasefile.query.counts-cases-errors+json
+           name: prosecutioncasefile.query.counts-cases-errors
+       ...
+     queryParameters:
+       region:
+         description: court region
+         type: string
+         required: false
+       courtLocation:
+         description: court location
+         type: string
+         required: false
+       caseType:
+         description: case type
+         type: string
+         required: false
+     responses:
+           200:
+               description: OK
+               body:
+                  application/vnd.prosecutioncasefile.query.counts-cases-errors+json:
+                    example: !include json/prosecutioncasefile.query.counts-cases-errors.json
+                    schema: !include json/schema/prosecutioncasefile.query.counts-cases-errors.json

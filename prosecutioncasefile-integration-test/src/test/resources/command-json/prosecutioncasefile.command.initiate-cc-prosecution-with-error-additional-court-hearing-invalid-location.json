@@ -1,0 +1,140 @@
+{
+  "caseDetails": {
+    "originatingOrganisation": "123",
+    "cpsOrganisation": "A30AB00",
+    "otherPartyOfficerInCase": {
+      "personalInformation": {
+        "address": {
+          "address1": "101",
+          "address2": "56Police House",
+          "address3": "Letsby Avenue",
+          "address4": "Avon",
+          "postcode": "HA1 2ER"
+        },
+        "contactDetails": {
+          "primaryEmail": "vegaoic@test.dom",
+          "work": "0117911911"
+        },
+        "firstName": "Vega",
+        "lastName": "OIC",
+        "title": "Mr"
+      },
+      "policeOfficerRank": "Constable"
+    },
+    "summonsCode": "summonsCode",
+    "caseId": "CASE-ID",
+    "initiationCode": "S",
+    "prosecutorCaseReference": "CASE-URN",
+    "caseMarkers": [
+      {
+        "markerTypeCode": "ABC",
+        "markerTypeDescription": "Child Abuse",
+        "markerTypeId": "2013c181-7458-4fb2-a637-b596fbe0e781"
+      },
+      {
+        "markerTypeCode": "BCD",
+        "markerTypeDescription": "Child Abuse",
+        "markerTypeId": "2013c181-7458-4fb2-a637-b596fbe0e782"
+      }
+    ],
+    "prosecutor": {
+      "informant": "informant",
+      "prosecutingAuthority": "123"
+    }
+  },
+  "defendants": [
+    {
+      "id": "DEFENDANT_ID1",
+      "documentationLanguage": "W",
+      "hearingLanguage": "W",
+      "initialHearing": {
+        "courtHearingLocation": "abcd",
+        "dateOfHearing": "1999-02-04",
+        "timeOfHearing": "09:05:01.001"
+      },
+      "individual": {
+        "personalInformation": {
+          "title": "MR",
+          "firstName": "John",
+          "lastName": "Smith",
+          "occupation": "Software Developer",
+          "occupationCode": 43,
+          "observedEthnicity": 55,
+          "address": {
+            "address1": "66 Exeter Street",
+            "address2": "line 2",
+            "address3": "line 3",
+            "address4": "line 4",
+            "address5": "line 5",
+            "postcode": "M60 1NW"
+          },
+          "contactDetails": {
+            "work": "020111222",
+            "home": "020111223",
+            "mobile": "07572222943",
+            "primaryEmail": "bad@primaryemail",
+            "secondaryEmail": "bad@secondaryemail"
+          }
+        },
+        "parentGuardianInformation": {
+          "dateOfBirth": "2041-03-03",
+          "gender": "MALE",
+          "observedEthnicity": "3",
+          "selfDefinedEthnicity": "white",
+          "personalInformation": {
+            "title": "MR",
+            "firstName": "Joe",
+            "lastName": "Potts",
+            "occupation": "Software Tester",
+            "occupationCode": 45,
+            "address": {
+              "address1": "122 Jubilee Street",
+              "address2": "line 2",
+              "address3": "line 3",
+              "address4": "line 4",
+              "address5": "line 5",
+              "postcode": "M60 1NW"
+            },
+            "contactDetails": {
+              "work": "020111222",
+              "home": "020111223",
+              "mobile": "07572222943",
+              "primaryEmail": "bad@parentprimaryemail",
+              "secondaryEmail": "bad@parentsecondaryemail"
+            }
+          }
+        },
+        "offenderCode": "XYZ",
+        "perceivedBirthYear": "2040",
+        "selfDefinedInformation": {
+          "ethnicity": "whitewhite",
+          "nationality": "ABC",
+          "dateOfBirth": "2040-05-03",
+          "gender": "MALE"
+        }
+      },
+      "offences": [
+        {
+          "offenceCode": "OFCODE12",
+          "offenceSequenceNumber": 1,
+          "offenceCommittedDate": "2018-09-10",
+          "offenceCommittedEndDate": "2018-10-10",
+          "offenceDateCode": 1,
+          "offenceLocation": "Croydon",
+          "offenceWording": "TV Licence not paid",
+          "chargeDate": "2022-04-04",
+          "arrestDate": "2021-04-04",
+          "offenceId": "2013c181-7458-4fb2-a637-b596fbe0e792",
+          "appliedCompensation": 200,
+          "alcoholRelatedOffence": {
+            "alcoholLevelMethod": "A",
+            "alcoholLevelAmount": 100
+          }
+        }
+      ],
+      "postingDate": "2018-09-10"
+    }
+  ],
+  "channel": "SPI",
+  "externalId": "EXTERNAL_ID"
+}

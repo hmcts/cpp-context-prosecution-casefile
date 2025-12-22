@@ -1,0 +1,22 @@
+{
+  "alcoholLevelMethods": [
+    {
+      "id": "c4ca4238-a0b9-3382-8dcc-509a6f75849b",
+      "seqNo": 1,
+      "methodCode": "A",
+      "methodDescription": "Blood"
+    },
+    {
+      "id": "c81e728d-9d4c-3f63-af06-7f89cc14862c",
+      "seqNo": 2,
+      "methodCode": "B",
+      "methodDescription": "Breath"
+    },
+    {
+      "id": "eccbc87e-4b5c-32fe-a830-8fd9f2a7baf3",
+      "seqNo": 3,
+      "methodCode": "C",
+      "methodDescription": "Urine"
+    }
+  ]
+}

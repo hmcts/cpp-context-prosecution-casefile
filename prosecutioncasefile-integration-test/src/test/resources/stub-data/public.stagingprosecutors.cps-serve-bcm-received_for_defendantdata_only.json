@@ -1,0 +1,49 @@
+{
+  "cpsDefendantOffences": [
+    {
+      "matchingId": "4b64afd7-686f-4ac8-96f6-ca948d83af3f",
+      "forename" : "%s",
+      "surname": "%s",
+      "dateOfBirth": "%s",
+      "cpsDefendantId": "CPS_DEFENDANT_ID",
+      "cpsOffenceDetails": [
+        {
+          "cjsOffenceCode": "CA03013",
+          "offenceDate": "2022-05-11",
+          "offenceWording": "offenceWording"
+        }
+      ],
+      "localAuthorityDetailsForYouthDefendants": {
+        "address1": "address1",
+        "authority": "test",
+        "email": "test@test.com",
+        "forename": "forename",
+        "isLookedAfterChild": true,
+        "phone": "1234567890",
+        "postcode": "G5 0TN",
+        "reference": "test",
+        "surname": "surname",
+        "title": "Mr"
+      },
+      "parentGuardianForYouthDefendants": {
+        "address1": "address1",
+        "address2": "address2",
+        "email": "test@test.com",
+        "forename": "parentForename",
+        "phone": "1234567890",
+        "postcode": "G5 0TN",
+        "relationshipToDefendant": "test",
+        "surname": "weterw",
+        "title": "Mr"
+      }
+    }
+  ],
+  "prosecutionCaseSubject": {
+    "prosecutingAuthority": "The OU Code of the prosecuting authority",
+    "urn": "%s"
+  },
+  "tag": "tag",
+  "evidencePrePTPH": "evidencePrePTPH text",
+  "submissionId": "e85d2c62-af1f-4674-863a-0891e67e325b",
+  "submissionStatus": "PENDING"
+}

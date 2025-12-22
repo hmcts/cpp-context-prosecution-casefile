@@ -1,0 +1,30 @@
+{
+  "prosecutionCaseSubject": {
+    "caseUrn" : "CASETFL001",
+    "prosecutingAuthority":"00TFL1A",
+    "ouCode" : "ouCode"
+  },
+  "material": "%s",
+  "materialType":"%s",
+  "materialContentType": "%s",
+  "submissionId": "8191c165-e9e4-4fd7-ac6d-5bfd04690f77",
+  "caseId": "51cac7fb-387c-4d19-9c80-8963fa8cf222",
+  "materialName": "defendant document",
+  "fileName": "Material-File",
+  "sectionOrderSequence": 1,
+  "caseSubFolderName": "Defendant-Material",
+  "exhibit": {
+    "reference": "test-reference"
+  },
+  "witnessStatement": {
+    "statementNumber": 2,
+    "statementDate": "2021-03-09T14:30:04.881Z"
+  },
+  "tag": [
+    {
+      "code": "M35"
+    }
+  ],
+  "receivedDateTime": "2021-10-04T14:38:50.954Z",
+  "isCpsCase": false
+}

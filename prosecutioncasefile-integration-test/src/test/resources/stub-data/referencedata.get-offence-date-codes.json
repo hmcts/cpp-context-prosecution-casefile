@@ -1,0 +1,40 @@
+{
+  "offenceDateCodes": [
+    {
+      "id": "38b3eff8-baf5-3627-878e-c76a704e9b52",
+      "seqNum": 10,
+      "dateCode": "1",
+      "dateCodeDescription": "on or in"
+    },
+    {
+      "id": "854d6fae-5ee4-3911-a77c-739ee1734486",
+      "seqNum": 20,
+      "dateCode": "2",
+      "dateCodeDescription": "before"
+    },
+    {
+      "id": "11b9842e-0a27-3ff2-92c1-903e7132cd68",
+      "seqNum": 30,
+      "dateCode": "3",
+      "dateCodeDescription": "after"
+    },
+    {
+      "id": "4f4adcbf-8c6f-36dc-bc8a-3282ac2bf10a",
+      "seqNum": 40,
+      "dateCode": "4",
+      "dateCodeDescription": "between"
+    },
+    {
+      "id": "e8c0653f-ea13-391b-b3c4-8159f7c24f78",
+      "seqNum": 50,
+      "dateCode": "5",
+      "dateCodeDescription": "on or about"
+    },
+    {
+      "id": "44c4c173-32ca-3e21-a4a1-a836d9fc4b6f",
+      "seqNum": 60,
+      "dateCode": "6",
+      "dateCodeDescription": "on or before"
+    }
+  ]
+}

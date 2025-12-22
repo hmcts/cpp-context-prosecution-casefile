@@ -1,0 +1,17 @@
+{
+  "code": "BACK_DUTY_AMOUNT_MISSING",
+  "values": [
+    {
+      "key": "offence_offenceCode",
+      "value": "CA03013"
+    },
+    {
+      "key": "offence_offenceSequenceNo",
+      "value": "1"
+    },
+    {
+      "key": "offence_backduty_value",
+      "value": "null"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/court-centre.json",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "code": {
+      "type": "string",
+      "description": "The reference data ou code for the court centre."
+    },
+    "name": {
+      "type": "string",
+      "description": "The reference data name for the court centre."
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/personal-information.json",
+  "type": "object",
+  "description": "Personal Information",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Title by which a person is addressed",
+      "maxLength": 35
+    },
+    "firstName": {
+      "type": "string",
+      "description": "The first given name of a person, e.g. John ",
+      "maxLength": 130
+    },
+    "lastName": {
+      "type": "string",
+      "description": "Surname or Family name, e.g. Brown.",
+      "maxLength": 35
+    },
+    "givenName2": {
+      "type": "string",
+      "description": "Middle name, e.g. Walter.",
+      "maxLength": 35
+    },
+    "givenName3": {
+      "type": "string",
+      "description": "Additional middle name, e.g. Percival.",
+      "maxLength": 35
+    },
+    "occupation": {
+      "type": "string",
+      "description": "The description of an occupation.",
+      "maxLength": 54
+    },
+    "occupationCode": {
+      "type": "integer",
+      "description": "An occupation code"
+    },
+    "observedEthnicity" : {
+      "type": "integer"
+    },
+    "contactDetails": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/contact-details.json"
+    },
+    "address": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/address.json"
+    }
+  },
+  "required": [
+    "lastName"
+  ]
+}

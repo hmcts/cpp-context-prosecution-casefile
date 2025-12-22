@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/domain/event/material-pending",
+  "type": "object",
+  "properties": {
+    "caseId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "prosecutingAuthority": {
+      "type": "string"
+    },
+    "prosecutorDefendantId": {
+      "type": "string",
+      "maxLength": 36
+    },
+    "material": {
+      "type": "object",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/material.json"
+    },
+    "isCpsCase":{
+      "type":"boolean"
+    },
+    "cmsDocumentId": {
+      "type": "string"
+    },
+    "materialType": {
+      "type": "integer"
+    },
+    "sectionCode": {
+      "type": "string"
+    },
+    "receivedDateTime":{
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date-time"
+    }
+  },
+  "required": [
+    "caseId",
+    "material"
+  ],
+  "additionalProperties": false
+}

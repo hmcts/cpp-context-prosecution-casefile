@@ -1,0 +1,17 @@
+{
+  "_metadata": {
+    "name": "prosecutioncasefile.events.material-pending"
+  },
+  "caseId": "a4391788-f829-4514-a344-61f1d5d9690c",
+  "material": {
+    "documentType": "CITN",
+    "fileStoreId": "3042a896-fd3e-478d-bb0e-948dd46191a4",
+    "fileType": "application/pdf"
+  },
+  "prosecutingAuthority": "GAEAA01",
+  "prosecutorDefendantId": "TVL_DEF_001",
+  "isCpsCase":false,
+  "cmsDocumentId": "ABCDEF",
+  "materialType": 1,
+  "sectionCode": "IDPC"
+}

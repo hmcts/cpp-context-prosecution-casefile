@@ -1,0 +1,57 @@
+subscriptions_descriptor:
+  spec_version: 1.0.0
+  service: prosecutioncasefile
+  service_component: EVENT_LISTENER
+  subscriptions:
+    - name: event listener subscription
+      events:
+        - name: prosecutioncasefile.events.sjp-prosecution-received
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/sjp-prosecution-received.json
+
+        - name: prosecutioncasefile.events.sjp-prosecution-received-with-warnings
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/sjp-prosecution-received-with-warnings.json
+
+        - name: prosecutioncasefile.events.defendant-idpc-added
+          schema_uri: http://moj.gov.uk/cpp/json/schemas/prosecutioncasefile/events/defendant-idpc-added.json
+
+        - name: prosecutioncasefile.events.cc-case-received
+          schema_uri: http://moj.gov.uk/cpp/json/schemas/prosecutioncasefile/events/cc-case-received.json
+
+        - name: prosecutioncasefile.events.cc-case-received-with-warnings
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/prosecutioncasefile.cc-case-received-with-warnings.json
+
+        - name: prosecutioncasefile.events.spi-prosecution-defendants-added
+          schema_uri: http://moj.gov.uk/cpp/json/schemas/prosecutioncasefile/events/spi-procecution-defendants-added.json
+
+        - name: prosecutioncasefile.events.prosecution-defendants-added
+          schema_uri: http://moj.gov.uk/cpp/json/schemas/prosecutioncasefile/events/prosecution-defendants-added.json
+
+        - name: prosecutioncasefile.events.case-validation-failed
+          schema_uri: http://moj.gov.uk/cpp/json/schemas/prosecutioncasefile/events/case-validation-failed.json
+
+        - name: prosecutioncasefile.events.defendant-validation-failed
+          schema_uri: http://moj.gov.uk/cpp/json/schemas/prosecutioncasefile/events/defendant-validation-failed.json
+
+        - name: prosecutioncasefile.events.sjp-validation-failed
+          schema_uri: http://moj.gov.uk/cpp/json/schemas/prosecutioncasefile/events/sjp-validation-failed.json
+
+        - name: prosecutioncasefile.events.validation-completed
+          schema_uri: http://moj.gov.uk/cpp/json/schemas/prosecutioncasefile/events/validation-failed.json
+
+        - name: prosecutioncasefile.event.resolved-case
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/resolved-case.json
+
+        - name: prosecutioncasefile.events.defendant-validation-passed
+          schema_uri: http://moj.gov.uk/cpp/json/schemas/prosecutioncasefile/events/defendant-validation-passed.json
+
+        - name: prosecutioncasefile.events.defendants-parked-for-summons-application-approval
+          schema_uri: http://moj.gov.uk/cpp/json/schemas/prosecutioncasefile/events/defendants-parked-for-summons-application-approval.json
+
+        - name: prosecutioncasefile.event.case-defendant-changed
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/case-defendant-changed.json
+
+        - name: prosecutioncasefile.events.sjp-prosecution-update-offence-code-request-received
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/sjp-prosecution-update-offence-code-request-received.json
+
+
+      event_source_name: prosecutioncasefile

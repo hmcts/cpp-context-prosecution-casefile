@@ -1,0 +1,125 @@
+{
+  "caseDetails": {
+    "caseId": "CASE-ID",
+    "caseMarkers": [],
+    "initiationCode": "C",
+    "originatingOrganisation": "GAAAA01",
+    "cpsOrganisation": "A30AB00",
+    "prosecutor": {
+      "informant": "Adam",
+      "prosecutingAuthority": "GAAAA01"
+    },
+    "prosecutorCaseReference": "CRC10955-50"
+  },
+  "channel": "CPPI",
+  "defendants": [
+    {
+      "appliedProsecutorCosts": 20.99,
+      "asn": "SummonsNumber001",
+      "croNumber": "CRO12312678",
+      "custodyStatus": "B",
+      "documentationLanguage": "E",
+      "emailAddress1": "aer@af.com",
+      "emailAddress2": "aer@af.com",
+      "hearingLanguage": "E",
+      "id": "DEFENDANT_ID1",
+      "individual": {
+        "bailConditions": "this is a free text",
+        "custodyStatus": "B",
+        "driverNumber": "AS",
+        "nationalInsuranceNumber": "SN123456C",
+        "parentGuardianInformation": {
+          "dateOfBirth": "1969-05-23",
+          "gender": "MALE",
+          "personalInformation": {
+            "address": {
+              "address1": "ParentGAddress Line 1",
+              "address2": "ParentGAddress Line 2",
+              "address3": "ParentGAddress Line 3",
+              "address4": "ParentGAddress Line 4",
+              "address5": "ParentG Address Line 5",
+              "postcode": "PG0 1XX"
+            },
+            "contactDetails": {
+              "home": "9991231230",
+              "mobile": "9991231230",
+              "primaryEmail": "999aer@test.com",
+              "secondaryEmail": "999aer@test.com",
+              "work": "9991231230"
+            },
+            "firstName": "parentGuardianJack",
+            "givenName2": "parentGuardianAaron",
+            "givenName3": "Sr",
+            "lastName": "parentGuardianReaper",
+            "title": "Baron"
+          },
+          "selfDefinedEthnicity": "W1"
+        },
+        "personalInformation": {
+          "address": {
+            "address1": "Address Line 1",
+            "address2": "Address Line 2",
+            "address3": "Address Line 3",
+            "address4": "Address Line 4",
+            "address5": "Address Line 5",
+            "postcode": "CR0 1XX"
+          },
+          "contactDetails": {
+            "home": "1231231230",
+            "mobile": "1231231230",
+            "primaryEmail": "aer@af.com",
+            "secondaryEmail": "aer@af.com",
+            "work": "1231231230"
+          },
+          "firstName": "John",
+          "givenName2": "Adam",
+          "givenName3": "Theodore",
+          "lastName": "SMITH",
+          "occupation": "TA",
+          "occupationCode": 666,
+          "title": "Baron"
+        },
+        "selfDefinedInformation": {
+          "additionalNationality": "POL",
+          "dateOfBirth": "1970-02-03",
+          "ethnicity": "W1",
+          "gender": "MALE",
+          "nationality": "GBR"
+        }
+      },
+      "initialHearing": {
+        "courtHearingLocation": "B01BH00",
+        "dateOfHearing": "DATE_OF_HEARING",
+        "timeOfHearing": "09:01:01.001"
+      },
+      "languageRequirement": "no special language needs",
+      "numPreviousConvictions": 3,
+      "offences": [
+        {
+          "alcoholRelatedOffence": {
+            "alcoholLevelAmount": 2,
+            "alcoholLevelMethod": "C"
+          },
+          "appliedCompensation": 99.99,
+          "arrestDate": "2019-08-10",
+          "backDutyDateFrom": "2018-04-09",
+          "backDutyDateTo": "2018-05-09",
+          "chargeDate": "2019-08-11",
+          "offenceCode": "CA03013",
+          "offenceCommittedDate": "2019-09-06",
+          "offenceCommittedEndDate": "2020-06-11",
+          "offenceDateCode": 6,
+          "offenceId": "OFFENCE_ID1",
+          "offenceLocation": "Croydon",
+          "offenceSequenceNumber": 1,
+          "offenceWording": "Test Prosecution charge wording",
+          "offenceWordingWelsh": "Test Prosecution charge wording in Welsh"
+        }
+      ],
+      "pncIdentifier": "ValidPncid1",
+      "prosecutorDefendantReference": "1234567891",
+      "specificRequirements": "no special needs"
+    }
+  ],
+  "externalId": "EXTERNAL_ID"
+}

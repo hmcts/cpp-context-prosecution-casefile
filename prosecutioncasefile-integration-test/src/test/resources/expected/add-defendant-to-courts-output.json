@@ -1,0 +1,90 @@
+{
+  "defendants": [
+    {
+      "id": "7e322485-ccae-48dd-b2a3-6df6e1b2fc31",
+      "masterDefendantId": "7e322485-ccae-48dd-b2a3-6df6e1b2fc31",
+      "courtProceedingsInitiated": "2020-02-25T23:43:01.811Z",
+      "offences": [
+        {
+          "arrestDate": "2015-03-04",
+          "chargeDate": "2004-12-09",
+          "count": 0,
+          "id": "7e322485-ccae-48dd-b2a3-6df6e1b2fc31",
+          "offenceCode": "OFCODE12",
+          "dvlaOffenceCode": "ABC123",
+          "offenceDefinitionId": "04c099cc-eba2-4c80-9eed-7c1ef21d706a",
+          "offenceFacts": {
+            "alcoholReadingAmount": 100,
+            "alcoholReadingMethodCode": "A",
+            "alcoholReadingMethodDescription": "Blood"
+          },
+          "offenceDateCode": 1,
+          "modeOfTrial": "Summary",
+          "offenceTitle": "Obstruct person executing search warrant for TV receiver",
+          "orderIndex": 1,
+          "startDate": "2004-12-09",
+          "wording": "On 09/12/2004 at East Yorkshire had in your possession a firearm with intent by means thereof to cause anonymous person to believe that unlawful violence would be used against him or another."
+        }
+      ],
+      "personDefendant": {
+        "arrestSummonsNumber": "0416BH0000000090557N",
+        "bailConditions": "bailConditions",
+        "bailStatus": {
+          "code": "B",
+          "description": "Conditional Bail",
+          "id": "dd4073b6-22be-3875-9d63-5da286bb3ece"
+        },
+        "personDetails": {
+          "address": {
+            "address1": "89",
+            "address2": "Palace Walk",
+            "address3": "Humberside",
+            "postcode": "HA1 2ER"
+          },
+          "dateOfBirth": "1974-05-03",
+          "documentationLanguageNeeds": "ENGLISH",
+          "hearingLanguageNeeds": "ENGLISH",
+          "ethnicity": {
+            "selfDefinedEthnicityCode": "W1",
+            "selfDefinedEthnicityDescription": "British",
+            "selfDefinedEthnicityId": "1daefec3-2f76-8109-82d9-2e60544a6c01"
+          },
+          "firstName": "john",
+          "gender": "MALE",
+          "lastName": "RAMBO",
+          "occupation": "Office",
+          "title": "Baron"
+        }
+      },
+      "prosecutionCaseId": "66e871c9-1ab9-4486-ab4e-d54335c7410d"
+    }
+  ],
+  "listHearingRequests": [
+    {
+      "courtCentre": {
+        "id": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+        "name": "Port Talbot",
+        "welshName": "Welsh Name",
+        "roomId": "9e4932f7-97b2-3010-b942-ddd2624e4dd8",
+        "roomName": "Courtroom 01"
+      },
+      "estimateMinutes": 20,
+      "hearingType": {
+        "description": "Plea & Trial Preparation",
+        "id": "06b0c2bf-3f98-46ed-ab7e-56efaf9ecced"
+      },
+      "jurisdictionType": "MAGISTRATES",
+      "listDefendantRequests": [
+        {
+          "defendantId": "7e322485-ccae-48dd-b2a3-6df6e1b2fc31",
+          "defendantOffences": [
+            "7e322485-ccae-48dd-b2a3-6df6e1b2fc31"
+          ],
+          "hearingLanguageNeeds": "ENGLISH",
+          "prosecutionCaseId": "66e871c9-1ab9-4486-ab4e-d54335c7410d"
+        }
+      ],
+      "listedStartDateTime": "2050-02-04T09:05:01.001Z"
+    }
+  ]
+}

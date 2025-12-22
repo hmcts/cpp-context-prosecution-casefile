@@ -1,0 +1,17 @@
+{
+  "caseId": "51cac7fb-387c-4d19-9c80-8963fa8cf222",
+  "prosecutorDefendantId": "TVL_DEF001",
+  "cmsDocumentIdentifier": {
+    "documentId": "a388efc2-14ff-4e4c-a599-b0934030fed9",
+    "materialType":12
+  },
+  "material": {
+    "fileStoreId": "3042a896-fd3e-478d-bb0e-948dd46191a4",
+    "fileType": "application/pdf"
+  },
+  "cmsDocumentIdentifier": {
+    "materialType": 55,
+    "documentId": "ABCDEF"
+  },
+  "receivedDateTime":"2020-02-04T05:27:17.210Z"
+}

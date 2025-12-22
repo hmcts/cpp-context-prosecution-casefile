@@ -1,0 +1,63 @@
+{
+  "id": "f2426280-f4d7-45cf-9f94-c618a210f7c2",
+  "documentationLanguage": "W",
+  "hearingLanguage": "W",
+  "languageRequirement": "no special language needs",
+  "specificRequirements": "no special needs",
+  "numPreviousConvictions" : 99,
+  "asn" : "arrest/summons",
+  "prosecutorDefendantReference": "pderef-1",
+  "individual": {
+    "driverNumber" : "AS",
+    "nationalInsuranceNumber" : "QQ 12 34 56 C",
+    "personalInformation": {
+      "title": "Baron",
+      "firstName": "John",
+      "lastName": "Smith",
+      "occupation": "Software Developer",
+      "occupationCode": 43,
+      "address": {
+        "address1": "66 Exeter Street",
+        "address2": "line 2",
+        "address3": "line 3",
+        "address4": "line 4",
+        "address5": "line 5",
+        "postcode": "M60 1NW"
+      },
+      "contactDetails": {
+        "work" : "020111222",
+        "home" : "020111223",
+        "mobile" : "07572222943",
+        "primaryEmail" : "scrooge.mcduck@mail.com",
+        "secondaryEmail" : "scrooge.mcduck2@mail.com"
+      }
+    },
+    "selfDefinedInformation": {
+      "ethnicity": "white",
+      "gender": "MALE",
+      "dateOfBirth": "1989-04-18",
+      "nationality": "SVK",
+      "additionalNationality": "HUN"
+    }
+  },
+  "offences": [
+    {
+      "offenceCode": "OFCODE12",
+      "offenceSequenceNumber": 1,
+      "offenceDateCode": 4,
+      "offenceCommittedDate": "2015-09-10",
+      "offenceCommittedEndDate" : "2016-03-14",
+      "offenceLocation" : "London",
+      "offenceWording": "TV Licence not paid",
+      "offenceWordingWelsh" : "TV Licence not paid (Welsh)",
+      "chargeDate": "2016-04-04",
+      "appliedCompensation": 1502,
+      "statementOfFacts" : "John Doe missed a TV license payment for the 5th time",
+      "statementOfFactsWelsh" : "John Doe missed a TV license payment for the 5th time (Welsh)",
+      "backDuty" : 3,
+      "backDutyDateFrom" : "1987-01-01",
+      "backDutyDateTo" : "1999-12-31"
+    }
+  ],
+  "postingDate": "2018-09-10"
+}

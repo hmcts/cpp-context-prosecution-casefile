@@ -1,0 +1,11 @@
+{
+  "defendant": {
+    "defendantId": "c2330088-539b-4a5c-9509-fee812b43632",
+    "surname": "smith",
+    "oucode": "B01AF00"
+  },
+  "caseId": "8c74f505-d062-49bd-b2be-1f64e8da3233",
+  "fileServiceId": "c9ad5fef-7d97-4df5-b796-0eed3eed1acf",
+  "caseUrn": "88GD6251318",
+  "materialType": "A_DOCUMENT_TYPE"
+}

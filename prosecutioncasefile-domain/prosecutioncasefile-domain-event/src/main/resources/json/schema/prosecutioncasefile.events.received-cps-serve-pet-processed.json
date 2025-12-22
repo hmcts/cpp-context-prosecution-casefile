@@ -1,0 +1,522 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/domain/event/received-cps-serve-pet-processed.json",
+  "type": "object",
+  "properties": {
+    "submissionId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "submissionStatus": {
+      "type": "string",
+      "enum": [
+        "PENDING",
+        "FAILED",
+        "REJECTED",
+        "SUCCESS",
+        "SUCCESS_WITH_WARNINGS",
+        "EXPIRED"
+      ]
+    },
+    "caseId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "prosecutionCaseSubject": {
+      "type": "object",
+      "properties": {
+        "urn": {
+          "type": "string",
+          "minLength": 1
+        },
+        "prosecutingAuthority": {
+          "type": "string",
+          "description": "The OU Code of the prosecuting authority"
+        }
+      },
+      "required": [
+        "urn",
+        "prosecutingAuthority"
+      ],
+      "additionalProperties": false
+    },
+    "cpsDefendantOffences": {
+      "description": "Identifies the defendant and offences to which the form is associated to",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "prosecutorDefendantId": {
+            "description": "A unique reference to a defendant within a prosecution. Provided by the prosecuting authority e.g. DWP",
+            "type": "string",
+            "maxLength": 36
+          },
+          "cpsDefendantId": {
+            "description": "A unique reference to a defendant within a prosecution. Provided by cps when CPS are prosecuting the case",
+            "type": "string",
+            "maxLength": 36
+          },
+          "asn": {
+            "description": "A unique reference to a defendant within a prosecution. Provided by the police force and requested from the police by a non police prosecutor e.g. DWP requests from the police",
+            "type": "string",
+            "maxLength": 21
+          },
+          "title": {
+            "description": "Title by which a defendant is addressed",
+            "type": "string"
+          },
+          "forename": {
+            "description": "The first given name of a defendant",
+            "type": "string",
+            "maxLength": 35
+          },
+          "forename2": {
+            "description": "The second given name of a defendant",
+            "type": "string",
+            "maxLength": 35
+          },
+          "forename3": {
+            "description": "The third given name of a defendant",
+            "type": "string",
+            "maxLength": 35
+          },
+          "surname": {
+            "description": "Surname or Family name",
+            "type": "string",
+            "maxLength": 35
+          },
+          "dateOfBirth": {
+            "description": "The date when the defendant was born",
+            "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date"
+          },
+          "organisationName": {
+            "description": "The name of a defendant that is a legal entity",
+            "type": "string"
+          },
+          "parentGuardianForYouthDefendants": {
+            "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/defendant-parent-guardian.json"
+          },
+          "localAuthorityDetailsForYouthDefendants": {
+            "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/local-authority-details-for-youth-defendants.json"
+          },
+          "cpsOffenceDetails": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "cjsOffenceCode": {
+                  "type": "string"
+                },
+                "offenceDate": {
+                  "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date"
+                },
+                "offenceWording": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "cjsOffenceCode",
+                "offenceDate",
+                "offenceWording"
+              ],
+              "additionalProperties": false
+            }
+          }
+        }
+      }
+    },
+    "reviewingLawyer": {
+      "description": "Prosecution contact - Reviewing lawyer",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/cps-case-contact.json"
+    },
+    "prosecutionCaseProgressionOfficer": {
+      "description": "Prosecution contact - Case Progression officer (usually paralegal)",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/cps-case-contact.json"
+    },
+    "petFormData": {
+      "type": "object",
+      "properties": {
+        "prosecution": {
+          "type": "object",
+          "properties": {
+            "witnesses": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+                  },
+                  "defendantId": {
+                    "type": "string"
+                  },
+                  "dateOfBirth": {
+                    "type": "string"
+                  },
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "age": {
+                    "type": "integer"
+                  },
+                  "interpreterRequired": {
+                    "type": "string"
+                  },
+                  "languageAndDialect": {
+                    "type": "string"
+                  },
+                  "specialOtherMeasuresRequired": {
+                    "type": "string"
+                  },
+                  "measuresRequired": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "otherText": {
+                    "type": "string"
+                  },
+                  "prosecutionProposesWitnessAttendInPerson": {
+                    "type": "string"
+                  },
+                  "selected": {
+                    "type": "boolean"
+                  },
+                  "isDefendantWitness": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            },
+            "dynamicFormAnswers": {
+              "type": "object",
+              "properties": {
+                "additionalInformation": {
+                  "type": "string"
+                },
+                "prosecutorGroup": {
+                  "type": "object",
+                  "properties": {
+                    "prosecutorServeEvidence": {
+                      "type": "string"
+                    },
+                    "prosecutorServeEvidenceYesGroup": {
+                      "type": "object",
+                      "properties": {
+                        "prosecutorServeEvidenceDetails": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "prosecutionCompliance": {
+                      "type": "string"
+                    },
+                    "prosecutionComplianceYesGroup": {
+                      "type": "object",
+                      "properties": {
+                        "prosecutionComplianceDetailsYes": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "prosecutionComplianceNoGroup": {
+                      "type": "object",
+                      "properties": {
+                        "prosecutionComplianceDetailsNo": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "pendingLinesOfEnquiry": {
+                      "type": "string"
+                    },
+                    "pendingLinesOfEnquiryYesGroup": {
+                      "type": "object",
+                      "properties": {
+                        "pendingLinesOfEnquiryYesGroup": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "slaveryOrExploitation": {
+                      "type": "string"
+                    },
+                    "slaveryOrExploitationYesGroup": {
+                      "type": "object",
+                      "properties": {
+                        "slaveryOrExploitationDetails": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "relyOn": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "displayEquipment": {
+                      "type": "string"
+                    },
+                    "displayEquipmentYesGroup": {
+                      "type": "object",
+                      "properties": {
+                        "displayEquipmentDetails": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "pointOfLaw": {
+                      "type": "string"
+                    },
+                    "pointOfLawYesGroup": {
+                      "type": "object",
+                      "properties": {
+                        "pointOfLawDetails": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "applicationsForDirectionsGroup": {
+                  "type": "object",
+                  "properties": {
+                    "groundRulesQuestioning": {
+                      "type": "string"
+                    },
+                    "variationStandardDirectionsProsecutor": {
+                      "type": "string"
+                    },
+                    "variationStandardDirectionsProsecutorYesGroup": {
+                      "type": "object",
+                      "properties": {
+                        "variationStandardDirectionsProsecutorYesGroupDetails": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "defence": {
+          "type": "object",
+          "properties": {
+            "defendants": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+                  },
+                  "cpsDefendantId": {
+                    "type": "string"
+                  },
+                  "prosecutorDefendantId": {
+                    "type": "string"
+                  },
+                  "addressAndContact": {
+                    "type": "object",
+                    "properties": {
+                      "address": {
+                        "type": "string"
+                      },
+                      "primaryEmail": {
+                        "type": "string"
+                      },
+                      "secondaryEmail": {
+                        "type": "string"
+                      },
+                      "home": {
+                        "type": "string"
+                      },
+                      "mobile": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "cpsOffences": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "offenceCode": {
+                          "type": "string"
+                        },
+                        "wording": {
+                          "type": "string"
+                        },
+                        "date": {
+                          "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date"
+                        }
+                      }
+                    }
+                  },
+                  "associatedPerson": {
+                    "type": "object",
+                    "properties": {
+                      "guardianDetails": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "relationship": {
+                            "type": "string",
+                            "description": "The nature of the relationship to the defendant."
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "address": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "authorityDetails": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "ref": {
+                            "type": "string",
+                            "description": "The nature of the relationship to the defendant."
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "address": {
+                            "type": "string"
+                          },
+                          "phone": {
+                            "pattern": "^[0-9+\\ \\-]{10,}$",
+                            "description": "A home telephone number, including any exchange of location code, at which a person or organisation can be contacted in the UK by telephonic means."
+                          },
+                          "responsible": {
+                            "type": "string"
+                          },
+                          "isLookedAfterChild": {
+                            "type": "boolean"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "trialRepresentative" : {
+                    "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/defendant-trial-representative.json"
+                  },
+                  "witnesses": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+                        },
+                        "defendantId": {
+                          "type": "string"
+                        },
+                        "dateOfBirth": {
+                          "type": "string"
+                        },
+                        "firstName": {
+                          "type": "string"
+                        },
+                        "lastName": {
+                          "type": "string"
+                        },
+                        "age": {
+                          "type": "integer"
+                        },
+                        "interpreterRequired": {
+                          "type": "string"
+                        },
+                        "languageAndDialect": {
+                          "type": "string"
+                        },
+                        "specialOtherMeasuresRequired": {
+                          "type": "string"
+                        },
+                        "measuresRequired": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "prosecutionProposesWitnessAttendInPerson": {
+                          "type": "string"
+                        },
+                        "selected": {
+                          "type": "boolean"
+                        },
+                        "isDefendantWitness": {
+                          "type": "boolean"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "petDefendants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "defendantId": {
+            "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+          },
+          "cpsDefendantId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "defendantId"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/problem.json"
+      }
+    },
+    "isYouth": {
+      "description": "Is Youth",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "submissionId",
+    "submissionStatus",
+    "prosecutionCaseSubject",
+    "cpsDefendantOffences",
+    "petFormData",
+    "isYouth"
+  ],
+  "oneOf": [
+    {
+      "required": [
+        "reviewingLawyer"
+      ]
+    },
+    {
+      "required": [
+        "prosecutionCaseProgressionOfficer"
+      ]
+    }
+  ],
+  "additionalProperties": false
+}

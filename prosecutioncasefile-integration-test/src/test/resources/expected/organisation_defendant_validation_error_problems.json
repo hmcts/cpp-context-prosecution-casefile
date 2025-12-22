@@ -1,0 +1,20 @@
+[
+  {
+    "code": "DEFENDANT_PRIMARY_EMAIL_ADDRESS_INVALID",
+    "values": [
+      {
+        "key": "emailAddress1",
+        "value": "bad@organisationprimaryemail"
+      }
+    ]
+  },
+  {
+    "code": "DEFENDANT_SECONDARY_EMAIL_ADDRESS_INVALID",
+    "values": [
+      {
+        "key": "emailAddress2",
+        "value": "bad@organisationsecondaryemail"
+      }
+    ]
+  }
+]

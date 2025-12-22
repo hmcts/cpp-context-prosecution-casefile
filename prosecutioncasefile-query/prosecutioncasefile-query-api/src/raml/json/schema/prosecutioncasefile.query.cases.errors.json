@@ -1,0 +1,124 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "type": "object",
+  "definitions": {
+    "error": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "fieldName": {
+          "type": "string"
+        },
+        "errorValue": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "displayName": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "id": "http://justice.gov.uk/json/schemas/domains/prosecutioncasefile/query.cases.errors.json",
+  "properties": {
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+          },
+          "urn": {
+            "type": "string"
+          },
+          "version": {
+            "type": "number"
+          },
+          "region": {
+            "type": "string"
+          },
+          "errorsDescription": {
+            "type": "string"
+          },
+          "multipleErrors": {
+            "type": "string"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "caseMarkersErrors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "defendants": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "chargeDate": {
+                  "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date"
+                },
+                "hearingDate": {
+                  "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date"
+                },
+                "id": {
+                  "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+                },
+                "firstName": {
+                  "type": "string",
+                  "maxLength": 130
+                },
+                "lastName": {
+                  "type": "string",
+                  "maxLength": 35
+                },
+                "organisationName": {
+                  "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/error"
+                  }
+                },
+                "offences": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+                      },
+                      "errors": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/definitions/error"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "results": {
+      "type": "integer"
+    },
+    "pageCount": {
+      "type": "integer"
+    }
+  }
+}

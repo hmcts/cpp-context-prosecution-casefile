@@ -1,0 +1,97 @@
+{
+  "prosecution": {
+    "caseDetails": {
+      "caseId": "0dc21b1c-ca54-4b6f-baf4-c79346b19198",
+      "caseMarker": {
+        "markerTypeCode": "ABC",
+        "markerTypeDescription": "Child Abuse",
+        "markerTypeId": "2013c181-7458-4fb2-a637-b596fbe0e781"
+      },
+      "initialHearing": {
+        "courtHearingLocation": "abcd",
+        "dateOfHearing": "02-04-1978",
+        "timeOfHearing": "9:05"
+      },
+      "initiationCode": "H",
+      "originatingOrganisation": "cps",
+      "prosecutor": {
+        "informant": "informant",
+        "prosecutingAuthority": "prosAut"
+      },
+      "prosecutorCaseReference": "6vwGnvQbIh",
+      "statementOfFacts": "statementOfFacts",
+      "statementOfFactsWelsh": "statementOfFactsWelsh",
+      "summonsCode": "summonsCode"
+    },
+    "defendants": [
+      {
+        "documentationLanguage": "W",
+        "hearingLanguage": "W",
+        "id": "77f0959d-29d0-49ae-9eaa-f42cddb4d439",
+        "individual": {
+          "personalInformation": {
+            "address": {
+              "address1": "armagaddon house",
+              "postcode": "M60 1NW"
+            },
+            "contactDetails": {},
+            "firstName": "John",
+            "lastName": "Smith",
+            "title": "Baron"
+          },
+          "selfDefinedInformation": {
+            "ethnicity": "white",
+            "gender": "MALE"
+          }
+        },
+        "offences": [
+          {
+            "appliedCompensation": 200,
+            "chargeDate": "2015-04-04",
+            "offenceCode": "CA03013",
+            "offenceCommittedDate": "2018-09-10",
+            "offenceDateCode": 1,
+            "offenceLocation": "Croydon",
+            "offenceSequenceNumber": 1,
+            "offenceWording": "TV Licence not paid"
+          }
+        ],
+        "postingDate": "2018-09-10"
+      },
+      {
+        "documentationLanguage": "W",
+        "hearingLanguage": "W",
+        "id": "3ef1a350-5ee2-4028-884e-d74bfdd8888c",
+        "individual": {
+          "personalInformation": {
+            "address": {
+              "address1": "armagaddon house",
+              "postcode": "M60 1NW"
+            },
+            "contactDetails": {},
+            "firstName": "John",
+            "lastName": "Smith",
+            "title": "Baron"
+          },
+          "selfDefinedInformation": {
+            "ethnicity": "white",
+            "gender": "MALE"
+          }
+        },
+        "offences": [
+          {
+            "appliedCompensation": 200,
+            "chargeDate": "2015-04-04",
+            "offenceCode": "DA03014",
+            "offenceCommittedDate": "2018-09-10",
+            "offenceDateCode": 1,
+            "offenceLocation": "Croydon",
+            "offenceSequenceNumber": 1,
+            "offenceWording": "TV Licence not paid"
+          }
+        ],
+        "postingDate": "2018-09-10"
+      }
+    ]
+  }
+}

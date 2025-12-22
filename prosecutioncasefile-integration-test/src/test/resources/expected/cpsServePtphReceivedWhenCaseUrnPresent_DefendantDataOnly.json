@@ -1,0 +1,127 @@
+{
+  "ptphHeader": {
+    "urn": "{URN_VALUE}"
+  },
+  "defendants": [
+    {
+      "id": "{DEFENDANT_1_ID}",
+      "principalCharges": "principal-charges",
+      "caseProgressionOfficer": {
+        "email": "test@test.com",
+        "firstName": "name",
+        "phone": "7778888345"
+      },
+      "advocateAtPTPH": {
+        "email": "test@test.com",
+        "firstName": "name",
+        "phone": "7778888345"
+      },
+      "advocateForTrial": {
+        "email": "test@test.com",
+        "firstName": "name",
+        "phone": "7778888345"
+      }
+    }
+  ],
+  "contacts": {
+    "advAtPthp": {
+      "email": "test@test.com",
+      "firstName": "name",
+      "phone": "7778888345"
+    },
+    "advForTrial": {
+      "email": "test@test.com",
+      "firstName": "name",
+      "phone": "7778888345"
+    },
+    "reviewingLawyer": {
+      "email": "test@test.com",
+      "firstName": "name",
+      "phone": "7778888345"
+    },
+    "prosCaseProgOfficer": {
+      "email": "test@test.com",
+      "firstName": "name",
+      "phone": "7778888345"
+    },
+    "cpsOffice": {
+      "address1": "The Court House",
+      "address2": "Cramic Way",
+      "address3": "Port Talbot",
+      "address4": "West Glam.",
+      "address5": "address line 5",
+      "postcode": "SA13 1RU"
+    },
+    "officerInCase": {
+      "email": "test@test.com",
+      "firstName": "name",
+      "phone": "7778888345"
+    }
+  },
+  "prosecutionInformation": {
+    "section1Q10Group": {
+      "q10": "Y"
+    },
+    "section1Q11Group": {
+      "q11": "Y"
+    },
+    "section1Q12Group": {
+      "q12": "Y"
+    },
+    "section1Q13Group": {
+      "q13": "Y"
+    },
+    "section1Q14Group": {
+      "q14": "Y"
+    },
+    "section1Q15Group": {
+      "q15": "Y"
+    },
+    "section1Q16Group": {
+      "q16": "Y"
+    },
+    "section1Q1Group": {
+      "q1": "Y"
+    },
+    "section1Q2Group": {
+      "q2": "Y"
+    },
+    "section1Q3Group": {
+      "q3": "Y"
+    },
+    "section1Q4Group": {
+      "q4": "Y"
+    },
+    "section1Q5Group": {
+      "particulars": "Cctv Notes",
+      "q5": "Y"
+    },
+    "section1Q6Group": {
+      "q6": "Y"
+    },
+    "section1Q7Group": {
+      "q7": "Y"
+    },
+    "section1Q8Group": {
+      "q8": "Y"
+    },
+    "section1Q9Group": {
+      "q9": "Y"
+    }
+  },
+  "defenceInformation":[
+  ],
+  "witnesses": [
+    {
+      "firstName": "forename",
+      "lastName": "abc",
+      "collarNumber": "collar number",
+      "rank": "Rank1",
+      "relevantDisputedIssue": "Issue 1",
+      "details": [
+        "POLICE_OFFICER",
+        "OIC"
+      ]
+    }
+  ]
+}

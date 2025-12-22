@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/prosecution-case.json",
+  "properties": {
+    "caseId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "prosecutorInformant": {
+      "type": "string"
+    },
+    "prosecutionAuthority": {
+      "type": "string"
+    },
+    "originatingOrganisation": {
+      "type": "string"
+    },
+    "prosecutionCaseReference": {
+      "type": "string"
+    },
+    "defendants": {
+      "type": "array",
+      "items": {
+        "$ref" : "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/defendant.json"
+      }
+    }
+  }
+}

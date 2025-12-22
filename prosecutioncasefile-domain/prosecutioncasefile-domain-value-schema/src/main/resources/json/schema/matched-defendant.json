@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/matched-defendant.json",
+  "type": "object",
+  "properties": {
+    "matchingId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "defendantId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "problems": {
+      "type": "array",
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/problem.json"
+      }
+    },
+    "isContinueMatching" : {
+      "type": "boolean"
+    },
+    "cpsDefendantId" : {
+      "type": "string"
+    }
+  },
+  "required": [
+    "code",
+    "values"
+  ],
+  "additionalProperties": false
+}

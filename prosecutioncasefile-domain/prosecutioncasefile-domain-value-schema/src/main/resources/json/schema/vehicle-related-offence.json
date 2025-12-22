@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/vehicle-related-offence.json",
+  "type": "object",
+  "properties": {
+    "vehicleCode": {
+      "type": "string",
+      "description": "Vehicle Code"
+    },
+    "vehicleRegistrationMark": {
+      "type": "string",
+      "description": "Vehicle Registration"
+    }
+    },
+  "additionalProperties": false
+  }

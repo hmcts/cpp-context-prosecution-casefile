@@ -1,0 +1,166 @@
+{
+  "offences": [
+    {
+      "offenceId": "062cedf4-b495-3a6c-9148-cec6bef362ed",
+      "cjsOffenceCode": "CA03013",
+      "modeOfTrial": "SNONIMP",
+      "cppDateOfLastUpdate": "2019-11-28",
+      "pnldDateOfLastUpdate": "2019-12-23",
+      "details": {
+        "document": {
+          "type": "H",
+          "codes": {
+            "fptgraduated": 0.0,
+            "mojstatscode": "196/08",
+            "mopinoteslink": "D19586",
+            "cjsoffencecode": "CA03013",
+            "mopireviewgroup": {
+              "code": "C",
+              "description": "Group 3"
+            },
+            "notifiabletomoj": {
+              "code": "N",
+              "description": "NO"
+            },
+            "seatbeltoffence": {
+              "code": "N",
+              "description": "NO"
+            },
+            "fptgraduatedhigh": 0.0,
+            "roadsidedeposits": {
+              "code": "N",
+              "description": "NO"
+            },
+            "fptissuedbypolice": 0.0,
+            "pndissuedbyothers": 0.0,
+            "pndissuedbypolice": 0.0,
+            "disqualificationclass": {
+              "code": "N",
+              "description": "discretionary disqualification not endorsable"
+            },
+            "recordableonpncindicator": {
+              "code": "N",
+              "description": "NO"
+            },
+            "pndissuedbylocalauthorities": 0.0
+          },
+          "libra": {
+            "miscode": {
+              "code": "SNM",
+              "description": "Summary Non-Motoring"
+            },
+            "fineindicator": {
+              "code": "Y",
+              "description": "YES"
+            },
+            "libracategory": {
+              "code": "CS",
+              "description": "Summary Non-motoring"
+            },
+            "maxfinetypemagct": {
+              "code": "U",
+              "description": "Unlimited"
+            },
+            "custodialindicator": {
+              "code": "N",
+              "description": "NO"
+            }
+          },
+          "other": {
+            "penalty": "A fine not exceeding level five on    the standard scale",
+            "modeoftrial": {
+              "code": "SNONIMP",
+              "description": "SUMMARY NON-IMPRISONABLE"
+            },
+            "powersofarrest": "Arrest without warrant",
+            "geographicregion": {
+              "code": "EWNI",
+              "description": "England, Wales and Northern Ireland"
+            },
+            "timelimitforprosecutions": "6 months"
+          },
+          "english": {
+            "title": "Obstruct person executing search warrant for TV receiver",
+            "legislation": "Contrary to section 366(8)(a) and (9) of the Communications Act 2003.",
+            "pointstoprove": "pointstoprove",
+            "additionalkeywords": {
+              "additionalkeyword": [
+                "Obstruct",
+                "execute",
+                "executes",
+                "obstructs",
+                "Possession or control of a television receiver without a licence",
+                "Communication Act 2003",
+                "public electronic communication network",
+                "tv",
+                "receivers",
+                "license",
+                "colour",
+                "black and white",
+                "intend",
+                "intends",
+                "obstructed",
+                "obstructing",
+                "obstruction"
+              ]
+            },
+            "investigatoractions": {
+              "investigatoraction": [
+                {
+                  "code": "IA27",
+                  "description": "Confirm proposed charge is appropriately authorised (Police or CPS)"
+                },
+                {
+                  "code": "IA28",
+                  "description": "Ensure compliance with investigator's obligations re disclosure"
+                },
+                {
+                  "code": "IA29",
+                  "description": "Consider if case suitable for referral to Financial Investigation Unit and CPS for asset recovery eg confiscation order"
+                },
+                {
+                  "code": "IA13",
+                  "description": "Guilty Plea by letter procedure may be offered for this offence"
+                }
+              ]
+            },
+            "standardoffencewording": "standardoffencewording",
+            "standardstatementoffacts": "standardstatementoffacts",
+            "policeandcpschargingresponsibilities": "D27968"
+          },
+          "pnldref": "H6211",
+          "ancillary": {
+            "groups": {
+              "code": "GP03",
+              "description": "Television & satellite"
+            },
+            "legislationcode": {
+              "link": "S509"
+            },
+            "dateoflastupdate": "2005-12-23",
+            "offencestartdate": "2004-04-01",
+            "offencewordinggroup": "Y10"
+          },
+          "indictment": {
+            "indictmentindicator": {
+              "code": "N",
+              "description": "NO"
+            },
+            "structuredindictmentindicator": {
+              "code": "N",
+              "description": "NO"
+            }
+          }
+        }
+      },
+      "title": "Obstruct person executing search warrant for TV receiver",
+      "legislation": "Contrary to section 366(8)(a) and    (9) of the Communications Act 2003.",
+      "offenceStartDate": "2019-12-04",
+      "drugsOrAlcoholRelated": "N",
+      "locationRequired": "Y",
+      "prosecutionTimeLimit": "6",
+      "backDuty": true,
+      "modeOfTrialDerived": "Summary"
+    }
+  ]
+}

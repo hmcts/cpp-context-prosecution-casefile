@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/error-details.json",
+  "properties": {
+    "errorDetails": {
+      "type": "array",
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/error.json"
+      }
+    }
+  },
+  "additionalProperties": false
+}

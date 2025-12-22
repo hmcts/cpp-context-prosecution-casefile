@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/problem.json",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string",
+      "minLength": 1
+    },
+    "values": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/problem-value"
+      }
+    }
+  },
+  "required": [
+    "code",
+    "values"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "problem-value": {
+      "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/problem-value.json",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "key",
+        "value"
+      ]
+    }
+  }
+}

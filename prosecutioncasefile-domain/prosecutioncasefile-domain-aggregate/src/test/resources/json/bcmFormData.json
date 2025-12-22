@@ -1,0 +1,17 @@
+{
+  "bcmDefendants": [
+    {
+      "id": "7f8fe782-a287-11eb-bcbc-0242ac130002",
+      "otherAreasBeforePtph": "otherAreasBeforePtph",
+      "otherAreasAfterPtph": "otherAreasAfterPtph",
+      "anyOther": "anyOther",
+      "prosecutorOffences": [
+        {
+          "offenceCode": "offenceCode",
+          "wording": "wording",
+          "date": "2022-05-11"
+        }
+      ]
+    }
+  ]
+}

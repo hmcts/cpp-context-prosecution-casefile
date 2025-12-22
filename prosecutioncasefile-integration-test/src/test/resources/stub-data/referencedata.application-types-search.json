@@ -1,0 +1,51 @@
+{
+  "courtApplicationTypes": [
+    {
+      "id": "62fab61d-e166-4e44-9a4e-046866511993",
+      "code": "APP_TYPE_CODE",
+      "type": "Application to amend a community order on change of residence",
+      "legislation": "In accordance with paragraph 16 of Schedule 8 to the Criminal Justice Act 2003.",
+      "categoryCode": "CO",
+      "jurisdiction": "EITHER",
+      "linkType": "LINKED",
+      "appealFlag": true,
+      "summonsTemplateType": "BREACH",
+      "validFrom": "2019-04-01",
+      "applicantAppellantFlag": true,
+      "pleaApplicableFlag": true,
+      "offenceActiveOrder": "OFFENCE",
+      "commrOfOathFlag": true,
+      "breachType": "GENERIC_BREACH",
+      "courtOfAppealFlag": true,
+      "courtExtractAvlFlag": true,
+      "listingNotifTemplate": "Template1,Template2",
+      "boxworkNotifTemplate": "Template1,Template2",
+      "typeWelsh": "Sample Text",
+      "legislationWelsh": "Sample Text",
+      "prosecutorThirdPartyFlag": true,
+      "spiOutApplicableFlag": true,
+      "resentencingActivationCode": "CJO3523",
+      "prefix": "Resentenced"
+    },
+    {
+      "id": "cb05a560-48f9-415d-b230-55b78f8cb4a8",
+      "code": "CJ0546",
+      "type": "Application for first hearing summons for criminal case",
+      "categoryCode": "CO",
+      "jurisdiction": "EITHER",
+      "linkType": "FIRST_HEARING",
+      "appealFlag": false,
+      "summonsTemplateType": "FIRST_HEARING",
+      "validFrom": "2019-04-01",
+      "applicantAppellantFlag": false,
+      "pleaApplicableFlag": false,
+      "offenceActiveOrder": "OFFENCE",
+      "commrOfOathFlag": false,
+      "breachType": "NOT_APPLICABLE",
+      "courtOfAppealFlag": false,
+      "courtExtractAvlFlag": false,
+      "prosecutorThirdPartyFlag": false,
+      "spiOutApplicableFlag": false
+    }
+  ]
+}

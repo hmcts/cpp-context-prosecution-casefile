@@ -1,0 +1,30 @@
+{
+  "caseDetails": {
+    "caseId": "cbd1a62f-cf21-482a-a951-609c7c4e0fbf",
+    "prosecutorCaseReference": "CcXisI6QFd",
+    "prosecutor": {
+        "prosecutionAuthorityId": "bb06efdc-1f22-461b-8264-024df64f6109",
+        "prosecutingAuthority": "TFL"
+    }
+  },
+  "channel": "SPI",
+  "defendants": [
+    {
+      "id": "f2cd7358-0811-4d25-919a-b6507d1f0d95",
+      "offences": [
+        {
+          "id": "33a995a9-0188-4feb-a8df-ac0f1fbc5018",
+          "cjsCode": "OFCODE12",
+          "startDate": "2018-09-10"
+        }
+      ],
+      "organisation": {
+        "aliasOrganisationNames": [
+          "FakeCompany",
+          "RealCompany"
+        ],
+        "organisationName": "Ministry of Justice"
+      }
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "caseDetails": {
+    "caseId": "CASE-ID",
+    "initiationCode": "J",
+    "prosecutorCaseReference": "CASE-URN",
+    "originatingOrganisation": "GAEAA01",
+    "cpsOrganisation": "A30AB00",
+    "prosecutor": {
+      "prosecutingAuthority": "GAEAA01",
+      "informant": "Venu"
+    }
+  },
+  "defendants": [
+    {
+      "asn": "asn",
+      "documentationLanguage": "E",
+      "hearingLanguage": "E",
+      "id": "DEFENDANT_ID1",
+      "individual": {
+        "driverNumber": "AS",
+        "nationalInsuranceNumber": "SN123456C",
+        "personalInformation": {
+          "address": {
+            "address1": "Address Line 1",
+            "address2": "Address Line 2",
+            "address3": "Address Line 3",
+            "address4": "Address Line 4",
+            "address5": "Address Line 5",
+            "postcode": "CR0 1XX"
+          },
+          "contactDetails": {
+            "home": "9991231230",
+            "mobile": "9991231230",
+            "primaryEmail": "abc@test.com",
+            "secondaryEmail": "abc@test.com",
+            "work": "9991231230"
+          },
+          "firstName": "Steve  nothing",
+          "lastName": "Reaper",
+          "occupation": "TA",
+          "occupationCode": 666,
+          "title": "Baron"
+        },
+        "selfDefinedInformation": {
+          "additionalNationality": "GBR",
+          "dateOfBirth": "1999-09-09",
+          "ethnicity": "W1",
+          "gender": "MALE",
+          "nationality": "POL"
+        }
+      },
+      "languageRequirement": "Test no special language needs",
+      "numPreviousConvictions": 9,
+      "offences": [
+        {
+          "appliedCompensation": 0.00,
+          "backDuty": 0.00,
+          "backDutyDateTo": "2019-12-04",
+          "chargeDate": "2019-12-04",
+          "offenceCode": "OFCODE12",
+          "offenceCommittedDate": "2019-11-04",
+          "offenceCommittedEndDate": "2019-12-04",
+          "offenceDateCode": 4,
+          "offenceId": "OFFENCE_ID1",
+          "offenceSequenceNumber": 1,
+          "offenceWording": "Test Prosecution charge wording",
+          "offenceWordingWelsh": "Test Prosecution charge wording in Welsh",
+          "statementOfFacts": "Test Prosecution statements of facts"
+        }
+      ],
+      "postingDate": "2019-12-04",
+      "prosecutorDefendantReference": "OFFENCE_ID2",
+      "specificRequirements": "Test no special needs",
+      "appliedProsecutorCosts": 20.99
+    }
+  ],
+  "channel": "CPPI",
+  "externalId": "EXTERNAL_ID"
+}

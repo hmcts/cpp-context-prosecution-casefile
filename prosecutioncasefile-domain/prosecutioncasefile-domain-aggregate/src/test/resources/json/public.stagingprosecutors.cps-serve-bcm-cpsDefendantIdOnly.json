@@ -1,0 +1,39 @@
+{
+  "prosecutionCaseSubject": {
+    "prosecutingAuthority": "The OU Code of the prosecuting authority",
+    "urn": "45MD0000220"
+  },
+  "cpsDefendantOffences": [
+    {
+      "matchingId": "4b64afd7-686f-4ac8-96f6-ca948d83af3f",
+      "cpsDefendantId": "7f8fe782-a287-11eb-bcbc-0242ac130002",
+      "cpsOffenceDetails": [
+        {
+          "cjsOffenceCode": "CA03013",
+          "offenceDate": "2022-05-11",
+          "offenceWording": "offenceWording"
+        }
+      ]
+    }
+  ],
+  "witnesses": [
+    {
+      "firstNameOfIntermediaryKnownAtPtph": "first name",
+      "lastNameOfIntermediaryKnownAtPtph": "last name",
+      "policeOfficerSubject": {
+        "officerInCharge": true,
+        "officeCollarNumber": "collar number",
+        "officerRank": "Rank1"
+      },
+      "relevantDisputedIssue": "Issue 1",
+      "witnessFirstName": "forename",
+      "witnessLastName": "abc"
+    }
+  ],
+  "tag": "tag",
+  "evidencePrePTPH": "evidencePrePTPH text",
+  "evidencePostPTPH": "evidencePostPTPH text",
+  "otherInformation": "otherInformation text",
+  "submissionId": "e85d2c62-af1f-4674-863a-0891e67e325b",
+  "submissionStatus": "PENDING"
+}

@@ -1,0 +1,60 @@
+{
+  "cases": [
+    {
+      "defendants": [
+        {
+          "chargeDate": "2000-09-10",
+          "id": "3b9c05ce-bfdf-4779-b9e5-bcd7a39416d9",
+          "errors": [],
+          "offences": [
+            {
+              "id": "b6bed944-8564-4cb3-b6b1-534081eee67b",
+              "errors": [
+                {
+                  "id": "b6bed944-8564-4cb3-b6b1-534081eee67b",
+                  "fieldName": "offence_offenceCode",
+                  "errorValue": "OFCODE13",
+                  "displayName": "OFFENCE_CODE_IS_INVALID",
+                  "version": 2
+                },
+                {
+                  "id": "b6bed944-8564-4cb3-b6b1-534081eee67b",
+                  "fieldName": "offence_offenceSequenceNo",
+                  "errorValue": "1",
+                  "displayName": "OFFENCE_CODE_IS_INVALID",
+                  "version": 2
+                }
+              ]
+            }
+          ],
+          "firstName": "John",
+          "lastName": "Smith"
+        }
+      ],
+      "id": "210364cb-8cc2-40de-943f-82de6240d51b",
+      "urn": "b0ejooSWBV",
+      "dateOfBirth": "1999-04-24",
+      "region": "NW",
+      "caseType": "J",
+      "errorDescription": "Multiple Errors",
+      "version": 2,
+      "errors": [],
+      "caseMarkersErrors": [],
+      "errorCaseDetails": {
+        "defendants": [
+          {
+            "id": "3b9c05ce-bfdf-4779-b9e5-bcd7a39416d9",
+            "firstName": "John",
+            "lastName": "Smith",
+            "offences": [
+              {
+                "id": "b6bed944-8564-4cb3-b6b1-534081eee67b",
+                "description": "Duty not paid"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

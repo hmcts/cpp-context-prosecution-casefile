@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <include file="liquibase/001-create-offence-table.changelog.xml"/>
+    <include file="liquibase/002-create-defendant-table.changelog.xml"/>
+    <include file="liquibase/003-add-fk-between-offence-and-defendant.changelog.xml"/>
+    <include file="liquibase/004-add-hearing-details.changelog.xml"/>
+    <include file="liquibase/005-add-court-name.changelog.xml"/>
+    <include file="liquibase/006-add-suspect-id.changelog.xml"/>
+    <include file="liquibase/007-alter-offence-wording.changelog.xml"/>
+    <include file="liquibase/008-create-case-details-tables.changelog.xml"/>
+    <include file="liquibase/009-add-prosecutor-defendant-reference.changelog.xml"/>
+    <include file="liquibase/010-add-idpc-material-reference.changelog.xml"/>
+    <include file="liquibase/011-alter-defendant-personal-information.changelog.xml"/>
+    <include file="liquibase/012-alter-defendant-self-information.changelog.xml"/>
+    <include file="liquibase/013-create-table-business-validation-errors.changelog.xml"/>
+    <include file="liquibase/014-alter-table-business-validation-errors.changelog.xml"/>
+    <include file="liquibase/015-alter-table-business-validation-errors.changelog.xml"/>
+    <include file="liquibase/016-alter-table-business-validation-errors.changelog.xml"/>
+    <include file="liquibase/017-alter-table-business-validation-errors.changelog.xml"/>
+    <include file="liquibase/018-alter-table-business-validation-errors.changelog.xml"/>
+    <include file="liquibase/019-alter-table-business-validation-errors.changelog.xml"/>
+    <include file="liquibase/020-alter-table-case-details.changelog.xml"/>
+    <include file="liquibase/021-alter-table-defendant.changelog.xml"/>
+    <include file="liquibase/022-alter-table-offence-add-dvla-fields.changelog.xml"/>
+    <include file="liquibase/023-alter-table-offence-extend-vehicle-make.changelog.xml"/>
+    <include file="liquibase/024-create-table-resolved-cases.changelog.xml"/>
+    <include file="liquibase/025-alter-table-add-resolved-cases-filter-columns.changelog.xml"/>
+    <include file="liquibase/026-police-cases-fields.changelog.xml"/>
+    <include file="liquibase/027-create-business-validation-errors-summary-view.changelog.xml"/>
+    <include file="liquibase/028-create-indices-defendant-offence-individual.changelog.xml"/>
+    <include file="liquibase/028-create-civil-fees-table.changelog.xml"/>
+    <include file="liquibase/029-drop-process-event-index.xml"/>
+    <include file="liquibase/029-create-organisation-information-table.changelog.xml"/>
+    <include file="liquibase/030-alter-table-defendant.changelog.xml"/>
+    <include file="liquibase/031-alter-table-personal_information.changelog.xml"/>
+    <include file="liquibase/032-add-prosecutor-defendant-reference-initiation-code.changelog.xml"/>
+    <include file="liquibase/033-alter-table-business-validation-errors.changelog.xml"/>
+    <include file="liquibase/034-create-table-business-validation-errors-case-details.changelog.xml"/>
+    <include file="liquibase/035-add-index-case-details.changelog.xml"/>
+    <include file="liquibase/036-alter-table-business-validation-errors-case-detail-column.xml"/>
+    <include file="liquibase/036-recreate-civil-fees-table.changelog.xml"/>
+
+</databaseChangeLog>

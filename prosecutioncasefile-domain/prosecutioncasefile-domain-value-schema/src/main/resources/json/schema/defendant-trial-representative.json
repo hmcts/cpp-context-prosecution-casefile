@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/defendant-trial-representative.json",
+  "type": "object",
+  "description": "Defendant's trial representative address and contact details",
+  "properties": {
+    "representative" : {
+      "type": "string"
+    },
+    "reference": {
+      "type": "string"
+    },
+    "representativeAddress": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone" : {
+      "type": "string"
+    },
+    "contactPerson" : {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,33 @@
+{
+  "cases": [
+    {
+      "defendants": [
+        {
+          "chargeDate": "2015-04-04",
+          "hearingDate": "2050-02-04",
+          "id": "6cd1503f-0a9b-49a1-84ef-52b7f7e7bd4d",
+          "errors": [
+            {
+              "fieldName": "individual_selfDefinedInformation_dateOfBirth",
+              "errorValue": "2050-02-04",
+              "displayName": "DEFENDANT_DOB_IN_FUTURE",
+              "version": 1025
+            }
+          ],
+          "offences": [],
+          "firstName": "John",
+          "lastName": "Smith"
+        }
+      ],
+      "id": "dbdd8f81-780d-4cd9-8bcf-8a747dd4cc25",
+      "urn": "zJ84kN5IO9",
+      "courtLocation": "C55BN00",
+      "region": "NW",
+      "caseType": "Q",
+      "errorDescription": "Single Error",
+      "version": 1025,
+      "errors": [],
+      "caseMarkersErrors": []
+    }
+  ]
+}

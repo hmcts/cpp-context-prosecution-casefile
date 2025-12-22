@@ -1,0 +1,87 @@
+{
+  "cases": [
+    {
+      "defendants": [
+        {
+          "chargeDate": "OFFENCE_CHARGE_DATE",
+          "hearingDate": "2021-02-04",
+          "id": "71881bf3-a163-46c6-8612-ee7e0cb938d1",
+          "errors": [
+            {
+              "fieldName": "individual_personalInformation_contactDetails_primaryEmail",
+              "errorValue": "bad@primaryemail",
+              "displayName": "DEFENDANT_PRIMARY_EMAIL_ADDRESS_INVALID",
+              "version": 1122
+            },
+            {
+              "fieldName": "individual_personalInformation_contactDetails_secondaryEmail",
+              "errorValue": "bad@secondaryemail",
+              "displayName": "DEFENDANT_SECONDARY_EMAIL_ADDRESS_INVALID",
+              "version": 1122
+            },
+            {
+              "fieldName": "individual_selfDefinedInformation_nationality",
+              "errorValue": "ABC",
+              "displayName": "DEFENDANT_NATIONALITY_INVALID",
+              "version": 1122
+            }
+          ],
+          "offences": [
+            {
+              "id": "2013c181-7458-4fb2-a637-b596fbe0e792",
+              "errors": [
+                {
+                  "id": "2013c181-7458-4fb2-a637-b596fbe0e792",
+                  "fieldName": "offence_arrestDate",
+                  "errorValue": "OFFENCE_ARREST_DATE",
+                  "displayName": "ARREST_DATE_IN_FUTURE",
+                  "version": 1122
+                },
+                {
+                  "id": "2013c181-7458-4fb2-a637-b596fbe0e792",
+                  "fieldName": "offence_chargeDate",
+                  "errorValue": "OFFENCE_CHARGE_DATE",
+                  "displayName": "CHARGE_DATE_IN_FUTURE",
+                  "version": 1122
+                }
+              ]
+            }
+          ],
+          "firstName": "John",
+          "lastName": "Smith"
+        }
+      ],
+      "id": "16de4c52-522c-4898-ba1f-bb96cfe97076",
+      "urn": "PGYceZhGA9",
+      "courtLocation": "C55BN00",
+      "region": "NW",
+      "caseType": "9",
+      "errorDescription": "Multiple Errors",
+      "version": 1123,
+      "errors": [
+        {
+          "fieldName": "initiationCode",
+          "errorValue": "9",
+          "displayName": "CASE_INITIATION_CODE_INVALID",
+          "version": 1123
+        }
+      ],
+      "caseMarkersErrors": [
+        {
+          "id": "0",
+          "fieldName": "caseMarkers",
+          "errorValue": "ABC",
+          "displayName": "CASE_MARKER_IS_INVALID",
+          "version": 1123
+        },
+        {
+          "id": "1",
+          "fieldName": "caseMarkers",
+          "errorValue": "BCD",
+          "displayName": "CASE_MARKER_IS_INVALID",
+          "version": 1123
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "defendantId": "3781b95e-113a-46bb-8f94-d5859eb12865",
+  "dateOfBirth":"2010-01-01",
+  "personDetails":{
+    "address":{
+      "address1":"22",
+      "address2":"Acacia Avenue",
+      "address3":"Acacia Town",
+      "address4":"Acacia City",
+      "address5":"Acacia Country",
+      "postcode":"GIR 0AA"
+    },
+    "contactDetails":{
+      "work":"7891011",
+      "home":"123456",
+      "mobile":"45678910",
+      "primaryEmail":"harry.kanejunior@spurs.co.uk",
+      "secondaryEmail":"harry.kanejunior@hotmail.com"
+    },
+    "title":"DR",
+    "firstName":"updatedName",
+    "lastName":"Kane Junior"
+  }
+}

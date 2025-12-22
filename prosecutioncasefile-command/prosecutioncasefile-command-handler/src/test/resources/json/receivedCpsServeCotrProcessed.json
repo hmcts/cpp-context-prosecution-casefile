@@ -1,0 +1,51 @@
+{
+  "applyForThePtrToBeVacated": "Y",
+  "applyForThePtrToBeVacatedDetails": "Details",
+  "caseId": "44884cbc-9659-4ae1-a42e-a8c9839df502",
+  "certificationDate": "1980-01-24",
+  "certifyThatTheProsecutionIsTrialReady": "Y",
+  "certifyThatTheProsecutionIsTrialReadyDetails": "Details",
+  "defendantSubject": [
+    {
+      "prosecutorDefendantId": "defendant Id"
+    }
+  ],
+  "errors": [],
+  "formCompletedOnBehalfOfTheProsecutionBy": "FormCompletedBySomeone",
+  "formDefendants": [
+    {
+      "defendantId": "68e55356-7683-4cb7-a1a2-d0f94286a6d3"
+    }
+  ],
+  "furtherInformationToAssistTheCourt": "FurtherInformation",
+  "hasAllDisclosureBeenProvided": "Y",
+  "hasAllDisclosureBeenProvidedDetails": "Details",
+  "hasAllEvidenceToBeReliedOnBeenServed": "Y",
+  "hasAllEvidenceToBeReliedOnBeenServedDetails": "Details",
+  "haveAnyWitnessSummonsesRequiredBeenReceivedAndServed": "Y",
+  "haveAnyWitnessSummonsesRequiredBeenReceivedAndServedDetails": "Details",
+  "haveArrangementsBeenMadeForStatementOfPointsOfAgreementAndDisagreement": "Y",
+  "haveArrangementsBeenMadeForStatementOfPointsOfAgreementAndDisagreementDetails": "Details",
+  "haveEditedAbeInterviewsBeenPreparedAndAgreed": "Y",
+  "haveEditedAbeInterviewsBeenPreparedAndAgreedDetails": "Details",
+  "haveInterpretersForWitnessesBeenArranged": "Y",
+  "haveInterpretersForWitnessesBeenArrangedDetails": "Details",
+  "haveOtherDirectionsBeenCompliedWith": "Y",
+  "haveOtherDirectionsBeenCompliedWithDetails": "Details",
+  "haveSpecialMeasuresOrRemoteAttendanceIssuesForWitnessesBeenResolved": "Y",
+  "haveSpecialMeasuresOrRemoteAttendanceIssuesForWitnessesBeenResolvedDetails": "Details",
+  "haveTheProsecutionWitnessesRequiredToAttendAcknowledgedThatTheyWillAttend": "Y",
+  "haveTheProsecutionWitnessesRequiredToAttendAcknowledgedThatTheyWillAttendDetails": "Details",
+  "isTheCaseReadyToProceedWithoutDelayBeforeTheJury": "Y",
+  "isTheCaseReadyToProceedWithoutDelayBeforeTheJuryDetails": "Details",
+  "isTheTimeEstimateCorrect": "Y",
+  "isTheTimeEstimateCorrectDetails": "Details",
+  "lastRecordedTimeEstimate": 14,
+  "prosecutionCaseSubject": {
+    "prosecutingAuthority": "The OU Code of the prosecuting authority",
+    "urn": "caseURN"
+  },
+  "submissionId": "e85d2c62-af1f-4674-863a-0891e67e325b",
+  "submissionStatus": "SUCCESS",
+  "trialDate": "1980-01-24"
+}

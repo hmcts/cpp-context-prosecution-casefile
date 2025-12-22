@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cpp/json/schemas/sjp/events/public.sjp-case-created.json",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "postingDate": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date"
+    }
+  },
+  "required": [
+    "id",
+    "postingDate"
+  ]
+}

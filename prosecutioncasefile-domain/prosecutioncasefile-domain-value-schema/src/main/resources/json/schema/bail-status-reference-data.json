@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/bail-status-reference-data.json",
+  "type": "object",
+  "description": "Bail Status Reference Data",
+  "properties": {
+    "id": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "sequence": {
+      "type": "integer"
+    },
+    "statusCode": {
+      "type": "string",
+      "maxLength": 10
+    },
+    "statusDescription": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "validFrom": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+  "id",
+  "sequence",
+  "statusCode"
+  ]
+}

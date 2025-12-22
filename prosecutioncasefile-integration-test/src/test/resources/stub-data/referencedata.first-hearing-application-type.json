@@ -1,0 +1,21 @@
+{
+  "id": "bfa61811-b917-3bce-9cc1-7ea8e554bd3b",
+  "code": "CJ06463",
+  "appealFlag": false,
+  "applicantAppellantFlag": false,
+  "breachType": "NOT_APPLICABLE",
+  "categoryCode": "CO",
+  "commrOfOathFlag": false,
+  "courtExtractAvlFlag": false,
+  "courtOfAppealFlag": false,
+  "id": "cb05a560-48f9-415d-b230-55b78f8cb4a8",
+  "jurisdiction": "EITHER",
+  "linkType": "FIRST_HEARING",
+  "offenceActiveOrder": "OFFENCE",
+  "pleaApplicableFlag": false,
+  "prosecutorThirdPartyFlag": false,
+  "spiOutApplicableFlag": false,
+  "summonsTemplateType": "FIRST_HEARING",
+  "type": "Application for first hearing summons for criminal case",
+  "validFrom": "2019-04-01"
+}

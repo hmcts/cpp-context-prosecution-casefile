@@ -1,0 +1,23 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <bean id="processEngineConfiguration" class="org.activiti.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration">
+    <property name="jobExecutorActivate" value="true"/>
+  </bean>
+  <bean id="pendingMaterialExpiredDelegate" class="org.mockito.Mockito" factory-method="mock">
+    <constructor-arg name="classToMock" value="org.activiti.engine.delegate.JavaDelegate"/>
+  </bean>
+  <bean id="pendingIdpcMaterialExpiredDelegate" class="org.mockito.Mockito" factory-method="mock">
+    <constructor-arg name="classToMock" value="org.activiti.engine.delegate.JavaDelegate"/>
+  </bean>
+  <bean id="bulkScanPendingMaterialExpiredDelegate" class="org.mockito.Mockito" factory-method="mock">
+    <constructor-arg name="classToMock" value="org.activiti.engine.delegate.JavaDelegate"/>
+  </bean>
+  <bean id="pendingCpsServePetExpiredDelegate" class="org.mockito.Mockito" factory-method="mock">
+    <constructor-arg name="classToMock" value="org.activiti.engine.delegate.JavaDelegate"/>
+  </bean>
+  <bean id="pendingCpsServeBcmExpiredDelegate" class="org.mockito.Mockito" factory-method="mock">
+    <constructor-arg name="classToMock" value="org.activiti.engine.delegate.JavaDelegate"/>
+  </bean>
+</beans>

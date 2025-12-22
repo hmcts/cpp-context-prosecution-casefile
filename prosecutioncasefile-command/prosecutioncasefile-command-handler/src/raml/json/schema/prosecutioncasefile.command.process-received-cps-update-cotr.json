@@ -1,0 +1,139 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/command/handler/staging/process-received-cps-update-cotr.json",
+  "type": "object",
+  "properties": {
+    "submissionId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "submissionStatus": {
+      "type": "string",
+      "enum": [
+        "PENDING",
+        "FAILED",
+        "REJECTED",
+        "SUCCESS",
+        "SUCCESS_WITH_WARNINGS",
+        "EXPIRED"
+      ]
+    },
+    "prosecutionCaseSubject": {
+      "description": "Identifies the case to which the form is associated to",
+      "type": "object",
+      "items": {
+        "urn": {
+          "type": "string",
+          "minLength": 1
+        },
+        "prosecutingAuthority": {
+          "type": "string",
+          "description": "The OU Code of the prosecuting authority"
+        }
+      }
+    },
+    "defendantSubject": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "matchingId": {
+            "description": "This is randomly generated id for processing only",
+            "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+          },
+          "prosecutorDefendantId": {
+            "description": "A unique reference to a defendant within a prosecution. Provided by the prosecuting authority e.g. DWP",
+            "type": "string",
+            "maxLength": 36
+          },
+          "cpsDefendantId": {
+            "description": "A unique reference to a defendant within a prosecution. Provided by cps when CPS are prosecuting the case",
+            "type": "string",
+            "maxLength": 36
+          },
+          "asn": {
+            "description": "A unique reference to a defendant within a prosecution. Provided by the police force and requested from the police by a non police prosecutor e.g. DWP requests from the police",
+            "type": "string",
+            "maxLength": 21
+          },
+          "title": {
+            "description": "Title by which a defendant is addressed",
+            "type": "string"
+          },
+          "forename": {
+            "description": "The first given name of a defendant",
+            "type": "string",
+            "maxLength": 35
+          },
+          "forename2": {
+            "description": "The second given name of a defendant",
+            "type": "string",
+            "maxLength": 35
+          },
+          "forename3": {
+            "description": "The third given name of a defendant",
+            "type": "string",
+            "maxLength": 35
+          },
+          "surname": {
+            "description": "Surname or Family name",
+            "type": "string",
+            "maxLength": 35
+          },
+          "dateOfBirth": {
+            "description": "The date when the defendant was born",
+            "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date"
+          },
+          "organisationName": {
+            "description": "The name of a defendant that is a legal entity",
+            "type": "string"
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "validationData": {
+      "type": "object",
+      "properties": {
+        "defendantIds": {
+          "type": "array",
+          "items": {
+            "properties": {
+              "cpsDefendantId": {
+                "description": "This is CPS Defendant Id",
+                "type": "string"
+              },
+              "defendantId": {
+                "description": "This is the Common Platform unique identifier for the defendant",
+                "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+              }
+            }
+          }
+        }
+      }
+    },
+    "tag": {
+      "type": "string"
+    },
+    "trialDate": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date",
+      "description": "The date of the trial"
+    },
+    "furtherProsecutionInformationProvidedAfterCertification": {
+      "type": "string"
+    },
+    "certifyThatTheProsecutionIsTrialReady": {
+      "type": "string"
+    },
+    "formCompletedOnBehalfOfProsecutionBy": {
+      "type": "string"
+    },
+    "certificationDate": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date",
+      "description": "The certification date"
+    },
+    "cotrId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    }
+  },
+  "additionalProperties": false
+}

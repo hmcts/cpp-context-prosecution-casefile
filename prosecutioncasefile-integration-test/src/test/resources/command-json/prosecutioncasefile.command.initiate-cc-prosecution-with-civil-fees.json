@@ -1,0 +1,81 @@
+{
+  "caseDetails": {
+    "initiationCode": "INITIATION_CODE",
+    "prosecutor": {
+      "prosecutingAuthority": "prosAut"
+    },
+    "originatingOrganisation": "GAFTL00",
+    "feeStatus": "REFUNDED",
+    "dateReceived": "DATE_RECEIVED"
+  },
+  "defendants": [
+    {
+      "id": "DEFENDANT_ID1",
+      "individual": {
+        "personalInformation": {
+          "address": {
+            "address1": "340",
+            "address2": "8009 Camden Throughway",
+            "postcode": "SW11 1JU"
+          },
+          "title": "Mr",
+          "firstName": "TyshawnTEST",
+          "givenName2": "TorreyTest",
+          "lastName": "O'Reilly"
+        },
+        "selfDefinedInformation": {
+          "dateOfBirth": "1970-11-11",
+          "gender": "NOT_SPECIFIED"
+        }
+      },
+      "documentationLanguage": "E",
+      "hearingLanguage": "E",
+      "offences": [
+        {
+          "offenceCode": "OFFENCE_CODE",
+          "offenceId": "OFFENCE_ID",
+          "offenceSequenceNumber": 1,
+          "offenceCommittedDate": "2018-09-10",
+          "offenceCommittedEndDate": "2018-10-10",
+          "offenceDateCode": 1,
+          "offenceLocation": "Croydon",
+          "offenceWording": "TV Licence not paid",
+
+          "arrestDate": "2018-12-04",
+          "appliedCompensation": 200,
+          "alcoholRelatedOffence": {
+            "alcoholLevelMethod": "A",
+            "alcoholLevelAmount": 100
+          },
+          "vehicleRelatedOffence": {
+            "vehicleCode": "O",
+            "vehicleRegistrationMark": "AA11 ABC"
+          },
+          "plea": {
+            "pleaDate": "2018-09-11",
+            "pleaValue": "GUILTY"
+          },
+          "verdict": {
+            "verdictDate": "2018-09-12",
+            "verdictType": {
+              "id": "c4ca4238-a0b9-3382-8dcc-509a6f75849b",
+              "category": "Guilty",
+              "categoryType": "GUILTY"
+            }
+          }
+        }
+      ],
+      "initialHearing": {
+        "hearingDuration": 20,
+        "hearingLanguage": "E",
+        "dateOfHearing": "DATE_OF_HEARING",
+        "timeOfHearing": "11:11:00.000",
+        "courtHearingLocation": "B01LY00",
+        "roomId": "9e4932f7-97b2-3010-b942-ddd2624e4dd8"
+      },
+      "prosecutorDefendantReference": "DEFENDANT_REFERENCE1"
+    }
+  ],
+  "channel": "MCC",
+  "isCivil": true
+}

@@ -1,0 +1,21 @@
+{
+  "cpsOffenceDetails": [
+    {
+      "cjsOffenceCode": "OFFENCE_CODE_1",
+      "offenceDate": "2021-12-30",
+      "offenceWording": "offenceWording"
+    },
+    {
+      "cjsOffenceCode": "OFFENCE_CODE_11",
+      "offenceDate": "2021-12-30",
+      "offenceWording": "offenceWording"
+    },
+    {
+      "cjsOffenceCode": "OFFENCE_CODE_111",
+      "offenceDate": "2021-12-30",
+      "offenceWording": "offenceWording"
+    }
+  ],
+  "matchingId": "MATCHING_ID1",
+  "organisationName": "unknown"
+}

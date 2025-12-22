@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/domain/event/idpc-defendant-matched",
+  "type": "object",
+  "properties": {
+    "fileServiceId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "caseId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "transactionId": {
+      "type": "string"
+    },
+    "caseUrn": {
+      "type": "string",
+      "maxLength": 36
+    },
+    "responseEmail": {
+      "type": "string"
+    },
+    "materialType": {
+      "type": "string"
+    },
+    "defendantId": {
+      "type": "string",
+      "maxLength": 36
+    }
+  },
+  "required": [
+    "fileServiceId",
+    "caseId",
+    "caseUrn",
+    "materialType",
+    "defendantId"
+  ],
+  "additionalProperties": false
+}

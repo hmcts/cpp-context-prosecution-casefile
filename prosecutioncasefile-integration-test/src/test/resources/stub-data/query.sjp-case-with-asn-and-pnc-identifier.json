@@ -1,0 +1,50 @@
+{
+  "id": "${case.id}",
+  "urn": "${case.urn}",
+  "enterpriseId": "${case.enterpriseId}",
+  "prosecutingAuthority": "TFL",
+  "costs": 200,
+  "postingDate": "2018-09-10",
+  "defendant": {
+    "id": "${defendant.id}",
+    "address": {
+      "address1": "armagaddon house"
+    },
+    "dateOfBirth": "${defendant.dob}",
+    "firstName": "John",
+    "gender": "Male",
+    "lastName": "Smith",
+    "offences": [
+      {
+        "id": "${offence.id}",
+        "chargeDate": "${offence.chargeDate:-2018-02-01}",
+        "compensation": 200,
+        "libraOffenceCode": "OFCODE12",
+        "libraOffenceDateCode": 1,
+        "offenceCommittedDate": "${offence.committedDate:-2018-01-01}",
+        "offenceSequenceNo": 1,
+        "offenceWording": "Duty not paid",
+        "backDutyDateFrom":"2018-04-30",
+        "backDutyDateTo":"2018-05-30",
+        "backDuty":340.31,
+        "vehicleRegistrationMark":"AB11 ABC",
+        "vehicleMake":"Ford",
+        "endorsable": ${offence.endorsable},
+        "pressRestrictable": ${offence.pressRestrictable}
+      }
+    ],
+    "title": "Baron",
+    "contactDetails": {
+      "home": "0207 000 0000",
+      "mobile": "11111 111 111",
+      "email": "primary@email.com",
+      "email2": "secondary@email.com",
+      "business": "0207 111 1111"
+    },
+    "nationalInsuranceNumber": "AB123456C",
+    "hearingLanguage": "W",
+    "asn": "ASN",
+    "pncIdentifier": "PNC_ID"
+  }
+
+}

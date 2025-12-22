@@ -1,0 +1,34 @@
+{
+  "caseId": "44884cbc-9659-4ae1-a42e-a8c9839df502",
+  "defendants": [
+    {
+      "asn": "asn1",
+      "defendantId": "7f8fe782-a287-11eb-bcbc-0242ac130002",
+      "prosecutorDefendantReference": "5ac172a2-3332-4dcc-bd03-20fa0c7957b4",
+      "appliedProsecutorCosts": 200,
+      "documentationLanguage": "W",
+      "hearingLanguage": "W",
+      "nationalInsuranceNumber": "AB123456C",
+      "personalInformation": {
+        "firstName": "John",
+        "lastName": "Lewis"
+      },
+      "selfDefinedInformation": {
+        "dateOfBirth": "1986-06-03"
+      }
+    },
+    {
+      "asn": "asn2",
+      "defendantId": "9044d4d2-7871-4ed2-a96e-45321eb58a86",
+      "prosecutorDefendantReference": "5ac172a2-3332-4dcc-bd03-20fa0c7957b5",
+      "appliedProsecutorCosts": 200,
+      "documentationLanguage": "W",
+      "hearingLanguage": "W",
+      "nationalInsuranceNumber": "AB123456C",
+      "organisationName": "XYZ Limited"
+    }
+  ],
+  "prosecutionAuthority": "GAAAA01",
+  "prosecutionCaseReference": "2OknbZ5Xl4",
+  "prosecutorInformant": "Adam"
+}

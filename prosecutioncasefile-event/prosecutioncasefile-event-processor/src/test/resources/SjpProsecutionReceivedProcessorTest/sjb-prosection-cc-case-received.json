@@ -1,0 +1,27 @@
+{
+  "initiateCourtProceedings": {
+    "courtDocuments": null,
+    "listHearingRequests": [],
+    "prosecutionCases": [
+      {
+        "appealProceedingsPending": null,
+        "breachProceedingsPending": null,
+        "caseMarkers": null,
+        "caseStatus": null,
+        "defendants": [],
+        "id": "dfd9e505-66bc-42b5-901c-4447ba3bfcd4",
+        "initiationCode": "Z",
+        "originatingOrganisation": null,
+        "policeOfficerInCase": null,
+        "prosecutionCaseIdentifier": {
+          "prosecutionAuthorityCode": "TFL  ",
+          "prosecutionAuthorityId": "ee8a12ea-9377-43ed-ba40-0aaf3287859b",
+          "caseURN": null,
+          "prosecutionAuthorityReference": null
+        },
+        "statementOfFacts": null,
+        "statementOfFactsWelsh": null
+      }
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "caseDetails": {
+    "caseId": "e0b621b3-fb2d-4498-97d9-2fdd7d9c36b7",
+    "prosecutorCaseReference": "eTf27HZShX",
+    "prosecutor": {
+      "prosecutionAuthorityId": "bb06efdc-1f22-461b-8264-024df64f6109",
+      "prosecutingAuthority": "TFL"
+    }
+  },
+  "channel": "SPI",
+  "defendants": [
+    {
+      "id": "6d609f9f-ccb2-491e-9d34-3e4ca12e8bcc",
+      "prosecutorDefendantReference": "6d609f9f-ccb2-491e-9d34-3e4ca12e8bcc",
+      "firstName": "John",
+      "lastName": "Smith",
+
+      "offences": [
+        {
+          "id":"33a995a9-0188-4feb-a8df-ac0f1fbc5018",
+          "cjsCode": "OFCODE12",
+          "startDate": "2018-09-10"
+        }
+      ]
+    },
+    {
+      "id": "b7f07b6f-e47e-4853-bd05-2245f9d9a756",
+      "prosecutorDefendantReference": "b7f07b6f-e47e-4853-bd05-2245f9d9a756",
+      "firstName": "John",
+      "lastName": "Smith",
+      "offences": [
+        {
+          "id":"dc46b120-90de-4fbb-a782-845124e923f5",
+          "cjsCode": "OFCODE12",
+          "startDate": "2018-09-10"
+        }
+      ]
+    }
+  ]
+}

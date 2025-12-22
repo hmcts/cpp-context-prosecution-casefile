@@ -1,0 +1,314 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/staging/prosecutors/json/schemas/public.stagingprosecutors.cps-serve-bcm-received.json",
+  "type": "object",
+  "properties": {
+    "prosecutionCaseSubject": {
+      "type": "object",
+      "properties": {
+        "urn": {
+          "type": "string",
+          "minLength": 1
+        },
+        "prosecutingAuthority": {
+          "type": "string",
+          "description": "The OU Code of the prosecuting authority"
+        }
+      },
+      "required": [
+        "urn",
+        "prosecutingAuthority"
+      ],
+      "additionalProperties": false
+    },
+    "cpsDefendantOffences": {
+      "description": "Identifies the defendant and offences to which the form is associated to",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "matchingId": {
+            "description": "This is randomly generated id for processing only",
+            "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+          },
+          "prosecutorDefendantId": {
+            "description": "A unique reference to a defendant within a prosecution. Provided by the prosecuting authority e.g. DWP",
+            "type": "string",
+            "maxLength": 36
+          },
+          "cpsDefendantId": {
+            "description": "A unique reference to a defendant within a prosecution. Provided by cps when CPS are prosecuting the case",
+            "type": "string",
+            "maxLength": 36
+          },
+          "asn": {
+            "description": "A unique reference to a defendant within a prosecution. Provided by the police force and requested from the police by a non police prosecutor e.g. DWP requests from the police",
+            "type": "string",
+            "maxLength": 21
+          },
+          "title": {
+            "description": "Title by which a defendant is addressed",
+            "type": "string"
+          },
+          "forename": {
+            "description": "The first given name of a defendant",
+            "type": "string",
+            "maxLength": 35
+          },
+          "forename2": {
+            "description": "The second given name of a defendant",
+            "type": "string",
+            "maxLength": 35
+          },
+          "forename3": {
+            "description": "The third given name of a defendant",
+            "type": "string",
+            "maxLength": 35
+          },
+          "surname": {
+            "description": "Surname or Family name",
+            "type": "string",
+            "maxLength": 35
+          },
+          "dateOfBirth": {
+            "description": "The date when the defendant was born",
+            "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date"
+          },
+          "organisationName": {
+            "description": "The name of a defendant that is a legal entity",
+            "type": "string"
+          },
+          "cpsOffenceDetails": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "cjsOffenceCode": {
+                  "type": "string"
+                },
+                "offenceDate": {
+                  "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date"
+                },
+                "offenceWording": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "cjsOffenceCode",
+                "offenceDate",
+                "offenceWording"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "parentGuardianForYouthDefendants": {
+            "type": "object",
+            "description": "Defendant’s parent or guardian",
+            "properties": {
+              "title": {
+                "type": "string",
+                "description": "Title by which a person is addressed",
+                "maxLength": 35
+              },
+              "forename": {
+                "type": "string",
+                "description": "Given Name",
+                "maxLength": 35,
+                "pattern": "^(?!.*  ).+",
+                "comments": "Alphanumeric no consecutive spaces (i.e. a space can not appear adjacent to another space)."
+              },
+              "forename2": {
+                "type": "string",
+                "description": "The second given name of a person, e.g. Ian",
+                "maxLength": 35,
+                "pattern": "^(?!.*  ).+",
+                "comments": "Alphanumeric no consecutive spaces (i.e. a space can not appear adjacent to another space)."
+              },
+              "forename3": {
+                "type": "string",
+                "description": "The third given name of a person, e.g. Barry",
+                "maxLength": 35,
+                "pattern": "^(?!.*  ).+",
+                "comments": "Alphanumeric no consecutive spaces (i.e. a space can not appear adjacent to another space)."
+              },
+              "surname": {
+                "type": "string",
+                "description": "Surname or Family name, e.g. Brown (CJS DSC v5 3.39 Family Name)",
+                "maxLength": 35,
+                "pattern": "^(?!.*  ).+",
+                "comments": "Alphanumeric no consecutive spaces (i.e. a space can not appear adjacent to another space)."
+              },
+              "phone": {
+                "pattern": "^[0-9+\\ \\-]{10,}$",
+                "description": "A home telephone number, including any exchange of location code, at which a person or organisation can be contacted in the UK by telephonic means."
+              },
+              "relationshipToDefendant": {
+                "type": "string",
+                "description": "The nature of the relationship to the defendant."
+              },
+              "email": {
+                "type": "string",
+                "maxLength": 255
+              },
+              "address1": {
+                "type": "string",
+                "description": "Address Line 1 for the defendant",
+                "minLength" : 1,
+                "maxLength": 35
+              },
+              "address2": {
+                "type": "string",
+                "description": "Address Line 2 for the defendant",
+                "maxLength": 35
+              },
+              "address3": {
+                "type": "string",
+                "description": "Address Line 3 for the defendant",
+                "maxLength": 35
+              },
+              "address4": {
+                "type": "string",
+                "description": "Address Line 4 for the defendant",
+                "maxLength": 35
+              },
+              "address5": {
+                "type": "string",
+                "description": "Address Line 5 for the defendant",
+                "maxLength": 35
+              },
+              "postcode": {
+                "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/ukGovPostCode",
+                "description": "UK Post Code (CGS DSC 5.25)"
+              }
+            }
+          },
+          "localAuthorityDetailsForYouthDefendants": {
+            "type": "object",
+            "description": "Local authority responsible for a youth defendant",
+            "properties": {
+              "isLookedAfterChild": {
+                "type": "boolean",
+                "description": "Is the defendant a looked after child"
+              },
+              "authority": {
+                "type": "string",
+                "description": "The name of the Local Authority"
+              },
+              "phone": {
+                "pattern": "^[0-9+\\ \\-]{10,}$",
+                "description": "A home telephone number, including any exchange of location code, at which a person or organisation can be contacted in the UK by telephonic means."
+              },
+              "reference": {
+                "type": "string",
+                "description": "Local authority reference identifier"
+              },
+              "address1": {
+                "type": "string",
+                "description": "Address Line 1 for the defendant",
+                "minLength" : 1,
+                "maxLength": 35
+              },
+              "address2": {
+                "type": "string",
+                "description": "Address Line 2 for the defendant",
+                "maxLength": 35
+              },
+              "address3": {
+                "type": "string",
+                "description": "Address Line 3 for the defendant",
+                "maxLength": 35
+              },
+              "address4": {
+                "type": "string",
+                "description": "Address Line 4 for the defendant",
+                "maxLength": 35
+              },
+              "address5": {
+                "type": "string",
+                "description": "Address Line 5 for the defendant",
+                "maxLength": 35
+              },
+              "postcode": {
+                "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/ukGovPostCode",
+                "description": "UK Post Code (CGS DSC 5.25)"
+              },
+              "title": {
+                "type": "string",
+                "description": "Title by which a person is addressed",
+                "maxLength": 35
+              },
+              "forename": {
+                "type": "string",
+                "description": "Given Name",
+                "maxLength": 35,
+                "pattern": "^(?!.*  ).+",
+                "comments": "Alphanumeric no consecutive spaces (i.e. a space can not appear adjacent to another space)."
+              },
+              "surname": {
+                "type": "string",
+                "description": "Surname or Family name, e.g. Brown (CJS DSC v5 3.39 Family Name)",
+                "maxLength": 35,
+                "pattern": "^(?!.*  ).+",
+                "comments": "Alphanumeric no consecutive spaces (i.e. a space can not appear adjacent to another space)."
+              },
+              "email": {
+                "type": "string",
+                "maxLength": 255
+              }
+            }
+          }
+        }
+      }
+    },
+    "tag": {
+      "type": "string"
+    },
+    "evidencePrePTPH": {
+      "type": "string"
+    },
+    "evidencePostPTPH": {
+      "type": "string"
+    },
+    "otherInformation": {
+      "type": "string"
+    },
+    "submissionId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "submissionStatus": {
+      "type": "string",
+      "enum": [
+        "PENDING",
+        "FAILED",
+        "REJECTED",
+        "SUCCESS",
+        "SUCCESS_WITH_WARNINGS",
+        "EXPIRED"
+      ]
+    }
+  },
+  "required": [
+    "prosecutionCaseSubject",
+    "cpsDefendantOffences",
+    "submissionId",
+    "submissionStatus"
+  ],
+  "anyOf": [
+    {
+      "required": [
+        "evidencePrePTPH"
+      ]
+    },
+    {
+      "required": [
+        "evidencePostPTPH"
+      ]
+    },
+    {
+      "required": [
+        "otherInformation"
+      ]
+    }
+  ],
+  "additionalProperties": true
+}

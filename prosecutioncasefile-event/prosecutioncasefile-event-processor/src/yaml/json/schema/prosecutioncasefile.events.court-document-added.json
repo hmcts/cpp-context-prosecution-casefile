@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://justice.gov.uk/core/courts/court-document-added",
+  "type": "object",
+  "properties": {
+    "materialId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "fileStoreId": {
+      "type": "string"
+    },
+    "courtDocument": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/courtDocument.json#"
+    },
+    "isUnbundledDocument": {
+      "type": "boolean",
+      "default": false
+    },
+    "materialSubmittedV2": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/addMaterialSubmissionV2.json"
+    },
+    "cpsFlag": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "materialId",
+    "materialSubmittedV2"
+  ],
+  "additionalProperties": false
+}

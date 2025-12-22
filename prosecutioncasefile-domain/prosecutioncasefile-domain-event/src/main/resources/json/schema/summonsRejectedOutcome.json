@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://justice.gov.uk/core/courts/summonsRejectedOutcome.json",
+  "description": "The address",
+  "type": "object",
+  "properties": {
+    "prosecutorEmailAddress": {
+      "type": "string",
+      "description": "Email address to be used for sending notification to prosecutor on application approval / rejection"
+    },
+    "reasons": {
+      "description": "List of reasons the application has been rejected",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "reasons",
+    "prosecutorEmailAddress"
+  ],
+  "additionalProperties": false
+}

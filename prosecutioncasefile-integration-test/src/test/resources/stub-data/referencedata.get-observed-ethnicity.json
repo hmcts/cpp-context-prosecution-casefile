@@ -1,0 +1,20 @@
+{
+  "observedEthnicities": [
+    {
+      "id": "4aaecac5-222b-402d-9047-84803679edac",
+      "seqNo": 1,
+      "ethnicityCode": "1",
+      "ethnicityDescription": "White - North European",
+      "validFrom": "2019-03-01",
+      "validTo": "2019-04-01"
+    },
+    {
+      "id": "4aaecac5-222b-402d-9047-84803679edac",
+      "seqNo": 2,
+      "ethnicityCode": "2",
+      "ethnicityDescription": "White - South European",
+      "validFrom": "2019-03-01",
+      "validTo": "2019-04-01"
+    }
+  ]
+}

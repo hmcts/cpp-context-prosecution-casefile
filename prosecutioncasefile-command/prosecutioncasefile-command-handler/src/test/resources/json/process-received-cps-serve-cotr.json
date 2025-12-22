@@ -1,0 +1,51 @@
+{
+  "submissionId": "e85d2c62-af1f-4674-863a-0891e67e325b",
+  "submissionStatus": "PENDING",
+  "prosecutionCaseSubject": {
+    "urn": "caseURN",
+    "prosecutingAuthority": "The OU Code of the prosecuting authority"
+  },
+  "validationData" : {
+    "defendantIds" : [
+      {
+        "cpsDefendantId": "7f8fe782-a287-11eb-bcbc-0242ac130002"
+      }
+    ]
+  },
+  "defendantSubject": [
+    {
+      "prosecutorDefendantId": "defendant Id"
+    }
+  ],
+  "trialDate": "1980-01-24",
+  "lastRecordedTimeEstimate": 14,
+  "hasAllEvidenceToBeReliedOnBeenServed": "Y",
+  "hasAllEvidenceToBeReliedOnBeenServedDetails": "Details",
+  "hasAllDisclosureBeenProvided": "Y",
+  "hasAllDisclosureBeenProvidedDetails": "Details",
+  "haveOtherDirectionsBeenCompliedWith": "Y",
+  "haveOtherDirectionsBeenCompliedWithDetails": "Details",
+  "haveTheProsecutionWitnessesRequiredToAttendAcknowledgedThatTheyWillAttend": "Y",
+  "haveTheProsecutionWitnessesRequiredToAttendAcknowledgedThatTheyWillAttendDetails": "Details",
+  "haveAnyWitnessSummonsesRequiredBeenReceivedAndServed": "Y",
+  "haveAnyWitnessSummonsesRequiredBeenReceivedAndServedDetails": "Details",
+  "haveSpecialMeasuresOrRemoteAttendanceIssuesForWitnessesBeenResolved": "Y",
+  "haveSpecialMeasuresOrRemoteAttendanceIssuesForWitnessesBeenResolvedDetails": "Details",
+  "haveInterpretersForWitnessesBeenArranged": "Y",
+  "haveInterpretersForWitnessesBeenArrangedDetails": "Details",
+  "haveEditedAbeInterviewsBeenPreparedAndAgreed": "Y",
+  "haveEditedAbeInterviewsBeenPreparedAndAgreedDetails": "Details",
+  "haveArrangementsBeenMadeForStatementOfPointsOfAgreementAndDisagreement": "Y",
+  "haveArrangementsBeenMadeForStatementOfPointsOfAgreementAndDisagreementDetails": "Details",
+  "isTheCaseReadyToProceedWithoutDelayBeforeTheJury": "Y",
+  "isTheCaseReadyToProceedWithoutDelayBeforeTheJuryDetails": "Details",
+  "isTheTimeEstimateCorrect": "Y",
+  "isTheTimeEstimateCorrectDetails": "Details",
+  "furtherInformationToAssistTheCourt": "FurtherInformation",
+  "certifyThatTheProsecutionIsTrialReady": "Y",
+  "certifyThatTheProsecutionIsTrialReadyDetails": "Details",
+  "applyForThePtrToBeVacated": "Y",
+  "applyForThePtrToBeVacatedDetails": "Details",
+  "formCompletedOnBehalfOfTheProsecutionBy": "FormCompletedBySomeone",
+  "certificationDate": "1980-01-24"
+}

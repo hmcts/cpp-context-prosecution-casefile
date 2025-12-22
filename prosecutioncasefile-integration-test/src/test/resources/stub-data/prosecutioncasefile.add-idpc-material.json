@@ -1,0 +1,12 @@
+{
+  "defendant": {
+    "defendantId": "c2330088-539b-4a5c-9509-fee812b43632",
+    "surname": "smith",
+    "oucode": "B01AF00",
+    "forenames": "John",
+    "dob": "1980-01-01"
+  },
+  "fileServiceId": "%s",
+  "caseUrn": "88GD6251318",
+  "materialType": "IDPC"
+}

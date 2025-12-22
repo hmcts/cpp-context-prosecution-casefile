@@ -1,0 +1,51 @@
+{
+  "id": "${case.id}",
+  "urn": "${case.urn}",
+  "enterpriseId": "${case.enterpriseId}",
+  "prosecutingAuthority": "TVL",
+  "costs": 200,
+  "postingDate": "2018-09-10",
+  "defendant": {
+    "id": "${defendant.id}",
+    "address": {
+      "address1": "armagaddon house",
+      "postcode": "M60 1NW"
+    },
+    "dateOfBirth": "${defendant.dob}",
+    "firstName": "John",
+    "gender": "Male",
+    "lastName": "Smith",
+    "hearingLanguage": "${defendant.hearingLanguage}",
+    "offences": [
+      {
+        "id": "${offence.id.1}",
+        "chargeDate": "${offence.chargeDate:-2018-02-01}",
+        "compensation": 200,
+        "libraOffenceCode": "OFCODE12",
+        "libraOffenceDateCode": 1,
+        "offenceCommittedDate": "${offence.committedDate:-2018-01-01}",
+        "offenceSequenceNo": ${offence.sequence.no.1},
+        "offenceWording": "TV Licence not paid"
+      },
+      {
+        "id": "${offence.id.2}",
+        "chargeDate": "${offence.chargeDate:-2018-02-01}",
+        "compensation": 200,
+        "libraOffenceCode": "OFCODE12",
+        "libraOffenceDateCode": 1,
+        "offenceCommittedDate": "${offence.committedDate:-2018-01-01}",
+        "offenceSequenceNo": ${offence.sequence.no.2},
+        "offenceWording": "TV Licence not paid"
+      }
+    ],
+    "title": "Mr",
+    "contactDetails": {
+      "home": "0207 000 0000",
+      "mobile": "11111 111 111",
+      "email": "primary@email.com",
+      "email2": "secondary@email.com",
+      "business": "0207 111 1111"
+    },
+    "nationalInsuranceNumber": "AB123456C"
+  }
+}

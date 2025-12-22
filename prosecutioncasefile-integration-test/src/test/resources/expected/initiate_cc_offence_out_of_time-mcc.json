@@ -1,0 +1,109 @@
+{
+  "initiateCourtProceedings": {
+    "listHearingRequests": [
+      {
+        "courtCentre": {
+          "id": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+          "name": "Port Talbot",
+          "welshName": "Welsh Name",
+          "roomId": "9e4932f7-97b2-3010-b942-ddd2624e4dd8",
+          "roomName": "Courtroom 01"
+        },
+        "estimateMinutes": 20,
+        "hearingType": {
+          "description": "Plea & Trial Preparation",
+          "id": "06b0c2bf-3f98-46ed-ab7e-56efaf9ecced"
+        },
+        "jurisdictionType": "CROWN",
+        "listDefendantRequests": [
+          {
+            "summonsRequired": "FIRST_HEARING",
+            "defendantId": "DEFENDANT_ID1",
+            "defendantOffences": [
+              "OFFENCE_ID1"
+            ],
+            "hearingLanguageNeeds": "WELSH",
+            "prosecutionCaseId": "CASE-ID"
+          }
+        ],
+        "listedStartDateTime": "2050-02-04T09:05:01.001Z"
+      }
+    ],
+    "prosecutionCases": [
+      {
+        "defendants": [
+          {
+            "id": "DEFENDANT_ID1",
+            "masterDefendantId": "DEFENDANT_ID1",
+            "courtProceedingsInitiated": "2020-02-25T23:43:01.811Z",
+            "aliases": [
+              {
+                "legalEntityName": "FakeCompany"
+              },
+              {
+                "legalEntityName": "RealCompany"
+              }
+            ],
+            "legalEntityDefendant": {
+              "organisation": {
+                "name": "Ministry of Justice"
+              }
+            },
+            "initiationCode": "C",
+            "offences": [
+              {
+                "id": "OFFENCE_ID1",
+                "arrestDate": "2019-04-10",
+                "chargeDate": "2019-05-10",
+                "count": 0,
+                "endDate": "2010-10-10",
+                "offenceCode": "OFCODE12",
+                "dvlaOffenceCode": "ABC123",
+                "offenceDefinitionId": "04c099cc-eba2-4c80-9eed-7c1ef21d706a",
+                "offenceFacts": {
+                  "alcoholReadingAmount": 100,
+                  "alcoholReadingMethodCode": "A",
+                  "alcoholReadingMethodDescription": "Blood"
+                },
+                "offenceTitle": "Obstruct person executing search warrant for TV receiver",
+                "orderIndex": 1,
+                "startDate": "2010-09-10",
+                "wording": "TV Licence not paid",
+                "offenceDateCode": 1,
+                "modeOfTrial": "Summary",
+                "maxPenalty": "maxPenalty"
+              }
+            ],
+            "prosecutionAuthorityReference": "TFLDEF001",
+            "prosecutionCaseId": "CASE-ID"
+          }
+        ],
+        "id": "CASE-ID",
+        "initiationCode": "C",
+        "summonsCode": "A",
+        "originatingOrganisation": "B01NM00",
+        "cpsOrganisation": "A01NM00",
+        "prosecutionCaseIdentifier": {
+          "prosecutionAuthorityCode": "TFL",
+          "prosecutionAuthorityId": "0534ee76-88f6-40e0-ba8f-53588e146675",
+          "caseURN": "CASE-URN",
+          "address": {
+            "address1": "6th Floor Windsor House",
+            "postcode": "SW1H 0TL",
+            "address2": "42-50 Victoria Street",
+            "address3": "London"
+          },
+          "majorCreditorCode": "TFL2",
+          "prosecutionAuthorityName": "Transport for London",
+          "prosecutionAuthorityOUCode": "GAFTL00",
+          "contact": {
+            "primaryEmail": "contact@cpp.com"
+          }
+        },
+        "classOfCase": "Class 1",
+        "trialReceiptType": "Transfer"
+      }
+    ]
+  },
+  "id" : ""
+}

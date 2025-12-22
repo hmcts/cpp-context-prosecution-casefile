@@ -1,0 +1,130 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/case-details.json",
+  "type": "object",
+  "description": "Prosecution Case File Details",
+  "properties": {
+    "caseId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid",
+      "description": "The Id of the SJP case to initiate"
+    },
+    "prosecutorCaseReference": {
+      "type": "string"
+    },
+    "originatingOrganisation": {
+      "type": "string"
+    },
+    "prosecutor": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/prosecutor.json"
+    },
+    "initiationCode": {
+      "type": "string"
+    },
+    "summonsCode": {
+      "type": "string"
+    },
+    "cpsOrganisation": {
+      "type": "string"
+    },
+    "cpsOrganisationId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "caseMarkers": {
+      "type": "array",
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/case-marker.json"
+      },
+      "default": []
+    },
+    "initiationTypeFound": {
+      "type": "boolean"
+    },
+    "vehicleOperatorLicenceNumber": {
+      "type": "string"
+    },
+    "otherPartyOfficerInCase": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/policeOfficerInCase.json"
+    },
+    "dateReceived": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date",
+      "description": "Date when case received from Magistrates court."
+    },
+    "trialReceiptType": {
+      "type": "string",
+      "description": "Trial case type E.g Either way case, Indictable, Transfer, Voluntary bail"
+    },
+    "eitherWayType": {
+      "type": "string",
+      "description": "If trialReceiptType is Either way case, then this must be populated E.g Election of accused"
+    },
+    "courtReceivedFromCode": {
+      "type": "string",
+      "description": "Magistrates court which sent the case. This is the organisation unit oucode. E.g B01BH00"
+    },
+    "courtReceivedToCode": {
+      "type": "string",
+      "description": "Court receiving the case from magistrates court. This is the organisation unit oucode. E.g B01BH00"
+    },
+    "classOfCase": {
+      "type": "string",
+      "description": "Class of case received from magistrates court. E.g Class 1, Class 2 etc."
+    },
+    "policeForceCode": {
+      "type": "string",
+      "description": "Police force code E.g '37' which represents the Suffolk police force "
+    },
+    "policeSystemId": {
+      "type": "string",
+      "description": "Police System Id This is the value from RouteSourceSystem  element in OI layer"
+    },
+    "dateOfSending": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date"
+    },
+    "dateOfCommittal": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date"
+    },
+    "feeId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "feeType": {
+      "description": "Indicates if a fee is initial or contested type",
+      "type": "string"
+    },
+    "feeStatus": {
+      "type": "string",
+      "description": "Indicates status of the fee according to fix list"
+    },
+    "paymentReference": {
+      "type": "string",
+      "description": "Prosecutor reference for the fee payment"
+    },
+    "contestedFeeId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "contestedFeeType": {
+      "description": "Indicates if a fee is initial or contested type",
+      "type": "string"
+    },
+    "contestedFeeStatus": {
+      "type": "string",
+      "description": "Indicates status of the fee according to fix list"
+    },
+    "contestedFeePaymentReference": {
+      "type": "string",
+      "description": "Prosecutor reference for the fee payment"
+    },
+    "relatedUrn": {
+      "type": "string",
+      "description": "related urn of the case which is related to this case"
+    },
+    "isRetrial": {
+      "description": "Indicates if the migrated XHIBIT case manually on the CP is a retrial",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "initiationCode",
+    "prosecutor"
+  ],
+  "additionalProperties": false
+}

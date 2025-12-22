@@ -1,0 +1,16 @@
+package uk.gov.moj.cpp.prosecution.casefile.command.api.accesscontrol;
+
+import uk.gov.moj.cpp.accesscontrol.drools.Outcome;
+import uk.gov.moj.cpp.accesscontrol.drools.Action;
+import uk.gov.moj.cpp.prosecution.casefile.command.api.accesscontrol.RuleConstants;
+
+global uk.gov.moj.cpp.accesscontrol.common.providers.UserAndGroupProvider userAndGroupProvider;
+
+rule "Command - Rule for update errors"
+  when
+    $outcome: Outcome();
+    $action: Action(name == "prosecutioncasefile.command.resolve-errors");
+    eval(userAndGroupProvider.isMemberOfAnyOfTheSuppliedGroups($action, RuleConstants.getUpdateErrorsActionGroups()));
+  then
+    $outcome.setSuccess(true);
+end

@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/self-defined-information.json",
+  "type": "object",
+  "description": "Self defined information",
+  "properties": {
+    "nationality": {
+      "type": "string",
+      "description": "Country of origin as stated by the defendant, as per CJS Standards section 3.103",
+      "maxLength": 3
+    },
+    "additionalNationality": {
+      "type": "string",
+      "description": "Additional country of origin as stated by the defendant, as per CJS Standards section 3.103",
+      "maxLength": 3
+    },
+    "ethnicity": {
+      "type": "string"
+    },
+    "dateOfBirth": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date",
+      "description": "The date when a person was born."
+    },
+    "gender": {
+      "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/gender.json",
+      "type": "string",
+      "description": "Gender as stated by the defendant",
+      "enum": [
+        "MALE",
+        "FEMALE",
+        "NOT_KNOWN",
+        "NOT_SPECIFIED"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "gender"
+  ]
+}

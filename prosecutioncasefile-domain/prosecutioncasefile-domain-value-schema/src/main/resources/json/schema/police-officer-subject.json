@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/police-officer-subject.json",
+  "type": "object",
+  "description": "Details of police officer witness",
+  "properties": {
+    "officerInCharge": {
+      "description": "Indicates that the police officer is the Officer In Charge (OIC)",
+      "type": "boolean"
+    },
+    "officeCollarNumber": {
+      "description": "The officer collar/shoulder number",
+      "type": "string"
+    },
+    "officerRank": {
+      "description": "The officer rank",
+      "type": "string"
+    }
+  },
+  "required": [
+    "officerInCharge",
+    "officerRank"
+  ],
+  "additionalProperties": false
+}

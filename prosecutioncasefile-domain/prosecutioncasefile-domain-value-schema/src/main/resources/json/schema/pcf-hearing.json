@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://justice.gov.uk/cps/prosecutioncasefile/hearing.json",
+  "type": "object",
+  "properties": {
+    "courtId": {
+      "type": "string"
+    },
+    "courtName": {
+      "type": "string"
+    },
+    "courtRoom": {
+      "type": "integer"
+    },
+    "hearingDate": {
+      "type": "string"
+    },
+    "typeOfCourt": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "typeOfCourt",
+    "hearingDate"
+  ]
+}

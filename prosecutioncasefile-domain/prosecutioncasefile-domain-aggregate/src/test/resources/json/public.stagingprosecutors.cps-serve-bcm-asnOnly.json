@@ -1,0 +1,25 @@
+{
+  "prosecutionCaseSubject": {
+    "prosecutingAuthority": "The OU Code of the prosecuting authority",
+    "urn": "45MD0000220"
+  },
+  "cpsDefendantOffences": [
+    {
+      "matchingId" : "90254db1-1683-483e-afb3-b87fde5a0a21",
+      "asn": "asn",
+      "cpsOffenceDetails": [
+        {
+          "cjsOffenceCode": "offenceCode",
+          "offenceDate": "2020-12-10",
+          "offenceWording": "offenceWording"
+        }
+      ]
+    }
+  ],
+  "tag": "tag",
+  "evidencePrePTPH": "evidencePrePTPH text",
+  "evidencePostPTPH": "evidencePostPTPH text",
+  "otherInformation": "otherInformation text",
+  "submissionId": "e85d2c62-af1f-4674-863a-0891e67e325b",
+  "submissionStatus": "PENDING"
+}

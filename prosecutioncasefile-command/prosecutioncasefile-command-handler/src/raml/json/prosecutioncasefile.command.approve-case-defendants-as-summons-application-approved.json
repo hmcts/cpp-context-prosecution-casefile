@@ -1,0 +1,10 @@
+{
+  "caseId": "fd223cb5-8676-4897-8c19-f8aa7428b5e6",
+  "applicationId": "fd223cb5-8676-4897-8c19-f8aa7428b5e7",
+  "summonsApprovedOutcome": {
+    "prosecutorCost": "£300.00",
+    "prosecutorEmailAddress": "test@test.com",
+    "summonsSuppressed": false,
+    "personalService": false
+  }
+}

@@ -1,0 +1,176 @@
+{
+  "caseDetails": {
+    "originatingOrganisation": "B01NM00",
+    "cpsOrganisation": "A30AB00",
+    "otherPartyOfficerInCase": {
+      "personalInformation": {
+        "address": {
+          "address1": "101",
+          "address2": "56Police House",
+          "address3": "Letsby Avenue",
+          "address4": "Avon",
+          "postcode": "HA1 2ER"
+        },
+        "contactDetails": {
+          "primaryEmail": "vegaoic@test.dom",
+          "work": "0117911911"
+        },
+        "firstName": "Vega",
+        "lastName": "OIC",
+        "title": "Baron"
+      },
+      "policeOfficerRank": "Constable"
+    },
+    "summonsCode": "A",
+    "caseId": "CASE-ID",
+    "initiationCode": "INITIATION_CODE",
+    "prosecutorCaseReference": "CASE-URN",
+    "policeSystemId": "00101PoliceCaseSystem",
+    "caseMarkers": [
+      {
+        "markerTypeCode": "ABC",
+        "markerTypeDescription": "",
+        "markerTypeId": "2013c181-7458-4fb2-a637-b596fbe0e781"
+      }
+    ],
+    "prosecutor": {
+      "informant": "informant",
+      "prosecutingAuthority": "prosAut"
+    },
+    "dateReceived": "DATE_RECEIVED"
+  },
+  "defendants": [
+    {
+      "id": "DEFENDANT_ID3",
+      "prosecutorDefendantReference": "DEFENDANT_REFERENCE3",
+      "individualAliases": [
+        {
+          "title": "Baron",
+          "firstName": "John",
+          "givenName2": "James",
+          "givenName3": "Jerry",
+          "lastName": "Smith"
+        },
+        {
+          "title": "Baroness",
+          "firstName": "John",
+          "lastName": "Smith"
+        }
+      ],
+      "documentationLanguage": "W",
+      "hearingLanguage": "W",
+      "custodyStatus": "B",
+      "bailConditions": "bailConditions",
+      "initialHearing": {
+        "courtHearingLocation": "C55BN00",
+        "dateOfHearing": "2050-02-04",
+        "timeOfHearing": "09:05:01.001"
+      },
+      "individual": {
+        "personalInformation": {
+          "title": "Baron",
+          "firstName": "Alice",
+          "lastName": "Smith",
+          "address": {
+            "address1": "armagaddon house",
+            "postcode": "M60 1NW"
+          },
+          "contactDetails": {}
+        },
+        "bailConditions": "bailConditions",
+        "selfDefinedInformation": {
+          "gender": "MALE"
+        }
+      },
+      "offences": [
+        {
+          "offenceCode": "OFCODE12",
+          "offenceId": "OFFENCE_ID3",
+          "offenceSequenceNumber": 1,
+          "offenceCommittedDate": "2018-09-10",
+          "offenceCommittedEndDate": "2018-10-10",
+          "offenceDateCode": 1,
+          "offenceLocation": "Croydon",
+          "offenceWording": "TV Licence not paid",
+          "chargeDate": "2018-10-10",
+          "arrestDate": "2018-10-10",
+          "appliedCompensation": 200,
+          "alcoholRelatedOffence": {
+            "alcoholLevelMethod": "A",
+            "alcoholLevelAmount": 100
+          },
+          "vehicleMake": "Toyota",
+          "vehicleRegistrationMark": "BB11 ABC"
+        }
+      ],
+      "postingDate": "2018-09-10"
+    },
+    {
+      "id": "DEFENDANT_ID1",
+      "prosecutorDefendantReference": "DEFENDANT_REFERENCE1",
+      "individualAliases": [
+        {
+          "title": "Baron",
+          "firstName": "John",
+          "givenName2": "James",
+          "givenName3": "Jerry",
+          "lastName": "Smith"
+        },
+        {
+          "title": "Baroness",
+          "firstName": "John",
+          "lastName": "Smith"
+        }
+      ],
+      "documentationLanguage": "W",
+      "hearingLanguage": "W",
+      "custodyStatus": "B",
+      "bailConditions": "bailConditions",
+      "initialHearing": {
+        "courtHearingLocation": "C55BN00",
+        "dateOfHearing": "2050-02-04",
+        "timeOfHearing": "09:05:01.001"
+      },
+      "individual": {
+        "personalInformation": {
+          "title": "Baron",
+          "firstName": "Alice",
+          "lastName": "Smith",
+          "address": {
+            "address1": "armagaddon house",
+            "postcode": "M60 1NW"
+          },
+          "contactDetails": {}
+        },
+        "bailConditions": "bailConditions",
+        "selfDefinedInformation": {
+          "gender": "MALE"
+        }
+      },
+      "offences": [
+        {
+          "offenceCode": "OFCODE12",
+          "offenceId": "OFFENCE_ID3",
+          "offenceSequenceNumber": 1,
+          "offenceCommittedDate": "2018-09-10",
+          "offenceCommittedEndDate": "2018-10-10",
+          "offenceDateCode": 1,
+          "offenceLocation": "Croydon",
+          "offenceWording": "TV Licence not paid",
+          "chargeDate": "2018-10-10",
+          "arrestDate": "2018-10-10",
+          "appliedCompensation": 200,
+          "alcoholRelatedOffence": {
+            "alcoholLevelMethod": "A",
+            "alcoholLevelAmount": 100
+          },
+          "vehicleMake": "Toyota",
+          "vehicleRegistrationMark": "BB11 ABC"
+        }
+      ],
+      "postingDate": "2018-09-10"
+    }
+  ],
+  "channel": "CHANNEL",
+  "externalId": "EXTERNAL_ID"
+}

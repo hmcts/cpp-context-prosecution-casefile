@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="8.1" author="prosecutioncasefile"
+               logicalFilePath="liquibase/prosecutioncasefile-viewstore-db-changelog.xml">
+
+        <renameTable newTableName="DEFENDANT_LEGACY" oldTableName="DEFENDANT"/>
+        <renameTable newTableName="OFFENCE_LEGACY" oldTableName="OFFENCE"/>
+    </changeSet>
+
+    <changeSet id="8.2" author="prosecutioncasefile" logicalFilePath="liquibase/prosecutioncasefile-viewstore-db-changelog.xml">
+        <createTable tableName="DEFENDANT">
+            <column name="defendant_id" type="VARCHAR(255)"><constraints nullable="false" primaryKey="true" primaryKeyName="pk_case_defendant" /></column>
+            <column name="asn" type="VARCHAR(20)"></column>
+            <column name="documentation_language" type="VARCHAR(1)"></column>
+            <column name="hearing_language" type="VARCHAR(1)"></column>
+            <column name="language_requirement" type="VARCHAR(150)"></column>
+            <column name="specific_requirements" type="VARCHAR(150)"></column>
+            <column name="number_previous_convictions" type="INTEGER"></column>
+            <column name="posting_date" type="DATE"></column>
+            <column name="driver_number" type="VARCHAR(16)"></column>
+            <column name="national_insurance_number" type="VARCHAR(13)"></column>
+            <column name="case_id" type="UUID"></column>
+            <column name="personal_information_id" type="UUID"></column>
+            <column name="self_defined_information_id" type="UUID"></column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="8.3" author="prosecutioncasefile" logicalFilePath="liquibase/prosecutioncasefile-viewstore-db-changelog.xml">
+        <createTable tableName="PERSONAL_INFORMATION">
+            <column name="personal_information_id" type="VARCHAR(255)"><constraints nullable="false" primaryKey="true" /></column>
+            <column name="first_name" type="VARCHAR(130)"/>
+            <column name="last_name" type="VARCHAR(35)"/>
+            <column name="title" type="VARCHAR(255)"/>
+            <column name="occupation" type="VARCHAR(54)"/>
+            <column name="occupation_code" type="INTEGER"/>
+
+            <column name="address_line_1" type="VARCHAR(35)"/>
+            <column name="address_line_2" type="VARCHAR(35)"/>
+            <column name="address_line_3" type="VARCHAR(35)"/>
+            <column name="address_line_4" type="VARCHAR(35)"/>
+            <column name="address_line_5" type="VARCHAR(35)"/>
+            <column name="postcode" type="VARCHAR(8)"/>
+
+            <column name="contact_number_home" type="VARCHAR(35)"/>
+            <column name="contact_number_work" type="VARCHAR(35)"/>
+            <column name="contact_number_mobile" type="VARCHAR(35)"/>
+            <column name="primary_email" type="VARCHAR(255)"/>
+            <column name="secondary_email" type="VARCHAR(255)"/>
+
+        </createTable>
+    </changeSet>
+
+    <changeSet id="8.4" author="prosecutioncasefile" logicalFilePath="liquibase/prosecutioncasefile-viewstore-db-changelog.xml">
+        <createTable tableName="SELF_DEFINED_INFORMATION">
+            <column name="self_defined_information_id" type="VARCHAR(255)"><constraints nullable="false" primaryKey="true" /></column>
+            <column name="nationality" type="VARCHAR(3)"/>
+            <column name="additional_nationality" type="VARCHAR(3)"/>
+            <column name="date_of_birth" type="DATE"/>
+            <column name="ethnicity" type="VARCHAR(255)"/>
+            <column name="gender" type="VARCHAR(13)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="8.5" author="prosecutioncasefile" logicalFilePath="liquibase/prosecutioncasefile-viewstore-db-changelog.xml">
+        <createTable tableName="CASE_DETAILS">
+            <column name="case_id" type="UUID">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="prosecution_case_reference" type="VARCHAR(255)"/>
+            <column name="applied_prosecutor_costs" type="NUMERIC"/>
+            <column name="prosecutor_informant" type="VARCHAR(92)"/>
+            <column name="prosecution_authority" type="VARCHAR(7)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="8.6" author="prosecutioncasefile" logicalFilePath="liquibase/prosecutioncasefile-viewstore-db-changelog.xml">
+        <createTable tableName="OFFENCE">
+            <column name="offence_id" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_case_offence" />
+            </column>
+            <column name="offence_code" type="VARCHAR(8)"/>
+            <column name="offence_sequence_number" type="INTEGER"/>
+            <column name="charge_date" type="DATE"/>
+            <column name="offence_date_code" type="INTEGER"/>
+            <column name="offence_committed_date" type="DATE"/>
+            <column name="offence_committed_end_date" type="DATE"/>
+            <column name="offence_location" type="VARCHAR(80)"/>
+            <column name="offence_wording" type="VARCHAR(2500)"/>
+            <column name="offence_wording_welsh" type="VARCHAR(2500)"/>
+            <column name="statement_of_facts" type="VARCHAR(4000)"/>
+            <column name="statement_of_facts_welsh" type="VARCHAR(4000)"/>
+            <column name="applied_compensation" type="NUMERIC"/>
+            <column name="back_duty" type="NUMERIC"/>
+            <column name="back_duty_date_from" type="DATE"/>
+            <column name="back_duty_date_to" type="DATE"/>
+            <column name="defendant_id" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

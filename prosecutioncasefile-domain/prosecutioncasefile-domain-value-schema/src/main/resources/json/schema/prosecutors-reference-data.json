@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/prosecutors-reference-data.json",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "sequenceNumber": {
+      "type": "integer"
+    },
+    "majorCreditorCode": {
+      "type": "string"
+    },
+    "shortName": {
+      "type": "string"
+    },
+    "nameWelsh": {
+      "type": "string"
+    },
+    "fullName": {
+      "type": "string"
+    },
+    "address": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/address.json"
+    },
+    "contactEmailAddress": {
+      "type": "string"
+    },
+    "oucode": {
+      "type": "string"
+    },
+    "spiInFlag": {
+      "type": "boolean"
+    },
+    "spiOutFlag": {
+      "type": "boolean"
+    },
+    "sjpFlag": {
+      "type": "boolean"
+    },
+    "cpsFlag": {
+      "type": "boolean"
+    },
+    "informantEmailAddress": {
+      "type": "string"
+    },
+    "prosecutorCategory": {
+      "type": "string"
+    },
+    "standard": {
+      "type": "boolean"
+    },
+    "aocpApproved": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "id",
+    "sequenceNumber",
+    "shortName",
+    "fullName",
+    "sjpFlag"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/individual-alias.json",
+  "type": "object",
+  "description": "Individual alias",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Title by which a person is addressed",
+      "maxLength": 35
+    },
+    "firstName": {
+      "description": "The person fore name",
+      "type": "string"
+    },
+    "givenName2": {
+      "type": "string",
+      "description": "Middle name, e.g. Walter."
+    },
+    "givenName3": {
+      "type": "string",
+      "description": "Additional middle name, e.g. Percival."
+    },
+    "lastName": {
+      "description": "The person last name",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}

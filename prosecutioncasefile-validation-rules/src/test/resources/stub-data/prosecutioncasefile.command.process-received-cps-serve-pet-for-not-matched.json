@@ -1,0 +1,130 @@
+{
+  "cpsDefendantOffences": [
+    {
+      "cpsOffenceDetails": [
+        {
+          "cjsOffenceCode": "offenceCode",
+          "offenceDate": "2020-12-20",
+          "offenceWording": "offenceWording"
+        }
+      ],
+      "matchingId": "7a7cb8db-a18e-4097-a239-cc1b58226de3",
+      "prosecutorDefendantId": "defendant Id",
+      "asn": "asn1",
+      "cpsDefendantId": "5ac172a2-3332-4dcc-bd03-20fa0c7957b4",
+      "forename": "John",
+      "surname": "Lewis",
+      "dateOfBirth": "03-06-1986"
+    },
+    {
+      "cpsOffenceDetails": [
+        {
+          "cjsOffenceCode": "offenceCode2",
+          "offenceSequenceNo": "1234",
+          "offenceWording": "offenceWording2"
+        }
+      ],
+      "matchingId": "95f43140-e1f9-47a1-b490-56c51288f8e9",
+      "prosecutorDefendantId": "defendant Id2",
+      "asn": "asn2",
+      "cpsDefendantId": "5ac172a2-3332-4dcc-bd03-20fa0c7957b5",
+      "organisationName": "XYZ Limited"
+    },
+    {
+      "cpsOffenceDetails": [
+        {
+          "cjsOffenceCode": "offenceCode3",
+          "offenceSequenceNo": "12345",
+          "offenceWording": "offenceWording3"
+        }
+      ],
+      "matchingId": "8763b90d-4aaa-4f60-8370-efcc6e1eb4a6",
+      "prosecutorDefendantId": "defendant Id2",
+      "asn": "asn3",
+      "cpsDefendantId": "5ac172a2-3332-4dcc-bd03-20fa0c7957b6",
+      "forename": "Martin",
+      "surname": "Andrew",
+      "dateOfBirth": "03-06-1988"
+    }
+  ],
+  "petFormData": {
+    "defence": {
+      "defendants": [
+        {
+          "id" : "d123ed32-ce29-11ec-9d64-0242ac120002",
+          "cpsDefendantId" : "cpsDefendant Id",
+          "prosecutorDefendantId" : "prosecutorDefendant Id",
+          "cpsOffences": [
+            {
+              "offenceCode": "offenceCode",
+              "wording": "offenceWording"
+            }
+          ],
+          "prosecutorDefendantId": "defendant Id"
+        }
+      ]
+    },
+    "prosecution": {
+      "dynamicFormAnswers": {
+        "applicationsForDirectionsGroup": {
+          "prosecutorWitnessAssistance": "Y",
+          "prosecutorWitnessAssistanceYesGroup": {
+            "witnessRequiresDetails": "N"
+          },
+          "groundRulesQuestioning": "Y",
+          "variationStandardDirectionsProsecutor": "Y",
+          "variationStandardDirectionsProsecutorYesGroup": {
+            "variationStandardDirectionsProsecutorYesGroupDetails": "directionDetails"
+          }
+        },
+        "prosecutorGroup": {
+          "displayEquipment": "Y",
+          "displayEquipmentYesGroup": {
+            "displayEquipmentDetails": "EquipmentDetails"
+          },
+          "pendingLinesOfEnquiry": "N",
+          "pendingLinesOfEnquiryYesGroup": {
+            "pendingLinesOfEnquiryYesGroup": "Details"
+          },
+          "pointOfLaw": "Y",
+          "pointOfLawYesGroup": {
+            "pointOfLawDetails": "LawDetails"
+          },
+          "prosecutionCompliance": "N",
+          "prosecutionComplianceNoGroup": {
+            "prosecutionComplianceDetailsNo": "noComplianceDetails"
+          },
+          "prosecutionComplianceYesGroup": {
+          },
+          "prosecutorServeEvidence": "N",
+          "prosecutorServeEvidenceYesGroup": {
+          },
+          "slaveryOrExploitation": "N",
+          "slaveryOrExploitationYesGroup": {
+            "slaveryOrExploitationDetails": "SlaveryDetails"
+          }
+        }
+      },
+      "witnesses": [
+        {
+          "age": 14,
+          "firstName": "forname",
+          "interpreterRequired": "yes",
+          "languageAndDialect": "welsh",
+          "lastName": "abc",
+          "measuresRequired": [
+            "measureDetails"
+          ],
+          "prosecutionProposesWitnessAttendInPerson": "yes",
+          "specialOtherMeasuresRequired": "Y"
+        }
+      ]
+    }
+  },
+  "prosecutionCaseSubject": {
+    "prosecutingAuthority": "The OU Code of the prosecuting authority",
+    "urn": "caseURN"
+  },
+  "submissionId": "e85d2c62-af1f-4674-863a-0891e67e325b",
+  "submissionStatus": "PENDING"
+}

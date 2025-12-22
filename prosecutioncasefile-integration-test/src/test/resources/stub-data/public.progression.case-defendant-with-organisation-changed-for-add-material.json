@@ -1,0 +1,22 @@
+{
+  "defendant":{
+    "id": "%s",
+    "legalEntityDefendant": {
+      "organisation": {
+        "address": {
+          "address1": "1234",
+          "address2": "StreetDescription",
+          "address3": "Locality2O",
+          "postcode": "AB1 3DF"
+        },
+        "contact": {
+          "primaryEmail": "test@test.com",
+          "secondaryEmail": "test1@test.com",
+          "work": " "
+        },
+        "name": "Ministry of Justice2"
+      }
+    },
+    "prosecutionCaseId":"%s"
+  }
+}

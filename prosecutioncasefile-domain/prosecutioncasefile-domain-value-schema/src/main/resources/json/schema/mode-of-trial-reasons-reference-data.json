@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/mode-of-trial-reasons-reference-data.json",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "seqNum": {
+      "type": "string"
+    },
+    "code": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "seqNum",
+    "code",
+    "description"
+  ],
+  "additionalProperties": false
+}

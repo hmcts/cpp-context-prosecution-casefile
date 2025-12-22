@@ -1,0 +1,21 @@
+{
+  "submissionId": "4b64afd7-686f-4ac8-96f6-ca948d83af3f",
+  "submissionStatus": "PENDING",
+  "prosecutionCaseSubject": {
+    "urn": "%s",
+    "prosecutingAuthority": "The OU Code of the prosecuting authority"
+  },
+  "defendantSubject": [
+    {
+      "matchingId": "767dee16-8c84-4dd1-8992-ca35d387f446",
+      "prosecutorDefendantId": "defendant Id"
+    }
+  ],
+  "tag": "29DI6807874/1",
+  "furtherProsecutionInformationProvidedAfterCertification": "Y",
+  "trialDate": "1980-01-24",
+  "certifyThatTheProsecutionIsTrialReady": "N",
+  "formCompletedOnBehalfOfProsecutionBy": "Y",
+  "date": "1980-01-24",
+  "cotrId": "8b64afd7-686f-4ac8-96f6-ca948d83af3f"
+}

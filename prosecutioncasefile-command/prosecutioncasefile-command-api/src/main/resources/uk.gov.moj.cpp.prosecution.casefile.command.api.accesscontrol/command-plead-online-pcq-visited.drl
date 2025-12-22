@@ -1,0 +1,17 @@
+package uk.gov.moj.cpp.prosecution.casefile.command.api.accesscontrol;
+
+import uk.gov.moj.cpp.accesscontrol.drools.Outcome;
+import uk.gov.moj.cpp.accesscontrol.drools.Action;
+import uk.gov.moj.cpp.prosecution.casefile.command.api.accesscontrol.RuleConstants;
+
+global uk.gov.moj.cpp.accesscontrol.common.providers.UserAndGroupProvider userAndGroupProvider;
+
+rule "Command API - Rule for plead online pcq visited"
+  when
+    $outcome: Outcome();
+    $action: Action(name == "prosecutioncasefile.plead-online-pcq-visited");
+    eval(userAndGroupProvider.isMemberOfAnyOfTheSuppliedGroups($action, RuleConstants.getPleadOnlinePcqVisitedActionGroups()));
+
+  then
+    $outcome.setSuccess(true);
+end

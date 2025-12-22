@@ -1,0 +1,34 @@
+{
+  "summonsCodes": [
+    {
+      "id": "5745efe9-4b81-373a-856e-bbf010905511",
+      "seqNo": 10,
+      "summonsCode": "A",
+      "summonsCodeDescription": "Application / Complaint"
+    },
+    {
+      "id": "8588865e-69d4-3fca-a40a-33122baa8a9b",
+      "seqNo": 20,
+      "summonsCode": "B",
+      "summonsCodeDescription": "Breach offences"
+    },
+    {
+      "id": "fc2fbbd4-c6eb-3ce7-9bc2-361c81bf59c5",
+      "seqNo": 30,
+      "summonsCode": "E",
+      "summonsCodeDescription": "Either Way or serious offences"
+    },
+    {
+      "id": "d2747531-e4f9-3f87-b404-a41344eca2bb",
+      "seqNo": 40,
+      "summonsCode": "M",
+      "summonsCodeDescription": "MCA Case"
+    },
+    {
+      "id": "5d130361-b6bf-3545-ba25-96c02082bcc4",
+      "seqNo": 50,
+      "summonsCode": "W",
+      "summonsCodeDescription": "Witness Statement"
+    }
+  ]
+}

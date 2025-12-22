@@ -1,0 +1,1950 @@
+{
+  "prosecutionCase": {
+    "caseStatus": "INACTIVE",
+    "cpsOrganisation": "A30AB00",
+    "defendants": [
+      {
+        "associatedDefenceOrganisation": {
+          "applicationReference": "LAA-20191601",
+          "associationEndDate": "2019-12-12",
+          "associationStartDate": "2019-09-12",
+          "defenceOrganisation": {
+            "laaContractNumber": "99998888",
+            "organisation": {
+              "address": {
+                "address1": "a",
+                "address2": "a",
+                "address3": "a",
+                "address4": "a",
+                "address5": "a",
+                "postcode": "GIR0AA"
+              },
+              "contact": {
+                "fax": "a",
+                "home": " ",
+                "mobile": " ",
+                "primaryEmail": "!.!@00.00",
+                "secondaryEmail": "!.!@00.00",
+                "work": "a"
+              },
+              "incorporationNumber": "a",
+              "name": "a",
+              "registeredCharityNumber": "a"
+            }
+          },
+          "fundingType": "REPRESENTATION_ORDER",
+          "isAssociatedByLAA": true
+        },
+        "associationLockedByRepOrder": true,
+        "courtProceedingsInitiated": "2021-05-19T13:18:38.386Z",
+        "id": "c6e502ee-ae75-4d84-97d9-10a72f84f64e",
+        "isYouth": false,
+        "legalAidStatus": "Granted",
+        "masterDefendantId": "c6e502ee-ae75-4d84-97d9-10a72f84f64e",
+        "offences": [
+          {
+            "arrestDate": "2020-02-09",
+            "chargeDate": "2020-02-09",
+            "count": 0,
+            "endorsableFlag": false,
+            "id": "2ae66611-e1fa-4bcb-b7a9-dcb918ca22eb",
+            "isDisposed": true,
+            "judicialResults": [
+              {
+                "alwaysPublished": false,
+                "category": "FINAL",
+                "cjsCode": "1017",
+                "courtClerk": {
+                  "firstName": "Erica",
+                  "lastName": "Wilson",
+                  "userId": "31ec3a16-8721-498c-8da5-f099390ee254"
+                },
+                "d20": false,
+                "dvlaCode": "J",
+                "excludedFromResults": false,
+                "isAdjournmentResult": false,
+                "isAvailableForCourtExtract": true,
+                "isConvictedResult": true,
+                "isDeleted": false,
+                "isFinancialResult": false,
+                "isNewAmendment": true,
+                "isUnscheduled": false,
+                "judicialResultId": "170d8fca-2e0e-4877-8275-7e35aa502671",
+                "judicialResultTypeId": "b9c6047b-fb84-4b12-97a1-2175e4b8bbac",
+                "label": "Absolute discharge",
+                "lastSharedDateTime": "2021-05-19",
+                "level": "O",
+                "lifeDuration": false,
+                "orderedDate": "2021-05-20",
+                "orderedHearingId": "e0cd8744-053b-4bff-bed5-94a90a8603f9",
+                "postHearingCustodyStatus": "A",
+                "publishedAsAPrompt": false,
+                "publishedForNows": false,
+                "rank": 23500,
+                "resultText": "Absolute discharge\n",
+                "rollUpPrompts": true,
+                "rootJudicialResultId": "170d8fca-2e0e-4877-8275-7e35aa502671",
+                "rootJudicialResultTypeId": "b9c6047b-fb84-4b12-97a1-2175e4b8bbac",
+                "terminatesOffenceProceedings": false,
+                "urgent": false,
+                "usergroups": [],
+                "welshLabel": "Rhyddhad diamod"
+              }
+            ],
+            "modeOfTrial": "Summary",
+            "offenceCode": "CA03013",
+            "offenceDateCode": 1,
+            "offenceDefinitionId": "8144e0b3-52dd-42f6-b615-271ed4301c22",
+            "offenceLegislation": "Contrary to section 363(3)(a) and (4) of the Communications Act 2003.",
+            "offenceTitle": "Possess a    television set with intent to install / use without a licence",
+            "orderIndex": 2,
+            "proceedingsConcluded": true,
+            "startDate": "2020-02-09",
+            "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+          },
+          {
+            "arrestDate": "2020-02-09",
+            "chargeDate": "2020-02-09",
+            "count": 0,
+            "id": "501cd9f3-c9a8-4aa4-b57f-3908c4666e8c",
+            "isDisposed": true,
+            "judicialResults": [
+              {
+                "alwaysPublished": false,
+                "category": "FINAL",
+                "cjsCode": "1017",
+                "courtClerk": {
+                  "firstName": "Erica",
+                  "lastName": "Wilson",
+                  "userId": "31ec3a16-8721-498c-8da5-f099390ee254"
+                },
+                "d20": false,
+                "dvlaCode": "J",
+                "excludedFromResults": false,
+                "isAdjournmentResult": false,
+                "isAvailableForCourtExtract": true,
+                "isConvictedResult": true,
+                "isDeleted": false,
+                "isFinancialResult": false,
+                "isNewAmendment": true,
+                "isUnscheduled": false,
+                "judicialResultId": "4a9d4602-3e2c-4b43-8bb7-5fbc630ff5a8",
+                "judicialResultTypeId": "b9c6047b-fb84-4b12-97a1-2175e4b8bbac",
+                "label": "Absolute discharge",
+                "lastSharedDateTime": "2021-05-19",
+                "level": "O",
+                "lifeDuration": false,
+                "orderedDate": "2021-05-20",
+                "orderedHearingId": "e0cd8744-053b-4bff-bed5-94a90a8603f9",
+                "postHearingCustodyStatus": "A",
+                "publishedAsAPrompt": false,
+                "publishedForNows": false,
+                "rank": 23500,
+                "resultText": "Absolute discharge\n",
+                "rollUpPrompts": true,
+                "rootJudicialResultId": "4a9d4602-3e2c-4b43-8bb7-5fbc630ff5a8",
+                "rootJudicialResultTypeId": "b9c6047b-fb84-4b12-97a1-2175e4b8bbac",
+                "terminatesOffenceProceedings": false,
+                "urgent": false,
+                "usergroups": [],
+                "welshLabel": "Rhyddhad diamod"
+              }
+            ],
+            "laaApplnReference": {
+              "applicationReference": "LAA-20191601",
+              "effectiveEndDate": "2019-12-12",
+              "effectiveStartDate": "2019-09-12",
+              "laaContractNumber": "99998888",
+              "offenceLevelStatus": "Granted",
+              "statusCode": "G2",
+              "statusDate": "2019-12-16",
+              "statusDescription": "Granted for Two Advocates",
+              "statusId": "58ebf081-2b7d-3b1d-8c47-149fe7dbd672"
+            },
+            "modeOfTrial": "Summary",
+            "offenceCode": "CA03010",
+            "offenceDateCode": 1,
+            "offenceDefinitionId": "d7443546-2e12-4d34-bde1-33dee7aebb23",
+            "offenceLegislation": "Contrary to section 363(2) and (4) of the Communications Act 2003.",
+            "offenceTitle": "Use / install a television set without a licence",
+            "orderIndex": 1,
+            "proceedingsConcluded": true,
+            "startDate": "2020-02-09",
+            "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+          }
+        ],
+        "personDefendant": {
+          "arrestSummonsNumber": "TFL",
+          "bailConditions": "",
+          "bailStatus": {
+            "code": "A",
+            "description": "Not applicable",
+            "id": "86009c70-759d-3308-8de4-194886ff9a77"
+          },
+          "personDetails": {
+            "address": {
+              "address1": "1234",
+              "address2": "StreetDescription",
+              "address3": "Locality2O",
+              "postcode": "CR0 1XX"
+            },
+            "dateOfBirth": "1990-01-01",
+            "documentationLanguageNeeds": "ENGLISH",
+            "firstName": "Stevie",
+            "gender": "MALE",
+            "lastName": "Dooley",
+            "title": "Mr"
+          }
+        },
+        "proceedingsConcluded": true,
+        "prosecutionAuthorityReference": "TFL",
+        "prosecutionCaseId": "de4bed25-56a3-4b12-ba84-a6a4c9bff089"
+      }
+    ],
+    "id": "de4bed25-56a3-4b12-ba84-a6a4c9bff089",
+    "initiationCode": "C",
+    "originatingOrganisation": "0300000",
+    "prosecutionCaseIdentifier": {
+      "address": {
+        "address1": "Criminal Justice Department",
+        "address2": "Derbyshire Constabulary",
+        "address3": "Butterley Hall",
+        "postcode": "DE5 3RS"
+      },
+      "majorCreditorCode": "PO30",
+      "prosecutionAuthorityCode": "DERPF",
+      "prosecutionAuthorityId": "bdc190e7-c939-37ca-be4b-9f615d6ef40e",
+      "prosecutionAuthorityName": "Derbyshire Police",
+      "prosecutionAuthorityOUCode": "0300000",
+      "caseURN": "CASE_URN"
+    },
+    "prosecutor": {
+      "address": {
+        "address1": "King Edward Court",
+        "address2": "Nottingham",
+        "postcode": "NG1 1EL"
+      },
+      "prosecutorCode": "CPS-EM",
+      "prosecutorId": "42880989-5d09-332e-a711-8797af06ecea",
+      "prosecutorName": "CPS East Midlands"
+    },
+    "isCivil": true
+  },
+  "linkedApplicationsSummary": [
+    {
+      "applicationId": "399af577-e035-4722-b384-910ca246fe1d",
+      "applicationTitle": "Appearance to make statutory declaration",
+      "applicationReference": "90GDAPP5057",
+      "applicationStatus": "FINALISED",
+      "applicantDisplayName": "Stevie Dooley",
+      "respondentDisplayNames": [
+        "DERPF"
+      ],
+      "isAppeal": false
+    }
+  ],
+  "hearingsAtAGlance": {
+    "courtApplications": [
+      {
+        "applicant": {
+          "id": "0e634902-4948-4223-8844-11de05f5c123",
+          "masterDefendant": {
+            "defendantCase": [
+              {
+                "caseId": "de4bed25-56a3-4b12-ba84-a6a4c9bff089",
+                "caseReference": "90GDAPP5057",
+                "defendantId": "c6e502ee-ae75-4d84-97d9-10a72f84f64e"
+              }
+            ],
+            "isYouth": false,
+            "masterDefendantId": "c6e502ee-ae75-4d84-97d9-10a72f84f64e",
+            "personDefendant": {
+              "arrestSummonsNumber": "TFL",
+              "bailStatus": {
+                "code": "A",
+                "description": "Not applicable",
+                "id": "86009c70-759d-3308-8de4-194886ff9a77"
+              },
+              "personDetails": {
+                "address": {
+                  "address1": "1234",
+                  "address2": "StreetDescription",
+                  "address3": "Locality2O"
+                },
+                "dateOfBirth": "1990-01-01",
+                "documentationLanguageNeeds": "ENGLISH",
+                "firstName": "Stevie",
+                "gender": "MALE",
+                "lastName": "Dooley",
+                "title": "Mr"
+              }
+            }
+          },
+          "notificationRequired": true,
+          "summonsRequired": false
+        },
+        "applicationParticulars": "test",
+        "applicationReceivedDate": "2021-05-19",
+        "applicationReference": "90GDAPP5057",
+        "applicationStatus": "FINALISED",
+        "commissionerOfOath": true,
+        "courtApplicationCases": [
+          {
+            "caseStatus": "INACTIVE",
+            "isSJP": false,
+            "offences": [
+              {
+                "arrestDate": "2020-02-09",
+                "chargeDate": "2020-02-09",
+                "count": 0,
+                "endorsableFlag": false,
+                "id": "2ae66611-e1fa-4bcb-b7a9-dcb918ca22eb",
+                "isDisposed": false,
+                "modeOfTrial": "Summary",
+                "offenceCode": "CA03011",
+                "offenceDateCode": 1,
+                "offenceDefinitionId": "8144e0b3-52dd-42f6-b615-271ed4301c22",
+                "offenceLegislation": "Contrary to section 363(3)(a) and (4) of the Communications Act 2003.",
+                "offenceTitle": "Possess a    television set with intent to install / use without a licence",
+                "orderIndex": 2,
+                "proceedingsConcluded": true,
+                "startDate": "2020-02-09",
+                "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+              },
+              {
+                "arrestDate": "2020-02-09",
+                "chargeDate": "2020-02-09",
+                "count": 0,
+                "id": "501cd9f3-c9a8-4aa4-b57f-3908c4666e8c",
+                "isDisposed": false,
+                "laaApplnReference": {
+                  "applicationReference": "LAA-20191601",
+                  "effectiveEndDate": "2019-12-12",
+                  "effectiveStartDate": "2019-09-12",
+                  "laaContractNumber": "99998888",
+                  "offenceLevelStatus": "Granted",
+                  "statusCode": "G2",
+                  "statusDate": "2019-12-16",
+                  "statusDescription": "Granted for Two Advocates",
+                  "statusId": "58ebf081-2b7d-3b1d-8c47-149fe7dbd672"
+                },
+                "modeOfTrial": "Summary",
+                "offenceCode": "CA03010",
+                "offenceDateCode": 1,
+                "offenceDefinitionId": "d7443546-2e12-4d34-bde1-33dee7aebb23",
+                "offenceLegislation": "Contrary to section 363(2) and (4) of the Communications Act 2003.",
+                "offenceTitle": "Use / install a television set without a licence",
+                "orderIndex": 1,
+                "proceedingsConcluded": true,
+                "startDate": "2020-02-09",
+                "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+              }
+            ],
+            "prosecutionCaseId": "de4bed25-56a3-4b12-ba84-a6a4c9bff089",
+            "prosecutionCaseIdentifier": {
+              "address": {
+                "address1": "Criminal Justice Department",
+                "address2": "Derbyshire Constabulary",
+                "address3": "Butterley Hall",
+                "postcode": "DE5 3RS"
+              },
+              "majorCreditorCode": "PO30",
+              "prosecutionAuthorityCode": "DERPF",
+              "prosecutionAuthorityId": "bdc190e7-c939-37ca-be4b-9f615d6ef40e",
+              "prosecutionAuthorityName": "Derbyshire Police",
+              "prosecutionAuthorityOUCode": "0300000",
+              "caseURN": "90GDAPP5057"
+            }
+          }
+        ],
+        "id": "399af577-e035-4722-b384-910ca246fe1d",
+        "judicialResults": [
+          {
+            "alwaysPublished": false,
+            "category": "FINAL",
+            "courtClerk": {
+              "firstName": "Erica",
+              "lastName": "Wilson",
+              "userId": "31ec3a16-8721-498c-8da5-f099390ee254"
+            },
+            "d20": false,
+            "excludedFromResults": false,
+            "isAdjournmentResult": false,
+            "isAvailableForCourtExtract": true,
+            "isConvictedResult": false,
+            "isDeleted": false,
+            "isFinancialResult": false,
+            "isNewAmendment": true,
+            "isUnscheduled": false,
+            "judicialResultId": "b9734732-db23-4056-8398-a59183226859",
+            "judicialResultTypeId": "2b3f7c20-8fc1-4fad-9076-df196c24b27e",
+            "label": "Granted",
+            "lastSharedDateTime": "2021-05-19",
+            "level": "O",
+            "lifeDuration": false,
+            "orderedDate": "2021-05-19",
+            "orderedHearingId": "0fcd72c8-a57f-447b-8370-8694c7bcb6f1",
+            "postHearingCustodyStatus": "A",
+            "publishedAsAPrompt": false,
+            "publishedForNows": false,
+            "rank": 84300,
+            "resultText": "Granted\n",
+            "rollUpPrompts": true,
+            "rootJudicialResultId": "b9734732-db23-4056-8398-a59183226859",
+            "rootJudicialResultTypeId": "2b3f7c20-8fc1-4fad-9076-df196c24b27e",
+            "terminatesOffenceProceedings": false,
+            "urgent": false,
+            "usergroups": []
+          }
+        ],
+        "respondents": [
+          {
+            "id": "da82bc0c-16bd-477a-b3b5-7d16c4954500",
+            "notificationRequired": true,
+            "prosecutingAuthority": {
+              "address": {
+                "address1": "Criminal Justice Department",
+                "address2": "Derbyshire Constabulary",
+                "address3": "Butterley Hall",
+                "postcode": "DE5 3RS"
+              },
+              "contact": {
+                "primaryEmail": "CCSU@derbyshire.pnn.police.uk"
+              },
+              "majorCreditorCode": "PO30",
+              "name": "Derbyshire Police",
+              "prosecutionAuthorityCode": "DERPF",
+              "prosecutionAuthorityId": "bdc190e7-c939-37ca-be4b-9f615d6ef40e",
+              "prosecutionAuthorityOUCode": "0300000",
+              "welshName": "Heddlu Derbyshire"
+            },
+            "summonsRequired": false
+          }
+        ],
+        "subject": {
+          "id": "0e634902-4948-4223-8844-11de05f5c123",
+          "masterDefendant": {
+            "defendantCase": [
+              {
+                "caseId": "de4bed25-56a3-4b12-ba84-a6a4c9bff089",
+                "caseReference": "90GDAPP5057",
+                "defendantId": "c6e502ee-ae75-4d84-97d9-10a72f84f64e"
+              }
+            ],
+            "isYouth": false,
+            "masterDefendantId": "c6e502ee-ae75-4d84-97d9-10a72f84f64e",
+            "personDefendant": {
+              "arrestSummonsNumber": "TFL",
+              "bailConditions": "",
+              "bailStatus": {
+                "code": "A",
+                "description": "Not applicable",
+                "id": "86009c70-759d-3308-8de4-194886ff9a77"
+              },
+              "personDetails": {
+                "address": {
+                  "address1": "1234",
+                  "address2": "StreetDescription",
+                  "address3": "Locality2O"
+                },
+                "dateOfBirth": "1990-01-01",
+                "documentationLanguageNeeds": "ENGLISH",
+                "firstName": "Stevie",
+                "gender": "MALE",
+                "lastName": "Dooley",
+                "title": "Mr"
+              }
+            }
+          },
+          "notificationRequired": true,
+          "summonsRequired": false
+        },
+        "type": {
+          "appealFlag": false,
+          "applicantAppellantFlag": false,
+          "boxworkNotifTemplate": "NOT_APPLICABLE",
+          "breachType": "NOT_APPLICABLE",
+          "categoryCode": "CO",
+          "code": "MC80527",
+          "commrOfOathFlag": true,
+          "courtExtractAvlFlag": true,
+          "courtOfAppealFlag": false,
+          "hearingCode": "APN",
+          "id": "f3a6e917-7cc8-3c66-83dd-d958abd6a6e4",
+          "jurisdiction": "MAGISTRATES",
+          "legislation": "In accordance with section 14 of the Magistrates' Courts Act 1980.",
+          "linkType": "LINKED",
+          "listingNotifTemplate": "POSTAL_NOTIFICATION",
+          "offenceActiveOrder": "OFFENCE",
+          "pleaApplicableFlag": false,
+          "prosecutorThirdPartyFlag": true,
+          "spiOutApplicableFlag": true,
+          "summonsTemplateType": "NOT_APPLICABLE",
+          "type": "Appearance to make statutory declaration"
+        }
+      }
+    ],
+    "defendantHearings": [
+      {
+        "defendantId": "c6e502ee-ae75-4d84-97d9-10a72f84f64e",
+        "defendantName": "Stevie Dooley",
+        "hearingIds": [
+          "c1d51307-f0b0-438a-b813-7971706d0a2f",
+          "e0cd8744-053b-4bff-bed5-94a90a8603f9"
+        ]
+      },
+      {
+        "defendantId": "c301bccf-d6bc-48f9-be2d-28aac8a0c542",
+        "defendantName": "Rosemary QuitzonShields",
+        "hearingIds": [
+          "c1d51307-f0b0-438a-b813-7971706d0a2f",
+          "e0cd8744-053b-4bff-bed5-94a90a8603f9"
+        ]
+      }
+    ],
+    "hearings": [
+      {
+        "courtCentre": {
+          "address": {
+            "address1": "Derby Combined Court Centre",
+            "address2": "Morledge",
+            "address3": "Derby",
+            "address4": "",
+            "address5": "",
+            "postcode": "DE1 2XE"
+          },
+          "code": "C30DE00",
+          "id": "6131bd34-33d9-3d1e-8152-8b5a2084f1bd",
+          "lja": {
+            "ljaCode": "1428",
+            "ljaName": "Southern Derbyshire Magistrates' Court"
+          },
+          "name": "Derby Crown Court",
+          "roomId": "594d6332-9806-38ab-830d-5941e671e0bb",
+          "roomName": "Courtroom 01"
+        },
+        "defendants": [
+          {
+            "address": {
+              "address1": "1234",
+              "address2": "StreetDescription",
+              "address3": "Locality2O"
+            },
+            "age": "31",
+            "courtApplications": [],
+            "dateOfBirth": "1990-01-01",
+            "defenceOrganisation": {
+              "defenceCounsels": [],
+              "defendantId": "c6e502ee-ae75-4d84-97d9-10a72f84f64e"
+            },
+            "id": "c6e502ee-ae75-4d84-97d9-10a72f84f64e",
+            "judicialResults": [],
+            "legalAidStatus": "Granted",
+            "name": "Stevie Dooley",
+            "offences": [
+              {
+                "count": 0,
+                "id": "2ae66611-e1fa-4bcb-b7a9-dcb918ca22eb",
+                "judicialResults": [
+                  {
+                    "alwaysPublished": false,
+                    "category": "INTERMEDIARY",
+                    "cjsCode": "4506",
+                    "courtClerk": {
+                      "firstName": "Erica",
+                      "lastName": "Wilson",
+                      "userId": "31ec3a16-8721-498c-8da5-f099390ee254"
+                    },
+                    "d20": false,
+                    "excludedFromResults": false,
+                    "isAdjournmentResult": false,
+                    "isAvailableForCourtExtract": true,
+                    "isConvictedResult": false,
+                    "isDeleted": false,
+                    "isFinancialResult": false,
+                    "isNewAmendment": true,
+                    "isUnscheduled": false,
+                    "judicialResultId": "53a79ddf-2177-498e-841b-ff265a20727f",
+                    "judicialResultPrompts": [
+                      {
+                        "courtExtract": "Y",
+                        "judicialResultPromptTypeId": "fbed768b-ee95-4434-87c8-e81cbc8d24c8",
+                        "label": "Next hearing in Crown Court",
+                        "promptReference": "04b61192-e9a6-472f-8148-5b92803c7a11",
+                        "promptSequence": 0,
+                        "usergroups": [],
+                        "value": "Fixed Date:20/05/2021\nTime of hearing:10:30\nCourtroom:Courtroom 01\nHearing type:Plea and Trial Preparation\nEstimated duration:30 Minutes\nRemand Status:Conditional Bail\nCourthouse organisation name:Derby Crown Court\nCourthouse address line 1:Derby Combined Court Centre\nCourthouse address line 2:Morledge\nCourthouse address line 3:Derby\nCourthouse post code:DE1 2XE\nCourthouse email address 1:EMCorrespondence@cps.gov.uk\nCourthouse email address 2:derbycc@geoamey.co.uk",
+                        "welshLabel": "Bydd y gwrandawiad nesaf yn Llys y Goron"
+                      },
+                      {
+                        "courtExtract": "Y",
+                        "isFinancialImposition": false,
+                        "judicialResultPromptTypeId": "61f951c3-f18d-4a44-ae4a-0cad4efb4133",
+                        "label": "Defendant to attend the next hearing",
+                        "promptReference": "defendantToAttendTheNextHearing",
+                        "promptSequence": 100,
+                        "type": "BOOLEAN",
+                        "usergroups": [],
+                        "value": "true",
+                        "welshLabel": "Diffynnydd i fynychu’r gwrandawiad nesaf",
+                        "welshValue": "true"
+                      },
+                      {
+                        "courtExtract": "Y",
+                        "judicialResultPromptTypeId": "a0bdcc1b-fd72-4515-91ba-01807dfdf880",
+                        "label": "Case part heard",
+                        "promptReference": "71a5d85f-172f-404d-966a-3db5ad2a0481",
+                        "promptSequence": 200,
+                        "usergroups": [],
+                        "value": "",
+                        "welshLabel": "Gwrandawyd yr achos yn rhannol"
+                      },
+                      {
+                        "courtExtract": "N",
+                        "judicialResultPromptTypeId": "7fc17a01-2f5a-4433-aae9-28e0c959f73b",
+                        "label": "Adjournment reasons",
+                        "promptReference": "b750e38f-1de4-44f9-8ce7-0e9e9a342020",
+                        "promptSequence": 300,
+                        "usergroups": [],
+                        "value": "",
+                        "welshLabel": "Rheswm dros ohirio:"
+                      }
+                    ],
+                    "judicialResultTypeId": "d278650c-e429-11e8-9f32-f2801f1b9fd1",
+                    "label": "Adjournment",
+                    "lastSharedDateTime": "2021-05-19",
+                    "level": "O",
+                    "lifeDuration": false,
+                    "nextHearing": {
+                      "adjournmentReason": "Case part heard",
+                      "courtCentre": {
+                        "address": {
+                          "address1": "Derby Combined Court Centre",
+                          "address2": "Morledge",
+                          "address3": "Derby",
+                          "postcode": "DE1 2XE"
+                        },
+                        "courtHearingLocation": "C30DE00",
+                        "id": "6131bd34-33d9-3d1e-8152-8b5a2084f1bd",
+                        "name": "Derby Crown Court",
+                        "psaCode": 1428,
+                        "roomId": "594d6332-9806-38ab-830d-5941e671e0bb",
+                        "roomName": "Courtroom 01",
+                        "welshName": "Llys Y Goron Derby"
+                      },
+                      "estimatedMinutes": 30,
+                      "jurisdictionType": "CROWN",
+                      "listedStartDateTime": "2021-05-20T09:30:00.000Z",
+                      "type": {
+                        "description": "Plea and Trial Preparation",
+                        "id": "06b0c2bf-3f98-46ed-ab7e-56efaf9ecced"
+                      }
+                    },
+                    "orderedDate": "2021-05-19",
+                    "orderedHearingId": "c1d51307-f0b0-438a-b813-7971706d0a2f",
+                    "postHearingCustodyStatus": "A",
+                    "publishedAsAPrompt": false,
+                    "publishedForNows": false,
+                    "rank": 76400,
+                    "resultText": "Adjournment\nNext hearing in Crown Court Fixed Date:20/05/2021\nTime of hearing:10:30\nCourtroom:Courtroom 01\nHearing type:Plea and Trial Preparation\nEstimated duration:30 Minutes\nRemand Status:Conditional Bail\nCourthouse organisation name:Derby Crown Court\nCourthouse address line 1:Derby Combined Court Centre\nCourthouse address line 2:Morledge\nCourthouse address line 3:Derby\nCourthouse post code:DE1 2XE\nCourthouse email address 1:EMCorrespondence@cps.gov.uk\nCourthouse email address 2:derbycc@geoamey.co.uk\nDefendant to attend the next hearing true\nCase part heard \nAdjournment reasons ",
+                    "rollUpPrompts": true,
+                    "rootJudicialResultId": "53a79ddf-2177-498e-841b-ff265a20727f",
+                    "rootJudicialResultTypeId": "d278650c-e429-11e8-9f32-f2801f1b9fd1",
+                    "terminatesOffenceProceedings": false,
+                    "urgent": false,
+                    "usergroups": [],
+                    "welshLabel": "Gohiriad"
+                  },
+                  {
+                    "alwaysPublished": false,
+                    "category": "FINAL",
+                    "cjsCode": "1017",
+                    "courtClerk": {
+                      "firstName": "Erica",
+                      "lastName": "Wilson",
+                      "userId": "31ec3a16-8721-498c-8da5-f099390ee254"
+                    },
+                    "d20": false,
+                    "dvlaCode": "J",
+                    "excludedFromResults": false,
+                    "isAdjournmentResult": false,
+                    "isAvailableForCourtExtract": true,
+                    "isConvictedResult": true,
+                    "isDeleted": false,
+                    "isFinancialResult": false,
+                    "isNewAmendment": true,
+                    "isUnscheduled": false,
+                    "judicialResultId": "170d8fca-2e0e-4877-8275-7e35aa502671",
+                    "judicialResultTypeId": "b9c6047b-fb84-4b12-97a1-2175e4b8bbac",
+                    "label": "Absolute discharge",
+                    "lastSharedDateTime": "2021-05-19",
+                    "level": "O",
+                    "lifeDuration": false,
+                    "orderedDate": "2021-05-20",
+                    "orderedHearingId": "e0cd8744-053b-4bff-bed5-94a90a8603f9",
+                    "postHearingCustodyStatus": "A",
+                    "publishedAsAPrompt": false,
+                    "publishedForNows": false,
+                    "rank": 23500,
+                    "resultText": "Absolute discharge\n",
+                    "rollUpPrompts": true,
+                    "rootJudicialResultId": "170d8fca-2e0e-4877-8275-7e35aa502671",
+                    "rootJudicialResultTypeId": "b9c6047b-fb84-4b12-97a1-2175e4b8bbac",
+                    "terminatesOffenceProceedings": false,
+                    "urgent": false,
+                    "usergroups": [],
+                    "welshLabel": "Rhyddhad diamod"
+                  }
+                ],
+                "offenceCode": "CA03011",
+                "offenceDefinitionId": "8144e0b3-52dd-42f6-b615-271ed4301c22",
+                "offenceLegislation": "Contrary to section 363(3)(a) and (4) of the Communications Act 2003.",
+                "offenceTitle": "Possess a    television set with intent to install / use without a licence",
+                "pleas": [],
+                "proceedingsConcluded": true,
+                "startDate": "2020-02-09",
+                "verdicts": [],
+                "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+              },
+              {
+                "count": 0,
+                "id": "501cd9f3-c9a8-4aa4-b57f-3908c4666e8c",
+                "judicialResults": [
+                  {
+                    "alwaysPublished": false,
+                    "category": "INTERMEDIARY",
+                    "cjsCode": "4506",
+                    "courtClerk": {
+                      "firstName": "Erica",
+                      "lastName": "Wilson",
+                      "userId": "31ec3a16-8721-498c-8da5-f099390ee254"
+                    },
+                    "d20": false,
+                    "excludedFromResults": false,
+                    "isAdjournmentResult": false,
+                    "isAvailableForCourtExtract": true,
+                    "isConvictedResult": false,
+                    "isDeleted": false,
+                    "isFinancialResult": false,
+                    "isNewAmendment": true,
+                    "isUnscheduled": false,
+                    "judicialResultId": "8473db1b-9b64-4cf8-ae05-7a23194d75d9",
+                    "judicialResultPrompts": [
+                      {
+                        "courtExtract": "Y",
+                        "judicialResultPromptTypeId": "fbed768b-ee95-4434-87c8-e81cbc8d24c8",
+                        "label": "Next hearing in Crown Court",
+                        "promptReference": "270db2c5-0534-41cb-b3b8-56c3943b86bc",
+                        "promptSequence": 0,
+                        "usergroups": [],
+                        "value": "Fixed Date:20/05/2021\nTime of hearing:10:30\nCourtroom:Courtroom 01\nHearing type:Plea and Trial Preparation\nEstimated duration:30 Minutes\nRemand Status:Conditional Bail\nCourthouse organisation name:Derby Crown Court\nCourthouse address line 1:Derby Combined Court Centre\nCourthouse address line 2:Morledge\nCourthouse address line 3:Derby\nCourthouse post code:DE1 2XE\nCourthouse email address 1:EMCorrespondence@cps.gov.uk\nCourthouse email address 2:derbycc@geoamey.co.uk",
+                        "welshLabel": "Bydd y gwrandawiad nesaf yn Llys y Goron"
+                      },
+                      {
+                        "courtExtract": "Y",
+                        "isFinancialImposition": false,
+                        "judicialResultPromptTypeId": "61f951c3-f18d-4a44-ae4a-0cad4efb4133",
+                        "label": "Defendant to attend the next hearing",
+                        "promptReference": "defendantToAttendTheNextHearing",
+                        "promptSequence": 100,
+                        "type": "BOOLEAN",
+                        "usergroups": [],
+                        "value": "true",
+                        "welshLabel": "Diffynnydd i fynychu’r gwrandawiad nesaf",
+                        "welshValue": "true"
+                      },
+                      {
+                        "courtExtract": "Y",
+                        "judicialResultPromptTypeId": "a0bdcc1b-fd72-4515-91ba-01807dfdf880",
+                        "label": "Case part heard",
+                        "promptReference": "d93439b4-8774-4ca5-934d-cb8dbcc07f6f",
+                        "promptSequence": 200,
+                        "usergroups": [],
+                        "value": "",
+                        "welshLabel": "Gwrandawyd yr achos yn rhannol"
+                      },
+                      {
+                        "courtExtract": "N",
+                        "judicialResultPromptTypeId": "7fc17a01-2f5a-4433-aae9-28e0c959f73b",
+                        "label": "Adjournment reasons",
+                        "promptReference": "dc2ad892-85c2-4e0c-9c37-adab129aaf7a",
+                        "promptSequence": 300,
+                        "usergroups": [],
+                        "value": "",
+                        "welshLabel": "Rheswm dros ohirio:"
+                      }
+                    ],
+                    "judicialResultTypeId": "d278650c-e429-11e8-9f32-f2801f1b9fd1",
+                    "label": "Adjournment",
+                    "lastSharedDateTime": "2021-05-19",
+                    "level": "O",
+                    "lifeDuration": false,
+                    "nextHearing": {
+                      "adjournmentReason": "Case part heard",
+                      "courtCentre": {
+                        "address": {
+                          "address1": "Derby Combined Court Centre",
+                          "address2": "Morledge",
+                          "address3": "Derby",
+                          "postcode": "DE1 2XE"
+                        },
+                        "courtHearingLocation": "C30DE00",
+                        "id": "6131bd34-33d9-3d1e-8152-8b5a2084f1bd",
+                        "name": "Derby Crown Court",
+                        "psaCode": 1428,
+                        "roomId": "594d6332-9806-38ab-830d-5941e671e0bb",
+                        "roomName": "Courtroom 01",
+                        "welshName": "Llys Y Goron Derby"
+                      },
+                      "estimatedMinutes": 30,
+                      "jurisdictionType": "CROWN",
+                      "listedStartDateTime": "2021-05-20T09:30:00.000Z",
+                      "type": {
+                        "description": "Plea and Trial Preparation",
+                        "id": "06b0c2bf-3f98-46ed-ab7e-56efaf9ecced"
+                      }
+                    },
+                    "orderedDate": "2021-05-19",
+                    "orderedHearingId": "c1d51307-f0b0-438a-b813-7971706d0a2f",
+                    "postHearingCustodyStatus": "A",
+                    "publishedAsAPrompt": false,
+                    "publishedForNows": false,
+                    "rank": 76400,
+                    "resultText": "Adjournment\nNext hearing in Crown Court Fixed Date:20/05/2021\nTime of hearing:10:30\nCourtroom:Courtroom 01\nHearing type:Plea and Trial Preparation\nEstimated duration:30 Minutes\nRemand Status:Conditional Bail\nCourthouse organisation name:Derby Crown Court\nCourthouse address line 1:Derby Combined Court Centre\nCourthouse address line 2:Morledge\nCourthouse address line 3:Derby\nCourthouse post code:DE1 2XE\nCourthouse email address 1:EMCorrespondence@cps.gov.uk\nCourthouse email address 2:derbycc@geoamey.co.uk\nDefendant to attend the next hearing true\nCase part heard \nAdjournment reasons ",
+                    "rollUpPrompts": true,
+                    "rootJudicialResultId": "8473db1b-9b64-4cf8-ae05-7a23194d75d9",
+                    "rootJudicialResultTypeId": "d278650c-e429-11e8-9f32-f2801f1b9fd1",
+                    "terminatesOffenceProceedings": false,
+                    "urgent": false,
+                    "usergroups": [],
+                    "welshLabel": "Gohiriad"
+                  },
+                  {
+                    "alwaysPublished": false,
+                    "category": "FINAL",
+                    "cjsCode": "1017",
+                    "courtClerk": {
+                      "firstName": "Erica",
+                      "lastName": "Wilson",
+                      "userId": "31ec3a16-8721-498c-8da5-f099390ee254"
+                    },
+                    "d20": false,
+                    "dvlaCode": "J",
+                    "excludedFromResults": false,
+                    "isAdjournmentResult": false,
+                    "isAvailableForCourtExtract": true,
+                    "isConvictedResult": true,
+                    "isDeleted": false,
+                    "isFinancialResult": false,
+                    "isNewAmendment": true,
+                    "isUnscheduled": false,
+                    "judicialResultId": "4a9d4602-3e2c-4b43-8bb7-5fbc630ff5a8",
+                    "judicialResultTypeId": "b9c6047b-fb84-4b12-97a1-2175e4b8bbac",
+                    "label": "Absolute discharge",
+                    "lastSharedDateTime": "2021-05-19",
+                    "level": "O",
+                    "lifeDuration": false,
+                    "orderedDate": "2021-05-20",
+                    "orderedHearingId": "e0cd8744-053b-4bff-bed5-94a90a8603f9",
+                    "postHearingCustodyStatus": "A",
+                    "publishedAsAPrompt": false,
+                    "publishedForNows": false,
+                    "rank": 23500,
+                    "resultText": "Absolute discharge\n",
+                    "rollUpPrompts": true,
+                    "rootJudicialResultId": "4a9d4602-3e2c-4b43-8bb7-5fbc630ff5a8",
+                    "rootJudicialResultTypeId": "b9c6047b-fb84-4b12-97a1-2175e4b8bbac",
+                    "terminatesOffenceProceedings": false,
+                    "urgent": false,
+                    "usergroups": [],
+                    "welshLabel": "Rhyddhad diamod"
+                  }
+                ],
+                "laaApplnReference": {
+                  "applicationReference": "LAA-20191601",
+                  "effectiveEndDate": "2019-12-12",
+                  "effectiveStartDate": "2019-09-12",
+                  "laaContractNumber": "99998888",
+                  "offenceLevelStatus": "Granted",
+                  "statusCode": "G2",
+                  "statusDate": "2019-12-16",
+                  "statusDescription": "Granted for Two Advocates",
+                  "statusId": "58ebf081-2b7d-3b1d-8c47-149fe7dbd672"
+                },
+                "offenceCode": "CA03010",
+                "offenceDefinitionId": "d7443546-2e12-4d34-bde1-33dee7aebb23",
+                "offenceLegislation": "Contrary to section 363(2) and (4) of the Communications Act 2003.",
+                "offenceTitle": "Use / install a television set without a licence",
+                "pleas": [],
+                "proceedingsConcluded": true,
+                "startDate": "2020-02-09",
+                "verdicts": [],
+                "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+              }
+            ]
+          },
+          {
+            "address": {
+              "address1": "1234",
+              "address2": "StreetDescription",
+              "address3": "Locality2O"
+            },
+            "age": "31",
+            "courtApplications": [],
+            "dateOfBirth": "1990-01-01",
+            "defenceOrganisation": {
+              "defenceCounsels": [],
+              "defendantId": "c301bccf-d6bc-48f9-be2d-28aac8a0c542"
+            },
+            "id": "c301bccf-d6bc-48f9-be2d-28aac8a0c542",
+            "judicialResults": [],
+            "name": "Rosemary QuitzonShields",
+            "offences": [
+              {
+                "count": 0,
+                "id": "c2d875fe-15cf-42b0-9d2d-a794f7a54973",
+                "judicialResults": [
+                  {
+                    "alwaysPublished": false,
+                    "category": "INTERMEDIARY",
+                    "cjsCode": "4506",
+                    "courtClerk": {
+                      "firstName": "Erica",
+                      "lastName": "Wilson",
+                      "userId": "31ec3a16-8721-498c-8da5-f099390ee254"
+                    },
+                    "d20": false,
+                    "excludedFromResults": false,
+                    "isAdjournmentResult": false,
+                    "isAvailableForCourtExtract": true,
+                    "isConvictedResult": false,
+                    "isDeleted": false,
+                    "isFinancialResult": false,
+                    "isNewAmendment": true,
+                    "isUnscheduled": false,
+                    "judicialResultId": "1407e3ec-030d-4afc-9971-a9ac94aec44b",
+                    "judicialResultPrompts": [
+                      {
+                        "courtExtract": "Y",
+                        "judicialResultPromptTypeId": "fbed768b-ee95-4434-87c8-e81cbc8d24c8",
+                        "label": "Next hearing in Crown Court",
+                        "promptReference": "5e278129-72c5-4592-8361-7d5ad5b7a3d6",
+                        "promptSequence": 0,
+                        "usergroups": [],
+                        "value": "Fixed Date:20/05/2021\nTime of hearing:10:30\nCourtroom:Courtroom 01\nHearing type:Plea and Trial Preparation\nEstimated duration:30 Minutes\nRemand Status:Conditional Bail\nCourthouse organisation name:Derby Crown Court\nCourthouse address line 1:Derby Combined Court Centre\nCourthouse address line 2:Morledge\nCourthouse address line 3:Derby\nCourthouse post code:DE1 2XE\nCourthouse email address 1:EMCorrespondence@cps.gov.uk\nCourthouse email address 2:derbycc@geoamey.co.uk",
+                        "welshLabel": "Bydd y gwrandawiad nesaf yn Llys y Goron"
+                      },
+                      {
+                        "courtExtract": "Y",
+                        "isFinancialImposition": false,
+                        "judicialResultPromptTypeId": "61f951c3-f18d-4a44-ae4a-0cad4efb4133",
+                        "label": "Defendant to attend the next hearing",
+                        "promptReference": "defendantToAttendTheNextHearing",
+                        "promptSequence": 100,
+                        "type": "BOOLEAN",
+                        "usergroups": [],
+                        "value": "true",
+                        "welshLabel": "Diffynnydd i fynychu’r gwrandawiad nesaf",
+                        "welshValue": "true"
+                      },
+                      {
+                        "courtExtract": "Y",
+                        "judicialResultPromptTypeId": "a0bdcc1b-fd72-4515-91ba-01807dfdf880",
+                        "label": "Case part heard",
+                        "promptReference": "dbc0f05a-803b-454d-ad9f-eec512c9f068",
+                        "promptSequence": 200,
+                        "usergroups": [],
+                        "value": "",
+                        "welshLabel": "Gwrandawyd yr achos yn rhannol"
+                      },
+                      {
+                        "courtExtract": "N",
+                        "judicialResultPromptTypeId": "7fc17a01-2f5a-4433-aae9-28e0c959f73b",
+                        "label": "Adjournment reasons",
+                        "promptReference": "9c2d5b50-cbcb-4dd2-beba-5066c6da0078",
+                        "promptSequence": 300,
+                        "usergroups": [],
+                        "value": "",
+                        "welshLabel": "Rheswm dros ohirio:"
+                      }
+                    ],
+                    "judicialResultTypeId": "d278650c-e429-11e8-9f32-f2801f1b9fd1",
+                    "label": "Adjournment",
+                    "lastSharedDateTime": "2021-05-19",
+                    "level": "O",
+                    "lifeDuration": false,
+                    "nextHearing": {
+                      "adjournmentReason": "Case part heard",
+                      "courtCentre": {
+                        "address": {
+                          "address1": "Derby Combined Court Centre",
+                          "address2": "Morledge",
+                          "address3": "Derby",
+                          "postcode": "DE1 2XE"
+                        },
+                        "courtHearingLocation": "C30DE00",
+                        "id": "6131bd34-33d9-3d1e-8152-8b5a2084f1bd",
+                        "name": "Derby Crown Court",
+                        "psaCode": 1428,
+                        "roomId": "594d6332-9806-38ab-830d-5941e671e0bb",
+                        "roomName": "Courtroom 01",
+                        "welshName": "Llys Y Goron Derby"
+                      },
+                      "estimatedMinutes": 30,
+                      "jurisdictionType": "CROWN",
+                      "listedStartDateTime": "2021-05-20T09:30:00.000Z",
+                      "type": {
+                        "description": "Plea and Trial Preparation",
+                        "id": "06b0c2bf-3f98-46ed-ab7e-56efaf9ecced"
+                      }
+                    },
+                    "orderedDate": "2021-05-19",
+                    "orderedHearingId": "c1d51307-f0b0-438a-b813-7971706d0a2f",
+                    "postHearingCustodyStatus": "A",
+                    "publishedAsAPrompt": false,
+                    "publishedForNows": false,
+                    "rank": 76400,
+                    "resultText": "Adjournment\nNext hearing in Crown Court Fixed Date:20/05/2021\nTime of hearing:10:30\nCourtroom:Courtroom 01\nHearing type:Plea and Trial Preparation\nEstimated duration:30 Minutes\nRemand Status:Conditional Bail\nCourthouse organisation name:Derby Crown Court\nCourthouse address line 1:Derby Combined Court Centre\nCourthouse address line 2:Morledge\nCourthouse address line 3:Derby\nCourthouse post code:DE1 2XE\nCourthouse email address 1:EMCorrespondence@cps.gov.uk\nCourthouse email address 2:derbycc@geoamey.co.uk\nDefendant to attend the next hearing true\nCase part heard \nAdjournment reasons ",
+                    "rollUpPrompts": true,
+                    "rootJudicialResultId": "1407e3ec-030d-4afc-9971-a9ac94aec44b",
+                    "rootJudicialResultTypeId": "d278650c-e429-11e8-9f32-f2801f1b9fd1",
+                    "terminatesOffenceProceedings": false,
+                    "urgent": false,
+                    "usergroups": [],
+                    "welshLabel": "Gohiriad"
+                  },
+                  {
+                    "alwaysPublished": false,
+                    "category": "FINAL",
+                    "cjsCode": "1017",
+                    "courtClerk": {
+                      "firstName": "Erica",
+                      "lastName": "Wilson",
+                      "userId": "31ec3a16-8721-498c-8da5-f099390ee254"
+                    },
+                    "d20": false,
+                    "dvlaCode": "J",
+                    "excludedFromResults": false,
+                    "isAdjournmentResult": false,
+                    "isAvailableForCourtExtract": true,
+                    "isConvictedResult": true,
+                    "isDeleted": false,
+                    "isFinancialResult": false,
+                    "isNewAmendment": true,
+                    "isUnscheduled": false,
+                    "judicialResultId": "b99d6e53-1f13-4550-bf8b-602f02aba0bf",
+                    "judicialResultTypeId": "b9c6047b-fb84-4b12-97a1-2175e4b8bbac",
+                    "label": "Absolute discharge",
+                    "lastSharedDateTime": "2021-05-19",
+                    "level": "O",
+                    "lifeDuration": false,
+                    "orderedDate": "2021-05-20",
+                    "orderedHearingId": "e0cd8744-053b-4bff-bed5-94a90a8603f9",
+                    "postHearingCustodyStatus": "A",
+                    "publishedAsAPrompt": false,
+                    "publishedForNows": false,
+                    "rank": 23500,
+                    "resultText": "Absolute discharge\n",
+                    "rollUpPrompts": true,
+                    "rootJudicialResultId": "b99d6e53-1f13-4550-bf8b-602f02aba0bf",
+                    "rootJudicialResultTypeId": "b9c6047b-fb84-4b12-97a1-2175e4b8bbac",
+                    "terminatesOffenceProceedings": false,
+                    "urgent": false,
+                    "usergroups": [],
+                    "welshLabel": "Rhyddhad diamod"
+                  }
+                ],
+                "offenceCode": "CA03012",
+                "offenceDefinitionId": "51ed3322-499a-4430-94cc-d52964f108db",
+                "offenceLegislation": "Contrary to section 363(3)(b) and (4) of the    Communications Act 2003.",
+                "offenceTitle": "Possess /    control TV set with intent another use install without a licence",
+                "pleas": [],
+                "proceedingsConcluded": true,
+                "startDate": "2020-02-09",
+                "verdicts": [],
+                "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+              },
+              {
+                "count": 0,
+                "id": "e31cc8d0-279f-477b-8d0d-f9d2fbc0ffaa",
+                "judicialResults": [
+                  {
+                    "alwaysPublished": false,
+                    "category": "INTERMEDIARY",
+                    "cjsCode": "4506",
+                    "courtClerk": {
+                      "firstName": "Erica",
+                      "lastName": "Wilson",
+                      "userId": "31ec3a16-8721-498c-8da5-f099390ee254"
+                    },
+                    "d20": false,
+                    "excludedFromResults": false,
+                    "isAdjournmentResult": false,
+                    "isAvailableForCourtExtract": true,
+                    "isConvictedResult": false,
+                    "isDeleted": false,
+                    "isFinancialResult": false,
+                    "isNewAmendment": true,
+                    "isUnscheduled": false,
+                    "judicialResultId": "7b926a8b-bbe9-4b7e-822b-863aa3e2234b",
+                    "judicialResultPrompts": [
+                      {
+                        "courtExtract": "Y",
+                        "judicialResultPromptTypeId": "fbed768b-ee95-4434-87c8-e81cbc8d24c8",
+                        "label": "Next hearing in Crown Court",
+                        "promptReference": "8556875e-e7b4-488a-bc95-ca4b6f542894",
+                        "promptSequence": 0,
+                        "usergroups": [],
+                        "value": "Fixed Date:20/05/2021\nTime of hearing:10:30\nCourtroom:Courtroom 01\nHearing type:Plea and Trial Preparation\nEstimated duration:30 Minutes\nRemand Status:Conditional Bail\nCourthouse organisation name:Derby Crown Court\nCourthouse address line 1:Derby Combined Court Centre\nCourthouse address line 2:Morledge\nCourthouse address line 3:Derby\nCourthouse post code:DE1 2XE\nCourthouse email address 1:EMCorrespondence@cps.gov.uk\nCourthouse email address 2:derbycc@geoamey.co.uk",
+                        "welshLabel": "Bydd y gwrandawiad nesaf yn Llys y Goron"
+                      },
+                      {
+                        "courtExtract": "Y",
+                        "isFinancialImposition": false,
+                        "judicialResultPromptTypeId": "61f951c3-f18d-4a44-ae4a-0cad4efb4133",
+                        "label": "Defendant to attend the next hearing",
+                        "promptReference": "defendantToAttendTheNextHearing",
+                        "promptSequence": 100,
+                        "type": "BOOLEAN",
+                        "usergroups": [],
+                        "value": "true",
+                        "welshLabel": "Diffynnydd i fynychu’r gwrandawiad nesaf",
+                        "welshValue": "true"
+                      },
+                      {
+                        "courtExtract": "Y",
+                        "judicialResultPromptTypeId": "a0bdcc1b-fd72-4515-91ba-01807dfdf880",
+                        "label": "Case part heard",
+                        "promptReference": "e814354a-f6f7-4856-a9be-d01bde72952b",
+                        "promptSequence": 200,
+                        "usergroups": [],
+                        "value": "",
+                        "welshLabel": "Gwrandawyd yr achos yn rhannol"
+                      },
+                      {
+                        "courtExtract": "N",
+                        "judicialResultPromptTypeId": "7fc17a01-2f5a-4433-aae9-28e0c959f73b",
+                        "label": "Adjournment reasons",
+                        "promptReference": "da2ae587-ea89-463e-8d79-7a5f02489b4e",
+                        "promptSequence": 300,
+                        "usergroups": [],
+                        "value": "",
+                        "welshLabel": "Rheswm dros ohirio:"
+                      }
+                    ],
+                    "judicialResultTypeId": "d278650c-e429-11e8-9f32-f2801f1b9fd1",
+                    "label": "Adjournment",
+                    "lastSharedDateTime": "2021-05-19",
+                    "level": "O",
+                    "lifeDuration": false,
+                    "nextHearing": {
+                      "adjournmentReason": "Case part heard",
+                      "courtCentre": {
+                        "address": {
+                          "address1": "Derby Combined Court Centre",
+                          "address2": "Morledge",
+                          "address3": "Derby",
+                          "postcode": "DE1 2XE"
+                        },
+                        "courtHearingLocation": "C30DE00",
+                        "id": "6131bd34-33d9-3d1e-8152-8b5a2084f1bd",
+                        "name": "Derby Crown Court",
+                        "psaCode": 1428,
+                        "roomId": "594d6332-9806-38ab-830d-5941e671e0bb",
+                        "roomName": "Courtroom 01",
+                        "welshName": "Llys Y Goron Derby"
+                      },
+                      "estimatedMinutes": 30,
+                      "jurisdictionType": "CROWN",
+                      "listedStartDateTime": "2021-05-20T09:30:00.000Z",
+                      "type": {
+                        "description": "Plea and Trial Preparation",
+                        "id": "06b0c2bf-3f98-46ed-ab7e-56efaf9ecced"
+                      }
+                    },
+                    "orderedDate": "2021-05-19",
+                    "orderedHearingId": "c1d51307-f0b0-438a-b813-7971706d0a2f",
+                    "postHearingCustodyStatus": "A",
+                    "publishedAsAPrompt": false,
+                    "publishedForNows": false,
+                    "rank": 76400,
+                    "resultText": "Adjournment\nNext hearing in Crown Court Fixed Date:20/05/2021\nTime of hearing:10:30\nCourtroom:Courtroom 01\nHearing type:Plea and Trial Preparation\nEstimated duration:30 Minutes\nRemand Status:Conditional Bail\nCourthouse organisation name:Derby Crown Court\nCourthouse address line 1:Derby Combined Court Centre\nCourthouse address line 2:Morledge\nCourthouse address line 3:Derby\nCourthouse post code:DE1 2XE\nCourthouse email address 1:EMCorrespondence@cps.gov.uk\nCourthouse email address 2:derbycc@geoamey.co.uk\nDefendant to attend the next hearing true\nCase part heard \nAdjournment reasons ",
+                    "rollUpPrompts": true,
+                    "rootJudicialResultId": "7b926a8b-bbe9-4b7e-822b-863aa3e2234b",
+                    "rootJudicialResultTypeId": "d278650c-e429-11e8-9f32-f2801f1b9fd1",
+                    "terminatesOffenceProceedings": false,
+                    "urgent": false,
+                    "usergroups": [],
+                    "welshLabel": "Gohiriad"
+                  },
+                  {
+                    "alwaysPublished": false,
+                    "category": "FINAL",
+                    "cjsCode": "1017",
+                    "courtClerk": {
+                      "firstName": "Erica",
+                      "lastName": "Wilson",
+                      "userId": "31ec3a16-8721-498c-8da5-f099390ee254"
+                    },
+                    "d20": false,
+                    "dvlaCode": "J",
+                    "excludedFromResults": false,
+                    "isAdjournmentResult": false,
+                    "isAvailableForCourtExtract": true,
+                    "isConvictedResult": true,
+                    "isDeleted": false,
+                    "isFinancialResult": false,
+                    "isNewAmendment": true,
+                    "isUnscheduled": false,
+                    "judicialResultId": "daf855ff-8d29-4d8c-a304-ba73a3da45cc",
+                    "judicialResultTypeId": "b9c6047b-fb84-4b12-97a1-2175e4b8bbac",
+                    "label": "Absolute discharge",
+                    "lastSharedDateTime": "2021-05-19",
+                    "level": "O",
+                    "lifeDuration": false,
+                    "orderedDate": "2021-05-20",
+                    "orderedHearingId": "e0cd8744-053b-4bff-bed5-94a90a8603f9",
+                    "postHearingCustodyStatus": "A",
+                    "publishedAsAPrompt": false,
+                    "publishedForNows": false,
+                    "rank": 23500,
+                    "resultText": "Absolute discharge\n",
+                    "rollUpPrompts": true,
+                    "rootJudicialResultId": "daf855ff-8d29-4d8c-a304-ba73a3da45cc",
+                    "rootJudicialResultTypeId": "b9c6047b-fb84-4b12-97a1-2175e4b8bbac",
+                    "terminatesOffenceProceedings": false,
+                    "urgent": false,
+                    "usergroups": [],
+                    "welshLabel": "Rhyddhad diamod"
+                  }
+                ],
+                "offenceCode": "CA03013",
+                "offenceDefinitionId": "062cedf4-b495-3a6c-9148-cec6bef362ed",
+                "offenceLegislation": "Contrary to section 366(8)(a) and    (9) of the Communications Act 2003.",
+                "offenceTitle": "Obstruct person executing search warrant for TV receiver",
+                "pleas": [],
+                "proceedingsConcluded": true,
+                "startDate": "2020-02-09",
+                "verdicts": [],
+                "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+              }
+            ]
+          }
+        ],
+        "hasResultAmended": false,
+        "hearingDays": [
+          {
+            "courtCentreId": "6131bd34-33d9-3d1e-8152-8b5a2084f1bd",
+            "courtRoomId": "594d6332-9806-38ab-830d-5941e671e0bb",
+            "isCancelled": false,
+            "listedDurationMinutes": 30,
+            "listingSequence": 0,
+            "sittingDay": "2021-05-20T09:30:00.000Z"
+          }
+        ],
+        "hearingListingStatus": "HEARING_RESULTED",
+        "id": "e0cd8744-053b-4bff-bed5-94a90a8603f9",
+        "jurisdictionType": "CROWN",
+        "type": {
+          "description": "Plea and Trial Preparation",
+          "id": "06b0c2bf-3f98-46ed-ab7e-56efaf9ecced"
+        }
+      },
+      {
+        "courtCentre": {
+          "address": {
+            "address1": "176A Lavender Hill",
+            "address2": "London",
+            "address3": "",
+            "address4": "",
+            "address5": "",
+            "postcode": "SW11 1JU"
+          },
+          "code": "B01LY00",
+          "id": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+          "lja": {
+            "ljaCode": "2577",
+            "ljaName": "South West London Magistrates' Court"
+          },
+          "name": "Lavender Hill Magistrates' Court",
+          "roomId": "9e4932f7-97b2-3010-b942-ddd2624e4dd8",
+          "roomName": "Courtroom 01"
+        },
+        "defendants": [
+          {
+            "address": {
+              "address1": "1234",
+              "address2": "StreetDescription",
+              "address3": "Locality2O"
+            },
+            "age": "31",
+            "courtApplications": [],
+            "dateOfBirth": "1990-01-01",
+            "defenceOrganisation": {
+              "defenceCounsels": [],
+              "defendantId": "c301bccf-d6bc-48f9-be2d-28aac8a0c542"
+            },
+            "id": "c301bccf-d6bc-48f9-be2d-28aac8a0c542",
+            "judicialResults": [],
+            "name": "Rosemary QuitzonShields",
+            "offences": [
+              {
+                "count": 0,
+                "id": "c2d875fe-15cf-42b0-9d2d-a794f7a54973",
+                "judicialResults": [
+                  {
+                    "alwaysPublished": false,
+                    "category": "INTERMEDIARY",
+                    "cjsCode": "4506",
+                    "courtClerk": {
+                      "firstName": "Erica",
+                      "lastName": "Wilson",
+                      "userId": "31ec3a16-8721-498c-8da5-f099390ee254"
+                    },
+                    "d20": false,
+                    "excludedFromResults": false,
+                    "isAdjournmentResult": false,
+                    "isAvailableForCourtExtract": true,
+                    "isConvictedResult": false,
+                    "isDeleted": false,
+                    "isFinancialResult": false,
+                    "isNewAmendment": true,
+                    "isUnscheduled": false,
+                    "judicialResultId": "1407e3ec-030d-4afc-9971-a9ac94aec44b",
+                    "judicialResultPrompts": [
+                      {
+                        "courtExtract": "Y",
+                        "judicialResultPromptTypeId": "fbed768b-ee95-4434-87c8-e81cbc8d24c8",
+                        "label": "Next hearing in Crown Court",
+                        "promptReference": "5e278129-72c5-4592-8361-7d5ad5b7a3d6",
+                        "promptSequence": 0,
+                        "usergroups": [],
+                        "value": "Fixed Date:20/05/2021\nTime of hearing:10:30\nCourtroom:Courtroom 01\nHearing type:Plea and Trial Preparation\nEstimated duration:30 Minutes\nRemand Status:Conditional Bail\nCourthouse organisation name:Derby Crown Court\nCourthouse address line 1:Derby Combined Court Centre\nCourthouse address line 2:Morledge\nCourthouse address line 3:Derby\nCourthouse post code:DE1 2XE\nCourthouse email address 1:EMCorrespondence@cps.gov.uk\nCourthouse email address 2:derbycc@geoamey.co.uk",
+                        "welshLabel": "Bydd y gwrandawiad nesaf yn Llys y Goron"
+                      },
+                      {
+                        "courtExtract": "Y",
+                        "isFinancialImposition": false,
+                        "judicialResultPromptTypeId": "61f951c3-f18d-4a44-ae4a-0cad4efb4133",
+                        "label": "Defendant to attend the next hearing",
+                        "promptReference": "defendantToAttendTheNextHearing",
+                        "promptSequence": 100,
+                        "type": "BOOLEAN",
+                        "usergroups": [],
+                        "value": "true",
+                        "welshLabel": "Diffynnydd i fynychu’r gwrandawiad nesaf",
+                        "welshValue": "true"
+                      },
+                      {
+                        "courtExtract": "Y",
+                        "judicialResultPromptTypeId": "a0bdcc1b-fd72-4515-91ba-01807dfdf880",
+                        "label": "Case part heard",
+                        "promptReference": "dbc0f05a-803b-454d-ad9f-eec512c9f068",
+                        "promptSequence": 200,
+                        "usergroups": [],
+                        "value": "",
+                        "welshLabel": "Gwrandawyd yr achos yn rhannol"
+                      },
+                      {
+                        "courtExtract": "N",
+                        "judicialResultPromptTypeId": "7fc17a01-2f5a-4433-aae9-28e0c959f73b",
+                        "label": "Adjournment reasons",
+                        "promptReference": "9c2d5b50-cbcb-4dd2-beba-5066c6da0078",
+                        "promptSequence": 300,
+                        "usergroups": [],
+                        "value": "",
+                        "welshLabel": "Rheswm dros ohirio:"
+                      }
+                    ],
+                    "judicialResultTypeId": "d278650c-e429-11e8-9f32-f2801f1b9fd1",
+                    "label": "Adjournment",
+                    "lastSharedDateTime": "2021-05-19",
+                    "level": "O",
+                    "lifeDuration": false,
+                    "nextHearing": {
+                      "adjournmentReason": "Case part heard",
+                      "courtCentre": {
+                        "address": {
+                          "address1": "Derby Combined Court Centre",
+                          "address2": "Morledge",
+                          "address3": "Derby",
+                          "postcode": "DE1 2XE"
+                        },
+                        "courtHearingLocation": "C30DE00",
+                        "id": "6131bd34-33d9-3d1e-8152-8b5a2084f1bd",
+                        "name": "Derby Crown Court",
+                        "psaCode": 1428,
+                        "roomId": "594d6332-9806-38ab-830d-5941e671e0bb",
+                        "roomName": "Courtroom 01",
+                        "welshName": "Llys Y Goron Derby"
+                      },
+                      "estimatedMinutes": 30,
+                      "jurisdictionType": "CROWN",
+                      "listedStartDateTime": "2021-05-20T09:30:00.000Z",
+                      "type": {
+                        "description": "Plea and Trial Preparation",
+                        "id": "06b0c2bf-3f98-46ed-ab7e-56efaf9ecced"
+                      }
+                    },
+                    "orderedDate": "2021-05-19",
+                    "orderedHearingId": "c1d51307-f0b0-438a-b813-7971706d0a2f",
+                    "postHearingCustodyStatus": "A",
+                    "publishedAsAPrompt": false,
+                    "publishedForNows": false,
+                    "rank": 76400,
+                    "resultText": "Adjournment\nNext hearing in Crown Court Fixed Date:20/05/2021\nTime of hearing:10:30\nCourtroom:Courtroom 01\nHearing type:Plea and Trial Preparation\nEstimated duration:30 Minutes\nRemand Status:Conditional Bail\nCourthouse organisation name:Derby Crown Court\nCourthouse address line 1:Derby Combined Court Centre\nCourthouse address line 2:Morledge\nCourthouse address line 3:Derby\nCourthouse post code:DE1 2XE\nCourthouse email address 1:EMCorrespondence@cps.gov.uk\nCourthouse email address 2:derbycc@geoamey.co.uk\nDefendant to attend the next hearing true\nCase part heard \nAdjournment reasons ",
+                    "rollUpPrompts": true,
+                    "rootJudicialResultId": "1407e3ec-030d-4afc-9971-a9ac94aec44b",
+                    "rootJudicialResultTypeId": "d278650c-e429-11e8-9f32-f2801f1b9fd1",
+                    "terminatesOffenceProceedings": false,
+                    "urgent": false,
+                    "usergroups": [],
+                    "welshLabel": "Gohiriad"
+                  }
+                ],
+                "offenceCode": "CA03012",
+                "offenceDefinitionId": "51ed3322-499a-4430-94cc-d52964f108db",
+                "offenceLegislation": "Contrary to section 363(3)(b) and (4) of the    Communications Act 2003.",
+                "offenceTitle": "Possess /    control TV set with intent another use install without a licence",
+                "pleas": [],
+                "proceedingsConcluded": false,
+                "startDate": "2020-02-09",
+                "verdicts": [],
+                "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+              },
+              {
+                "count": 0,
+                "id": "e31cc8d0-279f-477b-8d0d-f9d2fbc0ffaa",
+                "judicialResults": [
+                  {
+                    "alwaysPublished": false,
+                    "category": "INTERMEDIARY",
+                    "cjsCode": "4506",
+                    "courtClerk": {
+                      "firstName": "Erica",
+                      "lastName": "Wilson",
+                      "userId": "31ec3a16-8721-498c-8da5-f099390ee254"
+                    },
+                    "d20": false,
+                    "excludedFromResults": false,
+                    "isAdjournmentResult": false,
+                    "isAvailableForCourtExtract": true,
+                    "isConvictedResult": false,
+                    "isDeleted": false,
+                    "isFinancialResult": false,
+                    "isNewAmendment": true,
+                    "isUnscheduled": false,
+                    "judicialResultId": "7b926a8b-bbe9-4b7e-822b-863aa3e2234b",
+                    "judicialResultPrompts": [
+                      {
+                        "courtExtract": "Y",
+                        "judicialResultPromptTypeId": "fbed768b-ee95-4434-87c8-e81cbc8d24c8",
+                        "label": "Next hearing in Crown Court",
+                        "promptReference": "8556875e-e7b4-488a-bc95-ca4b6f542894",
+                        "promptSequence": 0,
+                        "usergroups": [],
+                        "value": "Fixed Date:20/05/2021\nTime of hearing:10:30\nCourtroom:Courtroom 01\nHearing type:Plea and Trial Preparation\nEstimated duration:30 Minutes\nRemand Status:Conditional Bail\nCourthouse organisation name:Derby Crown Court\nCourthouse address line 1:Derby Combined Court Centre\nCourthouse address line 2:Morledge\nCourthouse address line 3:Derby\nCourthouse post code:DE1 2XE\nCourthouse email address 1:EMCorrespondence@cps.gov.uk\nCourthouse email address 2:derbycc@geoamey.co.uk",
+                        "welshLabel": "Bydd y gwrandawiad nesaf yn Llys y Goron"
+                      },
+                      {
+                        "courtExtract": "Y",
+                        "isFinancialImposition": false,
+                        "judicialResultPromptTypeId": "61f951c3-f18d-4a44-ae4a-0cad4efb4133",
+                        "label": "Defendant to attend the next hearing",
+                        "promptReference": "defendantToAttendTheNextHearing",
+                        "promptSequence": 100,
+                        "type": "BOOLEAN",
+                        "usergroups": [],
+                        "value": "true",
+                        "welshLabel": "Diffynnydd i fynychu’r gwrandawiad nesaf",
+                        "welshValue": "true"
+                      },
+                      {
+                        "courtExtract": "Y",
+                        "judicialResultPromptTypeId": "a0bdcc1b-fd72-4515-91ba-01807dfdf880",
+                        "label": "Case part heard",
+                        "promptReference": "e814354a-f6f7-4856-a9be-d01bde72952b",
+                        "promptSequence": 200,
+                        "usergroups": [],
+                        "value": "",
+                        "welshLabel": "Gwrandawyd yr achos yn rhannol"
+                      },
+                      {
+                        "courtExtract": "N",
+                        "judicialResultPromptTypeId": "7fc17a01-2f5a-4433-aae9-28e0c959f73b",
+                        "label": "Adjournment reasons",
+                        "promptReference": "da2ae587-ea89-463e-8d79-7a5f02489b4e",
+                        "promptSequence": 300,
+                        "usergroups": [],
+                        "value": "",
+                        "welshLabel": "Rheswm dros ohirio:"
+                      }
+                    ],
+                    "judicialResultTypeId": "d278650c-e429-11e8-9f32-f2801f1b9fd1",
+                    "label": "Adjournment",
+                    "lastSharedDateTime": "2021-05-19",
+                    "level": "O",
+                    "lifeDuration": false,
+                    "nextHearing": {
+                      "adjournmentReason": "Case part heard",
+                      "courtCentre": {
+                        "address": {
+                          "address1": "Derby Combined Court Centre",
+                          "address2": "Morledge",
+                          "address3": "Derby",
+                          "postcode": "DE1 2XE"
+                        },
+                        "courtHearingLocation": "C30DE00",
+                        "id": "6131bd34-33d9-3d1e-8152-8b5a2084f1bd",
+                        "name": "Derby Crown Court",
+                        "psaCode": 1428,
+                        "roomId": "594d6332-9806-38ab-830d-5941e671e0bb",
+                        "roomName": "Courtroom 01",
+                        "welshName": "Llys Y Goron Derby"
+                      },
+                      "estimatedMinutes": 30,
+                      "jurisdictionType": "CROWN",
+                      "listedStartDateTime": "2021-05-20T09:30:00.000Z",
+                      "type": {
+                        "description": "Plea and Trial Preparation",
+                        "id": "06b0c2bf-3f98-46ed-ab7e-56efaf9ecced"
+                      }
+                    },
+                    "orderedDate": "2021-05-19",
+                    "orderedHearingId": "c1d51307-f0b0-438a-b813-7971706d0a2f",
+                    "postHearingCustodyStatus": "A",
+                    "publishedAsAPrompt": false,
+                    "publishedForNows": false,
+                    "rank": 76400,
+                    "resultText": "Adjournment\nNext hearing in Crown Court Fixed Date:20/05/2021\nTime of hearing:10:30\nCourtroom:Courtroom 01\nHearing type:Plea and Trial Preparation\nEstimated duration:30 Minutes\nRemand Status:Conditional Bail\nCourthouse organisation name:Derby Crown Court\nCourthouse address line 1:Derby Combined Court Centre\nCourthouse address line 2:Morledge\nCourthouse address line 3:Derby\nCourthouse post code:DE1 2XE\nCourthouse email address 1:EMCorrespondence@cps.gov.uk\nCourthouse email address 2:derbycc@geoamey.co.uk\nDefendant to attend the next hearing true\nCase part heard \nAdjournment reasons ",
+                    "rollUpPrompts": true,
+                    "rootJudicialResultId": "7b926a8b-bbe9-4b7e-822b-863aa3e2234b",
+                    "rootJudicialResultTypeId": "d278650c-e429-11e8-9f32-f2801f1b9fd1",
+                    "terminatesOffenceProceedings": false,
+                    "urgent": false,
+                    "usergroups": [],
+                    "welshLabel": "Gohiriad"
+                  }
+                ],
+                "offenceCode": "CA03013",
+                "offenceDefinitionId": "062cedf4-b495-3a6c-9148-cec6bef362ed",
+                "offenceLegislation": "Contrary to section 366(8)(a) and    (9) of the Communications Act 2003.",
+                "offenceTitle": "Obstruct person executing search warrant for TV receiver",
+                "pleas": [],
+                "proceedingsConcluded": false,
+                "startDate": "2020-02-09",
+                "verdicts": [],
+                "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+              }
+            ]
+          },
+          {
+            "address": {
+              "address1": "1234",
+              "address2": "StreetDescription",
+              "address3": "Locality2O"
+            },
+            "age": "31",
+            "courtApplications": [],
+            "dateOfBirth": "1990-01-01",
+            "defenceOrganisation": {
+              "defenceCounsels": [],
+              "defendantId": "c6e502ee-ae75-4d84-97d9-10a72f84f64e"
+            },
+            "id": "c6e502ee-ae75-4d84-97d9-10a72f84f64e",
+            "judicialResults": [],
+            "legalAidStatus": "Granted",
+            "name": "Stevie Dooley",
+            "offences": [
+              {
+                "count": 0,
+                "id": "501cd9f3-c9a8-4aa4-b57f-3908c4666e8c",
+                "judicialResults": [
+                  {
+                    "alwaysPublished": false,
+                    "category": "INTERMEDIARY",
+                    "cjsCode": "4506",
+                    "courtClerk": {
+                      "firstName": "Erica",
+                      "lastName": "Wilson",
+                      "userId": "31ec3a16-8721-498c-8da5-f099390ee254"
+                    },
+                    "d20": false,
+                    "excludedFromResults": false,
+                    "isAdjournmentResult": false,
+                    "isAvailableForCourtExtract": true,
+                    "isConvictedResult": false,
+                    "isDeleted": false,
+                    "isFinancialResult": false,
+                    "isNewAmendment": true,
+                    "isUnscheduled": false,
+                    "judicialResultId": "8473db1b-9b64-4cf8-ae05-7a23194d75d9",
+                    "judicialResultPrompts": [
+                      {
+                        "courtExtract": "Y",
+                        "judicialResultPromptTypeId": "fbed768b-ee95-4434-87c8-e81cbc8d24c8",
+                        "label": "Next hearing in Crown Court",
+                        "promptReference": "270db2c5-0534-41cb-b3b8-56c3943b86bc",
+                        "promptSequence": 0,
+                        "usergroups": [],
+                        "value": "Fixed Date:20/05/2021\nTime of hearing:10:30\nCourtroom:Courtroom 01\nHearing type:Plea and Trial Preparation\nEstimated duration:30 Minutes\nRemand Status:Conditional Bail\nCourthouse organisation name:Derby Crown Court\nCourthouse address line 1:Derby Combined Court Centre\nCourthouse address line 2:Morledge\nCourthouse address line 3:Derby\nCourthouse post code:DE1 2XE\nCourthouse email address 1:EMCorrespondence@cps.gov.uk\nCourthouse email address 2:derbycc@geoamey.co.uk",
+                        "welshLabel": "Bydd y gwrandawiad nesaf yn Llys y Goron"
+                      },
+                      {
+                        "courtExtract": "Y",
+                        "isFinancialImposition": false,
+                        "judicialResultPromptTypeId": "61f951c3-f18d-4a44-ae4a-0cad4efb4133",
+                        "label": "Defendant to attend the next hearing",
+                        "promptReference": "defendantToAttendTheNextHearing",
+                        "promptSequence": 100,
+                        "type": "BOOLEAN",
+                        "usergroups": [],
+                        "value": "true",
+                        "welshLabel": "Diffynnydd i fynychu’r gwrandawiad nesaf",
+                        "welshValue": "true"
+                      },
+                      {
+                        "courtExtract": "Y",
+                        "judicialResultPromptTypeId": "a0bdcc1b-fd72-4515-91ba-01807dfdf880",
+                        "label": "Case part heard",
+                        "promptReference": "d93439b4-8774-4ca5-934d-cb8dbcc07f6f",
+                        "promptSequence": 200,
+                        "usergroups": [],
+                        "value": "",
+                        "welshLabel": "Gwrandawyd yr achos yn rhannol"
+                      },
+                      {
+                        "courtExtract": "N",
+                        "judicialResultPromptTypeId": "7fc17a01-2f5a-4433-aae9-28e0c959f73b",
+                        "label": "Adjournment reasons",
+                        "promptReference": "dc2ad892-85c2-4e0c-9c37-adab129aaf7a",
+                        "promptSequence": 300,
+                        "usergroups": [],
+                        "value": "",
+                        "welshLabel": "Rheswm dros ohirio:"
+                      }
+                    ],
+                    "judicialResultTypeId": "d278650c-e429-11e8-9f32-f2801f1b9fd1",
+                    "label": "Adjournment",
+                    "lastSharedDateTime": "2021-05-19",
+                    "level": "O",
+                    "lifeDuration": false,
+                    "nextHearing": {
+                      "adjournmentReason": "Case part heard",
+                      "courtCentre": {
+                        "address": {
+                          "address1": "Derby Combined Court Centre",
+                          "address2": "Morledge",
+                          "address3": "Derby",
+                          "postcode": "DE1 2XE"
+                        },
+                        "courtHearingLocation": "C30DE00",
+                        "id": "6131bd34-33d9-3d1e-8152-8b5a2084f1bd",
+                        "name": "Derby Crown Court",
+                        "psaCode": 1428,
+                        "roomId": "594d6332-9806-38ab-830d-5941e671e0bb",
+                        "roomName": "Courtroom 01",
+                        "welshName": "Llys Y Goron Derby"
+                      },
+                      "estimatedMinutes": 30,
+                      "jurisdictionType": "CROWN",
+                      "listedStartDateTime": "2021-05-20T09:30:00.000Z",
+                      "type": {
+                        "description": "Plea and Trial Preparation",
+                        "id": "06b0c2bf-3f98-46ed-ab7e-56efaf9ecced"
+                      }
+                    },
+                    "orderedDate": "2021-05-19",
+                    "orderedHearingId": "c1d51307-f0b0-438a-b813-7971706d0a2f",
+                    "postHearingCustodyStatus": "A",
+                    "publishedAsAPrompt": false,
+                    "publishedForNows": false,
+                    "rank": 76400,
+                    "resultText": "Adjournment\nNext hearing in Crown Court Fixed Date:20/05/2021\nTime of hearing:10:30\nCourtroom:Courtroom 01\nHearing type:Plea and Trial Preparation\nEstimated duration:30 Minutes\nRemand Status:Conditional Bail\nCourthouse organisation name:Derby Crown Court\nCourthouse address line 1:Derby Combined Court Centre\nCourthouse address line 2:Morledge\nCourthouse address line 3:Derby\nCourthouse post code:DE1 2XE\nCourthouse email address 1:EMCorrespondence@cps.gov.uk\nCourthouse email address 2:derbycc@geoamey.co.uk\nDefendant to attend the next hearing true\nCase part heard \nAdjournment reasons ",
+                    "rollUpPrompts": true,
+                    "rootJudicialResultId": "8473db1b-9b64-4cf8-ae05-7a23194d75d9",
+                    "rootJudicialResultTypeId": "d278650c-e429-11e8-9f32-f2801f1b9fd1",
+                    "terminatesOffenceProceedings": false,
+                    "urgent": false,
+                    "usergroups": [],
+                    "welshLabel": "Gohiriad"
+                  }
+                ],
+                "laaApplnReference": {
+                  "applicationReference": "LAA-20191601",
+                  "effectiveEndDate": "2019-12-12",
+                  "effectiveStartDate": "2019-09-12",
+                  "laaContractNumber": "99998888",
+                  "offenceLevelStatus": "Granted",
+                  "statusCode": "G2",
+                  "statusDate": "2019-12-16",
+                  "statusDescription": "Granted for Two Advocates",
+                  "statusId": "58ebf081-2b7d-3b1d-8c47-149fe7dbd672"
+                },
+                "offenceCode": "CA03010",
+                "offenceDefinitionId": "d7443546-2e12-4d34-bde1-33dee7aebb23",
+                "offenceLegislation": "Contrary to section 363(2) and (4) of the Communications Act 2003.",
+                "offenceTitle": "Use / install a television set without a licence",
+                "pleas": [],
+                "proceedingsConcluded": false,
+                "startDate": "2020-02-09",
+                "verdicts": [],
+                "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+              },
+              {
+                "count": 0,
+                "id": "2ae66611-e1fa-4bcb-b7a9-dcb918ca22eb",
+                "judicialResults": [
+                  {
+                    "alwaysPublished": false,
+                    "category": "INTERMEDIARY",
+                    "cjsCode": "4506",
+                    "courtClerk": {
+                      "firstName": "Erica",
+                      "lastName": "Wilson",
+                      "userId": "31ec3a16-8721-498c-8da5-f099390ee254"
+                    },
+                    "d20": false,
+                    "excludedFromResults": false,
+                    "isAdjournmentResult": false,
+                    "isAvailableForCourtExtract": true,
+                    "isConvictedResult": false,
+                    "isDeleted": false,
+                    "isFinancialResult": false,
+                    "isNewAmendment": true,
+                    "isUnscheduled": false,
+                    "judicialResultId": "53a79ddf-2177-498e-841b-ff265a20727f",
+                    "judicialResultPrompts": [
+                      {
+                        "courtExtract": "Y",
+                        "judicialResultPromptTypeId": "fbed768b-ee95-4434-87c8-e81cbc8d24c8",
+                        "label": "Next hearing in Crown Court",
+                        "promptReference": "04b61192-e9a6-472f-8148-5b92803c7a11",
+                        "promptSequence": 0,
+                        "usergroups": [],
+                        "value": "Fixed Date:20/05/2021\nTime of hearing:10:30\nCourtroom:Courtroom 01\nHearing type:Plea and Trial Preparation\nEstimated duration:30 Minutes\nRemand Status:Conditional Bail\nCourthouse organisation name:Derby Crown Court\nCourthouse address line 1:Derby Combined Court Centre\nCourthouse address line 2:Morledge\nCourthouse address line 3:Derby\nCourthouse post code:DE1 2XE\nCourthouse email address 1:EMCorrespondence@cps.gov.uk\nCourthouse email address 2:derbycc@geoamey.co.uk",
+                        "welshLabel": "Bydd y gwrandawiad nesaf yn Llys y Goron"
+                      },
+                      {
+                        "courtExtract": "Y",
+                        "isFinancialImposition": false,
+                        "judicialResultPromptTypeId": "61f951c3-f18d-4a44-ae4a-0cad4efb4133",
+                        "label": "Defendant to attend the next hearing",
+                        "promptReference": "defendantToAttendTheNextHearing",
+                        "promptSequence": 100,
+                        "type": "BOOLEAN",
+                        "usergroups": [],
+                        "value": "true",
+                        "welshLabel": "Diffynnydd i fynychu’r gwrandawiad nesaf",
+                        "welshValue": "true"
+                      },
+                      {
+                        "courtExtract": "Y",
+                        "judicialResultPromptTypeId": "a0bdcc1b-fd72-4515-91ba-01807dfdf880",
+                        "label": "Case part heard",
+                        "promptReference": "71a5d85f-172f-404d-966a-3db5ad2a0481",
+                        "promptSequence": 200,
+                        "usergroups": [],
+                        "value": "",
+                        "welshLabel": "Gwrandawyd yr achos yn rhannol"
+                      },
+                      {
+                        "courtExtract": "N",
+                        "judicialResultPromptTypeId": "7fc17a01-2f5a-4433-aae9-28e0c959f73b",
+                        "label": "Adjournment reasons",
+                        "promptReference": "b750e38f-1de4-44f9-8ce7-0e9e9a342020",
+                        "promptSequence": 300,
+                        "usergroups": [],
+                        "value": "",
+                        "welshLabel": "Rheswm dros ohirio:"
+                      }
+                    ],
+                    "judicialResultTypeId": "d278650c-e429-11e8-9f32-f2801f1b9fd1",
+                    "label": "Adjournment",
+                    "lastSharedDateTime": "2021-05-19",
+                    "level": "O",
+                    "lifeDuration": false,
+                    "nextHearing": {
+                      "adjournmentReason": "Case part heard",
+                      "courtCentre": {
+                        "address": {
+                          "address1": "Derby Combined Court Centre",
+                          "address2": "Morledge",
+                          "address3": "Derby",
+                          "postcode": "DE1 2XE"
+                        },
+                        "courtHearingLocation": "C30DE00",
+                        "id": "6131bd34-33d9-3d1e-8152-8b5a2084f1bd",
+                        "name": "Derby Crown Court",
+                        "psaCode": 1428,
+                        "roomId": "594d6332-9806-38ab-830d-5941e671e0bb",
+                        "roomName": "Courtroom 01",
+                        "welshName": "Llys Y Goron Derby"
+                      },
+                      "estimatedMinutes": 30,
+                      "jurisdictionType": "CROWN",
+                      "listedStartDateTime": "2021-05-20T09:30:00.000Z",
+                      "type": {
+                        "description": "Plea and Trial Preparation",
+                        "id": "06b0c2bf-3f98-46ed-ab7e-56efaf9ecced"
+                      }
+                    },
+                    "orderedDate": "2021-05-19",
+                    "orderedHearingId": "c1d51307-f0b0-438a-b813-7971706d0a2f",
+                    "postHearingCustodyStatus": "A",
+                    "publishedAsAPrompt": false,
+                    "publishedForNows": false,
+                    "rank": 76400,
+                    "resultText": "Adjournment\nNext hearing in Crown Court Fixed Date:20/05/2021\nTime of hearing:10:30\nCourtroom:Courtroom 01\nHearing type:Plea and Trial Preparation\nEstimated duration:30 Minutes\nRemand Status:Conditional Bail\nCourthouse organisation name:Derby Crown Court\nCourthouse address line 1:Derby Combined Court Centre\nCourthouse address line 2:Morledge\nCourthouse address line 3:Derby\nCourthouse post code:DE1 2XE\nCourthouse email address 1:EMCorrespondence@cps.gov.uk\nCourthouse email address 2:derbycc@geoamey.co.uk\nDefendant to attend the next hearing true\nCase part heard \nAdjournment reasons ",
+                    "rollUpPrompts": true,
+                    "rootJudicialResultId": "53a79ddf-2177-498e-841b-ff265a20727f",
+                    "rootJudicialResultTypeId": "d278650c-e429-11e8-9f32-f2801f1b9fd1",
+                    "terminatesOffenceProceedings": false,
+                    "urgent": false,
+                    "usergroups": [],
+                    "welshLabel": "Gohiriad"
+                  }
+                ],
+                "offenceCode": "CA03011",
+                "offenceDefinitionId": "8144e0b3-52dd-42f6-b615-271ed4301c22",
+                "offenceLegislation": "Contrary to section 363(3)(a) and (4) of the Communications Act 2003.",
+                "offenceTitle": "Possess a    television set with intent to install / use without a licence",
+                "pleas": [],
+                "proceedingsConcluded": false,
+                "startDate": "2020-02-09",
+                "verdicts": [],
+                "wording": "Has a violent past and fear that he will commit further offences and\n                interfere with witnesse"
+              }
+            ]
+          }
+        ],
+        "hasResultAmended": false,
+        "hearingDays": [
+          {
+            "courtCentreId": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+            "courtRoomId": "9e4932f7-97b2-3010-b942-ddd2624e4dd8",
+            "isCancelled": false,
+            "listedDurationMinutes": 20,
+            "listingSequence": 21,
+            "sittingDay": "2021-05-19T09:01:01.001Z"
+          }
+        ],
+        "hearingListingStatus": "HEARING_RESULTED",
+        "id": "c1d51307-f0b0-438a-b813-7971706d0a2f",
+        "jurisdictionType": "MAGISTRATES",
+        "type": {
+          "description": "First hearing",
+          "id": "4a0e892d-c0c5-3c51-95b8-704d8c781776"
+        }
+      },
+      {
+        "courtCentre": {
+          "address": {
+            "address1": "The Magistrates' Court",
+            "address2": "Barclay Road",
+            "address3": "Croydon",
+            "postcode": "CR9 3NG"
+          },
+          "code": "B01EF00",
+          "id": "31b3d313-7a7c-4598-bb4b-c1bff9b00e26",
+          "lja": {
+            "ljaCode": "2576",
+            "ljaName": "South London Magistrates' Court"
+          },
+          "name": "Croydon Magistrates' Court"
+        },
+        "defendants": [
+          {
+            "courtApplications": [
+              {
+                "applicant": "Stevie Dooley",
+                "applicationId": "399af577-e035-4722-b384-910ca246fe1d",
+                "applicationReceivedDate": "2021-05-19",
+                "applicationType": "Appearance to make statutory declaration",
+                "isAppeal": false,
+                "judicialResults": [
+                  {
+                    "alwaysPublished": false,
+                    "category": "FINAL",
+                    "courtClerk": {
+                      "firstName": "Erica",
+                      "lastName": "Wilson",
+                      "userId": "31ec3a16-8721-498c-8da5-f099390ee254"
+                    },
+                    "d20": false,
+                    "excludedFromResults": false,
+                    "isAdjournmentResult": false,
+                    "isAvailableForCourtExtract": true,
+                    "isConvictedResult": false,
+                    "isDeleted": false,
+                    "isFinancialResult": false,
+                    "isNewAmendment": true,
+                    "isUnscheduled": false,
+                    "judicialResultId": "b9734732-db23-4056-8398-a59183226859",
+                    "judicialResultTypeId": "2b3f7c20-8fc1-4fad-9076-df196c24b27e",
+                    "label": "Granted",
+                    "lastSharedDateTime": "2021-05-19",
+                    "level": "O",
+                    "lifeDuration": false,
+                    "orderedDate": "2021-05-19",
+                    "orderedHearingId": "0fcd72c8-a57f-447b-8370-8694c7bcb6f1",
+                    "postHearingCustodyStatus": "A",
+                    "publishedAsAPrompt": false,
+                    "publishedForNows": false,
+                    "rank": 84300,
+                    "resultText": "Granted\n",
+                    "rollUpPrompts": true,
+                    "rootJudicialResultId": "b9734732-db23-4056-8398-a59183226859",
+                    "rootJudicialResultTypeId": "2b3f7c20-8fc1-4fad-9076-df196c24b27e",
+                    "terminatesOffenceProceedings": false,
+                    "urgent": false,
+                    "usergroups": []
+                  }
+                ],
+                "respondents": [
+                  {
+                    "name": "DERPF"
+                  }
+                ]
+              }
+            ],
+            "id": "da82bc0c-16bd-477a-b3b5-7d16c4954500",
+            "judicialResults": [],
+            "name": "DERPF"
+          }
+        ],
+        "hasResultAmended": false,
+        "hearingDays": [
+          {
+            "listedDurationMinutes": 10,
+            "sittingDay": "2021-05-19T00:00:00.000Z"
+          }
+        ],
+        "hearingListingStatus": "HEARING_RESULTED",
+        "id": "0fcd72c8-a57f-447b-8370-8694c7bcb6f1",
+        "isBoxHearing": true,
+        "jurisdictionType": "MAGISTRATES",
+        "type": {
+          "description": "Application",
+          "id": "3449743b-95d6-4836-8941-57f588b52068"
+        }
+      }
+    ],
+    "id": "de4bed25-56a3-4b12-ba84-a6a4c9bff089",
+    "latestHearingJurisdictionType": "MAGISTRATES",
+    "prosecutionCaseIdentifier": {
+      "address": {
+        "address1": "Criminal Justice Department",
+        "address2": "Derbyshire Constabulary",
+        "address3": "Butterley Hall",
+        "postcode": "DE5 3RS"
+      },
+      "majorCreditorCode": "PO30",
+      "prosecutionAuthorityCode": "DERPF",
+      "prosecutionAuthorityId": "bdc190e7-c939-37ca-be4b-9f615d6ef40e",
+      "prosecutionAuthorityName": "Derbyshire Police",
+      "prosecutionAuthorityOUCode": "0300000",
+      "caseURN": "90GDAPP5057"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="22" author="ATCM/Mojo/resul.ceylan"
+               logicalFilePath="liquibase/022-alter-table-offence-add-dvla-fields.changelog.xml">
+        <addColumn tableName="OFFENCE">
+            <column name="vehicle_make" type="VARCHAR(30)"/>
+            <column name="vehicle_registration_mark" type="VARCHAR(11)"/>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="OFFENCE">
+                <column name="vehicle_make"/>
+                <column name="vehicle_registration_mark"/>
+            </dropColumn>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

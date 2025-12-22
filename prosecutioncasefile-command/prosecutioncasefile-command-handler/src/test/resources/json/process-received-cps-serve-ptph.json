@@ -1,0 +1,114 @@
+{
+  "prosecutionCaseSubject": {
+    "urn": "28DI6390344",
+    "prosecutingAuthority": "0130000"
+  },
+  "tag": "28DI6390344(M)",
+  "ptphValidationData":
+    {
+      "defendantIds": [
+        {
+          "cpsDefendantId": "cps",
+          "defendantId": "4b64afd7-686f-4ac8-96f6-ca948d83af3f"
+        }
+      ]
+    },
+  "defendantOffencesSubjects": [
+    {
+      "defendant": {
+        "asn": "D28GC01126390344"
+      },
+      "principalCharges": "principal-charges"
+    }
+  ],
+  "ptphAdvocate": {
+    "name": "name12",
+    "phone": "0123456789",
+    "email": "test@gmail.com"
+  },
+  "trialAdvocate": {
+    "name": "name34",
+    "phone": "7778888345",
+    "email": "test@test.com"
+  },
+  "reviewingLawyer": {
+    "name": "firstName lastName",
+    "phone": "7778888345",
+    "email": "test@test.com"
+  },
+  "prosecutionCaseProgressionOfficer": {
+    "name": "Prosecution officer",
+    "phone": "7778888345",
+    "email": "test@test.com"
+  },
+  "officerInTheCase": {
+    "name": "name78",
+    "phone": "7778888345",
+    "email": "test@test.com"
+  },
+  "cpsOffice": "B46IR00",
+  "draftIndictment": "N",
+  "draftIndictmentNotes": "Draft Indictment Notes",
+  "summaryOfCircumstances": "N",
+  "summaryOfCircumstancesNotes": "Summary Of Circumstances Notes",
+  "statementsForPAndICm": "N",
+  "statementsForPAndICmNotes": "Statements For P And ICm Notes",
+  "exhibitsForPAndICm": "N",
+  "exhibitsForPAndICmNotes": "Exhibits For P And ICm Notes",
+  "cctv": "NA",
+  "cctvNotes": "Cctv Notes",
+  "streamlinedForensicReport": "NA",
+  "streamlinedForensicReportNotes": "Streamlined Forensic Report Notes",
+  "medicalEvidence": "NA",
+  "medicalEvidenceNotes": "Medical Evidence Notes",
+  "expertEvidence": "NA",
+  "ExpertEvidenceNotes": "Expert Evidence Notes",
+  "badCharacter": "NA",
+  "badCharacterNotes": "Bad Character Notes",
+  "hearsay": "NA",
+  "hearsayNotes": "Hear say Notes",
+  "specialMeasures": "NA",
+  "specialMeasuresNotes": "Special Measures Notes",
+  "criminalRecord": "NA",
+  "criminalRecordNotes": "Criminal Record Notes",
+  "victimPersonalStatement": "NA",
+  "victimPersonalStatementNotes": "Victim Personal Statement Notes",
+  "disclosureManagementDoc": "Y",
+  "disclosureManagementDocNotes": "Disclosure Management Doc Notes",
+  "thirdParty": "N",
+  "thirdPartyNotes": "Third Party Notes",
+  "reviewDisclosableMaterial": "NA",
+  "reviewDisclosableMaterialNotes": "Review Disclosable Material Notes",
+  "particularsOfAnyRelatedCriminalProceedings": "Particulars Of Any Related Criminal Proceedings",
+  "particularsOfAnyFamily": "Particulars Of Any Family",
+  "Witnesses": [
+    {
+      "witnessFirstName": "forename",
+      "witnessLastName": "abc",
+      "relevantDisputedIssue": "Issue 1",
+      "intermediaryForWitness": "N",
+      "firstNameOfIntermediaryKnownAtPtph": "first name",
+      "lastNameOfIntermediaryKnownAtPtph": "last name",
+      "policeOfficerSubject": {
+        "officerInCharge": true,
+        "officeCollarNumber": "41231",
+        "officerRank": "SC"
+      }
+    },
+    {
+      "witnessFirstName": "name1",
+      "witnessLastName": "abc45",
+      "relevantDisputedIssue": "Issue 2",
+      "intermediaryForWitness": "N",
+      "firstNameOfIntermediaryKnownAtPtph": "first name",
+      "lastNameOfIntermediaryKnownAtPtph": "last name",
+      "policeOfficerSubject": {
+        "officerInCharge": true,
+        "officeCollarNumber": "41231",
+        "officerRank": "D/SUPT"
+      }
+    }
+  ],
+  "submissionId": "b5784557-e620-4405-a8d3-184410ee1e71",
+  "submissionStatus": "SUCCESS"
+}

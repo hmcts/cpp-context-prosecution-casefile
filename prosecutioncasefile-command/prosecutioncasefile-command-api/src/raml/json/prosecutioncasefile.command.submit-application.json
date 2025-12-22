@@ -1,0 +1,286 @@
+{
+  "courtApplication": {
+    "id": "88cdf36e-93e4-41b0-8277-17d9dba7f06f",
+    "courtApplicationCases": [
+      {
+        "caseURN": "79GD4588921",
+        "prosecutorOuCode": "CPS-SW"
+      }
+    ],
+    "courtApplicationType": {
+      "code": "codeForCourtApplicat",
+      "categoryCode": "VP",
+      "jurisdiction": "MAGISTRATES"
+    },
+    "applicationParticulars": "Application within Criminal Proceedings",
+    "courtApplicationPayment": {
+      "isFeePaid": true,
+      "isFeeExempt": true,
+      "isFeeUndertakingAttached": false,
+      "paymentReference": "678NHFJLHKD"
+    },
+    "applicant": {
+      "organisation": {
+        "name": "Police",
+        "incorporationNumber": "Police",
+        "registeredCharityNumber": "Police",
+        "address": {
+          "address1": "oYf9BVgFGy",
+          "address2": "StreetDescription",
+          "address3": "Locality2O",
+          "address4": "Locality22",
+          "address5": "Locality24",
+          "postcode": "CR0 5QT"
+        },
+        "contact": {
+          "home": "02012345678",
+          "work": "02012345679",
+          "mobile": "07777777777",
+          "fax": "02011111111",
+          "primaryEmail": "Police@email.com",
+          "secondaryEmail": "Police@email.com"
+        }
+      },
+      "organisationPersons": [
+        {
+          "role": "role",
+          "person": {
+            "title": "Mr",
+            "firstName": "Robert",
+            "lastName": "Ormsby",
+            "dateOfBirth": "1944-03-04",
+            "gender": "MALE",
+            "documentationLanguageNeeds": "ENGLISH",
+            "interpreterLanguageNeeds": "ENGLISH",
+            "nationalInsuranceNumber": "NH222222B",
+            "specificRequirements": "wheelchair access",
+            "address": {
+              "address1": "oYf9BVgFGy",
+              "address2": "StreetDescription",
+              "address3": "Locality2O",
+              "address4": "Locality22",
+              "address5": "Locality24",
+              "postcode": "CR0 5QT"
+            },
+            "contact": {
+              "home": "02012345678",
+              "work": "02012345679",
+              "mobile": "07777777777",
+              "fax": "02011111111",
+              "primaryEmail": "Police@email.com",
+              "secondaryEmail": "Police@email.com"
+            }
+          }
+        }
+      ],
+      "isSubject": false
+    },
+    "respondents": [
+      {
+        "asn": "Arrest Summons Number",
+        "cpsDefendantId": "ERT677SN",
+        "personDetails": {
+          "title": "Mr",
+          "firstName": "Robert",
+          "lastName": "Ormsby",
+          "dateOfBirth": "1944-03-04",
+          "gender": "MALE",
+          "documentationLanguageNeeds": "ENGLISH",
+          "interpreterLanguageNeeds": "ENGLISH",
+          "nationalInsuranceNumber": "NH222222B",
+          "specificRequirements": "wheelchair access",
+          "address": {
+            "address1": "oYf9BVgFGy",
+            "address2": "StreetDescription",
+            "address3": "Locality2O",
+            "address4": "Locality22",
+            "address5": "Locality24",
+            "postcode": "CR0 5QT"
+          },
+          "contact": {
+            "home": "02012345678",
+            "work": "02012345679",
+            "mobile": "07777777777",
+            "fax": "02011111111",
+            "primaryEmail": "Police@email.com",
+            "secondaryEmail": "Police@email.com"
+          }
+        },
+        "organisation": {
+          "name": "Police",
+          "incorporationNumber": "Police",
+          "registeredCharityNumber": "Police",
+          "address": {
+            "address1": "oYf9BVgFGy",
+            "address2": "StreetDescription",
+            "address3": "Locality2O",
+            "address4": "Locality22",
+            "address5": "Locality24",
+            "postcode": "CR0 5QT"
+          },
+          "contact": {
+            "home": "02012345678",
+            "work": "02012345679",
+            "mobile": "07777777777",
+            "fax": "02011111111",
+            "primaryEmail": "Police@email.com",
+            "secondaryEmail": "Police@email.com"
+          }
+        },
+        "organisationPersons": [
+          {
+            "role": "role",
+            "person": {
+              "title": "Mr",
+              "firstName": "Robert",
+              "lastName": "Ormsby",
+              "dateOfBirth": "1944-03-04",
+              "gender": "MALE",
+              "documentationLanguageNeeds": "ENGLISH",
+              "interpreterLanguageNeeds": "ENGLISH",
+              "nationalInsuranceNumber": "NH222222B",
+              "specificRequirements": "wheelchair access",
+              "address": {
+                "address1": "oYf9BVgFGy",
+                "address2": "StreetDescription",
+                "address3": "Locality2O",
+                "address4": "Locality22",
+                "address5": "Locality24",
+                "postcode": "CR0 5QT"
+              },
+              "contact": {
+                "home": "02012345678",
+                "work": "02012345679",
+                "mobile": "07777777777",
+                "fax": "02011111111",
+                "primaryEmail": "Police@email.com",
+                "secondaryEmail": "Police@email.com"
+              }
+            }
+          }
+        ],
+        "representedOrganisation": {
+          "address": {
+            "address1": "Flat 4, Armageddon House",
+            "address2": "13 Old Road",
+            "address3": "Giggleswick",
+            "address4": "Merton",
+            "address5": "London",
+            "postcode": "TA23 1AB"
+          },
+          "contact": {
+            "home": "02012345678",
+            "work": "02012345679",
+            "mobile": "07777777777",
+            "fax": "02011111111",
+            "primaryEmail": "Police@email.com",
+            "secondaryEmail": "Police@email.com"
+          },
+          "name": "Police",
+          "incorporationNumber": "Police",
+          "registeredCharityNumber": "Police"
+        },
+        "isSubject": false
+      }
+    ],
+    "thirdParties": [
+      {
+        "summonsRequired": false,
+        "notificationRequired": true,
+        "appointmentNotificationRequired": true,
+        "personDetails": {
+          "title": "Mr",
+          "firstName": "Robert",
+          "lastName": "Ormsby",
+          "dateOfBirth": "1944-03-04",
+          "gender": "MALE",
+          "documentationLanguageNeeds": "ENGLISH",
+          "interpreterLanguageNeeds": "ENGLISH",
+          "nationalInsuranceNumber": "NH222222B",
+          "specificRequirements": "wheelchair access",
+          "address": {
+            "address1": "oYf9BVgFGy",
+            "address2": "StreetDescription",
+            "address3": "Locality2O",
+            "address4": "Locality22",
+            "address5": "Locality24",
+            "postcode": "CR0 5QT"
+          },
+          "contact": {
+            "home": "02012345678",
+            "work": "02012345679",
+            "mobile": "07777777777",
+            "fax": "02011111111",
+            "primaryEmail": "Police@email.com",
+            "secondaryEmail": "Police@email.com"
+          }
+        },
+        "organisation": {
+          "name": "Police",
+          "incorporationNumber": "Police",
+          "registeredCharityNumber": "Police",
+          "address": {
+            "address1": "oYf9BVgFGy",
+            "address2": "StreetDescription",
+            "address3": "Locality2O",
+            "address4": "Locality22",
+            "address5": "Locality24",
+            "postcode": "CR0 5QT"
+          },
+          "contact": {
+            "home": "02012345678",
+            "work": "02012345679",
+            "mobile": "07777777777",
+            "fax": "02011111111",
+            "primaryEmail": "Police@email.com",
+            "secondaryEmail": "Police@email.com"
+          }
+        },
+        "organisationPersons": [
+          {
+            "role": "role",
+            "person": {
+              "title": "Mr",
+              "firstName": "Robert",
+              "lastName": "Ormsby",
+              "dateOfBirth": "1944-03-04",
+              "gender": "MALE",
+              "documentationLanguageNeeds": "ENGLISH",
+              "interpreterLanguageNeeds": "ENGLISH",
+              "nationalInsuranceNumber": "NH222222B",
+              "specificRequirements": "wheelchair access",
+              "address": {
+                "address1": "oYf9BVgFGy",
+                "address2": "StreetDescription",
+                "address3": "Locality2O",
+                "address4": "Locality22",
+                "address5": "Locality24",
+                "postcode": "CR0 5QT"
+              },
+              "contact": {
+                "home": "02012345678",
+                "work": "02012345679",
+                "mobile": "07777777777",
+                "fax": "02011111111",
+                "primaryEmail": "Police@email.com",
+                "secondaryEmail": "Police@email.com"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "outOfTimeReason": "Required if the application is out of time"
+  },
+  "boxHearingRequest": {
+    "jurisdictionType": "CROWN",
+    "applicationDueDate": "2020-11-04",
+    "sendAppointmentLetter": true,
+    "courtCentre": {
+      "name": "COVENTRY COMBINED COURT",
+      "code": "C20CO00"
+    }
+  },
+  "pocaFileId" : "c11eebd6-7cb3-4b9d-b13e-e553bc713b6f",
+  "senderEmail": "test@test.com"
+}

@@ -1,0 +1,67 @@
+{
+  "cases": [
+    {
+      "defendants": [
+        {
+          "chargeDate":"2018-12-10",
+          "hearingDate":"2050-02-04",
+          "id":"9b0d2a7b-4702-40e5-943f-765287ec9df4",
+          "bailStatus":"B",
+          "errors":[
+            {
+              "fieldName":"emailAddress1",
+              "errorValue":"bad@organisationprimaryemail",
+              "displayName":"DEFENDANT_PRIMARY_EMAIL_ADDRESS_INVALID",
+              "version":304
+            },
+            {
+              "fieldName":"emailAddress2",
+              "errorValue":"bad@organisationsecondaryemail",
+              "displayName":"DEFENDANT_SECONDARY_EMAIL_ADDRESS_INVALID",
+              "version":304
+            }
+          ],
+          "offences":[  ],
+          "organisationName":"Ministry of Justice"
+        }
+      ],
+      "id": "f5dd30fb-0ccd-44dd-9c5c-99ebf74f8b84",
+      "urn": "UklGUSXlVj",
+      "courtLocation": "C55BN00",
+      "region": "NW",
+      "caseType": "S",
+      "errorDescription": "Multiple Errors",
+      "version": 305,
+      "errors": [
+        {
+          "fieldName": "summonsCode",
+          "errorValue": "summonsCode",
+          "displayName": "SUMMONS_CODE_INVALID",
+          "version": 305
+        },
+        {
+          "fieldName": "prosecutingAuthority",
+          "errorValue": "123",
+          "displayName": "PROSECUTOR_OUCODE_NOT_RECOGNISED",
+          "version": 305
+        }
+      ],
+      "caseMarkersErrors": [
+        {
+          "id": "0",
+          "fieldName": "caseMarkers",
+          "errorValue": "ABC",
+          "displayName": "CASE_MARKER_IS_INVALID",
+          "version": 305
+        },
+        {
+          "id": "1",
+          "fieldName": "caseMarkers",
+          "errorValue": "BCD",
+          "displayName": "CASE_MARKER_IS_INVALID",
+          "version": 305
+        }
+      ]
+    }
+  ]
+}

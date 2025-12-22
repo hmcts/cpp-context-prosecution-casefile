@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/command/handler/submit-application.json",
+  "description": "instruction to initiate court proceedings for a court application",
+  "type": "object",
+  "properties": {
+    "courtApplication": {
+      "description": "The details of the court application for which proceedings are required",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/court-application.json"
+    },
+    "boxHearingRequest": {
+      "description": "The details of the required box hearing including agreed appointment details where necessary",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/box-hearing-request.json"
+    },
+    "prosecutionCases": {
+      "type": "array",
+      "items": {
+        "$ref": "http://justice.gov.uk/core/courts/prosecutionCase.json#"
+      }
+    },
+    "applicationTypes": {
+      "description": "The type of application made to court for judicial decision.  Taken from reference data",
+      "type": "array",
+      "items": {
+        "$ref": "http://justice.gov.uk/core/courts/courtApplicationType.json"
+      }
+    },
+    "courtroomReferenceData": {
+      "description": "The courtroom reference data taken from reference data",
+      "type": "array",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/organisation-unit-with-courtroom-reference-data.json"
+    },
+    "pocaFileId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "senderEmail": {
+      "type": "string"
+    },
+    "emailSubject": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "courtApplication",
+    "boxHearingRequest"
+  ]
+}

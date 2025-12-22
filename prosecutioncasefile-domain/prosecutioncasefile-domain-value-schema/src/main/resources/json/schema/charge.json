@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://justice.gov.uk/cps/prosecutioncasefile/offence/charge",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "offenceCode": {
+      "type": "string"
+    },
+    "plea": {
+      "type": "string"
+    },
+    "indicatedPlea": {
+      "type": "string"
+    },
+    "section": {
+      "type": "string"
+    },
+    "offenceSequenceNumber": {
+      "type": "integer"
+    },
+    "pleaMitigation": {
+      "type": "string"
+    },
+    "wording": {
+      "type": "string"
+    },
+    "policeOffenceId": {
+      "type": "string"
+    },
+    "cprDefendantOffenderYear": {
+      "type": "string"
+    },
+    "cprDefendantOffenderOrganisationUnit": {
+      "type": "string"
+    },
+    "cprDefendantOffenderNumber": {
+      "type": "string"
+    },
+    "cprDefendantOffenderCheckDigit": {
+      "type": "string"
+    },
+    "reason": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "arrestDate": {
+      "type": "string"
+    },
+    "fromDate": {
+      "type": "string"
+    },
+    "toDate": {
+      "type": "string"
+    },
+    "chargeDate": {
+      "type": "string"
+    },
+    "count": {
+      "type": "integer"
+    }
+  }
+}

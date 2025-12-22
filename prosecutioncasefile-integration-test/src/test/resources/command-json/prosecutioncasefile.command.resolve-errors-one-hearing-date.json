@@ -1,0 +1,20 @@
+{
+  "caseId": "CASE_ID",
+  "errors": [],
+  "defendants": [{
+    "id": "DEFENDANT_ID1",
+    "name": "OrganisationName0",
+    "errors": []
+  }, {
+    "id": "DEFENDANT_ID2",
+    "name": "Ormsby",
+    "errors": [{
+      "fieldName": "initialHearing_dateOfHearing",
+      "value": "DATE_OF_HEARING"
+    }]
+  }, {
+    "id": "DEFENDANT_ID3",
+    "name": "Ormsby1",
+    "errors": []
+  }]
+}

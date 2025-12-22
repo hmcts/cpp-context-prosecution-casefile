@@ -1,0 +1,29 @@
+{
+  "offenceCode": "OFCODE12",
+  "offenceSequenceNumber": 1,
+  "offenceDateCode": 4,
+  "offenceCommittedDate": "2015-09-10",
+  "offenceCommittedEndDate" : "2016-03-14",
+  "offenceLocation" : "London",
+  "offenceWording": "TV Licence not paid",
+  "offenceWordingWelsh" : "TV Licence not paid (Welsh)",
+  "chargeDate": "2015-04-04",
+  "appliedCompensation": 1502,
+  "statementOfFacts" : "John Doe missed a TV license payment for the 5th time",
+  "statementOfFactsWelsh" : "John Doe missed a TV license payment for the 5th time (Welsh)",
+  "backDuty" : 3,
+  "backDutyDateFrom" : "1987-01-01",
+  "backDutyDateTo" : "1999-12-31",
+  "plea": {
+    "pleaDate": "2018-09-11",
+    "pleaValue": "GUILTY"
+  },
+  "verdict": {
+    "verdictDate": "2018-09-12",
+    "verdictType": {
+      "id": "c4ca4238-a0b9-3382-8dcc-509a6f75849b",
+      "category": "Guilty",
+      "categoryType": "GUILTY"
+    }
+  }
+}

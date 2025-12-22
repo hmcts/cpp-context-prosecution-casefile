@@ -1,0 +1,36 @@
+{
+  "courtLocations": [
+    {
+      "id": "ad52ff9a-4aff-47b6-b8d8-fce53b2c0970",
+      "locationCode": "B05BK00",
+      "level1Code": "B",
+      "level1Name": "Magistrates' Courts",
+      "level2Code": "05",
+      "level2Name": "Merseyside",
+      "level3Code": "BK",
+      "level3Name": "Birkenhead",
+      "level4Code": "00",
+      "level4Name": "",
+      "startDate": "2004-01-01",
+      "endDate": "2017-03-01",
+      "validFrom": "2017-08-01",
+      "validTo": "2017-08-01"
+    },
+    {
+      "id": "e599798b-5a8e-440a-a4a0-339e1e6d5f49",
+      "locationCode": "B05BW00",
+      "level1Code": "B",
+      "level1Name": "Magistrates' Courts",
+      "level2Code": "05",
+      "level2Name": "Merseyside",
+      "level3Code": "BW",
+      "level3Name": "Bootle",
+      "level4Code": "00",
+      "level4Name": "",
+      "startDate": "2004-01-01",
+      "endDate": "2017-03-01",
+      "validFrom": "2017-08-01",
+      "validTo": "2017-08-01"
+    }
+  ]
+}

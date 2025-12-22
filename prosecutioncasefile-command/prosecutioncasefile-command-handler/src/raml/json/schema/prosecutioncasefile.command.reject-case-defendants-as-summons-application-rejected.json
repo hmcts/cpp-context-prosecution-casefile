@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/command/handler/reject-case-defendants-as-summons-application-rejected.json",
+  "type": "object",
+  "properties": {
+    "caseId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "applicationId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "summonsRejectedOutcome": {
+      "$ref": "http://justice.gov.uk/core/courts/summonsRejectedOutcome.json"
+    }
+  },
+  "required": [
+    "caseId",
+    "applicationId",
+    "summonsRejectedOutcome"
+  ],
+  "additionalProperties": false
+}

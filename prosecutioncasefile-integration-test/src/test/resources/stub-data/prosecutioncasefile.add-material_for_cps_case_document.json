@@ -1,0 +1,13 @@
+{
+  "prosecutingAuthority": "00TFL01",
+  "prosecutorDefendantId": "c2391758-f829-4514-a222-61f1d5d9690d",
+  "material": {
+    "fileStoreId": "%s",
+    "documentType": "%s"
+  },
+  "cmsDocumentIdentifier": {
+    "materialType": 1,
+    "documentId": "ABCDEF"
+  },
+  "receivedDateTime":"2020-02-04T05:27:17.210Z"
+}

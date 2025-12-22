@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/domain/event/submit-application-accepted.json",
+  "description": "initiate court application accepted event",
+  "type": "object",
+  "properties": {
+    "courtApplication": {
+      "description": "The details of the court application for which proceedings are required",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/court-application.json"
+    },
+    "boxHearingRequest": {
+      "description": "The details of the required box hearing including agreed appointment details where necessary",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/box-hearing-request.json"
+    },
+    "enrichedApplicationData": {
+      "id": "http://moj.gov.uk/cps/prosecutioncasefile/domain/event/enrichedApplicationData.json",
+      "type": "object",
+      "properties": {
+        "courtApplicationType": {
+          "description": "The type of application made to court for judicial decision. Taken from reference data",
+          "$ref": "http://justice.gov.uk/core/courts/courtApplicationType.json"
+        }
+      },
+      "required": [
+        "courtApplicationType"
+      ]
+    },
+    "pocaFileId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "senderEmail": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "courtApplication",
+    "boxHearingRequest",
+    "enrichedApplicationData"
+  ],
+  "additionalProperties": false
+}

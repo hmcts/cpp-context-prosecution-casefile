@@ -1,0 +1,50 @@
+{
+  "caseId": "44884cbc-9659-4ae1-a42e-a8c9839df502",
+  "defendants": [
+    {
+      "asn": "ASN_1",
+      "defendantId": "DEFENDANT_ID_1",
+      "prosecutorDefendantReference": "5ac172a2-3332-4dcc-bd03-20fa0c7957b4",
+      "appliedProsecutorCosts": 200,
+      "documentationLanguage": "W",
+      "hearingLanguage": "W",
+      "nationalInsuranceNumber": "AB123456C",
+      "personalInformation": {
+        "firstName": "John1",
+        "lastName": "Lewis1"
+      },
+      "selfDefinedInformation": {
+        "dateOfBirth": "03-06-1986"
+      }
+    },
+    {
+      "asn": "ASN_2",
+      "defendantId": "DEFENDANT_ID_2",
+      "prosecutorDefendantReference": "5ac172a2-3332-4dcc-bd03-20fa0c7957b5",
+      "appliedProsecutorCosts": 200,
+      "documentationLanguage": "W",
+      "hearingLanguage": "W",
+      "nationalInsuranceNumber": "AB123456C",
+      "organisationName": "organisationName"
+    },
+    {
+      "asn": "ASN_3",
+      "defendantId": "DEFENDANT_ID_3",
+      "prosecutorDefendantReference": "5ac172a2-3332-4dcc-bd03-20fa0c7957b4",
+      "appliedProsecutorCosts": 200,
+      "documentationLanguage": "W",
+      "hearingLanguage": "W",
+      "nationalInsuranceNumber": "AB123456C",
+      "personalInformation": {
+        "firstName": "John2",
+        "lastName": "Lewis2"
+      },
+      "selfDefinedInformation": {
+        "dateOfBirth": "03-06-1986"
+      }
+    }
+  ],
+  "prosecutionAuthority": "GAAAA01",
+  "prosecutionCaseReference": "2OknbZ5Xl4",
+  "prosecutorInformant": "Adam"
+}

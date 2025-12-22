@@ -1,0 +1,45 @@
+{
+  "submissionId": "%SUBMISSION_ID%",
+  "submissionStatus": "PENDING",
+  "prosecutionCaseSubject": {
+    "urn": "caseURN",
+    "prosecutingAuthority": "The OU Code of the prosecuting authority"
+  },
+  "defendantSubject": [
+    {
+      "matchingId": "767dee16-8c84-4dd1-8992-ca35d387f446",
+      "prosecutorDefendantId": "defendant Id"
+    }
+  ],
+  "trialDate": "1980-01-24",
+  "lastRecordedTimeEstimate": 14,
+  "hasAllEvidenceToBeReliedOnBeenServed": "Y",
+  "hasAllEvidenceToBeReliedOnBeenServedDetails": "Details",
+  "hasAllDisclosureBeenProvided": "Y",
+  "hasAllDisclosureBeenProvidedDetails": "Details",
+  "haveOtherDirectionsBeenCompliedWith": "Y",
+  "haveOtherDirectionsBeenCompliedWithDetails": "Details",
+  "haveTheProsecutionWitnessesRequiredToAttendAcknowledgedThatTheyWillAttend": "Y",
+  "haveTheProsecutionWitnessesRequiredToAttendAcknowledgedThatTheyWillAttendDetails": "Details",
+  "haveAnyWitnessSummonsesRequiredBeenReceivedAndServed": "Y",
+  "haveAnyWitnessSummonsesRequiredBeenReceivedAndServedDetails": "Details",
+  "haveSpecialMeasuresOrRemoteAttendanceIssuesForWitnessesBeenResolved": "Y",
+  "haveSpecialMeasuresOrRemoteAttendanceIssuesForWitnessesBeenResolvedDetails": "Details",
+  "haveInterpretersForWitnessesBeenArranged": "Y",
+  "haveInterpretersForWitnessesBeenArrangedDetails": "Details",
+  "haveEditedAbeInterviewsBeenPreparedAndAgreed": "Y",
+  "haveEditedAbeInterviewsBeenPreparedAndAgreedDetails": "Details",
+  "haveArrangementsBeenMadeForStatementOfPointsOfAgreementAndDisagreement": "Y",
+  "haveArrangementsBeenMadeForStatementOfPointsOfAgreementAndDisagreementDetails": "Details",
+  "isTheCaseReadyToProceedWithoutDelayBeforeTheJury": "Y",
+  "isTheCaseReadyToProceedWithoutDelayBeforeTheJuryDetails": "Details",
+  "isTheTimeEstimateCorrect": "Y",
+  "isTheTimeEstimateCorrectDetails": "Details",
+  "furtherInformationToAssistTheCourt": "FurtherInformation",
+  "certifyThatTheProsecutionIsTrialReady": "Y",
+  "certifyThatTheProsecutionIsTrialReadyDetails": "Details",
+  "applyForThePtrToBeVacated": "Y",
+  "applyForThePtrToBeVacatedDetails": "Details",
+  "formCompletedOnBehalfOfTheProsecutionBy": "FormCompletedBySomeone",
+  "certificationDate": "1980-01-24"
+}

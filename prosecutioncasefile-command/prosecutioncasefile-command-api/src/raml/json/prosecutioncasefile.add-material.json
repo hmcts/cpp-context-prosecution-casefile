@@ -1,0 +1,15 @@
+{
+  "caseId": "a4391788-f829-4514-a344-61f1d5d9690c",
+  "prosecutingAuthority": "00TFL01",
+  "prosecutorDefendantId": "c2391758-f829-4514-a222-61f1d5d9690d",
+  "material": {
+    "fileStoreId": "3042a896-fd3e-478d-bb0e-948dd46191a4",
+    "documentType": "SJPN"
+  },
+  "isCpsCase": false,
+  "cmsDocumentIdentifier": {
+    "materialType": 1,
+    "documentId": "ABCDEF"
+  },
+  "receivedDateTime": "2020-02-04T05:27:17.210Z"
+}

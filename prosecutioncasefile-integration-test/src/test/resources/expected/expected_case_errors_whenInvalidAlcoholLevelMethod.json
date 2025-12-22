@@ -1,0 +1,41 @@
+{
+  "cases": [
+    {
+      "caseType": "C",
+      "courtLocation": "C55BN00",
+      "defendants": [
+        {
+          "chargeDate": "2015-04-04",
+          "errors": [
+          ],
+          "hearingDate": "2050-02-04",
+          "id": "DEFENDANT_ID1",
+          "offences": [
+            {
+              "errors": [
+                {
+                  "id": "OFFENCE_ID1",
+                  "displayName": "ALCOHOL_DRUG_LEVEL_METHOD_INVALID",
+                  "errorValue": "D1",
+                  "fieldName": "offence_alcoholRelatedOffence_alcoholLevelMethod",
+                  "version": 2651
+                }
+              ],
+              "id": "OFFENCE_ID1"
+            }
+          ],
+          "firstName": "John",
+          "lastName": "Smith"
+        }
+      ],
+      "errorDescription": "Single Error",
+      "errors": [
+      ],
+      "caseMarkersErrors": [],
+      "id": "CASE-ID",
+      "region": "NW",
+      "urn": "CASE-URN",
+      "version": 2651
+    }
+  ]
+}

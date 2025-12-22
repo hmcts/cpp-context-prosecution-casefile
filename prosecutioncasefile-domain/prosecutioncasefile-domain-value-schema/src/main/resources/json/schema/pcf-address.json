@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/address.json",
+  "type": "object",
+  "description": "Address of the defendant",
+  "properties": {
+    "address1": {
+      "type": "string",
+      "description": "Address Line 1 for the defendant"
+    },
+    "address2": {
+      "type": "string",
+      "description": "Address Line 2 for the defendant"
+    },
+    "address3": {
+      "type": "string",
+      "description": "Address Line 3 for the defendant"
+    },
+    "address4": {
+      "type": "string",
+      "description": "Address Line 4 for the defendant"
+    },
+    "address5": {
+      "type": "string",
+      "description": "Address Line 5 for the defendant"
+    },
+    "postcode": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "address1"
+  ],
+  "additionalProperties": false
+}

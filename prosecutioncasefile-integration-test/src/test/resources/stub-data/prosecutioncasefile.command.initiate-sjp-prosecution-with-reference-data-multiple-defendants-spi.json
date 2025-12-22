@@ -1,0 +1,128 @@
+{
+  "caseDetails": {
+    "caseId": "${case.id}",
+    "prosecutorCaseReference": "${case.urn}",
+    "originatingOrganisation": "123",
+    "cpsOrganisation": "A30AB00",
+    "initiationCode": "J",
+    "policeSystemId": "${policeSystemId}",
+    "prosecutor": {
+      "prosecutingAuthority": "GAEAA01",
+      "informant": "Adam"
+    }
+  },
+  "defendants": [
+    {
+      "id": "257c27b4-69af-4ce0-bf68-f127a66f5c19",
+      "appliedProsecutorCosts": 200,
+      "documentationLanguage": "W",
+      "hearingLanguage": "W",
+      "prosecutorDefendantReference": "TFL001Defendant01",
+      "individual": {
+        "personalInformation": {
+          "title": "Baron",
+          "firstName": "John",
+          "lastName": "Smith",
+          "address": {
+            "address1": "armagaddon house",
+            "postcode": "M60 1NW"
+          },
+          "contactDetails": {
+            "home": "0207 000 0000",
+            "mobile": "11111 111 111",
+            "primaryEmail": "primary@email.com",
+            "secondaryEmail": "secondary@email.com",
+            "work": "0207 111 1111"
+          }
+        },
+        "selfDefinedInformation": {
+          "ethnicity": "W1",
+          "gender": "MALE",
+          "dateOfBirth": "1990-01-01",
+          "nationality": "GBR"
+        },
+        "nationalInsuranceNumber": "AB123456C"
+      },
+      "individualAliases": [
+        {
+          "title": "Mr",
+          "firstName": "X",
+          "lastName": "Alias1"
+        },
+        {
+          "title": "Mr",
+          "firstName": "Y",
+          "lastName": "Alias2"
+        }
+      ],
+      "offences": [
+        {
+          "offenceCode": "OFCODE12",
+          "offenceSequenceNumber": 1,
+          "offenceCommittedDate": "2017-11-10",
+          "offenceDateCode": 1,
+          "offenceWording": "Duty not paid",
+          "chargeDate": "2018-02-01",
+          "appliedCompensation": 200,
+          "backDuty": 340.31,
+          "backDutyDateFrom": "2018-04-30",
+          "backDutyDateTo": "2018-05-30",
+          "vehicleMake": "Ford",
+          "vehicleRegistrationMark": "AB11 ABC"
+        }
+      ],
+      "postingDate": "2018-09-10"
+    },
+    {
+      "id": "482c27b4-69af-4ce0-bf68-f127a66f5c19",
+      "appliedProsecutorCosts": 200,
+      "documentationLanguage": "W",
+      "hearingLanguage": "W",
+      "prosecutorDefendantReference": "TFL001Defendant01",
+      "individual": {
+        "personalInformation": {
+          "title": "Baron",
+          "firstName": "Will",
+          "lastName": "Smith",
+          "address": {
+            "address1": "armagaddon house",
+            "postcode": "M60 1NW"
+          },
+          "contactDetails": {
+            "home": "0207 111 0000",
+            "mobile": "11111 111 111",
+            "primaryEmail": "primary@email.com",
+            "secondaryEmail": "secondary@email.com",
+            "work": "0207 111 1111"
+          }
+        },
+        "selfDefinedInformation": {
+          "ethnicity": "W1",
+          "gender": "MALE",
+          "dateOfBirth": "1992-02-01",
+          "nationality": "GBR"
+        },
+        "nationalInsuranceNumber": "AB123454D"
+      },
+      "offences": [
+        {
+          "offenceCode": "OFCODE12",
+          "offenceSequenceNumber": 1,
+          "offenceCommittedDate": "2017-11-10",
+          "offenceDateCode": 1,
+          "offenceWording": "Duty not paid",
+          "chargeDate": "2018-02-01",
+          "appliedCompensation": 200,
+          "backDuty": 340.31,
+          "backDutyDateFrom": "2018-04-30",
+          "backDutyDateTo": "2018-05-30",
+          "vehicleMake": "Ford",
+          "vehicleRegistrationMark": "AB11 ABC"
+        }
+      ],
+      "postingDate": "2018-09-10"
+    }
+  ],
+  "channel": "SPI",
+  "externalId": "${external.id}"
+}

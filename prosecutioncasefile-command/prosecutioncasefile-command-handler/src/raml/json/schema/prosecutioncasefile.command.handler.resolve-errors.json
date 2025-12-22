@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/command/handler/resolve-errors.json",
+  "type": "object",
+  "properties": {
+    "caseId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "errors": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "fieldName": {
+              "type": "string"
+            },
+            "value": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "fieldName",
+            "value"
+          ]
+        }
+      ]
+    },
+    "defendants": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "errors": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "fieldName": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "fieldName",
+                    "value"
+                  ]
+                }
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "errors"
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "caseId"
+  ]
+}

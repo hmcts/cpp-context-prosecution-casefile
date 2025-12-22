@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/defence-case-details.json",
+  "type": "object",
+  "description": "Prosecution Case File Details",
+  "properties": {
+    "caseId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid",
+      "description": "The Id of the SJP case to initiate"
+    },
+    "prosecutorCaseReference": {
+      "type": "string"
+    },
+    "prosecutor": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/prosecutor.json"
+    }
+  },
+  "required": [
+    "caseId",
+    "prosecutorCaseReference"
+  ],
+  "additionalProperties": false
+}

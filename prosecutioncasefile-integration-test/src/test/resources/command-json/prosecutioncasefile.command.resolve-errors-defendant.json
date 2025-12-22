@@ -1,0 +1,21 @@
+{
+  "defendants": [
+    {
+      "id": "DEF_ID",
+      "errors": [
+        {
+          "fieldName": "individual_selfDefinedInformation_nationality",
+          "value": "GBR"
+        },
+        {
+          "fieldName": "individual_personalInformation_contactDetails_primaryEmail",
+          "value": "good@primaryemail.com"
+        },
+        {
+          "fieldName": "individual_personalInformation_contactDetails_secondaryEmail",
+          "value": "good@secondaryemail.com"
+        }
+      ]
+    }
+  ]
+}

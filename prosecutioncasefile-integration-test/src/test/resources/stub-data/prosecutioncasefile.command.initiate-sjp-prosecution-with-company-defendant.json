@@ -1,0 +1,58 @@
+{
+  "caseDetails": {
+    "caseId": "${case.id}",
+    "prosecutorCaseReference": "${case.urn}",
+    "originatingOrganisation": "123",
+    "cpsOrganisation": "A30AB00",
+    "initiationCode": "J",
+    "prosecutor": {
+      "prosecutingAuthority": "GAEAA01",
+      "informant": "Adam"
+    }
+  },
+
+  "defendants": [
+    {
+      "id": "${defendant.id}",
+      "appliedProsecutorCosts": 200,
+      "documentationLanguage": "W",
+      "hearingLanguage": "W",
+      "prosecutorDefendantReference": "TFL001Defendant01",
+      "organisationName": "Ministry of Justice",
+      "address": {
+        "address1": "6th Floor Windsor House",
+        "address2": "42-50 Victoria Street",
+        "address3": "London",
+        "address4": "address4",
+        "address5": "address5",
+        "postcode": "SW1H 0TL"
+      },
+      "telephoneNumberBusiness": "447824745555",
+      "emailAddress1": "email1@gmail.com",
+      "emailAddress2": "email2@gmail.com",
+      "offences": [
+        {
+          "offenceCode": "${offence.code:-OFCODE12}",
+          "offenceSequenceNumber": 1,
+          "offenceCommittedDate": "${offence.committedDate:-2017-11-10}",
+          "offenceDateCode": 1,
+          "offenceWording": "Duty not paid",
+          "chargeDate": "${offence.chargeDate:-2018-02-01}",
+          "appliedCompensation": 200,
+          "alcoholRelatedOffence": {
+            "alcoholLevelMethod": "${offence.alcoholRelatedOffence.alcoholLevelMethod:-A}",
+            "alcoholLevelAmount": 100
+          },
+          "backDuty": 340.31,
+          "backDutyDateFrom": "2018-04-30",
+          "backDutyDateTo": "2018-05-30",
+          "vehicleMake": "Ford",
+          "vehicleRegistrationMark": "AB11 ABC"
+        }
+      ],
+      "postingDate": "2018-09-10"
+    }
+  ],
+  "channel": "SPI",
+  "externalId": "${external.id}"
+}

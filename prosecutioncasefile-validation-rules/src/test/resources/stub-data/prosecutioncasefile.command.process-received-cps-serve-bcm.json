@@ -1,0 +1,59 @@
+{
+  "prosecutionCaseSubject": {
+    "prosecutingAuthority": "The OU Code of the prosecuting authority",
+    "urn": "45MD0000220"
+  },
+  "cpsDefendantOffences": [
+    {
+      "cpsOffenceDetails": [
+        {
+          "cjsOffenceCode": "OFFENCE_CODE_1",
+          "offenceDate": "2021-12-30",
+          "offenceWording": "offenceWording"
+        },
+        {
+          "cjsOffenceCode": "OFFENCE_CODE_11",
+          "offenceDate": "2021-12-30",
+          "offenceWording": "offenceWording"
+        },
+        {
+          "cjsOffenceCode": "OFFENCE_CODE_111",
+          "offenceDate": "2021-12-30",
+          "offenceWording": "offenceWording"
+        }
+      ],
+      "matchingId": "7a7cb8db-a18e-4097-a239-cc1b58226de3",
+      "prosecutorDefendantId": "defendant Id",
+      "asn": "ASN_1",
+      "cpsDefendantId": "CPS_DEFENDANT_ID_1",
+      "forename": "John",
+      "surname": "Lewis",
+      "dateOfBirth": "03-06-1986"
+    },
+    {
+      "cpsOffenceDetails": [
+        {
+          "cjsOffenceCode": "OFFENCE_CODE_2",
+          "offenceDate": "2021-11-22",
+          "offenceWording": "offenceWording2"
+        },
+        {
+          "cjsOffenceCode": "OFFENCE_CODE_22",
+          "offenceDate": "2021-11-22",
+          "offenceWording": "offenceWording2"
+        }
+      ],
+      "matchingId": "95f43140-e1f9-47a1-b490-56c51288f8e9",
+      "prosecutorDefendantId": "defendant Id2",
+      "asn": "ASN_2",
+      "cpsDefendantId": "CPS_DEFENDANT_ID_2",
+      "organisationName": "XYZ Limited"
+    }
+  ],
+  "tag": "tag",
+  "evidencePrePTPH": "evidencePrePTPH text",
+  "evidencePostPTPH": "evidencePostPTPH text",
+  "otherInformation": "otherInformation text",
+  "submissionId": "e85d2c62-af1f-4674-863a-0891e67e325b",
+  "submissionStatus": "PENDING"
+}

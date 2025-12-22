@@ -1,0 +1,153 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://justice.gov.uk/json/schemas/domains/sjp/query/case-by-urn-postcode.json",
+  "definitions": {
+    "offence": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "titleWelsh": {
+          "type": "string"
+        },
+        "legislation": {
+          "type": "string"
+        },
+        "legislationWelsh": {
+          "type": "string"
+        },
+        "wording": {
+          "type": "string"
+        },
+        "wordingWelsh": {
+          "type": "string"
+        },
+        "pendingWithdrawal": {
+          "type": "boolean"
+        },
+        "plea": {
+          "$ref": "http://justice.gov.uk/json/schemas/domains/sjp/plea-type.json"
+        },
+        "hasPlea": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true,
+      "required": [
+        "id",
+        "title",
+        "legislation",
+        "wording",
+        "pendingWithdrawal"
+      ]
+    },
+    "personalDetails": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "gender": {
+          "$ref": "http://justice.gov.uk/json/schemas/domains/sjp/gender.json"
+        },
+        "dateOfBirth": {
+          "type": "string"
+        },
+        "nationalInsuranceNumber": {
+          "type": "string"
+        },
+        "contactDetails": {
+          "$ref": "http://justice.gov.uk/json/schemas/domains/sjp/contact-details.json"
+        },
+        "address": {
+          "$ref": "http://justice.gov.uk/json/schemas/domains/sjp/address.json"
+        }
+      },
+      "additionalProperties": true,
+      "required": [
+        "firstName",
+        "lastName",
+        "address"
+      ]
+    },
+    "defendant": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "caseId": {
+          "type": "string"
+        },
+        "numPreviousConvictions": {
+          "type": "integer"
+        },
+        "pcqId" : {
+          "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/plea/json/schemas/definitions.json#/definitions/uuid"
+        },
+        "personalDetails": {
+          "$ref": "#/definitions/personalDetails"
+        },
+        "interpreter": {
+          "type": "object",
+          "properties": {
+            "language": {
+              "type": "string"
+            }
+          }
+        },
+        "offences": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/offence"
+          },
+          "minItems": 1
+        }
+      },
+      "additionalProperties": true,
+      "required": [
+        "id",
+        "personalDetails",
+        "offences"
+      ]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "urn": {
+      "type": "string"
+    },
+    "initiationCode": {
+      "type": "string",
+      "enum": ["J", "Q"]
+    },
+    "canContinue": {
+      "type": "boolean"
+    },
+    "cantContinueReason": {
+      "type": "string"
+    },
+    "defendant": {
+      "$ref": "#/definitions/defendant"
+    }
+  },
+  "additionalProperties": true,
+  "required": [
+    "id",
+    "urn",
+    "defendant"
+  ]
+}

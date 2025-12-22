@@ -1,0 +1,5 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cpp/json/schemas/progression/events/public.progression.prosecution-case-created.json",
+  "ref": "http://justice.gov.uk/progression/courts/public.progression.prosecution-case-created.json"
+}

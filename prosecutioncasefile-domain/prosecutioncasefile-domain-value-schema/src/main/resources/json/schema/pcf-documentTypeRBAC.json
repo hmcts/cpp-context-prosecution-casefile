@@ -1,0 +1,43 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/documentTypeRBAC.json",
+	"description": "(RBAC) Role based access control rules for each user for each type of document",
+	"type": "object",
+	"properties": {
+		"readUserGroups": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+		},
+		"uploadUserGroups": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+		},
+		"downloadUserGroups": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+		},
+        "deleteUserGroups": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+           }
+        },
+		"effectiveFrom": {
+          "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date"
+		},
+		"effectiveTo": {
+          "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date"
+		}
+	},
+	"additionalProperties": false
+}

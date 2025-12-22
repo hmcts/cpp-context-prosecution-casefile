@@ -1,0 +1,9 @@
+{
+  "prosecutingAuthority": "B01NM00",
+  "material": {
+    "fileStoreId": "%s",
+    "documentType": "%s",
+    "fileType": "%s"
+  },
+  "isCpsCase":%s
+}

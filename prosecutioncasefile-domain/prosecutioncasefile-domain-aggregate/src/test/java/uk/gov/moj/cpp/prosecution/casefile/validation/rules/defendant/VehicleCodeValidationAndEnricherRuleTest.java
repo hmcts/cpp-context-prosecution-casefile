@@ -1,0 +1,247 @@
+package uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant;
+
+import static java.util.Arrays.asList;
+import static java.util.UUID.randomUUID;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.when;
+import static uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode.DEFENDANT_OFFENCE_VEHICLE_CODE;
+import static uk.gov.moj.cpp.prosecution.casefile.validation.rules.FieldName.OFFENCE_VEHICLE_CODE;
+
+import uk.gov.moj.cpp.prosecution.casefile.domain.DefendantWithReferenceData;
+import uk.gov.moj.cpp.prosecution.casefile.domain.ReferenceDataVO;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Offence;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Problem;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.VehicleCodeReferenceData;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.VehicleRelatedOffence;
+import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
+import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.offence.VehicleCodeValidationAndEnricherRule;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Answers;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+@ExtendWith(MockitoExtension.class)
+public class VehicleCodeValidationAndEnricherRuleTest {
+
+
+    private static final UUID OFFENCE_ID = randomUUID();
+    private static final BigDecimal APPLIED_COMPENSATION = new BigDecimal(30.00);
+    private static final BigDecimal BACK_DUTY = new BigDecimal(150.10);
+    private static final LocalDate BACK_DUTY_DATE_FROM = LocalDate.of(2011, 1, 1);
+    private static final LocalDate BACK_DUTY_DATE_TO = LocalDate.of(2015, 1, 1);
+    private static final LocalDate ARREST_DATE = LocalDate.of(2017, 11, 8);
+    private static final LocalDate CHARGE_DATE = LocalDate.of(2017, 11, 8);
+    private static final UUID MOT_REASON_ID = randomUUID();
+    private static final String OFFENCE_CODE = "OFCODE12";
+    private static final LocalDate OFFENCE_COMMITTED_DATE = LocalDate.of(2017, 6, 1);
+    private static final LocalDate OFFENCE_COMMITTED_END_DATE = LocalDate.of(2017, 6, 20);
+    private static final Integer OFFENCE_DATE_CODE = 15;
+    private static final String OFFENCE_LOCATION = "London";
+    private static final Integer OFFENCE_SEQUENCE_NUMBER = 3;
+    private static final String OFFENCE_TITLE = "Offence Title";
+    private static final String OFFENCE_TITLE_WELSH = "Offence Title (Welsh)";
+    private static final String OFFENCE_WORDING = "TV Licence not paid";
+    private static final String OFFENCE_WORDING_WELSH = "TV Licence not paid (Welsh)";
+    private static final String STATEMENT_OF_FACTS = "Prosecution charge wording";
+    private static final String STATEMENT_OF_FACTS_WELSH = "Prosecution charge wording (Welsh)";
+
+    @Mock
+    ReferenceDataQueryService referenceDataQueryService;
+
+    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
+    DefendantWithReferenceData defendantWithReferenceData;
+
+    @Test
+    public void shouldReturnEmptyListWhenNoOffences() {
+        when(defendantWithReferenceData.getDefendant().getOffences()).thenReturn(null);
+        final Optional<Problem> optionalProblem = new VehicleCodeValidationAndEnricherRule().validate(defendantWithReferenceData, referenceDataQueryService)
+                .problems().stream().findFirst();
+        assertThat(optionalProblem.isPresent(), is(false));
+    }
+
+    @Test
+    public void shouldReturnEmptyListWhenNoVehicleOffences() {
+        when(defendantWithReferenceData.getDefendant().getOffences()).thenReturn(getMockOffence(null));
+        final Optional<Problem> optionalProblem = new VehicleCodeValidationAndEnricherRule().validate(defendantWithReferenceData, referenceDataQueryService)
+                .problems().stream().findFirst();
+        assertThat(optionalProblem.isPresent(), is(false));
+    }
+
+    @Test
+    public void shouldReturnEmptyListWhenReferenceDataVOHasNoVehicleCodes() {
+        final String vehicleCode = "1";
+        final VehicleRelatedOffence vehicleRelatedOffence = VehicleRelatedOffence.vehicleRelatedOffence()
+                .withVehicleCode(vehicleCode).build();
+
+        final VehicleCodeReferenceData vehicleCodeReferenceData = new VehicleCodeReferenceData("1", "Large Goods Vehicle or Passenger Carrying Vehicle",
+                randomUUID(), 10, "2019-04-01",null);
+
+        final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
+
+        when(defendantWithReferenceData.getDefendant().getOffences()).thenReturn(getMockOffence(vehicleRelatedOffence));
+        when(defendantWithReferenceData.getReferenceDataVO()).thenReturn(referenceDataVO);
+        when(referenceDataQueryService.retrieveVehicleCodes()).thenReturn(asList(vehicleCodeReferenceData));
+
+        final Optional<Problem> optionalProblem = new VehicleCodeValidationAndEnricherRule().validate(defendantWithReferenceData, referenceDataQueryService)
+                .problems().stream().findFirst();
+        assertThat(optionalProblem.isPresent(), is(false));
+    }
+
+    @Test
+    public void shouldReturnEmptyListWhenVehicleCodeMatches() {
+        final String vehicleCode = "1";
+        final VehicleRelatedOffence vehicleRelatedOffence = VehicleRelatedOffence.vehicleRelatedOffence()
+                .withVehicleCode(vehicleCode).build();
+
+        final VehicleCodeReferenceData vehicleCodeReferenceData = new VehicleCodeReferenceData("1", "Large Goods Vehicle or Passenger Carrying Vehicle",
+                randomUUID(), 10, "2019-04-01",null);
+
+        final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
+        referenceDataVO.setVehicleCodesReferenceData(asList(vehicleCodeReferenceData));
+
+        when(defendantWithReferenceData.getDefendant().getOffences()).thenReturn(getMockOffence(vehicleRelatedOffence));
+        when(defendantWithReferenceData.getReferenceDataVO()).thenReturn(referenceDataVO);
+
+        final Optional<Problem> optionalProblem = new VehicleCodeValidationAndEnricherRule().validate(defendantWithReferenceData, referenceDataQueryService)
+                .problems().stream().findFirst();
+        assertThat(optionalProblem.isPresent(), is(false));
+    }
+
+    @Test
+    public void shouldReturnViolationWhenVehicleCodeDoesNotMatch() {
+        final String vehicleCode = "2";
+        final VehicleRelatedOffence vehicleRelatedOffence = VehicleRelatedOffence.vehicleRelatedOffence()
+                .withVehicleCode(vehicleCode).build();
+
+        final VehicleCodeReferenceData vehicleCodeReferenceData = new VehicleCodeReferenceData("1", "Large Goods Vehicle or Passenger Carrying Vehicle",
+                randomUUID(), 10, "2019-04-01",null);
+
+        final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
+        referenceDataVO.setVehicleCodesReferenceData(asList(vehicleCodeReferenceData));
+
+        when(defendantWithReferenceData.getDefendant().getOffences()).thenReturn(getMockOffence(vehicleRelatedOffence));
+        when(defendantWithReferenceData.getReferenceDataVO()).thenReturn(referenceDataVO);
+        when(referenceDataQueryService.retrieveVehicleCodes()).thenReturn(asList(vehicleCodeReferenceData));
+
+        final Optional<Problem> optionalProblem = new VehicleCodeValidationAndEnricherRule().validate(defendantWithReferenceData, referenceDataQueryService)
+                .problems().stream().findFirst();
+        assertThat(optionalProblem.isPresent(), is(true));
+        assertThat(optionalProblem.get().getCode(), is( DEFENDANT_OFFENCE_VEHICLE_CODE.name()));
+        assertThat(optionalProblem.get().getValues().get(0).getKey(), is(  OFFENCE_VEHICLE_CODE.getValue()));
+        assertThat(optionalProblem.get().getValues().get(0).getValue(), is(vehicleCode));
+    }
+
+    @Test
+    public void shouldReturnViolationWhenVehicleCodeDoesNotMatchWithMultipleOffences() {
+        final String vehicleCode = "2";
+        final VehicleRelatedOffence vehicleRelatedOffence = VehicleRelatedOffence.vehicleRelatedOffence()
+                .withVehicleCode(vehicleCode).build();
+
+        final VehicleCodeReferenceData vehicleCodeReferenceData = new VehicleCodeReferenceData("1", "Large Goods Vehicle or Passenger Carrying Vehicle",
+                randomUUID(), 10, "2019-04-01",null);
+
+        final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
+        referenceDataVO.setVehicleCodesReferenceData(asList(vehicleCodeReferenceData));
+
+        when(defendantWithReferenceData.getDefendant().getOffences()).thenReturn(getMockOffences(vehicleRelatedOffence));
+        when(defendantWithReferenceData.getReferenceDataVO()).thenReturn(referenceDataVO);
+        when(referenceDataQueryService.retrieveVehicleCodes()).thenReturn(asList(vehicleCodeReferenceData));
+
+        final Optional<Problem> optionalProblem = new VehicleCodeValidationAndEnricherRule().validate(defendantWithReferenceData, referenceDataQueryService)
+                .problems().stream().findFirst();
+        assertThat(optionalProblem.isPresent(), is(true));
+        assertThat(optionalProblem.get().getCode(), is( DEFENDANT_OFFENCE_VEHICLE_CODE.name()));
+        assertThat(optionalProblem.get().getValues().get(0).getKey(), is(  OFFENCE_VEHICLE_CODE.getValue()));
+        assertThat(optionalProblem.get().getValues().get(0).getValue(), is(vehicleCode));
+    }
+
+    private List<Offence> getMockOffence(final VehicleRelatedOffence vehicleRelatedOffence) {
+        return asList(Offence.offence()
+                .withAppliedCompensation(APPLIED_COMPENSATION)
+                .withArrestDate(ARREST_DATE)
+                .withBackDuty(BACK_DUTY)
+                .withBackDutyDateFrom(BACK_DUTY_DATE_FROM)
+                .withBackDutyDateTo(BACK_DUTY_DATE_TO)
+                .withChargeDate(CHARGE_DATE)
+                .withMotReasonId(MOT_REASON_ID)
+                .withOffenceCode(OFFENCE_CODE)
+                .withOffenceCommittedDate(OFFENCE_COMMITTED_DATE)
+                .withOffenceCommittedEndDate(OFFENCE_COMMITTED_END_DATE)
+                .withOffenceDateCode(OFFENCE_DATE_CODE)
+                .withOffenceId(OFFENCE_ID)
+                .withOffenceLocation(OFFENCE_LOCATION)
+                .withOffenceSequenceNumber(OFFENCE_SEQUENCE_NUMBER)
+                .withOffenceTitle(OFFENCE_TITLE)
+                .withOffenceTitleWelsh(OFFENCE_TITLE_WELSH)
+                .withOffenceWording(OFFENCE_WORDING)
+                .withOffenceWordingWelsh(OFFENCE_WORDING_WELSH)
+                .withStatementOfFacts(STATEMENT_OF_FACTS)
+                .withStatementOfFactsWelsh(STATEMENT_OF_FACTS_WELSH)
+                .withVehicleRelatedOffence(vehicleRelatedOffence)
+                .build()
+);
+    }
+
+    private List<Offence> getMockOffences(final VehicleRelatedOffence vehicleRelatedOffence) {
+
+        final Offence vehicleOffence = Offence.offence()
+                .withAppliedCompensation(APPLIED_COMPENSATION)
+                .withArrestDate(ARREST_DATE)
+                .withBackDuty(BACK_DUTY)
+                .withBackDutyDateFrom(BACK_DUTY_DATE_FROM)
+                .withBackDutyDateTo(BACK_DUTY_DATE_TO)
+                .withChargeDate(CHARGE_DATE)
+                .withMotReasonId(MOT_REASON_ID)
+                .withOffenceCode(OFFENCE_CODE)
+                .withOffenceCommittedDate(OFFENCE_COMMITTED_DATE)
+                .withOffenceCommittedEndDate(OFFENCE_COMMITTED_END_DATE)
+                .withOffenceDateCode(OFFENCE_DATE_CODE)
+                .withOffenceId(OFFENCE_ID)
+                .withOffenceLocation(OFFENCE_LOCATION)
+                .withOffenceSequenceNumber(OFFENCE_SEQUENCE_NUMBER)
+                .withOffenceTitle(OFFENCE_TITLE)
+                .withOffenceTitleWelsh(OFFENCE_TITLE_WELSH)
+                .withOffenceWording(OFFENCE_WORDING)
+                .withOffenceWordingWelsh(OFFENCE_WORDING_WELSH)
+                .withStatementOfFacts(STATEMENT_OF_FACTS)
+                .withStatementOfFactsWelsh(STATEMENT_OF_FACTS_WELSH)
+                .withVehicleRelatedOffence(vehicleRelatedOffence)
+                .build();
+
+        final Offence nonVehicleOffence = Offence.offence()
+                .withAppliedCompensation(APPLIED_COMPENSATION)
+                .withArrestDate(ARREST_DATE)
+                .withBackDuty(BACK_DUTY)
+                .withBackDutyDateFrom(BACK_DUTY_DATE_FROM)
+                .withBackDutyDateTo(BACK_DUTY_DATE_TO)
+                .withChargeDate(CHARGE_DATE)
+                .withMotReasonId(MOT_REASON_ID)
+                .withOffenceCode(OFFENCE_CODE)
+                .withOffenceCommittedDate(OFFENCE_COMMITTED_DATE)
+                .withOffenceCommittedEndDate(OFFENCE_COMMITTED_END_DATE)
+                .withOffenceDateCode(OFFENCE_DATE_CODE)
+                .withOffenceId(OFFENCE_ID)
+                .withOffenceLocation(OFFENCE_LOCATION)
+                .withOffenceSequenceNumber(OFFENCE_SEQUENCE_NUMBER)
+                .withOffenceTitle(OFFENCE_TITLE)
+                .withOffenceTitleWelsh(OFFENCE_TITLE_WELSH)
+                .withOffenceWording(OFFENCE_WORDING)
+                .withOffenceWordingWelsh(OFFENCE_WORDING_WELSH)
+                .withStatementOfFacts(STATEMENT_OF_FACTS)
+                .withStatementOfFactsWelsh(STATEMENT_OF_FACTS_WELSH)
+                .build();
+
+        return asList(nonVehicleOffence, vehicleOffence);
+    }
+
+
+}

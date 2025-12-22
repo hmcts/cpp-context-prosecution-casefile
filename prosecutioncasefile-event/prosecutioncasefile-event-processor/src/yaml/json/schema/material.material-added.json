@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cpp/json/schemas/material/events/public.material.material-added.json",
+  "type": "object",
+  "properties": {
+    "materialId": {
+      "type": "string"
+    },
+    "fileDetails": {
+      "type": "object",
+      "properties": {
+        "fileName": {
+          "type": "string"
+        }
+      },
+      "required": ["fileName"],
+      "oneOf": [
+        {
+          "properties": {
+            "alfrescoAssetId": {
+              "type": "string"
+            },
+            "mimeType": {
+              "type": "string"
+            }
+          },
+          "required": ["alfrescoAssetId", "mimeType"]
+        },
+        {
+          "properties": {
+            "externalLink": {
+              "type": "string"
+            }
+          },
+          "required": ["externalLink"]
+        }
+      ]
+    },
+    "materialAddedDate": {
+      "type": "string"
+    },
+    "isCpsCase": {
+      "type": "boolean"
+    },
+    "isUnbundledDocument": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "materialId",
+    "fileDetails",
+    "materialAddedDate"
+  ]
+}

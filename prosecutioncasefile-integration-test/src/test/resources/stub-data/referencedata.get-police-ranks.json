@@ -1,0 +1,10 @@
+{
+  "policeRanks": [
+    {
+      "id": "7e2f843e-d639-40b3-8611-8015f3a13333",
+      "sequence": 10,
+      "rankCode": "AXE",
+      "validFrom": "2013-02-01"
+    }
+  ]
+}

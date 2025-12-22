@@ -1,0 +1,141 @@
+{
+  "cases": [
+    {
+      "defendants": [
+        {
+          "chargeDate": "2022-04-04",
+          "hearingDate": "1999-02-04",
+          "id": "01bd504a-b608-430e-95c2-bd97fbaaad61",
+          "errors": [
+            {
+              "fieldName": "individual_selfDefinedInformation_nationality",
+              "errorValue": "ABC",
+              "displayName": "DEFENDANT_NATIONALITY_INVALID",
+              "version": 2692
+            },
+            {
+              "fieldName": "initialHearing_dateOfHearing",
+              "errorValue": "1999-02-04",
+              "displayName": "DEFENDANT_DATE_OF_HEARING_INVALID",
+              "version": 2692
+            },
+            {
+              "fieldName": "initialHearing_courtHearingLocation",
+              "errorValue": "abcd",
+              "displayName": "DEFENDANT_COURT_HEARING_LOCATION_INVALID",
+              "version": 2692
+            },
+            {
+              "fieldName": "individual_parentGuardianInformation_dateOfBirth",
+              "errorValue": "2041-03-03",
+              "displayName": "DEFENDANT_PARENT_GUARDIAN_DATE_OF_BIRTH_IN_FUTURE",
+              "version": 2692
+            },
+            {
+              "fieldName": "individual_parentGuardianInformation_observedEthnicity",
+              "errorValue": "3",
+              "displayName": "DEFENDANT_PARENT_GUARDIAN_OBSERVED_ETHNICITY",
+              "version": 2692
+            },
+            {
+              "fieldName": "individual_parentGuardianInformation_selfDefinedEthnicity",
+              "errorValue": "white",
+              "displayName": "DEFENDANT_PARENT_GUARDIAN_SELF_DEFINED_ETHNICITY",
+              "version": 2692
+            },
+            {
+              "fieldName": "individual_offenderCode",
+              "errorValue": "XYZ",
+              "displayName": "OFFENDER_CODE_IS_INVALID",
+              "version": 2692
+            },
+            {
+              "fieldName": "individual_selfDefinedInformation_dateOfBirth",
+              "errorValue": "2040-05-03",
+              "displayName": "DEFENDANT_DOB_IN_FUTURE",
+              "version": 2692
+            },
+            {
+              "fieldName": "individual_perceivedBirthYear",
+              "errorValue": "2040",
+              "displayName": "DEFENDANT_PERCEIVED_BIRTH_YEAR_IN_FUTURE",
+              "version": 2692
+            },
+            {
+              "fieldName": "individual_personalInformation_observedEthnicity",
+              "errorValue": "55",
+              "displayName": "OBSERVED_ETHNICITY_IS_INVALID",
+              "version": 2692
+            },
+            {
+              "fieldName": "individual_selfDefinedInformation_ethnicity",
+              "errorValue": "whitewhite",
+              "displayName": "SELF_DEFINED_ETHNICITY_IS_INVALID",
+              "version": 2692
+            }
+          ],
+          "offences": [
+            {
+              "id": "2013c181-7458-4fb2-a637-b596fbe0e792",
+              "errors": [
+                {
+                  "id": "2013c181-7458-4fb2-a637-b596fbe0e792",
+                  "fieldName": "offence_arrestDate",
+                  "errorValue": "2021-04-04",
+                  "displayName": "DEFENDANT_OFFENCE_ARREST_DATE",
+                  "version": 8174
+                },
+                {
+                  "id": "2013c181-7458-4fb2-a637-b596fbe0e792",
+                  "fieldName": "offence_chargeDate",
+                  "errorValue": "2022-04-04",
+                  "displayName": "DEFENDANT_OFFENCE_CHARGE_DATE",
+                  "version": 8174
+                }
+              ]
+            }
+          ],
+          "firstName": "John",
+          "lastName": "Smith"
+        }
+      ],
+      "id": "aa2b29aa-6fa8-4d19-957f-eaa78a10dd04",
+      "urn": "ucpEpbxetS",
+      "version": 2693,
+      "courtLocation": "abcd",
+      "region": "NW",
+      "caseType": "S",
+      "errorDescription": "Multiple Errors",
+      "errors": [
+        {
+          "fieldName": "summonsCode",
+          "errorValue": "summonsCode",
+          "displayName": "SUMMONS_CODE_INVALID",
+          "version": 2693
+        },
+        {
+          "fieldName": "originatingOrganisation",
+          "errorValue": "123",
+          "displayName": "PROSECUTOR_OUCODE_NOT_RECOGNISED",
+          "version": 2693
+        },
+        {
+          "id": "0",
+          "fieldName": "caseMarkers",
+          "errorValue": "ABC",
+          "displayName": "CASE_MARKERS_INVALID",
+          "version": 8171
+        },
+        {
+          "id": "1",
+          "fieldName": "caseMarkers",
+          "errorValue": "BCD",
+          "displayName": "CASE_MARKERS_INVALID",
+          "version": 8171
+        }
+      ]
+    }
+  ],
+  "results": 121,
+  "pageCount": 11
+}

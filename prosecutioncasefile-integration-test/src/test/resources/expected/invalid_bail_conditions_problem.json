@@ -1,0 +1,11 @@
+[
+  {
+    "code": "BAIL_CONDITIONS_REQUIRED",
+    "values": [
+      {
+        "key": "individual_bailConditions",
+        "value": ""
+      }
+    ]
+  }
+]

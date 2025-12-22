@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/command/handler/cps-reject-bcm-for-timer-expire.json",
+  "type": "object",
+  "properties": {
+    "timerUUID": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    }
+  },
+  "required": [
+    "timerUUID"
+  ],
+  "additionalProperties": false
+}

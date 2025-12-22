@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/court-application.json",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Unique identifier for this Application, is also used to link the Application to the supporting materials",
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "courtApplicationCases": {
+      "description": "Array of the cases that are linked to this application",
+      "type": "array",
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/court-application-case.json"
+      }
+    },
+    "courtApplicationType": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/court-application-type.json"
+    },
+    "applicationParticulars": {
+      "description": "The particulars of the application when not covered by the associated document",
+      "type": "string",
+      "maxLength": 2048
+    },
+    "courtApplicationPayment": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/court-application-payment.json"
+    },
+    "applicationDecisionSoughtByDate": {
+      "description": "The date by which a judicial decision is sought",
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date"
+    },
+    "applicant": {
+      "description": "The party applying to court to make a judicial decision on a matter",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/applicant.json"
+    },
+    "respondents": {
+      "description": "An array of the parties answering to a matter before the court",
+      "type": "array",
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/respondent.json"
+      }
+    },
+    "thirdParties": {
+      "description": "An array of the 3rd parties associated to the court matter.  Required to be notified",
+      "type": "array",
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/application/json/schemas/third-party.json"
+      }
+    },
+    "outOfTimeReason": {
+      "description": "The rationale for seeking a judicial decision when the regulatory timeline has surpassed.  This only applies to application ",
+      "type": "string",
+      "maxLength": 2048
+    },
+    "courtCivilApplication": {
+      "description": "court civil application",
+      "$ref": "http://justice.gov.uk/core/courts/courtCivilApplication.json"
+    }
+  },
+  "required": [
+    "id",
+    "courtApplicationType",
+    "applicant"
+  ],
+  "additionalProperties": false
+}

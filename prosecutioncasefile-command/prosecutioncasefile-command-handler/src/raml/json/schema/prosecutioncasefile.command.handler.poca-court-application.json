@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/command/handler/poca-court-application.json",
+  "description": "poca court application created",
+  "type": "object",
+  "properties": {
+    "courtApplication": {
+      "description": "The details of the court application for which proceedings are required",
+      "$ref": "http://justice.gov.uk/core/courts/courtApplication.json"
+    }
+  },
+  "required": [
+    "courtApplication"
+  ]
+}

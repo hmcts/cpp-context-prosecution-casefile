@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/pcf-definitions.json",
+  "definitions": {
+    "submissionStatus": {
+      "type": "string",
+      "enum": [
+        "PENDING",
+        "FAILED",
+        "REJECTED",
+        "SUCCESS",
+        "SUCCESS_WITH_WARNINGS"
+      ]
+    },
+    "channel": {
+      "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/channel.json",
+      "type": "string",
+      "enum": [
+        "SPI",
+        "CPPI",
+        "MCC",
+        "CIVIL"
+      ]
+    },
+    "nationalInsuranceNumber": {
+      "type": "string",
+      "pattern": "^(?!BG)(?!GB)(?!NK)(?!KN)(?!TN)(?!NT)(?!ZZ)[A-CEGHJ-PR-TW-Z][A-CEGHJ-NPR-TW-Z][0-9][0-9][0-9][0-9][0-9][0-9][A-D]$"
+    },
+
+    "isoDate": {
+      "type": "string",
+      "pattern": "^\\d{4}-[01]\\d-[0-3]\\d$"
+    },
+    "hearingDateTimeType" : {
+      "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/hearingDateTimeType.json",
+      "type": "string",
+      "enum": [
+        "WEEK_COMMENCING",
+        "FIXED",
+        "DATE_TO_BE_FIXED"
+      ]
+    }
+  }
+}

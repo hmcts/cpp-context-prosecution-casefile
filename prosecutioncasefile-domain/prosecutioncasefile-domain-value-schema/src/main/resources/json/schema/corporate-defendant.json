@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/corporate-defendant.json",
+  "type": "object",
+  "description": "Defendant Details",
+  "properties": {
+    "id": {
+      "type": "string",
+      "maxLength": 36
+    },
+    "address": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/address.json"
+    },
+
+    "prosecutorReference": {
+      "type": "string"
+    },
+
+    "emailAddress1": {
+      "type": "string"
+    },
+
+    "emailAddress2": {
+      "type": "string"
+    },
+
+    "organisationName": {
+      "type": "string"
+    },
+
+    "pncIdentifier": {
+      "type": "string"
+    },
+
+    "telephoneNumberBusiness": {
+      "type": "string"
+    },
+    "prosecutorDefendantReference": {
+      "type": "string"
+    },
+    "croNumber": {
+      "type": "string"
+    },
+
+    "alias": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+
+    "offences": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/offence.json"
+      }
+    }
+  },
+
+  "required": [
+    "prosecutorReference",
+    "organisationName",
+    "address"
+  ],
+  "additionalProperties": false
+}

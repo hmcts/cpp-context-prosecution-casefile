@@ -1,0 +1,96 @@
+{
+  "caseId": "44884cbc-9659-4ae1-a42e-a8c9839df502",
+  "cpsDefendantOffences": [
+    {
+      "cpsOffenceDetails": [
+        {
+          "cjsOffenceCode": "offenceCode",
+          "offenceDate": "2020-12-10",
+          "offenceWording": "offenceWording"
+        }
+      ],
+      "prosecutorDefendantId": "7f8fe782-a287-11eb-bcbc-0242ac130002"
+    }
+  ],
+  "petFormData": {
+    "defence": {
+      "defendants": [
+        {
+          "id": "d123ed32-ce29-11ec-9d64-0242ac120002",
+          "cpsDefendantId": "cpsDefendant Id",
+          "prosecutorDefendantId": "7f8fe782-a287-11eb-bcbc-0242ac130002",
+          "cpsOffences": [
+            {
+              "offenceCode": "offenceCode",
+              "wording": "offenceWording"
+            }
+          ]
+        }
+      ]
+    },
+    "prosecution": {
+      "dynamicFormAnswers": {
+        "applicationsForDirectionsGroup": {
+          "groundRulesQuestioning": "Y",
+          "variationStandardDirectionsProsecutor": "Y",
+          "variationStandardDirectionsProsecutorYesGroup": {
+            "variationStandardDirectionsProsecutorYesGroupDetails": "directionDetails"
+          }
+        },
+        "prosecutorGroup": {
+          "displayEquipment": "Y",
+          "displayEquipmentYesGroup": {
+            "displayEquipmentDetails": "EquipmentDetails"
+          },
+          "pendingLinesOfEnquiry": "N",
+          "pendingLinesOfEnquiryYesGroup": {
+            "pendingLinesOfEnquiryYesGroup": "Details"
+          },
+          "pointOfLaw": "Y",
+          "pointOfLawYesGroup": {
+            "pointOfLawDetails": "LawDetails"
+          },
+          "prosecutionCompliance": "N",
+          "prosecutionComplianceNoGroup": {
+            "prosecutionComplianceDetailsNo": "noComplianceDetails"
+          },
+          "prosecutionComplianceYesGroup": {
+          },
+          "prosecutorServeEvidence": "N",
+          "prosecutorServeEvidenceYesGroup": {
+          },
+          "slaveryOrExploitation": "N",
+          "slaveryOrExploitationYesGroup": {
+            "slaveryOrExploitationDetails": "SlaveryDetails"
+          }
+        }
+      },
+      "witnesses": [
+        {
+          "age": 14,
+          "firstName": "forname",
+          "interpreterRequired": "yes",
+          "languageAndDialect": "welsh",
+          "lastName": "abc",
+          "measuresRequired": [
+            "measureDetails"
+          ],
+          "prosecutionProposesWitnessAttendInPerson": "yes",
+          "specialOtherMeasuresRequired": "Y"
+        }
+      ]
+    }
+  },
+  "errors":[],
+  "petDefendants": [
+    {
+      "defendantId": "7f8fe782-a287-11eb-bcbc-0242ac130002"
+    }
+  ],
+  "prosecutionCaseSubject": {
+    "prosecutingAuthority": "The OU Code of the prosecuting authority",
+    "urn": "caseURN"
+  },
+  "submissionId": "e85d2c62-af1f-4674-863a-0891e67e325b",
+  "submissionStatus": "SUCCESS"
+}

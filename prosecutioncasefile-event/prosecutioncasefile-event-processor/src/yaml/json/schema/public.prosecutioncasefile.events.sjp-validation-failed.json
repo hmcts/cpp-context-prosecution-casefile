@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cpp/json/schemas/prosecutioncasefile/events/public.prosecutioncasefile.events.sjp-validation-failed.json",
+  "type": "object",
+  "properties": {
+    "prosecution": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/prosecution.json"
+    }
+
+
+  },
+  "required": [
+    "prosecution"
+  ]
+}

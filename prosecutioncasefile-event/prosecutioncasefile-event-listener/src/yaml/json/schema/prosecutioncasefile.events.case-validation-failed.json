@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cpp/json/schemas/prosecutioncasefile/events/case-validation-failed.json",
+  "type": "object",
+  "properties": {
+    "prosecution": {
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/prosecution.json"
+    },
+    "problems": {
+      "type": "array",
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/problem.json"
+      },
+      "externalId": {
+        "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid",
+        "description": "ID originating from the client (SPI or CPPI) for referencing the original message"
+      }
+    }
+  },
+  "required": [
+    "prosecution",
+    "problems"
+  ]
+}

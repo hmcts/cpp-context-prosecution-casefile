@@ -1,0 +1,24 @@
+{
+  "id": "be1c793c-723f-11e9-a923-1681be663d3e",
+  "errors": [
+    {
+      "fieldName": "case.marker",
+      "value": ""
+    }
+  ],
+  "defendants": [
+    {
+
+      "id": "be1c7be4-723f-11e9-a923-1681be663d3e",
+      "errors": [
+        {
+          "id": "id-of-offence",
+          "fieldName": "defendant.offenceCode",
+          "value": ""
+        }
+      ]
+    }
+  ]
+
+
+}

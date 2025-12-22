@@ -1,0 +1,51 @@
+{
+  "caseId": "44884cbc-9659-4ae1-a42e-a8c9839df502",
+  "defendants": [
+    {
+      "defendantId": "5ac172a2-3332-4dcc-bd03-20fa0c7957b5",
+      "appliedProsecutorCosts": 200,
+      "documentationLanguage": "W",
+      "hearingLanguage": "W",
+      "nationalInsuranceNumber": "AB123456C",
+      "offences": [
+        {
+          "appliedCompensation": 200,
+          "chargeDate": "2015-04-04",
+          "offenceCode": "OFCODE12",
+          "offenceCommittedDate": "2018-09-10",
+          "offenceDateCode": 1,
+          "offenceId": "b3947192-2149-4f8a-8342-67620295e5bd",
+          "offenceSequenceNumber": 1,
+          "offenceWording": "Duty not paid",
+          "backDuty": 340.30,
+          "backDutyDateFrom": "2018-04-30",
+          "backDutyDateTo": "2018-05-30",
+          "vehicleMake": "Ford",
+          "vehicleRegistrationMark": "AB11 ABC"
+        }
+      ],
+      "personalInformation": {
+        "address1": "armagaddon house",
+        "firstName": "John",
+        "home": "0207 000 0000",
+        "lastName": "Smith",
+        "mobile": "11111 111 111",
+        "postcode": "M60 1NW",
+        "primaryEmail": "primary@email.com",
+        "secondaryEmail": "secondary@email.com",
+        "title": "Baron",
+        "work": "0207 111 1111"
+      },
+      "postingDate": "2018-09-10",
+      "selfDefinedInformation": {
+        "dateOfBirth": "1988-12-01",
+        "ethnicity": "white",
+        "gender": "MALE",
+        "nationality": "GBR"
+      }
+    }
+  ],
+  "prosecutionAuthority": "GAAAA01",
+  "prosecutionCaseReference": "2OknbZ5Xl4",
+  "prosecutorInformant": "Adam"
+}

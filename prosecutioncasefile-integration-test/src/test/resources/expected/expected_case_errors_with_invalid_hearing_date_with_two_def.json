@@ -1,0 +1,52 @@
+{
+  "cases": [{
+    "defendants": [
+      {
+        "chargeDate": "2020-04-04",
+        "hearingDate": "2018-02-04",
+        "id": "DEFENDANT_ID1",
+        "errors": [{
+          "fieldName": "initialHearing_dateOfHearing",
+          "errorValue": "2018-02-04",
+          "displayName": "DATE_OF_HEARING_EARLIER_THAN_OFFENCE_COMMITTED_DATE",
+          "version": 24212
+        }, {
+          "fieldName": "initialHearing_dateOfHearing",
+          "errorValue": "2018-02-04",
+          "displayName": "DATE_OF_HEARING_IN_THE_PAST",
+          "version": 24212
+        }],
+        "offences": [],
+        "firstName": "John",
+        "lastName": "Smith"
+      },
+      {
+        "chargeDate": "2020-04-04",
+        "hearingDate": "2018-02-04",
+        "id": "DEFENDANT_ID3",
+        "errors": [{
+          "fieldName": "initialHearing_dateOfHearing",
+          "errorValue": "2018-02-04",
+          "displayName": "DATE_OF_HEARING_EARLIER_THAN_OFFENCE_COMMITTED_DATE",
+          "version": 24213
+        }, {
+          "fieldName": "initialHearing_dateOfHearing",
+          "errorValue": "2018-02-04",
+          "displayName": "DATE_OF_HEARING_IN_THE_PAST",
+          "version": 24213
+        }],
+        "offences": [],
+        "firstName": "John",
+        "lastName": "Smith"
+      }],
+    "id": "be238a91-1098-4ca6-9865-b1122dff54de",
+    "urn": "pbvf0tyGeT",
+    "courtLocation": "C55BN00",
+    "region": "NW",
+    "caseType": "Q",
+    "errorDescription": "Multiple Errors",
+    "version": 24212,
+    "errors": [],
+    "caseMarkersErrors": []
+  }]
+}

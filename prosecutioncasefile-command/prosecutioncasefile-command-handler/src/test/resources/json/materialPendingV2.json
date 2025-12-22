@@ -1,0 +1,41 @@
+{
+  "caseId": "51cac7fb-387c-4d19-9c80-8963fa8cf222",
+  "caseSubFolderName": "Defendant-Material",
+  "caseType": "UNKNOWN",
+  "documentCategory": "Defendant level",
+  "documentTypeId": "",
+  "exhibit": {
+    "reference": "test-reference"
+  },
+  "fileName": "Material-File",
+  "isCpsCase": false,
+  "material": "2191c165-e9e4-4fd7-ac6d-5bfd04690f77",
+  "materialContentType": "text/plain",
+  "materialName": "defendant document",
+  "materialType": "IDPC bundle",
+  "prosecutionCaseSubject": {
+    "caseUrn": "CASETFL001",
+    "defendantSubject": {
+      "prosecutorPersonDefendantDetails": {
+        "dateOfBirth": "1990-10-23",
+        "forename": "David",
+        "prosecutorDefendantId": "2b9c0dac-deeb-4634-ba69-be5115bdc585",
+        "surname": "Miller",
+        "title": "Mr"
+      }
+    },
+    "prosecutingAuthority": "00TFL1A"
+  },
+  "receivedDateTime": "2021-10-04T14:38:50.954Z",
+  "sectionOrderSequence": 1,
+  "submissionId": "8191c165-e9e4-4fd7-ac6d-5bfd04690f77",
+  "tag": [
+    {
+      "code": "M35"
+    }
+  ],
+  "witnessStatement": {
+    "statementDate": "2021-03-09T14:30:04.881Z",
+    "statementNumber": 2
+  }
+}

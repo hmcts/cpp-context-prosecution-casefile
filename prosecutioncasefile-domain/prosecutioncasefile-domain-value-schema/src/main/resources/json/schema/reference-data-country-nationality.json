@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/reference-data-country-nationality.json",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$"
+    },
+    "cjsCode": {
+      "type": "string"
+    },
+    "isoCode": {
+      "type": "string"
+    },
+    "govCode": {
+      "type": "string"
+    },
+    "countryName": {
+      "type": "string"
+    },
+    "nationality": {
+      "type": "string"
+    },
+    "startDate": {
+      "type": "string"
+    },
+    "endDate": {
+      "type": "string"
+    },
+    "validFrom": {
+      "type": "string"
+    },
+    "validTo": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "cjsCode",
+    "countryName"
+  ],
+  "additionalProperties": false
+}

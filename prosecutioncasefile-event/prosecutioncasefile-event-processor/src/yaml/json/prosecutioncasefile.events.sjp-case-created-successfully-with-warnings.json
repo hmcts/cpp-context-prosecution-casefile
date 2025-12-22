@@ -1,0 +1,24 @@
+{
+  "caseId": "79d0c503-052f-4105-9b05-b49d9c4cf6a2",
+  "warnings": [
+    {
+      "code": "DEFENDANT_UNDER_18_YEARS_AT_CHARGE_DATE",
+      "values": [
+        {
+          "key": "dateOfBirth",
+          "value": "Defendant under 18 at date of charge - case not suitable for SJP"
+        },
+        {
+          "key": "dateOfBirth",
+          "value": "2000-10-21"
+        },
+        {
+          "key": "chargeDate",
+          "value": "2018-10-10"
+        }
+      ]
+    }
+  ],
+  "externalId": "f0576c3a-ab06-45b7-8059-cc29282d33cf",
+  "channel": "SPI"
+}

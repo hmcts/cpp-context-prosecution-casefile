@@ -113,7 +113,6 @@
       "description": "Original reference number with exactly 10 digits.",
       "pattern": "^[0-9]{10}$"
     }
-
   },
   "required": [
     "offences"

@@ -90,7 +90,7 @@
       "offences": [
         {
           "offenceCode": "OFCODE12",
-          "offenceId": "02f17023-d3ed-47e6-bae6-3bdf26602775",
+          "offenceId": "OFFENCE_ID1",
           "offenceSequenceNumber": 1,
           "offenceCommittedDate": "2018-09-10",
           "offenceCommittedEndDate": "2018-10-10",
@@ -166,7 +166,7 @@
       "offences": [
         {
           "offenceCode": "OFCODE12",
-          "offenceId": "cfafc8df-8d21-4e18-93ca-a854ccfc0fdf",
+          "offenceId": "OFFENCE_ID2",
           "offenceSequenceNumber": 1,
           "offenceCommittedDate": "2018-09-10",
           "offenceCommittedEndDate": "2018-10-10",

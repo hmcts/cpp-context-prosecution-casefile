@@ -29,8 +29,9 @@ public class CustodyStatusValidationAndEnricherRule implements ValidationRule<De
         boolean isDefendantOrganisation = Objects.nonNull(defendantWithReferenceData.getDefendant().getOrganisationName()) ;
         boolean isChargeCase = CHARGE_CASE_TYPE.equals(defendantWithReferenceData.getCaseDetails().getInitiationCode());
         boolean isMCCAndCaseTypeO= O_CASE_TYPE.equals(defendantWithReferenceData.getCaseDetails().getInitiationCode()) && defendantWithReferenceData.isMCC();
+        boolean inactiveMigratedCase = defendantWithReferenceData.isInactiveMigratedCase();
 
-        if(isDefendantOrganisation){
+        if(isDefendantOrganisation || inactiveMigratedCase) {
             return VALID;
         }
 

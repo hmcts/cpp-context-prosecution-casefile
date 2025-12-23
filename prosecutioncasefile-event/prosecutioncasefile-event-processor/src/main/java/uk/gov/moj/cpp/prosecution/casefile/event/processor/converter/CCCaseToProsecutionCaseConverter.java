@@ -10,6 +10,7 @@ import static uk.gov.justice.core.courts.InitiationCode.valueFor;
 import static uk.gov.justice.core.courts.Marker.marker;
 import static uk.gov.justice.core.courts.ProsecutionCase.prosecutionCase;
 import static uk.gov.justice.core.courts.ProsecutionCaseIdentifier.prosecutionCaseIdentifier;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.MCC;
 
 import uk.gov.justice.core.courts.Address;
 import uk.gov.justice.core.courts.CivilFees;
@@ -53,6 +54,7 @@ public class CCCaseToProsecutionCaseConverter implements Converter<CcCaseReceive
         final ProsecutionWithReferenceData prosecutionWithReferenceData = source.getProsecutionWithReferenceData();
 
         final Prosecution prosecution = prosecutionWithReferenceData.getProsecution();
+
         final List<ProsecutionCase> prosecutionCases = new ArrayList<>();
         final CaseDetails caseDetails = prosecution.getCaseDetails();
         final Optional<OrganisationUnitWithCourtroomReferenceData> organisationUnitWithCourtroomReferenceData = prosecutionWithReferenceData
@@ -70,6 +72,16 @@ public class CCCaseToProsecutionCaseConverter implements Converter<CcCaseReceive
         if(nonNull(prosecution.getIsCivil()) && prosecution.getIsCivil()){
             paramsVO.setCivil(prosecution.getIsCivil());
         }
+
+
+        boolean isInactiveMigratedCase =
+                MCC.equals(prosecution.getChannel()) &&
+                        Optional.ofNullable(prosecution.getMigrationSourceSystem())
+                                .map(MigrationSourceSystem::getMigrationCaseStatus)
+                                .filter(status -> status.name().equals("INACTIVE"))
+                                .isPresent();
+
+        paramsVO.setInactiveMigratedCase(isInactiveMigratedCase);
 
         organisationUnitWithCourtroomReferenceData.ifPresent(unitWithCourtroomReferenceData -> paramsVO.setOucodeL1Code(unitWithCourtroomReferenceData.getOucodeL1Code()));
 
@@ -103,7 +115,7 @@ public class CCCaseToProsecutionCaseConverter implements Converter<CcCaseReceive
         return initiateCourtProceedings()
                 .withInitiateCourtProceedings(courtReferral()
                         .withProsecutionCases(prosecutionCases)
-                        .withListHearingRequests(prosecutionCaseFileInitialHearingToCCHearingRequestConverter.
+                        .withListHearingRequests(isInactiveMigratedCase ? null :  prosecutionCaseFileInitialHearingToCCHearingRequestConverter.
                                 convert(source.getProsecutionWithReferenceData().getProsecution().getDefendants(), paramsVO))
                         .build())
                 .withId(source.getId())

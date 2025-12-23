@@ -135,6 +135,10 @@
       "type": "string",
       "description": "This is the organisation unit oucode. E.g B01BH00"
     },
+    "convictionDate": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/date",
+      "description": "Date of conviction"
+    },
     "civilOffence": {
       "description": "The Offence data object related to civil cases",
       "$ref": "http://justice.gov.uk/core/courts/civilOffence.json"

@@ -161,8 +161,12 @@ class ProgressionPublicEventProcessorTest {
                                         .add(createObjectBuilder()
                                                 .add("id", defendantId.toString())))
                                 .add("migrationSourceSystem", createObjectBuilder()
-                                        .add("migrationSourceSystemName", "LIBRA")
-                                        .add("migrationSourceSystemCaseIdentifier", "LIB-100002"))
+                                        .add("migrationSourceSystemName", "XHIBIT")
+                                        .add("migrationSourceSystemCaseIdentifier", "LIB-100002")
+                                        .add("defendantFineAccountNumbers",createArrayBuilder()
+                                                .add(createObjectBuilder()
+                                                        .add("defendantId",defendantId.toString())
+                                                        .add("fineAccountNumber","FINE9876"))))
                                 .build())
                         .build());
 

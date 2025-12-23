@@ -28,7 +28,7 @@
     },
     "summonsCode": "A",
 
-    "initiationCode": "C",
+    "initiationCode": "O",
 
     "prosecutor": {
       "prosecutingAuthority": "prosAut"
@@ -43,14 +43,8 @@
       "prosecutorDefendantReference": "TFL001Defendant01",
       "documentationLanguage": "W",
       "hearingLanguage": "W",
-      "custodyStatus": "B",
+      "custodyTimeLimit": "2050-02-04",
       "numPreviousConvictions": 3,
-      "initialHearing": {
-        "courtHearingLocation": "C55BN00",
-        "dateOfHearing": "2050-02-04",
-        "timeOfHearing": "09:05:01.001",
-        "hearingTypeCode": "FPTP"
-      },
       "individual": {
         "personalInformation": {
           "title": "Mr",
@@ -105,18 +99,11 @@
             "alcoholLevelMethod": "A",
             "alcoholLevelAmount": 100
           },
-          "verdict": {
-            "verdictDate": "2018-09-12",
-            "verdictType": {
-              "id": "c4ca4238-a0b9-3382-8dcc-509a6f75849b",
-              "category": "Guilty",
-              "categoryType": "GUILTY",
-              "description": "Description"
-            }
-          },
           "vehicleRelatedOffence": {
             "vehicleCode": "O"
-          }
+          },
+          "convictingCourtCode": "B02NM03",
+          "convictionDate": "2018-09-11"
         }
       ],
       "postingDate": "2018-09-10"
@@ -141,13 +128,7 @@
       ],
       "documentationLanguage": "W",
       "hearingLanguage": "W",
-      "custodyStatus": "B",
       "bailConditions": "bailConditions",
-      "initialHearing": {
-        "courtHearingLocation": "C55BN00",
-        "dateOfHearing": "2050-02-04",
-        "timeOfHearing": "09:05:01.001"
-      },
       "individual": {
         "personalInformation": {
           "title": "Mr",
@@ -180,20 +161,27 @@
           "alcoholRelatedOffence": {
             "alcoholLevelMethod": "A",
             "alcoholLevelAmount": 100
-          },
-          "verdict": {
-            "verdictDate": "2018-09-12",
-            "verdictType": {
-              "id": "c4ca4238-a0b9-3382-8dcc-509a6f75849b",
-              "category": "Guilty",
-              "categoryType": "GUILTY",
-              "description": "Description"
-            }
           }
         }
       ],
       "postingDate": "2018-09-10"
     }
   ],
-  "channel": "MCC"
+  "channel": "MCC",
+  "migrationSourceSystem": {
+    "migrationSourceSystemName": "XHIBIT",
+    "migrationSourceSystemCaseIdentifier": "XHIBIT-2-HEARINGS",
+    "migrationCaseStatus": "INACTIVE",
+    "defendantFineAccountNumbers": [
+      {
+        "defendantId": "DEFENDANT_ID1",
+        "fineAccountNumber": "322398774"
+      },
+      {
+        "defendantId": "DEFENDANT_ID2",
+        "fineAccountNumber": "322398775"
+      }
+    ]
+
+  }
 }

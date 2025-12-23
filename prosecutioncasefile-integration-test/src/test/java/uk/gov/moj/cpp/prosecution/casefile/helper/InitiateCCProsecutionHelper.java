@@ -286,6 +286,13 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
         customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[1].personDefendant.bailStatus", (o1, o2) -> true));
         customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[0].offences[0].allocationDecision", (o1, o2) -> true));
         customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[1].offences[0].allocationDecision", (o1, o2) -> true));
+        customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[1].offences[1].allocationDecision", (o1, o2) -> true));
+        customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[1].offences[2].allocationDecision", (o1, o2) -> true));
+
+        customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[2].offences[0].allocationDecision", (o1, o2) -> true));
+        customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[2].offences[1].allocationDecision", (o1, o2) -> true));
+        customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[2].offences[2].allocationDecision", (o1, o2) -> true));
+
         customizedAsserts.add(new Customization("id", (o1, o2) -> true));
 
 
@@ -345,6 +352,7 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
                 new Customization("initiateCourtProceedings.prosecutionCases[0].caseMarkers[0].id", (o1, o2) -> true),
                 new Customization("initiateCourtProceedings.prosecutionCases[0].caseMarkers[1].id", (o1, o2) -> true),
                 new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[0].personDefendant.bailStatus", (o1, o2) -> true),
+                new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[0].offences[0].allocationDecision", (o1, o2) -> true),
                 new Customization("id", (o1, o2) -> true)
         ));
     }

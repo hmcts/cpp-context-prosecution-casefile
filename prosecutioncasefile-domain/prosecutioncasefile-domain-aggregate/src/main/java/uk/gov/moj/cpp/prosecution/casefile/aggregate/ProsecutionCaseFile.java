@@ -64,6 +64,8 @@ import static uk.gov.moj.cps.prosecutioncasefile.domain.event.SummonsApplication
 import static uk.gov.moj.cps.prosecutioncasefile.domain.event.UploadCaseDocumentRecorded.uploadCaseDocumentRecorded;
 
 import uk.gov.justice.core.courts.CourtDocumentAdded;
+import uk.gov.justice.core.courts.MigrationCaseStatus;
+import uk.gov.justice.core.courts.MigrationSourceSystem;
 import uk.gov.justice.core.courts.SummonsApprovedOutcome;
 import uk.gov.justice.cps.prosecutioncasefile.InitialHearing;
 import uk.gov.justice.domain.aggregate.Aggregate;
@@ -470,7 +472,16 @@ public class ProsecutionCaseFile implements Aggregate {
 
         final List<Problem> caseProblems = validate(prosecutionWithReferenceData, referenceDataQueryService, getCaseValidationRules(receivedInitiationCode));
         boolean isMCCWithListNewHearing = MCC.equals(prosecutionChannel) && Objects.nonNull(prosecutionWithReferenceData.getProsecution().getListNewHearing());
-        final List<DefendantProblem> defendantErrors = validateDefendantErrors(prosecution.getCaseDetails(), prosecutionChannel, defendantsWithReferenceData, referenceDataQueryService, builder, Boolean.FALSE, isMCCWithListNewHearing, isCivil);
+
+        //ACTIVE // INACTIVE
+        boolean isStandaloneCaseWithoutHearing =
+                MCC.equals(prosecutionChannel) &&
+                        Optional.ofNullable(prosecution.getMigrationSourceSystem())
+                                .map(MigrationSourceSystem::getMigrationCaseStatus)
+                                .filter(status -> MigrationCaseStatus.INACTIVE == status)
+                                .isPresent();
+
+        final List<DefendantProblem> defendantErrors = validateDefendantErrors(prosecution.getCaseDetails(), prosecutionChannel, defendantsWithReferenceData, referenceDataQueryService, builder, Boolean.FALSE, isMCCWithListNewHearing,isStandaloneCaseWithoutHearing, isCivil);
 
         if (messageFromCppiOrMccOrCivil && prosecutionReceived) {
             caseProblems.add(newProblem(DUPLICATED_PROSECUTION, "urn", prosecution.getCaseDetails().getProsecutorCaseReference()));
@@ -790,7 +801,7 @@ public class ProsecutionCaseFile implements Aggregate {
 
     public Stream<Object> addErrorCorrectedDefendantsForSPI(final UUID caseId, final UUID externalId, final DefendantsWithReferenceData defendantsWithReferenceData, final ReferenceDataQueryService referenceDataQueryService,final Boolean isCivil) {
         final Builder<Object> builder = builder();
-        final List<DefendantProblem> defendantErrors = validateDefendantErrors(this.caseDetails, SPI, defendantsWithReferenceData, referenceDataQueryService, builder, Boolean.FALSE, false, isCivil);
+        final List<DefendantProblem> defendantErrors = validateDefendantErrors(this.caseDetails, SPI, defendantsWithReferenceData, referenceDataQueryService, builder, Boolean.FALSE, false, false,isCivil);
         return addDefendants(caseId, externalId, defendantsWithReferenceData, defendantErrors, builder);
     }
 

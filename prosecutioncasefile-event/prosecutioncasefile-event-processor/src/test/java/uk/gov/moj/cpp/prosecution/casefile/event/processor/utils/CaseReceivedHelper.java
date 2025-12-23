@@ -7,7 +7,7 @@ import static java.util.Collections.singletonList;
 import static java.util.Optional.of;
 import static java.util.UUID.fromString;
 import static java.util.UUID.randomUUID;
-import static javax.json.Json.createReader;
+import static uk.gov.justice.services.messaging.JsonObjects.createReader;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.jupiter.api.Assertions.fail;

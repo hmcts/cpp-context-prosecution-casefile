@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.inject.Inject;
-import javax.json.Json;
+import uk.gov.justice.services.messaging.JsonObjects;
 import javax.json.JsonObject;
 
 import com.google.common.collect.Lists;
@@ -42,7 +42,7 @@ public class SjpProsecutionUpdateOffenceCodeApi {
         final List<OffenceReferenceData> offencesRefData = referenceDataQueryService.retrieveOffenceDataList(Lists.newArrayList(payload.getString(OFFENCE_CODE)), Optional.empty());
         final OffenceReferenceData offenceReferenceData = offencesRefData.get(0);
 
-        final JsonObject commandPayload = Json.createObjectBuilder()
+        final JsonObject commandPayload = JsonObjects.createObjectBuilder()
                 .add("caseId", payload.getString("caseId"))
                 .add(OFFENCE_CODE, payload.getString(OFFENCE_CODE))
                 .add("offenceReferenceData", objectToJsonObjectConverter.convert(offenceReferenceData))

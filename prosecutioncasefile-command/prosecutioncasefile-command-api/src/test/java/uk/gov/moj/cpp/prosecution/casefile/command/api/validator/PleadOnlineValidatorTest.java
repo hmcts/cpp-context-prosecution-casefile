@@ -24,7 +24,7 @@ import uk.gov.moj.cps.prosecutioncasefile.command.api.PleadOnline;
 import java.util.List;
 import java.util.Map;
 
-import javax.json.Json;
+import uk.gov.justice.services.messaging.JsonObjects;
 import javax.json.JsonObject;
 
 import org.mockito.InjectMocks;
@@ -131,14 +131,14 @@ public class PleadOnlineValidatorTest {
 
     @Test
     public void shouldValidateWithJsonPayload_WhenCaseAlreadyReviewed() {
-        final JsonObject jsonObject = Json.createObjectBuilder()
+        final JsonObject jsonObject = JsonObjects.createObjectBuilder()
                 .add("status", "")
                 .add("completed", false)
                 .add("assigned", false)
-                .add("defendant", Json
+                .add("defendant", JsonObjects
                         .createObjectBuilder()
-                        .add("offences", Json.createArrayBuilder()
-                                .add(Json.createObjectBuilder()
+                        .add("offences", JsonObjects.createArrayBuilder()
+                                .add(JsonObjects.createObjectBuilder()
                                         .add("pendingWithdrawal", true)
                                         .build())
                                 .build()
@@ -153,14 +153,14 @@ public class PleadOnlineValidatorTest {
 
     @Test
     public void shouldValidateWithJsonPayload_WhenCaseAdjournedPostConviction() {
-        final JsonObject jsonObject = Json.createObjectBuilder()
+        final JsonObject jsonObject = JsonObjects.createObjectBuilder()
                 .add("status", "")
                 .add("completed", false)
                 .add("assigned", false)
-                .add("defendant", Json
+                .add("defendant", JsonObjects
                         .createObjectBuilder()
-                        .add("offences", Json.createArrayBuilder()
-                                .add(Json.createObjectBuilder()
+                        .add("offences", JsonObjects.createArrayBuilder()
+                                .add(JsonObjects.createObjectBuilder()
                                         .add("pendingWithdrawal", false)
                                         .add("convictionDate", "2020-12-23")
                                         .build())
@@ -176,14 +176,14 @@ public class PleadOnlineValidatorTest {
 
     @Test
     public void shouldValidateWithJsonPayload_WhenPleaAlreadySubmitted() {
-        final JsonObject jsonObject = Json.createObjectBuilder()
+        final JsonObject jsonObject = JsonObjects.createObjectBuilder()
                 .add("status", "")
                 .add("completed", false)
                 .add("assigned", false)
-                .add("defendant", Json
+                .add("defendant", JsonObjects
                         .createObjectBuilder()
-                        .add("offences", Json.createArrayBuilder()
-                                .add(Json.createObjectBuilder()
+                        .add("offences", JsonObjects.createArrayBuilder()
+                                .add(JsonObjects.createObjectBuilder()
                                         .add("pendingWithdrawal", false)
                                         .add("plea", "Guilty")
                                         .build())
@@ -199,14 +199,14 @@ public class PleadOnlineValidatorTest {
 
     @Test
     public void shouldValidateWithJsonPayload() {
-        final JsonObject jsonObject = Json.createObjectBuilder()
+        final JsonObject jsonObject = JsonObjects.createObjectBuilder()
                 .add("status", "")
                 .add("completed", false)
                 .add("assigned", false)
-                .add("defendant", Json
+                .add("defendant", JsonObjects
                         .createObjectBuilder()
-                        .add("offences", Json.createArrayBuilder()
-                                .add(Json.createObjectBuilder()
+                        .add("offences", JsonObjects.createArrayBuilder()
+                                .add(JsonObjects.createObjectBuilder()
                                         .add("pendingWithdrawal", false)
                                         .build())
                                 .build())

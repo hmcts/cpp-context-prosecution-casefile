@@ -53,7 +53,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 
-import javax.json.Json;
+import uk.gov.justice.services.messaging.JsonObjects;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 
@@ -157,7 +157,7 @@ public class ProsecutionReceivedProcessorTest {
 
         final String initiateCourtProceedingsJson = readResourcesFile("initiate-court-proceedings.json");
 
-        final JsonReader reader = Json.createReader(new StringReader(initiateCourtProceedingsJson));
+        final JsonReader reader = JsonObjects.createReader(new StringReader(initiateCourtProceedingsJson));
         final JsonObject jsonObject = reader.readObject();
         reader.close();
         when(objectToJsonObjectConverter.convert(any())).thenReturn(jsonObject);
@@ -241,7 +241,7 @@ public class ProsecutionReceivedProcessorTest {
 
         final String initiateCourtProceedingsJson = readResourcesFile("initiate-court-proceedings.json");
 
-        final JsonReader reader = Json.createReader(new StringReader(initiateCourtProceedingsJson));
+        final JsonReader reader = JsonObjects.createReader(new StringReader(initiateCourtProceedingsJson));
         final JsonObject jsonObject = reader.readObject();
         reader.close();
         when(objectToJsonObjectConverter.convert(any())).thenReturn(jsonObject);

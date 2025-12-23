@@ -1,6 +1,6 @@
 package uk.gov.moj.cpp.prosecution.casefile.event.processor.service;
 
-import static javax.json.Json.createObjectBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static javax.transaction.Transactional.TxType.REQUIRES_NEW;
 
 import uk.gov.justice.services.core.dispatcher.SystemUserProvider;

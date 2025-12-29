@@ -19,7 +19,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import javax.inject.Inject;
-import javax.json.Json;
+import uk.gov.justice.services.messaging.JsonObjects;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
@@ -62,7 +62,7 @@ public class AddMaterialApi {
         final JsonObject addMaterialPayload = addMaterialCommand.payloadAsJsonObject();
 
         final JsonArray materials = addMaterialPayload.getJsonArray(MATERIALS);
-        final JsonArrayBuilder enrichedMaterialsBuilder = Json.createArrayBuilder();
+        final JsonArrayBuilder enrichedMaterialsBuilder = JsonObjects.createArrayBuilder();
         for (final JsonObject material : materials.getValuesAs(JsonObject.class)) {
             final JsonObjectBuilder enrichedMaterialBuilder = createObjectBuilder(material);
             getFileType(material).ifPresent(fileType -> enrichedMaterialBuilder.add(FILE_TYPE, fileType));

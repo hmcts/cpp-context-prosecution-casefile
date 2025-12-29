@@ -22,7 +22,7 @@ import uk.gov.moj.cps.prosecutioncasefile.domain.event.GroupIdRecordedForSummons
 import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
-import static javax.json.Json.createObjectBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;

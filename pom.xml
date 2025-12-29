@@ -4,12 +4,12 @@
     <parent>
         <groupId>uk.gov.moj.cpp.common</groupId>
         <artifactId>service-parent-pom</artifactId>
-        <version>17.103.3</version>
+        <version>17.103.9-M1</version>
     </parent>
 
     <groupId>uk.gov.moj.cpp.prosecution.casefile</groupId>
     <artifactId>prosecutioncasefile-parent</artifactId>
-    <version>17.0.81-SNAPSHOT</version>
+    <version>17.0.81-PEG-2848-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Prosecution Casefile Microservice - Parent</name>
     <description>Casefile Microservice - Prosecution Context</description>

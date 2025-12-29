@@ -1,7 +1,7 @@
 package uk.gov.moj.cpp.prosecution.casefile.query.api;
 
 import static java.util.Optional.ofNullable;
-import static javax.json.Json.createObjectBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;

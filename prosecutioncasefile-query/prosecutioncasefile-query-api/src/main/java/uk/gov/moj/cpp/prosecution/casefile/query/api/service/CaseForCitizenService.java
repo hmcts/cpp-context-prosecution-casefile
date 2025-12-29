@@ -9,7 +9,7 @@ import static java.util.Objects.nonNull;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
-import static javax.json.Json.createObjectBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static uk.gov.moj.cpp.prosecution.casefile.query.api.service.DefendantType.LEGAL_ENTITY;
 import static uk.gov.moj.cpp.prosecution.casefile.query.api.service.DefendantType.PERSON;
 import static uk.gov.moj.cpp.prosecution.casefile.query.api.service.SjpService.INITIATION_CODE;

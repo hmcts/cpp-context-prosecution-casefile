@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.InputStream;
 import java.io.StringReader;
 
-import javax.json.Json;
+import uk.gov.justice.services.messaging.JsonObjects;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 
@@ -34,7 +34,7 @@ public class FileUtil {
 
     public static JsonObject jsonFromString(String jsonObjectStr) {
 
-        JsonReader jsonReader = Json.createReader(new StringReader(jsonObjectStr));
+        JsonReader jsonReader = JsonObjects.createReader(new StringReader(jsonObjectStr));
         JsonObject object = jsonReader.readObject();
         jsonReader.close();
 

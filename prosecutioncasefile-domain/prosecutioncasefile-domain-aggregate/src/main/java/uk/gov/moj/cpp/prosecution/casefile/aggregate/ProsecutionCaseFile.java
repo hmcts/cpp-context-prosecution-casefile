@@ -17,7 +17,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static java.util.stream.Stream.builder;
 import static java.util.stream.Stream.of;
-import static javax.json.Json.createArrayBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createArrayBuilder;
 import static org.apache.commons.collections.CollectionUtils.isEmpty;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static org.apache.commons.collections.ListUtils.union;
@@ -166,7 +166,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
 
-import javax.json.Json;
+import uk.gov.justice.services.messaging.JsonObjects;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
@@ -389,7 +389,7 @@ public class ProsecutionCaseFile implements Aggregate {
             final String id = errorField.containsKey("id") ? errorField.getString("id") : null;
             addJsonProperty(mutableJsonObject, value, fieldName, id);
         }));
-        try (JsonReader jsonReader = Json.createReader(new StringReader(mutableJsonObject.getAsJsonObject().toString()))) {
+        try (JsonReader jsonReader = JsonObjects.createReader(new StringReader(mutableJsonObject.getAsJsonObject().toString()))) {
             final JsonObject updatedJsonObject = jsonReader.readObject();
             this.caseDetails = jsonObjectToObjectConverter.convert(updatedJsonObject, CaseDetails.class);
         }
@@ -415,7 +415,7 @@ public class ProsecutionCaseFile implements Aggregate {
                     }
             );
 
-            try (JsonReader jsonReader = Json.createReader(new StringReader(mutableJsonObject.getAsJsonObject().toString()))) {
+            try (JsonReader jsonReader = JsonObjects.createReader(new StringReader(mutableJsonObject.getAsJsonObject().toString()))) {
                 return jsonReader.readObject();
             }
         }).collect(toList());
@@ -1888,7 +1888,7 @@ public class ProsecutionCaseFile implements Aggregate {
                     .stream()
                     .map((d) -> {
                         final JsonObjectBuilder defendantJsonObjectBuilder = createObjectBuilder(objectToJsonObjectConverter.convert(d));
-                        final JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
+                        final JsonArrayBuilder jsonArrayBuilder = JsonObjects.createArrayBuilder();
 
                         d.getOffences().forEach((o) -> {
                             final JsonObjectBuilder offenceJsonObjectBuilder = createObjectBuilder(objectToJsonObjectConverter.convert(o));

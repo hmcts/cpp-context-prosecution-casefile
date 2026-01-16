@@ -9,7 +9,7 @@
 
     <groupId>uk.gov.moj.cpp.prosecution.casefile</groupId>
     <artifactId>prosecutioncasefile-parent</artifactId>
-    <version>17.0.81-SNAPSHOT</version>
+    <version>17.0.81-CCT-2357-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Prosecution Casefile Microservice - Parent</name>
     <description>Casefile Microservice - Prosecution Context</description>
@@ -23,7 +23,7 @@
         <mvn.site.url>file://${project.build.directory}/site</mvn.site.url>
         <cpp.framework.action.mapping.enabled>true</cpp.framework.action.mapping.enabled>
         <authorisation.service.version>0.1.49</authorisation.service.version>
-        <coredomain.version>17.103.10</coredomain.version>
+        <coredomain.version>17.102.15-CCT-2357-SNAPSHOT</coredomain.version>
         <cpp.structure.version>2.0.335</cpp.structure.version>
         <system.users.library.version>3.1.3</system.users.library.version>
         <referencedata.version>17.0.120</referencedata.version>

@@ -229,6 +229,22 @@ public class TestDataProvider {
                 .build();
     }
 
+    public static Defendant createDefendantWithLanguages(Language language) {
+        return Defendant.defendant().withAsn(ASN)
+                .withAppliedProsecutorCosts(APPLIED_PROSECUTOR_COSTS)
+                .withDocumentationLanguage(language)
+                .withHearingLanguage(language)
+                .withId(DEFENDANT_ID)
+                .withIndividual(createIndividual())
+                .withLanguageRequirement(LANGUAGE_REQUIREMENTS)
+                .withNumPreviousConvictions(NUM_OF_PREVIOUS_CONVICTIONS)
+                .withOffences(singletonList(createOffence()))
+                .withPostingDate(POSTING_DATE)
+                .withProsecutorDefendantReference(PROSECUTOR_DEFENDANT_REFERENCE)
+                .withSpecificRequirements(SPECIFIC_REQUIREMENTS)
+                .build();
+    }
+
     public static Defendant createCorporateDefendant() {
         return Defendant.defendant()
                 .withId(DEFENDANT_ID)
@@ -255,6 +271,10 @@ public class TestDataProvider {
 
     public static Prosecution createProsecution() {
         return Prosecution.prosecution().withCaseDetails(createCaseDetails()).withChannel(Channel.SPI).withDefendants(singletonList(createDefendant())).build();
+    }
+
+    public static Prosecution createProsecutionWithLanguage(Language language) {
+        return Prosecution.prosecution().withCaseDetails(createCaseDetails()).withChannel(Channel.SPI).withDefendants(singletonList(createDefendantWithLanguages(language))).build();
     }
 
 }

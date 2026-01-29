@@ -55,6 +55,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.event.listener.converter.TestD
 import static uk.gov.moj.cpp.prosecution.casefile.event.listener.converter.TestDataProvider.TITLE;
 import static uk.gov.moj.cpp.prosecution.casefile.event.listener.converter.TestDataProvider.WORK;
 
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Language;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.AddressDetails;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.ContactDetails;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.DefendantDetails;
@@ -131,6 +132,16 @@ public abstract class ConverterBaseTest {
         assertDefendantDetails(caseDetails.getDefendants().stream().findFirst().get());
     }
 
+    protected void assertCaseDetails(final uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.CaseDetails caseDetails, final Language language) {
+        assertThat(caseDetails.getCaseId(), Matchers.is(CASE_ID));
+        assertThat(caseDetails.getProsecutionCaseReference(), Matchers.is(CASE_REFERENCE));
+        assertThat(caseDetails.getProsecutionAuthority(), Matchers.is(AUTHORITY));
+        assertThat(caseDetails.getProsecutorInformant(), Matchers.is(INFORMANT));
+
+        assertThat(caseDetails.getDefendants().size(), is(1));
+        assertDefendantDetailsLanguage(caseDetails.getDefendants().stream().findFirst().get(), DEFENDANT_ID, language);
+    }
+
     protected void assertDefendantDetails(final DefendantDetails defendantDetails) {
         assertDefendantDetails(defendantDetails, DEFENDANT_ID);
     }
@@ -153,6 +164,26 @@ public abstract class ConverterBaseTest {
         assertThat(defendantDetails.getOffences().size(), is(1));
         assertOffenceDetails(defendantDetails.getOffences().stream().findAny().get());
     }
+
+    protected void assertDefendantDetailsLanguage(final DefendantDetails defendantDetails, final String defendantId, final Language language) {
+        assertThat(defendantDetails.getDefendantId(), is(defendantId));
+        assertThat(defendantDetails.getAppliedProsecutorCosts(), is(APPLIED_PROSECUTOR_COSTS));
+        assertThat(defendantDetails.getAsn(), is(ASN));
+        assertThat(defendantDetails.getDocumentationLanguage(), is(language));
+        assertThat(defendantDetails.getHearingLanguage(), is(language));
+        assertThat(defendantDetails.getLanguageRequirement(), is(LANGUAGE_REQUIREMENTS));
+        assertThat(defendantDetails.getSpecificRequirements(), is(SPECIFIC_REQUIREMENTS));
+        assertThat(defendantDetails.getNumPreviousConvictions(), is(NUM_OF_PREVIOUS_CONVICTIONS));
+        assertThat(defendantDetails.getPostingDate(), is(POSTING_DATE));
+        assertThat(defendantDetails.getDriverNumber(), is(DRIVER_NUMBER));
+        assertThat(defendantDetails.getNationalInsuranceNumber(), is(NATIONAL_INSURANCE_NUMBER));
+        assertThat(defendantDetails.getProsecutorDefendantReference(), is(PROSECUTOR_DEFENDANT_REFERENCE));
+        assertPersonalInformationDetails(defendantDetails.getPersonalInformation());
+        assertSelfDefinedInformationDetails(defendantDetails.getSelfDefinedInformation());
+        assertThat(defendantDetails.getOffences().size(), is(1));
+        assertOffenceDetails(defendantDetails.getOffences().stream().findAny().get());
+    }
+
 
     protected void assertCorporateDefendantDetails(final DefendantDetails defendantDetails) {
         assertThat(defendantDetails.getDefendantId(), is(DEFENDANT_ID));

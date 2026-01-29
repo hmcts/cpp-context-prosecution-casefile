@@ -2,6 +2,7 @@ package uk.gov.moj.cpp.prosecution.casefile.event.listener.converter;
 
 import uk.gov.justice.services.common.converter.Converter;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Language;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecution;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.CaseDetails;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.CivilFees;
@@ -40,6 +41,23 @@ public class ProsecutionReceivedToCase implements Converter<Prosecution, CaseDet
     }
 
     private Set<DefendantDetails> getDefendantDetails(final List<Defendant> defendants) {
-        return defendants.stream().map(defendantToDefendantDetail::convert).collect(Collectors.toSet());
+        return defendants.stream().map(defendantToDefendantDetail::convert).map(this::getDefendantLanguageCheck).collect(Collectors.toSet());
     }
+
+    private DefendantDetails getDefendantLanguageCheck(DefendantDetails defendant){
+        Language documentationLanguage = checkLanguage(defendant.getDocumentationLanguage());
+        Language hearingLanguage = checkLanguage(defendant.getHearingLanguage());
+        defendant.setDocumentationLanguage(documentationLanguage);
+        defendant.setHearingLanguage(hearingLanguage);
+        return defendant;
+    }
+
+    private Language checkLanguage(Language language) {
+        return switch (language) {
+            case ENGLISH -> Language.E;
+            case WELSH -> Language.W;
+            default -> language;
+        };
+    }
+
 }

@@ -23,24 +23,24 @@
         <mvn.site.url>file://${project.build.directory}/site</mvn.site.url>
         <cpp.framework.action.mapping.enabled>true</cpp.framework.action.mapping.enabled>
         <authorisation.service.version>0.1.49</authorisation.service.version>
-        <coredomain.version>17.102.16-DLRM7-SNAPSHOT</coredomain.version>
+        <coredomain.version>17.102.17-DLRM7-SNAPSHOT</coredomain.version>
         <cpp.structure.version>2.0.335</cpp.structure.version>
         <system.users.library.version>3.1.3</system.users.library.version>
-        <referencedata.version>17.0.120</referencedata.version>
-        <referencedata.offences.version>17.0.38</referencedata.offences.version>
+        <referencedata.version>17.103.122</referencedata.version>
+        <referencedata.offences.version>17.103.40</referencedata.offences.version>
         <system.enterprise-id.version>0.0.3</system.enterprise-id.version>
-        <resulting.version>17.0.37</resulting.version>
+        <resulting.version>17.0.42</resulting.version>
         <progression.version>17.0.207-DLRM7-SNAPSHOT</progression.version>
-        <defence.version>17.0.86</defence.version>
+        <defence.version>17.0.87</defence.version>
         <criminal-court-public-model.version>${coredomain.version}</criminal-court-public-model.version>
         <notification.notify.version>17.0.24</notification.notify.version>
         <commons-text.version>1.10.0</commons-text.version>
         <awaility.version>1.7.0</awaility.version>
-        <sjp.version>17.0.141</sjp.version>
+        <sjp.version>17.103.161</sjp.version>
         <json-smart.version>2.4.8</json-smart.version>
         <byte-buddy.version>1.12.19</byte-buddy.version>
         <domain.dsl.test.version>0.3.1</domain.dsl.test.version>
-        <material.version>17.0.72</material.version>
+        <material.version>17.0.75</material.version>
         <stream-transformation-tool.version>6.4.5</stream-transformation-tool.version>
         <json-smart.version>2.4.8</json-smart.version>
         <stream-transformation-tool-anonymise>7.0.0</stream-transformation-tool-anonymise>

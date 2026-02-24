@@ -3,6 +3,7 @@ package uk.gov.moj.cpp.prosecution.casefile.event.listener.converter;
 import static java.util.Collections.singletonList;
 import static java.util.UUID.randomUUID;
 
+import org.apache.commons.codec.language.bm.Lang;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Address;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.AlcoholRelatedOffence;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseDetails;
@@ -229,6 +230,22 @@ public class TestDataProvider {
                 .build();
     }
 
+    public static Defendant createDefendantWithLanguages(Language documentLanguage, Language hearingLanguage) {
+        return Defendant.defendant().withAsn(ASN)
+                .withAppliedProsecutorCosts(APPLIED_PROSECUTOR_COSTS)
+                .withDocumentationLanguage(documentLanguage)
+                .withHearingLanguage(hearingLanguage)
+                .withId(DEFENDANT_ID)
+                .withIndividual(createIndividual())
+                .withLanguageRequirement(LANGUAGE_REQUIREMENTS)
+                .withNumPreviousConvictions(NUM_OF_PREVIOUS_CONVICTIONS)
+                .withOffences(singletonList(createOffence()))
+                .withPostingDate(POSTING_DATE)
+                .withProsecutorDefendantReference(PROSECUTOR_DEFENDANT_REFERENCE)
+                .withSpecificRequirements(SPECIFIC_REQUIREMENTS)
+                .build();
+    }
+
     public static Defendant createCorporateDefendant() {
         return Defendant.defendant()
                 .withId(DEFENDANT_ID)
@@ -255,6 +272,10 @@ public class TestDataProvider {
 
     public static Prosecution createProsecution() {
         return Prosecution.prosecution().withCaseDetails(createCaseDetails()).withChannel(Channel.SPI).withDefendants(singletonList(createDefendant())).build();
+    }
+
+    public static Prosecution createProsecutionWithLanguage(Language documentLanguage, Language hearingLanguage) {
+        return Prosecution.prosecution().withCaseDetails(createCaseDetails()).withChannel(Channel.SPI).withDefendants(singletonList(createDefendantWithLanguages(documentLanguage, hearingLanguage))).build();
     }
 
 }

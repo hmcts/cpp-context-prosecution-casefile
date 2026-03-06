@@ -5,7 +5,7 @@
     <parent>
         <groupId>uk.gov.moj.cpp.prosecution.casefile</groupId>
         <artifactId>prosecutioncasefile-viewstore</artifactId>
-        <version>17.105.84-PEG-3047-SNAPSHOT</version>
+        <version>17.105.85-PEG-3047-SNAPSHOT</version>
     </parent>
     <artifactId>prosecutioncasefile-viewstore-liquibase</artifactId>
     <properties>

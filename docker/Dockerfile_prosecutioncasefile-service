@@ -27,7 +27,6 @@ ADD ${mavenArtifactBaseUrl}/uk/gov/justice/event-store/aggregate-snapshot-reposi
 ADD ${mavenArtifactBaseUrl}/uk/gov/justice/event-store/event-buffer-liquibase/${eventstore_version}/event-buffer-liquibase-${eventstore_version}.jar  /tmp/liquibase/event-buffer-liquibase.jar
 ADD ${mavenArtifactBaseUrl}/uk/gov/justice/event-store/event-tracking-liquibase/${eventstore_version}/event-tracking-liquibase-${eventstore_version}.jar  /tmp/liquibase/event-tracking-liquibase.jar
 ADD ${mavenArtifactBaseUrl}/uk/gov/justice/services/framework-system-liquibase/${framework_version}/framework-system-liquibase-${framework_version}.jar  /tmp/liquibase/framework-system-liquibase.jar
-ADD ${mavenArtifactBaseUrl}/uk/gov/justice/services/file-service-liquibase/${framework_libraries_version}/file-service-liquibase-${framework_libraries_version}.jar  /tmp/liquibase/file-service-liquibase.jar
 ADD ${mavenArtifactBaseUrl}/uk/gov/moj/cpp/activiti/activiti-liquibase/${activiti_version}/activiti-liquibase-${activiti_version}.jar  /tmp/liquibase/activiti-liquibase.jar
 RUN chmod -R 755 /tmp/liquibase
 COPY scripts/liquibase.sh /tmp/liquibase/liquibase.sh

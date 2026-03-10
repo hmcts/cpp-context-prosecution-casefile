@@ -3,7 +3,9 @@ package uk.gov.moj.cpp.prosecution.casefile.event.listener.converter;
 
 import static java.util.UUID.randomUUID;
 import static uk.gov.moj.cpp.prosecution.casefile.event.listener.converter.TestDataProvider.createProsecution;
+import static uk.gov.moj.cpp.prosecution.casefile.event.listener.converter.TestDataProvider.createProsecutionWithLanguage;
 
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Language;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.CaseDetails;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.SjpProsecutionReceived;
 
@@ -49,5 +51,33 @@ public class ProsecutionReceivedToCaseTest extends ConverterBaseTest{
 
         final CaseDetails caseDetails = converter.convert(prosecutionReceived.getProsecution());
         assertCaseDetails(caseDetails);
+    }
+
+    @Test
+    public void testConvertSelfDefinedInformationToSelfDefinedInformationDetailsAndENGLISHAndWELSHLanguageCheck() {
+        final SjpProsecutionReceived prosecutionReceived = new SjpProsecutionReceived(randomUUID(), createProsecutionWithLanguage(Language.ENGLISH, Language.WELSH));
+        final CaseDetails caseDetails = converter.convert(prosecutionReceived.getProsecution());
+        assertCaseDetails(caseDetails, Language.E, Language.W);
+    }
+
+    @Test
+    public void testConvertSelfDefinedInformationToSelfDefinedInformationDetailsAndWALSHAndEnglishLanguageCheck() {
+        final SjpProsecutionReceived prosecutionReceived = new SjpProsecutionReceived(randomUUID(), createProsecutionWithLanguage(Language.WELSH, Language.ENGLISH));
+        final CaseDetails caseDetails = converter.convert(prosecutionReceived.getProsecution());
+        assertCaseDetails(caseDetails, Language.W, Language.E);
+    }
+
+    @Test
+    public void testConvertSelfDefinedInformationToSelfDefinedInformationDetailsAndENGLISHLanguageCheck() {
+        final SjpProsecutionReceived prosecutionReceived = new SjpProsecutionReceived(randomUUID(), createProsecutionWithLanguage(Language.ENGLISH, Language.ENGLISH));
+        final CaseDetails caseDetails = converter.convert(prosecutionReceived.getProsecution());
+        assertCaseDetails(caseDetails, Language.E, Language.E);
+    }
+
+    @Test
+    public void testConvertSelfDefinedInformationToSelfDefinedInformationDetailsAndWALSHLanguageCheck() {
+        final SjpProsecutionReceived prosecutionReceived = new SjpProsecutionReceived(randomUUID(), createProsecutionWithLanguage(Language.WELSH, Language.WELSH));
+        final CaseDetails caseDetails = converter.convert(prosecutionReceived.getProsecution());
+        assertCaseDetails(caseDetails, Language.W, Language.W);
     }
 }

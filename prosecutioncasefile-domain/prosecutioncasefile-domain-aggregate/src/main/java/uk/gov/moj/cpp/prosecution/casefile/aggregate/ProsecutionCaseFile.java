@@ -82,6 +82,7 @@ import uk.gov.moj.cpp.prosecution.casefile.domain.ProsecutionWithReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.domain.ReferenceDataVO;
 import uk.gov.moj.cpp.prosecution.casefile.domain.SummonsApplicationApprovedDetails;
 import uk.gov.moj.cpp.prosecution.casefile.domain.SummonsApplicationRejectedDetails;
+import uk.gov.moj.cpp.prosecution.casefile.event.CaseDetailsUpdated;
 import uk.gov.moj.cpp.prosecution.casefile.event.CaseEjected;
 import uk.gov.moj.cpp.prosecution.casefile.event.CaseValidationFailed;
 import uk.gov.moj.cpp.prosecution.casefile.event.CcCaseReceived;
@@ -1236,6 +1237,16 @@ public class ProsecutionCaseFile implements Aggregate {
                         newDefendantsWarnings.forEach(defendantProblem -> this.warnings.addAll(defendantProblem.getProblems()));
                     }
                 }),
+                when(CaseDetailsUpdated.class).apply(e -> {
+                    CaseDetails updatedCaseDetails = CaseDetails.caseDetails()
+                            .withValuesFrom(this.caseDetails)
+                            .withFeeStatus(e.getFeeStatus())
+                            .withContestedFeeStatus(e.getContestedFeeStatus())
+                            .withContestedFeePaymentReference(e.getContestedPaymentReference())
+                            .withPaymentReference(e.getPaymentReference())
+                            .build();
+                    this.caseDetails=updatedCaseDetails;
+                }),
                 when(ProsecutionDefendantsAdded.class).apply(e -> {
                     this.caseId = e.getCaseId();
                     this.defendants = union(this.defendants, e.getDefendants());
@@ -1705,6 +1716,18 @@ public class ProsecutionCaseFile implements Aggregate {
                                 .withSummonsApprovedOutcome(summonsApprovedOutcome)
                                 .build())
                 .build();
+    }
+
+    public Stream<Object> updateCaseDetails(final String contestedFeeStatus, final String contestedPaymentReference, final String feeStatus, final String paymentReference){
+        final Builder<Object> builder = builder();
+        final CaseDetailsUpdated caseDetailsUpdated = CaseDetailsUpdated.caseDetailsUpdated()
+                .withCaseId(String.valueOf(this.caseId))
+                .withFeeStatus(feeStatus)
+                .withPaymentReference(paymentReference)
+                .withContestedFeeStatus(contestedFeeStatus)
+                .withContestedPaymentReference(contestedPaymentReference)
+                .build();
+        return apply(builder.add(caseDetailsUpdated).build());
     }
 
     public Stream<Object> addCourtDocument(final CourtDocument courtDocument, final UUID materialId, final String fileStoreId) {

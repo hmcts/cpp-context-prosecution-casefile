@@ -4,7 +4,7 @@
     <parent>
         <groupId>uk.gov.moj.cpp.prosecution.casefile</groupId>
         <artifactId>prosecutioncasefile-parent</artifactId>
-        <version>17.105.85-PEG-3047-SNAPSHOT</version>
+        <version>17.105.86-PEG-3047-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>

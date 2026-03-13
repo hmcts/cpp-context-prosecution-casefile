@@ -263,9 +263,9 @@ public class ProgressionPublicEventProcessor {
         final CourtApplicationPayment courtApplicationPayment = applicationProceedingsEdited.getCourtApplication().getCourtApplicationPayment();
 
         final JsonObject commandPayload = createObjectBuilder()
-                .add("caseId", courtApplicationCase.getProsecutionCaseId().toString())
+                .add(FIELD_CASE_ID, courtApplicationCase.getProsecutionCaseId().toString())
                 .add("contestedFeeStatus", courtApplicationPayment.getContestedFeeStatus().toString())
-                .add("contestedPaymentReference", courtApplicationPayment.getContestedPaymentReference().toString())
+                .add("contestedPaymentReference", courtApplicationPayment.getContestedPaymentReference())
                 .add("feeStatus", courtApplicationPayment.getFeeStatus().toString())
                 .add("paymentReference", courtApplicationPayment.getPaymentReference())
                 .build();

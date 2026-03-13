@@ -36,11 +36,13 @@ import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.moj.cpp.prosecution.casefile.aggregate.ProsecutionCaseFile;
 import uk.gov.moj.cpp.prosecution.casefile.domain.SummonsApplicationApprovedDetails;
 import uk.gov.moj.cpp.prosecution.casefile.domain.SummonsApplicationRejectedDetails;
+import uk.gov.moj.cpp.prosecution.casefile.event.CaseDetailsUpdated;
 import uk.gov.moj.cpp.prosecution.casefile.refdata.defendant.DefendantRefDataEnricher;
 import uk.gov.moj.cpp.prosecution.casefile.refdata.proscase.CaseRefDataEnricher;
 import uk.gov.moj.cpp.prosecution.casefile.service.ProgressionService;
 import uk.gov.moj.cps.prosecutioncasefile.command.handler.ApproveCaseDefendantsAsSummonsApplicationApproved;
 import uk.gov.moj.cps.prosecutioncasefile.command.handler.RejectCaseDefendantsAsSummonsApplicationRejected;
+import uk.gov.moj.cps.prosecutioncasefile.command.handler.UpdateCaseDetails;
 
 import java.util.UUID;
 
@@ -144,6 +146,29 @@ public class SummonsApplicationHandlerTest {
         assertThat(result.getCaseId(), is(CASE_ID));
         assertThat(result.getApplicationId(), is(APPLICATION_ID));
         assertThat(result.getSummonsRejectedOutcome().getReasons(), hasItems(REJECTION_REASON_1, REJECTION_REASON_2));
+    }
+
+    @Test
+    public void shouldInvokeAggregateToUpdateCaseDetails() throws EventStreamException {
+        given(eventSource.getStreamById(CASE_ID)).willReturn(eventStream);
+        given(aggregateService.get(eventStream, ProsecutionCaseFile.class)).willReturn(aggregate);
+        given(aggregate.updateCaseDetails(any(), any(), any(), any())).willReturn(empty());
+
+        final Envelope<UpdateCaseDetails> envelope = envelopeFrom(metadataFor(
+                "prosecutioncasefile.command.update-case-details"), UpdateCaseDetails.updateCaseDetails()
+                .withCaseId(CASE_ID.toString())
+                .withContestedFeeStatus("Outstanding")
+                .withContestedPaymentReference("Ref01")
+                .withFeeStatus("Outstanding")
+                .withPaymentReference("Ref01")
+                .build());
+
+        summonsApplicationHandler.updateCaseDetails(envelope);
+
+        assertThat(summonsApplicationHandler, isHandler(COMMAND_HANDLER)
+                .with(method("updateCaseDetails")
+                        .thatHandles("prosecutioncasefile.command.update-case-details")
+                ));
     }
 
     private ApproveCaseDefendantsAsSummonsApplicationApproved buildSummonsApplicationApprovedCommandPayload() {

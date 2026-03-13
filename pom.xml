@@ -57,6 +57,7 @@
             **/uk/gov/moj/cps/prosecutioncasefile/command/handler/**/*
             **/uk/gov/moj/cpp/cps/prosecutioncasefile/command/handler/staging/**/*
             **/uk/gov/moj/cps/prosecutioncasefile/domain/event/**/*
+            **/uk/gov/moj/cpp/prosecution/casefile/event/**/*
         </sonar.coverage.exclusions>
     </properties>
 

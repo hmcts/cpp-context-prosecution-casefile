@@ -262,19 +262,24 @@ public class ProgressionPublicEventProcessor {
         final CourtApplicationCase courtApplicationCase = applicationProceedingsEdited.getCourtApplication().getCourtApplicationCases().get(0);
         final CourtApplicationPayment courtApplicationPayment = applicationProceedingsEdited.getCourtApplication().getCourtApplicationPayment();
 
-        final JsonObject commandPayload = createObjectBuilder()
+        final JsonObjectBuilder commandPayload = createObjectBuilder()
                 .add(FIELD_CASE_ID, courtApplicationCase.getProsecutionCaseId().toString())
-                .add("contestedFeeStatus", courtApplicationPayment.getContestedFeeStatus().toString())
                 .add("contestedPaymentReference", courtApplicationPayment.getContestedPaymentReference())
-                .add("feeStatus", courtApplicationPayment.getFeeStatus().toString())
-                .add("paymentReference", courtApplicationPayment.getPaymentReference())
-                .build();
+                .add("paymentReference", courtApplicationPayment.getPaymentReference());
+
+        if(nonNull(courtApplicationPayment.getContestedFeeStatus())){
+            commandPayload.add("contestedFeeStatus", courtApplicationPayment.getContestedFeeStatus().toString());
+        }
+
+        if(nonNull(courtApplicationPayment.getFeeStatus())){
+            commandPayload.add("feeStatus", courtApplicationPayment.getFeeStatus().toString());
+        }
 
         final Metadata metadata = metadataFrom(envelope.metadata())
                 .withName("prosecutioncasefile.command.update-case-details")
                 .build();
 
-        sender.send(envelopeFrom(metadata, commandPayload));
+        sender.send(envelopeFrom(metadata, commandPayload.build()));
     }
 
     @Handles("public.progression.events.civil-case-exists")

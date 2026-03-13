@@ -146,6 +146,7 @@ import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 import uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode;
 import uk.gov.moj.cps.prosecutioncasefile.common.AddMaterialCommonV2;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.*;
+import uk.gov.moj.cps.prosecutioncasefile.domain.event.CaseDetailsUpdated;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;

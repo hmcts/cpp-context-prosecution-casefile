@@ -36,7 +36,6 @@ import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.moj.cpp.prosecution.casefile.aggregate.ProsecutionCaseFile;
 import uk.gov.moj.cpp.prosecution.casefile.domain.SummonsApplicationApprovedDetails;
 import uk.gov.moj.cpp.prosecution.casefile.domain.SummonsApplicationRejectedDetails;
-import uk.gov.moj.cpp.prosecution.casefile.event.CaseDetailsUpdated;
 import uk.gov.moj.cpp.prosecution.casefile.refdata.defendant.DefendantRefDataEnricher;
 import uk.gov.moj.cpp.prosecution.casefile.refdata.proscase.CaseRefDataEnricher;
 import uk.gov.moj.cpp.prosecution.casefile.service.ProgressionService;

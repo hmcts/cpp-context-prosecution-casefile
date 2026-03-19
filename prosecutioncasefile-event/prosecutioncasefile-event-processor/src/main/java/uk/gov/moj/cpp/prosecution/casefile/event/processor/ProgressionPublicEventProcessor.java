@@ -264,8 +264,11 @@ public class ProgressionPublicEventProcessor {
 
         final JsonObjectBuilder commandPayload = createObjectBuilder()
                 .add(FIELD_CASE_ID, courtApplicationCase.getProsecutionCaseId().toString())
-                .add("contestedPaymentReference", courtApplicationPayment.getContestedPaymentReference())
-                .add("paymentReference", courtApplicationPayment.getPaymentReference());
+                .add("contestedPaymentReference", courtApplicationPayment.getContestedPaymentReference());
+
+        if(nonNull(courtApplicationPayment.getPaymentReference())){
+            commandPayload.add("paymentReference", courtApplicationPayment.getPaymentReference());
+        }
 
         if(nonNull(courtApplicationPayment.getContestedFeeStatus())){
             commandPayload.add("contestedFeeStatus", courtApplicationPayment.getContestedFeeStatus().toString());

@@ -505,8 +505,36 @@ class ProgressionPublicEventProcessorTest {
                 withJsonPath("$.caseId", equalTo(applicationProceedingsEdited.getCourtApplication().getCourtApplicationCases().get(0).getProsecutionCaseId().toString())),
                 withJsonPath("$.contestedFeeStatus", equalTo(applicationProceedingsEdited.getCourtApplication().getCourtApplicationPayment().getContestedFeeStatus().toString())),
                 withJsonPath("$.contestedPaymentReference", equalTo(applicationProceedingsEdited.getCourtApplication().getCourtApplicationPayment().getContestedPaymentReference().toString())),
+                withJsonPath("$.feeStatus", equalTo(applicationProceedingsEdited.getCourtApplication().getCourtApplicationPayment().getFeeStatus().toString())),
+                withJsonPath("$.paymentReference", equalTo(applicationProceedingsEdited.getCourtApplication().getCourtApplicationPayment().getPaymentReference().toString()))
+        )));
+    }
+
+    @Test
+    void shouldHandleCourtApplicationProceedingsEdited_InitialFeeNA() throws IOException {
+        String courtApplicationProceedingsPayload = Resources.toString(getResource("public.progression.event.application-proceedings-edited1.json"), defaultCharset());
+        final JsonObject courtApplicationProceedingsJsonPayload = jsonFromString(courtApplicationProceedingsPayload);
+
+        final ApplicationProceedingsEdited applicationProceedingsEdited = jsonToObjectConverter.convert(courtApplicationProceedingsJsonPayload, ApplicationProceedingsEdited.class);
+
+        final Envelope<ApplicationProceedingsEdited> envelope1 = envelopeFrom(
+                metadataWithIdpcProcessId(metadataWithRandomUUID("public.progression.event.application-proceedings-edited").build(), randomUUID().toString()),
+                applicationProceedingsEdited);
+
+        progressionPublicEventProcessor.handleCourtApplicationProceedingsEdited(envelope1);
+
+        verify(sender).send(jsonObjectEnvelopeCaptor.capture());
+        final Envelope<JsonObject> resultEnvelope = jsonObjectEnvelopeCaptor.getValue();
+
+        Metadata metadata = resultEnvelope.metadata();
+
+        assertThat(metadata, is(notNullValue()));
+        assertThat(metadata.name(), is("prosecutioncasefile.command.update-case-details"));
+        assertThat(resultEnvelope.payload().toString(), isJson(allOf(
+                withJsonPath("$.caseId", equalTo(applicationProceedingsEdited.getCourtApplication().getCourtApplicationCases().get(0).getProsecutionCaseId().toString())),
+                withJsonPath("$.contestedFeeStatus", equalTo(applicationProceedingsEdited.getCourtApplication().getCourtApplicationPayment().getContestedFeeStatus().toString())),
                 withJsonPath("$.contestedPaymentReference", equalTo(applicationProceedingsEdited.getCourtApplication().getCourtApplicationPayment().getContestedPaymentReference().toString())),
-                withJsonPath("$.contestedPaymentReference", equalTo(applicationProceedingsEdited.getCourtApplication().getCourtApplicationPayment().getContestedPaymentReference().toString()))
+                withJsonPath("$.feeStatus", equalTo(applicationProceedingsEdited.getCourtApplication().getCourtApplicationPayment().getFeeStatus().toString()))
         )));
     }
 }

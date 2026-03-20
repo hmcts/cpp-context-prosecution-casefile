@@ -109,6 +109,7 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.PersonalInformation;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Problem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecution;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.SelfDefinedInformation;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Language;
 import uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.PleadOnline;
 import uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.PleadOnlinePcqVisited;
 import uk.gov.moj.cpp.prosecution.casefile.refdata.defendant.DefendantRefDataEnricher;
@@ -163,6 +164,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
 
@@ -280,10 +282,36 @@ public class ProsecutionCaseFile implements Aggregate {
             if (!validationWarnings.isEmpty()) {
                 builder.accept(new SjpProsecutionReceivedWithWarnings(prosecutionWithReferenceData.getExternalId(), prosecution, validationWarnings));
             } else {
-                builder.accept(new SjpProsecutionReceived(prosecutionWithReferenceData.getExternalId(), prosecution));
+                List<Defendant> prosecutionDefendants = prosecution.getDefendants();
+                Prosecution prosecutionUpdatedWithLanguage = prosecution().withValuesFrom(prosecution)
+                        .withDefendants(getDefendantDetails(prosecutionDefendants))
+                        .build();
+                builder.accept(new SjpProsecutionReceived(prosecutionWithReferenceData.getExternalId(), prosecutionUpdatedWithLanguage));
             }
         }
         return apply(builder.build());
+    }
+
+    private List<Defendant> getDefendantDetails(final List<Defendant> defendants) {
+        return defendants.stream().map(this::getDefendantLanguageCheck).collect(Collectors.toList());
+    }
+
+    private Defendant getDefendantLanguageCheck(Defendant defendant){
+        Language documentationLanguage = defendant.getDocumentationLanguage() != null ? checkLanguage(defendant.getDocumentationLanguage()) : null;
+        Language hearingLanguage = defendant.getHearingLanguage() != null ? checkLanguage(defendant.getHearingLanguage()) : null;
+        return Defendant.defendant()
+                .withValuesFrom(defendant)
+                .withDocumentationLanguage(documentationLanguage)
+                .withHearingLanguage(hearingLanguage)
+                .build();
+    }
+
+    private Language checkLanguage(Language language) {
+        return switch (language) {
+            case ENGLISH -> Language.E;
+            case WELSH -> Language.W;
+            default -> language;
+        };
     }
 
     public Stream<Object> pleadOnline(final UUID caseId, final PleadOnline pleadOnline, final ZonedDateTime createdOn, final UUID userId) {

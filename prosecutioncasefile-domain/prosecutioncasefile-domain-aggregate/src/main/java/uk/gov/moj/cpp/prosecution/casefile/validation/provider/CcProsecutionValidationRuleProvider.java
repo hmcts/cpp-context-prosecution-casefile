@@ -190,8 +190,7 @@ public class CcProsecutionValidationRuleProvider {
 
     private static final List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> SUMMONS_DEFENDANT_RULE_MCC_SET = unmodifiableList(asList(
             new DateOfHearingPastDateValidationAndEnricherRule(),
-            new AdditionalNationalityValidationAndEnricherRule(),
-            new StatementOfFactsWelshValidationRule()
+            new AdditionalNationalityValidationAndEnricherRule()
     ));
 
     private static final List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> REQUISITION_DEFENDANT_RULE_SET = unmodifiableList(asList(

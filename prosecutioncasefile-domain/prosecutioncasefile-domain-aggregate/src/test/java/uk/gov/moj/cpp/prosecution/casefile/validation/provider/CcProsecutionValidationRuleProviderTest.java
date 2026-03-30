@@ -19,6 +19,7 @@ import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.PncIdSpiVa
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.PncIdValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.offence.OffenceGenericValidationAndEnricherRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.offence.StatementOfFactsValidationRule;
+import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.offence.StatementOfFactsWelshValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.prosecutor.ProsecutorAOCPValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.prosecutor.ProsecutorSJPValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.groupcases.CaseCountValidationRule;
@@ -117,6 +118,7 @@ public class CcProsecutionValidationRuleProviderTest {
         assertFalse(validationRules.stream().map((Function<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>::getClass).anyMatch(s -> s.equals(StatementOfFactsValidationRule.class)));
         assertTrue(validationRules.stream().map((Function<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>::getClass).anyMatch(s -> s.equals(CroNumberValidationRule.class)));
         assertTrue(validationRules.stream().map((Function<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>::getClass).anyMatch(s -> s.equals(PncIdValidationRule.class)));
+        assertTrue(validationRules.stream().map((Function<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>::getClass).noneMatch(s -> s.equals(StatementOfFactsWelshValidationRule.class)));
     }
 
     @Test

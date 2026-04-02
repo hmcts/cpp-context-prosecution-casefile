@@ -1,0 +1,183 @@
+{
+  "boxHearing": {
+    "applicationDueDate": "2026-03-18",
+    "courtCentre": {
+      "address": {
+        "address1": "176A Lavender Hill",
+        "address2": "London",
+        "postcode": "SW11 1JU"
+      },
+      "code": "B01LY00",
+      "courtHearingLocation": "B01LY00",
+      "id": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+      "name": "Lavender Hill Magistrates' Court"
+    },
+    "id": "4c83b86f-6ee1-4bad-8697-5d7093d1736b",
+    "jurisdictionType": "MAGISTRATES"
+  },
+  "courtApplication": {
+    "applicant": {
+      "id": "51b0ac76-cf62-45ef-9ba2-cd9061251f26",
+      "notificationRequired": false,
+      "prosecutingAuthority": {
+        "address": {
+          "address1": "Queen's Buildings",
+          "address2": "Potter Street",
+          "address3": "Worksop",
+          "postcode": "S80 2AH"
+        },
+        "contact": {
+          "primaryEmail": "legaladmin@bassetlaw.gov.uk"
+        },
+        "majorCreditorCode": "BLDC",
+        "name": "Basset Law District Council",
+        "prosecutionAuthorityCode": "BASS",
+        "prosecutionAuthorityId": "51b0ac76-cf62-45ef-9ba2-cd9061251f26",
+        "prosecutionAuthorityOUCode": "GAWBL00"
+      },
+      "summonsRequired": false
+    },
+    "applicationReceivedDate": "2023-09-11",
+    "applicationReference": "CKP8F46P7R",
+    "applicationStatus": "LISTED",
+    "courtApplicationCases": [
+      {
+        "caseStatus": "ACTIVE",
+        "isSJP": false,
+        "offences": [
+          {
+            "civilOffence": {
+              "isExParte": false
+            },
+            "count": 0,
+            "id": "cb952a05-25e6-4a9c-8d85-fa1887874f3a",
+            "laidDate": "2021-02-11",
+            "offenceCode": "SX03502",
+            "offenceDefinitionId": "aea1e6a0-264e-47df-a4b5-0843a2067bef",
+            "offenceLegislation": "In accordance with section 90 of the Sexual Offences Act 2003.",
+            "offenceTitle": "Application to vary a parental direction",
+            "orderIndex": 1,
+            "startDate": "2021-02-11",
+            "wording": "Application to vary a parental direction made on 17 Mar 2023 by LavenderHill Magistrate's Court by Test Details of Variation Requested  on the ground that Test Grounds for Application ."
+          }
+        ],
+        "prosecutionCaseId": "386e60e9-f7b6-4577-9eec-c413a4c2e78e",
+        "prosecutionCaseIdentifier": {
+          "address": {
+            "address1": "Queen's Buildings",
+            "address2": "Potter Street",
+            "address3": "Worksop",
+            "postcode": "S80 2AH"
+          },
+          "contact": {
+            "primaryEmail": "legaladmin@bassetlaw.gov.uk"
+          },
+          "majorCreditorCode": "BLDC",
+          "prosecutionAuthorityCode": "BASS",
+          "prosecutionAuthorityId": "51b0ac76-cf62-45ef-9ba2-cd9061251f26",
+          "prosecutionAuthorityName": "Basset Law District Council",
+          "prosecutionAuthorityOUCode": "GAWBL00",
+          "caseURN": "CKP8F46P7R"
+        }
+      }
+    ],
+    "courtApplicationPayment": {
+      "contestedFeeStatus": "PAYMENT_UNDERTAKING_MADE",
+      "contestedPaymentReference": "PayUn",
+      "feeStatus": "NOT_APPLICABLE"
+    },
+    "courtCivilApplication": {
+      "isCivil": true
+    },
+    "id": "37929561-f47a-47bc-b1d5-78fc74641204",
+    "respondents": [
+      {
+        "id": "9feb53f9-c67f-49f3-868e-e38f13aa22d9",
+        "masterDefendant": {
+          "isYouth": false,
+          "masterDefendantId": "9feb53f9-c67f-49f3-868e-e38f13aa22d9",
+          "personDefendant": {
+            "arrestSummonsNumber": "0800PP0100000000001H",
+            "personDetails": {
+              "address": {
+                "address1": "11, Address line 1",
+                "address2": "Address line 2",
+                "address3": "Address line 3",
+                "address4": "Address line 4",
+                "postcode": "W1A 0AX"
+              },
+              "documentationLanguageNeeds": "ENGLISH",
+              "firstName": "MarquitaTest",
+              "gender": "NOT_SPECIFIED",
+              "hearingLanguageNeeds": "ENGLISH",
+              "lastName": "Winstead",
+              "title": "Mr"
+            }
+          },
+          "prosecutionAuthorityReference": "ProsecutorDef1"
+        },
+        "notificationRequired": false,
+        "summonsRequired": true
+      }
+    ],
+    "subject": {
+      "id": "9feb53f9-c67f-49f3-868e-e38f13aa22d9",
+      "masterDefendant": {
+        "isYouth": false,
+        "masterDefendantId": "9feb53f9-c67f-49f3-868e-e38f13aa22d9",
+        "personDefendant": {
+          "arrestSummonsNumber": "0800PP0100000000001H",
+          "personDetails": {
+            "address": {
+              "address1": "11, Address line 1",
+              "address2": "Address line 2",
+              "address3": "Address line 3",
+              "address4": "Address line 4",
+              "postcode": "W1A 0AX"
+            },
+            "documentationLanguageNeeds": "ENGLISH",
+            "firstName": "MarquitaTest",
+            "gender": "NOT_SPECIFIED",
+            "hearingLanguageNeeds": "ENGLISH",
+            "lastName": "Winstead",
+            "title": "Mr"
+          }
+        },
+        "prosecutionAuthorityReference": "ProsecutorDef1"
+      },
+      "notificationRequired": false,
+      "summonsRequired": true
+    },
+    "type": {
+      "appealFlag": false,
+      "applicantAppellantFlag": false,
+      "boxworkNotifTemplate": "NOT_APPLICABLE",
+      "breachType": "NOT_APPLICABLE",
+      "categoryCode": "CR",
+      "code": "MC80804",
+      "commrOfOathFlag": false,
+      "contestedFeeApplicable": false,
+      "courtExtractAvlFlag": false,
+      "courtOfAppealFlag": false,
+      "exParte": false,
+      "hearingCode": "APN",
+      "id": "bfa61811-b917-3bce-9cc1-7ea8e554bd3b",
+      "initialFeeApplicable": false,
+      "jurisdiction": "MAGISTRATES",
+      "lastModified": "2022-08-17T10:09:24.608Z",
+      "legislation": "In accordance with section 1 of the Magistrates' Courts Act 1980.",
+      "legislationWelsh": "Yn unol ag adran 1 Deddf Llysoedd Ynadon 1980.",
+      "linkType": "FIRST_HEARING",
+      "listingNotifTemplate": "NOT_APPLICABLE",
+      "offenceActiveOrder": "OFFENCE",
+      "pleaApplicableFlag": false,
+      "prosecutorThirdPartyFlag": false,
+      "spiOutApplicableFlag": false,
+      "summonsTemplateType": "NOT_APPLICABLE",
+      "type": "Application for issue of summons to accused or warrant for their arrest in relation to a criminal case",
+      "typeWelsh": "Cais am godi gwŷs i’r sawl a gyhuddwyd neu warant i’w harestio yng nghyswllt achos troseddol",
+      "validTo": "2021-12-31"
+    }
+  },
+  "summonsApprovalRequired": false
+}

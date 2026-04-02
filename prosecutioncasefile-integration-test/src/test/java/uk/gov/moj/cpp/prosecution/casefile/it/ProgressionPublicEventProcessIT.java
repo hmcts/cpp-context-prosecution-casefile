@@ -7,8 +7,13 @@ import java.util.UUID;
 
 import static java.lang.String.format;
 import static java.util.UUID.randomUUID;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static uk.gov.justice.services.test.utils.core.random.RandomGenerator.BOOLEAN;
 import static uk.gov.justice.services.test.utils.core.random.RandomGenerator.bigDecimal;
+
+import uk.gov.moj.cpp.prosecution.casefile.helper.AppplicationProceedingsEditedHelper;
 
 public class ProgressionPublicEventProcessIT extends BaseIT {
 
@@ -34,4 +39,12 @@ public class ProgressionPublicEventProcessIT extends BaseIT {
         sendPublicEvent(PUBLIC_PROGRESSION_EVENT_COURT_APPLICATION_CREATED, "stub-data/public.progression.court-application-event-created.json",
                 this.applicationId.toString(), this.caseId.toString(), this.prosecutorCost, String.valueOf(this.summonsSuppressed), String.valueOf(this.personalService));
     }
+    @Test
+    public void shouldRaiseProgressionEventCourtApplicationProceedingsEdited() {
+        sendPublicEvent("public.progression.event.application-proceedings-edited", "stub-data/public.progression.event.application-proceedings-edited.json");
+
+        AppplicationProceedingsEditedHelper appplicationProceedingsEditedHelper = new AppplicationProceedingsEditedHelper();
+        assertThat(appplicationProceedingsEditedHelper.getPrivateEvent(), is(notNullValue()));
+    }
+
 }

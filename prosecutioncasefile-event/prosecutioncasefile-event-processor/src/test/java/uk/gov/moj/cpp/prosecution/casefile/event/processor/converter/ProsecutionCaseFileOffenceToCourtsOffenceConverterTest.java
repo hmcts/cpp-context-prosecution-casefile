@@ -76,7 +76,6 @@ public class ProsecutionCaseFileOffenceToCourtsOffenceConverterTest {
                 .withReferenceData(offenceReferenceData()
                         .withModeOfTrialDerived("Summary")
                         .build())
-                        .withCivilOffence(CivilOffence.civilOffence().withIsExParte(true).build())
                 .build());
 
         final ParamsVO paramsVO = new ParamsVO();
@@ -116,7 +115,6 @@ public class ProsecutionCaseFileOffenceToCourtsOffenceConverterTest {
                 .withReferenceData(offenceReferenceData()
                         .withModeOfTrialDerived("Either Way")
                         .build())
-                .withCivilOffence(CivilOffence.civilOffence().withIsExParte(true).build())
                 .build());
 
         final ParamsVO paramsVO = new ParamsVO();
@@ -520,7 +518,6 @@ public class ProsecutionCaseFileOffenceToCourtsOffenceConverterTest {
                         .withPleaValue("GUILTY")
                         .build())
                 .withConvictingCourtCode(convictingCourtCode)
-                .withCivilOffence(CivilOffence.civilOffence().withIsExParte(false).build())
                 .build());
 
         final ParamsVO paramsVO = new ParamsVO();
@@ -553,7 +550,6 @@ public class ProsecutionCaseFileOffenceToCourtsOffenceConverterTest {
                         .withPleaDate(pleaDate)
                         .withPleaValue("INDICATED_GUILTY")
                         .build())
-                .withCivilOffence(CivilOffence.civilOffence().withIsExParte(false).build())
                 .build());
 
         final ParamsVO paramsVO = new ParamsVO();
@@ -588,7 +584,6 @@ public class ProsecutionCaseFileOffenceToCourtsOffenceConverterTest {
                                 .withCategoryType("GUILTY")
                                 .build())
                         .build())
-                .withCivilOffence(CivilOffence.civilOffence().withIsExParte(false).build())
                 .build());
 
         final ParamsVO paramsVO = new ParamsVO();
@@ -881,6 +876,32 @@ public class ProsecutionCaseFileOffenceToCourtsOffenceConverterTest {
         final uk.gov.justice.core.courts.Offence offence = coreOffences.get(0);
         assertThat(offence.getId(), is(offenceId));
         assertNotNull(offence.getCustodyTimeLimit());
+    }
+
+    @Test
+    void shouldNotSetConvictionDateAndAllocationDecisionForCivilCases(){
+        final ReferenceDataVO referenceDataVO = buildReferenceDataWithOffenceAndModeOfTrial(null);
+        final UUID offenceId = randomUUID();
+        final String offenceCode = "TVL-ABC";
+
+        final List<Offence> offences = List.of(offence()
+                .withOffenceId(offenceId)
+                .withOffenceCode(offenceCode)
+                .withOffenceCommittedDate(LocalDate.now())
+                .withCivilOffence(null)
+                .build());
+
+        final ParamsVO paramsVO = new ParamsVO();
+        paramsVO.setReferenceDataVO(referenceDataVO);
+        paramsVO.setChannel(MCC);
+        paramsVO.setInitiationCode(InitiationCode.O.name());
+
+        final List<uk.gov.justice.core.courts.Offence> coreOffences = converter.convert(offences, paramsVO);
+
+        final uk.gov.justice.core.courts.Offence offence = coreOffences.get(0);
+        assertThat(offence.getId(), is(offenceId));
+        assertNull(offence.getConvictionDate());
+        assertNull(offence.getAllocationDecision());
     }
 
 }

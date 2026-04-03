@@ -70,6 +70,9 @@ public class ProsecutionCaseFileOffenceToCourtsOffenceConverter implements Param
 
         final CustodyTimeLimit custodyTimeLimit = Optional.ofNullable(paramsVO.getCustodyTimelineDefendant()).map(e-> CustodyTimeLimit.custodyTimeLimit().withTimeLimit(e.toString()).build()).orElse(null);
         CourtCentre convictingCourt = getConvictingCourt(offence, paramsVO);
+
+        final boolean isCivil = nonNull(offence.getCivilOffence());
+
         return offence()
                 .withId(offence.getOffenceId())
                 .withArrestDate(getDate(offence.getArrestDate()))
@@ -93,8 +96,8 @@ public class ProsecutionCaseFileOffenceToCourtsOffenceConverter implements Param
                 .withCommittingCourt(getCommittingCourtFromReferenceData(paramsVO))
                 .withPlea(convertPlea(offence))
                 .withVerdict(convertVerdict(offence))
-                .withConvictionDate(calculateConvictionDate(offence, paramsVO))
-                .withAllocationDecision(buildAllocationDecision(offence, paramsVO))
+                .withConvictionDate(!isCivil ? calculateConvictionDate(offence, paramsVO) : null)
+                .withAllocationDecision(!isCivil ? buildAllocationDecision(offence, paramsVO) : null)
                 .withDvlaOffenceCode(getDvlaCode(offence.getOffenceCode(), referenceDataVO))
                 .withMaxPenalty(getMaxPenalty(offence.getOffenceCode(), referenceDataVO))
                 .withConvictingCourt(convictingCourt)

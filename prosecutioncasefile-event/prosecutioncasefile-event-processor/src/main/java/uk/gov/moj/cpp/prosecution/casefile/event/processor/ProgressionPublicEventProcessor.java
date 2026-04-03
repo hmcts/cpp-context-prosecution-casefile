@@ -16,7 +16,9 @@ import static uk.gov.moj.cps.prosecutioncasefile.command.handler.AcceptCase.acce
 import static uk.gov.moj.cps.prosecutioncasefile.command.handler.CaseDefendantChangedCommand.caseDefendantChangedCommand;
 import static uk.gov.moj.cps.prosecutioncasefile.command.handler.EjectCase.ejectCase;
 
+import uk.gov.justice.core.courts.CourtApplicationCase;
 import uk.gov.justice.core.courts.CourtApplicationCreated;
+import uk.gov.justice.core.courts.CourtApplicationPayment;
 import uk.gov.justice.core.courts.PublicProgressionCourtApplicationSummonsApproved;
 import uk.gov.justice.core.courts.PublicProgressionCourtApplicationSummonsRejected;
 import uk.gov.justice.progression.courts.CaseOrApplicationEjected;
@@ -28,6 +30,7 @@ import uk.gov.justice.services.core.sender.Sender;
 import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.Metadata;
+import uk.gov.moj.cpp.progression.events.ApplicationProceedingsEdited;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Address;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ContactDetails;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.PersonalInformation;
@@ -249,6 +252,37 @@ public class ProgressionPublicEventProcessor {
                 .add(COURT_APPLICATION, objectToJsonObjectConverter.convert(eventPayload.getCourtApplication()))
                 .build();
         sender.send(envelopeFrom(metadata, commandPayload));
+    }
+
+    @Handles("public.progression.event.application-proceedings-edited")
+    public void handleCourtApplicationProceedingsEdited(final Envelope<ApplicationProceedingsEdited> envelope) {
+        LOGGER.info("public.progression.event.application-proceedings-edited");
+
+        final ApplicationProceedingsEdited applicationProceedingsEdited = envelope.payload();
+        final CourtApplicationCase courtApplicationCase = applicationProceedingsEdited.getCourtApplication().getCourtApplicationCases().get(0);
+        final CourtApplicationPayment courtApplicationPayment = applicationProceedingsEdited.getCourtApplication().getCourtApplicationPayment();
+
+        final JsonObjectBuilder commandPayload = createObjectBuilder()
+                .add(FIELD_CASE_ID, courtApplicationCase.getProsecutionCaseId().toString())
+                .add("contestedPaymentReference", courtApplicationPayment.getContestedPaymentReference());
+
+        if(nonNull(courtApplicationPayment.getPaymentReference())){
+            commandPayload.add("paymentReference", courtApplicationPayment.getPaymentReference());
+        }
+
+        if(nonNull(courtApplicationPayment.getContestedFeeStatus())){
+            commandPayload.add("contestedFeeStatus", courtApplicationPayment.getContestedFeeStatus().toString());
+        }
+
+        if(nonNull(courtApplicationPayment.getFeeStatus())){
+            commandPayload.add("feeStatus", courtApplicationPayment.getFeeStatus().toString());
+        }
+
+        final Metadata metadata = metadataFrom(envelope.metadata())
+                .withName("prosecutioncasefile.command.update-case-details")
+                .build();
+
+        sender.send(envelopeFrom(metadata, commandPayload.build()));
     }
 
     @Handles("public.progression.events.civil-case-exists")

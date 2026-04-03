@@ -147,6 +147,7 @@ import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 import uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode;
 import uk.gov.moj.cps.prosecutioncasefile.common.AddMaterialCommonV2;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.*;
+import uk.gov.moj.cps.prosecutioncasefile.domain.event.CaseDetailsUpdated;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
@@ -1821,7 +1822,30 @@ public class ProsecutionCaseFileTest {
         assertThat(caseReceivedWithDuplicateDefendants.isPresent(), is(true));
     }
 
+    @Test
+    public void shouldUpdateCaseDetailsWithFees(){
+        final LocalDate offenceCommittedDate = of(2018, 3, 2);
+        final LocalDate offenceChargeDate = of(2018, 11, 2);
 
+        final ProsecutionWithReferenceData firstMessage = getProsecutionWithReferenceData(
+                of(buildDefendantWithOffence(offenceCommittedDate, offenceChargeDate, PROSECUTOR_DEFENDANT_REFERENCE_ONE),
+                        buildDefendant(SECOND_FORENAME, SECOND_SURNAME, SECOND_BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE)), SPI, SUMMONS_INITIATION_CODE);
+        prosecutionCaseFile.apply(ccCaseReceived().withProsecutionWithReferenceData(firstMessage).build());
+
+        final UUID externalIdForSecondMessage = randomUUID();
+        final ProsecutionWithReferenceData secondMessage = getProsecutionWithReferenceData(
+                of(buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, randomAlphabetic(10))), SPI, SUMMONS_INITIATION_CODE, externalIdForSecondMessage);
+        prosecutionCaseFile.receiveCCCase(secondMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
+
+
+        final Stream<Object> objectStream = prosecutionCaseFile.updateCaseDetails("OUTSTANDING", "Reference001","OUTSTANDING", "Ref001");
+
+        final List<Object> eventList = objectStream.collect(toList());
+        assertThat(eventList.size(), is(1));
+        CaseDetailsUpdated caseDetailsUpdated = (CaseDetailsUpdated) eventList.get(0);
+        assertThat(caseDetailsUpdated.getContestedFeeStatus(), is("OUTSTANDING"));
+        assertThat(caseDetailsUpdated.getContestedPaymentReference(), is("Reference001"));
+    }
 
 
     private void assertThatTheEventReturnedIsOfType(final Stream<Object> objectStream, final Class<?> eventClass) {

@@ -38,6 +38,7 @@ import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -69,6 +70,9 @@ public class ProsecutionCaseFileOffenceToCourtsOffenceConverter implements Param
 
         final CustodyTimeLimit custodyTimeLimit = Optional.ofNullable(paramsVO.getCustodyTimelineDefendant()).map(e-> CustodyTimeLimit.custodyTimeLimit().withTimeLimit(e.toString()).build()).orElse(null);
         CourtCentre convictingCourt = getConvictingCourt(offence, paramsVO);
+
+        final boolean isCivil = nonNull(offence.getCivilOffence());
+
         return offence()
                 .withId(offence.getOffenceId())
                 .withArrestDate(getDate(offence.getArrestDate()))
@@ -92,13 +96,7 @@ public class ProsecutionCaseFileOffenceToCourtsOffenceConverter implements Param
                 .withCommittingCourt(getCommittingCourtFromReferenceData(paramsVO))
                 .withPlea(convertPlea(offence))
                 .withVerdict(convertVerdict(offence))
-                .withConvictionDate(
-                        paramsVO.isInactiveMigratedCase() ?
-                                Optional.ofNullable(offence.getConvictionDate())
-                                        .map(Object::toString)
-                                        .orElse(null) :
-                                calculateConvictionDate(offence, paramsVO)
-                )
+                .withConvictionDate(resolveConvictionDate(offence, paramsVO, isCivil))
                 .withAllocationDecision(buildAllocationDecision(offence, paramsVO))
                 .withDvlaOffenceCode(getDvlaCode(offence.getOffenceCode(), referenceDataVO))
                 .withMaxPenalty(getMaxPenalty(offence.getOffenceCode(), referenceDataVO))
@@ -106,6 +104,20 @@ public class ProsecutionCaseFileOffenceToCourtsOffenceConverter implements Param
                 .withCustodyTimeLimit(isCustodyLimitTobeSet(offence, paramsVO) ? custodyTimeLimit : null)
                 .withCivilOffence(offence.getCivilOffence())
                 .build();
+    }
+
+    private String resolveConvictionDate(Offence offence, ParamsVO paramsVO, boolean isCivil) {
+        if (isCivil) {
+            return null;
+        }
+
+        if (paramsVO.isInactiveMigratedCase()) {
+            return Optional.ofNullable(offence.getConvictionDate())
+                    .map(Object::toString)
+                    .orElse(null);
+        }
+
+        return calculateConvictionDate(offence, paramsVO);
     }
 
     private boolean isCustodyLimitTobeSet(final Offence offence, final ParamsVO paramsVO) {

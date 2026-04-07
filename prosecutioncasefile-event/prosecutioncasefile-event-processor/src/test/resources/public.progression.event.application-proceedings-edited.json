@@ -1,0 +1,181 @@
+{
+  "boxHearing": {
+    "applicationDueDate": "2026-03-09",
+    "courtCentre": {
+      "address": {
+        "address1": "176A Lavender Hill",
+        "address2": "London",
+        "postcode": "SW11 1JU"
+      },
+      "code": "B01LY00",
+      "courtHearingLocation": "B01LY00",
+      "id": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+      "name": "Lavender Hill Magistrates' Court"
+    },
+    "id": "55755d6e-4c73-4ddb-8f30-fbaf8b9f8ef0",
+    "jurisdictionType": "MAGISTRATES"
+  },
+  "courtApplication": {
+    "applicant": {
+      "id": "2860909d-6e7f-4c2d-9544-d7aa2c66050c",
+      "notificationRequired": false,
+      "prosecutingAuthority": {
+        "address": {
+          "address1": "Regulation and Enforcement Team",
+          "address2": "Units 1 - 3",
+          "address3": "Ashted Lock Way",
+          "address4": "Birmingham",
+          "postcode": "B7 4AZ"
+        },
+        "contact": {
+          "primaryEmail": "legal.proceedings@birmingham.gov.uk"
+        },
+        "majorCreditorCode": "BHCC",
+        "name": "Birmingham City Council",
+        "prosecutionAuthorityCode": "BHCC",
+        "prosecutionAuthorityId": "2860909d-6e7f-4c2d-9544-d7aa2c66050c",
+        "prosecutionAuthorityOUCode": "GANBC00"
+      },
+      "summonsRequired": false
+    },
+    "applicationReceivedDate": "2026-03-01",
+    "applicationReference": "CFSYIMHUZ3",
+    "applicationStatus": "LISTED",
+    "courtApplicationCases": [
+      {
+        "caseStatus": "ACTIVE",
+        "isSJP": false,
+        "offences": [
+          {
+            "civilOffence": {
+              "isExParte": false
+            },
+            "count": 0,
+            "id": "ed90f2d1-1061-4bac-8eb7-449ef505acb7",
+            "laidDate": "2026-03-01",
+            "offenceCode": "AP00502",
+            "offenceDefinitionId": "ff349510-1fc5-41bf-bc7d-fbaf36751538",
+            "offenceLegislation": "Pursuant to the court's inherent jurisdiction.",
+            "offenceLegislationWelsh": "Yn unol ag awdurdodaeth gynhenid y llys",
+            "offenceTitle": "Application to set aside a civil case",
+            "offenceTitleWelsh": "Cais i roi achos sifil o'r naill du",
+            "orderIndex": 1,
+            "startDate": "2026-03-01",
+            "wording": "Application to set aside a decision in respect of an application for test.",
+            "wordingWelsh": "Cais i roi penderfyniad mewn perthynas â chais am test o'r naill du."
+          }
+        ],
+        "prosecutionCaseId": "00080290-6702-4631-ac21-8e1ae381df46",
+        "prosecutionCaseIdentifier": {
+          "address": {
+            "address1": "Regulation and Enforcement Team",
+            "address2": "Units 1 - 3",
+            "address3": "Ashted Lock Way",
+            "address4": "Birmingham",
+            "postcode": "B7 4AZ"
+          },
+          "contact": {
+            "primaryEmail": "legal.proceedings@birmingham.gov.uk"
+          },
+          "majorCreditorCode": "BHCC",
+          "prosecutionAuthorityCode": "BHCC",
+          "prosecutionAuthorityId": "2860909d-6e7f-4c2d-9544-d7aa2c66050c",
+          "prosecutionAuthorityName": "Birmingham City Council",
+          "prosecutionAuthorityOUCode": "GANBC00",
+          "caseURN": "CFSYIMHUZ3"
+        }
+      }
+    ],
+    "courtApplicationPayment": {
+      "contestedFeeStatus": "WAIVED",
+      "contestedPaymentReference": "TestRef",
+      "feeStatus": "WAIVED",
+      "paymentReference": "TestRef"
+    },
+    "courtCivilApplication": {
+      "isCivil": true
+    },
+    "id": "89445a44-9c21-481c-8799-e3f4c33356c8",
+    "respondents": [
+      {
+        "id": "384ddcba-723a-4935-a8ba-63f5ef4a501c",
+        "masterDefendant": {
+          "isYouth": false,
+          "masterDefendantId": "384ddcba-723a-4935-a8ba-63f5ef4a501c",
+          "personDefendant": {
+            "personDetails": {
+              "address": {
+                "address1": "No fixed abode"
+              },
+              "dateOfBirth": "2002-02-01",
+              "documentationLanguageNeeds": "ENGLISH",
+              "firstName": "FN32",
+              "gender": "NOT_SPECIFIED",
+              "hearingLanguageNeeds": "ENGLISH",
+              "lastName": "LN32",
+              "title": "Mr"
+            }
+          },
+          "prosecutionAuthorityReference": "PRef8"
+        },
+        "notificationRequired": false,
+        "summonsRequired": true
+      }
+    ],
+    "subject": {
+      "id": "384ddcba-723a-4935-a8ba-63f5ef4a501c",
+      "masterDefendant": {
+        "isYouth": false,
+        "masterDefendantId": "384ddcba-723a-4935-a8ba-63f5ef4a501c",
+        "personDefendant": {
+          "personDetails": {
+            "address": {
+              "address1": "No fixed abode"
+            },
+            "dateOfBirth": "2002-02-01",
+            "documentationLanguageNeeds": "ENGLISH",
+            "firstName": "FN32",
+            "gender": "NOT_SPECIFIED",
+            "hearingLanguageNeeds": "ENGLISH",
+            "lastName": "LN32",
+            "title": "Mr"
+          }
+        },
+        "prosecutionAuthorityReference": "PRef8"
+      },
+      "notificationRequired": false,
+      "summonsRequired": true
+    },
+    "type": {
+      "appealFlag": false,
+      "applicantAppellantFlag": false,
+      "boxworkNotifTemplate": "NOT_APPLICABLE",
+      "breachType": "NOT_APPLICABLE",
+      "categoryCode": "CR",
+      "code": "MC80804",
+      "commrOfOathFlag": false,
+      "contestedFeeApplicable": false,
+      "courtExtractAvlFlag": false,
+      "courtOfAppealFlag": false,
+      "exParte": false,
+      "hearingCode": "APN",
+      "id": "bfa61811-b917-3bce-9cc1-7ea8e554bd3b",
+      "initialFeeApplicable": false,
+      "jurisdiction": "MAGISTRATES",
+      "lastModified": "2022-08-17T10:09:24.608Z",
+      "legislation": "In accordance with section 1 of the Magistrates' Courts Act 1980.",
+      "legislationWelsh": "Yn unol ag adran 1 Deddf Llysoedd Ynadon 1980.",
+      "linkType": "FIRST_HEARING",
+      "listingNotifTemplate": "NOT_APPLICABLE",
+      "offenceActiveOrder": "OFFENCE",
+      "pleaApplicableFlag": false,
+      "prosecutorThirdPartyFlag": false,
+      "spiOutApplicableFlag": false,
+      "summonsTemplateType": "NOT_APPLICABLE",
+      "type": "Application for issue of summons to accused or warrant for their arrest in relation to a criminal case",
+      "typeWelsh": "Cais am godi gwŷs i’r sawl a gyhuddwyd neu warant i’w harestio yng nghyswllt achos troseddol",
+      "validTo": "2021-12-31"
+    }
+  },
+  "summonsApprovalRequired": false
+}

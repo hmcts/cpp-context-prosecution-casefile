@@ -228,4 +228,7 @@ subscriptions_descriptor:
         - name: public.progression.court-application-created
           schema_uri: http://justice.gov.uk/core/courts/public.progression.court-application-created.json
 
+        - name: public.progression.event.application-proceedings-edited
+          schema_uri: http://moj.gov.uk/cpp/progression/events/application-proceedings-edited.json
+
       event_source_name: public

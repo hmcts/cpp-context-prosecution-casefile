@@ -263,8 +263,11 @@ public class ProgressionPublicEventProcessor {
         final CourtApplicationPayment courtApplicationPayment = applicationProceedingsEdited.getCourtApplication().getCourtApplicationPayment();
 
         final JsonObjectBuilder commandPayload = createObjectBuilder()
-                .add(FIELD_CASE_ID, courtApplicationCase.getProsecutionCaseId().toString())
-                .add("contestedPaymentReference", courtApplicationPayment.getContestedPaymentReference());
+                .add(FIELD_CASE_ID, courtApplicationCase.getProsecutionCaseId().toString());
+
+        if (nonNull(courtApplicationPayment.getContestedPaymentReference())){
+            commandPayload.add("contestedPaymentReference", courtApplicationPayment.getContestedPaymentReference());
+        }
 
         if(nonNull(courtApplicationPayment.getPaymentReference())){
             commandPayload.add("paymentReference", courtApplicationPayment.getPaymentReference());

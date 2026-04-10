@@ -1,0 +1,131 @@
+{
+  "courtApplication": {
+    "applicant": {
+      "id": "8b631367-55c5-4774-8a4e-6a8675118901",
+      "notificationRequired": true,
+      "prosecutingAuthority": {
+        "address": {
+          "address1": "Albany House",
+          "address2": "98 Petty France",
+          "address3": "London",
+          "postcode": "SW1H 9EA"
+        },
+        "contact": {
+          "primaryEmail": "BTP-Justice-Unit@btp.police.uk"
+        },
+        "name": "British Transport Police",
+        "prosecutionAuthorityCode": "BTP",
+        "prosecutionAuthorityId": "433ab45d-bfb6-3c38-a6a5-a30e114c9a5f",
+        "prosecutionAuthorityOUCode": "0930000",
+        "standard": true,
+        "welshName": "Heddlu Trafnidiaeth Prydeinig"
+      },
+      "summonsRequired": false
+    },
+    "applicationParticulars": "Test Particulars",
+    "applicationReceivedDate": "2026-04-05",
+    "applicationReference": "FWZF5970356",
+    "applicationStatus": "DRAFT",
+    "commissionerOfOath": false,
+    "courtApplicationPayment": {
+      "feeStatus": "NOT_APPLICABLE"
+    },
+    "id": "43a4fc10-047b-4c49-884f-d96c06fa7d2a",
+    "respondents": [
+      {
+        "id": "4378ec05-682d-4717-a0d4-22c9f17a02bb",
+        "notificationRequired": true,
+        "personDetails": {
+          "address": {
+            "address1": "Address 1",
+            "address2": "Address 2",
+            "postcode": "TW18 4NL"
+          },
+          "dateOfBirth": "2018-01-20",
+          "firstName": "John",
+          "gender": "NOT_SPECIFIED",
+          "lastName": "Doe"
+        },
+        "summonsRequired": false
+      }
+    ],
+    "subject": {
+      "id": "4378ec05-682d-4717-a0d4-22c9f17a02bb",
+      "notificationRequired": true,
+      "personDetails": {
+        "address": {
+          "address1": "Address 1",
+          "address2": "Address 2",
+          "postcode": "TW18 4NL"
+        },
+        "dateOfBirth": "2018-01-20",
+        "firstName": "John",
+        "gender": "NOT_SPECIFIED",
+        "lastName": "Doe"
+      },
+      "summonsRequired": false
+    },
+    "type": {
+      "appealFlag": false,
+      "applicantAppellantFlag": false,
+      "applicationWording": "Application for a warrant for further detention in connection with {1} arrest for an alleged offence {2}",
+      "boxworkNotifTemplate": "NOT_APPLICABLE",
+      "breachType": "NOT_APPLICABLE",
+      "categoryCode": "CR",
+      "changeDate": "2022-05-26T16:26:54.000Z",
+      "code": "PL84501",
+      "commrOfOathFlag": false,
+      "contestedFeeApplicable": false,
+      "courtExtractAvlFlag": true,
+      "courtOfAppealFlag": false,
+      "exParte": false,
+      "hearingCode": "APL",
+      "id": "425aa22d-bac6-4842-a9e2-1fa3730a528f",
+      "initialFeeApplicable": false,
+      "jurisdiction": "MAGISTRATES",
+      "lastModified": "2022-05-26T16:26:54.000Z",
+      "legislation": "In accordance with section 43 of the Police and Criminal Evidence Act 1984.",
+      "linkType": "STANDALONE",
+      "listingNotifTemplate": "POSTAL_NOTIFICATION",
+      "offenceActiveOrder": "NOT_APPLICABLE",
+      "pleaApplicableFlag": false,
+      "prosecutorThirdPartyFlag": false,
+      "pssId": 601921,
+      "sowRef": "APPS",
+      "spiOutApplicableFlag": true,
+      "summonsTemplateType": "NOT_APPLICABLE",
+      "type": "Application for a warrant for further detention",
+      "typeWelsh": "Cais am warant i gadw rhywun dan glo am gyfnod hwy",
+      "validFrom": "2006-01-14T00:00:00.000Z"
+    }
+  },
+  "courtHearing": {
+    "bookedSlots": [
+      {
+        "courtCentreId": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+        "courtRoomId": 2330,
+        "courtScheduleId": "650becfd-5c6a-4d3f-b33b-0dea0d85f01f",
+        "duration": 1,
+        "oucode": "B01LY00",
+        "roomId": "9e4932f7-97b2-3010-b942-ddd2624e4dd8",
+        "session": "AM",
+        "startTime": "2026-04-09T09:00:00.000Z"
+      }
+    ],
+    "courtCentre": {
+      "id": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+      "name": "Lavender Hill Magistrates' Court",
+      "roomId": "9e4932f7-97b2-3010-b942-ddd2624e4dd8",
+      "roomName": "Courtroom 01"
+    },
+    "earliestStartDateTime": "2026-04-09T09:00:00.000Z",
+    "estimatedMinutes": 10,
+    "hearingType": {
+      "description": "Warrant of Further Detention",
+      "id": "638ced9d-3f95-4e99-b27b-47fa5a2c6add"
+    },
+    "id": "4c07619c-b741-432d-a618-49dd6ffa6f53",
+    "jurisdictionType": "MAGISTRATES"
+  },
+  "summonsApprovalRequired": false
+}

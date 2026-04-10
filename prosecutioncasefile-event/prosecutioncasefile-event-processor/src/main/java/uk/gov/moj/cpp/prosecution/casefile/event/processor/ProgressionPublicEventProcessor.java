@@ -1,11 +1,13 @@
 package uk.gov.moj.cpp.prosecution.casefile.event.processor;
 
 import static java.time.LocalDate.parse;
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.Optional.ofNullable;
 import static java.util.UUID.fromString;
 import static java.util.stream.Collectors.toList;
 import static javax.json.Json.createObjectBuilder;
+import static org.apache.commons.collections.CollectionUtils.isEmpty;
 import static org.slf4j.LoggerFactory.getLogger;
 import static uk.gov.justice.services.core.annotation.Component.EVENT_PROCESSOR;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;
@@ -257,11 +259,14 @@ public class ProgressionPublicEventProcessor {
     @Handles("public.progression.event.application-proceedings-edited")
     public void handleCourtApplicationProceedingsEdited(final Envelope<ApplicationProceedingsEdited> envelope) {
         LOGGER.info("public.progression.event.application-proceedings-edited");
-
         final ApplicationProceedingsEdited applicationProceedingsEdited = envelope.payload();
-        final CourtApplicationCase courtApplicationCase = applicationProceedingsEdited.getCourtApplication().getCourtApplicationCases().get(0);
         final CourtApplicationPayment courtApplicationPayment = applicationProceedingsEdited.getCourtApplication().getCourtApplicationPayment();
+        if(isEmpty(applicationProceedingsEdited.getCourtApplication().getCourtApplicationCases()) || isNull(courtApplicationPayment)) {
+            LOGGER.info("public.progression.event.application-proceedings-edited event has no cases or courtApplicationPayment is null. Skipping...Processing");
+            return;
+        }
 
+        final CourtApplicationCase courtApplicationCase = applicationProceedingsEdited.getCourtApplication().getCourtApplicationCases().get(0);
         final JsonObjectBuilder commandPayload = createObjectBuilder()
                 .add(FIELD_CASE_ID, courtApplicationCase.getProsecutionCaseId().toString());
 

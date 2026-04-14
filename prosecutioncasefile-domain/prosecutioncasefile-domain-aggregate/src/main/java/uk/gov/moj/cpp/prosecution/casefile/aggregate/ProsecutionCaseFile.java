@@ -109,6 +109,7 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.PersonalInformation;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Problem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecution;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.SelfDefinedInformation;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Language;
 import uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.PleadOnline;
 import uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.PleadOnlinePcqVisited;
 import uk.gov.moj.cpp.prosecution.casefile.refdata.defendant.DefendantRefDataEnricher;
@@ -163,10 +164,11 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
 
-import uk.gov.justice.services.messaging.JsonObjects;
+import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
@@ -280,10 +282,36 @@ public class ProsecutionCaseFile implements Aggregate {
             if (!validationWarnings.isEmpty()) {
                 builder.accept(new SjpProsecutionReceivedWithWarnings(prosecutionWithReferenceData.getExternalId(), prosecution, validationWarnings));
             } else {
-                builder.accept(new SjpProsecutionReceived(prosecutionWithReferenceData.getExternalId(), prosecution));
+                List<Defendant> prosecutionDefendants = prosecution.getDefendants();
+                Prosecution prosecutionUpdatedWithLanguage = prosecution().withValuesFrom(prosecution)
+                        .withDefendants(getDefendantDetails(prosecutionDefendants))
+                        .build();
+                builder.accept(new SjpProsecutionReceived(prosecutionWithReferenceData.getExternalId(), prosecutionUpdatedWithLanguage));
             }
         }
         return apply(builder.build());
+    }
+
+    private List<Defendant> getDefendantDetails(final List<Defendant> defendants) {
+        return defendants.stream().map(this::getDefendantLanguageCheck).collect(Collectors.toList());
+    }
+
+    private Defendant getDefendantLanguageCheck(Defendant defendant){
+        Language documentationLanguage = defendant.getDocumentationLanguage() != null ? checkLanguage(defendant.getDocumentationLanguage()) : null;
+        Language hearingLanguage = defendant.getHearingLanguage() != null ? checkLanguage(defendant.getHearingLanguage()) : null;
+        return Defendant.defendant()
+                .withValuesFrom(defendant)
+                .withDocumentationLanguage(documentationLanguage)
+                .withHearingLanguage(hearingLanguage)
+                .build();
+    }
+
+    private Language checkLanguage(Language language) {
+        return switch (language) {
+            case ENGLISH -> Language.E;
+            case WELSH -> Language.W;
+            default -> language;
+        };
     }
 
     public Stream<Object> pleadOnline(final UUID caseId, final PleadOnline pleadOnline, final ZonedDateTime createdOn, final UUID userId) {
@@ -389,7 +417,7 @@ public class ProsecutionCaseFile implements Aggregate {
             final String id = errorField.containsKey("id") ? errorField.getString("id") : null;
             addJsonProperty(mutableJsonObject, value, fieldName, id);
         }));
-        try (JsonReader jsonReader = JsonObjects.createReader(new StringReader(mutableJsonObject.getAsJsonObject().toString()))) {
+        try (JsonReader jsonReader = Json.createReader(new StringReader(mutableJsonObject.getAsJsonObject().toString()))) {
             final JsonObject updatedJsonObject = jsonReader.readObject();
             this.caseDetails = jsonObjectToObjectConverter.convert(updatedJsonObject, CaseDetails.class);
         }
@@ -415,7 +443,7 @@ public class ProsecutionCaseFile implements Aggregate {
                     }
             );
 
-            try (JsonReader jsonReader = JsonObjects.createReader(new StringReader(mutableJsonObject.getAsJsonObject().toString()))) {
+            try (JsonReader jsonReader = Json.createReader(new StringReader(mutableJsonObject.getAsJsonObject().toString()))) {
                 return jsonReader.readObject();
             }
         }).collect(toList());
@@ -1888,7 +1916,7 @@ public class ProsecutionCaseFile implements Aggregate {
                     .stream()
                     .map((d) -> {
                         final JsonObjectBuilder defendantJsonObjectBuilder = createObjectBuilder(objectToJsonObjectConverter.convert(d));
-                        final JsonArrayBuilder jsonArrayBuilder = JsonObjects.createArrayBuilder();
+                        final JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
 
                         d.getOffences().forEach((o) -> {
                             final JsonObjectBuilder offenceJsonObjectBuilder = createObjectBuilder(objectToJsonObjectConverter.convert(o));

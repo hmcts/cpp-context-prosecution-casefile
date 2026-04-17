@@ -3,7 +3,7 @@
     <parent>
         <groupId>uk.gov.moj.cpp.prosecution.casefile</groupId>
         <artifactId>prosecutioncasefile-parent</artifactId>
-        <version>17.0.85-PEG-2848-SNAPSHOT</version>
+        <version>17.0.85-RBSD-2609-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 

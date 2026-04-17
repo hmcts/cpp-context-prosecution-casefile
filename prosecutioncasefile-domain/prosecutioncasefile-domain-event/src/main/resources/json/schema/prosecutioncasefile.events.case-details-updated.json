@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/domain/event/case-details-updated.json",
+  "type": "object",
+  "properties": {
+    "caseId": {
+      "type": "string"
+    },
+    "contestedFeeStatus": {
+      "type": "string"
+    },
+    "contestedPaymentReference": {
+      "type": "string"
+    },
+    "feeStatus": {
+      "type": "string"
+    },
+    "paymentReference": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "caseId"
+  ]
+}

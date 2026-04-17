@@ -1,7 +1,9 @@
 package uk.gov.moj.cpp.prosecution.casefile.event.processor;
 
+import static com.google.common.io.Resources.getResource;
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.isJson;
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.withJsonPath;
+import static java.nio.charset.Charset.defaultCharset;
 import static java.time.LocalDate.parse;
 import static java.util.UUID.randomUUID;
 import static uk.gov.justice.services.messaging.JsonObjects.createArrayBuilder;
@@ -17,6 +19,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.core.courts.CourtApplicationCreated.courtApplicationCreated;
 import static uk.gov.justice.core.courts.PublicProgressionCourtApplicationSummonsApproved.publicProgressionCourtApplicationSummonsApproved;
@@ -30,10 +33,12 @@ import static uk.gov.justice.services.test.utils.core.matchers.HandlerClassMatch
 import static uk.gov.justice.services.test.utils.core.matchers.HandlerMethodMatcher.method;
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithRandomUUID;
 import static uk.gov.justice.services.test.utils.core.random.RandomGenerator.BOOLEAN;
+import static uk.gov.moj.cpp.prosecution.casefile.event.processor.utils.FileUtil.jsonFromString;
 import static uk.gov.moj.cpp.prosecution.casefile.event.processor.utils.MetadataHelper.metadataWithIdpcProcessId;
 
 import uk.gov.justice.core.courts.CourtApplication;
 import uk.gov.justice.core.courts.CourtApplicationCreated;
+import uk.gov.justice.core.courts.CourtApplicationPayment;
 import uk.gov.justice.core.courts.PublicProgressionCourtApplicationSummonsApproved;
 import uk.gov.justice.core.courts.PublicProgressionCourtApplicationSummonsRejected;
 import uk.gov.justice.core.courts.SummonsRejectedOutcome;
@@ -45,6 +50,7 @@ import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.Metadata;
 import uk.gov.justice.services.test.utils.core.random.RandomGenerator;
+import uk.gov.moj.cpp.progression.events.ApplicationProceedingsEdited;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Address;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ContactDetails;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.PersonalInformation;
@@ -53,12 +59,14 @@ import uk.gov.moj.cps.prosecutioncasefile.command.handler.AcceptGroupCases;
 import uk.gov.moj.cps.prosecutioncasefile.command.handler.CaseDefendantChangedCommand;
 import uk.gov.moj.cps.prosecutioncasefile.command.handler.RejectGroupCases;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import javax.json.JsonObject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
+import com.google.common.io.Resources;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -109,6 +117,9 @@ class ProgressionPublicEventProcessorTest {
 
     @Mock
     private JsonObjectToObjectConverter jsonObjectToObjectConverter;
+
+    @Spy
+    private JsonObjectToObjectConverter jsonToObjectConverter = new JsonObjectToObjectConverter(new ObjectMapperProducer().objectMapper());
 
 
     @Test
@@ -471,6 +482,171 @@ class ProgressionPublicEventProcessorTest {
         assertThat(rejectGroupCasesEnvelope2.payload().getGroupId(), is(nullValue()));
         assertThat(rejectGroupCasesEnvelope2.payload().getCaseId(), is(caseId));
         assertThat(rejectGroupCasesEnvelope2.payload().getCaseUrn(), is(caseUrn));
+    }
+    @Test
+    void shouldHandleCourtApplicationProceedingsEdited() throws IOException {
+        String courtApplicationProceedingsPayload = Resources.toString(getResource("public.progression.event.application-proceedings-edited.json"), defaultCharset());
+        final JsonObject courtApplicationProceedingsJsonPayload = jsonFromString(courtApplicationProceedingsPayload);
+
+        final ApplicationProceedingsEdited applicationProceedingsEdited = jsonToObjectConverter.convert(courtApplicationProceedingsJsonPayload, ApplicationProceedingsEdited.class);
+
+        final Envelope<ApplicationProceedingsEdited> envelope1 = envelopeFrom(
+                metadataWithIdpcProcessId(metadataWithRandomUUID("public.progression.event.application-proceedings-edited").build(), randomUUID().toString()),
+                applicationProceedingsEdited);
+
+        progressionPublicEventProcessor.handleCourtApplicationProceedingsEdited(envelope1);
+
+        verify(sender).send(jsonObjectEnvelopeCaptor.capture());
+        final Envelope<JsonObject> resultEnvelope = jsonObjectEnvelopeCaptor.getValue();
+
+        Metadata metadata = resultEnvelope.metadata();
+
+        assertThat(metadata, is(notNullValue()));
+        assertThat(metadata.name(), is("prosecutioncasefile.command.update-case-details"));
+        assertThat(resultEnvelope.payload().toString(), isJson(allOf(
+                withJsonPath("$.caseId", equalTo(applicationProceedingsEdited.getCourtApplication().getCourtApplicationCases().get(0).getProsecutionCaseId().toString())),
+                withJsonPath("$.contestedFeeStatus", equalTo(applicationProceedingsEdited.getCourtApplication().getCourtApplicationPayment().getContestedFeeStatus().toString())),
+                withJsonPath("$.contestedPaymentReference", equalTo(applicationProceedingsEdited.getCourtApplication().getCourtApplicationPayment().getContestedPaymentReference().toString())),
+                withJsonPath("$.feeStatus", equalTo(applicationProceedingsEdited.getCourtApplication().getCourtApplicationPayment().getFeeStatus().toString())),
+                withJsonPath("$.paymentReference", equalTo(applicationProceedingsEdited.getCourtApplication().getCourtApplicationPayment().getPaymentReference().toString()))
+        )));
+    }
+
+    @Test
+    void shouldHandleCourtApplicationProceedingsEdited_branchCoverage() throws IOException {
+        String courtApplicationProceedingsPayload = Resources.toString(getResource("public.progression.event.application-proceedings-edited.json"), defaultCharset());
+        final JsonObject courtApplicationProceedingsJsonPayload = jsonFromString(courtApplicationProceedingsPayload);
+
+        final ApplicationProceedingsEdited applicationProceedingsEdited = jsonToObjectConverter.convert(courtApplicationProceedingsJsonPayload, ApplicationProceedingsEdited.class);
+
+        final Envelope<ApplicationProceedingsEdited> envelope1 = envelopeFrom(
+                metadataWithIdpcProcessId(metadataWithRandomUUID("public.progression.event.application-proceedings-edited").build(), randomUUID().toString()),
+                applicationProceedingsEdited);
+
+        progressionPublicEventProcessor.handleCourtApplicationProceedingsEdited(envelope1);
+
+        verify(sender).send(jsonObjectEnvelopeCaptor.capture());
+        final Envelope<JsonObject> resultEnvelope = jsonObjectEnvelopeCaptor.getValue();
+
+        Metadata metadata = resultEnvelope.metadata();
+
+        assertThat(metadata, is(notNullValue()));
+        assertThat(metadata.name(), is("prosecutioncasefile.command.update-case-details"));
+        assertThat(resultEnvelope.payload().toString(), isJson(allOf(
+                withJsonPath("$.caseId", equalTo(applicationProceedingsEdited.getCourtApplication().getCourtApplicationCases().get(0).getProsecutionCaseId().toString())),
+                withJsonPath("$.contestedFeeStatus", equalTo(applicationProceedingsEdited.getCourtApplication().getCourtApplicationPayment().getContestedFeeStatus().toString())),
+                withJsonPath("$.contestedPaymentReference", equalTo(applicationProceedingsEdited.getCourtApplication().getCourtApplicationPayment().getContestedPaymentReference().toString())),
+                withJsonPath("$.feeStatus", equalTo(applicationProceedingsEdited.getCourtApplication().getCourtApplicationPayment().getFeeStatus().toString())),
+                withJsonPath("$.paymentReference", equalTo(applicationProceedingsEdited.getCourtApplication().getCourtApplicationPayment().getPaymentReference().toString()))
+        )));
+
+        final ApplicationProceedingsEdited applicationProceedingsEdited2 = ApplicationProceedingsEdited.applicationProceedingsEdited()
+                .withBoxHearing(applicationProceedingsEdited.getBoxHearing())
+                .withCourtHearing(applicationProceedingsEdited.getCourtHearing())
+                .withSummonsApprovalRequired(applicationProceedingsEdited.getSummonsApprovalRequired())
+                .withCourtApplication(CourtApplication.courtApplication().withValuesFrom(applicationProceedingsEdited.getCourtApplication())
+                        .withCourtApplicationPayment(CourtApplicationPayment.courtApplicationPayment().withValuesFrom(applicationProceedingsEdited.getCourtApplication().getCourtApplicationPayment())
+                                .withContestedFeeStatus(null)
+                                .build())
+                        .build())
+                .build();
+        final Envelope<ApplicationProceedingsEdited> envelope2 = envelopeFrom(
+                metadataWithIdpcProcessId(metadataWithRandomUUID("public.progression.event.application-proceedings-edited").build(), randomUUID().toString()),
+                applicationProceedingsEdited2);
+
+        progressionPublicEventProcessor.handleCourtApplicationProceedingsEdited(envelope2);
+
+        final ApplicationProceedingsEdited applicationProceedingsEdited3 = ApplicationProceedingsEdited.applicationProceedingsEdited()
+                .withBoxHearing(applicationProceedingsEdited.getBoxHearing())
+                .withCourtHearing(applicationProceedingsEdited.getCourtHearing())
+                .withSummonsApprovalRequired(applicationProceedingsEdited.getSummonsApprovalRequired())
+                .withCourtApplication(CourtApplication.courtApplication().withValuesFrom(applicationProceedingsEdited.getCourtApplication())
+                        .withCourtApplicationPayment(CourtApplicationPayment.courtApplicationPayment().withValuesFrom(applicationProceedingsEdited.getCourtApplication().getCourtApplicationPayment())
+                                .withFeeStatus(null)
+                                .build())
+                        .build())
+                .build();
+        final Envelope<ApplicationProceedingsEdited> envelope3 = envelopeFrom(
+                metadataWithIdpcProcessId(metadataWithRandomUUID("public.progression.event.application-proceedings-edited").build(), randomUUID().toString()),
+                applicationProceedingsEdited3);
+
+        progressionPublicEventProcessor.handleCourtApplicationProceedingsEdited(envelope3);
+
+        final ApplicationProceedingsEdited applicationProceedingsEdited4 = ApplicationProceedingsEdited.applicationProceedingsEdited()
+                .withBoxHearing(applicationProceedingsEdited.getBoxHearing())
+                .withCourtHearing(applicationProceedingsEdited.getCourtHearing())
+                .withSummonsApprovalRequired(applicationProceedingsEdited.getSummonsApprovalRequired())
+                .withCourtApplication(CourtApplication.courtApplication().withValuesFrom(applicationProceedingsEdited.getCourtApplication())
+                        .withCourtApplicationPayment(CourtApplicationPayment.courtApplicationPayment().withValuesFrom(applicationProceedingsEdited.getCourtApplication().getCourtApplicationPayment())
+                                .withContestedPaymentReference(null)
+                                .build())
+                        .build())
+                .build();
+        final Envelope<ApplicationProceedingsEdited> envelope4 = envelopeFrom(
+                metadataWithIdpcProcessId(metadataWithRandomUUID("public.progression.event.application-proceedings-edited").build(), randomUUID().toString()),
+                applicationProceedingsEdited4);
+
+        progressionPublicEventProcessor.handleCourtApplicationProceedingsEdited(envelope4);
+    }
+
+    @Test
+    void shouldHandleCourtApplicationProceedingsEdited_InitialFeeNA() throws IOException {
+        String courtApplicationProceedingsPayload = Resources.toString(getResource("public.progression.event.application-proceedings-edited1.json"), defaultCharset());
+        final JsonObject courtApplicationProceedingsJsonPayload = jsonFromString(courtApplicationProceedingsPayload);
+
+        final ApplicationProceedingsEdited applicationProceedingsEdited = jsonToObjectConverter.convert(courtApplicationProceedingsJsonPayload, ApplicationProceedingsEdited.class);
+
+        final Envelope<ApplicationProceedingsEdited> envelope1 = envelopeFrom(
+                metadataWithIdpcProcessId(metadataWithRandomUUID("public.progression.event.application-proceedings-edited").build(), randomUUID().toString()),
+                applicationProceedingsEdited);
+
+        progressionPublicEventProcessor.handleCourtApplicationProceedingsEdited(envelope1);
+
+        verify(sender).send(jsonObjectEnvelopeCaptor.capture());
+        final Envelope<JsonObject> resultEnvelope = jsonObjectEnvelopeCaptor.getValue();
+
+        Metadata metadata = resultEnvelope.metadata();
+
+        assertThat(metadata, is(notNullValue()));
+        assertThat(metadata.name(), is("prosecutioncasefile.command.update-case-details"));
+        assertThat(resultEnvelope.payload().toString(), isJson(allOf(
+                withJsonPath("$.caseId", equalTo(applicationProceedingsEdited.getCourtApplication().getCourtApplicationCases().get(0).getProsecutionCaseId().toString())),
+                withJsonPath("$.contestedFeeStatus", equalTo(applicationProceedingsEdited.getCourtApplication().getCourtApplicationPayment().getContestedFeeStatus().toString())),
+                withJsonPath("$.contestedPaymentReference", equalTo(applicationProceedingsEdited.getCourtApplication().getCourtApplicationPayment().getContestedPaymentReference().toString())),
+                withJsonPath("$.feeStatus", equalTo(applicationProceedingsEdited.getCourtApplication().getCourtApplicationPayment().getFeeStatus().toString()))
+        )));
+    }
+
+    @Test
+    void shouldHandleCourtApplicationProceedingsEdited_noCases_standAloneApplication() throws IOException {
+        String courtApplicationProceedingsPayload = Resources.toString(getResource("public.progression.event.application-proceedings-edited-standalone.json"), defaultCharset());
+        final JsonObject courtApplicationProceedingsJsonPayload = jsonFromString(courtApplicationProceedingsPayload);
+
+        final ApplicationProceedingsEdited applicationProceedingsEdited = jsonToObjectConverter.convert(courtApplicationProceedingsJsonPayload, ApplicationProceedingsEdited.class);
+
+        final Envelope<ApplicationProceedingsEdited> envelope1 = envelopeFrom(
+                metadataWithIdpcProcessId(metadataWithRandomUUID("public.progression.event.application-proceedings-edited").build(), randomUUID().toString()),
+                applicationProceedingsEdited);
+
+        progressionPublicEventProcessor.handleCourtApplicationProceedingsEdited(envelope1);
+
+        verifyNoInteractions(sender);
+    }
+
+    @Test
+    void shouldHandleCourtApplicationProceedingsEdited_noFeePayment() throws IOException {
+        String courtApplicationProceedingsPayload = Resources.toString(getResource("public.progression.event.application-proceedings-edited-nofee.json"), defaultCharset());
+        final JsonObject courtApplicationProceedingsJsonPayload = jsonFromString(courtApplicationProceedingsPayload);
+
+        final ApplicationProceedingsEdited applicationProceedingsEdited = jsonToObjectConverter.convert(courtApplicationProceedingsJsonPayload, ApplicationProceedingsEdited.class);
+
+        final Envelope<ApplicationProceedingsEdited> envelope1 = envelopeFrom(
+                metadataWithIdpcProcessId(metadataWithRandomUUID("public.progression.event.application-proceedings-edited").build(), randomUUID().toString()),
+                applicationProceedingsEdited);
+
+        progressionPublicEventProcessor.handleCourtApplicationProceedingsEdited(envelope1);
+
+        verifyNoInteractions(sender);
     }
 }
 

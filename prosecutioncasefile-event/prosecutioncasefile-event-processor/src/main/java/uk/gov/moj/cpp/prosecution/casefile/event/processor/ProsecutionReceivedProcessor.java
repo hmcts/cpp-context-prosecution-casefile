@@ -118,6 +118,7 @@ public class ProsecutionReceivedProcessor {
 
         final InitiateCourtProceedings initiateCourtProceedings = ccCaseToProsecutionCaseConverter.convert(
                 CcCaseReceived.ccCaseReceived().withProsecutionWithReferenceData(prosecutionWithReferenceData)
+                        .withSummonsApprovedOutcome(envelope.payload().getSummonsApprovedOutcome())
                         .withId(envelope.payload().getId()).build());
 
         final JsonEnvelope envelope1 = envelopeHelper.withMetadataInPayload(

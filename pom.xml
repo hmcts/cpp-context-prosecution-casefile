@@ -30,7 +30,7 @@
         <referencedata.offences.version>17.0.38</referencedata.offences.version>
         <system.enterprise-id.version>0.0.3</system.enterprise-id.version>
         <resulting.version>17.0.37</resulting.version>
-        <progression.version>17.0.246</progression.version>
+        <progression.version>17.0.249</progression.version>
         <defence.version>17.0.85</defence.version>
         <criminal-court-public-model.version>${coredomain.version}</criminal-court-public-model.version>
         <notification.notify.version>17.0.24</notification.notify.version>

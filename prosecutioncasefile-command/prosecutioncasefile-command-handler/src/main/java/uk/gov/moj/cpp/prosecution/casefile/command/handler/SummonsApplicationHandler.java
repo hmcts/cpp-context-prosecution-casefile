@@ -25,6 +25,7 @@ import uk.gov.moj.cpp.prosecution.casefile.refdata.proscase.GroupCasesReferenceD
 import uk.gov.moj.cpp.prosecution.casefile.service.ProgressionService;
 import uk.gov.moj.cps.prosecutioncasefile.command.handler.ApproveCaseDefendantsAsSummonsApplicationApproved;
 import uk.gov.moj.cps.prosecutioncasefile.command.handler.RejectCaseDefendantsAsSummonsApplicationRejected;
+import uk.gov.moj.cps.prosecutioncasefile.command.handler.UpdateCaseDetails;
 
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -79,6 +80,19 @@ public class SummonsApplicationHandler extends BaseProsecutionCaseFileHandler {
             final JsonEnvelope jsonEnvelope = JsonEnvelope.envelopeFrom(envelope.metadata(), JsonValue.NULL);
             eventStreamForGroupCases.append(events.map(toEnvelopeWithMetadataFrom(jsonEnvelope)));
         }
+    }
+
+    @Handles("prosecutioncasefile.command.update-case-details")
+    public void updateCaseDetails(final Envelope<UpdateCaseDetails> envelope) throws EventStreamException {
+        final UpdateCaseDetails commandPayload = envelope.payload();
+        final UUID caseId = UUID.fromString(commandPayload.getCaseId());
+
+        final EventStream eventStream = eventSource.getStreamById(caseId);
+        final ProsecutionCaseFile prosecutionCaseFile = aggregateService.get(eventStream, ProsecutionCaseFile.class);
+        final Stream<Object> events = prosecutionCaseFile.updateCaseDetails(commandPayload.getContestedFeeStatus(),commandPayload.getContestedPaymentReference(),
+                commandPayload.getFeeStatus(), commandPayload.getPaymentReference());
+        final JsonEnvelope jsonEnvelope = JsonEnvelope.envelopeFrom(envelope.metadata(), JsonValue.NULL);
+        eventStream.append(events.map(toEnvelopeWithMetadataFrom(jsonEnvelope)));
     }
 
     @Handles("prosecutioncasefile.command.reject-case-defendants-as-summons-application-rejected")

@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/command/handler/update-case-details.json",
+  "description": "poca court application created",
+  "type": "object",
+  "properties": {
+    "caseId": {
+      "type": "string"
+    },
+    "contestedFeeStatus": {
+      "type": "string"
+    },
+    "contestedPaymentReference": {
+      "type": "string"
+    },
+    "feeStatus": {
+      "type": "string"
+    },
+    "paymentReference": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "caseId"
+  ]
+}

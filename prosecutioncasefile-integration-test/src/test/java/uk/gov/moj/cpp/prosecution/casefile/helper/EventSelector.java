@@ -73,6 +73,9 @@ public class EventSelector {
     public static final String EVENT_SELECTOR_DEFENDANT_VALIDATION_PASSED = "prosecutioncasefile.events.defendant-validation-passed";
 
     public static final String EVENT_SELECTOR_CASE_CREATED_SUCCESSFULLY = "prosecutioncasefile.events.case-created-successfully";
+
+    public static final String EVENT_SELECTOR_CASE_DETAILS_UPDATED = "prosecutioncasefile.events.case-details-updated";
+
     public static final String EVENT_SELECTOR_INITIATE_APPLICATION_ACCEPTED = "prosecutioncasefile.events.submit-application-accepted";
     public static final String PROSECUTIONCASEFILE_EVENTS_SUBMIT_APPLICATION_VALIDATION_FAILED = "prosecutioncasefile.events.submit-application-validation-failed";
 

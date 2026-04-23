@@ -3,15 +3,15 @@
     <parent>
         <artifactId>prosecutioncasefile-parent</artifactId>
         <groupId>uk.gov.moj.cpp.prosecution.casefile</groupId>
-        <version>17.0.89-SNAPSHOT</version>
+        <version>21.0.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>prosecutioncasefile-defence-service</artifactId>
     <dependencies>
         <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>

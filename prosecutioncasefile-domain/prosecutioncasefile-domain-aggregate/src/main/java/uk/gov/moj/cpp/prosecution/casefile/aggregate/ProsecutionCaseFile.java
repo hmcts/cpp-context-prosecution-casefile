@@ -17,7 +17,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static java.util.stream.Stream.builder;
 import static java.util.stream.Stream.of;
-import static javax.json.Json.createArrayBuilder;
+import static jakarta.json.Json.createArrayBuilder;
 import static org.apache.commons.collections.CollectionUtils.isEmpty;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static org.apache.commons.collections.ListUtils.union;
@@ -169,12 +169,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
 
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.json.JsonReader;
+import jakarta.json.Json;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonArrayBuilder;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonObjectBuilder;
+import jakarta.json.JsonReader;
 
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonParser;
@@ -1266,8 +1266,11 @@ public class ProsecutionCaseFile implements Aggregate {
                     }
                 }),
                 when(CaseDetailsUpdated.class).apply(e -> {
+                    final CaseDetails base = this.caseDetails != null
+                            ? this.caseDetails
+                            : CaseDetails.caseDetails().withCaseId(UUID.fromString(e.getCaseId())).build();
                     CaseDetails updatedCaseDetails = CaseDetails.caseDetails()
-                            .withValuesFrom(this.caseDetails)
+                            .withValuesFrom(base)
                             .withFeeStatus(e.getFeeStatus())
                             .withContestedFeeStatus(e.getContestedFeeStatus())
                             .withContestedFeePaymentReference(e.getContestedPaymentReference())

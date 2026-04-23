@@ -7,15 +7,12 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Gender;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -26,11 +23,6 @@ public class SelfDefinedInformationDetails implements Serializable {
     @Id
     @Column(name = "self_defined_information_id", unique = true, nullable = false)
     private String selfDefinedInformationId;
-
-    @MapsId
-    @OneToOne(mappedBy = "selfDefinedInformation")
-    @JoinColumn(name = "self_defined_information_id")
-    private DefendantDetails defendantDetails;
 
     @Column(name = "additional_nationality")
     private String additionalNationality;
@@ -111,14 +103,6 @@ public class SelfDefinedInformationDetails implements Serializable {
 
     public void setNationality(String nationality) {
         this.nationality = nationality;
-    }
-
-    public DefendantDetails getDefendantDetails() {
-        return defendantDetails;
-    }
-
-    public void setDefendantDetails(final DefendantDetails defendantDetails) {
-        this.defendantDetails = defendantDetails;
     }
 
     @Override

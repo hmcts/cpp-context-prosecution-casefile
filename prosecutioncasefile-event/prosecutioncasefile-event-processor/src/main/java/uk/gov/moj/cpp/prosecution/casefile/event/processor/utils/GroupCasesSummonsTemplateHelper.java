@@ -2,8 +2,8 @@ package uk.gov.moj.cpp.prosecution.casefile.event.processor.utils;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
-import static javax.json.Json.createArrayBuilder;
-import static javax.json.Json.createObjectBuilder;
+import static jakarta.json.Json.createArrayBuilder;
+import static jakarta.json.Json.createObjectBuilder;
 import static org.apache.commons.lang3.StringUtils.isNoneEmpty;
 
 import uk.gov.moj.cpp.prosecution.casefile.domain.GroupProsecutionList;
@@ -14,8 +14,8 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.GroupProsecution;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Offence;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.PersonalInformation;
 
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
+import jakarta.json.JsonArrayBuilder;
+import jakarta.json.JsonObject;
 
 public class GroupCasesSummonsTemplateHelper {
 

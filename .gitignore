@@ -60,3 +60,7 @@ buildContexts.sh
 lightning-jenkins.properties
 **/.DS_Store
 
+# OpenJPA bytecode enhancement artifacts (extracted from JAR by Maven enhance goal)
+/META-INF/
+/org/
+

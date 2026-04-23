@@ -24,8 +24,8 @@ import uk.gov.moj.cps.prosecutioncasefile.command.api.PleadOnline;
 import java.util.List;
 import java.util.Map;
 
-import javax.json.Json;
-import javax.json.JsonObject;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
 
 import org.mockito.InjectMocks;
 

@@ -1,92 +1,78 @@
 package uk.gov.moj.cpp.prosecutioncasefile.persistence.repository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.ADDITIONAL_NATIONALITY;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.DATE_OF_BIRTH;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.ETHNICITY;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.GENDER;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.NATIONALITY;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.createFirstDefendant;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
+import uk.gov.justice.services.test.utils.persistence.HibernateTestEntityManagerProvider;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Gender;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.DefendantDetails;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.PersonalInformationDetails;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.SelfDefinedInformationDetails;
-import uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.UUID;
 
-import javax.inject.Inject;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
-import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-@RunWith(CdiTestRunner.class)
 public class SelfDefinedInformationRepositoryTest {
 
-    @Inject
-    private SelfDefinedInformationRepository selfDefinedInformationRepository;
+    private static final String PERSISTENCE_UNIT = "prosecutioncasefile-test-persistence-unit";
 
-    @Inject
+    private static final String DEFENDANT_ID = UUID.randomUUID().toString();
+
+    @RegisterExtension
+    static HibernateTestEntityManagerProvider hibernateTestEntityManagerProvider = new HibernateTestEntityManagerProvider(PERSISTENCE_UNIT);
+
+    private SelfDefinedInformationRepository selfDefinedInformationRepository;
     private DefendantRepository defendantRepository;
 
-    private SelfDefinedInformationDetails selfDefinedInformationDetails;
-
-    private DefendantDetails defendantDetails;
-
-    @Before
-    public void setUp() {
-        createAndSaveDefendant();
+    @BeforeEach
+    public void createRepositories() {
+        selfDefinedInformationRepository = new SelfDefinedInformationRepository();
+        hibernateTestEntityManagerProvider.injectEntityManagerInto(selfDefinedInformationRepository);
+        defendantRepository = new DefendantRepository();
+        hibernateTestEntityManagerProvider.injectEntityManagerInto(defendantRepository);
     }
 
     @Test
-    public void shouldUpdateSelfDefinedInformation() {
-        final String ADDITIONAL_NATIONALITY = "American";
-        selfDefinedInformationDetails.setAdditionalNationality(ADDITIONAL_NATIONALITY);
-        selfDefinedInformationRepository.save(selfDefinedInformationDetails);
+    void shouldFindSelfDefinedInformationById() {
+        saveDefendantWithSelfDefinedInformation("British", Gender.MALE);
 
-        final List<SelfDefinedInformationDetails> selfDefinedInformationDetailsList = selfDefinedInformationRepository.findAll();
-        assertThat(selfDefinedInformationDetailsList.size(), equalTo(1));
-        final SelfDefinedInformationDetails selfDefinedInformationDetailsSvd = selfDefinedInformationDetailsList.get(0);
-        assertThat(selfDefinedInformationDetailsSvd.getAdditionalNationality(), equalTo(ADDITIONAL_NATIONALITY));
-        assertSelfDefinedInformationMatches(selfDefinedInformationDetails, selfDefinedInformationDetailsSvd);
+        final SelfDefinedInformationDetails found = selfDefinedInformationRepository.findBy(UUID.fromString(DEFENDANT_ID));
+
+        assertThat(found, notNullValue());
+        assertThat(found.getNationality(), is("British"));
+        assertThat(found.getGender(), is(Gender.MALE));
     }
 
     @Test
-    public void shouldConstructSelfDefinedInformation() {
-        final DefendantDetails defendantDetails = createFirstDefendant();
-        final SelfDefinedInformationDetails selfDefinedInformationDetails = new SelfDefinedInformationDetails(ADDITIONAL_NATIONALITY, DATE_OF_BIRTH, ETHNICITY, GENDER, NATIONALITY);
-        selfDefinedInformationDetails.setDefendantDetails(defendantDetails);
-        final SelfDefinedInformationDetails selfDefinedInformationDetailsSvd = new SelfDefinedInformationDetails();
-        selfDefinedInformationDetailsSvd.setAdditionalNationality(ADDITIONAL_NATIONALITY);
-        selfDefinedInformationDetailsSvd.setDateOfBirth(DATE_OF_BIRTH);
-        selfDefinedInformationDetailsSvd.setEthnicity(ETHNICITY);
-        selfDefinedInformationDetailsSvd.setGender(GENDER);
-        selfDefinedInformationDetailsSvd.setNationality(NATIONALITY);
-        selfDefinedInformationDetailsSvd.setDefendantDetails(defendantDetails);
-        assertSelfDefinedInformationMatches(selfDefinedInformationDetails, selfDefinedInformationDetailsSvd);
+    void shouldSaveSelfDefinedInformation() {
+        saveDefendantWithSelfDefinedInformation("British", Gender.MALE);
+
+        final SelfDefinedInformationDetails found = selfDefinedInformationRepository.findBy(UUID.fromString(DEFENDANT_ID));
+        assertThat(found, notNullValue());
+
+        found.setNationality("French");
+        selfDefinedInformationRepository.save(found);
+
+        final SelfDefinedInformationDetails updated = selfDefinedInformationRepository.findBy(UUID.fromString(DEFENDANT_ID));
+        assertThat(updated.getNationality(), is("French"));
     }
 
-    private void assertSelfDefinedInformationMatches(final SelfDefinedInformationDetails selfDefinedInformationDetails, final SelfDefinedInformationDetails selfDefinedInformationDetailsSvd) {
-        assertThat(selfDefinedInformationDetailsSvd.getSelfDefinedInformationId(), equalTo(selfDefinedInformationDetails.getSelfDefinedInformationId()));
-        assertThat(selfDefinedInformationDetailsSvd.getEthnicity(), equalTo(selfDefinedInformationDetailsSvd.getEthnicity()));
-        assertThat(selfDefinedInformationDetailsSvd.getDateOfBirth(), equalTo(selfDefinedInformationDetails.getDateOfBirth()));
-        assertThat(selfDefinedInformationDetailsSvd.getDefendantDetails().getDefendantId(), equalTo(selfDefinedInformationDetails.getDefendantDetails().getDefendantId()));
-        assertThat(selfDefinedInformationDetailsSvd.getGender(), equalTo(selfDefinedInformationDetails.getGender()));
-        assertThat(selfDefinedInformationDetailsSvd.getNationality(), equalTo(selfDefinedInformationDetails.getNationality()));
-    }
-
-    private void createAndSaveDefendant() {
-        defendantDetails = TestUtils.createFirstDefendant();
-
-        final PersonalInformationDetails personalInformationDetails = defendantDetails.getPersonalInformation();
-        personalInformationDetails.setDefendantDetails(defendantDetails);
-
-        selfDefinedInformationDetails = defendantDetails.getSelfDefinedInformation();
-        selfDefinedInformationDetails.setDefendantDetails(defendantDetails);
-
-        defendantRepository.save(defendantDetails);
+    private void saveDefendantWithSelfDefinedInformation(final String nationality, final Gender gender) {
+        final PersonalInformationDetails personalInformation = new PersonalInformationDetails(
+                "Mr", "John", "Smith", null, null, null, null);
+        final SelfDefinedInformationDetails selfDefinedInformation = new SelfDefinedInformationDetails(
+                null, LocalDate.of(1990, 5, 15), "White British", gender, nationality);
+        final DefendantDetails defendant = new DefendantDetails(
+                DEFENDANT_ID, "ASN123", null, null, null, null, null, null,
+                null, null, null, null,
+                personalInformation, selfDefinedInformation, new HashSet<>(), new ArrayList<>(), null, null);
+        defendantRepository.save(defendant);
     }
 }

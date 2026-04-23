@@ -12,7 +12,7 @@ import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 public class ModeOfTrialRefDataEnricher implements DefendantRefDataEnricher {
 

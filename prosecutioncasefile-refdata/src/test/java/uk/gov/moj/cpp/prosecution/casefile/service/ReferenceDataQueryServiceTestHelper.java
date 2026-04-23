@@ -2,8 +2,8 @@ package uk.gov.moj.cpp.prosecution.casefile.service;
 
 import static java.util.Optional.ofNullable;
 import static java.util.UUID.randomUUID;
-import static javax.json.Json.createArrayBuilder;
-import static javax.json.Json.createObjectBuilder;
+import static jakarta.json.Json.createArrayBuilder;
+import static jakarta.json.Json.createObjectBuilder;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.messaging.JsonEnvelope.envelopeFrom;
@@ -17,10 +17,10 @@ import uk.gov.justice.services.messaging.JsonEnvelope;
 
 import java.util.UUID;
 
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
+import jakarta.json.Json;
+import jakarta.json.JsonArrayBuilder;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonObjectBuilder;
 
 public class ReferenceDataQueryServiceTestHelper {
 
@@ -499,7 +499,7 @@ public class ReferenceDataQueryServiceTestHelper {
         final JsonObject courtRoom = createObjectBuilder()
                 .add(KEY_ID, randomUUID().toString())
                 .add(VENUENAME, VENUENAMEVALUE)
-                .add(COURTROOMID, "123")
+                .add(COURTROOMID, 123)
                 .add(COURTROOMNAME, COURTROOMNAMEVALUE_1)
                 .build();
 

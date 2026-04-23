@@ -8,7 +8,7 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecution;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecutor;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ProsecutorsReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.List;
 
 public class GroupCasesProsecutorReferenceDataEnricher implements GroupCasesReferenceDataEnricher {

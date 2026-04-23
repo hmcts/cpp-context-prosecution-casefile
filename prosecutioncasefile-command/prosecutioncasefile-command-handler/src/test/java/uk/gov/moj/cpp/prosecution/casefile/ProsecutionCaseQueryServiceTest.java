@@ -1,7 +1,7 @@
 package uk.gov.moj.cpp.prosecution.casefile;
 
 import static java.util.UUID.randomUUID;
-import static javax.json.Json.createObjectBuilder;
+import static jakarta.json.Json.createObjectBuilder;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -20,7 +20,7 @@ import uk.gov.moj.cpp.prosecution.casefile.command.service.ProsecutionCaseQueryS
 
 import java.util.UUID;
 
-import javax.json.JsonObject;
+import jakarta.json.JsonObject;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

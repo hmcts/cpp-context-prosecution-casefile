@@ -11,8 +11,8 @@ import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.moj.cpp.prosecution.casefile.query.api.service.vo.CaseDefendantHearings;
 import uk.gov.moj.cpp.prosecution.casefile.query.api.service.vo.CaseDetail;
 
-import javax.inject.Inject;
-import javax.json.JsonObject;
+import jakarta.inject.Inject;
+import jakarta.json.JsonObject;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -23,7 +23,7 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
-import static javax.json.Json.createObjectBuilder;
+import static jakarta.json.Json.createObjectBuilder;
 import static uk.gov.justice.services.core.enveloper.Enveloper.envelop;
 
 public class ProgressionService {

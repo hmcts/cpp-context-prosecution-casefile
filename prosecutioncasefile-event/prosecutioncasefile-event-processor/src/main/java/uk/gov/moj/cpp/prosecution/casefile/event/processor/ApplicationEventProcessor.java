@@ -1,7 +1,7 @@
 package uk.gov.moj.cpp.prosecution.casefile.event.processor;
 
 import static java.util.Objects.nonNull;
-import static javax.json.Json.createObjectBuilder;
+import static jakarta.json.Json.createObjectBuilder;
 import static uk.gov.justice.services.core.annotation.Component.EVENT_PROCESSOR;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;
 import static uk.gov.justice.services.messaging.Envelope.metadataFrom;
@@ -21,8 +21,8 @@ import uk.gov.moj.cpp.prosecution.casefile.event.processor.utils.EnvelopeHelper;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.SubmitApplicationAccepted;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.SubmitApplicationValidationFailed;
 
-import javax.inject.Inject;
-import javax.json.JsonObjectBuilder;
+import jakarta.inject.Inject;
+import jakarta.json.JsonObjectBuilder;
 import java.util.UUID;
 
 @ServiceComponent(EVENT_PROCESSOR)
@@ -90,7 +90,9 @@ public class ApplicationEventProcessor {
         notifyObjectBuilder.add(SENDER_ADDRESS, payload.getSenderEmail());
 
         final JsonObjectBuilder personalisationObjectBuilder = createObjectBuilder();
-        personalisationObjectBuilder.add(SUBJECT, payload.getEmailSubject());
+        if (nonNull(payload.getEmailSubject())) {
+            personalisationObjectBuilder.add(SUBJECT, payload.getEmailSubject());
+        }
         notifyObjectBuilder.add(PERSONALISATION, personalisationObjectBuilder.build());
 
         final Metadata metadata = Envelope.metadataFrom(envelope.metadata()).withName(NOTIFICATION_NOTIFY_SEND_EMAIL_NOTIFICATION).build();

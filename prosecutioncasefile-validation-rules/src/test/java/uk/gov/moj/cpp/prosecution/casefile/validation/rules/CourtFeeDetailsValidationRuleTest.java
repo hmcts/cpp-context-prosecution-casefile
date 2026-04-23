@@ -8,7 +8,7 @@ import uk.gov.moj.cpp.prosecution.casefile.validation.SubmitApplicationValidator
 
 import java.util.List;
 
-import javax.enterprise.inject.Instance;
+import jakarta.enterprise.inject.Instance;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;

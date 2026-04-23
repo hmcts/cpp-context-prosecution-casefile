@@ -1,6 +1,6 @@
 package uk.gov.moj.cpp.prosecution.casefile.event.processor;
 
-import static javax.json.Json.createObjectBuilder;
+import static jakarta.json.Json.createObjectBuilder;
 import static uk.gov.justice.services.core.annotation.Component.EVENT_PROCESSOR;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;
 import static uk.gov.justice.services.messaging.JsonEnvelope.metadataFrom;
@@ -18,8 +18,8 @@ import uk.gov.moj.cps.prosecutioncasefile.domain.event.CaseFiltered;
 
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.json.JsonObject;
+import jakarta.inject.Inject;
+import jakarta.json.JsonObject;
 
 @ServiceComponent(EVENT_PROCESSOR)
 public class CaseFilteredEventProcessor {

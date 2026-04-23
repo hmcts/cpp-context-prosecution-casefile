@@ -16,7 +16,7 @@ import uk.gov.moj.cpp.prosecutioncasefile.persistence.repository.CaseDetailsRepo
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.repository.DefendantRepository;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.CaseDefendantChanged;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 @ServiceComponent(EVENT_LISTENER)
 public class DefendantChangedListener {

@@ -4,7 +4,7 @@
     <parent>
         <groupId>uk.gov.moj.cpp.prosecution.casefile</groupId>
         <artifactId>prosecutioncasefile-command</artifactId>
-        <version>17.0.89-SNAPSHOT</version>
+        <version>21.0.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -18,8 +18,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -28,8 +28,8 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>javax.json</groupId>
-            <artifactId>javax.json-api</artifactId>
+            <groupId>jakarta.json</groupId>
+            <artifactId>jakarta.json-api</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -193,8 +193,8 @@
                         <version>${coredomain.version}</version>
                     </dependency>
                     <dependency>
-                        <groupId>javax</groupId>
-                        <artifactId>javaee-api</artifactId>
+                        <groupId>jakarta.platform</groupId>
+                        <artifactId>jakarta.jakartaee-api</artifactId>
                         <version>${javaee-api.version}</version>
                     </dependency>
                 </dependencies>
@@ -216,8 +216,8 @@
                         </exclusions>
                     </dependency>
                     <dependency>
-                        <groupId>javax</groupId>
-                        <artifactId>javaee-api</artifactId>
+                        <groupId>jakarta.platform</groupId>
+                        <artifactId>jakarta.jakartaee-api</artifactId>
                         <version>${javaee-api.version}</version>
                     </dependency>
                 </dependencies>

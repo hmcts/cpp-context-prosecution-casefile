@@ -11,8 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.runtime.ProcessInstance;

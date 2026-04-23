@@ -1,8 +1,8 @@
 package uk.gov.moj.cpp.prosecution.casefile.validation.rules.forms;
 
 import static java.util.UUID.randomUUID;
-import static javax.json.Json.createArrayBuilder;
-import static javax.json.Json.createObjectBuilder;
+import static jakarta.json.Json.createArrayBuilder;
+import static jakarta.json.Json.createObjectBuilder;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -14,9 +14,9 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Problem;
 
 import java.util.UUID;
 
-import javax.enterprise.inject.Instance;
-import javax.json.JsonArray;
-import javax.json.JsonObject;
+import jakarta.enterprise.inject.Instance;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonObject;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

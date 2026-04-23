@@ -13,7 +13,7 @@ import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.OrganisationInforma
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 @SuppressWarnings({"pmd:NullAssignment"})
 public class DefendantToDefendantDetails implements Converter<Defendant, DefendantDetails> {

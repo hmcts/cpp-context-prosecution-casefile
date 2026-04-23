@@ -2,7 +2,7 @@ package uk.gov.moj.cpp.prosecution.casefile.helper;
 
 import static java.lang.ClassLoader.getSystemResourceAsStream;
 import static java.lang.String.format;
-import static javax.json.Json.createReader;
+import static jakarta.json.Json.createReader;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -15,8 +15,8 @@ import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
 import java.util.Map;
 
-import javax.json.JsonObject;
-import javax.json.JsonReader;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
 
 import com.google.common.io.Resources;
 import org.apache.commons.io.IOUtils;

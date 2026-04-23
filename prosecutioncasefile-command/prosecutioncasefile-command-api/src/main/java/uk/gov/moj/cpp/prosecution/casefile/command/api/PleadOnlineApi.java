@@ -2,7 +2,7 @@ package uk.gov.moj.cpp.prosecution.casefile.command.api;
 
 import static java.util.Arrays.asList;
 import static java.util.Objects.nonNull;
-import static javax.json.Json.createObjectBuilder;
+import static jakarta.json.Json.createObjectBuilder;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_API;
 import static uk.gov.justice.services.core.enveloper.Enveloper.envelop;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;
@@ -28,10 +28,10 @@ import uk.gov.moj.cps.prosecutioncasefile.command.api.PleadOnlinePcqVisited;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
+import jakarta.inject.Inject;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonObjectBuilder;
 
 @ServiceComponent(COMMAND_API)
 public class PleadOnlineApi {

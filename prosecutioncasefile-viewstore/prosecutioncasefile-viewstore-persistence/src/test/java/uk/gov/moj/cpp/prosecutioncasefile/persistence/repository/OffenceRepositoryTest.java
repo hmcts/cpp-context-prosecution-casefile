@@ -1,78 +1,88 @@
 package uk.gov.moj.cpp.prosecutioncasefile.persistence.repository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.APPLIED_COMPENSATION;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.BACK_DUTY;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.BACK_DUTY_FROM;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.BACK_DUTY_TO;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.CHARGE_DATE;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.OFFENCE_CODE;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.OFFENCE_COMMITTED_DATE;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.OFFENCE_COMMITTED_END_DATE;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.OFFENCE_DATE_CODE;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.OFFENCE_ID;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.OFFENCE_LOCATION;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.OFFENCE_SEQUENCE_NUMBER;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.OFFENCE_WORDING;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.OFFENCE_WORDING_WELSH;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.STATEMENT_OF_FACT;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.STATEMENT_OF_FACT_WELSH;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.VEHICLE_MAKE;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.VEHICLE_REGISTRATION_MARK;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.createFirstDefendantOffence;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
+import uk.gov.justice.services.test.utils.persistence.HibernateTestEntityManagerProvider;
+import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.DefendantDetails;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.OffenceDetails;
-import uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils;
+import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.PersonalInformationDetails;
 
-import javax.inject.Inject;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.UUID;
 
-import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
-@RunWith(CdiTestRunner.class)
 public class OffenceRepositoryTest {
 
-    @Inject
+    private static final String PERSISTENCE_UNIT = "prosecutioncasefile-test-persistence-unit";
+
+    private static final UUID OFFENCE_ID = UUID.randomUUID();
+    private static final String DEFENDANT_ID = UUID.randomUUID().toString();
+
+    @RegisterExtension
+    static HibernateTestEntityManagerProvider hibernateTestEntityManagerProvider = new HibernateTestEntityManagerProvider(PERSISTENCE_UNIT);
+
     private OffenceRepository offenceRepository;
+    private DefendantRepository defendantRepository;
+
+    @BeforeEach
+    public void createRepositories() {
+        offenceRepository = new OffenceRepository();
+        hibernateTestEntityManagerProvider.injectEntityManagerInto(offenceRepository);
+        defendantRepository = new DefendantRepository();
+        hibernateTestEntityManagerProvider.injectEntityManagerInto(defendantRepository);
+    }
 
     @Test
-    public void shouldFindOffenceById() {
-        final OffenceDetails offence = TestUtils.createFirstDefendantOffence();
+    void shouldSaveAndFindOffence() {
+        final DefendantDetails defendant = saveDefendant();
+        final OffenceDetails offence = createOffence(OFFENCE_ID, defendant);
+
         offenceRepository.save(offence);
-        final OffenceDetails offenceDetailsSvd = offenceRepository.findBy(offence.getOffenceId());
-        assertOffenceMatches(offence, offenceDetailsSvd);
+
+        final OffenceDetails found = offenceRepository.findBy(OFFENCE_ID);
+        assertThat(found, notNullValue());
+        assertThat(found.getOffenceId(), is(OFFENCE_ID));
+        assertThat(found.getOffenceCode(), is("RT88191"));
+        assertThat(found.getOffenceWording(), is("Speeding offence"));
     }
 
     @Test
-    public void shouldConstructOffence() {
-        final OffenceDetails offenceDetails = new OffenceDetails(OFFENCE_ID, APPLIED_COMPENSATION, BACK_DUTY, BACK_DUTY_FROM, BACK_DUTY_TO, CHARGE_DATE, OFFENCE_CODE, OFFENCE_COMMITTED_DATE,
-                OFFENCE_COMMITTED_END_DATE, OFFENCE_DATE_CODE, OFFENCE_LOCATION, OFFENCE_SEQUENCE_NUMBER, OFFENCE_WORDING, OFFENCE_WORDING_WELSH, STATEMENT_OF_FACT, STATEMENT_OF_FACT_WELSH,
-                VEHICLE_MAKE, VEHICLE_REGISTRATION_MARK, null);
-        final OffenceDetails offenceDetailsSvd = createFirstDefendantOffence();
-        assertOffenceMatches(offenceDetails, offenceDetailsSvd);
+    void shouldRemoveOffence() {
+        final DefendantDetails defendant = saveDefendant();
+        final OffenceDetails offence = createOffence(OFFENCE_ID, defendant);
+        offenceRepository.save(offence);
+
+        offenceRepository.remove(offence);
+
+        assertThat(offenceRepository.findBy(OFFENCE_ID), nullValue());
     }
 
-    private void assertOffenceMatches(final OffenceDetails offence, final OffenceDetails offenceDetailsSvd) {
-        assertThat(offence.getOffenceId(), equalTo(offenceDetailsSvd.getOffenceId()));
-        assertThat(offence.getAppliedCompensation(), equalTo(offenceDetailsSvd.getAppliedCompensation()));
-        assertThat(offence.getBackDuty(), equalTo(offenceDetailsSvd.getBackDuty()));
-        assertThat(offence.getOffenceCode(), equalTo(offenceDetailsSvd.getOffenceCode()));
-        assertThat(offence.getChargeDate(), equalTo(offenceDetailsSvd.getChargeDate()));
-        assertThat(offence.getOffenceLocation(), equalTo(offenceDetailsSvd.getOffenceLocation()));
-        assertThat(offence.getBackDutyDateFrom(), equalTo(offenceDetailsSvd.getBackDutyDateFrom()));
-        assertThat(offence.getBackDutyDateTo(), equalTo(offenceDetailsSvd.getBackDutyDateTo()));
-        assertThat(offence.getOffenceCommittedDate(), equalTo(offenceDetailsSvd.getOffenceCommittedDate()));
-        assertThat(offence.getDefendant(), equalTo(offenceDetailsSvd.getDefendant()));
-        assertThat(offence.getOffenceCommittedEndDate(), equalTo(offenceDetailsSvd.getOffenceCommittedEndDate()));
-        assertThat(offence.getOffenceDateCode(), equalTo(offenceDetailsSvd.getOffenceDateCode()));
-        assertThat(offence.getOffenceSequenceNumber(), equalTo(offenceDetailsSvd.getOffenceSequenceNumber()));
-        assertThat(offence.getOffenceWording(), equalTo(offenceDetailsSvd.getOffenceWording()));
-        assertThat(offence.getOffenceWordingWelsh(), equalTo(offenceDetailsSvd.getOffenceWordingWelsh()));
-        assertThat(offence.getStatementOfFacts(), equalTo(offenceDetailsSvd.getStatementOfFacts()));
-        assertThat(offence.getStatementOfFactsWelsh(), equalTo(offenceDetailsSvd.getStatementOfFactsWelsh()));
-        assertThat(offence.getVehicleMake(), equalTo(offenceDetailsSvd.getVehicleMake()));
-        assertThat(offence.getVehicleRegistrationMark(), equalTo(offenceDetailsSvd.getVehicleRegistrationMark()));
+    private DefendantDetails saveDefendant() {
+        final PersonalInformationDetails personalInformation = new PersonalInformationDetails(
+                "Mr", "John", "Smith", null, null, null, null);
+        final DefendantDetails defendant = new DefendantDetails(
+                DEFENDANT_ID, "ASN123", null, null, null, null, null, null,
+                null, null, null, null,
+                personalInformation, null, new HashSet<>(), new ArrayList<>(), null, null);
+        return defendantRepository.save(defendant);
+    }
+
+    private OffenceDetails createOffence(final UUID offenceId, final DefendantDetails defendant) {
+        final OffenceDetails offence = new OffenceDetails(
+                offenceId, null, null, null, null,
+                LocalDate.now(), "RT88191", LocalDate.now(), null,
+                1, "London", 1, "Speeding offence", null,
+                null, null, null, null, null);
+        offence.setDefendant(defendant);
+        return offence;
     }
 }

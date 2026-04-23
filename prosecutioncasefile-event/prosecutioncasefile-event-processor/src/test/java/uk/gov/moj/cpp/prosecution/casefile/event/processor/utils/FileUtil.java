@@ -8,9 +8,9 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.InputStream;
 import java.io.StringReader;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;

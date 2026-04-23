@@ -15,8 +15,8 @@ import uk.gov.moj.cpp.prosecution.casefile.query.api.service.vo.Offence;
 import uk.gov.moj.cpp.prosecution.casefile.query.api.service.vo.PersonalDetails;
 import uk.gov.moj.cpp.prosecution.casefile.query.api.utils.OffenceHelper;
 
-import javax.inject.Inject;
-import javax.json.JsonObject;
+import jakarta.inject.Inject;
+import jakarta.json.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
 

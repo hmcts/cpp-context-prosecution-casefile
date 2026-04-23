@@ -6,8 +6,8 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
-import javax.json.JsonObject;
-import javax.json.JsonValue;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
 
 import org.apache.commons.lang3.EnumUtils;
 

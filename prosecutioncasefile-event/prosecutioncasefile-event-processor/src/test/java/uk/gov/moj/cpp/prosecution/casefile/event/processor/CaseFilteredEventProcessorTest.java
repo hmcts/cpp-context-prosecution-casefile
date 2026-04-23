@@ -2,7 +2,7 @@ package uk.gov.moj.cpp.prosecution.casefile.event.processor;
 
 import static java.util.Objects.nonNull;
 import static java.util.UUID.randomUUID;
-import static javax.json.Json.createObjectBuilder;
+import static jakarta.json.Json.createObjectBuilder;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;

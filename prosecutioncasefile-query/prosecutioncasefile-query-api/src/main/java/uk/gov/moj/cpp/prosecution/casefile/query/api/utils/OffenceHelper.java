@@ -1,6 +1,6 @@
 package uk.gov.moj.cpp.prosecution.casefile.query.api.utils;
 
-import javax.json.JsonObject;
+import jakarta.json.JsonObject;
 
 import static java.util.Arrays.asList;
 import static java.util.Objects.isNull;

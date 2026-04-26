@@ -24,7 +24,7 @@
 
 ## Constraints
 
-- Maven only — Gradle is forbidden in this codebase
+- Maven is the current build tool. Future migration to Gradle is allowed but requires coordinating constitution + rule files + CI pipeline together (see Constitution Principle V).
 - Java 17 only — do not use `var` outside method-local scope where the type is non-obvious; prefer explicit types in public APIs
 - Use the CPP framework's `@ServiceComponent` + `@Handles` for command/event handling — NOT hand-rolled JMS listeners
 - Aggregate state mutation must go through `AggregateStateMutator` / `CompositeCaseAggregateStateMutator` (functional-interface dispatcher pattern)

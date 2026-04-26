@@ -147,7 +147,7 @@ review output.
 
 ### V. HMCTS CPP Standards Compliance (NON-NEGOTIABLE)
 
-- **Build tool**: Maven. Gradle is forbidden in this codebase.
+- **Build tool**: Maven (current). Module layout, version management, and CI all assume the Maven reactor; a future migration to Gradle is allowed but is itself a constitution-amendment-scale change and MUST update this section, the rule files, the agent docs, and the CI pipeline in lockstep.
 - **Java**: 17. CI pool demands `centos8-j17`. Local builds use the
   CPP-standard `mvn17` alias when system default differs.
 - **Parent**: `uk.gov.moj.cpp.common:service-parent-pom:17.103.x` —

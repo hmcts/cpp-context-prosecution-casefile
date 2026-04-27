@@ -1,0 +1,163 @@
+# SPECKIT-LOCAL-PATCH: hooks tuned for this team's Jira-named branch workflow.
+# - before_specify (speckit.git.feature) is ENABLED with Jira-id support: the
+#   underlying script (.specify/extensions/git/scripts/bash/create-new-feature.sh)
+#   detects a Jira id (e.g. DD-41656) from the description prefix, --jira-id
+#   flag, or JIRA_ID env var. If none is provided and stdin is a TTY it
+#   prompts; if non-interactive (the speckit skill flow) it errors with a
+#   helpful message — the skill should ask the user for the Jira id and pass
+#   it via --jira-id before invoking. Use --no-jira-id to fall back to
+#   sequential numbering for occasional non-Jira features.
+# - before_constitution (speckit.git.initialize) is DISABLED — repo is already
+#   a git repo; the hook is a no-op.
+# - All speckit.git.commit hooks are DISABLED. They are configured as no-ops
+#   in .specify/extensions/git/git-config.yml anyway, so leaving them enabled
+#   produces misleading prompts at every phase. The team commits manually
+#   with Conventional Commits messages.
+installed: []
+settings:
+  auto_execute_hooks: true
+hooks:
+  before_constitution:
+  - extension: git
+    command: speckit.git.initialize
+    enabled: false
+    optional: false
+    prompt: Execute speckit.git.initialize?
+    description: Initialize Git repository before constitution setup
+    condition: null
+  before_specify:
+  - extension: git
+    command: speckit.git.feature
+    enabled: true
+    optional: false
+    prompt: Execute speckit.git.feature?
+    description: Create feature branch before specification (Jira-id prefixed)
+    condition: null
+  before_clarify:
+  - extension: git
+    command: speckit.git.commit
+    enabled: false
+    optional: true
+    prompt: Commit outstanding changes before clarification?
+    description: Auto-commit before spec clarification
+    condition: null
+  before_plan:
+  - extension: git
+    command: speckit.git.commit
+    enabled: false
+    optional: true
+    prompt: Commit outstanding changes before planning?
+    description: Auto-commit before implementation planning
+    condition: null
+  before_tasks:
+  - extension: git
+    command: speckit.git.commit
+    enabled: false
+    optional: true
+    prompt: Commit outstanding changes before task generation?
+    description: Auto-commit before task generation
+    condition: null
+  before_implement:
+  - extension: git
+    command: speckit.git.commit
+    enabled: false
+    optional: true
+    prompt: Commit outstanding changes before implementation?
+    description: Auto-commit before implementation
+    condition: null
+  before_checklist:
+  - extension: git
+    command: speckit.git.commit
+    enabled: false
+    optional: true
+    prompt: Commit outstanding changes before checklist?
+    description: Auto-commit before checklist generation
+    condition: null
+  before_analyze:
+  - extension: git
+    command: speckit.git.commit
+    enabled: false
+    optional: true
+    prompt: Commit outstanding changes before analysis?
+    description: Auto-commit before analysis
+    condition: null
+  before_taskstoissues:
+  - extension: git
+    command: speckit.git.commit
+    enabled: false
+    optional: true
+    prompt: Commit outstanding changes before issue sync?
+    description: Auto-commit before tasks-to-issues conversion
+    condition: null
+  after_constitution:
+  - extension: git
+    command: speckit.git.commit
+    enabled: false
+    optional: true
+    prompt: Commit constitution changes?
+    description: Auto-commit after constitution update
+    condition: null
+  after_specify:
+  - extension: git
+    command: speckit.git.commit
+    enabled: false
+    optional: true
+    prompt: Commit specification changes?
+    description: Auto-commit after specification
+    condition: null
+  after_clarify:
+  - extension: git
+    command: speckit.git.commit
+    enabled: false
+    optional: true
+    prompt: Commit clarification changes?
+    description: Auto-commit after spec clarification
+    condition: null
+  after_plan:
+  - extension: git
+    command: speckit.git.commit
+    enabled: false
+    optional: true
+    prompt: Commit plan changes?
+    description: Auto-commit after implementation planning
+    condition: null
+  after_tasks:
+  - extension: git
+    command: speckit.git.commit
+    enabled: false
+    optional: true
+    prompt: Commit task changes?
+    description: Auto-commit after task generation
+    condition: null
+  after_implement:
+  - extension: git
+    command: speckit.git.commit
+    enabled: false
+    optional: true
+    prompt: Commit implementation changes?
+    description: Auto-commit after implementation
+    condition: null
+  after_checklist:
+  - extension: git
+    command: speckit.git.commit
+    enabled: false
+    optional: true
+    prompt: Commit checklist changes?
+    description: Auto-commit after checklist generation
+    condition: null
+  after_analyze:
+  - extension: git
+    command: speckit.git.commit
+    enabled: false
+    optional: true
+    prompt: Commit analysis results?
+    description: Auto-commit after analysis
+    condition: null
+  after_taskstoissues:
+  - extension: git
+    command: speckit.git.commit
+    enabled: false
+    optional: true
+    prompt: Commit after syncing issues?
+    description: Auto-commit after tasks-to-issues conversion
+    condition: null

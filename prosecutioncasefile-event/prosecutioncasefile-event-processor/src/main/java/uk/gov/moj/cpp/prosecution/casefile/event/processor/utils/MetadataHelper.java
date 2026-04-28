@@ -1,22 +1,23 @@
 package uk.gov.moj.cpp.prosecution.casefile.event.processor.utils;
 
 
+import static java.util.Optional.ofNullable;
+import static uk.gov.justice.services.messaging.Envelope.metadataFrom;
+import static uk.gov.justice.services.messaging.JsonEnvelope.envelopeFrom;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createReader;
+
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.JsonMetadata;
 import uk.gov.justice.services.messaging.JsonObjects;
 import uk.gov.justice.services.messaging.Metadata;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.json.JsonReader;
 import java.io.StringReader;
 import java.util.Optional;
 
-import static java.util.Optional.ofNullable;
-import static uk.gov.justice.services.messaging.Envelope.metadataFrom;
-import static uk.gov.justice.services.messaging.JsonEnvelope.envelopeFrom;
-import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonReader;
 
 public class MetadataHelper {
 
@@ -37,7 +38,7 @@ public class MetadataHelper {
     }
 
     private static JsonObject readJson(final String json) {
-        try (final JsonReader jsonReader = Json.createReader(new StringReader(json))) {
+        try (final JsonReader jsonReader = createReader(new StringReader(json))) {
             return jsonReader.readObject();
         }
     }

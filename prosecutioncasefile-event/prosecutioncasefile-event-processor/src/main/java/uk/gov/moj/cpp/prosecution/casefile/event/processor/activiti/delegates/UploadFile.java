@@ -2,6 +2,7 @@ package uk.gov.moj.cpp.prosecution.casefile.event.processor.activiti.delegates;
 
 import static uk.gov.justice.services.core.annotation.Component.EVENT_PROCESSOR;
 import static uk.gov.justice.services.messaging.JsonEnvelope.metadataFrom;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static uk.gov.moj.cpp.prosecution.casefile.event.processor.utils.MetadataHelper.envelopeWithIdpcProcessId;
 import static uk.gov.moj.cpp.prosecution.casefile.event.processor.utils.MetadataHelper.metadataFromString;
 
@@ -14,7 +15,6 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.json.Json;
 import javax.json.JsonObject;
 
 import org.activiti.engine.delegate.DelegateExecution;
@@ -40,7 +40,7 @@ public class UploadFile implements JavaDelegate {
         final String metadataAsString = execution.getVariable("metadata", String.class);
         final Metadata originalMetadata = metadataFromString(metadataAsString);
 
-        final JsonObject uploadFileCommandPayload = Json.createObjectBuilder()
+        final JsonObject uploadFileCommandPayload = createObjectBuilder()
                 .add("materialId", UUID.randomUUID().toString())
                 .add("fileServiceId", documentReference)
                 .build();

@@ -6,6 +6,7 @@ import static java.util.UUID.randomUUID;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static uk.gov.justice.services.test.utils.core.messaging.JsonEnvelopeBuilder.envelope;
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithRandomUUID;
 
@@ -21,7 +22,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import javax.json.Json;
 import javax.json.JsonObject;
 
 import org.junit.jupiter.api.Test;
@@ -55,7 +55,7 @@ public class CaseDetailConverterTest {
 
 
     private JsonObject buildOffenceReferenceData() {
-        return Json.createObjectBuilder()
+        return createObjectBuilder()
                 .add("modeOfTrial", "SNONIMP1")
                 .build();
     }

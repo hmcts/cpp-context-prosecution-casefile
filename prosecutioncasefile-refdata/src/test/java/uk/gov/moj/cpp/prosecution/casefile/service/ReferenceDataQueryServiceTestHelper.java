@@ -180,9 +180,6 @@ public class ReferenceDataQueryServiceTestHelper {
         JsonArrayBuilder autorArray = createArrayBuilder();
         JsonObjectBuilder autorObject = createObjectBuilder();
 
-        JsonObjectBuilder rbacObject = createObjectBuilder();
-
-
         JsonObjectBuilder readUserGroupsCppGroupObject = createObjectBuilder();
         readUserGroupsCppGroupObject
                 .add("id", "ff9fb2c8-2738-4d77-87e5-56b5781b4113")

@@ -49,7 +49,6 @@ import uk.gov.justice.services.eventsourcing.source.core.exception.EventStreamEx
 import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.Metadata;
-import uk.gov.justice.services.test.utils.core.messaging.JsonObjects;
 import uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil;
 import uk.gov.moj.cpp.prosecution.casefile.aggregate.ProsecutionCaseFile;
 import uk.gov.moj.cpp.prosecution.casefile.command.service.ProsecutionCaseQueryService;

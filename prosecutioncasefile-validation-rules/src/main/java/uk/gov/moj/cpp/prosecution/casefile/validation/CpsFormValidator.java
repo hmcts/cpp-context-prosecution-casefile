@@ -6,9 +6,9 @@ import static java.util.Objects.nonNull;
 import static java.util.UUID.fromString;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.StreamSupport.stream;
-import static javax.json.Json.createArrayBuilder;
-import static javax.json.Json.createObjectBuilder;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
+import static uk.gov.justice.services.messaging.JsonObjects.createArrayBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static uk.gov.moj.cpp.prosecution.casefile.domain.FormValidationResult.formValidationResult;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.MatchedDefendant.matchedDefendant;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Problem.problem;
@@ -101,7 +101,6 @@ import java.util.Set;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
@@ -170,7 +169,7 @@ public class CpsFormValidator {
         }
 
         final JsonObjectBuilder newBcmFormData = createObjectBuilder();
-        final JsonArrayBuilder newBcmFormDefendantsArrayBuilder = Json.createArrayBuilder();
+        final JsonArrayBuilder newBcmFormDefendantsArrayBuilder = createArrayBuilder();
         final Set<MatchedDefendant> finalMatchedDefendantSet = matchedDefendantsSet;
 
         processReceivedCpsServePtph
@@ -182,7 +181,7 @@ public class CpsFormValidator {
                 .map(defendantFromEventPayload -> buildPtphDefendantWithDefendantId(objectToJsonObjectConverter, finalMatchedDefendantSet, defendantFromEventPayload, processReceivedCpsServePtph))
                 .forEach(newBcmFormDefendantsArrayBuilder::add);
 
-        final JsonArrayBuilder newFormDefendantArrayBuilder = Json.createArrayBuilder();
+        final JsonArrayBuilder newFormDefendantArrayBuilder = createArrayBuilder();
         matchedDefendantsSet
                 .stream()
                 .map(this::buildFormDefendant)
@@ -192,8 +191,7 @@ public class CpsFormValidator {
                 .withFormData(newBcmFormData
                         .add(PTPH_DEFENDANTS, newBcmFormDefendantsArrayBuilder.build())
                         .build())
-                .withFormDefendants(Json
-                        .createObjectBuilder()
+                .withFormDefendants(createObjectBuilder()
                         .add(FORM_DEFENDANTS, newFormDefendantArrayBuilder.build())
                         .build())
                 .withErrorList(errorList)
@@ -218,7 +216,7 @@ public class CpsFormValidator {
                     .getValuesAs(JsonObject.class);
 
             final boolean areAllDefendantsHaveCpsIds = defendantIds.size() == caseDefendantList.size();
-            final JsonObject cpsDefendantIdRuleInput = Json.createObjectBuilder()
+            final JsonObject cpsDefendantIdRuleInput = createObjectBuilder()
                     .add("cpsDefendantIdList", defendantIds)
                     .add("areAllDefendantsHaveCpsIds", areAllDefendantsHaveCpsIds)
                     .build();
@@ -226,7 +224,7 @@ public class CpsFormValidator {
         }
 
         if (matchedDefendant.getIsContinueMatching()) {
-            final JsonObject cpsDefendantDetailRuleInput = Json.createObjectBuilder()
+            final JsonObject cpsDefendantDetailRuleInput = createObjectBuilder()
                     .add("cpsDefendantIdList", defendantIds)
                     .add("prosecutionCase", prosecutionCase)
                     .build();
@@ -357,7 +355,7 @@ public class CpsFormValidator {
                     .build();
         }
         final JsonObjectBuilder newBcmFormData = createObjectBuilder();
-        final JsonArrayBuilder newBcmFormDefendantsArrayBuilder = Json.createArrayBuilder();
+        final JsonArrayBuilder newBcmFormDefendantsArrayBuilder = createArrayBuilder();
         final Set<MatchedDefendant> finalMatchedDefendantSet = matchedDefendantsSet;
 
         processReceivedCpsServeBcm
@@ -369,7 +367,7 @@ public class CpsFormValidator {
                 .map(defendantFromEventPayload -> buildBcmDefendantWithDefendantId(finalMatchedDefendantSet, validOffences, defendantFromEventPayload, processReceivedCpsServeBcm))
                 .forEach(newBcmFormDefendantsArrayBuilder::add);
 
-        final JsonArrayBuilder newFormDefendantArrayBuilder = Json.createArrayBuilder();
+        final JsonArrayBuilder newFormDefendantArrayBuilder = createArrayBuilder();
         matchedDefendantsSet
                 .stream()
                 .map(this::buildFormDefendant)
@@ -379,8 +377,7 @@ public class CpsFormValidator {
                 .withFormData(newBcmFormData
                         .add(BCM_DEFENDANTS, newBcmFormDefendantsArrayBuilder.build())
                         .build())
-                .withFormDefendants(Json
-                        .createObjectBuilder()
+                .withFormDefendants(createObjectBuilder()
                         .add(FORM_DEFENDANTS, newFormDefendantArrayBuilder.build())
                         .build())
                 .withErrorList(errorList)
@@ -619,7 +616,7 @@ public class CpsFormValidator {
         }
 
         final JsonObjectBuilder newPetFormData = createObjectBuilder();
-        final JsonArrayBuilder newPetFormDefenceDefendantsArrayBuilder = Json.createArrayBuilder();
+        final JsonArrayBuilder newPetFormDefenceDefendantsArrayBuilder = createArrayBuilder();
         final Set<MatchedDefendant> finalMatchedDefendantSet = matchedDefendantsSet;
 
         processReceivedCpsServePet
@@ -631,7 +628,7 @@ public class CpsFormValidator {
                 .map(defendantFromEventPayload -> buildDefendantWithDefendantId(finalMatchedDefendantSet, validOffences, defendantFromEventPayload))
                 .forEach(newPetFormDefenceDefendantsArrayBuilder::add);
 
-        final JsonArrayBuilder newDefenceArrayBuilder = Json.createArrayBuilder();
+        final JsonArrayBuilder newDefenceArrayBuilder = createArrayBuilder();
         matchedDefendantsSet
                 .stream()
                 .map(this::buildFormDefendant)
@@ -643,8 +640,7 @@ public class CpsFormValidator {
                                 .add(DEFENDANTS, newPetFormDefenceDefendantsArrayBuilder.build()))
                         .add(PROSECUTION, petFormData.getJsonObject(PROSECUTION))
                         .build())
-                .withPetDefendants(Json
-                        .createObjectBuilder()
+                .withPetDefendants(createObjectBuilder()
                         .add(PET_DEFENDANTS, newDefenceArrayBuilder.build())
                         .build())
                 .withErrorList(errorList)
@@ -683,7 +679,7 @@ public class CpsFormValidator {
             defendantBuilder.add(PROSECUTOR_DEFENDANT_ID, defendantJson.getString(PROSECUTOR_DEFENDANT_ID));
         }
 
-        buildAssociatedPerson(defendantJson,defendantBuilder);
+        buildAssociatedPerson(defendantJson, defendantBuilder);
 
         return defendantBuilder.build();
     }
@@ -696,7 +692,7 @@ public class CpsFormValidator {
     }
 
     private JsonObject buildFormDefendant(final MatchedDefendant matchedDefendant) {
-        final JsonObjectBuilder builder = Json.createObjectBuilder();
+        final JsonObjectBuilder builder = createObjectBuilder();
         builder.add(DEFENDANT_ID, matchedDefendant.getDefendantId().toString());
         if (StringUtils.isNotEmpty(matchedDefendant.getCpsDefendantId())) {
             builder.add(CPS_DEFENDANT_ID, matchedDefendant.getCpsDefendantId());
@@ -746,15 +742,14 @@ public class CpsFormValidator {
                     .build();
         }
 
-        final JsonArrayBuilder newFormDefendantArrayBuilder = Json.createArrayBuilder();
+        final JsonArrayBuilder newFormDefendantArrayBuilder = createArrayBuilder();
         matchedDefendantsSet
                 .stream()
                 .map(this::buildFormDefendant)
                 .forEach(newFormDefendantArrayBuilder::add);
 
         return formValidationResult()
-                .withFormDefendants(Json
-                        .createObjectBuilder()
+                .withFormDefendants(createObjectBuilder()
                         .add(FORM_DEFENDANTS, newFormDefendantArrayBuilder.build())
                         .build())
                 .withErrorList(errorList)
@@ -763,14 +758,14 @@ public class CpsFormValidator {
     }
 
     private void buildAssociatedPerson(final JsonObject defendantJson, final JsonObjectBuilder defendantBuilder) {
-        final JsonObjectBuilder associatedPersonBuilder = Json.createObjectBuilder();
+        final JsonObjectBuilder associatedPersonBuilder = createObjectBuilder();
 
         if (defendantJson.containsKey(LOCAL_AUTHORITY_DETAILS_FOR_YOUTH_DEFENDANTS)) {
             final JsonObject localAuthorityObject = defendantJson.getJsonObject(LOCAL_AUTHORITY_DETAILS_FOR_YOUTH_DEFENDANTS);
-            final JsonObject localAuthority = Json.createObjectBuilder()
+            final JsonObject localAuthority = createObjectBuilder()
                     .add(NAME, convertName(localAuthorityObject))
                     .add(ADDRESS, convertAddress(localAuthorityObject))
-                    .add(EMAIL,localAuthorityObject.getString(EMAIL))
+                    .add(EMAIL, localAuthorityObject.getString(EMAIL))
                     .add(PHONE, localAuthorityObject.getString(PHONE))
                     .add(REF, localAuthorityObject.getString(REFERENCE))
                     .add(RESPONSIBLE, localAuthorityObject.getString(AUTHORITY))
@@ -782,7 +777,7 @@ public class CpsFormValidator {
 
         if (defendantJson.containsKey(PARENT_GUARDIAN_FOR_YOUTH_DEFENDANTS)) {
             final JsonObject guardianObject = defendantJson.getJsonObject(PARENT_GUARDIAN_FOR_YOUTH_DEFENDANTS);
-            final JsonObject guardian = Json.createObjectBuilder()
+            final JsonObject guardian = createObjectBuilder()
                     .add(NAME, convertName(guardianObject))
                     .add(ADDRESS, convertAddress(guardianObject))
                     .add(EMAIL, guardianObject.getString(EMAIL))

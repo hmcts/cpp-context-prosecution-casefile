@@ -2,22 +2,17 @@ package uk.gov.moj.cpp.prosecution.casefile.service;
 
 import static java.util.Optional.ofNullable;
 import static java.util.UUID.randomUUID;
-import static javax.json.Json.createArrayBuilder;
-import static javax.json.Json.createObjectBuilder;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.messaging.JsonEnvelope.envelopeFrom;
+import static uk.gov.justice.services.messaging.JsonObjects.createArrayBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static uk.gov.justice.services.messaging.spi.DefaultJsonMetadata.metadataBuilder;
 import static uk.gov.justice.services.test.utils.core.messaging.JsonEnvelopeBuilder.envelope;
 
-import uk.gov.justice.core.courts.LjaDetails;
-import uk.gov.justice.hearing.courts.referencedata.EnforcementArea;
 import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 
 import java.util.UUID;
 
-import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -84,10 +79,9 @@ public class ReferenceDataQueryServiceTestHelper {
 
 
     public static JsonObject getMockReferenceDataCountryNationalities() {
-        return Json.createObjectBuilder().add("countryNationality",
-                Json.createArrayBuilder()
-                        .add(
-                                Json.createObjectBuilder()
+        return createObjectBuilder().add("countryNationality",
+                        createArrayBuilder()
+                                .add(createObjectBuilder()
                                         .add("id", "22ef7a73-df50-4349-8c72-ca3b9ace6363")
                                         .add("cjseCode", 0)
                                         .add("isoCode", "GBR")
@@ -95,8 +89,7 @@ public class ReferenceDataQueryServiceTestHelper {
                                         .add("countryName", "United Kingdom")
                                         .add("nationality", "British")
                                         .build())
-                        .add(
-                                Json.createObjectBuilder()
+                                .add(createObjectBuilder()
                                         .add("id", "05ad4861-7927-437e-8df1-32b4128e369f")
                                         .add("cjseCode", 0)
                                         .add("isoCode", "FRA")
@@ -104,8 +97,7 @@ public class ReferenceDataQueryServiceTestHelper {
                                         .add("countryName", "France")
                                         .add("nationality", "French")
                                         .build())
-                        .add(
-                                Json.createObjectBuilder()
+                                .add(createObjectBuilder()
                                         .add("id", "ca2438fd-2eba-4c1b-967d-3fa7c46f24d4")
                                         .add("cjseCode", 3)
                                         .add("isoCode", "ITA")
@@ -114,157 +106,147 @@ public class ReferenceDataQueryServiceTestHelper {
                                         .add("nationality", "Italian")
                                         .build())
 
-                        .build())
+                                .build())
                 .build();
     }
 
     public static JsonObject getMockReferenceDataOffenceDateCodes() {
-        return Json.createObjectBuilder().add("offenceDateCodes",
-                Json.createArrayBuilder()
-                        .add(
-                                Json.createObjectBuilder()
+        return createObjectBuilder().add("offenceDateCodes",
+                        createArrayBuilder()
+                                .add(createObjectBuilder()
                                         .add("id", "4aaecac5-222b-402d-9047-84803679edac")
                                         .add("seqNum", 10)
                                         .add("dateCode", "1")
                                         .add("dateCodeDescription", "on or in")
                                         .add(VALID_FROM, "2019-04-01")
                                         .build())
-                        .add(
-                                Json.createObjectBuilder()
+                                .add(createObjectBuilder()
                                         .add("id", "5aaecac5-222b-402d-9047-84803679edac")
                                         .add("seqNum", 20)
                                         .add("dateCode", "2")
                                         .add("dateCodeDescription", "before")
                                         .add(VALID_FROM, "2019-04-01")
                                         .build())
-                        .build())
+                                .build())
                 .build();
     }
 
     public static JsonObject getMockReferenceDataOffenderCodes() {
-        return Json.createObjectBuilder().add("offenderCodes",
-                Json.createArrayBuilder()
-                        .add(
-                                Json.createObjectBuilder()
+        return createObjectBuilder().add("offenderCodes",
+                        createArrayBuilder()
+                                .add(createObjectBuilder()
                                         .add("id", "4aaecac5-222b-402d-9047-84803679edac")
                                         .add("seqNo", 10)
                                         .add("code", "1")
                                         .add("description", "on or in")
                                         .add(VALID_FROM, "2019-04-01")
                                         .build())
-                        .add(
-                                Json.createObjectBuilder()
+                                .add(createObjectBuilder()
                                         .add("id", "5aaecac5-222b-402d-9047-84803679edac")
                                         .add("seqNo", 20)
                                         .add("code", "2")
                                         .add("description", "before")
                                         .add(VALID_FROM, "2019-04-01")
                                         .build())
-                        .build())
+                                .build())
                 .build();
     }
 
 
     public static JsonObject getMockReferenceDataSummonsCodes() {
-        return Json.createObjectBuilder().add("summonsCodes",
-                Json.createArrayBuilder()
-                        .add(
-                                Json.createObjectBuilder()
+        return createObjectBuilder().add("summonsCodes",
+                        createArrayBuilder()
+                                .add(createObjectBuilder()
                                         .add("id", "4aaecac5-222b-402d-9047-84803679edac")
                                         .add(SEQ_NO, 10)
                                         .add("summonsCode", "A")
                                         .add("summonsCodeDescription", "Application / Complaint")
                                         .add(VALID_FROM, "2019-03-01")
                                         .build())
-                        .add(
-                                Json.createObjectBuilder()
+                                .add(createObjectBuilder()
                                         .add("id", "5aaecac5-222b-402d-9047-84803679edac")
                                         .add(SEQ_NO, 20)
                                         .add("summonsCode", "B")
                                         .add("summonsCodeDescription", "Breach offences")
                                         .add(VALID_FROM, "2019-03-01")
                                         .build())
-                        .build())
+                                .build())
                 .build();
     }
 
 
     public static JsonObject getMockReferenceDataDocumentsTypeAccess() {
 
-        JsonArrayBuilder autorArray = Json.createArrayBuilder();
-        JsonObjectBuilder autorObject = Json.createObjectBuilder();
+        JsonArrayBuilder autorArray = createArrayBuilder();
+        JsonObjectBuilder autorObject = createObjectBuilder();
 
-        JsonObjectBuilder rbacObject = Json.createObjectBuilder();
+        JsonObjectBuilder rbacObject = createObjectBuilder();
 
 
-
-        JsonObjectBuilder readUserGroupsCppGroupObject = Json.createObjectBuilder();
+        JsonObjectBuilder readUserGroupsCppGroupObject = createObjectBuilder();
         readUserGroupsCppGroupObject
-                .add("id","ff9fb2c8-2738-4d77-87e5-56b5781b4113")
+                .add("id", "ff9fb2c8-2738-4d77-87e5-56b5781b4113")
                 .add("groupName", "Legal Advisors");
 
-        JsonObjectBuilder uploadUserGroupsCppGroupObject = Json.createObjectBuilder();
+        JsonObjectBuilder uploadUserGroupsCppGroupObject = createObjectBuilder();
         uploadUserGroupsCppGroupObject
-                .add("id","ff9fb2c8-2738-4d77-87e5-56b5781b4113")
+                .add("id", "ff9fb2c8-2738-4d77-87e5-56b5781b4113")
                 .add("groupName", "Court Admin");
 
-        JsonObjectBuilder downloadUserCppGroupObject = Json.createObjectBuilder();
+        JsonObjectBuilder downloadUserCppGroupObject = createObjectBuilder();
         downloadUserCppGroupObject
-                .add("id","ff9fb2c8-2738-4d77-87e5-56b5781b4113")
+                .add("id", "ff9fb2c8-2738-4d77-87e5-56b5781b4113")
                 .add("groupName", "Crown Court Clerk");
 
-        JsonObjectBuilder deleteUserGroupsCppGroupObject = Json.createObjectBuilder();
+        JsonObjectBuilder deleteUserGroupsCppGroupObject = createObjectBuilder();
         deleteUserGroupsCppGroupObject
-                .add("id","ff9fb2c8-2738-4d77-87e5-56b5781b4113")
+                .add("id", "ff9fb2c8-2738-4d77-87e5-56b5781b4113")
                 .add("groupName", "Listing Officer");
 
 
-
-
-
-        JsonObjectBuilder readUserGroupsInnerObject = Json.createObjectBuilder();
+        JsonObjectBuilder readUserGroupsInnerObject = createObjectBuilder();
         readUserGroupsInnerObject
-                .add("cppGroup",readUserGroupsCppGroupObject)
+                .add("cppGroup", readUserGroupsCppGroupObject)
                 .add("validFrom", "1983-05-13")
                 .add("validTo", "2022-05-13");
 
-        JsonObjectBuilder uploadUserGroupsInnerObject = Json.createObjectBuilder();
+        JsonObjectBuilder uploadUserGroupsInnerObject = createObjectBuilder();
         uploadUserGroupsInnerObject
-                .add("cppGroup",uploadUserGroupsCppGroupObject)
+                .add("cppGroup", uploadUserGroupsCppGroupObject)
                 .add("validFrom", "1983-05-13")
                 .add("validTo", "2022-05-13");
 
-        JsonObjectBuilder downloadUserInnerObject = Json.createObjectBuilder();
+        JsonObjectBuilder downloadUserInnerObject = createObjectBuilder();
         downloadUserInnerObject
-                .add("cppGroup",downloadUserCppGroupObject)
+                .add("cppGroup", downloadUserCppGroupObject)
                 .add("validFrom", "1983-05-13")
                 .add("validTo", "2022-05-13");
 
-        JsonObjectBuilder deleteUserGroupsInnerObject = Json.createObjectBuilder();
+        JsonObjectBuilder deleteUserGroupsInnerObject = createObjectBuilder();
         deleteUserGroupsInnerObject
-                .add("cppGroup",deleteUserGroupsCppGroupObject)
+                .add("cppGroup", deleteUserGroupsCppGroupObject)
                 .add("validFrom", "1983-05-13")
                 .add("validTo", "2022-05-13");
 
 
-        JsonArrayBuilder readUserGroupsArray = Json.createArrayBuilder();
+        JsonArrayBuilder readUserGroupsArray = createArrayBuilder();
         readUserGroupsArray.add(readUserGroupsInnerObject);
 
-        JsonArrayBuilder uploadUserGroupsArray = Json.createArrayBuilder();
+        JsonArrayBuilder uploadUserGroupsArray = createArrayBuilder();
         uploadUserGroupsArray.add(uploadUserGroupsInnerObject);
 
-        JsonArrayBuilder downloadUserArray = Json.createArrayBuilder();
+        JsonArrayBuilder downloadUserArray = createArrayBuilder();
         downloadUserArray.add(downloadUserInnerObject);
 
-        JsonArrayBuilder deleteUserGroupsArray = Json.createArrayBuilder();
+        JsonArrayBuilder deleteUserGroupsArray = createArrayBuilder();
         deleteUserGroupsArray.add(deleteUserGroupsInnerObject);
 
 
-        JsonObjectBuilder readUserGroupsAutorObject = Json.createObjectBuilder();
-        readUserGroupsAutorObject.add("readUserGroups",readUserGroupsArray);
-        readUserGroupsAutorObject.add("uploadUserGroups",uploadUserGroupsArray);
-        readUserGroupsAutorObject.add("downloadUserGroups",downloadUserArray);
-        readUserGroupsAutorObject.add("deleteUserGroups",deleteUserGroupsArray);
+        JsonObjectBuilder readUserGroupsAutorObject = createObjectBuilder();
+        readUserGroupsAutorObject.add("readUserGroups", readUserGroupsArray);
+        readUserGroupsAutorObject.add("uploadUserGroups", uploadUserGroupsArray);
+        readUserGroupsAutorObject.add("downloadUserGroups", downloadUserArray);
+        readUserGroupsAutorObject.add("deleteUserGroups", deleteUserGroupsArray);
 
         autorObject.add("id", "460f6f7a-c002-11e8-a355-529269fb1459")
                 .add("section", "CITN")
@@ -272,44 +254,38 @@ public class ReferenceDataQueryServiceTestHelper {
                 .add("actionRequired", false)
                 .add("validFrom", "1983-05-13")
                 .add("validTo", "2022-05-13")
-                .add("courtDocumentTypeRBAC",readUserGroupsAutorObject);
+                .add("courtDocumentTypeRBAC", readUserGroupsAutorObject);
 
         autorArray.add(autorObject);
 
-        return Json.createObjectBuilder().add("documentsTypeAccess", autorArray).build();
-
+        return createObjectBuilder().add("documentsTypeAccess", autorArray).build();
 
 
     }
 
 
-
-
     public static JsonObject getMockReferenceDataAlcoholLevelMethods() {
-        return Json.createObjectBuilder().add("alcoholLevelMethods",
-                Json.createArrayBuilder()
-                        .add(
-                                Json.createObjectBuilder()
+        return createObjectBuilder().add("alcoholLevelMethods",
+                        createArrayBuilder()
+                                .add(createObjectBuilder()
                                         .add("id", "c4ca4238-a0b9-3382-8dcc-509a6f75849b")
                                         .add(SEQ_NO, 1)
                                         .add(METHOD_CODE, "A")
                                         .add(METHOD_DESCRIPTION, "Blood")
                                         .build())
-                        .add(
-                                Json.createObjectBuilder()
+                                .add(createObjectBuilder()
                                         .add("id", "c81e728d-9d4c-3f63-af06-7f89cc14862c")
                                         .add(SEQ_NO, 2)
                                         .add(METHOD_CODE, "B")
                                         .add(METHOD_DESCRIPTION, "Breath")
                                         .build())
-                        .add(
-                                Json.createObjectBuilder()
+                                .add(createObjectBuilder()
                                         .add("id", "eccbc87e-4b5c-32fe-a830-8fd9f2a7baf3")
                                         .add(SEQ_NO, 3)
                                         .add(METHOD_CODE, "C")
                                         .add(METHOD_DESCRIPTION, "Urine")
                                         .build())
-                        .build())
+                                .build())
                 .build();
     }
 
@@ -336,9 +312,8 @@ public class ReferenceDataQueryServiceTestHelper {
         builder.add("unbundleFlag", true);
 
 
-
         builder.add(VALID_FROM, validityDate);
-        builder .add(VALID_TO, validityDate);
+        builder.add(VALID_TO, validityDate);
 
         return builder.build();
 
@@ -346,10 +321,9 @@ public class ReferenceDataQueryServiceTestHelper {
 
     public static JsonObject getMockReferenceDataInitiationTypeJsonObject() {
         final String validityDate = "2017-08-01";
-        return Json.createObjectBuilder().add("initiationTypes",
-                Json.createArrayBuilder()
-                        .add(
-                                Json.createObjectBuilder()
+        return createObjectBuilder().add("initiationTypes",
+                        createArrayBuilder()
+                                .add(createObjectBuilder()
                                         .add(ID, "7e2f843e-d639-40b3-8611-8015f3a18957")
                                         .add(SEQUENCE, 1)
                                         .add(DESCRIPTION, "Charge")
@@ -357,8 +331,7 @@ public class ReferenceDataQueryServiceTestHelper {
                                         .add(VALID_FROM, validityDate)
                                         .add(VALID_TO, validityDate)
                                         .build())
-                        .add(
-                                Json.createObjectBuilder()
+                                .add(createObjectBuilder()
                                         .add(ID, "8e2f843e-d639-40b3-8611-8015f3a18958")
                                         .add(SEQUENCE, 2)
                                         .add(DESCRIPTION, "Summons")
@@ -366,7 +339,7 @@ public class ReferenceDataQueryServiceTestHelper {
                                         .add(VALID_FROM, validityDate)
                                         .add(VALID_TO, validityDate)
                                         .build())
-                        .build())
+                                .build())
                 .build();
     }
 
@@ -394,7 +367,7 @@ public class ReferenceDataQueryServiceTestHelper {
 
     }
 
-    public static  Envelope<JsonObject> buildVehicleCodes() {
+    public static Envelope<JsonObject> buildVehicleCodes() {
         final JsonArrayBuilder courtLocationsArrayBuilder = createArrayBuilder();
 
         final JsonObject vehicleCode1 = createObjectBuilder()
@@ -508,7 +481,7 @@ public class ReferenceDataQueryServiceTestHelper {
                 .add(OUCODE, VALUE_COURT_ID_MATCHING)
                 .add(OUCODEL1CODE, "B")
                 .add(WELSHVENUENAME, WELSHVENUENAMEVALUE)
-                .add(OUCODEL3NAME,OUCODEL3NAMEVALUE)
+                .add(OUCODEL3NAME, OUCODEL3NAMEVALUE)
                 .add(COURTROOM, courtRoom)
                 .build();
 
@@ -517,129 +490,117 @@ public class ReferenceDataQueryServiceTestHelper {
     }
 
     public static JsonObject getMockReferenceDataOffenceData() {
-        return Json.createObjectBuilder().add("offences",
-                Json.createArrayBuilder()
-                        .add(
-                                Json.createObjectBuilder()
+        return createObjectBuilder().add("offences",
+                        createArrayBuilder()
+                                .add(createObjectBuilder()
                                         .add("id", "4aaecac5-222b-402d-9047-84803679edac")
                                         .add("cjsOffenceCode", "cjsOffenceCode")
                                         .add("fullName", "fullName")
                                         .build())
-                        .add(
-                                Json.createObjectBuilder()
+                                .add(createObjectBuilder()
                                         .add("id", "5aaecac5-222b-402d-9047-84803679edac")
                                         .add("cjsOffenceCode", "cjsOffenceCode2")
                                         .build())
-                        .build())
+                                .build())
                 .build();
     }
 
     public static JsonObject getMockReferenceDataLicenceCode() {
-        return Json.createObjectBuilder().add("licenceCodes",
-                Json.createArrayBuilder()
-                        .add(
-                                Json.createObjectBuilder()
+        return createObjectBuilder().add("licenceCodes",
+                        createArrayBuilder()
+                                .add(createObjectBuilder()
                                         .add("id", "4aaecac5-222b-402d-9047-84803679edac")
                                         .add(SEQUENCE, 10)
                                         .add("licenceCode", "AA")
                                         .add(VALID_FROM, "2019-03-11")
                                         .build())
-                        .add(
-                                Json.createObjectBuilder()
+                                .add(createObjectBuilder()
                                         .add("id", "5aaecac5-222b-402d-9047-84803679edac")
                                         .add(SEQUENCE, 20)
                                         .add("licenceCode", "BB")
                                         .add(VALID_FROM, "2019-03-01")
                                         .build())
-                        .build())
+                                .build())
                 .build();
     }
 
     public static JsonObject getMockReferenceDataPoliceForces() {
-        return Json.createObjectBuilder().add("policeForces",
-                Json.createArrayBuilder()
-                        .add(
-                                Json.createObjectBuilder()
+        return createObjectBuilder().add("policeForces",
+                        createArrayBuilder()
+                                .add(createObjectBuilder()
                                         .add("id", "419a13f4-f1c6-3e1e-b0f6-f1c162d4c41a")
                                         .add(SEQUENCE, 2)
                                         .add("policeForceCode", "1")
                                         .add("policeForceName", "London")
                                         .add("validForSpiOut", true)
-                                        .add("oucodeL2Code","01")
+                                        .add("oucodeL2Code", "01")
                                         .build())
-                        .add(
-                                Json.createObjectBuilder()
+                                .add(createObjectBuilder()
                                         .add("id", "47bb2c5d-cde9-3c13-9ae3-b3f5be9177e7")
                                         .add(SEQUENCE, 2)
                                         .add("policeForceCode", "2")
                                         .add("policeForceName", "London")
                                         .add("validForSpiOut", true)
                                         .build())
-                        .build())
+                                .build())
                 .build();
     }
 
     public static JsonObject getMockReferenceDataObservedEthnicity() {
-        return Json.createObjectBuilder().add("observedEthnicities",
-                Json.createArrayBuilder()
-                        .add(
-                                Json.createObjectBuilder()
+        return createObjectBuilder().add("observedEthnicities",
+                        createArrayBuilder()
+                                .add(createObjectBuilder()
                                         .add("id", "4aaecac5-222b-402d-9047-84803679edac")
                                         .add(SEQ_NO, 10)
                                         .add("ethnicityCode", "AA")
                                         .add(VALID_FROM, "2019-03-11")
                                         .build())
-                        .add(
-                                Json.createObjectBuilder()
+                                .add(createObjectBuilder()
                                         .add("id", "5aaecac5-222b-402d-9047-84803679edac")
                                         .add(SEQ_NO, 20)
                                         .add("ethnicityCode", "BB")
                                         .add(VALID_FROM, "2019-03-01")
                                         .build())
-                        .build())
+                                .build())
                 .build();
     }
 
 
     public static JsonObject getMockReferenceDataCustodyStatus() {
-        return Json.createObjectBuilder().add("custodyStatuses",
-                Json.createArrayBuilder()
-                        .add(
-                                Json.createObjectBuilder()
+        return createObjectBuilder().add("custodyStatuses",
+                        createArrayBuilder()
+                                .add(createObjectBuilder()
                                         .add("id", "4aaecac5-222b-402d-9047-84803679edac")
                                         .add(SEQUENCE, 10)
                                         .add("statusCode", "AA")
                                         .add(VALID_FROM, "2019-03-11")
                                         .build())
-                        .add(
-                                Json.createObjectBuilder()
+                                .add(createObjectBuilder()
                                         .add("id", "5aaecac5-222b-402d-9047-84803679edac")
                                         .add(SEQUENCE, 20)
                                         .add("statusCode", "BB")
                                         .add(VALID_FROM, "2019-03-01")
                                         .build())
-                        .build())
+                                .build())
                 .build();
     }
 
     public static JsonObject getMockReferenceDataPoliceRanks() {
-        return Json.createObjectBuilder().add("policeRanks",
-                Json.createArrayBuilder()
-                        .add(
-                                Json.createObjectBuilder()
+        return createObjectBuilder().add("policeRanks",
+                        createArrayBuilder()
+                                .add(createObjectBuilder()
                                         .add("id", "4aaecac5-222b-402d-9047-84803679edac")
                                         .add(SEQUENCE, 10)
                                         .add("rankCode", "AA")
                                         .add(VALID_FROM, "2019-03-11")
                                         .build())
-                        .add(
-                                Json.createObjectBuilder()
+                                .add(createObjectBuilder()
                                         .add("id", "5aaecac5-222b-402d-9047-84803679edac")
                                         .add(SEQUENCE, 20)
                                         .add("rankCode", "BB")
                                         .add(VALID_FROM, "2019-03-01")
                                         .build())
-                        .build())
+                                .build())
                 .build();
     }
 }

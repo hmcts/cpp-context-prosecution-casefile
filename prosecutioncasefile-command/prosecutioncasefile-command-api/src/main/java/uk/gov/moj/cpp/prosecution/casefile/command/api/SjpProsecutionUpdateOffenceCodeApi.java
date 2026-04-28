@@ -2,6 +2,7 @@ package uk.gov.moj.cpp.prosecution.casefile.command.api;
 
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_API;
 import static uk.gov.justice.services.messaging.Envelope.metadataFrom;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 
 import uk.gov.justice.services.common.converter.ObjectToJsonObjectConverter;
 import uk.gov.justice.services.core.annotation.Handles;
@@ -16,7 +17,6 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.inject.Inject;
-import javax.json.Json;
 import javax.json.JsonObject;
 
 import com.google.common.collect.Lists;
@@ -42,7 +42,7 @@ public class SjpProsecutionUpdateOffenceCodeApi {
         final List<OffenceReferenceData> offencesRefData = referenceDataQueryService.retrieveOffenceDataList(Lists.newArrayList(payload.getString(OFFENCE_CODE)), Optional.empty());
         final OffenceReferenceData offenceReferenceData = offencesRefData.get(0);
 
-        final JsonObject commandPayload = Json.createObjectBuilder()
+        final JsonObject commandPayload = createObjectBuilder()
                 .add("caseId", payload.getString("caseId"))
                 .add(OFFENCE_CODE, payload.getString(OFFENCE_CODE))
                 .add("offenceReferenceData", objectToJsonObjectConverter.convert(offenceReferenceData))

@@ -4,6 +4,7 @@ import static java.util.UUID.fromString;
 import static uk.gov.justice.services.core.annotation.Component.EVENT_PROCESSOR;
 import static uk.gov.justice.services.messaging.JsonEnvelope.envelopeFrom;
 import static uk.gov.justice.services.messaging.JsonEnvelope.metadataFrom;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static uk.gov.moj.cpp.prosecution.casefile.event.processor.utils.MetadataHelper.metadataFromString;
 
 import uk.gov.justice.services.core.annotation.FrameworkComponent;
@@ -16,7 +17,6 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.json.Json;
 import javax.json.JsonObject;
 
 import org.activiti.engine.delegate.DelegateExecution;
@@ -38,7 +38,7 @@ public class PendingIdpcMaterialExpiredDelegate implements JavaDelegate {
         final UUID fileStoreId = fromString(execution.getProcessBusinessKey());
         final UUID caseId = execution.getVariable("caseId", UUID.class);
         final Metadata metadata = metadataFromString(execution.getVariable("metadata", String.class));
-        final JsonObject payload = Json.createObjectBuilder()
+        final JsonObject payload = createObjectBuilder()
                 .add("caseId", caseId.toString())
                 .add("fileServiceId", fileStoreId.toString())
                 .build();

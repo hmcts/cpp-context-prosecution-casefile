@@ -21,6 +21,7 @@ import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_HANDLER;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;
 import static uk.gov.justice.services.messaging.Envelope.metadataFrom;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static uk.gov.justice.services.test.utils.core.enveloper.EnveloperFactory.createEnveloperWithEvents;
 import static uk.gov.justice.services.test.utils.core.helper.EventStreamMockHelper.verifyAppendAndGetArgumentFrom;
 import static uk.gov.justice.services.test.utils.core.matchers.HandlerMatcher.isHandler;
@@ -81,7 +82,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonValue;
 
@@ -460,15 +460,15 @@ public class AcceptCaseHandlerTest {
     }
 
     private JsonEnvelope materialPendingEventEnvelope(final UUID submissionId, final MaterialPending materialPending) {
-        final Metadata metadata = metadataFrom(JsonObjects.createObjectBuilder(metadataWithRandomUUID("prosecutioncasefile.events.material-pending").build().asJsonObject())
+        final Metadata metadata = metadataFrom(createObjectBuilder(metadataWithRandomUUID("prosecutioncasefile.events.material-pending").build().asJsonObject())
                 .add("submissionId", submissionId.toString()).build())
                 .build();
 
-        final JsonObject payload = Json.createObjectBuilder()
+        final JsonObject payload = createObjectBuilder()
                 .add("caseId", materialPending.getCaseId().toString())
                 .add("prosecutingAuthority", materialPending.getProsecutingAuthority())
                 .add("prosecutorDefendantId", materialPending.getProsecutorDefendantId())
-                .add("material", Json.createObjectBuilder()
+                .add("material", createObjectBuilder()
                         .add("fileStoreId", materialPending.getMaterial().getFileStoreId().toString())
                         .add("documentType", materialPending.getMaterial().getDocumentType())
                         .add("fileType", materialPending.getMaterial().getFileType())
@@ -479,14 +479,14 @@ public class AcceptCaseHandlerTest {
     }
 
     private JsonEnvelope materialPendingEventEnvelopeV2(final UUID submissionId, final MaterialPendingV2 materialPending) {
-        final Metadata metadata = metadataFrom(JsonObjects.createObjectBuilder(metadataWithRandomUUID("prosecutioncasefile.events.material-pending-v2").build().asJsonObject())
+        final Metadata metadata = metadataFrom(createObjectBuilder(metadataWithRandomUUID("prosecutioncasefile.events.material-pending-v2").build().asJsonObject())
                 .add("submissionId", submissionId.toString()).build())
                 .build();
 
-        final JsonObject payload = Json.createObjectBuilder()
+        final JsonObject payload = createObjectBuilder()
                 .add("caseId", materialPending.getCaseId().toString())
                 .add("caseSubFolderName", materialPending.getCaseSubFolderName())
-                .add("exhibit", Json.createObjectBuilder()
+                .add("exhibit", createObjectBuilder()
                         .add("reference", materialPending.getExhibit().getReference())
                         .build())
                 .add("fileName", materialPending.getFileName())
@@ -500,6 +500,6 @@ public class AcceptCaseHandlerTest {
     }
 
     private Metadata withSubmissionId(final Metadata metadata, final String submissionId) {
-        return metadataFrom(JsonObjects.createObjectBuilder(metadata.asJsonObject()).add("submissionId", submissionId).build()).build();
+        return metadataFrom(createObjectBuilder(metadata.asJsonObject()).add("submissionId", submissionId).build()).build();
     }
 }

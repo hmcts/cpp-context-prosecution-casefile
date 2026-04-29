@@ -2,6 +2,7 @@ package uk.gov.moj.cpp.prosecution.casefile.event.processor.listener.external.sj
 
 import static org.mockito.Mockito.verify;
 import static uk.gov.justice.services.messaging.JsonEnvelope.envelopeFrom;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static uk.gov.justice.services.test.utils.core.enveloper.EnveloperFactory.createEnveloper;
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithRandomUUID;
 
@@ -9,8 +10,6 @@ import uk.gov.justice.services.core.enveloper.Enveloper;
 import uk.gov.justice.services.core.sender.Sender;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.spi.DefaultEnvelope;
-
-import javax.json.Json;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,7 +38,7 @@ public class CaseDocumentUploadedListenerTest {
     public void shouldProcessRecordUploadCaseDocument() {
 
         final JsonEnvelope event = envelopeFrom(metadataWithRandomUUID("prosecutioncasefile.command.record-upload-case-document"),
-                Json.createObjectBuilder().build());
+                createObjectBuilder().build());
 
         testObj.handleSjpCaseDocumentUploaded(event);
 

@@ -5,8 +5,6 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.UUID.fromString;
 import static java.util.UUID.randomUUID;
-import static javax.json.Json.createArrayBuilder;
-import static javax.json.Json.createObjectBuilder;
 import static org.codehaus.groovy.runtime.InvokerHelper.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
@@ -21,6 +19,8 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.cps.prosecutioncasefile.InitialHearing.initialHearing;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;
+import static uk.gov.justice.services.messaging.JsonObjects.createArrayBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithDefaults;
 import static uk.gov.moj.cpp.prosecution.casefile.event.listener.converter.TestDataProvider.FIRST_NAME;
 import static uk.gov.moj.cpp.prosecution.casefile.event.listener.converter.TestDataProvider.LAST_NAME;
@@ -43,7 +43,6 @@ import uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory;
 import uk.gov.moj.cpp.json.schemas.prosecutioncasefile.events.DefendantValidationPassed;
 import uk.gov.moj.cpp.prosecution.casefile.domain.DefendantProblemsVO;
 import uk.gov.moj.cpp.prosecution.casefile.domain.ProsecutionWithReferenceData;
-import uk.gov.moj.cpp.prosecution.casefile.domain.ReferenceDataVO;
 import uk.gov.moj.cpp.prosecution.casefile.event.CaseValidationFailed;
 import uk.gov.moj.cpp.prosecution.casefile.event.CcCaseReceived;
 import uk.gov.moj.cpp.prosecution.casefile.event.DefendantValidationFailed;
@@ -81,6 +80,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.json.JsonObject;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -88,9 +89,6 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import javax.json.Json;
-import javax.json.JsonObject;
 
 @ExtendWith(MockitoExtension.class)
 public class ProsecutionReceivedListenerTest {
@@ -467,7 +465,7 @@ public class ProsecutionReceivedListenerTest {
                 .add("firstName", "FirstName")
                 .add("lastName", "LastName")
                 .add("offences", createArrayBuilder()
-                        .add(Json.createObjectBuilder()
+                        .add(createObjectBuilder()
                                 .add("id", offenceId.toString())
                                 .add("description", "Duty not paid")
                                 .build()))

@@ -7,12 +7,12 @@ import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static javax.ws.rs.core.Response.Status.OK;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.WiremockTestHelper.waitForStubToBeReady;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-import javax.json.Json;
 import javax.ws.rs.core.Response;
 
 import org.apache.http.HttpHeaders;
@@ -21,7 +21,7 @@ public class IdMapperStub {
 
     public static void stubGetFromIdMapper(final String sourceType, final String sourceId, final String targetType, final String targetId) {
 
-        final String responseBody = Json.createObjectBuilder()
+        final String responseBody = createObjectBuilder()
                 .add("mappingId", UUID.randomUUID().toString())
                 .add("sourceId", sourceId)
                 .add("sourceType", sourceType)
@@ -51,7 +51,7 @@ public class IdMapperStub {
                 .withHeader(HttpHeaders.CONTENT_TYPE, equalTo(mime))
                 .willReturn(aResponse()
                         .withStatus(OK.getStatusCode())
-                        .withBody(Json.createObjectBuilder()
+                        .withBody(createObjectBuilder()
                                 .add("id", UUID.randomUUID().toString())
                                 .build().toString())
                 )

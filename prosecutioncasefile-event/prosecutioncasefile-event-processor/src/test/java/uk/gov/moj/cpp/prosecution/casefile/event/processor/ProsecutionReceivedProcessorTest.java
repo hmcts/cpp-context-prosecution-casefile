@@ -13,6 +13,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;
 import static uk.gov.justice.services.messaging.Envelope.metadataBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createReader;
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithRandomUUIDAndName;
 import static uk.gov.moj.cpp.prosecution.casefile.event.CcCaseReceived.ccCaseReceived;
 import static uk.gov.moj.cpp.prosecution.casefile.event.CcCaseReceivedWithWarnings.ccCaseReceivedWithWarnings;
@@ -53,7 +54,6 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 
-import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 
@@ -157,7 +157,7 @@ public class ProsecutionReceivedProcessorTest {
 
         final String initiateCourtProceedingsJson = readResourcesFile("initiate-court-proceedings.json");
 
-        final JsonReader reader = Json.createReader(new StringReader(initiateCourtProceedingsJson));
+        final JsonReader reader = createReader(new StringReader(initiateCourtProceedingsJson));
         final JsonObject jsonObject = reader.readObject();
         reader.close();
         when(objectToJsonObjectConverter.convert(any())).thenReturn(jsonObject);
@@ -241,7 +241,7 @@ public class ProsecutionReceivedProcessorTest {
 
         final String initiateCourtProceedingsJson = readResourcesFile("initiate-court-proceedings.json");
 
-        final JsonReader reader = Json.createReader(new StringReader(initiateCourtProceedingsJson));
+        final JsonReader reader = createReader(new StringReader(initiateCourtProceedingsJson));
         final JsonObject jsonObject = reader.readObject();
         reader.close();
         when(objectToJsonObjectConverter.convert(any())).thenReturn(jsonObject);

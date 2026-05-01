@@ -1,14 +1,14 @@
 package uk.gov.moj.cpp.prosecution.casefile.validation.rules.forms;
 
 import static java.util.UUID.randomUUID;
-import static javax.json.Json.createArrayBuilder;
-import static javax.json.Json.createObjectBuilder;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
+import static uk.gov.justice.services.messaging.JsonObjects.createArrayBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.MatchedDefendant;
 import uk.gov.moj.cpp.prosecution.casefile.validation.ValidationError;
@@ -16,7 +16,6 @@ import uk.gov.moj.cpp.prosecution.casefile.validation.utils.FileUtil;
 
 import java.util.UUID;
 
-import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 
@@ -69,7 +68,7 @@ public class NameAndDOBValidationRuleTest {
                         .build())
                 .build();
 
-        JsonObject cpsDefendantDetailRuleInput = Json.createObjectBuilder()
+        JsonObject cpsDefendantDetailRuleInput = createObjectBuilder()
                 .add("cpsDefendantIdList", defendantIdsAsJsonArrayFromProsecutionCase)
                 .add("prosecutionCase", prosecutionCaseFileCase)
                 .build();
@@ -100,7 +99,7 @@ public class NameAndDOBValidationRuleTest {
                         .build())
                 .build();
 
-        JsonObject cpsDefendantDetailRuleInput = Json.createObjectBuilder()
+        JsonObject cpsDefendantDetailRuleInput = createObjectBuilder()
                 .add("cpsDefendantIdList", defendantIdsAsJsonArrayFromProsecutionCase)
                 .add("prosecutionCase", prosecutionCaseFileCaseWithCpsDefendantIds)
                 .build();
@@ -133,7 +132,7 @@ public class NameAndDOBValidationRuleTest {
                         .build())
                 .build();
 
-        JsonObject cpsDefendantDetailRuleInput = Json.createObjectBuilder()
+        JsonObject cpsDefendantDetailRuleInput = createObjectBuilder()
                 .add("cpsDefendantIdList", defendantIdsAsJsonArrayFromProsecutionCase)
                 .add("prosecutionCase", prosecutionCaseFileCaseWithCpsDefendantIds)
                 .build();
@@ -158,7 +157,7 @@ public class NameAndDOBValidationRuleTest {
                         .build())
                 .build();
 
-        JsonObject cpsDefendantDetailRuleInput = Json.createObjectBuilder()
+        JsonObject cpsDefendantDetailRuleInput = createObjectBuilder()
                 .add("cpsDefendantIdList", defendantIdsAsJsonArrayFromProsecutionCase)
                 .add("prosecutionCase", prosecutionCaseFileCase)
                 .build();
@@ -188,7 +187,7 @@ public class NameAndDOBValidationRuleTest {
                         .build())
                 .build();
 
-        JsonObject cpsDefendantDetailRuleInput = Json.createObjectBuilder()
+        JsonObject cpsDefendantDetailRuleInput = createObjectBuilder()
                 .add("cpsDefendantIdList", defendantIdsAsJsonArrayFromProsecutionCase)
                 .add("prosecutionCase", prosecutionCaseFileCaseWithCpsDefendantIds)
                 .build();
@@ -218,7 +217,7 @@ public class NameAndDOBValidationRuleTest {
                         .build())
                 .build();
 
-        JsonObject cpsDefendantDetailRuleInput = Json.createObjectBuilder()
+        JsonObject cpsDefendantDetailRuleInput = createObjectBuilder()
                 .add("cpsDefendantIdList", defendantIdsAsJsonArrayFromProsecutionCase)
                 .add("prosecutionCase", prosecutionCaseFileCase)
                 .build();
@@ -248,7 +247,7 @@ public class NameAndDOBValidationRuleTest {
                         .build())
                 .build();
 
-        JsonObject cpsDefendantDetailRuleInput = Json.createObjectBuilder()
+        JsonObject cpsDefendantDetailRuleInput = createObjectBuilder()
                 .add("cpsDefendantIdList", defendantIdsAsJsonArrayFromProsecutionCase)
                 .add("prosecutionCase", prosecutionCaseFileCase)
                 .build();
@@ -286,7 +285,7 @@ public class NameAndDOBValidationRuleTest {
                         .build())
                 .build();
 
-        JsonObject cpsDefendantDetailRuleInput = Json.createObjectBuilder()
+        JsonObject cpsDefendantDetailRuleInput = createObjectBuilder()
                 .add("cpsDefendantIdList", defendantIdsAsJsonArrayFromProsecutionCase)
                 .add("prosecutionCase", prosecutionCaseFileCase)
                 .build();
@@ -322,7 +321,7 @@ public class NameAndDOBValidationRuleTest {
                         .build())
                 .build();
 
-        JsonObject cpsDefendantDetailRuleInput = Json.createObjectBuilder()
+        JsonObject cpsDefendantDetailRuleInput = createObjectBuilder()
                 .add("cpsDefendantIdList", defendantIdsAsJsonArrayFromProsecutionCase)
                 .add("prosecutionCase", prosecutionCaseFileCase)
                 .build();
@@ -352,7 +351,7 @@ public class NameAndDOBValidationRuleTest {
                         .build())
                 .build();
 
-        JsonObject cpsDefendantDetailRuleInput = Json.createObjectBuilder()
+        JsonObject cpsDefendantDetailRuleInput = createObjectBuilder()
                 .add("cpsDefendantIdList", defendantIdsAsJsonArrayFromProsecutionCase)
                 .add("prosecutionCase", prosecutionCaseFileCase)
                 .build();
@@ -382,7 +381,7 @@ public class NameAndDOBValidationRuleTest {
                         .build())
                 .build();
 
-        JsonObject cpsDefendantDetailRuleInput = Json.createObjectBuilder()
+        JsonObject cpsDefendantDetailRuleInput = createObjectBuilder()
                 .add("cpsDefendantIdList", defendantIdsAsJsonArrayFromProsecutionCase)
                 .add("prosecutionCase", prosecutionCaseFileCase)
                 .build();
@@ -412,7 +411,7 @@ public class NameAndDOBValidationRuleTest {
                         .build())
                 .build();
 
-        JsonObject cpsDefendantDetailRuleInput = Json.createObjectBuilder()
+        JsonObject cpsDefendantDetailRuleInput = createObjectBuilder()
                 .add("cpsDefendantIdList", defendantIdsAsJsonArrayFromProsecutionCase)
                 .add("prosecutionCase", prosecutionCaseFileCase)
                 .build();
@@ -442,7 +441,7 @@ public class NameAndDOBValidationRuleTest {
                         .build())
                 .build();
 
-        JsonObject cpsDefendantDetailRuleInput = Json.createObjectBuilder()
+        JsonObject cpsDefendantDetailRuleInput = createObjectBuilder()
                 .add("cpsDefendantIdList", defendantIdsAsJsonArrayFromProsecutionCase)
                 .add("prosecutionCase", prosecutionCaseFileCase)
                 .build();
@@ -473,7 +472,7 @@ public class NameAndDOBValidationRuleTest {
                         .build())
                 .build();
 
-        JsonObject cpsDefendantDetailRuleInput = Json.createObjectBuilder()
+        JsonObject cpsDefendantDetailRuleInput = createObjectBuilder()
                 .add("cpsDefendantIdList", defendantIdsAsJsonArrayFromProsecutionCase)
                 .add("prosecutionCase", prosecutionCaseFileCase)
                 .build();
@@ -504,7 +503,7 @@ public class NameAndDOBValidationRuleTest {
                         .build())
                 .build();
 
-        JsonObject cpsDefendantDetailRuleInput = Json.createObjectBuilder()
+        JsonObject cpsDefendantDetailRuleInput = createObjectBuilder()
                 .add("cpsDefendantIdList", defendantIdsAsJsonArrayFromProsecutionCase)
                 .add("prosecutionCase", prosecutionCaseFileCase)
                 .build();
@@ -534,7 +533,7 @@ public class NameAndDOBValidationRuleTest {
                         .build())
                 .build();
 
-        JsonObject cpsDefendantDetailRuleInput = Json.createObjectBuilder()
+        JsonObject cpsDefendantDetailRuleInput = createObjectBuilder()
                 .add("cpsDefendantIdList", defendantIdsAsJsonArrayFromProsecutionCase)
                 .add("prosecutionCase", prosecutionCaseFileCase)
                 .build();
@@ -563,7 +562,7 @@ public class NameAndDOBValidationRuleTest {
                         .build())
                 .build();
 
-        JsonObject cpsDefendantDetailRuleInput = Json.createObjectBuilder()
+        JsonObject cpsDefendantDetailRuleInput = createObjectBuilder()
                 .add("cpsDefendantIdList", defendantIdsAsJsonArrayFromProsecutionCase)
                 .add("prosecutionCase", prosecutionCaseFileCase)
                 .build();

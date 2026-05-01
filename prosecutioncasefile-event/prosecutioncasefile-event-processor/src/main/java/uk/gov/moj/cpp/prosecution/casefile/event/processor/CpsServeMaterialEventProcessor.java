@@ -6,8 +6,6 @@ import static java.util.Objects.nonNull;
 import static java.util.UUID.fromString;
 import static java.util.UUID.nameUUIDFromBytes;
 import static java.util.stream.Collectors.toList;
-import static javax.json.Json.createArrayBuilder;
-import static javax.json.Json.createObjectBuilder;
 import static javax.json.JsonValue.NULL;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -15,6 +13,8 @@ import static org.apache.commons.validator.util.ValidatorUtils.getValueAsString;
 import static uk.gov.justice.services.core.annotation.Component.EVENT_PROCESSOR;
 import static uk.gov.justice.services.core.enveloper.Enveloper.envelop;
 import static uk.gov.justice.services.messaging.JsonEnvelope.envelopeFrom;
+import static uk.gov.justice.services.messaging.JsonObjects.createArrayBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.ProblemValue.problemValue;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.ValidationError.CASE_URN_NOT_FOUND;
 import static uk.gov.moj.cps.prosecutioncasefile.domain.event.CpsServeBcmSubmitted.cpsServeBcmSubmitted;
@@ -73,7 +73,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import javax.inject.Inject;
-import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
@@ -502,7 +501,7 @@ public class CpsServeMaterialEventProcessor {
         ptphHeaderJson.add(CASE_URN, ptphHeader.getUrn());
 
         //defendants
-        final JsonArrayBuilder defendantArrayBuilder = Json.createArrayBuilder();
+        final JsonArrayBuilder defendantArrayBuilder = createArrayBuilder();
         ptphFormData.getPtphFormdefendants().forEach(ptphFormdefendants -> {
             final JsonObjectBuilder defendant = createObjectBuilder();
             defendant.add(ID, ptphFormdefendants.getId());
@@ -531,7 +530,7 @@ public class CpsServeMaterialEventProcessor {
         //Contacts
         final JsonObjectBuilder contacts = constructContacts(ptphFormData.getContacts());
 
-        final JsonArrayBuilder defenceInformationArrayBuilder = Json.createArrayBuilder();
+        final JsonArrayBuilder defenceInformationArrayBuilder = createArrayBuilder();
         if (isNotEmpty(ptphFormData.getDefenceInformation())) {
             ptphFormData.getDefenceInformation().forEach(defenceInformation -> defenceInformationArrayBuilder.add(objectToJsonObjectConverter.convert(defenceInformation)));
         }
@@ -649,7 +648,7 @@ public class CpsServeMaterialEventProcessor {
         final Metadata metadata = JsonEnvelope.metadataFrom(envelope.metadata())
                 .withName("public.prosecutioncasefile.cps-serve-pet-submitted")
                 .build();
-        final JsonArrayBuilder petDefendantsArrayBuilder = Json.createArrayBuilder();
+        final JsonArrayBuilder petDefendantsArrayBuilder = createArrayBuilder();
         if (nonNull(servePetReceived.getPetDefendants())) {
             servePetReceived
                     .getPetDefendants()
@@ -705,7 +704,7 @@ public class CpsServeMaterialEventProcessor {
     }
 
     private String createStringFromFormDataForBcm(FormData bcmFormData) {
-        final JsonArrayBuilder defendantArrayBuilder = Json.createArrayBuilder();
+        final JsonArrayBuilder defendantArrayBuilder = createArrayBuilder();
         bcmFormData.getBcmDefendants().forEach(bcmDefendants -> defendantArrayBuilder.add(createJsonObjectFromBcmDefendants(bcmDefendants)));
         return createObjectBuilder()
                 .add(DEFENDANTS, defendantArrayBuilder.build())
@@ -734,7 +733,7 @@ public class CpsServeMaterialEventProcessor {
     }
 
     private JsonArray createProsecutorOffences(List<ProsecutorOffences> prosecutorOffencesList) {
-        final JsonArrayBuilder offencesArrayBuilder = Json.createArrayBuilder();
+        final JsonArrayBuilder offencesArrayBuilder = createArrayBuilder();
         prosecutorOffencesList.forEach(prosecutorOffences -> offencesArrayBuilder.add(createObjectBuilder()
                 .add(DATE, DateUtil.convertToStringFromLocalDate(prosecutorOffences.getDate()))
                 .add(OFFENCE_CODE, prosecutorOffences.getOffenceCode())

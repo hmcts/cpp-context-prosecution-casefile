@@ -2,8 +2,6 @@ package uk.gov.moj.cpp.prosecution.casefile.validation;
 
 import static java.util.Arrays.asList;
 import static java.util.UUID.randomUUID;
-import static javax.json.Json.createArrayBuilder;
-import static javax.json.Json.createObjectBuilder;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.hasSize;
@@ -11,6 +9,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.when;
+import static uk.gov.justice.services.messaging.JsonObjects.createArrayBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.rules.forms.FormConstant.ASSOCIATED_PERSON;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.rules.forms.FormConstant.AUTHORITY_DETAILS;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.rules.forms.FormConstant.BCM_DEFENDANTS;
@@ -42,7 +42,6 @@ import uk.gov.moj.cps.prosecutioncasefile.domain.event.SubmissionStatus;
 import java.util.List;
 
 import javax.enterprise.inject.Instance;
-import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 
@@ -262,10 +261,10 @@ public class CpsFormValidatorTest {
                 .replaceAll("DEFENDANT_ID_2", defendantIdTwo);
         final JsonObject prosecutionCaseFileCase = FileUtil.jsonFromString(prosecutionCasePayloadString);
 
-        final JsonArray defendantIdsArray = Json.createArrayBuilder().add(createObjectBuilder()
-                .add(DEFENDANT_ID, defendantIdOne)
-                .add(CPS_DEFENDANT_ID, randomUUID().toString())
-                .build())
+        final JsonArray defendantIdsArray = createArrayBuilder().add(createObjectBuilder()
+                        .add(DEFENDANT_ID, defendantIdOne)
+                        .add(CPS_DEFENDANT_ID, randomUUID().toString())
+                        .build())
                 .build();
 
         final FormValidationResult formValidationResult = cpsFormValidator.validateAndRebuildingFormData(processReceivedPpsServePet, prosecutionCaseFileCase, validOffences, defendantIdsArray);
@@ -313,10 +312,10 @@ public class CpsFormValidatorTest {
                 .replaceAll("DEFENDANT_ID_2", defendantIdTwo);
         final JsonObject prosecutionCaseFileCase = FileUtil.jsonFromString(prosecutionCasePayloadString);
 
-        final JsonArray defendantIdsArray = Json.createArrayBuilder().add(createObjectBuilder()
-                .add(DEFENDANT_ID, defendantIdOne)
-                .add(CPS_DEFENDANT_ID, randomUUID().toString())
-                .build())
+        final JsonArray defendantIdsArray = createArrayBuilder().add(createObjectBuilder()
+                        .add(DEFENDANT_ID, defendantIdOne)
+                        .add(CPS_DEFENDANT_ID, randomUUID().toString())
+                        .build())
                 .build();
 
         final FormValidationResult formValidationResult = cpsFormValidator.validateAndRebuildingFormDataBcm(processReceivedPpsServeBcm, prosecutionCaseFileCase, validOffences, defendantIdsArray);
@@ -363,10 +362,10 @@ public class CpsFormValidatorTest {
                 .replaceAll("DEFENDANT_ID_2", defendantIdTwo);
         final JsonObject prosecutionCaseFileCase = FileUtil.jsonFromString(prosecutionCasePayloadString);
 
-        final JsonArray defendantIdsArray = Json.createArrayBuilder().add(createObjectBuilder()
-                .add(DEFENDANT_ID, defendantIdOne)
-                .add(CPS_DEFENDANT_ID, randomUUID().toString())
-                .build())
+        final JsonArray defendantIdsArray = createArrayBuilder().add(createObjectBuilder()
+                        .add(DEFENDANT_ID, defendantIdOne)
+                        .add(CPS_DEFENDANT_ID, randomUUID().toString())
+                        .build())
                 .build();
 
         final FormValidationResult formValidationResult = cpsFormValidator.validateAndRebuildingFormDataPtph(processReceivedPpsServePtph, prosecutionCaseFileCase, defendantIdsArray, objectToJsonObjectConverter);
@@ -410,10 +409,10 @@ public class CpsFormValidatorTest {
                 .replaceAll("DEFENDANT_ID_2", defendantIdTwo);
         final JsonObject prosecutionCaseFileCase = FileUtil.jsonFromString(prosecutionCasePayloadString);
 
-        final JsonArray defendantIdsArray = Json.createArrayBuilder().add(createObjectBuilder()
-                .add(DEFENDANT_ID, defendantIdOne)
-                .add(CPS_DEFENDANT_ID, randomUUID().toString())
-                .build())
+        final JsonArray defendantIdsArray = createArrayBuilder().add(createObjectBuilder()
+                        .add(DEFENDANT_ID, defendantIdOne)
+                        .add(CPS_DEFENDANT_ID, randomUUID().toString())
+                        .build())
                 .build();
 
         final FormValidationResult formValidationResult = cpsFormValidator.validateAndRebuildingFormData(processReceivedPpsServePet, prosecutionCaseFileCase, validOffences, defendantIdsArray);
@@ -456,10 +455,10 @@ public class CpsFormValidatorTest {
                 .replaceAll("DEFENDANT_ID_2", defendantIdTwo);
         final JsonObject prosecutionCaseFileCase = FileUtil.jsonFromString(prosecutionCasePayloadString);
 
-        final JsonArray defendantIdsArray = Json.createArrayBuilder().add(createObjectBuilder()
-                .add(DEFENDANT_ID, defendantIdOne)
-                .add(CPS_DEFENDANT_ID, randomUUID().toString())
-                .build())
+        final JsonArray defendantIdsArray = createArrayBuilder().add(createObjectBuilder()
+                        .add(DEFENDANT_ID, defendantIdOne)
+                        .add(CPS_DEFENDANT_ID, randomUUID().toString())
+                        .build())
                 .build();
 
         final FormValidationResult formValidationResult = cpsFormValidator.validateAndRebuildingFormDataBcm(processReceivedPpsServeBcm, prosecutionCaseFileCase, validOffences, defendantIdsArray);
@@ -495,10 +494,10 @@ public class CpsFormValidatorTest {
                 .replaceAll("DEFENDANT_ID_2", defendantIdTwo);
         final JsonObject prosecutionCaseFileCase = FileUtil.jsonFromString(prosecutionCasePayloadString);
 
-        final JsonArray defendantIdsArray = Json.createArrayBuilder().add(createObjectBuilder()
-                .add(DEFENDANT_ID, defendantIdOne)
-                .add(CPS_DEFENDANT_ID, randomUUID().toString())
-                .build())
+        final JsonArray defendantIdsArray = createArrayBuilder().add(createObjectBuilder()
+                        .add(DEFENDANT_ID, defendantIdOne)
+                        .add(CPS_DEFENDANT_ID, randomUUID().toString())
+                        .build())
                 .build();
 
         final FormValidationResult formValidationResult = cpsFormValidator.validateAndRebuildingFormDataPtph(processReceivedPpsServePtph, prosecutionCaseFileCase, defendantIdsArray, objectToJsonObjectConverter);
@@ -532,10 +531,10 @@ public class CpsFormValidatorTest {
                 .replaceAll("DEFENDANT_ID_2", defendantIdTwo);
         final JsonObject prosecutionCaseFileCase = FileUtil.jsonFromString(prosecutionCasePayloadString);
 
-        final JsonArray defendantIdsArray = Json.createArrayBuilder().add(createObjectBuilder()
-                .add(DEFENDANT_ID, defendantIdOne)
-                .add(CPS_DEFENDANT_ID, randomUUID().toString())
-                .build())
+        final JsonArray defendantIdsArray = createArrayBuilder().add(createObjectBuilder()
+                        .add(DEFENDANT_ID, defendantIdOne)
+                        .add(CPS_DEFENDANT_ID, randomUUID().toString())
+                        .build())
                 .build();
 
         final FormValidationResult formValidationResult = cpsFormValidator.validateAndRebuildingFormDataPtph(processReceivedPpsServePtph, prosecutionCaseFileCase, defendantIdsArray, objectToJsonObjectConverter);

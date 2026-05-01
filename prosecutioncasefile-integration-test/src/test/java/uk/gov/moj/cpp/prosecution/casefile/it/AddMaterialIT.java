@@ -9,7 +9,6 @@ import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasNoJsonPath;
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.isJson;
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.withJsonPath;
 import static java.util.UUID.randomUUID;
-import static javax.json.Json.createObjectBuilder;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -19,6 +18,8 @@ import static org.hamcrest.core.Is.is;
 import static uk.gov.justice.services.integrationtest.utils.jms.JmsMessageConsumerClientProvider.newPublicJmsMessageConsumerClientProvider;
 import static uk.gov.justice.services.messaging.Envelope.metadataBuilder;
 import static uk.gov.justice.services.messaging.Envelope.metadataFrom;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createReader;
 import static uk.gov.justice.services.test.utils.core.matchers.JsonEnvelopeMatcher.jsonEnvelope;
 import static uk.gov.justice.services.test.utils.core.matchers.JsonEnvelopeMetadataMatcher.metadata;
 import static uk.gov.justice.services.test.utils.core.matchers.JsonEnvelopePayloadMatcher.payload;
@@ -48,8 +49,8 @@ import static uk.gov.moj.cpp.prosecution.casefile.stub.ProgressionStub.ADD_COURT
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ProgressionStub.stubForAddCourtDocument;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubGetCaseMarkersWithCode;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubGetDocumentsTypeAccess;
-import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubGetReferenceDataBySectionCode;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubGetParentBundleSection;
+import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubGetReferenceDataBySectionCode;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.TestUtils.readFile;
 
 import uk.gov.justice.services.common.converter.LocalDates;
@@ -77,7 +78,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.json.JsonReader;
@@ -180,7 +180,7 @@ public class AddMaterialIT extends BaseIT {
         addMaterialHelper.verifyAddCourtDocumentCalled(materialId);
 
         final JsonObject courtDocumentPayload;
-        try (JsonReader jsonReader = Json.createReader(new StringReader(getLastLoggedRequest(ADD_COURT_DOCUMENT_COMMAND + materialId)))) {
+        try (JsonReader jsonReader = createReader(new StringReader(getLastLoggedRequest(ADD_COURT_DOCUMENT_COMMAND + materialId)))) {
             courtDocumentPayload = jsonReader.readObject();
         }
 
@@ -277,7 +277,7 @@ public class AddMaterialIT extends BaseIT {
         addMaterialHelper.verifyAddCourtDocumentCalled(materialId);
 
         final JsonObject courtDocumentPayload;
-        try (JsonReader jsonReader = Json.createReader(new StringReader(getLastLoggedRequest(ADD_COURT_DOCUMENT_COMMAND + materialId)))) {
+        try (JsonReader jsonReader = createReader(new StringReader(getLastLoggedRequest(ADD_COURT_DOCUMENT_COMMAND + materialId)))) {
             courtDocumentPayload = jsonReader.readObject();
         }
 
@@ -862,7 +862,7 @@ public class AddMaterialIT extends BaseIT {
         addMaterialHelper.verifyAddCourtDocumentCalled(materialId);
 
         final JsonObject courtDocumentPayload;
-        try (JsonReader jsonReader = Json.createReader(new StringReader(getLastLoggedRequest(ADD_COURT_DOCUMENT_COMMAND + materialId)))) {
+        try (JsonReader jsonReader = createReader(new StringReader(getLastLoggedRequest(ADD_COURT_DOCUMENT_COMMAND + materialId)))) {
             courtDocumentPayload = jsonReader.readObject();
         }
 
@@ -1130,7 +1130,7 @@ public class AddMaterialIT extends BaseIT {
         verifyInMessagingQueueForDefendantIDPCUpdated(materialId);
 
         final JsonObject courtDocumentPayload;
-        try (JsonReader jsonReader = Json.createReader(new StringReader(getLastLoggedRequest(ADD_COURT_DOCUMENT_COMMAND + materialId)))) {
+        try (JsonReader jsonReader = createReader(new StringReader(getLastLoggedRequest(ADD_COURT_DOCUMENT_COMMAND + materialId)))) {
             courtDocumentPayload = jsonReader.readObject();
         }
 
@@ -1520,7 +1520,7 @@ public class AddMaterialIT extends BaseIT {
         addMaterialHelper.verifyAddCourtDocumentCalled(materialId);
 
         final JsonObject courtDocumentPayload;
-        try (JsonReader jsonReader = Json.createReader(new StringReader(getLastLoggedRequest(ADD_COURT_DOCUMENT_COMMAND + materialId)))) {
+        try (JsonReader jsonReader = createReader(new StringReader(getLastLoggedRequest(ADD_COURT_DOCUMENT_COMMAND + materialId)))) {
             courtDocumentPayload = jsonReader.readObject();
         }
 
@@ -1623,7 +1623,7 @@ public class AddMaterialIT extends BaseIT {
         addMaterialHelper.verifyAddCourtDocumentCalled(materialId);
 
         final JsonObject courtDocumentPayload;
-        try (JsonReader jsonReader = Json.createReader(new StringReader(getLastLoggedRequest(ADD_COURT_DOCUMENT_COMMAND + materialId)))) {
+        try (JsonReader jsonReader = createReader(new StringReader(getLastLoggedRequest(ADD_COURT_DOCUMENT_COMMAND + materialId)))) {
             courtDocumentPayload = jsonReader.readObject();
         }
 
@@ -1713,7 +1713,7 @@ public class AddMaterialIT extends BaseIT {
         addMaterialHelper.verifyAddCourtDocumentCalled(materialId);
 
         final JsonObject courtDocumentPayload;
-        try (JsonReader jsonReader = Json.createReader(new StringReader(getLastLoggedRequest(ADD_COURT_DOCUMENT_COMMAND + materialId)))) {
+        try (JsonReader jsonReader = createReader(new StringReader(getLastLoggedRequest(ADD_COURT_DOCUMENT_COMMAND + materialId)))) {
             courtDocumentPayload = jsonReader.readObject();
         }
 
@@ -2108,7 +2108,7 @@ public class AddMaterialIT extends BaseIT {
         addMaterialHelper.verifyAddCourtDocumentCalled(materialId);
 
         final JsonObject courtDocumentPayload;
-        try (JsonReader jsonReader = Json.createReader(new StringReader(getLastLoggedRequest(ADD_COURT_DOCUMENT_COMMAND + materialId)))) {
+        try (JsonReader jsonReader = createReader(new StringReader(getLastLoggedRequest(ADD_COURT_DOCUMENT_COMMAND + materialId)))) {
             courtDocumentPayload = jsonReader.readObject();
         }
 

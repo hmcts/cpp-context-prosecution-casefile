@@ -219,11 +219,11 @@ public class ProsecutionCaseFileHelper {
                                                                  final DefendantsWithReferenceData defendantsWithReferenceData,
                                                                  final ReferenceDataQueryService referenceDataQueryService,
                                                                  final Stream.Builder<Object> builder,
-                                                                 final Boolean isGroupCase, final boolean isMCCWithListNewHearing,final Boolean isCivil) {
+                                                                 final Boolean isGroupCase, final boolean isMCCWithListNewHearing, final boolean isInactiveMigratedCase,final Boolean isCivil) {
         final List<DefendantProblem> defendantErrors = new ArrayList<>();
 
         defendantsWithReferenceData.getDefendants().forEach(defendant -> {
-            final DefendantWithReferenceData defendantWithReferenceData = new DefendantWithReferenceData(defendant, defendantsWithReferenceData.getReferenceDataVO(), defendantsWithReferenceData.getCaseDetails(), isMCCWithListNewHearing, MCC.equals(channel));
+            final DefendantWithReferenceData defendantWithReferenceData = new DefendantWithReferenceData(defendant, defendantsWithReferenceData.getReferenceDataVO(), defendantsWithReferenceData.getCaseDetails(), isMCCWithListNewHearing, MCC.equals(channel), isInactiveMigratedCase);
             final String defendantInitiationCode = defendant.getInitiationCode();
             final String initiationCode = defendantInitiationCode != null && isValidInitiationCode(defendantInitiationCode) ? defendant.getInitiationCode() : caseDetails.getInitiationCode();
 

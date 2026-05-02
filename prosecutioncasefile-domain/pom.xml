@@ -14,7 +14,7 @@
         <module>prosecutioncasefile-domain-aggregate</module>
         <module>prosecutioncasefile-domain-event</module>
         <module>prosecutioncasefile-domain-value-schema</module>
-        <module>prosecutioncasefile-domain-event-processor</module>
+         <module>prosecutioncasefile-domain-event-processor</module>
     </modules>
 
 </project>

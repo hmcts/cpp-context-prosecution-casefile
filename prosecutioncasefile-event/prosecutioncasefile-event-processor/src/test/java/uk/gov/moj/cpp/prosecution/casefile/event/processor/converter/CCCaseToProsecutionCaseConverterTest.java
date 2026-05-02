@@ -1,5 +1,6 @@
 package uk.gov.moj.cpp.prosecution.casefile.event.processor.converter;
 
+import static java.util.Collections.singletonList;
 import static java.util.UUID.randomUUID;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -9,7 +10,9 @@ import static uk.gov.moj.cpp.prosecution.casefile.event.processor.utils.CaseRece
 import static uk.gov.moj.cpp.prosecution.casefile.event.processor.utils.CaseReceivedHelper.buildProsecutionWithReferenceData;
 import static uk.gov.moj.cpp.prosecution.casefile.event.processor.utils.CaseReceivedHelper.buildProsecutionWithReferenceDataWithContactEmail;
 
+import uk.gov.justice.core.courts.DefendantFineAccountNumber;
 import uk.gov.justice.core.courts.InitiateCourtProceedings;
+import uk.gov.justice.core.courts.MigrationCaseStatus;
 import uk.gov.justice.core.courts.MigrationSourceSystem;
 import uk.gov.justice.core.courts.ProsecutionCase;
 import uk.gov.moj.cpp.prosecution.casefile.domain.ParamsVO;
@@ -48,7 +51,6 @@ public class CCCaseToProsecutionCaseConverterTest {
 
         final CcCaseReceived ccCaseReceived = ccCaseReceived().withProsecutionWithReferenceData(buildProsecutionWithReferenceData(EITHER_WAY)).build();
         final List<Defendant> defendants = ccCaseReceived.getProsecutionWithReferenceData().getProsecution().getDefendants();
-        final ParamsVO paramsVO = new ParamsVO();
 
         final InitiateCourtProceedings convertedCourtProceedings = ccCaseToProsecutionCaseConverter.convert(ccCaseReceived);
 
@@ -85,7 +87,13 @@ public class CCCaseToProsecutionCaseConverterTest {
         final CcCaseReceived ccCaseReceived = ccCaseReceived().withProsecutionWithReferenceData(
                 buildProsecutionWithReferenceData(EITHER_WAY,randomUUID().toString(),false, MigrationSourceSystem.migrationSourceSystem()
                         .withMigrationSourceSystemCaseIdentifier(XHIBIT_IDENTIFIER)
-                        .withMigrationSourceSystemName(XHIBIT).build())).build();
+                        .withMigrationSourceSystemName(XHIBIT)
+                        .withMigrationCaseStatus(MigrationCaseStatus.ACTIVE)
+                        .withDefendantFineAccountNumbers(singletonList(DefendantFineAccountNumber.defendantFineAccountNumber()
+                                .withDefendantId(randomUUID())
+                                .withFineAccountNumber("FINE13457")
+                                .build()))
+                        .build())).build();
         final List<Defendant> defendants = ccCaseReceived.getProsecutionWithReferenceData().getProsecution().getDefendants();
         final ParamsVO paramsVO = new ParamsVO();
 
@@ -115,6 +123,7 @@ public class CCCaseToProsecutionCaseConverterTest {
         assertThat(convertedProsecutionCase.getProsecutionCaseIdentifier().getProsecutionAuthorityOUCode(), equalTo(ccCaseReceived.getProsecutionWithReferenceData().getReferenceDataVO().getProsecutorsReferenceData().getOucode()));
         assertThat(convertedProsecutionCase.getMigrationSourceSystem().getMigrationSourceSystemName(), equalTo(XHIBIT));
         assertThat(convertedProsecutionCase.getMigrationSourceSystem().getMigrationSourceSystemCaseIdentifier(), equalTo(XHIBIT_IDENTIFIER));
+        assertThat(convertedProsecutionCase.getMigrationSourceSystem().getDefendantFineAccountNumbers().get(0).getFineAccountNumber(), equalTo("FINE13457"));
 
 
     }
@@ -123,7 +132,6 @@ public class CCCaseToProsecutionCaseConverterTest {
     public void convertProsecutionToCCCaseWithNSP() {
         final CcCaseReceived ccCaseReceived = ccCaseReceived().withProsecutionWithReferenceData(buildProsecutionWithReferenceDataWithContactEmail("Either Way", randomUUID().toString(), false)).build();
         final List<Defendant> defendants = ccCaseReceived.getProsecutionWithReferenceData().getProsecution().getDefendants();
-        final ParamsVO paramsVO = new ParamsVO();
 
         final InitiateCourtProceedings convertedCourtProceedings = ccCaseToProsecutionCaseConverter.convert(ccCaseReceived);
 
@@ -150,8 +158,6 @@ public class CCCaseToProsecutionCaseConverterTest {
         assertThat(convertedProsecutionCase.getProsecutionCaseIdentifier().getAddress().getAddress5(), equalTo(ccCaseReceived.getProsecutionWithReferenceData().getReferenceDataVO().getProsecutorsReferenceData().getAddress().getAddress5()));
         assertThat(convertedProsecutionCase.getProsecutionCaseIdentifier().getProsecutionAuthorityOUCode(), equalTo(ccCaseReceived.getProsecutionWithReferenceData().getReferenceDataVO().getProsecutorsReferenceData().getOucode()));
 
-
     }
-
 
 }

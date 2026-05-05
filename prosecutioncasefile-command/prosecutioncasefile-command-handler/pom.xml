@@ -4,7 +4,7 @@
     <parent>
         <groupId>uk.gov.moj.cpp.prosecution.casefile</groupId>
         <artifactId>prosecutioncasefile-command</artifactId>
-        <version>17.104.90-fw-e-upgrade-SNAPSHOT</version>
+        <version>17.104.91-fw-e-upgrade-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>

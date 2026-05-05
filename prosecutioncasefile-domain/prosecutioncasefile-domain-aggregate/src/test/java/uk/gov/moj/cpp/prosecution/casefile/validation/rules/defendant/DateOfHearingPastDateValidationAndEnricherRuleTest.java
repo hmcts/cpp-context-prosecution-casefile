@@ -43,6 +43,15 @@ public class DateOfHearingPastDateValidationAndEnricherRuleTest {
         assertThat(optionalProblem.isPresent(), is(false));
     }
 
+    @Test
+    public void shouldReturnEmptyListWhenMigartedCaseIsInActive() {
+        when(defendantWithReferenceData.isInactiveMigratedCase()).thenReturn(true);
+
+        final Optional<Problem> optionalProblem = new DateOfHearingPastDateValidationAndEnricherRule().validate(defendantWithReferenceData, referenceDataQueryService)
+                .problems().stream().findFirst();
+        assertThat(optionalProblem.isPresent(), is(false));
+    }
+
 
     @Test
     public void shouldReturnProblemWhenDefendantDateOfBirthIsInFuture() {

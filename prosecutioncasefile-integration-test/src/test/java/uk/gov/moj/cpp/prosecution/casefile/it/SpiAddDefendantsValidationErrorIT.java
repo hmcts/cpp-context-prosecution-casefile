@@ -32,10 +32,7 @@ import static uk.gov.justice.services.test.utils.core.matchers.ResponsePayloadMa
 import static uk.gov.justice.services.test.utils.core.matchers.ResponseStatusMatcher.status;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.DefaultRequests.getCaseErrorDetails;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SELECTOR_DEFENDANT_VALIDATION_FAILED;
-import static uk.gov.moj.cpp.prosecution.casefile.helper.WiremockTestHelper.createCommonMockEndpoints;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubGetCaseMarkersWithCode;
-import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubGetOrganisationUnits;
-import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubProsecutors;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.TestUtils.readFile;
 
 public class SpiAddDefendantsValidationErrorIT extends BaseIT {

@@ -1,43 +1,5 @@
 {
   "initiateCourtProceedings": {
-    "listHearingRequests": [
-      {
-        "courtCentre": {
-          "id": "f8254db1-1683-483e-afb3-b87fde5a0a26",
-          "name": "Port Talbot",
-          "welshName": "Welsh Name",
-          "roomId": "9e4932f7-97b2-3010-b942-ddd2624e4dd8",
-          "roomName": "Courtroom 01"
-        },
-        "estimateMinutes": 20,
-        "hearingType": {
-          "description": "Further Plea & Trial Preparation",
-          "id": "9cc41e45-b594-4ba6-906e-1a4626b08fed"
-        },
-        "jurisdictionType": "CROWN",
-        "listDefendantRequests": [
-          {
-            "summonsRequired": "FIRST_HEARING",
-            "defendantId": "8307c553-2a9f-4e99-9178-040709dd3108",
-            "defendantOffences": [
-              "02f17023-d3ed-47e6-bae6-3bdf26602775"
-            ],
-            "hearingLanguageNeeds": "WELSH",
-            "prosecutionCaseId": "610d9170-507c-41cc-9961-6bb850ecc069"
-          },
-          {
-            "summonsRequired": "FIRST_HEARING",
-            "defendantId": "0ea04d22-2757-468b-bb0b-ca3d9d91014b",
-            "defendantOffences": [
-              "cfafc8df-8d21-4e18-93ca-a854ccfc0fdf"
-            ],
-            "hearingLanguageNeeds": "WELSH",
-            "prosecutionCaseId": "610d9170-507c-41cc-9961-6bb850ecc069"
-          }
-        ],
-        "listedStartDateTime": "2050-02-04T09:05:01.001Z"
-      }
-    ],
     "prosecutionCases": [
       {
         "defendants": [
@@ -65,49 +27,58 @@
             "courtProceedingsInitiated": "2020-02-25T23:43:01.811Z",
             "prosecutionAuthorityReference": "TFL001Defendant01",
             "numberOfPreviousConvictionsCited": 3,
-            "initiationCode": "C",
+            "initiationCode": "O",
             "offences": [
               {
                 "arrestDate": "2018-12-04",
                 "chargeDate": "2018-12-04",
                 "count": 0,
                 "endDate": "2018-10-10",
-                "id": "OFFENCE_ID1",
+                "id": "02f17023-d3ed-47e6-bae6-3bdf26602775",
                 "offenceCode": "OFCODE12",
                 "dvlaOffenceCode": "ABC123",
                 "offenceDefinitionId": "04c099cc-eba2-4c80-9eed-7c1ef21d706a",
+                "committingCourt": {
+                  "courtCentreId": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+                  "courtHouseName": "Port Talbot",
+                  "courtHouseShortName": "Port Talbot",
+                  "courtHouseType": "MAGISTRATES"
+                },
                 "offenceFacts": {
                   "alcoholReadingAmount": 100,
                   "alcoholReadingMethodCode": "A",
                   "alcoholReadingMethodDescription": "Blood",
                   "vehicleCode": "OTHER"
                 },
-                "verdict": {
-                  "offenceId": "OFFENCE_ID1",
-                  "verdictDate": "2018-09-12",
-                  "verdictType": {
-                    "id": "c4ca4238-a0b9-3382-8dcc-509a6f75849b",
-                    "category": "Guilty",
-                    "categoryType": "GUILTY",
-                    "description": "Description"
-                  }
-                },
                 "offenceTitle": "Obstruct person executing search warrant for TV receiver",
                 "orderIndex": 1,
                 "startDate": "2018-09-10",
                 "wording": "TV Licence not paid",
                 "offenceDateCode": 1,
+                "convictionDate": "2018-09-11",
+                "convictingCourt": {
+                  "id": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+                  "name": "Port Talbot",
+                  "welshName": "Welsh Name",
+                  "lja": {
+                    "ljaCode": "1080",
+                    "ljaName": "Bedfordshire Magistrates' Court",
+                    "welshLjaName": "WELSH_NAME"
+                  }
+                },
                 "modeOfTrial": "Summary",
-                "maxPenalty": "Max Penalty"
+                "maxPenalty": "Max Penalty",
+                "allocationDecision": {
+                  "motReasonCode": "01",
+                  "motReasonDescription": "Summary-only offence",
+                  "motReasonId": "4aaecac5-222b-402d-9047-84803679edac",
+                  "offenceId": "5792a07f-169a-4998-a239-7f30747e7574",
+                  "sequenceNumber": 10
+                }
               }
             ],
             "personDefendant": {
               "bailConditions": "bailConditions",
-              "bailStatus": {
-                "code": "B",
-                "description": "Conditional Bail",
-                "id": "dd4073b6-22be-3875-9d63-5da286bb3ece"
-              },
               "personDetails": {
                 "address": {
                   "address1": "66 Exeter Street",
@@ -155,31 +126,27 @@
             "id": "0ea04d22-2757-468b-bb0b-ca3d9d91014b",
             "masterDefendantId": "0ea04d22-2757-468b-bb0b-ca3d9d91014b",
             "courtProceedingsInitiated": "2020-02-25T23:43:01.811Z",
-            "initiationCode": "C",
+            "initiationCode": "O",
             "offences": [
               {
                 "arrestDate": "2018-10-10",
                 "chargeDate": "2018-10-10",
                 "count": 0,
                 "endDate": "2018-10-10",
-                "id": "OFFENCE_ID2",
+                "id": "cfafc8df-8d21-4e18-93ca-a854ccfc0fdf",
                 "offenceCode": "OFCODE12",
                 "dvlaOffenceCode": "ABC123",
                 "offenceDefinitionId": "04c099cc-eba2-4c80-9eed-7c1ef21d706a",
+                "committingCourt": {
+                  "courtCentreId": "f8254db1-1683-483e-afb3-b87fde5a0a26",
+                  "courtHouseName": "Port Talbot",
+                  "courtHouseShortName": "Port Talbot",
+                  "courtHouseType": "MAGISTRATES"
+                },
                 "offenceFacts": {
                   "alcoholReadingAmount": 100,
                   "alcoholReadingMethodCode": "A",
                   "alcoholReadingMethodDescription": "Blood"
-                },
-                "verdict": {
-                  "offenceId": "OFFENCE_ID2",
-                  "verdictDate": "2018-09-12",
-                  "verdictType": {
-                    "id": "c4ca4238-a0b9-3382-8dcc-509a6f75849b",
-                    "category": "Guilty",
-                    "categoryType": "GUILTY",
-                    "description": "Description"
-                  }
                 },
                 "offenceTitle": "Obstruct person executing search warrant for TV receiver",
                 "orderIndex": 1,
@@ -187,16 +154,18 @@
                 "wording": "TV Licence not paid",
                 "offenceDateCode": 1,
                 "modeOfTrial": "Summary",
-                "maxPenalty": "Max Penalty"
+                "maxPenalty": "Max Penalty",
+                "allocationDecision": {
+                  "motReasonCode": "01",
+                  "motReasonDescription": "Summary-only offence",
+                  "motReasonId": "4aaecac5-222b-402d-9047-84803679edac",
+                  "offenceId": "5792a07f-169a-4998-a239-7f30747e7574",
+                  "sequenceNumber": 10
+                }
               }
             ],
             "personDefendant": {
               "bailConditions": "bailConditions",
-              "bailStatus": {
-                "code": "B",
-                "description": "Conditional Bail",
-                "id": "dd4073b6-22be-3875-9d63-5da286bb3ece"
-              },
               "personDetails": {
                 "address": {
                   "address1": "armagaddon house",
@@ -216,10 +185,9 @@
           }
         ],
         "id": "610d9170-507c-41cc-9961-6bb850ecc069",
-        "initiationCode": "C",
+        "initiationCode": "O",
         "summonsCode": "A",
         "originatingOrganisation": "B01NM00",
-        "cpsOrganisation": "B01NM00",
         "prosecutionCaseIdentifier": {
           "prosecutionAuthorityCode": "TFL",
           "prosecutionAuthorityId": "0534ee76-88f6-40e0-ba8f-53588e146675",
@@ -238,8 +206,13 @@
           }
         },
         "classOfCase": "Class 1",
+        "cpsOrganisation": "A30AB00",
         "trialReceiptType": "Transfer",
-        "isRetrial": true
+        "migrationSourceSystem": {
+          "migrationSourceSystemName": "XHIBIT",
+          "migrationSourceSystemCaseIdentifier": "XHIBIT-2-HEARINGS",
+          "migrationCaseStatus": "INACTIVE"
+        }
       }
     ]
   },

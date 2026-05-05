@@ -2,7 +2,6 @@ package uk.gov.moj.cpp.prosecution.casefile.validation.provider;
 
 import static com.google.common.collect.ImmutableMap.of;
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -344,7 +343,7 @@ public class CcProsecutionValidationRuleProvider {
         } else if (MCC == channel) {
             return getValidationRules(defendantInitiationCode, COMMON_DEFENDANT_RULE_SET, SPI_DEFENDANT_RULE_SET, defendantValidationMapMCC);
         } else {
-            return emptyList();
+            return getValidationRules(defendantInitiationCode, COMMON_DEFENDANT_RULE_SET, NON_POLICE_DEFENDANT_RULE_SET, defendantValidationMap);
         }
     }
 

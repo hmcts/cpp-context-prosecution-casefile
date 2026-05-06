@@ -13,7 +13,6 @@ import static uk.gov.moj.cpp.prosecution.casefile.aggregate.GroupProsecutionCase
 import static uk.gov.moj.cpp.prosecution.casefile.aggregate.GroupProsecutionCaseFile.INITIATION_CODE_FOR_SUMMONS;
 
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,7 +47,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 @ExtendWith(MockitoExtension.class)
-public class GroupProsecutionCaseFileTest {
+class GroupProsecutionCaseFileTest {
 
     private static final String OFFENCE_CODE = "TH68023";
 
@@ -62,7 +61,7 @@ public class GroupProsecutionCaseFileTest {
     private List<OffenceReferenceData> referenceDataList;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         referenceDataList = List.of(OffenceReferenceData.offenceReferenceData()
                 .withTitle("Robbery")
                 .withCjsOffenceCode("TH68023")
@@ -73,7 +72,7 @@ public class GroupProsecutionCaseFileTest {
     }
 
     @Test
-    public void shouldRaiseGroupCasesParkedForApproval() {
+    void shouldRaiseGroupCasesParkedForApproval() {
 
         final Optional<OrganisationUnitWithCourtroomReferenceData> optionalOrganisationUnitWithCourtroomReferenceData =
                 Optional.of(OrganisationUnitWithCourtroomReferenceData.organisationUnitWithCourtroomReferenceData().build());
@@ -101,7 +100,7 @@ public class GroupProsecutionCaseFileTest {
     }
 
     @Test
-    public void shouldRaiseGroupCasesParkedForRejected() {
+    void shouldRaiseGroupCasesParkedForRejected() {
 
         final Optional<OrganisationUnitWithCourtroomReferenceData> optionalOrganisationUnitWithCourtroomReferenceData =
                 Optional.of(OrganisationUnitWithCourtroomReferenceData.organisationUnitWithCourtroomReferenceData().build());
@@ -127,7 +126,7 @@ public class GroupProsecutionCaseFileTest {
     }
 
     @Test
-    public void shouldRaiseGroupCasesReceived() {
+    void shouldRaiseGroupCasesReceived() {
 
         final Optional<OrganisationUnitWithCourtroomReferenceData> optionalOrganisationUnitWithCourtroomReferenceData =
                 Optional.of(OrganisationUnitWithCourtroomReferenceData.organisationUnitWithCourtroomReferenceData().build());
@@ -156,7 +155,7 @@ public class GroupProsecutionCaseFileTest {
     }
 
     @Test
-    public void shouldRaiseGroupProsecutionRejected() {
+    void shouldRaiseGroupProsecutionRejected() {
 
         final Optional<OrganisationUnitWithCourtroomReferenceData> optionalOrganisationUnitWithCourtroomReferenceData =
                 Optional.of(OrganisationUnitWithCourtroomReferenceData.organisationUnitWithCourtroomReferenceData().build());
@@ -203,6 +202,7 @@ public class GroupProsecutionCaseFileTest {
                                 .withOffenceLocation("London")
                                 .withOffenceCommittedDate(LocalDate.now().minusDays(2))
                                 .withStatementOfFacts("statements")
+                                .withOffenceSequenceNumber(offenceSequenceNumber)
                                 .build()))
                         .withInitialHearing(InitialHearing.initialHearing()
                                 .withCourtHearingLocation("C55BN00")
@@ -214,7 +214,7 @@ public class GroupProsecutionCaseFileTest {
     }
 
     @Test
-    public void shouldNotThrowRuntimeExceptionForDuplicateProsecutionCaseIds() {
+    void shouldNotThrowRuntimeExceptionForDuplicateProsecutionCaseIds() {
 
         final UUID prosecutionCaseId = randomUUID();
 

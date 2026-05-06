@@ -1,7 +1,6 @@
 package uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.offence;
 
 import static java.util.List.of;
-import static java.util.stream.Collectors.toList;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode.OFFENCE_CODE_NOT_SUPPORTED;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.Problems.newProblem;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.rules.FieldName.OFFENCE_CODE;
@@ -45,7 +44,7 @@ public class CivilOffenceCodeValidationAndEnricherRule implements ValidationRule
 
         final List<Problem> problems = defendantWithReferenceData.getDefendant().getOffences().stream()
                 .map(offence -> verifyOffenceCode(offence, defendantWithReferenceData, referenceDataQueryService))
-                .filter(Objects::nonNull).collect(toList());
+                .filter(Objects::nonNull).toList();
 
         if (null == problems || problems.isEmpty()) {
             return VALID;
@@ -58,7 +57,7 @@ public class CivilOffenceCodeValidationAndEnricherRule implements ValidationRule
     private Problem verifyOffenceCode(final Offence offence, final DefendantWithReferenceData defendantWithReferenceData, final ReferenceDataQueryService referenceDataQueryService) {
         final ReferenceDataVO referenceDataVO = defendantWithReferenceData.getReferenceDataVO();
         final List<OffenceReferenceData> offenceReferenceDataListFromVO = referenceDataVO.getOffenceReferenceData().stream()
-                .filter(rd -> rd.getCjsOffenceCode().equals(offence.getOffenceCode())).filter(Objects::nonNull).collect(toList());
+                .filter(rd -> rd.getCjsOffenceCode().equals(offence.getOffenceCode())).filter(Objects::nonNull).toList();
 
         if (offenceReferenceDataListFromVO != null && !offenceReferenceDataListFromVO.isEmpty()) {
             return null;
@@ -66,7 +65,7 @@ public class CivilOffenceCodeValidationAndEnricherRule implements ValidationRule
 
         final List<OffenceReferenceData> newOffenceReferenceDataList = referenceDataQueryService.retrieveOffenceDataList(of(offence.getOffenceCode()), Optional.of(SOW_REF_VALUE_MOJ)).stream()
                 .filter(rd -> rd.getCjsOffenceCode().equals(offence.getOffenceCode())).filter(Objects::nonNull)
-                .collect(toList());
+                .toList();
 
         if (newOffenceReferenceDataList != null && !newOffenceReferenceDataList.isEmpty()) {
             if (referenceDataVO.getOffenceReferenceData() != null) {

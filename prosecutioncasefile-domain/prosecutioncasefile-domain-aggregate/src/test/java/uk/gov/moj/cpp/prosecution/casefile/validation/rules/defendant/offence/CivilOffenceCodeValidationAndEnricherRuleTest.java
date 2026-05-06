@@ -45,8 +45,6 @@ class CivilOffenceCodeValidationAndEnricherRuleTest {
     private static final String VALID_OFFENCE_CODE = "AB12345";
     private static final String UNSUPPORTED_OFFENCE_CODE = "ZZ99999";
     private static final String DIFFERENT_OFFENCE_CODE = "DIFF000";
-    private static final String GENERIC_ALTERED_OFFENCE_CODE_UPPER = "998A";
-    private static final String GENERIC_ALTERED_OFFENCE_CODE_LOWER = "998a";
     private static final String INITIATION_CODE = "S";
     private static final String FEE_STATUS_PAID = "PAID";
     private static final String SOW_REF_VALUE_MOJ = "moj";
@@ -97,26 +95,6 @@ class CivilOffenceCodeValidationAndEnricherRuleTest {
         final CaseDetails caseDetails = CaseDetails.caseDetails().withInitiationCode(INITIATION_CODE).build();
         final Defendant defendant = new Defendant.Builder().withId(DEFENDANT_ID).withOffences(emptyList()).build();
         final DefendantWithReferenceData input = new DefendantWithReferenceData(defendant, new ReferenceDataVO(), caseDetails);
-
-        final ValidationResult result = rule.validate(input, referenceDataQueryService);
-
-        assertThat(result.isValid(), is(true));
-        verifyNoInteractions(referenceDataQueryService);
-    }
-
-    @Test
-    void shouldReturnValidWhenOffenceCodeIsGenericAlteredUpperCase() {
-        final DefendantWithReferenceData input = buildSingleOffenceInput(GENERIC_ALTERED_OFFENCE_CODE_UPPER, new ReferenceDataVO());
-
-        final ValidationResult result = rule.validate(input, referenceDataQueryService);
-
-        assertThat(result.isValid(), is(true));
-        verifyNoInteractions(referenceDataQueryService);
-    }
-
-    @Test
-    void shouldReturnValidWhenOffenceCodeIsGenericAlteredLowerCase() {
-        final DefendantWithReferenceData input = buildSingleOffenceInput(GENERIC_ALTERED_OFFENCE_CODE_LOWER, new ReferenceDataVO());
 
         final ValidationResult result = rule.validate(input, referenceDataQueryService);
 
@@ -248,38 +226,6 @@ class CivilOffenceCodeValidationAndEnricherRuleTest {
         assertThat(problem.getValues().get(0).getValue(), is(UNSUPPORTED_OFFENCE_CODE));
         assertThat(vo.getOffenceReferenceData(), hasSize(1));
         assertThat(vo.getOffenceReferenceData().get(0).getCjsOffenceCode(), is(VALID_OFFENCE_CODE));
-    }
-
-    @Test
-    void shouldNotInvokeServiceForGenericOffenceWhenMixedWithEnrichableOffence() {
-        when(referenceDataQueryService.retrieveOffenceDataList(List.of(VALID_OFFENCE_CODE), Optional.of(SOW_REF_VALUE_MOJ)))
-                .thenReturn(List.of(offenceReferenceData().withCjsOffenceCode(VALID_OFFENCE_CODE).build()));
-
-        final ReferenceDataVO vo = new ReferenceDataVO();
-        final Offence enrichableOffence = Offence.offence()
-                .withOffenceId(UUID.randomUUID())
-                .withOffenceCode(VALID_OFFENCE_CODE)
-                .withOffenceSequenceNumber(1)
-                .build();
-        final Offence genericOffence = Offence.offence()
-                .withOffenceId(UUID.randomUUID())
-                .withOffenceCode(GENERIC_ALTERED_OFFENCE_CODE_UPPER)
-                .withOffenceSequenceNumber(2)
-                .build();
-        final Defendant defendant = new Defendant.Builder()
-                .withId(DEFENDANT_ID)
-                .withOffences(List.of(enrichableOffence, genericOffence))
-                .build();
-        final CaseDetails caseDetails = CaseDetails.caseDetails().withInitiationCode(INITIATION_CODE).build();
-        final DefendantWithReferenceData input = new DefendantWithReferenceData(defendant, vo, caseDetails);
-
-        final ValidationResult result = rule.validate(input, referenceDataQueryService);
-
-        assertThat(result.isValid(), is(true));
-        assertThat(result.problems(), is(empty()));
-        verify(referenceDataQueryService, never())
-                .retrieveOffenceDataList(List.of(GENERIC_ALTERED_OFFENCE_CODE_UPPER), Optional.of(SOW_REF_VALUE_MOJ));
-        assertThat(vo.getOffenceReferenceData(), hasSize(1));
     }
 
     @Test

@@ -3,8 +3,8 @@ package uk.gov.moj.cps.prosecutioncasefile;
 import static java.util.Collections.singletonList;
 import static java.util.Optional.ofNullable;
 import static java.util.UUID.randomUUID;
-import static javax.json.Json.createArrayBuilder;
-import static javax.json.Json.createObjectBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createArrayBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
@@ -84,7 +84,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.json.Json;
+import uk.gov.justice.services.messaging.JsonObjects;
 import javax.json.JsonObject;
 
 import org.junit.Rule;
@@ -818,8 +818,8 @@ public class ProsecutionCaseFileErrorCorrectionTest {
                 .add("initiationCode", INVALID_INITIATION_CODE)
                 .add("caseMarkers",
                         createArrayBuilder()
-                                .add(Json.createObjectBuilder().add("markerTypeCode", VALID_CASE_MARKER_CODE).build())
-                                .add(Json.createObjectBuilder().add("markerTypeCode", INVALID_CASE_MARKER_CODE).build())
+                                .add(JsonObjects.createObjectBuilder().add("markerTypeCode", VALID_CASE_MARKER_CODE).build())
+                                .add(JsonObjects.createObjectBuilder().add("markerTypeCode", INVALID_CASE_MARKER_CODE).build())
                                 .build())
                 .add("prosecutorCaseReference", PROSECUTOR_CASE_REFERENCE)
                 .add("policeSystemId", POLICE_SYSTEM_ID)

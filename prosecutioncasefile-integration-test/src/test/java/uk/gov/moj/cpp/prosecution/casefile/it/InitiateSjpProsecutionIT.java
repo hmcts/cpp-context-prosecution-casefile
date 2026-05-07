@@ -77,7 +77,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import javax.json.Json;
+import uk.gov.justice.services.messaging.JsonObjects;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
@@ -641,7 +641,7 @@ public class InitiateSjpProsecutionIT extends BaseIT {
 
         assertThat(prosecutionReceivedEvent.get().metadata().name(), equalTo(EVENT_SELECTOR_SJP_PROSECUTION_RECEIVED));
 
-        final JsonObject updateOffenceCodePayload = Json.createObjectBuilder()
+        final JsonObject updateOffenceCodePayload = JsonObjects.createObjectBuilder()
                 .add("offenceCode", offenceCode2)
                 .build();
 
@@ -1121,18 +1121,18 @@ public class InitiateSjpProsecutionIT extends BaseIT {
     }
 
     private JsonArray getProblem(final Problem... problems) {
-        final JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+        final JsonArrayBuilder arrayBuilder = JsonObjects.createArrayBuilder();
         for (final Problem problem : problems) {
-            final JsonArrayBuilder valuesBuilder = Json.createArrayBuilder();
+            final JsonArrayBuilder valuesBuilder = JsonObjects.createArrayBuilder();
             for (final ProblemValue problemValue : problem.getValues()) {
-                JsonObjectBuilder problemValueJson = Json.createObjectBuilder();
+                JsonObjectBuilder problemValueJson = JsonObjects.createObjectBuilder();
                 if (problemValue.getId() != null) {
                     problemValueJson.add("id", problemValue.getId());
                 }
                 problemValueJson.add("key", problemValue.getKey()).add("value", problemValue.getValue());
                 valuesBuilder.add(problemValueJson);
             }
-            arrayBuilder.add(Json.createObjectBuilder().add("code", problem.getCode()).add("values", valuesBuilder));
+            arrayBuilder.add(JsonObjects.createObjectBuilder().add("code", problem.getCode()).add("values", valuesBuilder));
         }
         return arrayBuilder.build();
     }

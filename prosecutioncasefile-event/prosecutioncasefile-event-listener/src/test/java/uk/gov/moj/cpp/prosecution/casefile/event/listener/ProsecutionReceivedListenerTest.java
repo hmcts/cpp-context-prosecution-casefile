@@ -5,8 +5,8 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.UUID.fromString;
 import static java.util.UUID.randomUUID;
-import static javax.json.Json.createArrayBuilder;
-import static javax.json.Json.createObjectBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createArrayBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static org.codehaus.groovy.runtime.InvokerHelper.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
@@ -89,7 +89,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.json.Json;
+import uk.gov.justice.services.messaging.JsonObjects;
 import javax.json.JsonObject;
 
 @ExtendWith(MockitoExtension.class)
@@ -467,7 +467,7 @@ public class ProsecutionReceivedListenerTest {
                 .add("firstName", "FirstName")
                 .add("lastName", "LastName")
                 .add("offences", createArrayBuilder()
-                        .add(Json.createObjectBuilder()
+                        .add(JsonObjects.createObjectBuilder()
                                 .add("id", offenceId.toString())
                                 .add("description", "Duty not paid")
                                 .build()))

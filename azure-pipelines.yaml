@@ -41,6 +41,7 @@ stages:
         parameters:
           sonarqube_project: ${{ variables['sonarqubeProject'] }}
           sonarQubeType: 'sonarQubeAKS'
+          runSonarqubeStatus: 'false'
 
   - ${{ if eq(variables['Build.Reason'], 'IndividualCI') }}:
       - template: pipelines/context-validation.yaml@cppAzureDevOpsTemplates

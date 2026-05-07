@@ -3,6 +3,7 @@ package uk.gov.moj.cpp.prosecution.casefile.validation.provider;
 import static com.google.common.collect.ImmutableMap.of;
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CIVIL;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.MCC;
@@ -59,6 +60,7 @@ import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.SelfDefine
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.offence.ArrestDateValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.offence.ArrestDateValidationRuleForCivil;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.offence.ChargeDateValidationRule;
+import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.offence.CivilOffenceCodeValidationAndEnricherRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.offence.OffenceAlcoholLevelValidationAndEnricherRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.offence.OffenceBackDutyValidationRuleAndEnricherRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.offence.OffenceCodeValidationAndEnricherRule;
@@ -227,6 +229,37 @@ public class CcProsecutionValidationRuleProvider {
             new CourtReceivedToCodeCourtValidationRules(),
             new HearingTypeCodeValidationRule()
     ));
+
+    private static final List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> CIVIL_DEFENDANT_RULE_SET = unmodifiableList(asList(
+            new CourtHearingLocationValidationRule(),
+            new DateOfHearingValidationAndEnricherRule(),
+            new IndividualDefendantPrimaryEmailAddressValidationRule(),
+            new IndividualDefendantSecondaryEmailAddressValidationRule(),
+            new CorporateDefendantPrimaryEmailAddressValidationRule(),
+            new CorporateDefendantSecondaryEmailAddressValidationRule(),
+            new ParentGuardianDateOfBirthValidationRule(),
+            new ParentGuardianObservedEthnicityValidationAndEnricherRule(),
+            new ParentGuardianSelfDefinedEthnicityValidationAndEnricherRule(),
+            new ParentGuardianPrimaryEmailAddressValidationRule(),
+            new ParentGuardianSecondaryEmailAddressValidationRule(),
+            new OffenderCodeValidationAndEnricherRule(),
+            new SelfDefinedEthnicityValidationAndEnricherRule(),
+            new OffenceLocationValidationAndEnricherRule(),
+            new ObservedEthnicityValidationAndEnricherRule(),
+            new OffenceAlcoholLevelValidationAndEnricherRule(),
+            new DefendantDateOfBirthValidationRule(),
+            new NationalityValidationAndEnricherRule(),
+            new VehicleCodeValidationAndEnricherRule(),
+            new DefendantPerceivedBirthYearValidationRule(),
+            new CivilOffenceCodeValidationAndEnricherRule(),
+            new OffenceDrugLevelMethodValidationAndEnricherRule(),
+            new OffenceDrugLevelAmountValidationAndEnricherRule(),
+            new OffenceBackDutyValidationRuleAndEnricherRule(),
+            new CourtReceivedFromCodeCourtValidationRules(),
+            new CourtReceivedToCodeCourtValidationRules(),
+            new HearingTypeCodeValidationRule()
+    ));
+
     private static final List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> SPI_DEFENDANT_RULE_SET = unmodifiableList(asList(
             new PncIdSpiValidationRule(),
             new CroNumberSpiValidationRule(),
@@ -247,7 +280,7 @@ public class CcProsecutionValidationRuleProvider {
             new OffenceLocationValidationAndEnricherRule(),
             new NationalityValidationAndEnricherRule(),
             new VehicleCodeValidationAndEnricherRule(),
-            new OffenceCodeValidationAndEnricherRule(),
+            new CivilOffenceCodeValidationAndEnricherRule(),
             new CourtReceivedFromCodeCourtValidationRules(),
             new CourtReceivedToCodeCourtValidationRules(),
             new HearingTypeCodeValidationRule(),
@@ -277,8 +310,8 @@ public class CcProsecutionValidationRuleProvider {
             OTHER.getCode(), Stream.of(GROUP_CIVIL_DEFENDANT_RULE_SET).flatMap(Collection::stream).toList());
 
     private static final Map<String, List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>>> defendantValidationMapMCCCivil = of(
-            SUMMONS.getCode(), Stream.of(GROUP_CIVIL_DEFENDANT_RULE_SET,COMMON_DEFENDANT_RULE_SET, NON_POLICE_DEFENDANT_RULE_SET, SUMMONS_DEFENDANT_RULE_MCC_SET).flatMap(Collection::stream).toList(),
-            OTHER.getCode(), Stream.of(GROUP_CIVIL_DEFENDANT_RULE_SET,COMMON_DEFENDANT_RULE_SET, NON_POLICE_DEFENDANT_RULE_SET, CHARGE_DEFENDANT_RULE_SET_CIVIL).flatMap(Collection::stream).toList());
+            SUMMONS.getCode(), Stream.of(GROUP_CIVIL_DEFENDANT_RULE_SET,CIVIL_DEFENDANT_RULE_SET, NON_POLICE_DEFENDANT_RULE_SET, SUMMONS_DEFENDANT_RULE_MCC_SET).flatMap(Collection::stream).toList(),
+            OTHER.getCode(), Stream.of(GROUP_CIVIL_DEFENDANT_RULE_SET,CIVIL_DEFENDANT_RULE_SET, NON_POLICE_DEFENDANT_RULE_SET, CHARGE_DEFENDANT_RULE_SET_CIVIL).flatMap(Collection::stream).toList());
 
 
     private CcProsecutionValidationRuleProvider() {
@@ -297,16 +330,21 @@ public class CcProsecutionValidationRuleProvider {
     public static List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> getDefendantValidationRules(final String defendantInitiationCode,
                                                                                                                           final Channel channel,
                                                                                                                           final Boolean isCivil) {
-        if (nonNull(channel) && CIVIL.equals(channel) && nonNull(isCivil) && (isCivil)) {
-            return getValidationRules(defendantInitiationCode, COMMON_DEFENDANT_RULE_SET, SPI_DEFENDANT_RULE_SET, defendantValidationMapForGroupCivilCases);
-        } else if (nonNull(channel) && MCC.equals(channel) && nonNull(isCivil) && (isCivil)) {
-            return getValidationRules(defendantInitiationCode, COMMON_DEFENDANT_RULE_SET, SPI_DEFENDANT_RULE_SET, defendantValidationMapMCCCivil);
-        } else if (nonNull(channel) && SPI.equals(channel)) {
-            return getValidationRules(defendantInitiationCode, COMMON_DEFENDANT_RULE_SET, SPI_DEFENDANT_RULE_SET, defendantValidationMapSpi);
-        } else if (nonNull(channel) && MCC.equals(channel)) {
-            return getValidationRules(defendantInitiationCode, COMMON_DEFENDANT_RULE_SET, SPI_DEFENDANT_RULE_SET, defendantValidationMapMCC);
+        if (isNull(channel)) {
+            return getValidationRules(defendantInitiationCode, COMMON_DEFENDANT_RULE_SET, NON_POLICE_DEFENDANT_RULE_SET, defendantValidationMap);
         }
-        return getValidationRules(defendantInitiationCode, COMMON_DEFENDANT_RULE_SET, NON_POLICE_DEFENDANT_RULE_SET, defendantValidationMap);
+
+        if (CIVIL == channel && nonNull(isCivil) && (isCivil)) {
+            return getValidationRules(defendantInitiationCode, CIVIL_DEFENDANT_RULE_SET, SPI_DEFENDANT_RULE_SET, defendantValidationMapForGroupCivilCases);
+        } else if (MCC == channel && nonNull(isCivil) && (isCivil)) {
+            return getValidationRules(defendantInitiationCode, CIVIL_DEFENDANT_RULE_SET, SPI_DEFENDANT_RULE_SET, defendantValidationMapMCCCivil);
+        } else if (SPI == channel) {
+            return getValidationRules(defendantInitiationCode, COMMON_DEFENDANT_RULE_SET, SPI_DEFENDANT_RULE_SET, defendantValidationMapSpi);
+        } else if (MCC == channel) {
+            return getValidationRules(defendantInitiationCode, COMMON_DEFENDANT_RULE_SET, SPI_DEFENDANT_RULE_SET, defendantValidationMapMCC);
+        } else {
+            return getValidationRules(defendantInitiationCode, COMMON_DEFENDANT_RULE_SET, NON_POLICE_DEFENDANT_RULE_SET, defendantValidationMap);
+        }
     }
 
     public static List<ValidationRule<GroupProsecutionList, ReferenceDataQueryService>> getGroupCasesValidationRules() {

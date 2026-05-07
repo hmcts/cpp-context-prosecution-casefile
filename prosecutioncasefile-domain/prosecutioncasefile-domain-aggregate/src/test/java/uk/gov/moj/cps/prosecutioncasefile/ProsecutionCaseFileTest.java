@@ -14,8 +14,8 @@ import static java.util.Optional.ofNullable;
 import static java.util.UUID.fromString;
 import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toList;
-import static javax.json.Json.createArrayBuilder;
-import static javax.json.Json.createObjectBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createArrayBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
@@ -137,7 +137,6 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Problem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ProblemValue;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecution;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ProsecutionCaseSubject;
-import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Language;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecutor;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ProsecutorsReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.SummonsCodeReferenceData;
@@ -147,7 +146,6 @@ import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 import uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode;
 import uk.gov.moj.cps.prosecutioncasefile.common.AddMaterialCommonV2;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.*;
-import uk.gov.moj.cps.prosecutioncasefile.domain.event.CaseDetailsUpdated;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
@@ -176,7 +174,6 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
-import uk.gov.moj.cps.prosecutioncasefile.domain.event.Defendant;
 
 // TODO: remove LENIENT strictness
 @MockitoSettings(strictness = LENIENT)
@@ -370,7 +367,7 @@ public class ProsecutionCaseFileTest {
         final LocalDate offenceChargeDate = of(2018, 11, 2);
 
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(getProsecutionWithReferenceDataAndCivilFees(of(buildDefendantWithOffence(offenceCommittedDate, offenceChargeDate, PROSECUTOR_DEFENDANT_REFERENCE_ONE),
-                        buildDefendantWithOffence(offenceCommittedDate, offenceChargeDate.minusMonths(4), PROSECUTOR_DEFENDANT_REFERENCE_TWO)), CPPI, false, Collections.emptyList()), new ArrayList<>(), new ArrayList<>(),
+                buildDefendantWithOffence(offenceCommittedDate, offenceChargeDate.minusMonths(4), PROSECUTOR_DEFENDANT_REFERENCE_TWO)), CPPI, false, Collections.emptyList()), new ArrayList<>(), new ArrayList<>(),
                 referenceDataQueryService);
 
         final List<Object> eventList = objectStream.collect(toList());
@@ -390,8 +387,8 @@ public class ProsecutionCaseFileTest {
 
         List<CivilFees> civilFees = new ArrayList<>();
         //if (!paymentRef.isEmpty()) {
-        civilFees.add(CivilFees.civilFees().withPaymentReference(paymentRef).withFeeStatus(actualFeeStatus).build());
-        //  }
+            civilFees.add(CivilFees.civilFees().withPaymentReference(paymentRef).withFeeStatus(actualFeeStatus).build());
+      //  }
 
         final ProsecutionWithReferenceData prosecutionWithReferenceDataAndCivilFees = getProsecutionWithReferenceDataAndCivilFees(of(buildDefendantWithOffence(offenceCommittedDate, offenceChargeDate, PROSECUTOR_DEFENDANT_REFERENCE_ONE),
                 buildDefendantWithOffence(offenceCommittedDate, offenceChargeDate.minusMonths(4), PROSECUTOR_DEFENDANT_REFERENCE_TWO)), CIVIL, true, civilFees);
@@ -653,7 +650,7 @@ public class ProsecutionCaseFileTest {
 
     @Test
     public void shouldRaiseIdpcDefendantMatchPendingEventWhenOnlyDateOfBirthMatched() {
-        final ProsecutionWithReferenceData prosecutionWithReferenceData = getProsecutionWithReferenceData(MCC, false, null);
+        final ProsecutionWithReferenceData prosecutionWithReferenceData = getProsecutionWithReferenceData(MCC, false);
         prosecutionCaseFile.receiveSjpProsecution(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
         final UUID materialId = fromString("c9ad5fef-7d97-4df5-b796-0eed3eed1acf");
         final String materialType = "IDPC";
@@ -665,7 +662,7 @@ public class ProsecutionCaseFileTest {
 
     @Test
     public void shouldRaiseIdpcDefendantMatchedEventWhenSurnameMatched() {
-        final ProsecutionWithReferenceData prosecutionWithReferenceData = getProsecutionWithReferenceData(MCC, false, null);
+        final ProsecutionWithReferenceData prosecutionWithReferenceData = getProsecutionWithReferenceData(MCC, false);
         prosecutionCaseFile.receiveSjpProsecution(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
         final UUID materialId = fromString("c9ad5fef-7d97-4df5-b796-0eed3eed1acf");
         final String materialType = "IDPC";
@@ -674,23 +671,10 @@ public class ProsecutionCaseFileTest {
         final Stream<Object> objectStream = prosecutionCaseFile.addIdpcCaseMaterial(prosecutionWithReferenceData.getProsecution().getCaseDetails().getCaseId(), URN, materialId, materialType, defendant);
         assertThatTheEventReturnedIsOfType(objectStream, IdpcDefendantMatched.class);
     }
-
-    @Test
-    public void shouldRaiseIdpcDefendantMatchedEventWhenSurnameMatchedWithLanguages() {
-        final ProsecutionWithReferenceData prosecutionWithReferenceData = getProsecutionWithReferenceData(MCC, false, Language.ENGLISH);
-        prosecutionCaseFile.receiveSjpProsecution(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
-        final UUID materialId = fromString("c9ad5fef-7d97-4df5-b796-0eed3eed1acf");
-        final String materialType = "IDPC";
-        final String ouCode = "B01AF00";
-        final Defendant defendant = new Defendant.Builder().withDefendantId(DEFENDANT_ID).withDob(BIRTH_DATE.toString()).withForenames(FORENAME).withOucode(ouCode).withSurname(SURNAME).build();
-        final Stream<Object> objectStream = prosecutionCaseFile.addIdpcCaseMaterial(prosecutionWithReferenceData.getProsecution().getCaseDetails().getCaseId(), URN, materialId, materialType, defendant);
-        assertThatTheEventReturnedIsOfType(objectStream, IdpcDefendantMatched.class);
-    }
-
 
     @Test
     public void shouldRaiseIdpcDefendantMatchedEventWhenSurnameMatchWithWhiteSpaceCharacterAtStartAndEnd() {
-        final ProsecutionWithReferenceData prosecutionWithReferenceData = getProsecutionWithReferenceData(MCC, false, null);
+        final ProsecutionWithReferenceData prosecutionWithReferenceData = getProsecutionWithReferenceData(MCC, false);
         prosecutionCaseFile.receiveSjpProsecution(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
         final UUID materialId = fromString("c9ad5fef-7d97-4df5-b796-0eed3eed1acf");
         final String materialType = "IDPC";
@@ -823,7 +807,7 @@ public class ProsecutionCaseFileTest {
 
     @Test
     public void shouldRaiseProsecutionCaseUnSupportedEventWhenMultipleDefendantsProsecutionReceivedForSjpCaseViaSpiChannel() {
-        final ProsecutionWithReferenceData prosecutionWithReferenceData = getProsecutionWithReferenceData(SPI, true, Language.ENGLISH);
+        final ProsecutionWithReferenceData prosecutionWithReferenceData = getProsecutionWithReferenceData(SPI, true);
         final Stream<Object> objectStream = prosecutionCaseFile.receiveSjpProsecution(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
         final List<Object> eventList = objectStream.collect(toList());
         assertThat(eventList.size(), is(1));
@@ -1247,7 +1231,7 @@ public class ProsecutionCaseFileTest {
         final ProsecutionWithReferenceData secondMessage = getProsecutionWithReferenceData(
                 of(buildDefendant(FORENAME, SECOND_SURNAME, BIRTH_DATE, SECOND_DEFENDANT_ID, randomAlphabetic(10)),
                         buildDefendant(FORENAME, THIRD_SURNAME, BIRTH_DATE, THIRD_DEFENDANT_ID, randomAlphabetic(10)),
-                        buildDefendant(FORENAME, FOURTH_SURNAME, BIRTH_DATE, FOURTH_DEFENDANT_ID, randomAlphabetic(10), DATE_OF_HEARING_IN_PAST, Language.ENGLISH)
+                        buildDefendant(FORENAME, FOURTH_SURNAME, BIRTH_DATE, FOURTH_DEFENDANT_ID, randomAlphabetic(10), DATE_OF_HEARING_IN_PAST)
                 ), SPI, SUMMONS_INITIATION_CODE, EXTERNAL_ID_2);
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(secondMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
@@ -1303,7 +1287,7 @@ public class ProsecutionCaseFileTest {
 
         final ProsecutionWithReferenceData secondMessageWithValidAndInvalidDefendants = getProsecutionWithReferenceData(
                 of(buildDefendant(FORENAME, THIRD_SURNAME, BIRTH_DATE, THIRD_DEFENDANT_ID, randomAlphabetic(10)),
-                        buildDefendant(FORENAME, FOURTH_SURNAME, BIRTH_DATE, FOURTH_DEFENDANT_ID, randomAlphabetic(10), DATE_OF_HEARING_IN_PAST, null)
+                        buildDefendant(FORENAME, FOURTH_SURNAME, BIRTH_DATE, FOURTH_DEFENDANT_ID, randomAlphabetic(10), DATE_OF_HEARING_IN_PAST)
                 ), SPI, SUMMONS_INITIATION_CODE, EXTERNAL_ID_2);
         Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(secondMessageWithValidAndInvalidDefendants, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
@@ -1822,30 +1806,7 @@ public class ProsecutionCaseFileTest {
         assertThat(caseReceivedWithDuplicateDefendants.isPresent(), is(true));
     }
 
-    @Test
-    public void shouldUpdateCaseDetailsWithFees(){
-        final LocalDate offenceCommittedDate = of(2018, 3, 2);
-        final LocalDate offenceChargeDate = of(2018, 11, 2);
 
-        final ProsecutionWithReferenceData firstMessage = getProsecutionWithReferenceData(
-                of(buildDefendantWithOffence(offenceCommittedDate, offenceChargeDate, PROSECUTOR_DEFENDANT_REFERENCE_ONE),
-                        buildDefendant(SECOND_FORENAME, SECOND_SURNAME, SECOND_BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE)), SPI, SUMMONS_INITIATION_CODE);
-        prosecutionCaseFile.apply(ccCaseReceived().withProsecutionWithReferenceData(firstMessage).build());
-
-        final UUID externalIdForSecondMessage = randomUUID();
-        final ProsecutionWithReferenceData secondMessage = getProsecutionWithReferenceData(
-                of(buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, randomAlphabetic(10))), SPI, SUMMONS_INITIATION_CODE, externalIdForSecondMessage);
-        prosecutionCaseFile.receiveCCCase(secondMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
-
-
-        final Stream<Object> objectStream = prosecutionCaseFile.updateCaseDetails("OUTSTANDING", "Reference001","OUTSTANDING", "Ref001");
-
-        final List<Object> eventList = objectStream.collect(toList());
-        assertThat(eventList.size(), is(1));
-        CaseDetailsUpdated caseDetailsUpdated = (CaseDetailsUpdated) eventList.get(0);
-        assertThat(caseDetailsUpdated.getContestedFeeStatus(), is("OUTSTANDING"));
-        assertThat(caseDetailsUpdated.getContestedPaymentReference(), is("Reference001"));
-    }
 
 
     private void assertThatTheEventReturnedIsOfType(final Stream<Object> objectStream, final Class<?> eventClass) {
@@ -2048,14 +2009,7 @@ public class ProsecutionCaseFileTest {
                                                                                       final LocalDate dateOfBirth,
                                                                                       final String defendantId,
                                                                                       final String prosecutorDefendantReference) {
-        return buildDefendant(firstName, lastName, dateOfBirth, defendantId, prosecutorDefendantReference, DATE_OF_HEARING, null);
-    }
-
-    private uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant buildDefendant(final String firstName, final String lastName,
-                                                                                      final LocalDate dateOfBirth,
-                                                                                      final String defendantId,
-                                                                                      final String prosecutorDefendantReference, final Language language) {
-        return buildDefendant(firstName, lastName, dateOfBirth, defendantId, prosecutorDefendantReference, DATE_OF_HEARING, language);
+        return buildDefendant(firstName, lastName, dateOfBirth, defendantId, prosecutorDefendantReference, DATE_OF_HEARING);
     }
 
     private uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant buildDefendantWithAsn(final String firstName, final String lastName,
@@ -2073,13 +2027,11 @@ public class ProsecutionCaseFileTest {
                                                                                       final LocalDate dateOfBirth,
                                                                                       final String defendantId,
                                                                                       final String prosecutorDefendantReference,
-                                                                                      final String dateOfHearing, final Language language) {
+                                                                                      final String dateOfHearing) {
         return defendant()
                 .withId(defendantId)
                 .withInitiationCode("C")
                 .withProsecutorDefendantReference(prosecutorDefendantReference)
-                .withDocumentationLanguage(language)
-                .withHearingLanguage(language)
                 .withIndividual(individual()
                         .withPersonalInformation(personalInformation()
                                 .withFirstName(firstName)
@@ -2286,7 +2238,7 @@ public class ProsecutionCaseFileTest {
                 .build());
     }
 
-    private ProsecutionWithReferenceData getProsecutionWithReferenceData(final Channel channel, final Boolean hasMultipleDefendants, final Language language) {
+    private ProsecutionWithReferenceData getProsecutionWithReferenceData(final Channel channel, final Boolean hasMultipleDefendants) {
 
         ProsecutorsReferenceData prd = new ProsecutorsReferenceData.Builder()
                 .withId(UUID.fromString("c9ad5fef-7d97-4df5-b796-0eed3eed1acf"))
@@ -2305,7 +2257,7 @@ public class ProsecutionCaseFileTest {
 
         final ImmutableList<uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant> defendants = hasMultipleDefendants ?
                 of(buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE), buildDefendant(SECOND_FORENAME, SECOND_SURNAME, SECOND_BIRTH_DATE, SECOND_DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_TWO)) :
-                of(buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE, language));
+                of(buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE));
         Prosecution prosecution = new Prosecution.Builder()
                 .withCaseDetails(caseDetails)
                 .withChannel(channel)

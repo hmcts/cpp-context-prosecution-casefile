@@ -151,7 +151,7 @@ public class ProgressionPublicEventProcessor {
 
     @Handles("public.progression.court-application-summons-rejected")
     public void handleCourtApplicationSummonsRejected(final Envelope<PublicProgressionCourtApplicationSummonsRejected> envelope) {
-        LOGGER.info("public.progression.court-application-summons-rejected event received for case: {}", envelope.payload().getProsecutionCaseId());
+        LOGGER.info("public.progression.court-application-summons-rejected event received for case: {}", objectToJsonObjectConverter.convert(envelope.payload()));
 
         final PublicProgressionCourtApplicationSummonsRejected eventPayload = envelope.payload();
 
@@ -169,7 +169,8 @@ public class ProgressionPublicEventProcessor {
 
     @Handles("public.progression.court-application-summons-approved")
     public void handleCourtApplicationSummonsApproved(final Envelope<PublicProgressionCourtApplicationSummonsApproved> envelope) {
-        LOGGER.info("public.progression.court-application-summons-approved event received for case: {}", envelope.payload().getProsecutionCaseId());
+        LOGGER.info("public.progression.court-application-summons-approved event received for case: {}", objectToJsonObjectConverter.convert(envelope.payload()));
+
         final PublicProgressionCourtApplicationSummonsApproved eventPayload = envelope.payload();
         final Metadata metadata = metadataFrom(envelope.metadata())
                 .withName("prosecutioncasefile.command.approve-case-defendants-as-summons-application-approved")

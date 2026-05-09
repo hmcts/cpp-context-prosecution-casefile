@@ -3,6 +3,12 @@
   "id": "http://justice.gov.uk/core/courts/summonsApprovedOutcome.json",
   "type": "object",
   "properties": {
+    "applicationId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
+    "hearingId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
+    },
     "prosecutorCost": {
       "type": "string",
       "description": "Prosecutor cost will be surfaced in the summons and defendant is liable to pay this amount.  Should be captured as £300.00"

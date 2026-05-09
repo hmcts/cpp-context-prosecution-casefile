@@ -162,7 +162,7 @@ public class ProsecutionReceivedProcessorTest {
         reader.close();
         when(objectToJsonObjectConverter.convert(any())).thenReturn(jsonObject);
 
-        final JsonEnvelope envelope1 = JsonEnvelope.envelopeFrom(metadataWithRandomUUIDAndName(), NULL);
+        final JsonEnvelope envelope1 = JsonEnvelope.envelopeFrom(metadataWithRandomUUIDAndName(), jsonObject);
         when(envelopeHelper.withMetadataInPayload(any())).thenReturn(envelope1);
 
         when(ccCaseToProsecutionCaseConverter.convert(any())).thenReturn(buildInitiateCourtProceedings());

@@ -72,7 +72,7 @@
                 "chargeDate": "2018-12-04",
                 "count": 0,
                 "endDate": "2018-10-10",
-                "id": "02f17023-d3ed-47e6-bae6-3bdf26602775",
+                "id": "OFFENCE_ID1",
                 "offenceCode": "OFCODE12",
                 "dvlaOffenceCode": "ABC123",
                 "offenceDefinitionId": "04c099cc-eba2-4c80-9eed-7c1ef21d706a",
@@ -83,7 +83,7 @@
                   "vehicleCode": "OTHER"
                 },
                 "verdict": {
-                  "offenceId": "02f17023-d3ed-47e6-bae6-3bdf26602775",
+                  "offenceId": "OFFENCE_ID1",
                   "verdictDate": "2018-09-12",
                   "verdictType": {
                     "id": "c4ca4238-a0b9-3382-8dcc-509a6f75849b",
@@ -162,7 +162,7 @@
                 "chargeDate": "2018-10-10",
                 "count": 0,
                 "endDate": "2018-10-10",
-                "id": "cfafc8df-8d21-4e18-93ca-a854ccfc0fdf",
+                "id": "OFFENCE_ID2",
                 "offenceCode": "OFCODE12",
                 "dvlaOffenceCode": "ABC123",
                 "offenceDefinitionId": "04c099cc-eba2-4c80-9eed-7c1ef21d706a",
@@ -172,7 +172,7 @@
                   "alcoholReadingMethodDescription": "Blood"
                 },
                 "verdict": {
-                  "offenceId": "cfafc8df-8d21-4e18-93ca-a854ccfc0fdf",
+                  "offenceId": "OFFENCE_ID2",
                   "verdictDate": "2018-09-12",
                   "verdictType": {
                     "id": "c4ca4238-a0b9-3382-8dcc-509a6f75849b",

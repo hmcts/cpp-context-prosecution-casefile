@@ -1,6 +1,6 @@
 package uk.gov.moj.cpp.prosecution.casefile.aggregate;
 
-import static java.util.Optional.*;
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Stream.builder;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static uk.gov.justice.domain.aggregate.matcher.EventSwitcher.match;
@@ -195,7 +195,7 @@ public class GroupProsecutionCaseFile implements Aggregate {
         return groupProsecutionList.getGroupProsecutionWithReferenceDataList().stream()
                 .flatMap(groupProsecutionWithReferenceData -> {
                     final DefendantsWithReferenceData defendantsWithReferenceData = defendantsWithReferenceDataMap.get(groupProsecutionWithReferenceData.getGroupProsecution().getCaseDetails().getCaseId());
-                    final List<DefendantProblem> errors = validateDefendantErrors(groupProsecutionWithReferenceData.getGroupProsecution().getCaseDetails(), groupProsecutionList.getChannel(), defendantsWithReferenceData, referenceDataQueryService, builder, Boolean.TRUE, false, isCivil);
+                    final List<DefendantProblem> errors = validateDefendantErrors(groupProsecutionWithReferenceData.getGroupProsecution().getCaseDetails(), groupProsecutionList.getChannel(), defendantsWithReferenceData, referenceDataQueryService, builder, Boolean.TRUE, false, false,isCivil);
                     return errors.stream();
                 }).toList();
     }

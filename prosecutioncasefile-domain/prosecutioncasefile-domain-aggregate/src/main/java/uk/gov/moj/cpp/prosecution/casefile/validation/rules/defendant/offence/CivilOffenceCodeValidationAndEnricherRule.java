@@ -31,12 +31,6 @@ public class CivilOffenceCodeValidationAndEnricherRule implements ValidationRule
     @Override
     public ValidationResult validate(final DefendantWithReferenceData defendantWithReferenceData, final ReferenceDataQueryService referenceDataQueryService) {
 
-        String feeStatus = defendantWithReferenceData.getCaseDetails().getFeeStatus();
-
-        if (feeStatus != null) {
-            return VALID;
-        }
-
         if (defendantWithReferenceData.getDefendant() == null || defendantWithReferenceData.getDefendant().getOffences() == null
                 || defendantWithReferenceData.getDefendant().getOffences().isEmpty()) {
             return VALID;

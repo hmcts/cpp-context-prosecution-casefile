@@ -3,11 +3,9 @@ package uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.offence;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -46,7 +44,6 @@ class CivilOffenceCodeValidationAndEnricherRuleTest {
     private static final String UNSUPPORTED_OFFENCE_CODE = "ZZ99999";
     private static final String DIFFERENT_OFFENCE_CODE = "DIFF000";
     private static final String INITIATION_CODE = "S";
-    private static final String FEE_STATUS_PAID = "PAID";
     private static final String SOW_REF_VALUE_MOJ = "moj";
     private static final String DEFENDANT_ID = "1234243";
 
@@ -55,17 +52,6 @@ class CivilOffenceCodeValidationAndEnricherRuleTest {
 
     @InjectMocks
     private CivilOffenceCodeValidationAndEnricherRule rule;
-
-    @Test
-    void shouldReturnValidWhenFeeStatusIsNotNull() {
-        final CaseDetails caseDetails = CaseDetails.caseDetails().withFeeStatus(FEE_STATUS_PAID).build();
-        final DefendantWithReferenceData input = new DefendantWithReferenceData(null, new ReferenceDataVO(), caseDetails);
-
-        final ValidationResult result = rule.validate(input, referenceDataQueryService);
-
-        assertThat(result.isValid(), is(true));
-        verifyNoInteractions(referenceDataQueryService);
-    }
 
     @Test
     void shouldReturnValidWhenDefendantIsNull() {

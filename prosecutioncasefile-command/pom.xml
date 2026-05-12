@@ -3,7 +3,7 @@
     <parent>
         <groupId>uk.gov.moj.cpp.prosecution.casefile</groupId>
         <artifactId>prosecutioncasefile-parent</artifactId>
-        <version>17.0.92-DLRM8-SNAPSHOT</version>
+        <version>17.0.93-DLRM8-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 

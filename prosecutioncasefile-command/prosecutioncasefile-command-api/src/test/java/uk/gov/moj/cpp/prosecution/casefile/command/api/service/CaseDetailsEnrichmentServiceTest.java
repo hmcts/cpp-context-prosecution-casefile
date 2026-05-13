@@ -3,12 +3,15 @@ package uk.gov.moj.cpp.prosecution.casefile.command.api.service;
 import static java.util.UUID.randomUUID;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.SPI;
 
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseDetails;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecutor;
 
 import java.time.LocalDate;
@@ -44,7 +47,7 @@ public class CaseDetailsEnrichmentServiceTest {
                         .build())
                 .build();
 
-        final CaseDetails response = caseDetailsEnrichmentService.enrichCaseDetails(caseDetails, prosecutor);
+        final CaseDetails response = caseDetailsEnrichmentService.enrichCaseDetails(caseDetails, prosecutor, SPI);
 
         assertThat(originalCaseId, is(response.getCaseId()));
         assertThat(originalProsecutorCaseReference, is(response.getProsecutorCaseReference()));
@@ -62,8 +65,8 @@ public class CaseDetailsEnrichmentServiceTest {
                 .build();
 
         when(idGenerationService.generateCaseReference()).thenReturn(generatedProsecutorCaseReference);
-        when(idGenerationService.generateCaseId(anyString())).thenReturn(generatedCaseId);
-        final CaseDetails response = caseDetailsEnrichmentService.enrichCaseDetails(caseDetails, prosecutor);
+        when(idGenerationService.generateCaseId(anyString(), any(), any(Channel.class))).thenReturn(generatedCaseId);
+        final CaseDetails response = caseDetailsEnrichmentService.enrichCaseDetails(caseDetails, prosecutor, SPI);
 
         assertThat(generatedCaseId, is(response.getCaseId()));
         assertThat(generatedProsecutorCaseReference, is(response.getProsecutorCaseReference()));
@@ -85,8 +88,8 @@ public class CaseDetailsEnrichmentServiceTest {
                 .build();
 
         when(idGenerationService.generateCaseReference()).thenReturn(generatedProsecutorCaseReference);
-        when(idGenerationService.generateCaseId(anyString())).thenReturn(generatedCaseId);
-        final CaseDetails response = caseDetailsEnrichmentService.enrichCaseDetails(caseDetails, prosecutor);
+        when(idGenerationService.generateCaseId(anyString(), any(), any(Channel.class))).thenReturn(generatedCaseId);
+        final CaseDetails response = caseDetailsEnrichmentService.enrichCaseDetails(caseDetails, prosecutor, SPI);
 
         assertThat(generatedCaseId, is(response.getCaseId()));
         assertThat(generatedProsecutorCaseReference, is(response.getProsecutorCaseReference()));
@@ -106,8 +109,8 @@ public class CaseDetailsEnrichmentServiceTest {
                         .build())
                 .build();
 
-        final CaseDetails response = caseDetailsEnrichmentService.enrichCaseDetails(caseDetails, prosecutor);
-        verify(idGenerationService, times(0)).generateCaseId(originalProsecutorCaseReference);
+        final CaseDetails response = caseDetailsEnrichmentService.enrichCaseDetails(caseDetails, prosecutor, SPI);
+        verify(idGenerationService, times(0)).generateCaseId(anyString(), any(), any(Channel.class));
         verify(idGenerationService, times(0)).generateCaseReference();
 
         assertThat(originalCaseId, is(response.getCaseId()));

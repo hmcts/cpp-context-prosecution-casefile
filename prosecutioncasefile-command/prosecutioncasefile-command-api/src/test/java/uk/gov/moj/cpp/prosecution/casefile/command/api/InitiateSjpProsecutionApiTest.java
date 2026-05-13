@@ -199,7 +199,7 @@ public class InitiateSjpProsecutionApiTest {
 
         final List<ReferenceDataCountryNationality> referenceDataCountryNationalities = referenceDataCountryNationalities();
 
-        when(caseDetailsEnrichmentService.enrichCaseDetails(any(), any())).thenReturn(CaseDetails.caseDetails().build());
+        when(caseDetailsEnrichmentService.enrichCaseDetails(any(), any(), any())).thenReturn(CaseDetails.caseDetails().build());
         when(idGenerator.generateId()).thenReturn(UUID.fromString(UUID_IN_TEST));
 
         initiateSjpProsecutionApi.initiateSjpProsecution(receivedEnvelope);

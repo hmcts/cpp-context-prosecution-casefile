@@ -79,7 +79,7 @@ public class InitiateGroupProsecutionApi {
                 .stream()
                 .map(groupProsecution -> {
                     final List<Defendant> defendants = enrichDefendants(envelope, groupProsecution, prosecutionAuthority, offenceReferenceData);
-                    return new GroupProsecution(this.caseDetailsEnrichmentService.enrichCaseDetails(groupProsecution.getCaseDetails(), groupProsecution.getCaseDetails().getProsecutor()),
+                    return new GroupProsecution(this.caseDetailsEnrichmentService.enrichCaseDetails(groupProsecution.getCaseDetails(), groupProsecution.getCaseDetails().getProsecutor(), initiateGroupProsecution.getChannel()),
                             defendants,
                             groupProsecution.getGroupId(),
                             groupProsecution.getIsCivil(),

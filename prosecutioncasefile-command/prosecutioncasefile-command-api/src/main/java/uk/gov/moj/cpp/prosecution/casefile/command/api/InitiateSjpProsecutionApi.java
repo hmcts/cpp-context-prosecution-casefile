@@ -76,7 +76,7 @@ public class InitiateSjpProsecutionApi {
         final Prosecution sjpProsecution = prosecution()
                 .withChannel(initiateProsecution.getChannel())
                 .withDefendants(defendantsWithReferenceData.getDefendants())
-                .withCaseDetails(caseDetailsEnrichmentService.enrichCaseDetails(initiateProsecution.getCaseDetails(), prosecutorWithReferenceData))
+                .withCaseDetails(caseDetailsEnrichmentService.enrichCaseDetails(initiateProsecution.getCaseDetails(), prosecutorWithReferenceData, initiateProsecution.getChannel()))
                 .withExternalId(initiateProsecution.getExternalId())
                 .withIsCivil(initiateProsecution.getIsCivil())
                 .withIsGroupMaster(initiateProsecution.getIsGroupMaster())

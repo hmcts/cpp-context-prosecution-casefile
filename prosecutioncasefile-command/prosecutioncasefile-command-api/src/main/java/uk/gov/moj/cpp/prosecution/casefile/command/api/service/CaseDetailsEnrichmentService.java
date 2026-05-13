@@ -1,6 +1,7 @@
 package uk.gov.moj.cpp.prosecution.casefile.command.api.service;
 
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseDetails;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecutor;
 
 import java.util.Optional;
@@ -11,11 +12,11 @@ public class CaseDetailsEnrichmentService {
     @Inject
     private IdGenerationService idGenerationService;
 
-    public CaseDetails enrichCaseDetails(final CaseDetails caseDetails, Prosecutor prosecutorWithReferenceData) {
+    public CaseDetails enrichCaseDetails(final CaseDetails caseDetails, final Prosecutor prosecutorWithReferenceData, final Channel channel) {
         final String prosecutorCaseReference = Optional.ofNullable(caseDetails.getProsecutorCaseReference())
                 .orElseGet(() -> idGenerationService.generateCaseReference());
         final UUID caseId = Optional.ofNullable(caseDetails.getCaseId())
-                .orElseGet(() -> idGenerationService.generateCaseId(prosecutorCaseReference));
+                .orElseGet(() -> idGenerationService.generateCaseId(prosecutorCaseReference, prosecutorWithReferenceData, channel));
         return enrichCaseDetailsWithCaseIdAndProsecutorCaseReference(caseId, prosecutorCaseReference, caseDetails, prosecutorWithReferenceData);
     }
 

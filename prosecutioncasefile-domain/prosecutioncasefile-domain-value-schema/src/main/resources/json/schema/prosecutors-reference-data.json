@@ -53,6 +53,9 @@
     },
     "aocpApproved": {
       "type": "boolean"
+    },
+    "policeFlag": {
+      "type": "boolean"
     }
   },
   "required": [

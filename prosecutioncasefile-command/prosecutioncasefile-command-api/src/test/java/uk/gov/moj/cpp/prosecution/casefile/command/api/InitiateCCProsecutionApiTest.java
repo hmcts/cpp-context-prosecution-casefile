@@ -170,7 +170,7 @@ public class InitiateCCProsecutionApiTest {
         when(caseDetails.getProsecutor()).thenReturn(prosecutor);
         when(caseDetails.getPoliceSystemId()).thenReturn(POLICE_SYSTEM_ID);
         when(prosecutor.getProsecutingAuthority()).thenReturn("OWTW");
-        when(caseDetailsEnrichmentService.enrichCaseDetails(any(), any())).thenReturn(caseDetails);
+        when(caseDetailsEnrichmentService.enrichCaseDetails(any(), any(), any())).thenReturn(caseDetails);
 
         final ProsecutorsReferenceData prosecutorsReferenceData = new ProsecutorsReferenceData.Builder()
                 .withShortName("OWTW")
@@ -295,7 +295,7 @@ public class InitiateCCProsecutionApiTest {
         when(initiateProsecution.getIsCivil()).thenReturn(isCivil);
         when(caseDetails.getProsecutor()).thenReturn(prosecutor);
         when(prosecutor.getProsecutingAuthority()).thenReturn("OWTW");
-        when(caseDetailsEnrichmentService.enrichCaseDetails(any(), any())).thenReturn(caseDetails);
+        when(caseDetailsEnrichmentService.enrichCaseDetails(any(), any(), any())).thenReturn(caseDetails);
 
         final ProsecutorsReferenceData prosecutorsReferenceData = new ProsecutorsReferenceData.Builder()
                 .withShortName("OWTW")
@@ -318,7 +318,7 @@ public class InitiateCCProsecutionApiTest {
         final Offence offence = offence().withOffenceLocation(null).build();
         final Defendant defendant = defendant().withOffences(ImmutableList.of(offence)).withAddress(Address.address().build()).build();
         final Envelope<InitiateProsecution> envelope = envelope(caseProsecution(defendant, DVLA_PROSECUTOR, null, null));
-        when(caseDetailsEnrichmentService.enrichCaseDetails(any(), any())).thenReturn(caseDetails);
+        when(caseDetailsEnrichmentService.enrichCaseDetails(any(), any(), any())).thenReturn(caseDetails);
 
         final ProsecutorsReferenceData prosecutorsReferenceData = new ProsecutorsReferenceData.Builder()
                 .withShortName("OWTW")
@@ -350,7 +350,7 @@ public class InitiateCCProsecutionApiTest {
         when(initiateProsecution.getChannel()).thenReturn(Channel.SPI);
         when(caseDetails.getProsecutor()).thenReturn(prosecutor);
         when(caseDetails.getPoliceSystemId()).thenReturn(POLICE_SYSTEM_ID);
-        when(caseDetailsEnrichmentService.enrichCaseDetails(any(), any())).thenReturn(caseDetails);
+        when(caseDetailsEnrichmentService.enrichCaseDetails(any(), any(), any())).thenReturn(caseDetails);
 
         when(referenceDataQueryService.retrieveOffenceData(any(), any())).thenReturn(Collections.emptyList());
 
@@ -373,7 +373,7 @@ public class InitiateCCProsecutionApiTest {
         final Offence offence = offence().withOffenceLocation("My Location").build();
         final Defendant defendant = defendant().withOffences(ImmutableList.of(offence)).withAddress(Address.address().build()).build();
         final Envelope<InitiateProsecution> envelope = envelope(caseProsecution(defendant, DVLA_PROSECUTOR, null, null));
-        when(caseDetailsEnrichmentService.enrichCaseDetails(any(), any())).thenReturn(caseDetails);
+        when(caseDetailsEnrichmentService.enrichCaseDetails(any(), any(), any())).thenReturn(caseDetails);
 
         final ProsecutorsReferenceData prosecutorsReferenceData = new ProsecutorsReferenceData.Builder()
                 .withShortName("OWTW")
@@ -393,7 +393,7 @@ public class InitiateCCProsecutionApiTest {
         final Offence offence = offence().withOffenceLocation("Canada").build();
         final Defendant defendant = defendant().withOffences(ImmutableList.of(offence)).withAddress(Address.address().build()).build();
         final Envelope<InitiateProsecution> envelope = envelope(caseProsecution(defendant, NON_DVLA_PROSECUTOR, null, null));
-        when(caseDetailsEnrichmentService.enrichCaseDetails(any(), any())).thenReturn(caseDetails);
+        when(caseDetailsEnrichmentService.enrichCaseDetails(any(), any(), any())).thenReturn(caseDetails);
 
         final ProsecutorsReferenceData prosecutorsReferenceData = new ProsecutorsReferenceData.Builder()
                 .withShortName("OWTW")
@@ -414,7 +414,7 @@ public class InitiateCCProsecutionApiTest {
         final Offence offence = offence().withOffenceLocation("Canada").build();
         final Defendant defendant = defendant().withOffences(ImmutableList.of(offence)).withAddress(Address.address().build()).build();
         final Envelope<InitiateProsecution> envelope = envelope(caseProsecution(defendant, NON_DVLA_PROSECUTOR, null, null));
-        when(caseDetailsEnrichmentService.enrichCaseDetails(any(), any())).thenReturn(caseDetails);
+        when(caseDetailsEnrichmentService.enrichCaseDetails(any(), any(), any())).thenReturn(caseDetails);
 
         final ProsecutorsReferenceData prosecutorsReferenceData = new ProsecutorsReferenceData.Builder()
                 .withShortName("OWTW")
@@ -463,7 +463,7 @@ public class InitiateCCProsecutionApiTest {
                 .withLibraReferenceNumber(libraReferenceNumber)
                 .build();
         final Envelope<InitiateProsecution> envelope = envelope(caseProsecution(defendant, NON_DVLA_PROSECUTOR, null, null));
-        when(caseDetailsEnrichmentService.enrichCaseDetails(any(), any())).thenReturn(caseDetails);
+        when(caseDetailsEnrichmentService.enrichCaseDetails(any(), any(), any())).thenReturn(caseDetails);
 
 
         final ProsecutorsReferenceData prosecutorsReferenceData = new ProsecutorsReferenceData.Builder()
@@ -527,7 +527,7 @@ public class InitiateCCProsecutionApiTest {
                         .build())
                 .build();
         final Envelope<InitiateProsecution> envelope = envelope(caseProsecution(defendant, NON_DVLA_PROSECUTOR, migrationSourceSystem, null));
-        when(caseDetailsEnrichmentService.enrichCaseDetails(any(), any())).thenReturn(caseDetails);
+        when(caseDetailsEnrichmentService.enrichCaseDetails(any(), any(), any())).thenReturn(caseDetails);
 
         final ProsecutorsReferenceData prosecutorsReferenceData = new ProsecutorsReferenceData.Builder()
                 .withShortName("OWTW")

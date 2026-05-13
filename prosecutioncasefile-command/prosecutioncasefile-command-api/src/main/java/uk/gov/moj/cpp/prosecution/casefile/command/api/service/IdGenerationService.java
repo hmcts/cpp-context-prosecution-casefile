@@ -2,11 +2,14 @@ package uk.gov.moj.cpp.prosecution.casefile.command.api.service;
 
 import static java.lang.String.format;
 import static java.util.UUID.randomUUID;
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.apache.commons.text.CharacterPredicates.DIGITS;
 import static org.apache.commons.text.CharacterPredicates.LETTERS;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.MCC;
 
 import uk.gov.justice.services.core.dispatcher.SystemUserProvider;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecutor;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ProsecutorsReferenceData;
 import uk.gov.moj.cpp.systemidmapper.client.AdditionResponse;
 import uk.gov.moj.cpp.systemidmapper.client.ResultCode;
 import uk.gov.moj.cpp.systemidmapper.client.SystemIdMap;
@@ -38,21 +41,35 @@ public class IdGenerationService {
     @Inject
     private SystemIdMapperClient systemIdMapperClient;
 
-    public UUID generateCaseId(final String caseReference) {
+    public UUID generateCaseId(final String caseReference, final Prosecutor prosecutorWithReferenceData, final Channel channel) {
+        final String effectiveKey = buildEffectiveKey(caseReference, prosecutorWithReferenceData, channel);
         final UUID newCaseId = randomUUID();
-        final Optional<SystemIdMapping> systemIdMapping = fetchSystemIdMappingFor(caseReference);
+        final Optional<SystemIdMapping> systemIdMapping = fetchSystemIdMappingFor(effectiveKey);
         if (systemIdMapping.isPresent()) {
             return systemIdMapping.map(SystemIdMapping::getTargetId).orElseThrow(()
                     -> new IllegalStateException(format("Invalid mapping found against case reference %s", caseReference)));
-        } else if(addMappingForProsecutorCaseReference(caseReference, newCaseId).isSuccess()) {
+        } else if (addMappingForProsecutorCaseReference(effectiveKey, newCaseId).isSuccess()) {
             return newCaseId;
         } else {
             throw new IllegalStateException(format("Unable to generate case id for reference %s", caseReference));
         }
     }
 
-    private AdditionResponse addMappingForProsecutorCaseReference(final String caseReference, final UUID caseId) {
-        final SystemIdMap systemIdMap = new SystemIdMap(caseReference, SOURCE_TYPE, caseId, TARGET_TYPE_CPI_MCC);
+    private String buildEffectiveKey(final String caseReference, final Prosecutor prosecutorWithReferenceData, final Channel channel) {
+        if (MCC.equals(channel) && prosecutorWithReferenceData != null) {
+            final ProsecutorsReferenceData refData = prosecutorWithReferenceData.getReferenceData();
+            if (refData != null) {
+                if (Boolean.TRUE.equals(refData.getPoliceFlag())) {
+                    return caseReference;
+                }
+                return refData.getOucode() + ":" + caseReference;
+            }
+        }
+        return caseReference;
+    }
+
+    private AdditionResponse addMappingForProsecutorCaseReference(final String effectiveCaseReference, final UUID caseId) {
+        final SystemIdMap systemIdMap = new SystemIdMap(effectiveCaseReference, SOURCE_TYPE, caseId, TARGET_TYPE_CPI_MCC);
         final Optional<UUID> contextSystemUserId = systemUserProvider.getContextSystemUserId();
 
         if (contextSystemUserId.isPresent()) {
@@ -61,9 +78,9 @@ public class IdGenerationService {
         return new AdditionResponse(caseId, ResultCode.CONFLICT, Optional.of("Failed to add system id mapping"));
     }
 
-    public Optional<SystemIdMapping> fetchSystemIdMappingFor(final String caseReference) {
+    public Optional<SystemIdMapping> fetchSystemIdMappingFor(final String effectiveCaseReference) {
         return systemIdMapperClient.findBy(systemUserProvider.getContextSystemUserId().orElseThrow(() -> new IllegalStateException(INVALID_CONTEXT_SYSTEM_USER_ID)),
-                caseReference, TARGET_TYPE_CPI_MCC,TARGET_TYPE_SPI,TARGET_TYPE_SJP);
+                effectiveCaseReference, TARGET_TYPE_CPI_MCC, TARGET_TYPE_SPI, TARGET_TYPE_SJP);
     }
 
     public String generateCaseReference() {

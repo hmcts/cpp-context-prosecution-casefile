@@ -120,7 +120,7 @@ public class InitiateCCProsecutionApi {
 
         final InitiateProsecution initiateProsecution = envelope.payload();
         final Prosecution ccProsecution = Prosecution.prosecution()
-                .withCaseDetails(caseDetailsEnrichmentService.enrichCaseDetails(initiateProsecution.getCaseDetails(), initiateProsecution.getCaseDetails().getProsecutor()))
+                .withCaseDetails(caseDetailsEnrichmentService.enrichCaseDetails(initiateProsecution.getCaseDetails(), initiateProsecution.getCaseDetails().getProsecutor(), channel))
                 .withChannel(initiateProsecution.getChannel())
                 .withMigrationSourceSystem(initiateProsecution.getMigrationSourceSystem())
                 .withListNewHearing(initiateProsecution.getListNewHearing())

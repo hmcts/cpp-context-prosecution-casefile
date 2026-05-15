@@ -34,7 +34,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
-import javax.json.Json;
+import uk.gov.justice.services.messaging.JsonObjects;
 import javax.json.JsonReader;
 
 @SuppressWarnings({"squid:S1612"})
@@ -103,7 +103,7 @@ public class BusinessErrorDetailsService {
         final List<BusinessValidationErrorCaseDetails> errorCaseDetails = businessValidationErrorCaseDetailsRepository.findByCaseId(caseId);
         ErrorCaseDetails errorCaseDetailsJson = null;
         if (errorCaseDetails != null && !errorCaseDetails.isEmpty()) {
-            try (JsonReader jsonReader = Json.createReader(new StringReader(errorCaseDetails.get(0).getCaseDetails()))) {
+            try (JsonReader jsonReader = JsonObjects.createReader(new StringReader(errorCaseDetails.get(0).getCaseDetails()))) {
                 errorCaseDetailsJson = new ErrorCaseDetails(jsonReader.readObject().getJsonArray("defendants"));
             }
         }

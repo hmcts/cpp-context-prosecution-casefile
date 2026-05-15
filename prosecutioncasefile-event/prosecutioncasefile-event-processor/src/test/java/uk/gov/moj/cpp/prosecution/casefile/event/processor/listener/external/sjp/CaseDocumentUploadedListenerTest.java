@@ -10,7 +10,7 @@ import uk.gov.justice.services.core.sender.Sender;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.spi.DefaultEnvelope;
 
-import javax.json.Json;
+import uk.gov.justice.services.messaging.JsonObjects;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,7 +39,7 @@ public class CaseDocumentUploadedListenerTest {
     public void shouldProcessRecordUploadCaseDocument() {
 
         final JsonEnvelope event = envelopeFrom(metadataWithRandomUUID("prosecutioncasefile.command.record-upload-case-document"),
-                Json.createObjectBuilder().build());
+                JsonObjects.createObjectBuilder().build());
 
         testObj.handleSjpCaseDocumentUploaded(event);
 

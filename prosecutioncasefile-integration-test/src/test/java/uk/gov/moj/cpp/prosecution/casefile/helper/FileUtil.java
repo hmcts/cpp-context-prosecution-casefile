@@ -2,7 +2,7 @@ package uk.gov.moj.cpp.prosecution.casefile.helper;
 
 import static java.lang.ClassLoader.getSystemResourceAsStream;
 import static java.lang.String.format;
-import static javax.json.Json.createReader;
+import static uk.gov.justice.services.messaging.JsonObjects.createReader;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;

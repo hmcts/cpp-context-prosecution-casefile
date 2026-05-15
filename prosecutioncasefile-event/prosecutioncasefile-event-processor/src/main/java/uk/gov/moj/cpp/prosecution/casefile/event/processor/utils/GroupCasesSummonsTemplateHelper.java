@@ -2,8 +2,8 @@ package uk.gov.moj.cpp.prosecution.casefile.event.processor.utils;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
-import static javax.json.Json.createArrayBuilder;
-import static javax.json.Json.createObjectBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createArrayBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static org.apache.commons.lang3.StringUtils.isNoneEmpty;
 
 import uk.gov.moj.cpp.prosecution.casefile.domain.GroupProsecutionList;

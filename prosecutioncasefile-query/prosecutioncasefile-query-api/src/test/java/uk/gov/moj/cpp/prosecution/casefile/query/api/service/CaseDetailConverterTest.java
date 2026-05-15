@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import javax.json.Json;
+import uk.gov.justice.services.messaging.JsonObjects;
 import javax.json.JsonObject;
 
 import org.junit.jupiter.api.Test;
@@ -55,7 +55,7 @@ public class CaseDetailConverterTest {
 
 
     private JsonObject buildOffenceReferenceData() {
-        return Json.createObjectBuilder()
+        return JsonObjects.createObjectBuilder()
                 .add("modeOfTrial", "SNONIMP1")
                 .build();
     }

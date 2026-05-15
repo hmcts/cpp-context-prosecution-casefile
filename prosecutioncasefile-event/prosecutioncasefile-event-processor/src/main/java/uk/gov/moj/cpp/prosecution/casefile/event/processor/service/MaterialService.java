@@ -11,7 +11,7 @@ import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.Metadata;
 
 import javax.inject.Inject;
-import javax.json.Json;
+import uk.gov.justice.services.messaging.JsonObjects;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import java.util.UUID;
@@ -49,7 +49,7 @@ public class MaterialService {
     public void uploadMaterial(final UUID fileServiceId, final UUID materialId, final Envelope envelope) {
         LOGGER.info("material being uploaded '{}' file service id '{}'", materialId, fileServiceId);
         final UUID userId = fromString(envelope.metadata().userId().orElseThrow(() -> new RuntimeException("UserId missing from event.")));
-        final JsonObject uploadMaterialPayload = Json.createObjectBuilder()
+        final JsonObject uploadMaterialPayload = JsonObjects.createObjectBuilder()
                 .add(FIELD_MATERIAL_ID, materialId.toString())
                 .add(FIELD_FILE_SERVICE_ID, fileServiceId.toString())
                 .build();
@@ -64,17 +64,17 @@ public class MaterialService {
     }
 
     private static Metadata createMetadataWithProcessIdAndUserId(final String id, final String name, final String userId) {
-        return metadataFrom(Json.createObjectBuilder()
+        return metadataFrom(JsonObjects.createObjectBuilder()
                 .add(ID, id)
                 .add(NAME, name)
                 .add(SOURCE, ORIGINATOR_VALUE)
-                .add(CONTEXT, Json.createObjectBuilder()
+                .add(CONTEXT, JsonObjects.createObjectBuilder()
                         .add(USER_ID, userId))
                 .build()).build();
     }
 
     private static JsonObject addMetadataToPayload(final JsonObject load, final Metadata metadata) {
-        final JsonObjectBuilder job = Json.createObjectBuilder();
+        final JsonObjectBuilder job = JsonObjects.createObjectBuilder();
         load.entrySet().forEach(entry -> job.add(entry.getKey(), entry.getValue()));
         job.add(JsonEnvelope.METADATA, metadata.asJsonObject());
         return job.build();

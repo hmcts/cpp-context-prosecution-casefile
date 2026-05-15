@@ -12,7 +12,7 @@ import uk.gov.justice.services.messaging.Metadata;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.json.Json;
+import uk.gov.justice.services.messaging.JsonObjects;
 import javax.json.JsonObject;
 
 import org.activiti.engine.delegate.DelegateExecution;
@@ -43,7 +43,7 @@ public class AddMaterialToCase implements JavaDelegate {
 
         final Metadata metadata = metadataFromString(metadataAsString);
 
-        final JsonObject payload = Json.createObjectBuilder()
+        final JsonObject payload = JsonObjects.createObjectBuilder()
                 .add("id", documentReference)
                 .add("caseId", caseId)
                 .add("materialId", materialId)

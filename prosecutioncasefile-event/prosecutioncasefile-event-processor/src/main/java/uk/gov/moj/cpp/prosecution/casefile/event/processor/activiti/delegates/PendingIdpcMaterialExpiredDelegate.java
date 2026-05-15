@@ -16,7 +16,7 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.json.Json;
+import uk.gov.justice.services.messaging.JsonObjects;
 import javax.json.JsonObject;
 
 import org.activiti.engine.delegate.DelegateExecution;
@@ -38,7 +38,7 @@ public class PendingIdpcMaterialExpiredDelegate implements JavaDelegate {
         final UUID fileStoreId = fromString(execution.getProcessBusinessKey());
         final UUID caseId = execution.getVariable("caseId", UUID.class);
         final Metadata metadata = metadataFromString(execution.getVariable("metadata", String.class));
-        final JsonObject payload = Json.createObjectBuilder()
+        final JsonObject payload = JsonObjects.createObjectBuilder()
                 .add("caseId", caseId.toString())
                 .add("fileServiceId", fileStoreId.toString())
                 .build();

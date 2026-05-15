@@ -2,8 +2,8 @@ package uk.gov.moj.cpp.prosecution.casefile.validation;
 
 import static java.util.Arrays.asList;
 import static java.util.UUID.randomUUID;
-import static javax.json.Json.createArrayBuilder;
-import static javax.json.Json.createObjectBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createArrayBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.hasSize;
@@ -42,7 +42,7 @@ import uk.gov.moj.cps.prosecutioncasefile.domain.event.SubmissionStatus;
 import java.util.List;
 
 import javax.enterprise.inject.Instance;
-import javax.json.Json;
+import uk.gov.justice.services.messaging.JsonObjects;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 
@@ -262,7 +262,7 @@ public class CpsFormValidatorTest {
                 .replaceAll("DEFENDANT_ID_2", defendantIdTwo);
         final JsonObject prosecutionCaseFileCase = FileUtil.jsonFromString(prosecutionCasePayloadString);
 
-        final JsonArray defendantIdsArray = Json.createArrayBuilder().add(createObjectBuilder()
+        final JsonArray defendantIdsArray = JsonObjects.createArrayBuilder().add(createObjectBuilder()
                 .add(DEFENDANT_ID, defendantIdOne)
                 .add(CPS_DEFENDANT_ID, randomUUID().toString())
                 .build())
@@ -313,7 +313,7 @@ public class CpsFormValidatorTest {
                 .replaceAll("DEFENDANT_ID_2", defendantIdTwo);
         final JsonObject prosecutionCaseFileCase = FileUtil.jsonFromString(prosecutionCasePayloadString);
 
-        final JsonArray defendantIdsArray = Json.createArrayBuilder().add(createObjectBuilder()
+        final JsonArray defendantIdsArray = JsonObjects.createArrayBuilder().add(createObjectBuilder()
                 .add(DEFENDANT_ID, defendantIdOne)
                 .add(CPS_DEFENDANT_ID, randomUUID().toString())
                 .build())
@@ -363,7 +363,7 @@ public class CpsFormValidatorTest {
                 .replaceAll("DEFENDANT_ID_2", defendantIdTwo);
         final JsonObject prosecutionCaseFileCase = FileUtil.jsonFromString(prosecutionCasePayloadString);
 
-        final JsonArray defendantIdsArray = Json.createArrayBuilder().add(createObjectBuilder()
+        final JsonArray defendantIdsArray = JsonObjects.createArrayBuilder().add(createObjectBuilder()
                 .add(DEFENDANT_ID, defendantIdOne)
                 .add(CPS_DEFENDANT_ID, randomUUID().toString())
                 .build())
@@ -410,7 +410,7 @@ public class CpsFormValidatorTest {
                 .replaceAll("DEFENDANT_ID_2", defendantIdTwo);
         final JsonObject prosecutionCaseFileCase = FileUtil.jsonFromString(prosecutionCasePayloadString);
 
-        final JsonArray defendantIdsArray = Json.createArrayBuilder().add(createObjectBuilder()
+        final JsonArray defendantIdsArray = JsonObjects.createArrayBuilder().add(createObjectBuilder()
                 .add(DEFENDANT_ID, defendantIdOne)
                 .add(CPS_DEFENDANT_ID, randomUUID().toString())
                 .build())
@@ -456,7 +456,7 @@ public class CpsFormValidatorTest {
                 .replaceAll("DEFENDANT_ID_2", defendantIdTwo);
         final JsonObject prosecutionCaseFileCase = FileUtil.jsonFromString(prosecutionCasePayloadString);
 
-        final JsonArray defendantIdsArray = Json.createArrayBuilder().add(createObjectBuilder()
+        final JsonArray defendantIdsArray = JsonObjects.createArrayBuilder().add(createObjectBuilder()
                 .add(DEFENDANT_ID, defendantIdOne)
                 .add(CPS_DEFENDANT_ID, randomUUID().toString())
                 .build())
@@ -495,7 +495,7 @@ public class CpsFormValidatorTest {
                 .replaceAll("DEFENDANT_ID_2", defendantIdTwo);
         final JsonObject prosecutionCaseFileCase = FileUtil.jsonFromString(prosecutionCasePayloadString);
 
-        final JsonArray defendantIdsArray = Json.createArrayBuilder().add(createObjectBuilder()
+        final JsonArray defendantIdsArray = JsonObjects.createArrayBuilder().add(createObjectBuilder()
                 .add(DEFENDANT_ID, defendantIdOne)
                 .add(CPS_DEFENDANT_ID, randomUUID().toString())
                 .build())
@@ -532,7 +532,7 @@ public class CpsFormValidatorTest {
                 .replaceAll("DEFENDANT_ID_2", defendantIdTwo);
         final JsonObject prosecutionCaseFileCase = FileUtil.jsonFromString(prosecutionCasePayloadString);
 
-        final JsonArray defendantIdsArray = Json.createArrayBuilder().add(createObjectBuilder()
+        final JsonArray defendantIdsArray = JsonObjects.createArrayBuilder().add(createObjectBuilder()
                 .add(DEFENDANT_ID, defendantIdOne)
                 .add(CPS_DEFENDANT_ID, randomUUID().toString())
                 .build())

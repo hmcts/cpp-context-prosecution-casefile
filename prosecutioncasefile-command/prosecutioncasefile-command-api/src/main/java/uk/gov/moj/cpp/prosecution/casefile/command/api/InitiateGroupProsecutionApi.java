@@ -2,6 +2,7 @@ package uk.gov.moj.cpp.prosecution.casefile.command.api;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static java.time.LocalDate.now;
+import static java.util.List.of;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -73,7 +74,7 @@ public class InitiateGroupProsecutionApi {
             return;
         }
         final String prosecutionAuthority = getProsecutionAuthorityShortName(envelope, groupProsecutionSelected.get());
-        final OffenceReferenceData offenceReferenceData = getOffenceReferenceData(offence.get(), initiationCode);
+        final OffenceReferenceData offenceReferenceData = getOffenceReferenceData(offence.get());
 
         final List<GroupProsecution> groupProsecutions = initiateGroupProsecution.getGroupProsecutions()
                 .stream()
@@ -154,6 +155,8 @@ public class InitiateGroupProsecutionApi {
                 vehicleRelatedOffence = new VehicleRelatedOffence(null, offence.getVehicleRegistrationMark());
             } else if (isBlank(offence.getVehicleRelatedOffence().getVehicleRegistrationMark())) {
                 vehicleRelatedOffence = new VehicleRelatedOffence(offence.getVehicleRelatedOffence().getVehicleCode(), offence.getVehicleRegistrationMark());
+            }else{
+                vehicleRelatedOffence = offence.getVehicleRelatedOffence();
             }
         }
 
@@ -206,8 +209,8 @@ public class InitiateGroupProsecutionApi {
         return offenceCommittedDate;
     }
 
-    private OffenceReferenceData getOffenceReferenceData(final Offence offence, final String initiationCode) {
-        final List<OffenceReferenceData> offencesRefData = this.referenceDataQueryService.retrieveOffenceData(offence, initiationCode);
+    private OffenceReferenceData getOffenceReferenceData(final Offence offence) {
+        final List<OffenceReferenceData> offencesRefData = this.referenceDataQueryService.retrieveOffenceDataList(of(offence.getOffenceCode()), Optional.of("MoJ"));
         return (offencesRefData != null && !offencesRefData.isEmpty()) ? offencesRefData.get(0) : null;
     }
 
@@ -218,6 +221,8 @@ public class InitiateGroupProsecutionApi {
             prosecutorsReferenceData = this.referenceDataQueryService.getProsecutorsByOuCode(envelope.metadata(), prosecutor.getProsecutingAuthority());
         } else if (nonNull(prosecutor.getProsecutionAuthorityId())) {
             prosecutorsReferenceData = this.referenceDataQueryService.getProsecutorById(prosecutor.getProsecutionAuthorityId());
+        }else{
+            prosecutorsReferenceData = null;
         }
         return nonNull(prosecutorsReferenceData) ? prosecutorsReferenceData.getShortName() : null;
     }

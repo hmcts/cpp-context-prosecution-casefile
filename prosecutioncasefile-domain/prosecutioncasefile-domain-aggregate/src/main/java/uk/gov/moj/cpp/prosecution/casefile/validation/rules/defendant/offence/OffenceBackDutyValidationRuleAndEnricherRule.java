@@ -1,5 +1,6 @@
 package uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.offence;
 
+import static uk.gov.moj.cpp.prosecution.casefile.ValidationHelper.offenceReferenceDataList;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode.BACK_DUTY_AMOUNT_MISSING;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode.BACK_DUTY_DATE_RANGE_INVALID;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.Problems.newProblem;
@@ -22,7 +23,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class OffenceBackDutyValidationRuleAndEnricherRule implements ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService> {
 
@@ -35,20 +35,20 @@ public class OffenceBackDutyValidationRuleAndEnricherRule implements ValidationR
         final List<Offence> offenceList = defendantWithReferenceData.getDefendant().getOffences();
 
         final List<Problem> problemList = offenceList.stream()
-                .filter(offence -> findMatchingBackDutyOffences(referenceDataQueryService, defendantWithReferenceData.getCaseDetails().getInitiationCode(), offence))
+                .filter(offence -> findMatchingBackDutyOffences(referenceDataQueryService, defendantWithReferenceData.getCaseDetails().getInitiationCode(), offence, defendantWithReferenceData.isCivil()))
                 .map(this::verifyBackDutyFields)
                 .filter(Objects::nonNull)
                 .flatMap(Collection::stream)
-                .collect(Collectors.toList());
+                .toList();
 
         return newValidationResult(problemList);
     }
 
-    private boolean findMatchingBackDutyOffences(final ReferenceDataQueryService referenceDataQueryService, final String initiationCode, final Offence offence) {
-        final List<OffenceReferenceData> offenceReferenceDataList = referenceDataQueryService.retrieveOffenceData(offence, initiationCode).stream()
+    private boolean findMatchingBackDutyOffences(final ReferenceDataQueryService referenceDataQueryService, final String initiationCode, final Offence offence, final boolean isCivil) {
+        final List<OffenceReferenceData> offenceReferenceDataList = offenceReferenceDataList(referenceDataQueryService, offence, initiationCode, isCivil).stream()
                 .filter(rd -> rd.getCjsOffenceCode().equals(offence.getOffenceCode()))
                 .filter(this::isBackDutyOffence)
-                .collect(Collectors.toList());
+                .toList();
 
         return !offenceReferenceDataList.isEmpty();
     }
@@ -75,19 +75,21 @@ public class OffenceBackDutyValidationRuleAndEnricherRule implements ValidationR
 
     private Optional<Problem> getBackDutyDateValidations(final Offence offence) {
         if (offence.getBackDutyDateFrom() != null || offence.getBackDutyDateTo() != null) {
+            Optional newProblem = Optional.empty();
             final List<ProblemValue> valuesList = new ArrayList<>(getOffenceInfo(offence));
             if (offence.getBackDutyDateFrom() == null) {
                 valuesList.add(new ProblemValue(offence.getOffenceId().toString(), FieldName.BACKDUTY_FROMDATE.getValue(), "backDutyDateFrom"));
-                return Optional.of(newProblem(BACK_DUTY_DATE_RANGE_INVALID, valuesList));
+                newProblem = Optional.of(newProblem(BACK_DUTY_DATE_RANGE_INVALID, valuesList));
             } else if (offence.getBackDutyDateTo() == null) {
                 valuesList.add(new ProblemValue(offence.getOffenceId().toString(), FieldName.BACKDUTY_TODATE.getValue(), "backDutyDateTo"));
-                return Optional.of(newProblem(BACK_DUTY_DATE_RANGE_INVALID, valuesList));
+                newProblem = Optional.of(newProblem(BACK_DUTY_DATE_RANGE_INVALID, valuesList));
             } else {
                 if (offence.getBackDutyDateTo().isBefore(offence.getBackDutyDateFrom())) {
                     valuesList.add(new ProblemValue(offence.getOffenceId().toString(), FieldName.BACKDUTY_FROMDATE_TODATE.getValue(), "back duty from date is after back duty to date"));
-                    return Optional.of(newProblem(BACK_DUTY_DATE_RANGE_INVALID, valuesList));
+                    newProblem = Optional.of(newProblem(BACK_DUTY_DATE_RANGE_INVALID, valuesList));
                 }
             }
+            return newProblem;
         }
         return Optional.empty();
     }
@@ -107,6 +109,6 @@ public class OffenceBackDutyValidationRuleAndEnricherRule implements ValidationR
     }
 
     private boolean isBackDutyOffence(OffenceReferenceData offenceReferenceData) {
-        return (offenceReferenceData.getBackDuty() == null ? false : offenceReferenceData.getBackDuty());
+        return (offenceReferenceData.getBackDuty() != null && offenceReferenceData.getBackDuty());
     }
 }

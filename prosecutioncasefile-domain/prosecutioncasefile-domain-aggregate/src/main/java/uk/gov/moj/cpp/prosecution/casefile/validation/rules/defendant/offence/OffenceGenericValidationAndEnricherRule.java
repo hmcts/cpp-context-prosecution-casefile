@@ -1,6 +1,7 @@
 package uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.offence;
 
 import static org.apache.commons.collections.CollectionUtils.isEmpty;
+import static uk.gov.moj.cpp.prosecution.casefile.ValidationHelper.offenceReferenceDataList;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode.OFFENCE_CODE_IS_GENERIC;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.Problems.newProblem;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.rules.FieldName.OFFENCE_CODE;
@@ -34,7 +35,7 @@ public class OffenceGenericValidationAndEnricherRule implements ValidationRule<D
         }
         final List<Problem> problems = defendantWithReferenceData.getDefendant().getOffences().stream()
                 .map(offence -> verifyGenericOffenceCode(offence, defendantWithReferenceData.getCaseDetails().getInitiationCode(), defendantWithReferenceData, referenceDataQueryService))
-                .filter(Objects::nonNull).collect(Collectors.toList());
+                .filter(Objects::nonNull).toList();
         if (isEmpty(problems)) {
             return VALID;
         }
@@ -45,13 +46,13 @@ public class OffenceGenericValidationAndEnricherRule implements ValidationRule<D
         final ReferenceDataVO referenceDataVO = defendantWithReferenceData.getReferenceDataVO();
 
         List<OffenceReferenceData> offenceReferenceDataListFromVO = referenceDataVO.getOffenceReferenceData().stream()
-                .filter(rd -> rd.getCjsOffenceCode().equals(offence.getOffenceCode())).collect(Collectors.toList());
+                .filter(rd -> rd.getCjsOffenceCode().equals(offence.getOffenceCode())).toList();
 
         if (offenceReferenceDataListFromVO.isEmpty()) {
 
-            final List<OffenceReferenceData> newOffenceReferenceDataList = referenceDataQueryService.retrieveOffenceData(offence, initiationCode).stream()
+            final List<OffenceReferenceData> newOffenceReferenceDataList = offenceReferenceDataList(referenceDataQueryService, offence, initiationCode, defendantWithReferenceData.isCivil()).stream()
                     .filter(rd -> rd.getCjsOffenceCode().equals(offence.getOffenceCode()))
-                    .collect(Collectors.toList());
+                    .toList();
 
             if (!isEmpty(newOffenceReferenceDataList)) {
                 if (referenceDataVO.getOffenceReferenceData() != null) {
@@ -61,7 +62,7 @@ public class OffenceGenericValidationAndEnricherRule implements ValidationRule<D
                 }
 
                 offenceReferenceDataListFromVO = referenceDataVO.getOffenceReferenceData().stream()
-                        .filter(rd -> rd.getCjsOffenceCode().equals(offence.getOffenceCode())).collect(Collectors.toList());
+                        .filter(rd -> rd.getCjsOffenceCode().equals(offence.getOffenceCode())).toList();
             }
         }
 

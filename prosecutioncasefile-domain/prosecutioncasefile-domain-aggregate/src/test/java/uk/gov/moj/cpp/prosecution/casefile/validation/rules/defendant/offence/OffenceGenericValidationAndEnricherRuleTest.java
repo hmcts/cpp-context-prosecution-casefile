@@ -1,5 +1,6 @@
 package uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.offence;
 
+import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -19,6 +20,7 @@ import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,7 +32,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class OffenceGenericValidationAndEnricherRuleTest {
+class OffenceGenericValidationAndEnricherRuleTest {
 
     private static final String GENERIC_OFFENCE_CODE = "998";
     private static final String GENERIC_ALTERED_OFFENCE_CODE = "998A";
@@ -45,7 +47,7 @@ public class OffenceGenericValidationAndEnricherRuleTest {
     private OffenceGenericValidationAndEnricherRule offenceGenericValidationAndEnricherRule;
 
     @Test
-    public void shouldCreateProblemWhenOffenceCodeIsGeneric() {
+    void shouldCreateProblemWhenOffenceCodeIsGeneric() {
 
         when(referenceDataVO.getOffenceReferenceData()).thenReturn(getMockOffenceCodesReferenceData(GENERIC_OFFENCE_CODE));
 
@@ -58,7 +60,7 @@ public class OffenceGenericValidationAndEnricherRuleTest {
     }
 
     @Test
-    public void shouldNotCreateProblemWhenOffenceCodeIsGenericAltered() {
+    void shouldNotCreateProblemWhenOffenceCodeIsGenericAltered() {
 
         when(referenceDataQueryService.retrieveOffenceData(any(), any())).thenReturn(getMockOffenceCodesReferenceData(GENERIC_OFFENCE_CODE));
         when(referenceDataVO.getOffenceReferenceData()).thenReturn(getMockOffenceCodesReferenceData(GENERIC_OFFENCE_CODE));
@@ -73,7 +75,7 @@ public class OffenceGenericValidationAndEnricherRuleTest {
     }
 
     @Test
-    public void shouldValidateGenericOffenceCode() {
+    void shouldValidateGenericOffenceCode() {
 
         when(referenceDataVO.getOffenceReferenceData()).thenReturn(getMockOffenceCodesReferenceData(GENERIC_OFFENCE_CODE));
 
@@ -88,6 +90,61 @@ public class OffenceGenericValidationAndEnricherRuleTest {
         assertThat(problem.get().getValues().get(0).getValue(), is("998"));
     }
 
+    @Test
+    void shouldReturnValidWhenDefendantIsNull() {
+        final CaseDetails caseDetails = CaseDetails.caseDetails().withInitiationCode("S").build();
+        final DefendantWithReferenceData defendantWithReferenceData = new DefendantWithReferenceData(null, referenceDataVO, caseDetails);
+
+        assertThat(offenceGenericValidationAndEnricherRule.validate(defendantWithReferenceData, referenceDataQueryService).isValid(), is(true));
+    }
+
+    @Test
+    void shouldReturnValidWhenOffencesAreEmpty() {
+        final CaseDetails caseDetails = CaseDetails.caseDetails().withInitiationCode("S").build();
+        final Defendant defendant = new Defendant.Builder().withId("D1").withInitiationCode("C").withOffences(emptyList()).build();
+        final DefendantWithReferenceData defendantWithReferenceData = new DefendantWithReferenceData(defendant, referenceDataVO, caseDetails);
+
+        assertThat(offenceGenericValidationAndEnricherRule.validate(defendantWithReferenceData, referenceDataQueryService).isValid(), is(true));
+    }
+
+    @Test
+    void shouldFetchFromServiceForCivilCaseWhenVOEmpty() {
+        final ReferenceDataVO realVO = new ReferenceDataVO();
+        when(referenceDataQueryService.retrieveOffenceDataList(any(), any()))
+                .thenReturn(Collections.singletonList(offenceReferenceData().withCjsOffenceCode(GENERIC_OFFENCE_CODE).build()));
+        final DefendantWithReferenceData defendantWithReferenceData = buildDefendant(GENERIC_OFFENCE_CODE, realVO, true);
+
+        final Optional<Problem> problem = offenceGenericValidationAndEnricherRule.validate(defendantWithReferenceData, referenceDataQueryService)
+                .problems().stream().findFirst();
+
+        assertThat(problem.isPresent(), is(true));
+        assertThat(problem.get().getCode(), is(OFFENCE_CODE_IS_GENERIC.name()));
+    }
+
+    @Test
+    void shouldReturnValidWhenVOAndServiceReturnEmpty() {
+        final ReferenceDataVO realVO = new ReferenceDataVO();
+        when(referenceDataQueryService.retrieveOffenceData(any(), any())).thenReturn(emptyList());
+        final DefendantWithReferenceData defendantWithReferenceData = buildDefendant("VALID_CODE", realVO, false);
+
+        assertThat(offenceGenericValidationAndEnricherRule.validate(defendantWithReferenceData, referenceDataQueryService).isValid(), is(true));
+    }
+
+    @Test
+    void shouldAddNewRefDataToExistingVOListWhenVOListNotNull() {
+        final ReferenceDataVO realVO = new ReferenceDataVO();
+        realVO.setOffenceReferenceData(new ArrayList<>());
+        when(referenceDataQueryService.retrieveOffenceData(any(), any()))
+                .thenReturn(Collections.singletonList(offenceReferenceData().withCjsOffenceCode(GENERIC_OFFENCE_CODE).build()));
+        final DefendantWithReferenceData defendantWithReferenceData = buildDefendant(GENERIC_OFFENCE_CODE, realVO, false);
+
+        final Optional<Problem> problem = offenceGenericValidationAndEnricherRule.validate(defendantWithReferenceData, referenceDataQueryService)
+                .problems().stream().findFirst();
+
+        assertThat(problem.isPresent(), is(true));
+        assertThat(realVO.getOffenceReferenceData().size(), is(1));
+    }
+
     private DefendantWithReferenceData getMockDefendantWithReferenceData(final String offenceCode) {
         final String DEFENDANT_ID = "1234243";
         final CaseDetails caseDetails = CaseDetails.caseDetails().withInitiationCode("S").build();
@@ -100,13 +157,20 @@ public class OffenceGenericValidationAndEnricherRuleTest {
 
                 .withOffences(Arrays.asList(offence))
                 .build();
-        final List<OffenceReferenceData> offenceReferenceData = new ArrayList<>();
-        offenceReferenceData.add(new OffenceReferenceData.Builder()
-                .withCjsOffenceCode(GENERIC_OFFENCE_CODE)
-                .withLocationRequired("Y")
-                .build());
 
         return new DefendantWithReferenceData(defendant, referenceDataVO, caseDetails);
+    }
+
+    private DefendantWithReferenceData buildDefendant(final String offenceCode, final ReferenceDataVO referenceDataVO, final boolean isCivil) {
+        final CaseDetails caseDetails = CaseDetails.caseDetails().withInitiationCode("S").build();
+        final Offence offence = Offence.offence()
+                .withOffenceId(UUID.randomUUID())
+                .withOffenceCode(offenceCode)
+                .withOffenceSequenceNumber(1)
+                .build();
+        final Defendant defendant = new Defendant.Builder().withId("D1").withInitiationCode("C")
+                .withOffences(Arrays.asList(offence)).build();
+        return new DefendantWithReferenceData(defendant, referenceDataVO, caseDetails, false, false, false, isCivil);
     }
 
     private List<OffenceReferenceData> getMockOffenceCodesReferenceData(final String offenceCode) {

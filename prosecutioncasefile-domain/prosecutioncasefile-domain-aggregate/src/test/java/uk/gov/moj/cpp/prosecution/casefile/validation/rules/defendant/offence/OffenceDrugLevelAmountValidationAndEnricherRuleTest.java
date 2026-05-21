@@ -1,7 +1,9 @@
 package uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.offence;
 
+import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.OffenceReferenceData.offenceReferenceData;
 
@@ -17,6 +19,7 @@ import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,7 +31,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class OffenceDrugLevelAmountValidationAndEnricherRuleTest {
+class OffenceDrugLevelAmountValidationAndEnricherRuleTest {
 
     private static final String MOCK_OFFENCE_CODE = "MOCK CODE";
 
@@ -40,16 +43,24 @@ public class OffenceDrugLevelAmountValidationAndEnricherRuleTest {
     private OffenceDrugLevelAmountValidationAndEnricherRule offenceDrugLevelAmountValidationAndEnricherRule;
 
     @Test
-    public void shouldReturnEmptyListWhenNoOffences() {
+    void shouldReturnEmptyListWhenNoOffences() {
         final DefendantWithReferenceData defendantWithReferenceData = getMockDefendantWithReferenceData(null);
         final Optional<Problem> optionalProblem = offenceDrugLevelAmountValidationAndEnricherRule.validate(defendantWithReferenceData, referenceDataQueryService)
                 .problems().stream().findFirst();
         assertThat(optionalProblem.isPresent(), is(false));
     }
 
+    @Test
+    void shouldReturnValidWhenDefendantIsNull() {
+        final CaseDetails caseDetails = CaseDetails.caseDetails().withInitiationCode("S").build();
+        final DefendantWithReferenceData defendantWithReferenceData = new DefendantWithReferenceData(null, referenceDataVO, caseDetails);
+
+        assertThat(offenceDrugLevelAmountValidationAndEnricherRule.validate(defendantWithReferenceData, referenceDataQueryService).isValid(), is(true));
+    }
+
 
     @Test
-    public void shouldReturnProblemWhenOffenceIsWithoutAlcoholLevelInfo() {
+    void shouldReturnProblemWhenOffenceIsWithoutAlcoholLevelInfo() {
         when(referenceDataVO.getOffenceReferenceData()).thenReturn(getMockOffenceCodesReferenceData(MOCK_OFFENCE_CODE));
         final DefendantWithReferenceData defendantWithReferenceData = getMockDefendantWithReferenceData(getOffence(MOCK_OFFENCE_CODE));
         final Optional<Problem> optionalProblem = offenceDrugLevelAmountValidationAndEnricherRule.validate(defendantWithReferenceData, referenceDataQueryService)
@@ -58,7 +69,7 @@ public class OffenceDrugLevelAmountValidationAndEnricherRuleTest {
     }
 
     @Test
-    public void shouldReturnProblemWhenOffenceIsWithAlcoholLevelInfo() {
+    void shouldReturnProblemWhenOffenceIsWithAlcoholLevelInfo() {
         when(referenceDataVO.getOffenceReferenceData()).thenReturn(getMockOffenceCodesReferenceData(MOCK_OFFENCE_CODE));
         final DefendantWithReferenceData defendantWithReferenceData = getMockDefendantWithReferenceData(getOffenceWithAlcoholLevelInfo(MOCK_OFFENCE_CODE));
         final Optional<Problem> optionalProblem = offenceDrugLevelAmountValidationAndEnricherRule.validate(defendantWithReferenceData, referenceDataQueryService)
@@ -66,6 +77,53 @@ public class OffenceDrugLevelAmountValidationAndEnricherRuleTest {
         assertThat(optionalProblem.isPresent(), is(false));
     }
 
+    @Test
+    void shouldEnrichRefDataAndReturnValidForCivilCaseWhenVOEmpty() {
+        final ReferenceDataVO realVO = new ReferenceDataVO();
+        when(referenceDataQueryService.retrieveOffenceDataList(any(), any()))
+                .thenReturn(Collections.singletonList(offenceReferenceData().withCjsOffenceCode(MOCK_OFFENCE_CODE).build()));
+        final DefendantWithReferenceData defendantWithReferenceData = buildDefendant(getOffenceWithAlcoholLevelInfo(MOCK_OFFENCE_CODE), realVO, true);
+
+        assertThat(offenceDrugLevelAmountValidationAndEnricherRule.validate(defendantWithReferenceData, referenceDataQueryService).isValid(), is(true));
+        assertThat(realVO.getOffenceReferenceData().size(), is(1));
+    }
+
+    @Test
+    void shouldEnrichRefDataFromNonCivilServiceWhenVOEmpty() {
+        final ReferenceDataVO realVO = new ReferenceDataVO();
+        when(referenceDataQueryService.retrieveOffenceData(any(), any()))
+                .thenReturn(Collections.singletonList(offenceReferenceData().withCjsOffenceCode(MOCK_OFFENCE_CODE).build()));
+        final DefendantWithReferenceData defendantWithReferenceData = buildDefendant(getOffenceWithAlcoholLevelInfo(MOCK_OFFENCE_CODE), realVO, false);
+
+        assertThat(offenceDrugLevelAmountValidationAndEnricherRule.validate(defendantWithReferenceData, referenceDataQueryService).isValid(), is(true));
+        assertThat(realVO.getOffenceReferenceData().size(), is(1));
+    }
+
+    @Test
+    void shouldReturnValidWhenServiceReturnsEmptyAndVOEmpty() {
+        final ReferenceDataVO realVO = new ReferenceDataVO();
+        when(referenceDataQueryService.retrieveOffenceData(any(), any())).thenReturn(emptyList());
+        final DefendantWithReferenceData defendantWithReferenceData = buildDefendant(getOffence(MOCK_OFFENCE_CODE), realVO, false);
+
+        assertThat(offenceDrugLevelAmountValidationAndEnricherRule.validate(defendantWithReferenceData, referenceDataQueryService).isValid(), is(true));
+    }
+
+    @Test
+    void shouldReturnProblemWhenAlcoholAmountMissingButOffenceHasAlcoholRelatedRecord() {
+        final ReferenceDataVO realVO = new ReferenceDataVO();
+        realVO.setOffenceReferenceData(new ArrayList<>(Collections.singletonList(
+                offenceReferenceData().withCjsOffenceCode(MOCK_OFFENCE_CODE).withDrugsOrAlcoholRelated("Y").build())));
+        final Offence offence = Offence.offence()
+                .withOffenceId(UUID.randomUUID())
+                .withOffenceCode(MOCK_OFFENCE_CODE)
+                .withAlcoholRelatedOffence(AlcoholRelatedOffence.alcoholRelatedOffence().withAlcoholLevelMethod("A").build())
+                .build();
+        final DefendantWithReferenceData defendantWithReferenceData = buildDefendant(offence, realVO, false);
+
+        final Optional<Problem> optionalProblem = offenceDrugLevelAmountValidationAndEnricherRule.validate(defendantWithReferenceData, referenceDataQueryService)
+                .problems().stream().findFirst();
+        assertThat(optionalProblem.isPresent(), is(true));
+    }
 
     private DefendantWithReferenceData getMockDefendantWithReferenceData(final Offence offence) {
         final String DEFENDANT_ID = "1234243";
@@ -78,12 +136,15 @@ public class OffenceDrugLevelAmountValidationAndEnricherRuleTest {
 
         }
         final Defendant defendant = defendantBuilder.build();
-        final List<OffenceReferenceData> offenceReferenceData = new ArrayList<>();
-        offenceReferenceData.add(new OffenceReferenceData.Builder()
-                .withCjsOffenceCode(MOCK_OFFENCE_CODE)
-                .build());
 
         return new DefendantWithReferenceData(defendant, referenceDataVO, caseDetails);
+    }
+
+    private DefendantWithReferenceData buildDefendant(final Offence offence, final ReferenceDataVO referenceDataVO, final boolean isCivil) {
+        final CaseDetails caseDetails = CaseDetails.caseDetails().withInitiationCode("S").build();
+        final Defendant defendant = new Defendant.Builder().withId("D1").withInitiationCode("C")
+                .withOffences(Arrays.asList(offence)).build();
+        return new DefendantWithReferenceData(defendant, referenceDataVO, caseDetails, false, false, false, isCivil);
     }
 
     private Offence getOffence(final String offenceCode) {

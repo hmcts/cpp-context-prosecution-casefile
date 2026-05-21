@@ -1,6 +1,8 @@
 package uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.offence;
 
+import static uk.gov.moj.cpp.prosecution.casefile.ValidationHelper.offenceReferenceDataList;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode.OFFENCE_CODE_IS_INVALID;
+import static uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode.OFFENCE_CODE_NOT_SUPPORTED;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.Problems.newProblem;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.rules.FieldName.OFFENCE_CODE;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.rules.FieldName.OFFENCE_SEQUENCE_NO;
@@ -14,6 +16,7 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.OffenceReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Problem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ProblemValue;
 import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
+import uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.ValidationResult;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.ValidationRule;
 
@@ -29,12 +32,6 @@ public class OffenceCodeValidationAndEnricherRule implements ValidationRule<Defe
 
     @Override
     public ValidationResult validate(final DefendantWithReferenceData defendantWithReferenceData, final ReferenceDataQueryService referenceDataQueryService) {
-
-        String feeStatus = defendantWithReferenceData.getCaseDetails().getFeeStatus();
-
-        if(feeStatus != null) {
-            return VALID;
-        }
 
         if (defendantWithReferenceData.getDefendant() == null || defendantWithReferenceData.getDefendant().getOffences() == null
                 || defendantWithReferenceData.getDefendant().getOffences().isEmpty()) {
@@ -66,7 +63,7 @@ public class OffenceCodeValidationAndEnricherRule implements ValidationRule<Defe
             return null;
         }
 
-        final List<OffenceReferenceData> newOffenceReferenceDataList = referenceDataQueryService.retrieveOffenceData(offence, initiationCode).stream()
+        final List<OffenceReferenceData> newOffenceReferenceDataList = offenceReferenceDataList(referenceDataQueryService, offence, initiationCode, defendantWithReferenceData.isCivil()).stream()
                 .filter(rd -> rd.getCjsOffenceCode().equals(offence.getOffenceCode())).filter(Objects::nonNull)
                 .collect(Collectors.toList());
 
@@ -80,7 +77,8 @@ public class OffenceCodeValidationAndEnricherRule implements ValidationRule<Defe
             }
             return null;
         } else {
-            return newProblem(OFFENCE_CODE_IS_INVALID,
+            final ProblemCode problemCode = defendantWithReferenceData.isCivil() ? OFFENCE_CODE_NOT_SUPPORTED : OFFENCE_CODE_IS_INVALID;
+            return newProblem(problemCode,
                     new ProblemValue(offence.getOffenceId().toString(), OFFENCE_CODE.getValue(), offence.getOffenceCode()),
                     new ProblemValue(offence.getOffenceId().toString(), OFFENCE_SEQUENCE_NO.getValue(), offence.getOffenceSequenceNumber().toString())
             );

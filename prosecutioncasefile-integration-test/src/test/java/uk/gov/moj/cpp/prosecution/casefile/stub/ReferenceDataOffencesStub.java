@@ -35,7 +35,7 @@ public class ReferenceDataOffencesStub extends StubUtil {
     }
 
     public static void stubOffencesForOffenceCodeForGroupCases() {
-        stubOffencesForOffenceCode("stub-data/referencedataoffences.offences-for-group-cases.json");
+        stubOffencesForOffenceCodeList("stub-data/referencedataoffences.offences-list-civil-group-case.json");
     }
 
     public static void stubOffencesForOffenceCodeWithEitherWayModeOfTrial() {

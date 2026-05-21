@@ -39,7 +39,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 @ExtendWith(MockitoExtension.class)
-public class InitiateGroupProsecutionApiTest {
+class InitiateGroupProsecutionApiTest {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapperProducer().objectMapper();
     private static final String INITIATE_GROUP_PROSECUTION_WITH_REFERENCE_DATA_COMMAND = "prosecutioncasefile.command.initiate-group-prosecution-with-reference-data";
@@ -62,14 +62,14 @@ public class InitiateGroupProsecutionApiTest {
     private CaseDetailsEnrichmentService caseDetailsEnrichmentService;
 
     @Test
-    public void shouldSendReceiveGroupProsecutionWithReferenceDataCommandWithCorrectPayload() throws Exception {
+    void shouldSendReceiveGroupProsecutionWithReferenceDataCommandWithCorrectPayload() throws Exception {
         final CaseDetails caseDetails = CaseDetails.caseDetails()
                 .withCaseId(UUID.fromString("51cac7fb-387c-4d19-9c80-8963fa8cf222"))
                 .withInitiationCode("C")
                 .withPoliceSystemId(POLICE_SYSTEM_ID)
                 .build();
         when(this.caseDetailsEnrichmentService.enrichCaseDetails(any(), any())).thenReturn(caseDetails);
-        when(this.referenceDataQueryService.retrieveOffenceData(any(), any())).thenReturn(singletonList(OffenceReferenceData.offenceReferenceData()
+        when(this.referenceDataQueryService.retrieveOffenceDataList(any(), any())).thenReturn(singletonList(OffenceReferenceData.offenceReferenceData()
                 .withLocationRequired("N")
                 .build()));
 
@@ -94,20 +94,16 @@ public class InitiateGroupProsecutionApiTest {
     }
 
     @Test
-    public void shouldGetProsecutorByIdWhenOUCodeIsNull() throws Exception {
+    void shouldGetProsecutorByIdWhenOUCodeIsNull() throws Exception {
         final CaseDetails caseDetails = CaseDetails.caseDetails()
                 .withCaseId(UUID.fromString("51cac7fb-387c-4d19-9c80-8963fa8cf222"))
                 .withPoliceSystemId(POLICE_SYSTEM_ID)
                 .build();
         when(this.caseDetailsEnrichmentService.enrichCaseDetails(any(), any())).thenReturn(caseDetails);
 
-        when(this.referenceDataQueryService.retrieveOffenceData(any(), any())).thenReturn(singletonList(OffenceReferenceData.offenceReferenceData()
+        when(this.referenceDataQueryService.retrieveOffenceDataList(any(), any())).thenReturn(singletonList(OffenceReferenceData.offenceReferenceData()
                 .withLocationRequired("N")
                 .build()));
-
-        final ProsecutorsReferenceData prosecutorsReferenceData = new ProsecutorsReferenceData.Builder()
-                .withShortName("OWTW")
-                .build();
 
         final InitiateGroupProsecution initiateGroupProsecution = initiateGroupProsecutionPayloadFromFile("json/initiateGroupProsecution.json", "MCC");
         final Envelope<InitiateGroupProsecution> envelope = envelope(initiateGroupProsecution);

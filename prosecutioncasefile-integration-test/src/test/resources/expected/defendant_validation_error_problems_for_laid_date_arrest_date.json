@@ -10,21 +10,6 @@
     ]
   },
   {
-    "code": "OFFENCE_CODE_NOT_SUPPORTED",
-    "values": [
-      {
-        "id": "2013c181-7458-4fb2-a637-b596fbe0e792",
-        "key": "offence_offenceCode",
-        "value": "RT88007"
-      },
-      {
-        "id": "2013c181-7458-4fb2-a637-b596fbe0e792",
-        "key": "offence_offenceSequenceNo",
-        "value": "1"
-      }
-    ]
-  },
-  {
     "code": "ARREST_DATE_IN_FUTURE",
     "values": [
       {

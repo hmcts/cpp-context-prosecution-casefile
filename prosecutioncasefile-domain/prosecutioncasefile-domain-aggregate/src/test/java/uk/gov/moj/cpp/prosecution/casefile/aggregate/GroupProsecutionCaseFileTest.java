@@ -1,19 +1,15 @@
 package uk.gov.moj.cpp.prosecution.casefile.aggregate;
 
 import static java.util.Arrays.asList;
-import static java.util.UUID.fromString;
 import static java.util.UUID.randomUUID;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.when;
 import static uk.gov.moj.cpp.prosecution.casefile.aggregate.GroupProsecutionCaseFile.INITIATION_CODE_CIVIL_CASE;
 import static uk.gov.moj.cpp.prosecution.casefile.aggregate.GroupProsecutionCaseFile.INITIATION_CODE_FOR_SUMMONS;
 
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,7 +27,6 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.GroupProsecution;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Individual;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Offence;
-import uk.gov.moj.cpp.prosecution.casefile.json.schemas.OffenceReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.OrganisationUnitWithCourtroomReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ParentGuardianInformation;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.SelfDefinedInformation;
@@ -47,9 +42,9 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 @ExtendWith(MockitoExtension.class)
-class GroupProsecutionCaseFileTest {
+public class GroupProsecutionCaseFileTest {
 
-    private static final String OFFENCE_CODE = "TH68023";
+    private static final String OFFENCE_CODE = "998A";
 
     @Mock
     private ReferenceDataQueryService referenceDataQueryService;
@@ -58,41 +53,27 @@ class GroupProsecutionCaseFileTest {
     private GroupProsecutionCaseFile groupProsecutionCaseFile;
 
     private UUID groupId = randomUUID();
-    private List<OffenceReferenceData> referenceDataList;
-
-    @BeforeEach
-    void setUp() {
-        referenceDataList = List.of(OffenceReferenceData.offenceReferenceData()
-                .withTitle("Robbery")
-                .withCjsOffenceCode("TH68023")
-                .withLegislation("Contrary to section 8(1) of the Theft Act 1968.")
-                .withOffenceId(fromString("6795cbe7-3e0f-3f6a-b59d-29a87a9d6f8d"))
-                .build()
-        );
-    }
 
     @Test
-    void shouldRaiseGroupCasesParkedForApproval() {
+    public void shouldRaiseGroupCasesParkedForApproval() {
 
         final Optional<OrganisationUnitWithCourtroomReferenceData> optionalOrganisationUnitWithCourtroomReferenceData =
                 Optional.of(OrganisationUnitWithCourtroomReferenceData.organisationUnitWithCourtroomReferenceData().build());
 
         when(referenceDataQueryService.retrieveOrganisationUnitWithCourtroom("C55BN00")).thenReturn(optionalOrganisationUnitWithCourtroomReferenceData);
-        when(referenceDataQueryService.retrieveOffenceDataList(anyList(),any())).thenReturn(referenceDataList);
         List<SummonsCodeReferenceData> summonsCodeReferenceDataList = new ArrayList<SummonsCodeReferenceData>();
         summonsCodeReferenceDataList.add(SummonsCodeReferenceData.summonsCodeReferenceData().withSummonsCode("S02").build());
         when(referenceDataQueryService.retrieveSummonsCodes()).thenReturn(summonsCodeReferenceDataList);
         final List<GroupProsecutionWithReferenceData> groupProsecutionWithReferenceDataList = new ArrayList<>();
         final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
         referenceDataVO.setInitiationTypes(Arrays.asList("S"));
-        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData1 = buildGroupProsecutionWithReferenceData(INITIATION_CODE_FOR_SUMMONS, randomUUID(), true, "URN1", 1);
+        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData1 = buildGroupProsecutionWithReferenceData(INITIATION_CODE_FOR_SUMMONS, randomUUID(), true, "URN1");
         groupProsecutionWithReferenceData1.setReferenceDataVO(referenceDataVO);
-        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData2 = buildGroupProsecutionWithReferenceData(INITIATION_CODE_FOR_SUMMONS, randomUUID(), false, "URN2", 2);
+        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData2 = buildGroupProsecutionWithReferenceData(INITIATION_CODE_FOR_SUMMONS, randomUUID(), false, "URN2");
         groupProsecutionWithReferenceData2.setReferenceDataVO(referenceDataVO);
         groupProsecutionWithReferenceDataList.add(groupProsecutionWithReferenceData1);
         groupProsecutionWithReferenceDataList.add(groupProsecutionWithReferenceData2);
         final GroupProsecutionList groupProsecutionList = new GroupProsecutionList(groupProsecutionWithReferenceDataList);
-        groupProsecutionList.setChannel(Channel.CIVIL);
 
         final Stream<Object> eventStream = groupProsecutionCaseFile.receiveGroupProsecution(groupProsecutionList, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
         assertThat(eventStream.findFirst().get(), is(instanceOf(GroupCasesParkedForApproval.class)));
@@ -100,25 +81,23 @@ class GroupProsecutionCaseFileTest {
     }
 
     @Test
-    void shouldRaiseGroupCasesParkedForRejected() {
+    public void shouldRaiseGroupCasesParkedForRejected() {
 
         final Optional<OrganisationUnitWithCourtroomReferenceData> optionalOrganisationUnitWithCourtroomReferenceData =
                 Optional.of(OrganisationUnitWithCourtroomReferenceData.organisationUnitWithCourtroomReferenceData().build());
 
         when(referenceDataQueryService.retrieveOrganisationUnitWithCourtroom("C55BN00")).thenReturn(optionalOrganisationUnitWithCourtroomReferenceData);
-        when(referenceDataQueryService.retrieveOffenceDataList(anyList(),any())).thenReturn(referenceDataList);
 
         final List<GroupProsecutionWithReferenceData> groupProsecutionWithReferenceDataList = new ArrayList<>();
         final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
         referenceDataVO.setInitiationTypes(Arrays.asList("S"));
-        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData1 = buildGroupProsecutionWithReferenceDataWithouSummonCode(INITIATION_CODE_FOR_SUMMONS, true, "URN1", 1);
+        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData1 = buildGroupProsecutionWithReferenceDataWithouSummonCode(INITIATION_CODE_FOR_SUMMONS, true, "URN1");
         groupProsecutionWithReferenceData1.setReferenceDataVO(referenceDataVO);
-        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData2 = buildGroupProsecutionWithReferenceDataWithouSummonCode(INITIATION_CODE_FOR_SUMMONS, false, "URN2", 2);
+        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData2 = buildGroupProsecutionWithReferenceDataWithouSummonCode(INITIATION_CODE_FOR_SUMMONS, false, "URN2");
         groupProsecutionWithReferenceData2.setReferenceDataVO(referenceDataVO);
         groupProsecutionWithReferenceDataList.add(groupProsecutionWithReferenceData1);
         groupProsecutionWithReferenceDataList.add(groupProsecutionWithReferenceData2);
         final GroupProsecutionList groupProsecutionList = new GroupProsecutionList(groupProsecutionWithReferenceDataList);
-        groupProsecutionList.setChannel(Channel.CIVIL);
 
         final Stream<Object> eventStream = groupProsecutionCaseFile.receiveGroupProsecution(groupProsecutionList, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
         assertThat(eventStream.findFirst().get(), is(instanceOf(GroupProsecutionRejected.class)));
@@ -126,20 +105,19 @@ class GroupProsecutionCaseFileTest {
     }
 
     @Test
-    void shouldRaiseGroupCasesReceived() {
+    public void shouldRaiseGroupCasesReceived() {
 
         final Optional<OrganisationUnitWithCourtroomReferenceData> optionalOrganisationUnitWithCourtroomReferenceData =
                 Optional.of(OrganisationUnitWithCourtroomReferenceData.organisationUnitWithCourtroomReferenceData().build());
 
         when(referenceDataQueryService.retrieveOrganisationUnitWithCourtroom("C55BN00")).thenReturn(optionalOrganisationUnitWithCourtroomReferenceData);
-        when(referenceDataQueryService.retrieveOffenceDataList(anyList(),any())).thenReturn(referenceDataList);
 
         final List<GroupProsecutionWithReferenceData> groupProsecutionWithReferenceDataList = new ArrayList<>();
         final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
         referenceDataVO.setInitiationTypes(Arrays.asList("O"));
-        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData1 = buildGroupProsecutionWithReferenceData(INITIATION_CODE_CIVIL_CASE, randomUUID(), true, "URN1", 1);
+        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData1 = buildGroupProsecutionWithReferenceData(INITIATION_CODE_CIVIL_CASE, randomUUID(), true, "URN1");
         groupProsecutionWithReferenceData1.setReferenceDataVO(referenceDataVO);
-        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData2 = buildGroupProsecutionWithReferenceData(INITIATION_CODE_CIVIL_CASE, randomUUID(), false, "URN2", 2);
+        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData2 = buildGroupProsecutionWithReferenceData(INITIATION_CODE_CIVIL_CASE, randomUUID(), false, "URN2");
         groupProsecutionWithReferenceData2.setReferenceDataVO(referenceDataVO);
         groupProsecutionWithReferenceDataList.add(groupProsecutionWithReferenceData1);
         groupProsecutionWithReferenceDataList.add(groupProsecutionWithReferenceData2);
@@ -155,7 +133,7 @@ class GroupProsecutionCaseFileTest {
     }
 
     @Test
-    void shouldRaiseGroupProsecutionRejected() {
+    public void shouldRaiseGroupProsecutionRejected() {
 
         final Optional<OrganisationUnitWithCourtroomReferenceData> optionalOrganisationUnitWithCourtroomReferenceData =
                 Optional.of(OrganisationUnitWithCourtroomReferenceData.organisationUnitWithCourtroomReferenceData().build());
@@ -165,22 +143,20 @@ class GroupProsecutionCaseFileTest {
         final List<GroupProsecutionWithReferenceData> groupProsecutionWithReferenceDataList = new ArrayList<>();
         final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
         referenceDataVO.setInitiationTypes(Arrays.asList("O"));
-        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData = buildGroupProsecutionWithReferenceData(INITIATION_CODE_CIVIL_CASE, randomUUID(), true, "URN1", 1);
+        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData = buildGroupProsecutionWithReferenceData(INITIATION_CODE_CIVIL_CASE, randomUUID(), true, "URN1");
         groupProsecutionWithReferenceData.setReferenceDataVO(referenceDataVO);
         groupProsecutionWithReferenceDataList.add(groupProsecutionWithReferenceData);
         final GroupProsecutionList groupProsecutionList = new GroupProsecutionList(groupProsecutionWithReferenceDataList);
-        groupProsecutionList.setChannel(Channel.CIVIL);
 
         final Stream<Object> eventStream = groupProsecutionCaseFile.receiveGroupProsecution(groupProsecutionList, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
         assertThat(eventStream.findFirst().get(), is(instanceOf(GroupProsecutionRejected.class)));
 
     }
 
-    private GroupProsecutionWithReferenceData buildGroupProsecutionWithReferenceDataWithouSummonCode(final String initiationCode, final Boolean isGroupMaster, final String prosecutorCaseReference, final Integer offenceSequenceNumber){
+    private GroupProsecutionWithReferenceData buildGroupProsecutionWithReferenceDataWithouSummonCode(final String initiationCode, final Boolean isGroupMaster, final String prosecutorCaseReference){
         return new GroupProsecutionWithReferenceData(GroupProsecution.groupProsecution()
                 .withGroupId(groupId)
                 .withIsGroupMaster(isGroupMaster)
-                .withIsCivil(true)
                 .withCaseDetails(CaseDetails.caseDetails()
                         .withCaseId(randomUUID())
                         .withInitiationCode(initiationCode)
@@ -199,10 +175,11 @@ class GroupProsecutionCaseFileTest {
                         .withOffences(asList(Offence.offence()
                                 .withOffenceId(randomUUID())
                                 .withOffenceCode(OFFENCE_CODE)
+                                .withArrestDate(LocalDate.now().minusDays(2))
+                                .withChargeDate(LocalDate.now().minusDays(2))
                                 .withOffenceLocation("London")
                                 .withOffenceCommittedDate(LocalDate.now().minusDays(2))
                                 .withStatementOfFacts("statements")
-                                .withOffenceSequenceNumber(offenceSequenceNumber)
                                 .build()))
                         .withInitialHearing(InitialHearing.initialHearing()
                                 .withCourtHearingLocation("C55BN00")
@@ -214,24 +191,23 @@ class GroupProsecutionCaseFileTest {
     }
 
     @Test
-    void shouldNotThrowRuntimeExceptionForDuplicateProsecutionCaseIds() {
+    public void shouldNotThrowRuntimeExceptionForDuplicateProsecutionCaseIds() {
 
         final UUID prosecutionCaseId = randomUUID();
 
         final Optional<OrganisationUnitWithCourtroomReferenceData> optionalOrganisationUnitWithCourtroomReferenceData =
                 Optional.of(OrganisationUnitWithCourtroomReferenceData.organisationUnitWithCourtroomReferenceData().build());
         when(referenceDataQueryService.retrieveOrganisationUnitWithCourtroom("C55BN00")).thenReturn(optionalOrganisationUnitWithCourtroomReferenceData);
-        when(referenceDataQueryService.retrieveOffenceDataList(anyList(),any())).thenReturn(referenceDataList);
 
         final List<GroupProsecutionWithReferenceData> groupProsecutionWithReferenceDataList = new ArrayList<>();
 
         final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
         referenceDataVO.setInitiationTypes(Arrays.asList("O"));
 
-        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData1 = buildGroupProsecutionWithReferenceData(INITIATION_CODE_CIVIL_CASE, prosecutionCaseId, true, "URN1", 1);
+        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData1 = buildGroupProsecutionWithReferenceData(INITIATION_CODE_CIVIL_CASE, prosecutionCaseId, true, "URN1");
         groupProsecutionWithReferenceData1.setReferenceDataVO(referenceDataVO);
 
-        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData2 = buildGroupProsecutionWithReferenceData(INITIATION_CODE_CIVIL_CASE, prosecutionCaseId, false, "URN2", 2);
+        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData2 = buildGroupProsecutionWithReferenceData(INITIATION_CODE_CIVIL_CASE, prosecutionCaseId, false, "URN2");
         groupProsecutionWithReferenceData2.setReferenceDataVO(referenceDataVO);
 
         groupProsecutionWithReferenceDataList.add(groupProsecutionWithReferenceData1);
@@ -244,7 +220,7 @@ class GroupProsecutionCaseFileTest {
         assertThat(eventStream.findFirst().get(), is(instanceOf(GroupCasesReceived.class)));
     }
 
-    private GroupProsecutionWithReferenceData buildGroupProsecutionWithReferenceData(final String initiationCode, final UUID prosecutionCaseId, final Boolean isGroupMaster, final String prosecutorCaseReference, final Integer offenceSequenceNumber){
+    private GroupProsecutionWithReferenceData buildGroupProsecutionWithReferenceData(final String initiationCode, final UUID prosecutionCaseId, final Boolean isGroupMaster, final String prosecutorCaseReference){
         return new GroupProsecutionWithReferenceData(GroupProsecution.groupProsecution()
                 .withGroupId(groupId)
                 .withIsCivil(true)
@@ -268,10 +244,11 @@ class GroupProsecutionCaseFileTest {
                         .withOffences(asList(Offence.offence()
                                 .withOffenceId(randomUUID())
                                 .withOffenceCode(OFFENCE_CODE)
+                                .withArrestDate(LocalDate.now().minusDays(2))
+                                .withChargeDate(LocalDate.now().minusDays(2))
                                 .withOffenceLocation("London")
                                 .withOffenceCommittedDate(LocalDate.now().minusDays(2))
                                 .withStatementOfFacts("statements")
-                                .withOffenceSequenceNumber(offenceSequenceNumber)
                                 .build()))
                         .withInitialHearing(InitialHearing.initialHearing()
                                 .withCourtHearingLocation("C55BN00")

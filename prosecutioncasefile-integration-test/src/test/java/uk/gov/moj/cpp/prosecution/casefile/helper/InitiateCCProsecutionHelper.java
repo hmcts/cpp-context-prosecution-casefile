@@ -19,7 +19,6 @@ import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
-import static org.skyscreamer.jsonassert.JSONCompareMode.LENIENT;
 import static org.skyscreamer.jsonassert.JSONCompareMode.STRICT;
 import static uk.gov.justice.services.messaging.JsonEnvelope.envelopeFrom;
 import static uk.gov.justice.services.test.utils.core.matchers.JsonEnvelopeMatcher.jsonEnvelope;
@@ -229,7 +228,7 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
         final String actualPayload = defaultJsonObjectEnvelopeConverter.extractPayloadFromEnvelope(jsonObject).toString();
         final String expectedPayload = replaceWithApplicationResults(expectedPayloadTemplate);
 
-        assertEquals(expectedPayload, actualPayload, new CustomComparator(LENIENT, getCustomAsserts(isDefendantOrganisation).toArray(new Customization[0])));
+        assertEquals(expectedPayload, actualPayload, new CustomComparator(STRICT, getCustomAsserts(isDefendantOrganisation).toArray(new Customization[0])));
     }
 
     private List<Customization> getCustomAsserts(final boolean isDefendantOrganisation) {

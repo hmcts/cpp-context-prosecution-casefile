@@ -14,11 +14,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class ValidationHelper {
 
-    public static final String SOW_REF_VALUE_MOJ = "moj";
+    public static final String SOW_REF_VALUE_MOJ = "MoJ";
 
     private ValidationHelper() {
     }
@@ -37,7 +36,7 @@ public class ValidationHelper {
         } else {
             newOffenceReferenceDataList = referenceDataQueryService.retrieveOffenceData(offence, initiationCode).stream()
                     .filter(rd -> rd.getCjsOffenceCode().equals(offence.getOffenceCode())).filter(Objects::nonNull)
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
         return newOffenceReferenceDataList;

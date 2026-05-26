@@ -58,7 +58,8 @@ import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.q
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.replaceExpectedValues;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForGenericOffence;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForOffenceCode;
-import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForOffenceCodeList;
+import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForOffenceCodeForGroupCases;
+import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForOffenceCodeList_NonCivilOffence;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForOffenceLocationRequired;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesWithBackDuty;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubGetCaseMarkersWithCode;
@@ -66,7 +67,8 @@ import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubNon
 import static uk.gov.moj.cpp.prosecution.casefile.stub.TestUtils.readFile;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode.INVALID_DEFENDANT_INDIVIDUAL_POST_CODE;
 
-public class ValidationErrorIT extends BaseIT {
+@SuppressWarnings("java:S2699")
+class ValidationErrorIT extends BaseIT {
 
     private static final String CASE_MARKER_CODE = "YO";
     private static final DateTimeFormatter DATE_FORMAT = ofPattern("yyyy-MM-dd");
@@ -82,12 +84,12 @@ public class ValidationErrorIT extends BaseIT {
     final InitiateCCProsecutionHelper initiateCCProsecutionHelper = new InitiateCCProsecutionHelper();
 
     @BeforeAll
-    public static void setupOnce() {
+    static void setupOnce() {
         stubGetCaseMarkersWithCode(CASE_MARKER_CODE);
     }
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         caseUrn = randomAlphanumeric(10);
         defendantId1 = randomUUID().toString();
         defendantId2 = randomUUID().toString();
@@ -98,7 +100,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorWhenInvalidInitiationCode() {
+    void shouldRaiseValidationErrorWhenInvalidInitiationCode() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-initiation-code.json");
 
@@ -133,7 +135,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorWhenInvalidOffenceAlcoholLevelMethod() {
+    void shouldRaiseValidationErrorWhenInvalidOffenceAlcoholLevelMethod() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-alocohol-level-method.json");
 
@@ -158,7 +160,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorWhenInvalidCustodyStatus() {
+    void shouldRaiseValidationErrorWhenInvalidCustodyStatus() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-custody-status.json");
 
@@ -177,7 +179,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorWhenInvalidPncId() {
+    void shouldRaiseValidationErrorWhenInvalidPncId() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-pncid.json");
 
@@ -194,7 +196,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorWhenInvalidPostCode() {
+    void shouldRaiseValidationErrorWhenInvalidPostCode() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-sjp-prosecution-with-invalid-postcode.json");
 
@@ -210,7 +212,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorWhenInvalidCroNumber() {
+    void shouldRaiseValidationErrorWhenInvalidCroNumber() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-cro-number.json");
 
@@ -228,7 +230,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorInvalidWhenStatementOfFacts() {
+    void shouldRaiseValidationErrorInvalidWhenStatementOfFacts() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-statement-of-facts.json");
 
@@ -246,7 +248,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldNotRaiseValidationErrorWhenStatementOfFactsFromMCCChannelWithSummonsTypeAsMCA() {
+    void shouldNotRaiseValidationErrorWhenStatementOfFactsFromMCCChannelWithSummonsTypeAsMCA() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-statement-of-facts.json");
 
@@ -259,7 +261,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldNotRaiseValidationErrorWhenStatementOfFactsFromMCCChannelWithSummonsTypeAsWitness() {
+    void shouldNotRaiseValidationErrorWhenStatementOfFactsFromMCCChannelWithSummonsTypeAsWitness() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-statement-of-facts.json");
 
@@ -272,7 +274,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldNotRaiseValidationErrorWhenStatementOfFactsFromCPPIChannel() {
+    void shouldNotRaiseValidationErrorWhenStatementOfFactsFromCPPIChannel() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-statement-of-facts.json");
 
@@ -285,7 +287,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorWhenStatementOfFactsFromCPPIChannelWithSummonsTypeAsMCA() {
+    void shouldRaiseValidationErrorWhenStatementOfFactsFromCPPIChannelWithSummonsTypeAsMCA() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-statement-of-facts.json");
 
@@ -307,7 +309,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorInvalidWhenStatementOfFactsWelsh() {
+    void shouldRaiseValidationErrorInvalidWhenStatementOfFactsWelsh() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-statement-of-facts-welsh.json");
 
@@ -325,7 +327,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorInvalidBailConditions() {
+    void shouldRaiseValidationErrorInvalidBailConditions() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-bail-conditions.json");
 
@@ -342,7 +344,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorInvalidAlcoholDrugLevelMethod() {
+    void shouldRaiseValidationErrorInvalidAlcoholDrugLevelMethod() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-alcohol-drug-level-method.json");
 
@@ -384,7 +386,7 @@ public class ValidationErrorIT extends BaseIT {
 
 
     @Test
-    public void shouldSubmitErrorCorrectionsAndRaiseCCCaseReceived() {
+    void shouldSubmitErrorCorrectionsAndRaiseCCCaseReceived() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-error-for-resolving.json");
 
@@ -423,7 +425,8 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void laidDateAndArrestDateValidationForCivilCase() {
+    void laidDateAndArrestDateValidationForCivilCase() {
+        stubOffencesForOffenceCodeForGroupCases();
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-civil-laid-date-arrest-date.json");
         final String ccPayLoad = replaceValuesForOffenceLaidDateAndArrestDate(staticPayLoad, caseId.toString());
@@ -436,7 +439,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorInvalidOffenceCodeMethod() {
+    void shouldRaiseValidationErrorInvalidOffenceCodeMethod() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-alcohol-drug-level-method.json");
 
@@ -455,7 +458,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldSubmitErrorCorrectionsForCorporateDefendantAndRaiseCCCaseReceived() {
+    void shouldSubmitErrorCorrectionsForCorporateDefendantAndRaiseCCCaseReceived() {
 
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-corporate-cc-prosecution-with-error-for-resolving.json");
@@ -490,7 +493,7 @@ public class ValidationErrorIT extends BaseIT {
 
 
     @Test
-    public void shouldRaiseValidationErrorWhenPayloadHasOffenceCodeErrors() {
+    void shouldRaiseValidationErrorWhenPayloadHasOffenceCodeErrors() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-offence-code-error.json");
 
@@ -519,7 +522,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldNOTRaiseValidationErrorWhenPayloadHasOffenceLocationErrors() {
+    void shouldNOTRaiseValidationErrorWhenPayloadHasOffenceLocationErrors() {
 
         stubOffencesForOffenceLocationRequired();
         final UUID caseId = randomUUID();
@@ -535,7 +538,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorWhenPayloadHasDefendantDOBErrors() {
+    void shouldRaiseValidationErrorWhenPayloadHasDefendantDOBErrors() {
 
         stubOffencesForOffenceLocationRequired();
         final UUID caseId = randomUUID();
@@ -562,7 +565,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorWhenPayloadHasDefendantAdditionalNationality() {
+    void shouldRaiseValidationErrorWhenPayloadHasDefendantAdditionalNationality() {
 
         stubOffencesForOffenceLocationRequired();
         final UUID caseId = randomUUID();
@@ -589,7 +592,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorWhenBackDutyIsMissing() {
+    void shouldRaiseValidationErrorWhenBackDutyIsMissing() {
         stubOffencesWithBackDuty();
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-when-backduty-is-missing.json");
@@ -621,7 +624,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorWhenBackDutyFromDateIsAfterToDateForSJPProsecution() {
+    void shouldRaiseValidationErrorWhenBackDutyFromDateIsAfterToDateForSJPProsecution() {
         stubOffencesWithBackDuty();
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-sjp-prosecution-when-backduty-fromdate-is-missing.json");
@@ -654,7 +657,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorWhenSjpISNotValid() {
+    void shouldRaiseValidationErrorWhenSjpISNotValid() {
 
         stubNonSjpProsecutors();
         final UUID caseId = randomUUID();
@@ -674,7 +677,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldNotRaiseValidationErrorWhenSjpISIsValid() {
+    void shouldNotRaiseValidationErrorWhenSjpISIsValid() {
 
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-sjp-prosecution-when-prosecutor-is-valid.json");
@@ -693,7 +696,7 @@ public class ValidationErrorIT extends BaseIT {
 
 
     @Test
-    public void shouldRaiseValidationErrorWhenPayloadHasOffenceLocationErrorsForSJPProsecution() {
+    void shouldRaiseValidationErrorWhenPayloadHasOffenceLocationErrorsForSJPProsecution() {
         stubOffencesForOffenceLocationRequired("stub-data/referencedataoffences.offences-with-offence-location-required.json");
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-sjp-prosecution-with-invalid-offence-location.json");
@@ -708,12 +711,12 @@ public class ValidationErrorIT extends BaseIT {
         final String expectedErrorsPayload = replaceValues(readFile("expected/expected_sjp_case_errors_for_invalid_offence_location.json"), caseId.toString());
         final String actualPayload = jsonEnvelope.get().payloadAsJsonObject().get("errors").toString();
         assertEquals(expectedErrorsPayload, actualPayload, LENIENT);
-        stubOffencesForOffenceCodeList();
+        stubOffencesForOffenceCodeList_NonCivilOffence();
 
     }
 
     @Test
-    public void shouldRaiseValidationErrorWhenPayloadHasGenericOffenceCode() {
+    void shouldRaiseValidationErrorWhenPayloadHasGenericOffenceCode() {
         stubOffencesForGenericOffence();
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-sjp-prosecution-with-generic-offence-code.json");
@@ -733,7 +736,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldNotRaiseValidationErrorWhenPayloadHasGenericAlteredOffenceCode() {
+    void shouldNotRaiseValidationErrorWhenPayloadHasGenericAlteredOffenceCode() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-sjp-prosecution-with-generic-altered-offence-code.json");
         final String sjpPayLoad = replaceValues(staticPayLoad, caseId.toString());
@@ -745,7 +748,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldSubmitOnlyErrorCorrectionsAndRaiseForDefendantShouldClearFromBusinessError() {
+    void shouldSubmitOnlyErrorCorrectionsAndRaiseForDefendantShouldClearFromBusinessError() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-hearing-date-error-for-resolving.json");
 

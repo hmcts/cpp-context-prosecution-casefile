@@ -71,6 +71,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode.INVALID
 class ValidationErrorIT extends BaseIT {
 
     private static final String CASE_MARKER_CODE = "YO";
+    private static final String CIVIL_PROSECUTION_REJECTED_EVENT = "public.prosecutioncasefile.civil-prosecution-rejected";
     private static final DateTimeFormatter DATE_FORMAT = ofPattern("yyyy-MM-dd");
     private String caseUrn;
     private String defendantId1;
@@ -422,6 +423,35 @@ class ValidationErrorIT extends BaseIT {
         final String ccExpectedPayload = readFile("expected/initiate_cc_expected_output_after_error_correction.json");
         initiateCCProsecutionHelper.verifyCourtProceedingsForCaseCreationHasBeenInitiated(caseUrn, ccExpectedPayload);
 
+    }
+
+    @Test
+    void shouldRejectCivilSummonsCaseWithSummonsCodeAWhenOffenceIsCriminalOffence() {
+        stubOffencesForOffenceCodeForGroupCases();
+        final UUID caseId = randomUUID();
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-civil-summons-blacklisted-offence.json");
+        final String ccPayLoad = replaceValues(staticPayLoad, caseId.toString(), "A", "CPPI");
+
+        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
+        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
+
+        final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
+        assertThat(privateEvent.isPresent(), is(true));
+        assertErrorsExpectedForCivil("expected/civil_summons_criminal_offence_problem.json", privateEvent.get());
+    }
+
+    @Test
+    void shouldNotRaiseValidationErrorForCivilSummonsCaseWithSummonsCodeAWhenOffenceIsNonCriminalOffence() {
+        stubOffencesForOffenceCodeForGroupCases();
+        final UUID caseId = randomUUID();
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-civil-summons-civil-offence.json");
+        final String ccPayLoad = replaceValues(staticPayLoad, caseId.toString(), "A", "CPPI");
+
+        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
+        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
+
+        assertNoErrorsExpected(initiateCCProsecutionHelper);
+        queryAndVerifyCasesAreEmptyCollection(caseId);
     }
 
     @Test

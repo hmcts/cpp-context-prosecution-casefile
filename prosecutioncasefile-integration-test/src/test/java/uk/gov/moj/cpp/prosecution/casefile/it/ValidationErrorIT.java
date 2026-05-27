@@ -71,7 +71,6 @@ import static uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode.INVALID
 class ValidationErrorIT extends BaseIT {
 
     private static final String CASE_MARKER_CODE = "YO";
-    private static final String CIVIL_PROSECUTION_REJECTED_EVENT = "public.prosecutioncasefile.civil-prosecution-rejected";
     private static final DateTimeFormatter DATE_FORMAT = ofPattern("yyyy-MM-dd");
     private String caseUrn;
     private String defendantId1;

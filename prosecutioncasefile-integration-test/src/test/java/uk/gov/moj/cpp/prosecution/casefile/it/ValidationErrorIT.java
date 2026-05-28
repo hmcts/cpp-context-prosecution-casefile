@@ -425,6 +425,35 @@ class ValidationErrorIT extends BaseIT {
     }
 
     @Test
+    void shouldRejectCivilSummonsCaseWithSummonsCodeAWhenOffenceIsCriminalOffence() {
+        stubOffencesForOffenceCodeForGroupCases();
+        final UUID caseId = randomUUID();
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-civil-summons-blacklisted-offence.json");
+        final String ccPayLoad = replaceValues(staticPayLoad, caseId.toString(), "A", "CPPI");
+
+        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
+        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
+
+        final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
+        assertThat(privateEvent.isPresent(), is(true));
+        assertErrorsExpectedForCivil("expected/civil_summons_criminal_offence_problem.json", privateEvent.get());
+    }
+
+    @Test
+    void shouldNotRaiseValidationErrorForCivilSummonsCaseWithSummonsCodeAWhenOffenceIsNonCriminalOffence() {
+        stubOffencesForOffenceCodeForGroupCases();
+        final UUID caseId = randomUUID();
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-civil-summons-civil-offence.json");
+        final String ccPayLoad = replaceValues(staticPayLoad, caseId.toString(), "A", "CPPI");
+
+        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
+        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
+
+        assertNoErrorsExpected(initiateCCProsecutionHelper);
+        queryAndVerifyCasesAreEmptyCollection(caseId);
+    }
+
+    @Test
     void laidDateAndArrestDateValidationForCivilCase() {
         stubOffencesForOffenceCodeForGroupCases();
         final UUID caseId = randomUUID();

@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_HANDLER;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;
 import static uk.gov.justice.services.messaging.Envelope.metadataFrom;
-import static uk.gov.justice.services.messaging.JsonObjects.*;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static uk.gov.justice.services.test.utils.core.enveloper.EnveloperFactory.createEnveloperWithEvents;
 import static uk.gov.justice.services.test.utils.core.helper.EventStreamMockHelper.verifyAppendAndGetArgumentFrom;
 import static uk.gov.justice.services.test.utils.core.matchers.HandlerMatcher.isHandler;
@@ -48,9 +48,7 @@ import uk.gov.justice.services.eventsourcing.source.core.EventStream;
 import uk.gov.justice.services.eventsourcing.source.core.exception.EventStreamException;
 import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.justice.services.messaging.JsonEnvelope;
-import uk.gov.justice.services.messaging.JsonObjects;
 import uk.gov.justice.services.messaging.Metadata;
-
 import uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil;
 import uk.gov.moj.cpp.prosecution.casefile.aggregate.ProsecutionCaseFile;
 import uk.gov.moj.cpp.prosecution.casefile.command.service.ProsecutionCaseQueryService;
@@ -60,7 +58,6 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.DefendantSubject;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Exhibit;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Individual;
-import uk.gov.moj.cpp.prosecution.casefile.json.schemas.OrganisationUnitReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.PersonalInformation;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ProsecutionCaseSubject;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ProsecutorPersonDefendantDetails;
@@ -469,7 +466,7 @@ public class AcceptCaseHandlerTest {
                 .add("caseId", materialPending.getCaseId().toString())
                 .add("prosecutingAuthority", materialPending.getProsecutingAuthority())
                 .add("prosecutorDefendantId", materialPending.getProsecutorDefendantId())
-                .add("material", JsonObjects.createObjectBuilder()
+                .add("material", createObjectBuilder()
                         .add("fileStoreId", materialPending.getMaterial().getFileStoreId().toString())
                         .add("documentType", materialPending.getMaterial().getDocumentType())
                         .add("fileType", materialPending.getMaterial().getFileType())
@@ -480,7 +477,7 @@ public class AcceptCaseHandlerTest {
     }
 
     private JsonEnvelope materialPendingEventEnvelopeV2(final UUID submissionId, final MaterialPendingV2 materialPending) {
-        final Metadata metadata = metadataFrom(JsonObjects.createObjectBuilder(metadataWithRandomUUID("prosecutioncasefile.events.material-pending-v2").build().asJsonObject())
+        final Metadata metadata = metadataFrom(createObjectBuilder(metadataWithRandomUUID("prosecutioncasefile.events.material-pending-v2").build().asJsonObject())
                 .add("submissionId", submissionId.toString()).build())
                 .build();
 
@@ -501,6 +498,6 @@ public class AcceptCaseHandlerTest {
     }
 
     private Metadata withSubmissionId(final Metadata metadata, final String submissionId) {
-        return metadataFrom(JsonObjects.createObjectBuilder(metadata.asJsonObject()).add("submissionId", submissionId).build()).build();
+        return metadataFrom(createObjectBuilder(metadata.asJsonObject()).add("submissionId", submissionId).build()).build();
     }
 }

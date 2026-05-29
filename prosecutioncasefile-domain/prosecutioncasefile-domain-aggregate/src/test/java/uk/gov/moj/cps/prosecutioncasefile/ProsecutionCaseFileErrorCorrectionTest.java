@@ -84,7 +84,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import uk.gov.justice.services.messaging.JsonObjects;
 import javax.json.JsonObject;
 
 import org.junit.Rule;
@@ -818,8 +817,8 @@ public class ProsecutionCaseFileErrorCorrectionTest {
                 .add("initiationCode", INVALID_INITIATION_CODE)
                 .add("caseMarkers",
                         createArrayBuilder()
-                                .add(JsonObjects.createObjectBuilder().add("markerTypeCode", VALID_CASE_MARKER_CODE).build())
-                                .add(JsonObjects.createObjectBuilder().add("markerTypeCode", INVALID_CASE_MARKER_CODE).build())
+                                .add(createObjectBuilder().add("markerTypeCode", VALID_CASE_MARKER_CODE).build())
+                                .add(createObjectBuilder().add("markerTypeCode", INVALID_CASE_MARKER_CODE).build())
                                 .build())
                 .add("prosecutorCaseReference", PROSECUTOR_CASE_REFERENCE)
                 .add("policeSystemId", POLICE_SYSTEM_ID)

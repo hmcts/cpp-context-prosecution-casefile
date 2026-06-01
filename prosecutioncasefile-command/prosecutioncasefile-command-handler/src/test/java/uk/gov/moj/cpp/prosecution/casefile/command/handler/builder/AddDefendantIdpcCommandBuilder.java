@@ -1,7 +1,7 @@
 package uk.gov.moj.cpp.prosecution.casefile.command.handler.builder;
 
 
-import static javax.json.Json.createObjectBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static uk.gov.justice.services.messaging.JsonEnvelope.metadataBuilder;
 import static uk.gov.moj.cpp.prosecution.casefile.command.handler.util.DefaultTestData.CASE_DOCUMENT_ID;
 import static uk.gov.moj.cpp.prosecution.casefile.command.handler.util.DefaultTestData.CASE_DOCUMENT_MATERIAL_ID;

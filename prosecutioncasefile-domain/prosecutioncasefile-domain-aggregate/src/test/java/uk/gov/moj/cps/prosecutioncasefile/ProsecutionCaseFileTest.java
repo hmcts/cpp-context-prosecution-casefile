@@ -1562,6 +1562,70 @@ public class ProsecutionCaseFileTest {
         assertThat(prosecutionCaseFile.getDefendants(), hasSize(1));
     }
 
+    @MethodSource("nonSpiChannels")
+    @ParameterizedTest
+    public void shouldRejectNewSummonsApplicationWithDuplicatedProsecutionWhenExistingUnapprovedSummonsAlreadyExistsForSameUrn(final Channel nonSpiChannel) {
+        final ProsecutionWithReferenceData firstMessage = getProsecutionWithReferenceData(
+                of(buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE)), nonSpiChannel, SUMMONS_INITIATION_CODE);
+        prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID, firstMessage, emptyList()));
+
+        final ProsecutionWithReferenceData secondMessage = getProsecutionWithReferenceData(
+                of(buildDefendant(SECOND_FORENAME, SECOND_SURNAME, SECOND_BIRTH_DATE, SECOND_DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_TWO)), nonSpiChannel, SUMMONS_INITIATION_CODE);
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(secondMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
+
+        final List<Object> eventList = objectStream.collect(toList());
+        final Optional<CcProsecutionRejected> ccProsecutionRejected = getFirstMatching(eventList, CcProsecutionRejected.class);
+        assertThat(ccProsecutionRejected.isPresent(), is(true));
+        assertThat(ccProsecutionRejected.get().getCaseErrors(), hasSize(1));
+        assertThat(ccProsecutionRejected.get().getCaseErrors().get(0).getCode(), is(ProblemCode.DUPLICATED_PROSECUTION.name()));
+    }
+
+    @MethodSource("nonSpiChannels")
+    @ParameterizedTest
+    public void shouldRejectNewCcCaseWithDuplicatedProsecutionWhenExistingUnapprovedSummonsAlreadyExistsForSameUrn(final Channel nonSpiChannel) {
+        final ProsecutionWithReferenceData summonsMessage = getProsecutionWithReferenceData(
+                of(buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE)), nonSpiChannel, SUMMONS_INITIATION_CODE);
+        prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID, summonsMessage, emptyList()));
+
+        final ProsecutionWithReferenceData ccMessage = getProsecutionWithReferenceData(
+                of(buildDefendant(SECOND_FORENAME, SECOND_SURNAME, SECOND_BIRTH_DATE, SECOND_DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_TWO)), nonSpiChannel, "C");
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(ccMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
+
+        final List<Object> eventList = objectStream.collect(toList());
+        final Optional<CcProsecutionRejected> ccProsecutionRejected = getFirstMatching(eventList, CcProsecutionRejected.class);
+        assertThat(ccProsecutionRejected.isPresent(), is(true));
+        assertThat(ccProsecutionRejected.get().getCaseErrors(), hasSize(1));
+        assertThat(ccProsecutionRejected.get().getCaseErrors().get(0).getCode(), is(ProblemCode.DUPLICATED_PROSECUTION.name()));
+    }
+
+    @Test
+    public void shouldRejectNewSjpProsecutionWithDuplicatedProsecutionWhenExistingUnapprovedSummonsAlreadyExistsForSameUrn() {
+        final ProsecutionWithReferenceData summonsMessage = getProsecutionWithReferenceData(
+                of(buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE)), CPPI, SUMMONS_INITIATION_CODE);
+        prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID, summonsMessage, emptyList()));
+
+        final ProsecutionWithReferenceData sjpMessage = getSjpProsecutionWithReferenceData("J");
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveSjpProsecution(sjpMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
+
+        final List<Object> eventList = objectStream.collect(toList());
+        final Optional<SjpProsecutionRejected> sjpRejected = getFirstMatching(eventList, SjpProsecutionRejected.class);
+        assertThat(sjpRejected.isPresent(), is(true));
+        assertThat(sjpRejected.get().getErrors().get(0).getCode(), is(ProblemCode.DUPLICATED_PROSECUTION.name()));
+    }
+
+    @MethodSource("nonSpiChannels")
+    @ParameterizedTest
+    public void shouldSuccessfullyParkDefendantsWhenNoExistingRecordExistsForSummonsUrn(final Channel nonSpiChannel) {
+        final ProsecutionWithReferenceData firstMessage = getProsecutionWithReferenceData(
+                of(buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE)), nonSpiChannel, SUMMONS_INITIATION_CODE);
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(firstMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
+
+        final List<Object> eventList = objectStream.collect(toList());
+        final Optional<DefendantsParkedForSummonsApplicationApproval> parkedEvent = getFirstMatching(eventList, DefendantsParkedForSummonsApplicationApproval.class);
+        assertThat(parkedEvent.isPresent(), is(true));
+        assertThat(parkedEvent.get().getProsecutionWithReferenceData().getExternalId(), is(EXTERNAL_ID));
+    }
+
     @Test
     public void shouldNotRaiseAnyEventWhenAcceptCaseIsCalledAndCaseNotReceivedForSJP() {
         final Stream<Object> resultObjectStream = prosecutionCaseFile.acceptCase(CASE_ID, null, referenceDataQueryService);

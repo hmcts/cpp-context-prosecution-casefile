@@ -137,4 +137,5 @@ No wildcard imports. Always use explicit per-class imports.
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan
+at `specs/001-duplicate-urn-summons-validation/plan.md`
 <!-- SPECKIT END -->

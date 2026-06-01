@@ -81,9 +81,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonValue;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

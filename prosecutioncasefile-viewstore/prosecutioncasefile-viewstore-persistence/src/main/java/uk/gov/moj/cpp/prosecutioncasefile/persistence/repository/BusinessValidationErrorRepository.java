@@ -1,81 +1,135 @@
 package uk.gov.moj.cpp.prosecutioncasefile.persistence.repository;
 
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.BusinessValidationErrorDetails;
-import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.BusinessValidationErrorDetails_;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.pagination.PaginationParameter;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.pagination.SortOrder;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 
-import org.apache.deltaspike.data.api.AbstractFullEntityRepository;
-import org.apache.deltaspike.data.api.Query;
-import org.apache.deltaspike.data.api.QueryParam;
-import org.apache.deltaspike.data.api.QueryResult;
-import org.apache.deltaspike.data.api.Repository;
+@ApplicationScoped
+public class BusinessValidationErrorRepository {
 
-@Repository
-public abstract class BusinessValidationErrorRepository
-        extends AbstractFullEntityRepository<BusinessValidationErrorDetails, UUID> {
+    @PersistenceContext(unitName = "prosecutioncasefile-persistence-unit")
+    EntityManager entityManager;
 
-    public abstract List<BusinessValidationErrorDetails> findByCaseId(final UUID caseId);
-
-    public abstract List<BusinessValidationErrorDetails> findByDefendantId(final UUID defendantId);
-
-    public abstract void deleteByCaseId(final UUID caseId);
-
-    public abstract void deleteByCaseIdAndDefendantIdIsNull(final UUID caseId);
-
-    public abstract void deleteByDefendantId(UUID defendantId);
-
-    public abstract void deleteByCaseIdAndDefendantId(final UUID caseId, final UUID defendantId);
-
-    public abstract void deleteByCaseIdAndFirstNameAndLastName(final UUID caseId, final String firstName, final String lastName);
-
-    public abstract void deleteByCaseIdAndOrganisationName(final UUID caseId, final String organisationName);
-
-
-    public Long countOfCasesWithOutstandingErrors(
-            final Optional<String> courtLocation, final Optional<String> caseType) {
-        return criteria()
-                .select(Long.class, countDistinct(BusinessValidationErrorDetails_.caseId))
-                .eqIgnoreCase(BusinessValidationErrorDetails_.courtLocation, courtLocation.orElse(null))
-                .eqIgnoreCase(BusinessValidationErrorDetails_.caseType, caseType.orElse(null))
-                .getSingleResult();
+    public BusinessValidationErrorDetails findBy(final UUID id) {
+        return entityManager.find(BusinessValidationErrorDetails.class, id);
     }
 
-    @Query(value = "SELECT e FROM BusinessValidationErrorDetails e WHERE e.caseId in (:caseIds)")
-    public abstract QueryResult<BusinessValidationErrorDetails> findAllCaseErrorDetailsByCaseIds(
-            @QueryParam("caseIds") final Collection<UUID> caseIds);
+    public List<BusinessValidationErrorDetails> findByCaseId(final UUID caseId) {
+        return entityManager.createQuery(
+                        "SELECT e FROM BusinessValidationErrorDetails e WHERE e.caseId = :caseId",
+                        BusinessValidationErrorDetails.class)
+                .setParameter("caseId", caseId)
+                .getResultList();
+    }
+
+    public List<BusinessValidationErrorDetails> findByDefendantId(final UUID defendantId) {
+        return entityManager.createQuery(
+                        "SELECT e FROM BusinessValidationErrorDetails e WHERE e.defendantId = :defendantId",
+                        BusinessValidationErrorDetails.class)
+                .setParameter("defendantId", defendantId)
+                .getResultList();
+    }
+
+    public void deleteByCaseId(final UUID caseId) {
+        entityManager.createQuery("DELETE FROM BusinessValidationErrorDetails e WHERE e.caseId = :caseId")
+                .setParameter("caseId", caseId)
+                .executeUpdate();
+    }
+
+    public void deleteByCaseIdAndDefendantIdIsNull(final UUID caseId) {
+        entityManager.createQuery(
+                        "DELETE FROM BusinessValidationErrorDetails e WHERE e.caseId = :caseId AND e.defendantId IS NULL")
+                .setParameter("caseId", caseId)
+                .executeUpdate();
+    }
+
+    public void deleteByDefendantId(final UUID defendantId) {
+        entityManager.createQuery(
+                        "DELETE FROM BusinessValidationErrorDetails e WHERE e.defendantId = :defendantId")
+                .setParameter("defendantId", defendantId)
+                .executeUpdate();
+    }
+
+    public void deleteByCaseIdAndDefendantId(final UUID caseId, final UUID defendantId) {
+        entityManager.createQuery(
+                        "DELETE FROM BusinessValidationErrorDetails e WHERE e.caseId = :caseId AND e.defendantId = :defendantId")
+                .setParameter("caseId", caseId)
+                .setParameter("defendantId", defendantId)
+                .executeUpdate();
+    }
+
+    public void deleteByCaseIdAndFirstNameAndLastName(final UUID caseId, final String firstName,
+            final String lastName) {
+        entityManager.createQuery(
+                        "DELETE FROM BusinessValidationErrorDetails e WHERE e.caseId = :caseId AND e.firstName = :firstName AND e.lastName = :lastName")
+                .setParameter("caseId", caseId)
+                .setParameter("firstName", firstName)
+                .setParameter("lastName", lastName)
+                .executeUpdate();
+    }
+
+    public void deleteByCaseIdAndOrganisationName(final UUID caseId, final String organisationName) {
+        entityManager.createQuery(
+                        "DELETE FROM BusinessValidationErrorDetails e WHERE e.caseId = :caseId AND e.organisationName = :organisationName")
+                .setParameter("caseId", caseId)
+                .setParameter("organisationName", organisationName)
+                .executeUpdate();
+    }
+
+    public Long countOfCasesWithOutstandingErrors(final Optional<String> courtLocation,
+            final Optional<String> caseType) {
+        final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        final CriteriaQuery<Long> q = cb.createQuery(Long.class);
+        final Root<BusinessValidationErrorDetails> e = q.from(BusinessValidationErrorDetails.class);
+        final List<Predicate> predicates = new ArrayList<>();
+        courtLocation.ifPresent(cl ->
+                predicates.add(cb.equal(cb.lower(e.get("courtLocation")), cl.toLowerCase())));
+        caseType.ifPresent(ct ->
+                predicates.add(cb.equal(cb.lower(e.get("caseType")), ct.toLowerCase())));
+        q.select(cb.countDistinct(e.get("caseId")));
+        if (!predicates.isEmpty()) {
+            q.where(cb.and(predicates.toArray(new Predicate[0])));
+        }
+        return entityManager.createQuery(q).getSingleResult();
+    }
 
     public List<BusinessValidationErrorDetails> fetchAllCaseErrorDetailsByCaseIds(
             final Collection<UUID> caseIds, final PaginationParameter paginationParameter) {
-
-        final CriteriaBuilder criteriaBuilder = entityManager().getCriteriaBuilder();
-
-        final CriteriaQuery<BusinessValidationErrorDetails> criteriaQuery =
-                criteriaBuilder.createQuery(BusinessValidationErrorDetails.class);
-
-        final Root<BusinessValidationErrorDetails> e =
-                criteriaQuery.from(BusinessValidationErrorDetails.class);
-
-        final Predicate predicate = e.get(BusinessValidationErrorDetails_.caseId).in(caseIds);
-        criteriaQuery.where(predicate);
-
+        final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        final CriteriaQuery<BusinessValidationErrorDetails> q =
+                cb.createQuery(BusinessValidationErrorDetails.class);
+        final Root<BusinessValidationErrorDetails> e = q.from(BusinessValidationErrorDetails.class);
+        q.where(e.get("caseId").in(caseIds));
         final String orderByField = paginationParameter.getSortField().getFieldName();
         if (paginationParameter.getSortOrder().toString().equalsIgnoreCase(SortOrder.ASC.toString())) {
-            criteriaQuery.orderBy(criteriaBuilder.asc(e.get(orderByField)));
+            q.orderBy(cb.asc(e.get(orderByField)));
         } else {
-            criteriaQuery.orderBy(criteriaBuilder.desc(e.get(orderByField)));
+            q.orderBy(cb.desc(e.get(orderByField)));
         }
+        return entityManager.createQuery(q).getResultList();
+    }
 
-        return entityManager().createQuery(criteriaQuery).getResultList();
+    public BusinessValidationErrorDetails save(final BusinessValidationErrorDetails entity) {
+        return entityManager.merge(entity);
+    }
+
+    public void remove(final BusinessValidationErrorDetails entity) {
+        final BusinessValidationErrorDetails managed =
+                entityManager.contains(entity) ? entity : entityManager.merge(entity);
+        entityManager.remove(managed);
     }
 }

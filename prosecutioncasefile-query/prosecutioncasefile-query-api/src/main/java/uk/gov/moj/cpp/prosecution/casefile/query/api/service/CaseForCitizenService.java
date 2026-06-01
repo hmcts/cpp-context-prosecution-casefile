@@ -9,7 +9,7 @@ import static java.util.Objects.nonNull;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
-import static javax.json.Json.createObjectBuilder;
+import static jakarta.json.Json.createObjectBuilder;
 import static uk.gov.moj.cpp.prosecution.casefile.query.api.service.DefendantType.LEGAL_ENTITY;
 import static uk.gov.moj.cpp.prosecution.casefile.query.api.service.DefendantType.PERSON;
 import static uk.gov.moj.cpp.prosecution.casefile.query.api.service.SjpService.INITIATION_CODE;
@@ -37,9 +37,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
+import jakarta.inject.Inject;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonObjectBuilder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

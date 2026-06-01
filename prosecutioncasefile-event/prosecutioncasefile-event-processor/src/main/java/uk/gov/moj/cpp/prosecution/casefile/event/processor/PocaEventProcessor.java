@@ -1,7 +1,7 @@
 package uk.gov.moj.cpp.prosecution.casefile.event.processor;
 
 import static java.util.Objects.nonNull;
-import static javax.json.Json.createObjectBuilder;
+import static jakarta.json.Json.createObjectBuilder;
 import static uk.gov.justice.services.core.annotation.Component.EVENT_PROCESSOR;
 import static uk.gov.justice.services.messaging.Envelope.metadataFrom;
 import static uk.gov.justice.services.messaging.JsonEnvelope.envelopeFrom;
@@ -27,10 +27,10 @@ import uk.gov.moj.cps.prosecutioncasefile.domain.event.CourtApplicationCreatedFr
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.inject.Inject;
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
+import jakarta.inject.Inject;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonObjectBuilder;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

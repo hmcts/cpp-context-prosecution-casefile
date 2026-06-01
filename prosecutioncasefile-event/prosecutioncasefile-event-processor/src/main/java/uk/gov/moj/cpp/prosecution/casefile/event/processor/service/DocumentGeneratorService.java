@@ -1,7 +1,7 @@
 package uk.gov.moj.cpp.prosecution.casefile.event.processor.service;
 
-import static javax.json.Json.createObjectBuilder;
-import static javax.transaction.Transactional.TxType.REQUIRES_NEW;
+import static jakarta.json.Json.createObjectBuilder;
+import static jakarta.transaction.Transactional.TxType.REQUIRES_NEW;
 
 import uk.gov.justice.services.core.dispatcher.SystemUserProvider;
 import uk.gov.justice.services.fileservice.api.FileServiceException;
@@ -17,9 +17,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
-import javax.inject.Inject;
-import javax.json.JsonObject;
-import javax.transaction.Transactional;
+import jakarta.inject.Inject;
+import jakarta.json.JsonObject;
+import jakarta.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

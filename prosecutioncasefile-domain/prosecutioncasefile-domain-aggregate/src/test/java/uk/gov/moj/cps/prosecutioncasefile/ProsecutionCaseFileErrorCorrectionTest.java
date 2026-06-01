@@ -3,8 +3,8 @@ package uk.gov.moj.cps.prosecutioncasefile;
 import static java.util.Collections.singletonList;
 import static java.util.Optional.ofNullable;
 import static java.util.UUID.randomUUID;
-import static javax.json.Json.createArrayBuilder;
-import static javax.json.Json.createObjectBuilder;
+import static jakarta.json.Json.createArrayBuilder;
+import static jakarta.json.Json.createObjectBuilder;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
@@ -84,14 +84,12 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.json.Json;
-import javax.json.JsonObject;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
 
-import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.rules.ExpectedException;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
@@ -114,8 +112,6 @@ public class ProsecutionCaseFileErrorCorrectionTest {
     private static final LocalDate OFFENCE_CHARGE_DATE_IN_FUTURE = LocalDate.now().plusMonths(4);
     private static final LocalDate OFFENCE_ARREST_DATE_IN_FUTURE = LocalDate.now().plusMonths(4);
     private static final UUID OFFENCE_ID = randomUUID();
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
     @Mock
     private ReferenceDataQueryService referenceDataQueryService;
     private List<CaseRefDataEnricher> caseRefDataEnrichers;

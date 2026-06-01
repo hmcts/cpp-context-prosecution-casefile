@@ -3,26 +3,25 @@ package uk.gov.moj.cpp.prosecution.casefile.helper;
 import static com.jayway.awaitility.Awaitility.await;
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.withJsonPath;
 import static java.util.Optional.empty;
-import static javax.json.Json.createReader;
+import static jakarta.json.Json.createReader;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.not;
 import static uk.gov.justice.services.test.utils.core.http.BaseUriProvider.getBaseUri;
 import static uk.gov.justice.services.test.utils.core.matchers.JsonValueIsJsonMatcher.isJson;
 
-import uk.gov.justice.services.test.utils.core.rest.RestClient;
 import uk.gov.justice.services.test.utils.core.rest.ResteasyClientBuilderFactory;
 
 import java.io.StringReader;
 import java.util.Objects;
 import java.util.Optional;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonValue;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 import com.jayway.awaitility.core.ConditionTimeoutException;
 import org.hamcrest.Matcher;
@@ -92,10 +91,10 @@ public class ActivitiHelper {
     }
 
     private static JsonObject runQuery(final String url) {
-        final RestClient restClient = new RestClient();
-        final String contentType = "application/json";
-        final Response response = restClient.query(url, contentType);
-        return createReader(new StringReader(response.readEntity(String.class))).readObject();
+        try (Response response = ResteasyClientBuilderFactory.clientBuilder().build()
+                .target(url).request(MediaType.APPLICATION_JSON_TYPE).get()) {
+            return createReader(new StringReader(response.readEntity(String.class))).readObject();
+        }
     }
 
     private static void sendPostRequest(final String url, final JsonObject payload) {

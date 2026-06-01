@@ -6,14 +6,14 @@ import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
-import static javax.ws.rs.core.Response.Status.OK;
+import static jakarta.ws.rs.core.Response.Status.OK;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.WiremockTestHelper.waitForStubToBeReady;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-import javax.json.Json;
-import javax.ws.rs.core.Response;
+import jakarta.json.Json;
+import jakarta.ws.rs.core.Response;
 
 import org.apache.http.HttpHeaders;
 

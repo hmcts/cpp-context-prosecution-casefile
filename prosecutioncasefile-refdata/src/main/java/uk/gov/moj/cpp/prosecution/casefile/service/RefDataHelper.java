@@ -1,9 +1,11 @@
 package uk.gov.moj.cpp.prosecution.casefile.service;
 
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseMarker.caseMarker;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.CourtRoom.courtRoom;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.OffenceDateCodeReferenceData.offenceDateCodeReferenceData;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.OffenderCodeReferenceData.offenderCodeReferenceData;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.OrganisationUnitReferenceData.organisationUnitReferenceData;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.OrganisationUnitWithCourtroomReferenceData.organisationUnitWithCourtroomReferenceData;
 
 import uk.gov.justice.core.courts.CourtApplicationType;
 import uk.gov.justice.services.common.converter.jackson.ObjectMapperProducer;
@@ -20,6 +22,7 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ObservedEthnicityReferen
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.OffenceDateCodeReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.OffenceReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.OffenderCodeReferenceData;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CourtRoom;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.OrganisationUnitReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.OrganisationUnitWithCourtroomReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.PoliceForceReferenceData;
@@ -36,9 +39,9 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 
-import javax.json.JsonNumber;
-import javax.json.JsonObject;
-import javax.json.JsonValue;
+import jakarta.json.JsonNumber;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -263,14 +266,48 @@ public class RefDataHelper {
 
     public static Function<JsonValue, OrganisationUnitWithCourtroomReferenceData> asOrganisationUnitWithCourtroomRefData() {
         return jsonValue -> {
-            try {
-                return OBJECT_MAPPER.readValue(jsonValue.toString(), OrganisationUnitWithCourtroomReferenceData.class);
-            } catch (IOException e) {
-                LOGGER.error("Unable to unmarshal OrganisationUnitWithCourtroomReferenceDataId: {}", jsonValue.asJsonObject().getString(FIELD_ID, DEFAULT_VALUE), e);
-                return null;
-            }
-        };
+            final JsonObject refDataObject = (JsonObject) jsonValue;
+            final OrganisationUnitWithCourtroomReferenceData.Builder builder = organisationUnitWithCourtroomReferenceData();
 
+            getStringFromJson(FIELD_ID, refDataObject).ifPresent(builder::withId);
+            getStringFromJson(OUCODE, refDataObject).ifPresent(builder::withOucode);
+            getStringFromJson("oucodeL1Code", refDataObject).ifPresent(builder::withOucodeL1Code);
+            getStringFromJson("oucodeL1Name", refDataObject).ifPresent(builder::withOucodeL1Name);
+            getStringFromJson("oucodeL3Code", refDataObject).ifPresent(builder::withOucodeL3Code);
+            getStringFromJson("oucodeL3Name", refDataObject).ifPresent(builder::withOucodeL3Name);
+            getStringFromJson("oucodeL3WelshName", refDataObject).ifPresent(builder::withOucodeL3WelshName);
+            getStringFromJson("address1", refDataObject).ifPresent(builder::withAddress1);
+            getStringFromJson("address2", refDataObject).ifPresent(builder::withAddress2);
+            getStringFromJson("address3", refDataObject).ifPresent(builder::withAddress3);
+            getStringFromJson("address4", refDataObject).ifPresent(builder::withAddress4);
+            getStringFromJson("address5", refDataObject).ifPresent(builder::withAddress5);
+            getStringFromJson("postcode", refDataObject).ifPresent(builder::withPostcode);
+            getStringFromJson("welshAddress1", refDataObject).ifPresent(builder::withWelshAddress1);
+            getStringFromJson("welshAddress2", refDataObject).ifPresent(builder::withWelshAddress2);
+            getStringFromJson("welshAddress3", refDataObject).ifPresent(builder::withWelshAddress3);
+            getStringFromJson("welshAddress4", refDataObject).ifPresent(builder::withWelshAddress4);
+            getStringFromJson("welshAddress5", refDataObject).ifPresent(builder::withWelshAddress5);
+            getStringFromJson("defaultStartTime", refDataObject).ifPresent(builder::withDefaultStartTime);
+            getStringFromJson("defaultDurationHrs", refDataObject).ifPresent(builder::withDefaultDurationHrs);
+
+            if (refDataObject.containsKey("isWelsh") && !refDataObject.isNull("isWelsh")) {
+                builder.withIsWelsh(refDataObject.getBoolean("isWelsh"));
+            }
+
+            if (refDataObject.containsKey("courtRoom") && !refDataObject.isNull("courtRoom")) {
+                builder.withCourtRoom(buildCourtRoom(refDataObject.getJsonObject("courtRoom")));
+            }
+
+            return builder.build();
+        };
+    }
+
+    private static CourtRoom buildCourtRoom(final JsonObject courtRoomJson) {
+        final CourtRoom.Builder builder = courtRoom();
+        getStringFromJson(FIELD_ID, courtRoomJson).ifPresent(builder::withId);
+        getIntFromJson("courtroomId", courtRoomJson).ifPresent(builder::withCourtroomId);
+        getStringFromJson("courtroomName", courtRoomJson).ifPresent(builder::withCourtroomName);
+        return builder.build();
     }
 
     public static Function<JsonValue, OrganisationUnitReferenceData> asOrganisationUnitRefData() {

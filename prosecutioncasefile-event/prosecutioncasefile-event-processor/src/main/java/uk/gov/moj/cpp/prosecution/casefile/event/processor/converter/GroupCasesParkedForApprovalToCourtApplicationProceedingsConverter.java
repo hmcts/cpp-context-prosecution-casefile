@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 @SuppressWarnings({"Duplicates", "duplicates"})
 public class GroupCasesParkedForApprovalToCourtApplicationProceedingsConverter implements ParameterisedConverter<GroupCasesParkedForApproval, InitiateCourtApplicationProceedings, Metadata> {
 

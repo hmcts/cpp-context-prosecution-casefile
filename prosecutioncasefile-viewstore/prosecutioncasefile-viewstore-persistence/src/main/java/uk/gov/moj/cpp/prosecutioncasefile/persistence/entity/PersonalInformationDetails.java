@@ -5,14 +5,11 @@ import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
 import java.io.Serializable;
 import java.util.Optional;
 
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -23,11 +20,6 @@ public class PersonalInformationDetails implements Serializable {
     @Id
     @Column(name = "personal_information_id", unique = true, nullable = false)
     private String personalInformationId;
-
-    @MapsId
-    @OneToOne(mappedBy = "personalInformation")
-    @JoinColumn(name = "personal_information_id")
-    private DefendantDetails defendantDetails;
 
     @Column(name = "title")
     private String title;
@@ -133,14 +125,6 @@ public class PersonalInformationDetails implements Serializable {
 
     public void setContactDetails(final ContactDetails contactDetails) {
         this.contactDetails = contactDetails;
-    }
-
-    public DefendantDetails getDefendantDetails() {
-        return defendantDetails;
-    }
-
-    public void setDefendantDetails(final DefendantDetails defendantDetails) {
-        this.defendantDetails = defendantDetails;
     }
 
     @Override

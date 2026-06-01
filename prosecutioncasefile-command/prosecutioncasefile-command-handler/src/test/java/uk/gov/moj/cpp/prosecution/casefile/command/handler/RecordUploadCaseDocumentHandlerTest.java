@@ -28,7 +28,7 @@ import uk.gov.moj.cps.prosecutioncasefile.domain.event.UploadCaseDocumentRecorde
 
 import java.util.UUID;
 
-import javax.json.JsonValue;
+import jakarta.json.JsonValue;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

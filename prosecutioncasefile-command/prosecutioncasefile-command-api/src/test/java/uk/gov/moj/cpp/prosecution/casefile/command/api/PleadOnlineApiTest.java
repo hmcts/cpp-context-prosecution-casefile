@@ -2,7 +2,7 @@ package uk.gov.moj.cpp.prosecution.casefile.command.api;
 
 import static java.util.Arrays.asList;
 import static java.util.UUID.randomUUID;
-import static javax.json.Json.createObjectBuilder;
+import static jakarta.json.Json.createObjectBuilder;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -30,7 +30,7 @@ import uk.gov.moj.cps.prosecutioncasefile.command.api.PleadOnlinePcqVisited;
 
 import java.util.UUID;
 
-import javax.json.JsonObject;
+import jakarta.json.JsonObject;
 
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;

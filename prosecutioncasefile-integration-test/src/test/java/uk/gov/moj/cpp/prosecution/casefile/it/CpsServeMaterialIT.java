@@ -30,7 +30,9 @@ import static uk.gov.moj.cpp.prosecution.casefile.stub.ProgressionStub.stubProgr
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ProgressionStub.stubProgressionQueryServiceForForm;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForOffenceCodeList;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForOffenceCodeWithEitherWayModeOfTrial;
+import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubGetApplicationType;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubGetCaseMarkersWithCode;
+import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubGetOrganisationUnitWithOneCourtroomForSubmitApplication;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.TestUtils.readFile;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.rules.forms.FormConstant.ANY_OTHER;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.rules.forms.FormConstant.ASN;
@@ -66,8 +68,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import javax.json.JsonArray;
-import javax.json.JsonObject;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonObject;
 
 import com.jayway.awaitility.Awaitility;
 import org.hamcrest.CoreMatchers;
@@ -80,6 +82,7 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 public class CpsServeMaterialIT extends BaseIT {
 
     private static final String CASE_MARKER_CODE = "ABC";
+    private static final String APPLICATION_TYPE_CODE = "CJ03564";
     private static final String PET_PAYLOAD = "stub-data/public.stagingprosecutors.cps-serve-pet-received.json";
     private static final String PET_PAYLOAD_ASN_ONLY = "stub-data/public.stagingprosecutors.cps-serve-pet-received_asn_only.json";
     private static final String PET_PAYLOAD_CPS_DEFENDANT_ID_ONLY = "stub-data/public.stagingprosecutors.cps-serve-pet-received_cpsDefendantId_only.json";
@@ -187,6 +190,8 @@ public class CpsServeMaterialIT extends BaseIT {
     @BeforeAll
     public static void setup() {
         stubGetCaseMarkersWithCode(CASE_MARKER_CODE);
+        stubGetOrganisationUnitWithOneCourtroomForSubmitApplication();
+        stubGetApplicationType(APPLICATION_TYPE_CODE);
     }
 
     @BeforeEach
@@ -233,7 +238,7 @@ public class CpsServeMaterialIT extends BaseIT {
         sendPublicEvent(EventSelector.PUBLIC_STAGING_PROSECUTORS_CPS_SERVE_PET_RECEIVED, PET_PAYLOAD, asn1, caseUrn);
 
         verifyCCEventAndProgressionCommand(readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution.json"), caseUrn, caseId);
-        final String ccApplicationPayLoad = replaceValues(readFile("command-json/prosecutioncasefile.command.submit-application.json"), caseUrn, caseUrn);
+        final String ccApplicationPayLoad = replaceValues(readFile("command-json/prosecutioncasefile.command.submit-application.json"), APPLICATION_TYPE_CODE, caseUrn);
         final SubmitCCApplicationHelper submitCCApplicationHelper = new SubmitCCApplicationHelper(EVENT_SELECTOR_INITIATE_APPLICATION_ACCEPTED);
         submitCCApplicationHelper.submitCCApplication(ccApplicationPayLoad);
         JsonEnvelope publicEventCpsServeMaterialStatusUpdatedEvent = QueueUtil.getEventFromQueue(publicEventConsumerCpsServeMaterialStatusUpdated);
@@ -533,9 +538,8 @@ public class CpsServeMaterialIT extends BaseIT {
     public void shouldHandleCpsServeBcmReceivedWhenCaseUrnPresent_OneDefendantMatchedOnly() {
         final String mismatchedAsn = "ASEC33563LS";
 
-        stubProgressionQueryServiceForForm(caseId, "progression.query.prosecutioncase-for-form-without-cps-defendant-id.json");
         createCPPICase();
-
+        stubProgressionQueryServiceForForm(caseId, "progression.query.prosecutioncase-for-form-without-cps-defendant-id.json");
 
         sendPublicEvent(EventSelector.PUBLIC_STAGING_PROSECUTORS_CPS_SERVE_BCM_RECEIVED, BCM_PAYLOAD_ONLY_ONE_MISMATCHED_ASN, asn1, mismatchedAsn, caseUrn);
 
@@ -560,10 +564,9 @@ public class CpsServeMaterialIT extends BaseIT {
     public void shouldHandleCpsServePtphReceivedWhenCaseUrnPresent_OneDefendantMatchedOnly() {
         final String mismatchedAsn = "ASEC33563LS";
 
+        createCPPICase();
         stubProgressionQueryServiceForForm(caseId, "progression.query.prosecutioncase-for-form-without-cps-defendant-id.json");
         ReferenceDataStub.stubGetOrganisationUnits();
-        createCPPICase();
-
 
         sendPublicEvent(EventSelector.PUBLIC_STAGING_PROSECUTORS_CPS_SERVE_PTPH_RECEIVED, PTPH_PAYLOAD_ONLY_ONE_MISMATCHED_ASN, caseUrn, asn1, mismatchedAsn);
 

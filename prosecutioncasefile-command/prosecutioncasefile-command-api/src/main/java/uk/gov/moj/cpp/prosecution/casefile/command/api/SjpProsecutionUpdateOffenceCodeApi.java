@@ -15,9 +15,9 @@ import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 import java.util.List;
 import java.util.Optional;
 
-import javax.inject.Inject;
-import javax.json.Json;
-import javax.json.JsonObject;
+import jakarta.inject.Inject;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
 
 import com.google.common.collect.Lists;
 

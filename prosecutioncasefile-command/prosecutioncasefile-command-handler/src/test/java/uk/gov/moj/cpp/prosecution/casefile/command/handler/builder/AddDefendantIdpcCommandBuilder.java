@@ -1,7 +1,7 @@
 package uk.gov.moj.cpp.prosecution.casefile.command.handler.builder;
 
 
-import static javax.json.Json.createObjectBuilder;
+import static jakarta.json.Json.createObjectBuilder;
 import static uk.gov.justice.services.messaging.JsonEnvelope.metadataBuilder;
 import static uk.gov.moj.cpp.prosecution.casefile.command.handler.util.DefaultTestData.CASE_DOCUMENT_ID;
 import static uk.gov.moj.cpp.prosecution.casefile.command.handler.util.DefaultTestData.CASE_DOCUMENT_MATERIAL_ID;
@@ -14,7 +14,7 @@ import uk.gov.justice.services.messaging.Metadata;
 
 import java.util.UUID;
 
-import javax.json.JsonObjectBuilder;
+import jakarta.json.JsonObjectBuilder;
 
 public class AddDefendantIdpcCommandBuilder {
 

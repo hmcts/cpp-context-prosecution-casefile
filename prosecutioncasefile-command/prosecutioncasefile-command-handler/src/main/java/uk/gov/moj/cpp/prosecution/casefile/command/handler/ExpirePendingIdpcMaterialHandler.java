@@ -9,7 +9,7 @@ import uk.gov.justice.services.eventsourcing.source.core.exception.EventStreamEx
 import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.moj.cps.prosecutioncasefile.command.handler.ExpirePendingIdpcMaterial;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 @ServiceComponent(COMMAND_HANDLER)
 public class ExpirePendingIdpcMaterialHandler extends BaseProsecutionCaseFileHandler {

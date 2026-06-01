@@ -12,8 +12,8 @@ import uk.gov.moj.cpp.prosecution.casefile.refdata.defendant.DefendantRefDataEnr
 import uk.gov.moj.cpp.prosecution.casefile.refdata.proscase.CaseRefDataEnricher;
 import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
+import jakarta.enterprise.inject.Instance;
+import jakarta.inject.Inject;
 
 @ServiceComponent(COMMAND_HANDLER)
 public class CcProsecutionHandler extends BaseProsecutionCaseFileHandler {

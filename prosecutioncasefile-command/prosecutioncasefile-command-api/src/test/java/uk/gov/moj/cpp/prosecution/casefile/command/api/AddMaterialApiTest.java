@@ -6,8 +6,8 @@ import static java.lang.String.format;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static java.util.UUID.randomUUID;
-import static javax.json.Json.createArrayBuilder;
-import static javax.json.Json.createObjectBuilder;
+import static jakarta.json.Json.createArrayBuilder;
+import static jakarta.json.Json.createObjectBuilder;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
@@ -40,8 +40,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
+import jakarta.json.JsonArrayBuilder;
+import jakarta.json.JsonObject;
 
 import com.jayway.jsonpath.ReadContext;
 import org.hamcrest.Matcher;

@@ -57,7 +57,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeAll;

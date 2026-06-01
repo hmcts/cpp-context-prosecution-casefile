@@ -2,8 +2,8 @@ package uk.gov.moj.cpp.prosecution.casefile.validation;
 
 import static java.util.Arrays.asList;
 import static java.util.UUID.randomUUID;
-import static javax.json.Json.createArrayBuilder;
-import static javax.json.Json.createObjectBuilder;
+import static jakarta.json.Json.createArrayBuilder;
+import static jakarta.json.Json.createObjectBuilder;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.hasSize;
@@ -41,10 +41,10 @@ import uk.gov.moj.cps.prosecutioncasefile.domain.event.SubmissionStatus;
 
 import java.util.List;
 
-import javax.enterprise.inject.Instance;
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonObject;
+import jakarta.enterprise.inject.Instance;
+import jakarta.json.Json;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonObject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

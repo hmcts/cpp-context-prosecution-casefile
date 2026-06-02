@@ -7,7 +7,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static com.jayway.awaitility.Awaitility.await;
 import static java.lang.ClassLoader.getSystemResourceAsStream;
 import static java.lang.String.format;
-import static uk.gov.justice.services.test.utils.core.messaging.JsonObjects.createObjectBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SELECTOR_MATERIAL_ADDED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SELECTOR_MATERIAL_ADDED_V2;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SELECTOR_MATERIAL_ADDED_WITH_WARNINGS;
@@ -38,7 +38,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import javax.json.Json;
 import javax.json.JsonObject;
 
 import com.jayway.awaitility.Awaitility;
@@ -81,7 +80,7 @@ public class AddMaterialHelper extends AbstractTestHelper {
         makePostCall(getWriteUrl(format("/cases/%s/material", caseId.toString())),
                 "application/vnd.prosecutioncasefile.add-material+json",
                 createObjectBuilder(addMaterialRequest)
-                        .add(JsonEnvelope.METADATA, Json.createObjectBuilder()
+                        .add(JsonEnvelope.METADATA, createObjectBuilder()
                                 .add("id", UUID.randomUUID().toString())
                                 .add("name", "prosecutioncasefile.add-material")
                                 .add("submissionId", submissionId.toString())
@@ -99,7 +98,7 @@ public class AddMaterialHelper extends AbstractTestHelper {
         makePostCall(getWriteUrl(format("/cases/%s/material", caseId.toString())),
                 "application/vnd.prosecutioncasefile.add-materials+json",
                 createObjectBuilder(addMaterialRequest)
-                        .add(JsonEnvelope.METADATA, Json.createObjectBuilder()
+                        .add(JsonEnvelope.METADATA, createObjectBuilder()
                                 .add("id", UUID.randomUUID().toString())
                                 .add("name", "prosecutioncasefile.add-materials")
                                 .add("submissionId", submissionId.toString())
@@ -114,7 +113,7 @@ public class AddMaterialHelper extends AbstractTestHelper {
         makePostCall(getWriteUrl(format("/cases/%s/material", caseId)),
                 "application/vnd.prosecutioncasefile.add-material-v2+json",
                 createObjectBuilder(addMaterialRequest)
-                        .add(JsonEnvelope.METADATA, Json.createObjectBuilder()
+                        .add(JsonEnvelope.METADATA, createObjectBuilder()
                                 .add("id", UUID.randomUUID().toString())
                                 .add("name", "prosecutioncasefile.add-material-v2")
                                 .add("submissionId", submissionId.toString())
@@ -129,7 +128,7 @@ public class AddMaterialHelper extends AbstractTestHelper {
         makePostCall(getWriteUrl(format("/applications/%s/material", applicationId.toString())),
                 "application/vnd.prosecutioncasefile.add-application-material-v2+json",
                 createObjectBuilder(addMaterialRequest)
-                        .add(JsonEnvelope.METADATA, Json.createObjectBuilder()
+                        .add(JsonEnvelope.METADATA, createObjectBuilder()
                                 .add("id", UUID.randomUUID().toString())
                                 .add("name", "prosecutioncasefile.add-application-material-v2")
                                 .add("submissionId", submissionId.toString())
@@ -144,7 +143,7 @@ public class AddMaterialHelper extends AbstractTestHelper {
         makePostCall(getWriteUrl(format("/cases/%s/material", caseId.toString())),
                 "application/vnd.prosecutioncasefile.add-cps-material+json",
                 createObjectBuilder(addCpsMaterialRequest)
-                        .add(JsonEnvelope.METADATA, Json.createObjectBuilder()
+                        .add(JsonEnvelope.METADATA, createObjectBuilder()
                                 .add("id", UUID.randomUUID().toString())
                                 .add("name", "prosecutioncasefile.add-cps-material")
                                 .add("submissionId", submissionId.toString())

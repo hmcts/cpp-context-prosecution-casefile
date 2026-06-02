@@ -2,8 +2,6 @@ package uk.gov.moj.cpp.prosecution.casefile.service;
 
 import static com.jayway.jsonassert.JsonAssert.with;
 import static java.util.UUID.randomUUID;
-import static javax.json.Json.createArrayBuilder;
-import static javax.json.Json.createObjectBuilder;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -14,12 +12,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static uk.gov.justice.services.messaging.JsonObjects.createArrayBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static uk.gov.justice.services.messaging.spi.DefaultJsonMetadata.metadataBuilder;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Offence.offence;
 import static uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryServiceTestHelper.buildCommandWith;
 import static uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryServiceTestHelper.buildCourtLocations;
 import static uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryServiceTestHelper.buildHearingTypes;
-//import static uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryServiceTestHelper.buildLjaDetails;
 import static uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryServiceTestHelper.buildOrganisationUnitWithCourtroom;
 import static uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryServiceTestHelper.buildSelfDefinedInformationEthnicity;
 import static uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryServiceTestHelper.buildVehicleCodes;
@@ -75,7 +74,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
@@ -477,23 +475,21 @@ public class ReferenceDataQueryServiceTest {
     }
 
     private JsonObject getMockReferenceDataInitiationCodes() {
-        return Json.createObjectBuilder().add("initiationTypes",
-                Json.createArrayBuilder()
-                        .add(
-                                Json.createObjectBuilder()
+        return createObjectBuilder().add("initiationTypes",
+                        createArrayBuilder()
+                                .add(createObjectBuilder()
                                         .add("id", "4aaecac5-222b-402d-9047-84803679edac")
                                         .add(SEQUENCE, 10)
                                         .add("code", "AA")
                                         .add(VALID_FROM, "2019-03-11")
                                         .build())
-                        .add(
-                                Json.createObjectBuilder()
+                                .add(createObjectBuilder()
                                         .add("id", "5aaecac5-222b-402d-9047-84803679edac")
                                         .add(SEQUENCE, 20)
                                         .add("code", "BB")
                                         .add(VALID_FROM, "2019-03-01")
                                         .build())
-                        .build())
+                                .build())
 
                 .build();
     }
@@ -533,7 +529,7 @@ public class ReferenceDataQueryServiceTest {
     }
 
     private JsonObject getMockReferenceDataProsecutors() {
-        return Json.createObjectBuilder()
+        return createObjectBuilder()
                 .add("id", "4aaecac5-222b-402d-9047-84803679edac")
                 .add("sequenceNumber", 10)
                 .add("fullName", "fullName")

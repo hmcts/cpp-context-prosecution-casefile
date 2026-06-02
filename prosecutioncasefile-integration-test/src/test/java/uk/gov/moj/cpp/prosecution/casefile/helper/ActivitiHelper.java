@@ -3,10 +3,11 @@ package uk.gov.moj.cpp.prosecution.casefile.helper;
 import static com.jayway.awaitility.Awaitility.await;
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.withJsonPath;
 import static java.util.Optional.empty;
-import static javax.json.Json.createReader;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.not;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createReader;
 import static uk.gov.justice.services.test.utils.core.http.BaseUriProvider.getBaseUri;
 import static uk.gov.justice.services.test.utils.core.matchers.JsonValueIsJsonMatcher.isJson;
 
@@ -17,7 +18,6 @@ import java.io.StringReader;
 import java.util.Objects;
 import java.util.Optional;
 
-import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonValue;
 import javax.ws.rs.client.Entity;
@@ -88,7 +88,7 @@ public class ActivitiHelper {
 
     private static void executeJob(final String jobId) {
         final String url = ACTIVITI_BASE_PATH + "management/jobs/" + jobId;
-        sendPostRequest(url, Json.createObjectBuilder().add("action", "execute").build());
+        sendPostRequest(url, createObjectBuilder().add("action", "execute").build());
     }
 
     private static JsonObject runQuery(final String url) {

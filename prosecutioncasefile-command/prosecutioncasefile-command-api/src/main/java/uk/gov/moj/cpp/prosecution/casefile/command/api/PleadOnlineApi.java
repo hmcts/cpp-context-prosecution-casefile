@@ -2,11 +2,11 @@ package uk.gov.moj.cpp.prosecution.casefile.command.api;
 
 import static java.util.Arrays.asList;
 import static java.util.Objects.nonNull;
-import static javax.json.Json.createObjectBuilder;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_API;
 import static uk.gov.justice.services.core.enveloper.Enveloper.envelop;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;
 import static uk.gov.justice.services.messaging.Envelope.metadataFrom;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilderWithFilter;
 import static uk.gov.moj.cpp.prosecution.casefile.command.api.service.AddressService.normalizePostcodeInAddress;
 import static uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.InitiationCode.J;
@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
@@ -126,7 +125,7 @@ public class PleadOnlineApi {
 
 
     private JsonObject getCaseDetailFromSjp(final Envelope<PleadOnline> envelope) {
-        final JsonObject queryCasePayload = Json.createObjectBuilder()
+        final JsonObject queryCasePayload = createObjectBuilder()
                 .add(CASE_ID, envelope.payload().getCaseId().toString())
                 .build();
         final Envelope<JsonObject> requestEnvelope = envelop(queryCasePayload)

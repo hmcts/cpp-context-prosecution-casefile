@@ -185,9 +185,13 @@ import javax.json.JsonReader;
 
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("java:S4738")
 public class ProsecutionCaseFile implements Aggregate {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProsecutionCaseFile.class);
+
     private static final long serialVersionUID = 8155753984190031446L;
     private static final String EXPIRED_AT = "expiredAt";
     private static final String SUMMONS_INITIATION_CODE = "S";
@@ -481,6 +485,9 @@ public class ProsecutionCaseFile implements Aggregate {
         final boolean firstMessageFromSpi = SPI.equals(prosecutionChannel) && (correctingKnownErrors || noErrorsAndNotSeenBefore);
         final boolean messageFromCppiOrMccOrCivil = (MCC.equals(prosecutionChannel) || CPPI.equals(prosecutionChannel) || CIVIL.equals(prosecutionChannel));
 
+        LOGGER.info("messageFromCppiOrMccOrCivil - {} ", messageFromCppiOrMccOrCivil);
+        LOGGER.info("prosecutionChannel - {} ", prosecutionChannel.toString());
+
         if (isEmpty(prosecutionWithReferenceData.getProsecution().getDefendants())) {
             return apply(builder.build());
         }
@@ -524,6 +531,7 @@ public class ProsecutionCaseFile implements Aggregate {
         final boolean hasNoErrors = isEmpty(caseProblems) && isEmpty(defendantErrors);
 
         if (hasNoErrors && (firstMessageFromSpi || messageFromCppiOrMccOrCivil)) {
+            LOGGER.info("Inside if - processWithoutProblems");
             return processWithoutProblems(prosecutionWithReferenceData, defendantsWithReferenceData, builder);
         }
 
@@ -762,6 +770,7 @@ public class ProsecutionCaseFile implements Aggregate {
         }
 
         if (SPI.equals(prosecutionChannel) || defendantWarningsForIncomingMessage.isEmpty()) {
+            LOGGER.info("processWithoutProblems - {} ", defendantWarningsForIncomingMessage.isEmpty());
             return apply(builder.add(ccCaseReceived()
                     .withProsecutionWithReferenceData(prosecutionWithReferenceData)
                     .withId(randomUUID())
@@ -908,6 +917,7 @@ public class ProsecutionCaseFile implements Aggregate {
 
     public Stream<Object> addMaterialV2(final AddMaterialCommonV2 addMaterialCommonV2, final ReferenceDataQueryService referenceDataQueryService) {
         final Builder<Object> builder = builder();
+        LOGGER.info("isProsecutionAccepted - {} ", isProsecutionAccepted());
         final Object event = isProsecutionAccepted()
                 ? validateMaterialV2(addMaterialCommonV2, referenceDataQueryService)
                 : ProsecutionCaseFileHelper.markMaterialAsPendingV2(addMaterialCommonV2);
@@ -927,6 +937,7 @@ public class ProsecutionCaseFile implements Aggregate {
 
         if (defendantSubject != null) {
             final String defendentId = ProsecutionCaseFileHelper.getDefendantId(defendantSubject);
+            LOGGER.info("defendentId - {} ", defendentId);
             this.validDefendantIds.put(defendentId, cpDefendantId);
             this.pendingMaterialsV2.stream()
                     .filter(materialPendingV2 -> ProsecutionCaseFileHelper.getDefendantId(materialPendingV2.getProsecutionCaseSubject().getDefendantSubject()).equals(defendentId))

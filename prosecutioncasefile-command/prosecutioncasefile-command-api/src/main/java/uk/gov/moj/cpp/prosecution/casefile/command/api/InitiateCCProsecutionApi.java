@@ -17,6 +17,8 @@ import static uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.PleaType.GUI
 import static uk.gov.moj.cpp.prosecution.casefile.refdata.defendant.OffenceLocationHelper.getOffenceLocation;
 
 import com.google.common.collect.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.gov.justice.core.courts.CivilOffence;
 
@@ -55,6 +57,7 @@ import javax.inject.Inject;
 @SuppressWarnings({"java:S126", "java:S1541"})
 @ServiceComponent(COMMAND_API)
 public class InitiateCCProsecutionApi {
+    private static final Logger LOGGER = LoggerFactory.getLogger(InitiateCCProsecutionApi.class);
 
     public static final String CONVICTING_COURT_CODE_IS_MANDATORY = "convicting court code is mandatory";
     public static final String PLEA_DATE_MUST_BE_TODAY_OR_IN_THE_PAST = "plea date must be today or in the past";
@@ -94,6 +97,8 @@ public class InitiateCCProsecutionApi {
 
         Channel channel = envelope.payload().getChannel();
         HearingRequest listNewHearing = envelope.payload().getListNewHearing();
+
+        LOGGER.info("channel - {} ", channel.toString());
 
         boolean isMCCWithNewListAndInitialHearing =
                 Channel.MCC.equals(channel) &&

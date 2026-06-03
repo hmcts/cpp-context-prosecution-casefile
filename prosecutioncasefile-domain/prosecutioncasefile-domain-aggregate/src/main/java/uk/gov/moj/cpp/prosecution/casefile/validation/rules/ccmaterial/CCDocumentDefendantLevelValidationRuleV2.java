@@ -33,7 +33,11 @@ import uk.gov.moj.cpp.prosecution.casefile.validation.rules.ValidationRule;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class CCDocumentDefendantLevelValidationRuleV2 implements ValidationRule<CaseDocumentWithReferenceData, ReferenceDataQueryService> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CCDocumentDefendantLevelValidationRuleV2.class);
 
     @Override
     public ValidationResult validate(final CaseDocumentWithReferenceData caseDocumentWithReferenceData, final ReferenceDataQueryService referenceDataQueryService) {
@@ -79,6 +83,7 @@ public class CCDocumentDefendantLevelValidationRuleV2 implements ValidationRule<
         }
 
         final String defendantId = getDefendantId(caseDocumentWithReferenceData.getProsecutionCaseSubject().getDefendantSubject());
+        LOGGER.info("defendantId - {} ", defendantId);
 
         final DefendantSubject defendantSubject = caseDocumentWithReferenceData.getProsecutionCaseSubject().getDefendantSubject();
         if(defendantSubject.getCpsPersonDefendantDetails() == null && defendantSubject.getProsecutorPersonDefendantDetails() == null){
@@ -88,6 +93,7 @@ public class CCDocumentDefendantLevelValidationRuleV2 implements ValidationRule<
             }
             return VALID;
         }else{
+            LOGGER.info("else...");
             return matchesPersonalInformation(caseDocumentWithReferenceData, defendantSubject, defendantId);
         }
     }
@@ -109,10 +115,13 @@ public class CCDocumentDefendantLevelValidationRuleV2 implements ValidationRule<
     private ValidationResult matchesPersonalInformation(final CaseDocumentWithReferenceData caseDocumentWithReferenceData, final DefendantSubject defendantSubject, final String defendantId) {
         final List<Defendant> matchedDefendants = new ArrayList<>();
         final List<ProblemValue> problemValues = matchDefendants(caseDocumentWithReferenceData, defendantSubject, matchedDefendants);
+        LOGGER.info("matchedDefendants.size() - {} ", matchedDefendants.size());
+
         if(matchedDefendants.size() >  1){
             problemValues.clear();
             return newValidationResult(of(newProblem(DUPLICATE_DEFENDANT, PROSECUTOR_DEFENDANT_ID.getValue(), defendantId)));
         }else if(matchedDefendants.size() ==  1){
+            LOGGER.info("matchedDefendants.Id - {} ", matchedDefendants.get(0).getId());
             caseDocumentWithReferenceData.setDefendantId(fromString(matchedDefendants.get(0).getId()));
         }
         return VALID;

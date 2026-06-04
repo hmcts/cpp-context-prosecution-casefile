@@ -43,7 +43,7 @@ public class AddMaterialApi {
 
     @Handles("prosecutioncasefile.add-material")
     public void addMaterial(final JsonEnvelope addMaterialCommand) throws FileServiceException {
-        LOGGER.info("Received command to add material with id {} to case file with id {}", addMaterialCommand.payloadAsJsonObject().getJsonObject(MATERIAL).getString("id"), addMaterialCommand.payloadAsJsonObject().getString("caseId"));
+        LOGGER.info(".................Received command to add material with id {} to case file with id.............");
         final JsonObject addMaterialPayload = addMaterialCommand.payloadAsJsonObject();
 
         final JsonObject material = addMaterialPayload.getJsonObject(MATERIAL);
@@ -82,7 +82,7 @@ public class AddMaterialApi {
     @Handles("prosecutioncasefile.add-material-v2")
     public void addMaterialV2(final JsonEnvelope addMaterialCommand) {
         final JsonObject addMaterialPayload = addMaterialCommand.payloadAsJsonObject();
-        LOGGER.info("Received command to add material with id {} to case file with id {}", addMaterialPayload.getJsonObject(MATERIAL).getString("id"), addMaterialPayload.getString("caseId"));
+        LOGGER.info("...............Received command to add material v2 with id {} to case file with id..........");
          final Metadata metadata = metadataFrom(addMaterialCommand.metadata())
                 .withName("prosecutioncasefile.command.add-material-v2")
                 .build();

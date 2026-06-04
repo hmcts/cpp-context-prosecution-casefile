@@ -1,0 +1,11 @@
+[
+  {
+    "code": "SUMMONS_CODE_INVALID",
+    "values": [
+      {
+        "key": "summonsCode",
+        "value": "INVALID_SUMMONS"
+      }
+    ]
+  }
+]

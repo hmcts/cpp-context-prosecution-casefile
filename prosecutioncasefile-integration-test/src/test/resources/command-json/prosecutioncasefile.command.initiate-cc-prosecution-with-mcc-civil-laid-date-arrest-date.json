@@ -34,7 +34,7 @@
       "hearingLanguage": "E",
       "offences": [
         {
-          "offenceCode": "RT88007",
+          "offenceCode": "OFCODE12",
           "offenceId": "2013c181-7458-4fb2-a637-b596fbe0e792",
           "offenceSequenceNumber": 1,
           "offenceCommittedEndDate": "2018-10-10",

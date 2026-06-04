@@ -637,6 +637,18 @@ class ValidationErrorIT extends BaseIT {
     }
 
     @Test
+    void shouldRaiseValidationErrorWhenCivilCasePayloadHasOffenceRequiresLocation() {
+        stubOffencesForOffenceLocationRequired("stub-data/referencedataoffences.offences-list-civil-location-required.json");
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-civil-offence-location-required.json");
+        final String ccPayLoad = replaceValues(staticPayLoad, randomUUID().toString());
+        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
+        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
+        final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
+        assertThat(privateEvent.isPresent(), is(true));
+        assertErrorsExpectedForCivil("expected/civil_case_offence_requires_location_problem.json", privateEvent.get());
+    }
+
+    @Test
     void shouldRaiseValidationErrorWhenCivilCasePayloadHasInvalidCaseMarker() {
         stubOffencesForOffenceCodeForGroupCases();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-civil-invalid-case-marker.json");

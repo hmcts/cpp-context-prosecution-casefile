@@ -893,6 +893,7 @@ public class ProsecutionCaseFile implements Aggregate {
                                       final String prosecutorDefendantId, final Material material,
                                       final ReferenceDataQueryService referenceDataQueryService, final Boolean isCpsCase,
                                       final ZonedDateTime receivedDateTime) {
+        LOGGER.info(".........addMaterial - isProsecutionAccepted - {} ", isProsecutionAccepted());
         final Object event = isProsecutionAccepted()
                 ? validateMaterial(caseId, prosecutingAuthority, prosecutorDefendantId, material, referenceDataQueryService, receivedDateTime, isCpsCase)
                 : ProsecutionCaseFileHelper.markMaterialAsPending(caseId, prosecutingAuthority, prosecutorDefendantId, material, null, isCpsCase, null);
@@ -917,7 +918,7 @@ public class ProsecutionCaseFile implements Aggregate {
 
     public Stream<Object> addMaterialV2(final AddMaterialCommonV2 addMaterialCommonV2, final ReferenceDataQueryService referenceDataQueryService) {
         final Builder<Object> builder = builder();
-        LOGGER.info("isProsecutionAccepted - {} ", isProsecutionAccepted());
+        LOGGER.info("..........isProsecutionAccepted - {} ", isProsecutionAccepted());
         final Object event = isProsecutionAccepted()
                 ? validateMaterialV2(addMaterialCommonV2, referenceDataQueryService)
                 : ProsecutionCaseFileHelper.markMaterialAsPendingV2(addMaterialCommonV2);
@@ -937,7 +938,7 @@ public class ProsecutionCaseFile implements Aggregate {
 
         if (defendantSubject != null) {
             final String defendentId = ProsecutionCaseFileHelper.getDefendantId(defendantSubject);
-            LOGGER.info("defendentId - {} ", defendentId);
+            LOGGER.info("........defendentId - {} ", defendentId);
             this.validDefendantIds.put(defendentId, cpDefendantId);
             this.pendingMaterialsV2.stream()
                     .filter(materialPendingV2 -> ProsecutionCaseFileHelper.getDefendantId(materialPendingV2.getProsecutionCaseSubject().getDefendantSubject()).equals(defendentId))
@@ -1471,6 +1472,7 @@ public class ProsecutionCaseFile implements Aggregate {
     }
 
     public boolean isProsecutionAccepted() {
+        LOGGER.info("prosecutionAccepted - {} ", prosecutionAccepted);
         return prosecutionAccepted;
     }
 
@@ -1522,6 +1524,7 @@ public class ProsecutionCaseFile implements Aggregate {
     }
 
     private Object validateMaterial(final UUID caseId, final String prosecutingAuthority, final String prosecutorDefendantId, final Material material, final ReferenceDataQueryService referenceDataQueryService, final ZonedDateTime receivedDateTime, Boolean isCpsCase) {
+        LOGGER.info("validateMaterial for caseId - {}, prosecutingAuthority - {}, prosecutorDefendantId - {}, material documentType - {}, receivedDateTime - {}, isCpsCase - {}", caseId, prosecutingAuthority, prosecutorDefendantId, material.getDocumentType(), receivedDateTime, isCpsCase);
         return validateMaterialWithDocumentDetails(caseId, prosecutingAuthority, prosecutorDefendantId, material, referenceDataQueryService, receivedDateTime, isCpsCase, null);
     }
 
@@ -1535,9 +1538,10 @@ public class ProsecutionCaseFile implements Aggregate {
                                                        final DocumentDetails documentDetails) {
         final CaseDocumentWithReferenceData caseDocumentWithReferenceData = new CaseDocumentWithReferenceData(referralReasonId, isCaseReferredToCourt(), material,
                 prosecutorDefendantId, defendants, material.getDocumentType(), isCaseAssigned(), isCaseEjected());
-
+        LOGGER.info("..........validateMaterialWithDocumentDetails for caseId - {}, prosecutingAuthority - {}, prosecutorDefendantId - {}, material documentType - {}, receivedDateTime - {}, isCpsCase - {}, documentDetails - {}", caseId, prosecutingAuthority, prosecutorDefendantId, material.getDocumentType(), receivedDateTime, isCpsCase, documentDetails);
+        LOGGER.info(".......caseType - {}", caseType);
         final List<Problem> rejections = validate(caseDocumentWithReferenceData, referenceDataQueryService, MaterialValidationRuleProvider.getRejectionRules(caseType));
-
+        LOGGER.info("rejections.....{}", rejections.size());
         String cmsDocumentId = null;
         String sectionCode = null;
         Integer materialType;

@@ -6,6 +6,11 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 import org.skyscreamer.jsonassert.ArrayValueMatcher;
 import org.skyscreamer.jsonassert.Customization;
 import org.skyscreamer.jsonassert.JSONCompareMode;
@@ -457,20 +462,6 @@ class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    void laidDateAndArrestDateValidationForCivilCase() {
-        stubOffencesForOffenceCodeForGroupCases();
-        final UUID caseId = randomUUID();
-        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-civil-laid-date-arrest-date.json");
-        final String ccPayLoad = replaceValuesForOffenceLaidDateAndArrestDate(staticPayLoad, caseId.toString());
-        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
-        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
-        final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
-        assertThat(privateEvent.isPresent(), is(true));
-        assertErrorsExpectedForCivil("expected/defendant_validation_error_problems_for_laid_date_arrest_date.json", privateEvent.get());
-
-    }
-
-    @Test
     void shouldRaiseValidationErrorInvalidOffenceCodeMethod() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-alcohol-drug-level-method.json");
@@ -596,52 +587,33 @@ class ValidationErrorIT extends BaseIT {
 
     }
 
-    @Test
-    void shouldRaiseAllDefendantLevelValidationErrorsForCivilCase() {
+    @ParameterizedTest(name = "[{index}] {0}")
+    @MethodSource("civilDefendantValidationScenarios")
+    void shouldRaiseCivilDefendantValidationErrors(final String fixture, final String expectedFile) {
         stubOffencesForOffenceCodeForGroupCases();
-        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-civil-defendant-level-errors.json");
-        final String ccPayLoad = replaceValues(staticPayLoad, randomUUID().toString());
+        final String ccPayLoad = replaceValues(readFile(fixture), randomUUID().toString());
         final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
         resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
         final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
         assertThat(privateEvent.isPresent(), is(true));
-        assertErrorsExpectedForCivil("expected/civil_case_all_defendant_level_errors_problem.json", privateEvent.get());
+        assertErrorsExpectedForCivil(expectedFile, privateEvent.get());
     }
 
-    @Test
-    void shouldRaiseAllDefendantLevelValidationErrorsForMCCCivilCase() {
-        stubOffencesForOffenceCodeForGroupCases();
-        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-mcc-civil-defendant-level-errors.json");
-        final String ccPayLoad = replaceValues(staticPayLoad, randomUUID().toString());
-        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
-        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
-        final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
-        assertThat(privateEvent.isPresent(), is(true));
-        assertErrorsExpectedForCivil("expected/mcc_civil_all_defendant_level_errors_problem.json", privateEvent.get());
-    }
-
-    @Test
-    void shouldRaisePersonalInfoValidationErrorsForMCCCivilCase() {
-        stubOffencesForOffenceCodeForGroupCases();
-        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-mcc-civil-personal-info-errors.json");
-        final String ccPayLoad = replaceValues(staticPayLoad, randomUUID().toString());
-        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
-        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
-        final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
-        assertThat(privateEvent.isPresent(), is(true));
-        assertErrorsExpectedForCivil("expected/mcc_civil_group_civil_personal_info_errors_problem.json", privateEvent.get());
-    }
-
-    @Test
-    void shouldRaiseOffenceCodeNotSupportedForMCCCivilCase() {
-        stubOffencesForOffenceCodeForGroupCases();
-        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-mcc-civil-criminal-offence.json");
-        final String ccPayLoad = replaceValues(staticPayLoad, randomUUID().toString());
-        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
-        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
-        final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
-        assertThat(privateEvent.isPresent(), is(true));
-        assertErrorsExpectedForCivil("expected/civil_summons_criminal_offence_problem.json", privateEvent.get());
+    private static Stream<Arguments> civilDefendantValidationScenarios() {
+        return Stream.of(
+            Arguments.of(
+                "command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-civil-defendant-level-errors.json",
+                "expected/civil_case_all_defendant_level_errors_problem.json"),
+            Arguments.of(
+                "command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-mcc-civil-defendant-level-errors.json",
+                "expected/mcc_civil_all_defendant_level_errors_problem.json"),
+            Arguments.of(
+                "command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-mcc-civil-personal-info-errors.json",
+                "expected/mcc_civil_group_civil_personal_info_errors_problem.json"),
+            Arguments.of(
+                "command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-mcc-civil-criminal-offence.json",
+                "expected/civil_summons_criminal_offence_problem.json")
+        );
     }
 
     @Test
@@ -656,16 +628,23 @@ class ValidationErrorIT extends BaseIT {
         assertErrorsExpectedForCivil("expected/civil_case_offence_requires_location_problem.json", privateEvent.get());
     }
 
-    @Test
-    void shouldRaiseLaidDateAndArrestDateValidationErrorsForMCCCivilCase() {
+    @ParameterizedTest(name = "[{index}] {0}")
+    @MethodSource("civilLaidDateArrestDateScenarios")
+    void shouldRaiseLaidDateAndArrestDateValidationErrors(final String fixture) {
         stubOffencesForOffenceCodeForGroupCases();
-        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-mcc-civil-laid-date-arrest-date.json");
-        final String ccPayLoad = replaceValuesForOffenceLaidDateAndArrestDate(staticPayLoad, randomUUID().toString());
+        final String ccPayLoad = replaceValuesForOffenceLaidDateAndArrestDate(readFile(fixture), randomUUID().toString());
         final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
         resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
         final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
         assertThat(privateEvent.isPresent(), is(true));
         assertErrorsExpectedForCivil("expected/defendant_validation_error_problems_for_laid_date_arrest_date.json", privateEvent.get());
+    }
+
+    private static Stream<Arguments> civilLaidDateArrestDateScenarios() {
+        return Stream.of(
+            Arguments.of("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-civil-laid-date-arrest-date.json"),
+            Arguments.of("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-mcc-civil-laid-date-arrest-date.json")
+        );
     }
 
     @Test

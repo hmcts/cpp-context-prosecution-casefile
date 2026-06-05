@@ -8,7 +8,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -17,6 +16,7 @@ import static uk.gov.justice.core.courts.IndicatedPleaValue.INDICATED_GUILTY;
 import static uk.gov.justice.core.courts.MigrationSourceSystem.migrationSourceSystem;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;
 import static uk.gov.justice.services.messaging.Envelope.metadataBuilder;
+import static uk.gov.moj.cpp.prosecution.casefile.command.api.InitiateCCProsecutionApi.CIVIL_SUMMONS_CODE_INVALID;
 import static uk.gov.moj.cpp.prosecution.casefile.command.api.InitiateCCProsecutionApi.CONVICTING_COURT_CODE_IS_MANDATORY;
 import static uk.gov.moj.cpp.prosecution.casefile.command.api.InitiateCCProsecutionApi.EARLIEST_START_DATE_MUST_BE_FUTURE_DATE;
 import static uk.gov.moj.cpp.prosecution.casefile.command.api.InitiateCCProsecutionApi.EARLIEST_START_DATE_MUST_BE_PROVIDED;
@@ -36,7 +36,6 @@ import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.VerdictType.verdi
 
 import uk.gov.justice.core.courts.CivilOffence;
 import uk.gov.justice.core.courts.DefendantFineAccountNumber;
-import uk.gov.justice.core.courts.FeeStatus;
 import uk.gov.justice.core.courts.MigrationSourceSystem;
 import uk.gov.justice.services.adapter.rest.exception.BadRequestException;
 
@@ -652,7 +651,6 @@ public class InitiateCCProsecutionApiTest {
         assertThrows(BadRequestException.class, () -> initiateCCProsecutionApi.initiateCCProsecution(envelope));
     }
 
-
     private InitiateProsecution caseProsecution(final Defendant defendant, final Prosecutor prosecutor, final MigrationSourceSystem migrationSourceSystem,
                                                 final HearingRequest listNewHearingRequest) {
         return new InitiateProsecution.Builder().withCaseDetails(new CaseDetails.Builder()
@@ -727,6 +725,97 @@ public class InitiateCCProsecutionApiTest {
 
     private Envelope<InitiateProsecution> envelope(final InitiateProsecution caseProsecution) {
         return envelopeFrom(metadataBuilder().withName("Command").withId(randomUUID()), caseProsecution);
+    }
+
+    @Test
+    void shouldPassWhenCivilCaseWithMCCAndInitiationSHasSummonsCodeA() {
+        final Defendant defendant = buildDefendant(offence().build());
+        final InitiateProsecution caseProsecution = new InitiateProsecution.Builder()
+                .withCaseDetails(new CaseDetails.Builder()
+                        .withProsecutor(DVLA_PROSECUTOR)
+                        .withInitiationCode("S")
+                        .withSummonsCode("A")
+                        .build())
+                .withDefendants(List.of(defendant))
+                .withChannel(MCC)
+                .withIsCivil(true)
+                .build();
+
+        when(caseDetailsEnrichmentService.enrichCaseDetails(any(), any())).thenReturn(caseProsecution.getCaseDetails());
+        when(referenceDataQueryService.getProsecutorsByOuCode(any(), any())).thenReturn(DVLA_PROSECUTORS_REFERENCE_DATA);
+
+        initiateCCProsecutionApi.initiateCCProsecution(envelope(caseProsecution));
+
+        verify(sender).send(any());
+    }
+
+    @Test
+    void shouldPassWhenNonCivilCaseWithMCCAndInitiationSRegardlessOfSummonsCode() {
+        final Defendant defendant = buildDefendant(offence().build());
+        final InitiateProsecution caseProsecution = new InitiateProsecution.Builder()
+                .withCaseDetails(new CaseDetails.Builder()
+                        .withProsecutor(DVLA_PROSECUTOR)
+                        .withInitiationCode("S")
+                        .withSummonsCode("M")
+                        .build())
+                .withDefendants(List.of(defendant))
+                .withChannel(MCC)
+                .withIsCivil(false)
+                .build();
+
+        when(caseDetailsEnrichmentService.enrichCaseDetails(any(), any())).thenReturn(caseProsecution.getCaseDetails());
+        when(referenceDataQueryService.getProsecutorsByOuCode(any(), any())).thenReturn(DVLA_PROSECUTORS_REFERENCE_DATA);
+
+        initiateCCProsecutionApi.initiateCCProsecution(envelope(caseProsecution));
+
+        verify(sender).send(any());
+    }
+
+    @Test
+    void shouldPassWhenCivilCaseWithMCCAndInitiationORegardlessOfSummonsCode() {
+        final Defendant defendant = buildDefendant(offence().build());
+        final InitiateProsecution caseProsecution = new InitiateProsecution.Builder()
+                .withCaseDetails(new CaseDetails.Builder()
+                        .withProsecutor(DVLA_PROSECUTOR)
+                        .withInitiationCode("O")
+                        .withSummonsCode("M")
+                        .build())
+                .withDefendants(List.of(defendant))
+                .withChannel(MCC)
+                .withIsCivil(true)
+                .build();
+
+        when(caseDetailsEnrichmentService.enrichCaseDetails(any(), any())).thenReturn(caseProsecution.getCaseDetails());
+        when(referenceDataQueryService.getProsecutorsByOuCode(any(), any())).thenReturn(DVLA_PROSECUTORS_REFERENCE_DATA);
+
+        initiateCCProsecutionApi.initiateCCProsecution(envelope(caseProsecution));
+
+        verify(sender).send(any());
+    }
+
+    @Test
+    void shouldThrowBadRequestExceptionWhenCivilCaseSummonsCodeIsNotA() {
+        final Offence offence = offence().build();
+        final Defendant defendant = defendant().withOffences(List.of(offence)).build();
+
+        final InitiateProsecution caseProsecution = new InitiateProsecution.Builder()
+                .withCaseDetails(new CaseDetails.Builder()
+                        .withProsecutor(DVLA_PROSECUTOR)
+                        .withInitiationCode("S")
+                        .withSummonsCode("M")
+                        .build())
+                .withDefendants(List.of(defendant))
+                .withMigrationSourceSystem(buildMigrationSourceSystem())
+                .withChannel(MCC)
+                .withIsCivil(true)
+                .build();
+
+        final Envelope<InitiateProsecution> envelope = envelope(caseProsecution);
+
+        final BadRequestException exception = assertThrows(BadRequestException.class,
+                () -> initiateCCProsecutionApi.initiateCCProsecution(envelope));
+
+        assertEquals(CIVIL_SUMMONS_CODE_INVALID, exception.getMessage());
     }
 
     private static Stream<Arguments> parametersForCCCaseTest() {

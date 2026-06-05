@@ -7,6 +7,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static uk.gov.justice.core.courts.IndicatedPleaValue.INDICATED_GUILTY;
 import static uk.gov.justice.core.courts.InitiationCode.O;
+import static uk.gov.justice.core.courts.InitiationCode.S;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_API;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;
 import static uk.gov.justice.services.messaging.Envelope.metadataFrom;
@@ -66,6 +67,8 @@ public class InitiateCCProsecutionApi {
     public static final String WEEK_COMMENCING_MUST_BE_PROVIDED = "Week commencing must be provided";
     public static final String EARLIEST_START_DATE_MUST_BE_FUTURE_DATE = "Earliest start date must be future date";
     public static final String EARLIEST_START_DATE_MUST_BE_PROVIDED = "Earliest start date must be provided";
+    public static final String CIVIL_SUMMONS_CODE_INVALID = "Summons code must be A for civil case requests";
+    private static final String CIVIL_SUMMONS_CODE = "A";
 
     @Inject
     private Sender sender;
@@ -81,6 +84,8 @@ public class InitiateCCProsecutionApi {
     @SuppressWarnings("java:S1541")
     @Handles("prosecutioncasefile.command.initiate-cc-prosecution")
     public void initiateCCProsecution(final Envelope<InitiateProsecution> envelope) {
+        LOGGER.info("Received request to initiate CC prosecution for case with PAYLOAD: {}",
+                envelope.payload());
 
         if (envelope.payload().getDefendants().stream()
                 .anyMatch(def -> nonNull(def.getIndividual()) && nonNull(def.getIndividual().getPersonalInformation())
@@ -98,7 +103,7 @@ public class InitiateCCProsecutionApi {
         Channel channel = envelope.payload().getChannel();
         HearingRequest listNewHearing = envelope.payload().getListNewHearing();
 
-        LOGGER.info("channel - {} ", channel.toString());
+        LOGGER.info(".....channel - {} ", channel.toString());
 
         boolean isMCCWithNewListAndInitialHearing =
                 Channel.MCC.equals(channel) &&
@@ -120,6 +125,9 @@ public class InitiateCCProsecutionApi {
             }
         }
 
+        if (S.name().equalsIgnoreCase(envelope.payload().getCaseDetails().getInitiationCode())) {
+            validateCivilSummonsCode(isCivil, envelope.payload().getCaseDetails().getSummonsCode());
+        }
 
         final List<Defendant> defendants = enrichDefendants(envelope);
 
@@ -288,6 +296,12 @@ public class InitiateCCProsecutionApi {
             prosecutorsReferenceData = referenceDataQueryService.getProsecutorById(prosecutor.getProsecutionAuthorityId());
         }
         return nonNull(prosecutorsReferenceData) ? prosecutorsReferenceData.getShortName() : null;
+    }
+
+    private void validateCivilSummonsCode(final boolean isCivil, final String summonsCode) {
+        if (isCivil && !CIVIL_SUMMONS_CODE.equals(summonsCode)) {
+            throw new BadRequestException(CIVIL_SUMMONS_CODE_INVALID);
+        }
     }
 
     private void validatePleaAndVerdictInOffences(Envelope<InitiateProsecution> envelope) {

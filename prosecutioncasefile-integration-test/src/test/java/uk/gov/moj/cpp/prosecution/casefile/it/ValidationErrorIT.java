@@ -1012,4 +1012,13 @@ class ValidationErrorIT extends BaseIT {
                 withJsonPath("$.cases[0].defendants[0].errors[0].displayName", is(displayName)))
         );
     }
+
+    @Test
+    void shouldReturnBadRequestWhenCivilCaseUsesSummonsCodeOtherThanA() {
+        final UUID caseId = randomUUID();
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-civil-summons-civil-offence.json");
+        final String ccPayLoad = replaceValues(staticPayLoad, caseId.toString(), "M", "MCC");
+
+        initiateCCProsecutionHelper.initiateCCProsecutionWithBadRequest(ccPayLoad);
+    }
 }

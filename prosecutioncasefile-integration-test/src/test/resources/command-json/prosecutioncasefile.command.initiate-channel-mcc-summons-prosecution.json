@@ -2,7 +2,7 @@
   "caseDetails":{
     "caseId":"CASE-ID",
     "initiationCode":"S",
-    "summonsCode":"B",
+    "summonsCode":"A",
     "originatingOrganisation":"B01BH00",
     "cpsOrganisation": "A30AB00",
     "prosecutor":{

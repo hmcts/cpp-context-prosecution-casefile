@@ -84,6 +84,8 @@ public class InitiateCCProsecutionApi {
     @SuppressWarnings("java:S1541")
     @Handles("prosecutioncasefile.command.initiate-cc-prosecution")
     public void initiateCCProsecution(final Envelope<InitiateProsecution> envelope) {
+        LOGGER.info("Received request to initiate CC prosecution for case with PAYLOAD: {}",
+                envelope.payload());
 
         if (envelope.payload().getDefendants().stream()
                 .anyMatch(def -> nonNull(def.getIndividual()) && nonNull(def.getIndividual().getPersonalInformation())
@@ -101,7 +103,7 @@ public class InitiateCCProsecutionApi {
         Channel channel = envelope.payload().getChannel();
         HearingRequest listNewHearing = envelope.payload().getListNewHearing();
 
-        LOGGER.info("channel - {} ", channel.toString());
+        LOGGER.info(".....channel - {} ", channel.toString());
 
         boolean isMCCWithNewListAndInitialHearing =
                 Channel.MCC.equals(channel) &&

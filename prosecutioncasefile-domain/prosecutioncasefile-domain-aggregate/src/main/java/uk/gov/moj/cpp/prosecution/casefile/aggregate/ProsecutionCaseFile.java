@@ -510,6 +510,7 @@ public class ProsecutionCaseFile implements Aggregate {
         final DefendantsWithReferenceData defendantsWithReferenceData = buildDefendantWithReferenceData(prosecutionWithReferenceData, defendantRefDataEnrichers);
 
         final Boolean isCivil = Optional.ofNullable(receivedProsecutionWithReferenceData.getProsecution().getIsCivil()).orElse(false);
+        LOGGER.info("......isCivil {}", isCivil);
 
         final List<Problem> caseProblems = validate(prosecutionWithReferenceData, referenceDataQueryService, getCaseValidationRules(receivedInitiationCode));
         boolean isMCCWithListNewHearing = MCC.equals(prosecutionChannel) && Objects.nonNull(prosecutionWithReferenceData.getProsecution().getListNewHearing());
@@ -531,7 +532,7 @@ public class ProsecutionCaseFile implements Aggregate {
         final boolean hasNoErrors = isEmpty(caseProblems) && isEmpty(defendantErrors);
 
         if (hasNoErrors && (firstMessageFromSpi || messageFromCppiOrMccOrCivil)) {
-            LOGGER.info("Inside if - processWithoutProblems");
+            LOGGER.info("......Inside if - processWithoutProblems");
             return processWithoutProblems(prosecutionWithReferenceData, defendantsWithReferenceData, builder);
         }
 
@@ -770,7 +771,7 @@ public class ProsecutionCaseFile implements Aggregate {
         }
 
         if (SPI.equals(prosecutionChannel) || defendantWarningsForIncomingMessage.isEmpty()) {
-            LOGGER.info("processWithoutProblems - {} ", defendantWarningsForIncomingMessage.isEmpty());
+            LOGGER.info(".........processWithoutProblems - {} ", defendantWarningsForIncomingMessage.isEmpty());
             return apply(builder.add(ccCaseReceived()
                     .withProsecutionWithReferenceData(prosecutionWithReferenceData)
                     .withId(randomUUID())
@@ -859,9 +860,12 @@ public class ProsecutionCaseFile implements Aggregate {
 
     public Stream<Object> acceptCase(final UUID caseId, final List<UUID> defendantIds, final ReferenceDataQueryService referenceDataQueryService) {
         final Builder<Object> builder = builder();
+        LOGGER.info(".........acceptCase - isProsecutionReceived - {} ", isProsecutionReceived());
 
         if (isProsecutionReceived()) {
             final UUID externalId = getExternalIdFromDefendantIds(defendantIds);
+
+            LOGGER.info(".........acceptCase - this.caseType - {} ", this.caseType);
 
             if (this.caseType.equals(CC)) {
                 builder.accept(this.warnings.isEmpty() ? new CaseCreatedSuccessfully(caseId, this.channel, externalId) : new CaseCreatedSuccessfullyWithWarnings(caseId, EMPTY_LIST, this.channel, this.defendantWarnings, externalId, this.warnings));

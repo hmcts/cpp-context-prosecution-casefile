@@ -1,0 +1,65 @@
+[
+  {
+    "code": "DATE_OF_HEARING_EARLIER_THAN_OFFENCE_COMMITTED_DATE",
+    "values": [
+      {
+        "key": "initialHearing_dateOfHearing",
+        "value": "2018-01-01"
+      }
+    ]
+  },
+  {
+    "code": "DEFENDANT_PARENT_GUARDIAN_OBSERVED_ETHNICITY_INVALID",
+    "values": [
+      {
+        "key": "individual_parentGuardianInformation_observedEthnicity",
+        "value": "ZZZ"
+      }
+    ]
+  },
+  {
+    "code": "DEFENDANT_PARENT_GUARDIAN_SELF_DEFINED_ETHNICITY_INVALID",
+    "values": [
+      {
+        "key": "individual_parentGuardianInformation_selfDefinedEthnicity",
+        "value": "ZZZ"
+      }
+    ]
+  },
+  {
+    "code": "DEFENDANT_SELF_DEFINED_ETHNICITY_INVALID",
+    "values": [
+      {
+        "key": "individual_selfDefinedInformation_ethnicity",
+        "value": "ZZZ"
+      }
+    ]
+  },
+  {
+    "code": "DEFENDANT_OBSERVED_ETHNICITY_INVALID",
+    "values": [
+      {
+        "key": "individual_personalInformation_observedEthnicity",
+        "value": "999"
+      }
+    ]
+  },
+  {
+    "code": "DATE_OF_HEARING_IN_THE_PAST",
+    "values": [
+      {
+        "key": "initialHearing_dateOfHearing",
+        "value": "2018-01-01"
+      }
+    ]
+  },
+  {
+    "code": "DEFENDANT_ADDITIONAL_NATIONALITY_INVALID",
+    "values": [
+      {
+        "key": "individual_selfDefinedInformation_additional_nationality",
+        "value": "ZZZ"
+      }
+    ]
+  }
+]

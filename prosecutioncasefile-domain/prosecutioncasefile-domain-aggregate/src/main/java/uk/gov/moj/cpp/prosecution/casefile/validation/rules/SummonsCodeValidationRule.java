@@ -15,6 +15,8 @@ public class SummonsCodeValidationRule implements ValidationRule<ProsecutionWith
 
     public static final String SUMMONS_CASE_TYPE = "S";
 
+    private static final String CIVIL_SUMMONS_CODE = "A";
+
     @Override
     public ValidationResult validate(final ProsecutionWithReferenceData prosecutionWithReferenceData, final ReferenceDataQueryService referenceDataQueryService) {
         final String summonsCode = prosecutionWithReferenceData.getProsecution().getCaseDetails().getSummonsCode();
@@ -23,14 +25,23 @@ public class SummonsCodeValidationRule implements ValidationRule<ProsecutionWith
             return VALID;
         }
 
-        if(summonsCode == null) {
-            return newValidationResult(of(newProblem(SUMMONS_CODE_INVALID, new ProblemValue(null,CASE_SUMMONS_CODE.getValue(), ""))));
+        final boolean isCivil = Boolean.TRUE.equals(prosecutionWithReferenceData.getProsecution().getIsCivil());
+
+        if (summonsCode == null) {
+            return newValidationResult(of(newProblem(SUMMONS_CODE_INVALID, new ProblemValue(null, CASE_SUMMONS_CODE.getValue(), ""))));
         }
 
-        if ((referenceDataQueryService.retrieveSummonsCodes().stream().anyMatch(s -> s.getSummonsCode().equals(summonsCode)))) {
+        if (isCivil) {
+            if (CIVIL_SUMMONS_CODE.equals(summonsCode)) {
+                return VALID;
+            }
+            return newValidationResult(of(newProblem(SUMMONS_CODE_INVALID, new ProblemValue(null, CASE_SUMMONS_CODE.getValue(), summonsCode))));
+        }
+
+        if (referenceDataQueryService.retrieveSummonsCodes().stream().anyMatch(s -> s.getSummonsCode().equals(summonsCode))) {
             return VALID;
         } else {
-            return newValidationResult(of(newProblem(SUMMONS_CODE_INVALID, new ProblemValue(null,CASE_SUMMONS_CODE.getValue(), summonsCode))));
+            return newValidationResult(of(newProblem(SUMMONS_CODE_INVALID, new ProblemValue(null, CASE_SUMMONS_CODE.getValue(), summonsCode))));
         }
 
     }

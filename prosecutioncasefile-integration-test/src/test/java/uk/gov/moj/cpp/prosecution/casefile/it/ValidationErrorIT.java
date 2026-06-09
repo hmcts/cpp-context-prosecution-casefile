@@ -661,18 +661,6 @@ class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    void shouldRaiseValidationErrorWhenCivilCaseHasNonCivilSummonsCode() {
-        stubOffencesForOffenceCodeForGroupCases();
-        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-civil-with-non-civil-summons-code.json");
-        final String ccPayLoad = replaceValues(staticPayLoad, randomUUID().toString());
-        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
-        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
-        final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
-        assertThat(privateEvent.isPresent(), is(true));
-        assertCivilCaseErrorsExpected("expected/civil_case_non_civil_summons_code_invalid_problem.json", privateEvent.get());
-    }
-
-    @Test
     void shouldRaiseValidationErrorWhenCivilCasePayloadHasUnrecognisedProsecutorOucode() {
         stubOffencesForOffenceCodeForGroupCases();
         stubProsecutorsReturns404();

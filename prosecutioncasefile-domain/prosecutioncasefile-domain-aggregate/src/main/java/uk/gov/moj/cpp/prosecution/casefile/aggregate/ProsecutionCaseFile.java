@@ -185,13 +185,9 @@ import javax.json.JsonReader;
 
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonParser;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("java:S4738")
 public class ProsecutionCaseFile implements Aggregate {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProsecutionCaseFile.class);
-
     private static final long serialVersionUID = 8155753984190031446L;
     private static final String EXPIRED_AT = "expiredAt";
     private static final String SUMMONS_INITIATION_CODE = "S";
@@ -485,9 +481,6 @@ public class ProsecutionCaseFile implements Aggregate {
         final boolean firstMessageFromSpi = SPI.equals(prosecutionChannel) && (correctingKnownErrors || noErrorsAndNotSeenBefore);
         final boolean messageFromCppiOrMccOrCivil = (MCC.equals(prosecutionChannel) || CPPI.equals(prosecutionChannel) || CIVIL.equals(prosecutionChannel));
 
-        LOGGER.info("messageFromCppiOrMccOrCivil - {} ", messageFromCppiOrMccOrCivil);
-        LOGGER.info("prosecutionChannel - {} ", prosecutionChannel.toString());
-
         if (isEmpty(prosecutionWithReferenceData.getProsecution().getDefendants())) {
             return apply(builder.build());
         }
@@ -510,7 +503,6 @@ public class ProsecutionCaseFile implements Aggregate {
         final DefendantsWithReferenceData defendantsWithReferenceData = buildDefendantWithReferenceData(prosecutionWithReferenceData, defendantRefDataEnrichers);
 
         final Boolean isCivil = Optional.ofNullable(receivedProsecutionWithReferenceData.getProsecution().getIsCivil()).orElse(false);
-        LOGGER.info("......isCivil {}", isCivil);
 
         final List<Problem> caseProblems = validate(prosecutionWithReferenceData, referenceDataQueryService, getCaseValidationRules(receivedInitiationCode));
         boolean isMCCWithListNewHearing = MCC.equals(prosecutionChannel) && Objects.nonNull(prosecutionWithReferenceData.getProsecution().getListNewHearing());
@@ -532,7 +524,6 @@ public class ProsecutionCaseFile implements Aggregate {
         final boolean hasNoErrors = isEmpty(caseProblems) && isEmpty(defendantErrors);
 
         if (hasNoErrors && (firstMessageFromSpi || messageFromCppiOrMccOrCivil)) {
-            LOGGER.info("......Inside if - processWithoutProblems");
             return processWithoutProblems(prosecutionWithReferenceData, defendantsWithReferenceData, builder);
         }
 
@@ -771,7 +762,6 @@ public class ProsecutionCaseFile implements Aggregate {
         }
 
         if (SPI.equals(prosecutionChannel) || defendantWarningsForIncomingMessage.isEmpty()) {
-            LOGGER.info(".........processWithoutProblems - {} ", defendantWarningsForIncomingMessage.isEmpty());
             return apply(builder.add(ccCaseReceived()
                     .withProsecutionWithReferenceData(prosecutionWithReferenceData)
                     .withId(randomUUID())
@@ -860,12 +850,9 @@ public class ProsecutionCaseFile implements Aggregate {
 
     public Stream<Object> acceptCase(final UUID caseId, final List<UUID> defendantIds, final ReferenceDataQueryService referenceDataQueryService) {
         final Builder<Object> builder = builder();
-        LOGGER.info(".........acceptCase - isProsecutionReceived - {} ", isProsecutionReceived());
 
         if (isProsecutionReceived()) {
             final UUID externalId = getExternalIdFromDefendantIds(defendantIds);
-
-            LOGGER.info(".........acceptCase - this.caseType - {} ", this.caseType);
 
             if (this.caseType.equals(CC)) {
                 builder.accept(this.warnings.isEmpty() ? new CaseCreatedSuccessfully(caseId, this.channel, externalId) : new CaseCreatedSuccessfullyWithWarnings(caseId, EMPTY_LIST, this.channel, this.defendantWarnings, externalId, this.warnings));
@@ -897,7 +884,6 @@ public class ProsecutionCaseFile implements Aggregate {
                                       final String prosecutorDefendantId, final Material material,
                                       final ReferenceDataQueryService referenceDataQueryService, final Boolean isCpsCase,
                                       final ZonedDateTime receivedDateTime) {
-        LOGGER.info(".........addMaterial - isProsecutionAccepted - {} ", isProsecutionAccepted());
         final Object event = isProsecutionAccepted()
                 ? validateMaterial(caseId, prosecutingAuthority, prosecutorDefendantId, material, referenceDataQueryService, receivedDateTime, isCpsCase)
                 : ProsecutionCaseFileHelper.markMaterialAsPending(caseId, prosecutingAuthority, prosecutorDefendantId, material, null, isCpsCase, null);
@@ -922,7 +908,6 @@ public class ProsecutionCaseFile implements Aggregate {
 
     public Stream<Object> addMaterialV2(final AddMaterialCommonV2 addMaterialCommonV2, final ReferenceDataQueryService referenceDataQueryService) {
         final Builder<Object> builder = builder();
-        LOGGER.info("..........isProsecutionAccepted - {} ", isProsecutionAccepted());
         final Object event = isProsecutionAccepted()
                 ? validateMaterialV2(addMaterialCommonV2, referenceDataQueryService)
                 : ProsecutionCaseFileHelper.markMaterialAsPendingV2(addMaterialCommonV2);
@@ -942,7 +927,6 @@ public class ProsecutionCaseFile implements Aggregate {
 
         if (defendantSubject != null) {
             final String defendentId = ProsecutionCaseFileHelper.getDefendantId(defendantSubject);
-            LOGGER.info("........defendentId - {} ", defendentId);
             this.validDefendantIds.put(defendentId, cpDefendantId);
             this.pendingMaterialsV2.stream()
                     .filter(materialPendingV2 -> ProsecutionCaseFileHelper.getDefendantId(materialPendingV2.getProsecutionCaseSubject().getDefendantSubject()).equals(defendentId))
@@ -1476,7 +1460,6 @@ public class ProsecutionCaseFile implements Aggregate {
     }
 
     public boolean isProsecutionAccepted() {
-        LOGGER.info("prosecutionAccepted - {} ", prosecutionAccepted);
         return prosecutionAccepted;
     }
 
@@ -1528,7 +1511,6 @@ public class ProsecutionCaseFile implements Aggregate {
     }
 
     private Object validateMaterial(final UUID caseId, final String prosecutingAuthority, final String prosecutorDefendantId, final Material material, final ReferenceDataQueryService referenceDataQueryService, final ZonedDateTime receivedDateTime, Boolean isCpsCase) {
-        LOGGER.info("validateMaterial for caseId - {}, prosecutingAuthority - {}, prosecutorDefendantId - {}, material documentType - {}, receivedDateTime - {}, isCpsCase - {}", caseId, prosecutingAuthority, prosecutorDefendantId, material.getDocumentType(), receivedDateTime, isCpsCase);
         return validateMaterialWithDocumentDetails(caseId, prosecutingAuthority, prosecutorDefendantId, material, referenceDataQueryService, receivedDateTime, isCpsCase, null);
     }
 
@@ -1542,10 +1524,9 @@ public class ProsecutionCaseFile implements Aggregate {
                                                        final DocumentDetails documentDetails) {
         final CaseDocumentWithReferenceData caseDocumentWithReferenceData = new CaseDocumentWithReferenceData(referralReasonId, isCaseReferredToCourt(), material,
                 prosecutorDefendantId, defendants, material.getDocumentType(), isCaseAssigned(), isCaseEjected());
-        LOGGER.info("..........validateMaterialWithDocumentDetails for caseId - {}, prosecutingAuthority - {}, prosecutorDefendantId - {}, material documentType - {}, receivedDateTime - {}, isCpsCase - {}, documentDetails - {}", caseId, prosecutingAuthority, prosecutorDefendantId, material.getDocumentType(), receivedDateTime, isCpsCase, documentDetails);
-        LOGGER.info(".......caseType - {}", caseType);
+
         final List<Problem> rejections = validate(caseDocumentWithReferenceData, referenceDataQueryService, MaterialValidationRuleProvider.getRejectionRules(caseType));
-        LOGGER.info("rejections.....{}", rejections.size());
+
         String cmsDocumentId = null;
         String sectionCode = null;
         Integer materialType;

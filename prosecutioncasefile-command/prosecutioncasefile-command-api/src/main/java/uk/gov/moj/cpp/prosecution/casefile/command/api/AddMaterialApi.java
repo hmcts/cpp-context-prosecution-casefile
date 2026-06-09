@@ -25,12 +25,9 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 @ServiceComponent(COMMAND_API)
 public class AddMaterialApi {
-    private static final Logger LOGGER = LoggerFactory.getLogger(AddMaterialApi.class);
+
     public static final String MATERIAL = "material";
     public static final String MATERIALS = "materials";
     public static final String FILE_TYPE = "fileType";
@@ -43,7 +40,7 @@ public class AddMaterialApi {
 
     @Handles("prosecutioncasefile.add-material")
     public void addMaterial(final JsonEnvelope addMaterialCommand) throws FileServiceException {
-        LOGGER.info(".................Received command to add material with id {} to case file with id.............");
+
         final JsonObject addMaterialPayload = addMaterialCommand.payloadAsJsonObject();
 
         final JsonObject material = addMaterialPayload.getJsonObject(MATERIAL);
@@ -82,7 +79,6 @@ public class AddMaterialApi {
     @Handles("prosecutioncasefile.add-material-v2")
     public void addMaterialV2(final JsonEnvelope addMaterialCommand) {
         final JsonObject addMaterialPayload = addMaterialCommand.payloadAsJsonObject();
-        LOGGER.info("...............Received command to add material v2 with id {} to case file with id..........");
          final Metadata metadata = metadataFrom(addMaterialCommand.metadata())
                 .withName("prosecutioncasefile.command.add-material-v2")
                 .build();

@@ -14,8 +14,7 @@ public class CaseDetailsEnrichmentService {
     public CaseDetails enrichCaseDetails(final CaseDetails caseDetails, Prosecutor prosecutorWithReferenceData) {
         final String prosecutorCaseReference = Optional.ofNullable(caseDetails.getProsecutorCaseReference())
                 .orElseGet(() -> idGenerationService.generateCaseReference());
-        final UUID caseId = Optional.ofNullable(caseDetails.getCaseId())
-                .orElseGet(() -> idGenerationService.generateCaseId(prosecutorCaseReference));
+        final UUID caseId = idGenerationService.generateCaseId(prosecutorCaseReference);
         return enrichCaseDetailsWithCaseIdAndProsecutorCaseReference(caseId, prosecutorCaseReference, caseDetails, prosecutorWithReferenceData);
     }
 

@@ -33,20 +33,22 @@ public class CaseDetailsEnrichmentServiceTest {
     private CaseDetailsEnrichmentService caseDetailsEnrichmentService;
 
     @Test
-    public void shouldReturnOriginalCaseIdAndProsecutorReference() {
+    public void shouldReturnSystemMapperCaseIdAndProvidedProsecutorReference() {
 
-        final UUID originalCaseId = randomUUID();
+        final UUID systemMapperCaseId = randomUUID();
         final String originalProsecutorCaseReference = "Xdw89HER7R";
         CaseDetails caseDetails = CaseDetails.caseDetails()
-                .withCaseId(originalCaseId)
+                .withCaseId(randomUUID())
                 .withProsecutorCaseReference(originalProsecutorCaseReference)
                 .withProsecutor(Prosecutor.prosecutor()
                         .build())
                 .build();
 
+        when(idGenerationService.generateCaseId(originalProsecutorCaseReference)).thenReturn(systemMapperCaseId);
+
         final CaseDetails response = caseDetailsEnrichmentService.enrichCaseDetails(caseDetails, prosecutor);
 
-        assertThat(originalCaseId, is(response.getCaseId()));
+        assertThat(systemMapperCaseId, is(response.getCaseId()));
         assertThat(originalProsecutorCaseReference, is(response.getProsecutorCaseReference()));
     }
 
@@ -106,11 +108,33 @@ public class CaseDetailsEnrichmentServiceTest {
                         .build())
                 .build();
 
+        when(idGenerationService.generateCaseId(originalProsecutorCaseReference)).thenReturn(originalCaseId);
+
         final CaseDetails response = caseDetailsEnrichmentService.enrichCaseDetails(caseDetails, prosecutor);
-        verify(idGenerationService, times(0)).generateCaseId(originalProsecutorCaseReference);
+        verify(idGenerationService, times(1)).generateCaseId(originalProsecutorCaseReference);
         verify(idGenerationService, times(0)).generateCaseReference();
 
         assertThat(originalCaseId, is(response.getCaseId()));
         assertThat(originalProsecutorCaseReference, is(response.getProsecutorCaseReference()));
+    }
+
+    @Test
+    public void enrichCaseDetails_whenClientCaseIdDiffersFromSystemMapperCaseId_shouldReturnSystemMapperCaseId() {
+        final UUID clientProvidedCaseId = randomUUID();
+        final UUID systemMapperCaseId = randomUUID();
+        final String urn = "STA21769946";
+        CaseDetails caseDetails = CaseDetails.caseDetails()
+                .withCaseId(clientProvidedCaseId)
+                .withProsecutorCaseReference(urn)
+                .withProsecutor(Prosecutor.prosecutor()
+                        .build())
+                .build();
+
+        when(idGenerationService.generateCaseId(urn)).thenReturn(systemMapperCaseId);
+
+        final CaseDetails result = caseDetailsEnrichmentService.enrichCaseDetails(caseDetails, prosecutor);
+
+        assertThat(result.getCaseId(), is(systemMapperCaseId));
+        verify(idGenerationService).generateCaseId(urn);
     }
 }

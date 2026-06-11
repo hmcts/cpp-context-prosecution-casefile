@@ -27,7 +27,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 @ServiceComponent(EVENT_PROCESSOR)
 public class ProsecutionRejectedProcessor {

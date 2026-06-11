@@ -10,8 +10,8 @@ import uk.gov.moj.cpp.prosecution.casefile.query.api.service.CaseForCitizenServi
 import uk.gov.moj.cpp.prosecution.casefile.query.api.service.DefendantType;
 import uk.gov.moj.cpp.prosecutioncasefile.query.view.ProsecutionCasefileQueryView;
 
-import javax.inject.Inject;
-import javax.json.JsonObject;
+import jakarta.inject.Inject;
+import jakarta.json.JsonObject;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 

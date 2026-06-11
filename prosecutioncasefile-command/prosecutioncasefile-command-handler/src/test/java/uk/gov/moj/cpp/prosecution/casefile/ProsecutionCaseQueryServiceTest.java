@@ -20,7 +20,7 @@ import uk.gov.moj.cpp.prosecution.casefile.command.service.ProsecutionCaseQueryS
 
 import java.util.UUID;
 
-import javax.json.JsonObject;
+import jakarta.json.JsonObject;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

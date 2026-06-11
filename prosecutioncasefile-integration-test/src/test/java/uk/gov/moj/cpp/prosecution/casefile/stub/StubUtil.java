@@ -10,7 +10,7 @@ import static java.util.UUID.randomUUID;
 import static uk.gov.justice.service.wiremock.testutil.InternalEndpointMockUtils.stubPingFor;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.FileUtil.resourceToString;
 
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MediaType;
 
 public class StubUtil {
 

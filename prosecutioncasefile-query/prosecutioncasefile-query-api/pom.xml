@@ -4,7 +4,7 @@
     <parent>
         <groupId>uk.gov.moj.cpp.prosecution.casefile</groupId>
         <artifactId>prosecutioncasefile-query</artifactId>
-        <version>17.0.93-SNAPSHOT</version>
+        <version>25.104.0-M1-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -17,8 +17,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -110,6 +110,11 @@
             <artifactId>test-utils-enveloper-provider</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -118,9 +123,14 @@
                 <artifactId>rest-client-generator-plugin</artifactId>
                 <dependencies>
                     <dependency>
-                        <groupId>javax</groupId>
-                        <artifactId>javaee-api</artifactId>
+                        <groupId>jakarta.platform</groupId>
+                        <artifactId>jakarta.jakartaee-api</artifactId>
                         <version>${javaee-api.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>jakarta.xml.bind</groupId>
+                        <artifactId>jakarta.xml.bind-api</artifactId>
+                        <version>${jakarta.xml.bind-api.raml.version}</version>
                     </dependency>
                     <dependency>
                         <groupId>uk.gov.moj.cpp.sjp</groupId>

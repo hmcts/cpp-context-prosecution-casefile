@@ -31,8 +31,8 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.inject.Inject;
-import javax.json.JsonObject;
+import jakarta.inject.Inject;
+import jakarta.json.JsonObject;
 
 import org.slf4j.Logger;
 

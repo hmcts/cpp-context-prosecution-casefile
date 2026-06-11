@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import uk.gov.justice.services.common.converter.LocalDates;
 import uk.gov.moj.cpp.prosecution.casefile.helper.InitiateGroupProsecutionHelper;
-import javax.json.JsonObject;
+import jakarta.json.JsonObject;
 import java.time.LocalDate;
 import java.util.UUID;
 

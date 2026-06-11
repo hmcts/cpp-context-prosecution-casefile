@@ -1,7 +1,6 @@
 package uk.gov.moj.cpp.prosecution.casefile.event.processor.activiti;
 
 import static java.util.UUID.randomUUID;
-import static org.activiti.engine.impl.test.JobTestHelper.waitForJobExecutorToProcessAllJobs;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -17,19 +16,17 @@ import java.util.UUID;
 
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.JavaDelegate;
-import org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration;
 import org.activiti.engine.runtime.ProcessInstance;
-import org.activiti.engine.test.ActivitiRule;
 import org.activiti.engine.test.Deployment;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class PendingCpsServePetExpirationTest {
 
     private static final String TIMEOUT_PROCESS_PATH = "processes/pendingCpsServePetExpired.bpmn20.xml";
@@ -39,26 +36,25 @@ public class PendingCpsServePetExpirationTest {
     private JavaDelegate pendingCpsServePetExpiredDelegate;
     private Metadata metadata;
 
-    @Rule
-    public ActivitiRule rule = new ActivitiRule();
+    @RegisterExtension
+    public final ActivitiJUnit5Extension activitiExtension = new ActivitiJUnit5Extension();
 
     @Captor
     private ArgumentCaptor<DelegateExecution> delegateExecutionCaptor;
 
-    @Before
+    @BeforeEach
     public void init() {
-        final StandaloneProcessEngineConfiguration configuration = (StandaloneProcessEngineConfiguration) rule.getProcessEngine().getProcessEngineConfiguration();
         timerUUID = randomUUID();
         metadata = metadataWithRandomUUID("test").build();
-        pendingCpsServePetExpiration = new PendingCpsServePetExpiration(rule.getRuntimeService(), Duration.ofSeconds(1).toString());
-        pendingCpsServePetExpiredDelegate = (JavaDelegate) configuration.getBeans().get("pendingCpsServePetExpiredDelegate");
+        pendingCpsServePetExpiration = new PendingCpsServePetExpiration(activitiExtension.getRuntimeService(), Duration.ofSeconds(1).toString());
+        pendingCpsServePetExpiredDelegate = (JavaDelegate) activitiExtension.getProcessEngineConfiguration().getBeans().get("pendingCpsServePetExpiredDelegate");
         reset(pendingCpsServePetExpiredDelegate);
     }
 
     @Test
     @Deployment(resources = {TIMEOUT_PROCESS_PATH})
     public void shouldTriggerTimeoutTaskAfterTimeout() throws Exception {
-        final ProcessInstance processInstance = pendingCpsServePetExpiration.startCpsServePetTimer(timerUUID,metadata);
+        final ProcessInstance processInstance = pendingCpsServePetExpiration.startCpsServePetTimer(timerUUID, metadata);
 
         waitForAllJobs();
 
@@ -72,11 +68,11 @@ public class PendingCpsServePetExpirationTest {
     }
 
     private void waitForAllJobs() {
-        waitForJobExecutorToProcessAllJobs(rule, 10000, 500);
+        activitiExtension.waitForJobExecutorToProcessAllJobs(10000, 500);
     }
 
     private boolean isProcessFinished(final ProcessInstance processInstance) {
-        final ProcessInstance refreshedProcessInstance = rule.getProcessEngine()
+        final ProcessInstance refreshedProcessInstance = activitiExtension.getProcessEngine()
                 .getRuntimeService()
                 .createProcessInstanceQuery()
                 .processInstanceId(processInstance.getProcessInstanceId())

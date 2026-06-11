@@ -10,7 +10,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static com.jayway.awaitility.Awaitility.await;
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.withJsonPath;
-import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
+import static jakarta.ws.rs.core.HttpHeaders.CONTENT_TYPE;
 import static org.apache.http.HttpStatus.SC_ACCEPTED;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;

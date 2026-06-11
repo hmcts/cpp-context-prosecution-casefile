@@ -22,9 +22,9 @@ import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
-import javax.json.JsonValue;
+import jakarta.enterprise.inject.Instance;
+import jakarta.inject.Inject;
+import jakarta.json.JsonValue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -23,8 +23,6 @@ public class ParamsVO {
 
     private  HearingRequest listNewHearing;
 
-    private boolean isInactiveMigratedCase;
-
     private Boolean isCivil;
 
     public Boolean getCivil() {
@@ -113,13 +111,5 @@ public class ParamsVO {
 
     public void setListNewHearing(final HearingRequest listNewHearing) {
         this.listNewHearing = listNewHearing;
-    }
-
-    public boolean isInactiveMigratedCase() {
-        return isInactiveMigratedCase;
-    }
-
-    public void setInactiveMigratedCase(final boolean isInactiveMigratedCase) {
-        this.isInactiveMigratedCase = isInactiveMigratedCase;
     }
 }

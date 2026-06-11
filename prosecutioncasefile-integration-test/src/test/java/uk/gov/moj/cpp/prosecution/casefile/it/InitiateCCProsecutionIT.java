@@ -57,7 +57,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeAll;
@@ -129,26 +129,6 @@ public class InitiateCCProsecutionIT extends BaseIT {
         stubGetOrganisationUnitWithOneCourtroom();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-mcc.json");
         final String expectedPayload = readFile("expected/initiate_cc_expected_output-mcc.json");
-        verifyCCEventAndProgressionCommandForMCC(staticPayLoad, expectedPayload);
-    }
-
-    @Test
-    void initiateCCProsecutionForMCCInActiveCase() {
-        stubGetOrganisationUnitWithOneCourtroom();
-        stubGetOrganisationUnitWithOneCourtroomForMags();
-        stubGetLocalJusticeAreas();
-        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-mcc-inactive.json");
-        final String expectedPayload = readFile("expected/initiate_cc_expected_output-mcc-inactive.json");
-        verifyCCEventAndProgressionCommandForMCC(staticPayLoad, expectedPayload);
-    }
-
-    @Test
-    void initiateCCProsecutionForMCCMigrationCaseInActiveCaseWithAccountFineNumber() {
-        stubGetOrganisationUnitWithOneCourtroom();
-        stubGetOrganisationUnitWithOneCourtroomForMags();
-        stubGetLocalJusticeAreas();
-        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-mcc-fine-account-number.json");
-        final String expectedPayload = replaceValuesForMCC(readFile("expected/initiate_cc_expected_output-mcc-fine-account-number.json"));
         verifyCCEventAndProgressionCommandForMCC(staticPayLoad, expectedPayload);
     }
 
@@ -503,7 +483,6 @@ public class InitiateCCProsecutionIT extends BaseIT {
     private void verifyCCEventAndProgressionCommandForMCC(final String staticPayLoad,
                                                           final String expectedPayload) {
         final String ccPayLoad = replaceValues(staticPayLoad);
-        final String expected = replaceValues(expectedPayload);
         final InitiateCCProsecutionHelper initiateCCProsecutionHelper = new InitiateCCProsecutionHelper();
         initiateCCProsecutionHelper.initiateCCProsecution(ccPayLoad);
         initiateCCProsecutionHelper.thenProsecutionReceivedEventShouldBeRaised();
@@ -512,7 +491,7 @@ public class InitiateCCProsecutionIT extends BaseIT {
                         PUBLIC_PROSECUTIONCASEFILE_CC_CASE_RECEIVED,
                         PUBLIC_PROSECUTIONCASEFILE_MANUAL_CASE_RECEIVED
                 });
-        initiateCCProsecutionHelper.verifyCourtProceedingsForCaseCreationHasBeenInitiated(defendantId1, expected);
+        initiateCCProsecutionHelper.verifyCourtProceedingsForCaseCreationHasBeenInitiated(defendantId1, expectedPayload);
     }
 
     private void verifyBadRequestPayload(final String staticPayLoad) {

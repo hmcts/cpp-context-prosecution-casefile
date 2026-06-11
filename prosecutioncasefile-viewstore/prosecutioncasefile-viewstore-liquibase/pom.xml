@@ -5,7 +5,7 @@
     <parent>
         <groupId>uk.gov.moj.cpp.prosecution.casefile</groupId>
         <artifactId>prosecutioncasefile-viewstore</artifactId>
-        <version>17.0.93-SNAPSHOT</version>
+        <version>25.104.0-M1-SNAPSHOT</version>
     </parent>
     <artifactId>prosecutioncasefile-viewstore-liquibase</artifactId>
     <properties>
@@ -17,4 +17,19 @@
             <artifactId>liquibase-core</artifactId>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <!-- TEMPORARY: shade 3.1.1 calls project.setFile() after creating dependency-reduced-pom.xml,
+                     causing Maven 3.9 to re-execute the lifecycle with basedir=target/, which then fails when
+                     clean deletes the file. Remove this override when cpp-platform-maven-parent-pom is released
+                     with shade 3.6.0+ (25.104.0-M2 or later). -->
+                <configuration>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

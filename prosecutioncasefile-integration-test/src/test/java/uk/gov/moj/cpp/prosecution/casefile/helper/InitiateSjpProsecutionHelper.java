@@ -1,7 +1,7 @@
 package uk.gov.moj.cpp.prosecution.casefile.helper;
 
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.withJsonPath;
-import static javax.ws.rs.core.Response.Status.OK;
+import static jakarta.ws.rs.core.Response.Status.OK;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
@@ -34,7 +34,7 @@ import uk.gov.justice.services.test.utils.core.http.ResponseData;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import javax.json.JsonObject;
+import jakarta.json.JsonObject;
 
 import com.jayway.jsonpath.ReadContext;
 import org.hamcrest.Matcher;

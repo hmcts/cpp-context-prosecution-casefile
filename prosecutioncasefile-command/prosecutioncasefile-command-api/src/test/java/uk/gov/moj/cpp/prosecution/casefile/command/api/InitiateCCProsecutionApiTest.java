@@ -35,7 +35,6 @@ import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.VerdictType.verdi
 
 
 import uk.gov.justice.core.courts.CivilOffence;
-import uk.gov.justice.core.courts.DefendantFineAccountNumber;
 import uk.gov.justice.core.courts.FeeStatus;
 import uk.gov.justice.core.courts.MigrationSourceSystem;
 import uk.gov.justice.services.adapter.rest.exception.BadRequestException;
@@ -77,7 +76,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.enterprise.inject.Instance;
+import jakarta.enterprise.inject.Instance;
 
 import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.Disabled;
@@ -179,15 +178,7 @@ public class InitiateCCProsecutionApiTest {
         when(initiateProsecution.getExternalId()).thenReturn(externalId);
         if (isMigration && channel == MCC) {
             when(initiateProsecution.getMigrationSourceSystem()).thenReturn(
-                    migrationSourceSystem()
-                            .withMigrationSourceSystemName(XHIBIT)
-                            .withMigrationSourceSystemCaseIdentifier(XHIBIT_IDENTIFIER)
-                            .withDefendantFineAccountNumbers(singletonList(DefendantFineAccountNumber
-                                    .defendantFineAccountNumber()
-                                    .withDefendantId(randomUUID())
-                                    .withFineAccountNumber("FINE98756")
-                                    .build()))
-                            .build());
+                    migrationSourceSystem().withMigrationSourceSystemName(XHIBIT).withMigrationSourceSystemCaseIdentifier(XHIBIT_IDENTIFIER).build());
         }
         final Envelope<InitiateProsecution> envelope = envelope(initiateProsecution);
 
@@ -202,7 +193,6 @@ public class InitiateCCProsecutionApiTest {
         assertThat(prosecutionWithReferenceDataEnvelope.payload().getExternalId(), is(externalId));
         if (isMigration && channel == MCC) {
             assertThat(prosecutionWithReferenceDataEnvelope.payload().getProsecution().getMigrationSourceSystem().getMigrationSourceSystemName(), is(XHIBIT));
-            assertThat(prosecutionWithReferenceDataEnvelope.payload().getProsecution().getMigrationSourceSystem().getDefendantFineAccountNumbers().get(0).getFineAccountNumber(), is("FINE98756"));
         }
     }
 

@@ -75,7 +75,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubPro
 import static uk.gov.moj.cpp.prosecution.casefile.stub.TestUtils.readFile;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode.INVALID_DEFENDANT_INDIVIDUAL_POST_CODE;
 
-@SuppressWarnings("java:S2699")
+@SuppressWarnings({"squid:S2699"})
 class ValidationErrorIT extends BaseIT {
 
     private static final String CASE_MARKER_CODE = "YO";

@@ -50,7 +50,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 @SuppressWarnings({"java:S126", "java:S1541"})
 @ServiceComponent(COMMAND_API)
@@ -243,7 +243,6 @@ public class InitiateCCProsecutionApi {
                 .withVehicleRelatedOffence(vehicleRelatedOffence)
                 .withVerdict(offence.getVerdict())
                 .withConvictingCourtCode(offence.getConvictingCourtCode())
-                .withConvictionDate(offence.getConvictionDate())
                 .build();
 
     }

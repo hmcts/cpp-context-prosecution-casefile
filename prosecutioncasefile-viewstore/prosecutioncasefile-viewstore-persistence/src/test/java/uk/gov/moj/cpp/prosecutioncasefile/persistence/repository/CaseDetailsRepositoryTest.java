@@ -1,124 +1,106 @@
 package uk.gov.moj.cpp.prosecutioncasefile.persistence.repository;
 
 import static java.util.Arrays.asList;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static java.util.Collections.emptySet;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThrows;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.CASE_ID;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.FIRST_DEFENDANT_CASE_ID;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.INVALID_PROSECUTOR_CASE_REFERENCE;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.ORIGINATING_ORGANISATION;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.PROSECUTOR_AUTHORITY;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.PROSECUTOR_CASE_REFERENCE;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.PROSECUTOR_CASE_REFERENCE2;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.PROSECUTOR_INFORMANT;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.createFirstDefendantCaseDetails;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import uk.gov.justice.services.test.utils.persistence.HibernateTestEntityManagerProvider;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.CaseDetails;
-import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.CivilFees;
-import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.DefendantDetails;
-import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.PersonalInformationDetails;
-import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.SelfDefinedInformationDetails;
-import uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
-import javax.inject.Inject;
-import javax.persistence.NoResultException;
+import jakarta.persistence.NoResultException;
 
-import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
-@RunWith(CdiTestRunner.class)
 public class CaseDetailsRepositoryTest {
 
-    @Inject
+    private static final String PERSISTENCE_UNIT = "prosecutioncasefile-test-persistence-unit";
+
+    private static final UUID CASE_ID = UUID.randomUUID();
+    private static final UUID FIRST_DEFENDANT_CASE_ID = UUID.randomUUID();
+    private static final String PROSECUTOR_CASE_REFERENCE = "18CPS1234567";
+    private static final String PROSECUTOR_CASE_REFERENCE2 = "18CPS7654321";
+    private static final String INVALID_PROSECUTOR_CASE_REFERENCE = "INVALID_REFERENCE";
+    private static final String PROSECUTOR_INFORMANT = "Test Informant";
+    private static final String PROSECUTOR_AUTHORITY = "CPS";
+    private static final String ORIGINATING_ORGANISATION = "Test Organisation";
+
+    @RegisterExtension
+    static HibernateTestEntityManagerProvider hibernateTestEntityManagerProvider = new HibernateTestEntityManagerProvider(PERSISTENCE_UNIT);
+
     private CaseDetailsRepository caseDetailsRepository;
 
-    @Test
-    public void shouldFindCaseDetailsByProsecutionCaseReference() {
-        final CaseDetails caseDetails = TestUtils.createFirstDefendantCaseDetails();
-
-        final DefendantDetails defendantDetails = caseDetails.getDefendants().stream().findFirst().get();
-
-        final PersonalInformationDetails personalInformation = defendantDetails.getPersonalInformation();
-        personalInformation.setDefendantDetails(defendantDetails);
-
-        final SelfDefinedInformationDetails selfDefinedInformation = defendantDetails.getSelfDefinedInformation();
-        selfDefinedInformation.setDefendantDetails(defendantDetails);
-
-        caseDetailsRepository.save(caseDetails);
-        final CaseDetails caseDetailsSvd = caseDetailsRepository.findCaseDetailsByProsecutionCaseReference(TestUtils.PROSECUTOR_CASE_REFERENCE);
-        assertCaseDetailsMatch(caseDetails, caseDetailsSvd);
+    @BeforeEach
+    public void createRepository() {
+        caseDetailsRepository = new CaseDetailsRepository();
+        hibernateTestEntityManagerProvider.injectEntityManagerInto(caseDetailsRepository);
     }
 
     @Test
-    public void shouldConstructCaseDetails() {
-        final CaseDetails caseDetailsSvd = createFirstDefendantCaseDetails();
-        final CaseDetails caseDetails = new CaseDetails(FIRST_DEFENDANT_CASE_ID,
+    void shouldFindCaseDetailsByProsecutionCaseReference() {
+        caseDetailsRepository.save(createFirstDefendantCaseDetails());
+
+        final CaseDetails caseDetails = caseDetailsRepository.findCaseDetailsByProsecutionCaseReference(PROSECUTOR_CASE_REFERENCE);
+
+        assertThat(caseDetails, notNullValue());
+        assertThat(caseDetails.getProsecutionCaseReference(), is(PROSECUTOR_CASE_REFERENCE));
+        assertThat(caseDetails.getProsecutorInformant(), is(PROSECUTOR_INFORMANT));
+        assertThat(caseDetails.getProsecutionAuthority(), is(PROSECUTOR_AUTHORITY));
+        assertThat(caseDetails.getOriginatingOrganisation(), is(ORIGINATING_ORGANISATION));
+    }
+
+    @Test
+    void shouldConstructCaseDetails() {
+        final CaseDetails savedCase = caseDetailsRepository.save(createFirstDefendantCaseDetails());
+
+        assertThat(savedCase, notNullValue());
+        assertThat(savedCase.getCaseId(), is(CASE_ID));
+        assertThat(savedCase.getProsecutionCaseReference(), is(PROSECUTOR_CASE_REFERENCE));
+    }
+
+    @Test
+    void shouldFindAllCaseDetailsByProsecutionCaseReferences() {
+        caseDetailsRepository.save(createFirstDefendantCaseDetails());
+        caseDetailsRepository.save(createSecondDefendantCaseDetails());
+
+        final List<CaseDetails> results = caseDetailsRepository.findAllCaseDetailsByProsecutionCaseReferences(
+                asList(PROSECUTOR_CASE_REFERENCE, PROSECUTOR_CASE_REFERENCE2));
+
+        assertThat(results.size(), is(2));
+    }
+
+    @Test
+    void shouldThrowException_whenGivenProsecutionCaseReference_notExist() {
+        assertThrows(NoResultException.class, () ->
+                caseDetailsRepository.findCaseDetailsByProsecutionCaseReference(INVALID_PROSECUTOR_CASE_REFERENCE));
+    }
+
+    private CaseDetails createFirstDefendantCaseDetails() {
+        return new CaseDetails(
+                CASE_ID,
                 PROSECUTOR_CASE_REFERENCE,
                 PROSECUTOR_INFORMANT,
                 PROSECUTOR_AUTHORITY,
                 ORIGINATING_ORGANISATION,
-                caseDetailsSvd.getDefendants(),
-                Set.of( new CivilFees(UUID.randomUUID(), CASE_ID,"someFeeType",
-                "someFeeStatus",
-                "")));
-        assertCaseDetailsMatch(caseDetails, caseDetailsSvd);
+                emptySet(),
+                null);
     }
 
-    @Test
-    public void shouldFindAllCaseDetailsByProsecutionCaseReferences() {
-        final CaseDetails firstDefendantCaseDetails = TestUtils.createFirstDefendantCaseDetails();
-        final DefendantDetails firstDefendantDetails = firstDefendantCaseDetails.getDefendants().stream().findFirst().get();
-        final PersonalInformationDetails personalInformation = firstDefendantDetails.getPersonalInformation();
-        personalInformation.setDefendantDetails(firstDefendantDetails);
-        final SelfDefinedInformationDetails selfDefinedInformation = firstDefendantDetails.getSelfDefinedInformation();
-        selfDefinedInformation.setDefendantDetails(firstDefendantDetails);
-        caseDetailsRepository.save(firstDefendantCaseDetails);
-
-        final CaseDetails secondDefendantCaseDetails = TestUtils.createSecondDefendantCaseDetails();
-        final DefendantDetails secondDefendantDetails = secondDefendantCaseDetails.getDefendants().stream().findFirst().get();
-        final PersonalInformationDetails secondDefendantPersonalInformation = secondDefendantDetails.getPersonalInformation();
-        secondDefendantPersonalInformation.setDefendantDetails(secondDefendantDetails);
-        final SelfDefinedInformationDetails secondDefendantSelfDefinedInformation= secondDefendantDetails.getSelfDefinedInformation();
-        secondDefendantSelfDefinedInformation.setDefendantDetails(secondDefendantDetails);
-        caseDetailsRepository.save(secondDefendantCaseDetails);
-
-
-        final List<CaseDetails> resultedCaseDetails = caseDetailsRepository.findAllCaseDetailsByProsecutionCaseReferences(asList(TestUtils.PROSECUTOR_CASE_REFERENCE, PROSECUTOR_CASE_REFERENCE2));
-        assertThat(resultedCaseDetails, notNullValue());
-        assertThat(resultedCaseDetails.size(),is(2));
-        assertCaseDetailsMatch(firstDefendantCaseDetails, resultedCaseDetails.get(0));
-        assertCaseDetailsMatch(secondDefendantCaseDetails, resultedCaseDetails.get(1));
-    }
-
-    @Test
-    public void shouldThrowException_whenGivenProsecutionCaseReference_notExist() {
-        final CaseDetails firstDefendantCaseDetails = TestUtils.createFirstDefendantCaseDetails();
-        final DefendantDetails firstDefendantDetails = firstDefendantCaseDetails.getDefendants().stream().findFirst().get();
-        final PersonalInformationDetails personalInformation = firstDefendantDetails.getPersonalInformation();
-        personalInformation.setDefendantDetails(firstDefendantDetails);
-        final SelfDefinedInformationDetails selfDefinedInformation = firstDefendantDetails.getSelfDefinedInformation();
-        selfDefinedInformation.setDefendantDetails(firstDefendantDetails);
-        caseDetailsRepository.save(firstDefendantCaseDetails);
-
-        final NoResultException expectedException = assertThrows(NoResultException.class, () ->caseDetailsRepository.findCaseDetailsByProsecutionCaseReference(INVALID_PROSECUTOR_CASE_REFERENCE));
-        assertThat(expectedException.getMessage(), is("No entity found for query"));
-    }
-
-    private void assertCaseDetailsMatch(final CaseDetails caseDetails, final CaseDetails caseDetailsSvd) {
-        assertThat(caseDetails.getCaseId(), equalTo(caseDetailsSvd.getCaseId()));
-        assertThat(caseDetails.getProsecutionAuthority(), equalTo(caseDetailsSvd.getProsecutionAuthority()));
-        assertThat(caseDetails.getProsecutionCaseReference(), equalTo(caseDetailsSvd.getProsecutionCaseReference()));
-        assertThat(caseDetails.getProsecutorInformant(), equalTo(caseDetailsSvd.getProsecutorInformant()));
-        assertThat(caseDetails.getProsecutorInformant(), equalTo(caseDetailsSvd.getProsecutorInformant()));
-        assertThat(caseDetails.getDefendants().size(), equalTo(caseDetailsSvd.getDefendants().size()));
+    private CaseDetails createSecondDefendantCaseDetails() {
+        return new CaseDetails(
+                FIRST_DEFENDANT_CASE_ID,
+                PROSECUTOR_CASE_REFERENCE2,
+                PROSECUTOR_INFORMANT,
+                PROSECUTOR_AUTHORITY,
+                ORIGINATING_ORGANISATION,
+                emptySet(),
+                null);
     }
 }

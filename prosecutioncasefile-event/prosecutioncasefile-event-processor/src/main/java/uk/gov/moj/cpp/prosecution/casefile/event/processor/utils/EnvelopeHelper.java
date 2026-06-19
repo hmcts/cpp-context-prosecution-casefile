@@ -14,10 +14,10 @@ import uk.gov.justice.services.messaging.Metadata;
 
 import java.util.function.Function;
 
-import javax.inject.Inject;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.json.JsonValue;
+import jakarta.inject.Inject;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonObjectBuilder;
+import jakarta.json.JsonValue;
 
 //TODO Remove (ATCM-3474)
 //Custom metadata fields are lost when envelop is transferred via http, workaround is to pass them in payload.

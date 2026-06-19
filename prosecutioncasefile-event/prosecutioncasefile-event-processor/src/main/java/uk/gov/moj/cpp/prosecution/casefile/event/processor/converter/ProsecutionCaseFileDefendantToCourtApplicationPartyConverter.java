@@ -18,7 +18,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 public class ProsecutionCaseFileDefendantToCourtApplicationPartyConverter implements DualParameterisedConverter<List<Defendant>, List<CourtApplicationParty>, ReferenceDataVO, Channel> {
 

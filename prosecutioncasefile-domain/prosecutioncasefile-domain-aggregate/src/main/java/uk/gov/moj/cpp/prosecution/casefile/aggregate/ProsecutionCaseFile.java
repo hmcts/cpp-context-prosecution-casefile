@@ -185,9 +185,13 @@ import javax.json.JsonReader;
 
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("java:S4738")
 public class ProsecutionCaseFile implements Aggregate {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProsecutionCaseFile.class);
+
     private static final long serialVersionUID = 8155753984190031446L;
     private static final String EXPIRED_AT = "expiredAt";
     private static final String SUMMONS_INITIATION_CODE = "S";
@@ -883,9 +887,9 @@ public class ProsecutionCaseFile implements Aggregate {
     public Stream<Object> addMaterial(final UUID caseId, final String prosecutingAuthority,
                                       final String prosecutorDefendantId, final Material material,
                                       final ReferenceDataQueryService referenceDataQueryService, final Boolean isCpsCase,
-                                      final ZonedDateTime receivedDateTime) {
+                                      final ZonedDateTime receivedDateTime, final UUID submissionId) {
         final Object event = isProsecutionAccepted()
-                ? validateMaterial(caseId, prosecutingAuthority, prosecutorDefendantId, material, referenceDataQueryService, receivedDateTime, isCpsCase)
+                ? validateMaterial(caseId, prosecutingAuthority, prosecutorDefendantId, material, referenceDataQueryService, receivedDateTime, isCpsCase, submissionId)
                 : ProsecutionCaseFileHelper.markMaterialAsPending(caseId, prosecutingAuthority, prosecutorDefendantId, material, null, isCpsCase, null);
 
         return apply(of(event));
@@ -898,7 +902,7 @@ public class ProsecutionCaseFile implements Aggregate {
         final Stream.Builder<Object> streamBuilder = Stream.builder();
         materials.forEach(material -> {
             final Object event = isProsecutionAccepted()
-                    ? validateMaterial(caseId, prosecutingAuthority, prosecutorDefendantId, material, referenceDataQueryService, receivedDateTime, isCpsCase)
+                    ? validateMaterial(caseId, prosecutingAuthority, prosecutorDefendantId, material, referenceDataQueryService, receivedDateTime, isCpsCase, null)
                     : ProsecutionCaseFileHelper.markMaterialAsPending(caseId, prosecutingAuthority, prosecutorDefendantId, material, null, isCpsCase, null);
             streamBuilder.add(event);
         });
@@ -943,7 +947,7 @@ public class ProsecutionCaseFile implements Aggregate {
         final Stream.Builder<Object> streamBuilder = builder();
 
         if (isProsecutionAccepted()) {
-            final Object resultingEvent = validateMaterialWithDocumentDetails(caseId, prosecutingAuthority, prosecutorDefendantId, material, referenceDataQueryService, receivedDateTime, true, documentDetails);
+            final Object resultingEvent = validateMaterialWithDocumentDetails(caseId, prosecutingAuthority, prosecutorDefendantId, material, referenceDataQueryService, receivedDateTime, true, documentDetails, null);
 
             streamBuilder.add(resultingEvent);
 
@@ -1510,8 +1514,8 @@ public class ProsecutionCaseFile implements Aggregate {
         return isCaseEjected;
     }
 
-    private Object validateMaterial(final UUID caseId, final String prosecutingAuthority, final String prosecutorDefendantId, final Material material, final ReferenceDataQueryService referenceDataQueryService, final ZonedDateTime receivedDateTime, Boolean isCpsCase) {
-        return validateMaterialWithDocumentDetails(caseId, prosecutingAuthority, prosecutorDefendantId, material, referenceDataQueryService, receivedDateTime, isCpsCase, null);
+    private Object validateMaterial(final UUID caseId, final String prosecutingAuthority, final String prosecutorDefendantId, final Material material, final ReferenceDataQueryService referenceDataQueryService, final ZonedDateTime receivedDateTime, Boolean isCpsCase, final UUID submissionId) {
+        return validateMaterialWithDocumentDetails(caseId, prosecutingAuthority, prosecutorDefendantId, material, referenceDataQueryService, receivedDateTime, isCpsCase, null, submissionId);
     }
 
     private Object validateMaterialV2(AddMaterialCommonV2 addMaterialCommonV2, final ReferenceDataQueryService referenceDataQueryService) {
@@ -1521,7 +1525,7 @@ public class ProsecutionCaseFile implements Aggregate {
 
     @SuppressWarnings("java:S107")
     private Object validateMaterialWithDocumentDetails(final UUID caseId, final String prosecutingAuthority, final String prosecutorDefendantId, final Material material, final ReferenceDataQueryService referenceDataQueryService, final ZonedDateTime receivedDateTime, final Boolean isCpsCase,
-                                                       final DocumentDetails documentDetails) {
+                                                       final DocumentDetails documentDetails, final UUID submissionId) {
         final CaseDocumentWithReferenceData caseDocumentWithReferenceData = new CaseDocumentWithReferenceData(referralReasonId, isCaseReferredToCourt(), material,
                 prosecutorDefendantId, defendants, material.getDocumentType(), isCaseAssigned(), isCaseEjected());
 
@@ -1561,8 +1565,13 @@ public class ProsecutionCaseFile implements Aggregate {
                     .withSectionCode(sectionCode)
                     .build();
         } else {
+            final MaterialRejected.Builder materialRejectedBuilder = materialRejected();
+            if(nonNull(submissionId)){
+                LOGGER.info("Adding submissionId {} to materialRejected event", submissionId);
+                materialRejectedBuilder.withSubmissionId(submissionId);
+            }
 
-            return materialRejected()
+            return materialRejectedBuilder
                     .withCaseId(caseId)
                     .withProsecutingAuthority(prosecutingAuthority)
                     .withProsecutorDefendantId(prosecutorDefendantId)
@@ -1626,7 +1635,8 @@ public class ProsecutionCaseFile implements Aggregate {
                 materialPending.getCmsDocumentId() != null ?
                         new DocumentDetails(materialPending.getCmsDocumentId(),
                                 materialPending.getMaterialType(),
-                                materialPending.getSectionCode()) : null);
+                                materialPending.getSectionCode()) : null,
+                null);
     }
 
     private Object validatePendingMaterialV2(final MaterialPendingV2 materialPending, final ReferenceDataQueryService referenceDataQueryService) {

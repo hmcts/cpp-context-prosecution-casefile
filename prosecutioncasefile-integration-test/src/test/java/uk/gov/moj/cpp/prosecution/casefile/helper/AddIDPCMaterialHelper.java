@@ -7,7 +7,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
 import static com.jayway.awaitility.Awaitility.await;
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath;
 import static java.lang.String.format;
-import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
+import static jakarta.ws.rs.core.HttpHeaders.CONTENT_TYPE;
 import static org.hamcrest.Matchers.notNullValue;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SELECTOR_CASE_DOCUMENT_ADDED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SELECTOR_DEFENDANT_IDPC_ALREADY_EXITS;
@@ -21,7 +21,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.stub.MaterialStub.UPLOAD_FILE_
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
-import javax.json.JsonObject;
+import jakarta.json.JsonObject;
 
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import org.hamcrest.Matcher;

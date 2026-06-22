@@ -42,7 +42,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.slf4j.Logger;
 
@@ -96,28 +96,14 @@ public class ProsecutionCaseFileOffenceToCourtsOffenceConverter implements Param
                 .withCommittingCourt(getCommittingCourtFromReferenceData(paramsVO))
                 .withPlea(convertPlea(offence))
                 .withVerdict(convertVerdict(offence))
-                .withConvictionDate(resolveConvictionDate(offence, paramsVO, isCivil))
-                .withAllocationDecision(buildAllocationDecision(offence, paramsVO))
+                .withConvictionDate(!isCivil ? calculateConvictionDate(offence, paramsVO) : null)
+                .withAllocationDecision(!isCivil ? buildAllocationDecision(offence, paramsVO) : null)
                 .withDvlaOffenceCode(getDvlaCode(offence.getOffenceCode(), referenceDataVO))
                 .withMaxPenalty(getMaxPenalty(offence.getOffenceCode(), referenceDataVO))
                 .withConvictingCourt(convictingCourt)
                 .withCustodyTimeLimit(isCustodyLimitTobeSet(offence, paramsVO) ? custodyTimeLimit : null)
                 .withCivilOffence(offence.getCivilOffence())
                 .build();
-    }
-
-    private String resolveConvictionDate(Offence offence, ParamsVO paramsVO, boolean isCivil) {
-        if (isCivil) {
-            return null;
-        }
-
-        if (paramsVO.isInactiveMigratedCase()) {
-            return Optional.ofNullable(offence.getConvictionDate())
-                    .map(Object::toString)
-                    .orElse(null);
-        }
-
-        return calculateConvictionDate(offence, paramsVO);
     }
 
     private boolean isCustodyLimitTobeSet(final Offence offence, final ParamsVO paramsVO) {
@@ -136,14 +122,9 @@ public class ProsecutionCaseFileOffenceToCourtsOffenceConverter implements Param
         final boolean isMCC = MCC.equals(paramsVO.getChannel())
                 && O.name().equalsIgnoreCase(paramsVO.getInitiationCode());
 
-        final boolean hasConvictingCourtCode = nonNull(offence.getConvictingCourtCode());
-        if(hasConvictingCourtCode && paramsVO.isInactiveMigratedCase()){
+        if (isMCC && guiltyPlea && Objects.nonNull(offence.getConvictingCourtCode()))  {
             return getCourtCentre(offence.getConvictingCourtCode());
-        }
-
-        if (isMCC && guiltyPlea && hasConvictingCourtCode)  {
-            return getCourtCentre(offence.getConvictingCourtCode());
-        } else if (isMCC && guiltyVerdict && hasConvictingCourtCode) {
+        } else if (isMCC && guiltyVerdict && Objects.nonNull(offence.getConvictingCourtCode())) {
             return getCourtCentre(offence.getConvictingCourtCode());
         }
 

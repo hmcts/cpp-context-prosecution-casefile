@@ -18,11 +18,11 @@ import java.io.StringReader;
 import java.util.Objects;
 import java.util.Optional;
 
-import javax.json.JsonObject;
-import javax.json.JsonValue;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 import com.jayway.awaitility.core.ConditionTimeoutException;
 import org.hamcrest.Matcher;

@@ -5,7 +5,7 @@ import uk.gov.justice.services.common.converter.Converter;
 import uk.gov.moj.cpp.prosecution.casefile.domain.ParamsVO;
 import uk.gov.moj.cpp.prosecution.casefile.event.SpiProsecutionDefendantsAdded;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 @SuppressWarnings("squid:S1133")
 public class SjpProsecutionToCCAddDefendantConverter implements Converter<SpiProsecutionDefendantsAdded, AddDefendantsToCourtProceedings> {
 

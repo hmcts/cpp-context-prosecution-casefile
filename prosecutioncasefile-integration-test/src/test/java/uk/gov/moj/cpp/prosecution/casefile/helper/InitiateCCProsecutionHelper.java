@@ -13,7 +13,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
-import static uk.gov.justice.services.messaging.JsonObjects.createReader;
+import static jakarta.json.Json.createReader;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -73,8 +73,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.json.JsonObject;
-import javax.json.JsonReader;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
 
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import org.hamcrest.Matcher;
@@ -274,6 +274,7 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
         customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[0].offences[0].verdict.verdictType.description", (o1, o2) -> true));
         customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[0].offences[1].id", (o1, o2) -> true));
         customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[1].offences[0].id", (o1, o2) -> true));
+        customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[1].offences[0].verdict.offenceId", (o1, o2) -> true));
         customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[1].offences[1].id", (o1, o2) -> true));
         customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[1].offences[1].civilOffence", (o1, o2) -> true));
         customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[2].offences[0].id", (o1, o2) -> true));
@@ -286,13 +287,6 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
         customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[1].personDefendant.bailStatus", (o1, o2) -> true));
         customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[0].offences[0].allocationDecision", (o1, o2) -> true));
         customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[1].offences[0].allocationDecision", (o1, o2) -> true));
-        customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[1].offences[1].allocationDecision", (o1, o2) -> true));
-        customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[1].offences[2].allocationDecision", (o1, o2) -> true));
-
-        customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[2].offences[0].allocationDecision", (o1, o2) -> true));
-        customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[2].offences[1].allocationDecision", (o1, o2) -> true));
-        customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[2].offences[2].allocationDecision", (o1, o2) -> true));
-
         customizedAsserts.add(new Customization("id", (o1, o2) -> true));
 
 
@@ -352,7 +346,6 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
                 new Customization("initiateCourtProceedings.prosecutionCases[0].caseMarkers[0].id", (o1, o2) -> true),
                 new Customization("initiateCourtProceedings.prosecutionCases[0].caseMarkers[1].id", (o1, o2) -> true),
                 new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[0].personDefendant.bailStatus", (o1, o2) -> true),
-                new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[0].offences[0].allocationDecision", (o1, o2) -> true),
                 new Customization("id", (o1, o2) -> true)
         ));
     }

@@ -134,6 +134,12 @@ Parent `service-parent-pom:17.103.3`. Current artifact `17.0.89-SNAPSHOT`. Notab
 
 No wildcard imports. Always use explicit per-class imports.
 
+## IT test pattern — `InitiateCCProsecutionHelper` has its own offenceId fields
+
+`InitiateCCProsecutionHelper` creates its own random `offenceId1`/`offenceId2`/... UUIDs in its constructor (independent from any outer IT class). When `verifyCCEventAndProgressionCommandForMCC` in `InitiateCCProsecutionIT` uses the IT class's own `replaceValues()` to build the command payload, then passes the raw expected template to the helper's `verifyCourtProceedingsForCaseCreationHasBeenInitiated`, the helper substitutes its own UUIDs in the expected template — a different UUID than what was actually sent to the server.
+
+**Rule:** Any `verdict.offenceId` or `plea.offenceId` path that uses `OFFENCE_IDn` in the expected template **must** be in the `getCustomAsserts()` ignore list (and the corresponding inline `Customization` list in `verifyCourtProceedingsForCaseCreationHasBeenInitiatedForMcc`). `defendants[0].offences[0].verdict.offenceId` is already ignored; apply the same pattern to any newly surfaced path.
+
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan

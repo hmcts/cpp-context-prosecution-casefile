@@ -6,8 +6,8 @@ import static com.jayway.jsonpath.matchers.JsonPathMatchers.withJsonPath;
 import static java.nio.charset.Charset.defaultCharset;
 import static java.time.LocalDate.parse;
 import static java.util.UUID.randomUUID;
-import static uk.gov.justice.services.messaging.JsonObjects.createArrayBuilder;
-import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
+import static jakarta.json.Json.createArrayBuilder;
+import static jakarta.json.Json.createObjectBuilder;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.contains;
@@ -62,7 +62,7 @@ import uk.gov.moj.cps.prosecutioncasefile.command.handler.RejectGroupCases;
 import java.io.IOException;
 import java.util.UUID;
 
-import javax.json.JsonObject;
+import jakarta.json.JsonObject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
@@ -172,12 +172,8 @@ class ProgressionPublicEventProcessorTest {
                                         .add(createObjectBuilder()
                                                 .add("id", defendantId.toString())))
                                 .add("migrationSourceSystem", createObjectBuilder()
-                                        .add("migrationSourceSystemName", "XHIBIT")
-                                        .add("migrationSourceSystemCaseIdentifier", "LIB-100002")
-                                        .add("defendantFineAccountNumbers",createArrayBuilder()
-                                                .add(createObjectBuilder()
-                                                        .add("defendantId",defendantId.toString())
-                                                        .add("fineAccountNumber","FINE9876"))))
+                                        .add("migrationSourceSystemName", "LIBRA")
+                                        .add("migrationSourceSystemCaseIdentifier", "LIB-100002"))
                                 .build())
                         .build());
 

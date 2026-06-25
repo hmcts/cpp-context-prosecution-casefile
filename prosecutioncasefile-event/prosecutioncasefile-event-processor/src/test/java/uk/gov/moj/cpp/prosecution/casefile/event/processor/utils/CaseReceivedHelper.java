@@ -398,6 +398,46 @@ public class CaseReceivedHelper {
     }
 
 
+    public static Defendant buildDefendantWithOrganisationGuardian(final String organisationName) {
+        return defendant()
+                .withId(randomUUID().toString())
+                .withDocumentationLanguage(Language.E)
+                .withHearingLanguage(Language.E)
+                .withInitiationCode("S")
+                .withIndividual(Individual.individual()
+                        .withPersonalInformation(personalInformation()
+                                .withAddress(Address.address()
+                                        .withAddress1("66 Exeter Street")
+                                        .withAddress2("address line 2")
+                                        .withAddress3("address line 3")
+                                        .withAddress4("address line 4")
+                                        .withPostcode("M60 1NW")
+                                        .build())
+                                .withFirstName("Eugene")
+                                .withLastName("Tooms")
+                                .withTitle("MR")
+                                .withObservedEthnicity(Integer.parseInt(OBSERVED_ETHNICITY_CODE))
+                                .build())
+                        .withSelfDefinedInformation(SelfDefinedInformation.selfDefinedInformation()
+                                .withDateOfBirth(LocalDate.of(1989, 4, 18))
+                                .withGender(Gender.MALE)
+                                .withNationality(NATIONALITY_CODE)
+                                .withAdditionalNationality(ADDITIONAL_NATIONALITY_CODE)
+                                .withEthnicity(SELF_DEFINED_ETHNICITY_CODE)
+                                .build())
+                        .withParentGuardianInformation(parentGuardianInformation()
+                                .withOrganisationName(organisationName)
+                                .build())
+                        .withNationalInsuranceNumber("1922492")
+                        .withDriverNumber("2362435")
+                        .build())
+                .withOffences(buildOffences())
+                .withPostingDate(LocalDate.of(2017, 10, 20))
+                .withLanguageRequirement("No")
+                .withNumPreviousConvictions(99)
+                .build();
+    }
+
     public static Defendant buildDefendantWithTitle(String title) {
         return buildDefendantWithTitle(title, false);
     }

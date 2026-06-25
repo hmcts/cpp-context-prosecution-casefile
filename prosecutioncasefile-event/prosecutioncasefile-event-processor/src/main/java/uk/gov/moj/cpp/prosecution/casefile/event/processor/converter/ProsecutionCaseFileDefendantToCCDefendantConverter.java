@@ -89,7 +89,14 @@ public class ProsecutionCaseFileDefendantToCCDefendantConverter implements Param
         if (null == parentGuardianInformation) {
             return null;
         } else if (!StringUtils.isEmpty(parentGuardianInformation.getOrganisationName())) {
-            return null;
+            final AssociatedPerson associatedPerson = associatedPerson()
+                    .withPerson(Person.person()
+                            .withLastName(parentGuardianInformation.getOrganisationName())
+                            .withAddress(buildOrganisationAddress(parentGuardianInformation))
+                            .build())
+                    .withRole("ParentGuardian")
+                    .build();
+            return ImmutableList.of(associatedPerson);
         } else {
 
             final AssociatedPerson associatedPerson = associatedPerson()
@@ -210,6 +217,22 @@ public class ProsecutionCaseFileDefendantToCCDefendantConverter implements Param
         }
 
         return null;
+    }
+
+    private Address buildOrganisationAddress(final ParentGuardianInformation parentGuardianInformation) {
+        if (null == parentGuardianInformation.getAddress()) {
+            return null;
+        }
+
+        final uk.gov.moj.cpp.prosecution.casefile.json.schemas.Address address = parentGuardianInformation.getAddress();
+        return Address.address()
+                .withAddress1(address.getAddress1())
+                .withAddress2(address.getAddress2())
+                .withAddress3(address.getAddress3())
+                .withAddress4(address.getAddress4())
+                .withAddress5(address.getAddress5())
+                .withPostcode(address.getPostcode())
+                .build();
     }
 
 }

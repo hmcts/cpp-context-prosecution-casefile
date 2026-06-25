@@ -150,6 +150,17 @@ class InitiateSummonsProsecutionIT extends BaseIT {
     }
 
     @Test
+    void shouldMapOrgParentGuardianToAssociatedPersonsWhenSummonsApprovedViaSPIChannel() {
+        final InitiateCCProsecutionHelper helper = new InitiateCCProsecutionHelper();
+        helper.initiateSummonsCaseForChannelAndVerifyApplicationCreatedInstead(SPI, COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_SPI, EXPECTED_INITIATE_SUMMONS_APPLICATION_FOR_SPI);
+        helper.whenSummonsApplicationIsApprovedForDefendants();
+        helper.thenEventsShouldBeRaised(new String[]{EVENT_SELECTOR_CC_PROSECUTION_RECEIVED});
+        helper.thenEventsShouldBeRaised(new String[]{PUBLIC_PROSECUTIONCASEFILE_CC_CASE_RECEIVED});
+        final String expectedPayload = readFile("expected/initiate_cc_expected_output_spi_summons.json");
+        helper.verifyCourtProceedingsForCaseCreationHasBeenInitiated(helper.getCaseUrn(), expectedPayload);
+    }
+
+    @Test
     void shouldIgnoreAsDuplicateDefendantWhenSameDefendantIsReceivedAndSummonsApplicationForTheDefendantHasAlreadyBeenApprovedViaSPIChannel() {
         final InitiateCCProsecutionHelper helper = new InitiateCCProsecutionHelper();
         helper.initiateSummonsCaseForChannelAndVerifyApplicationCreatedInstead(SPI, COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_SPI, EXPECTED_INITIATE_SUMMONS_APPLICATION_FOR_SPI);

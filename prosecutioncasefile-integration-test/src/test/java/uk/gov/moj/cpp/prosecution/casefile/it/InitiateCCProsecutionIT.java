@@ -125,6 +125,18 @@ public class InitiateCCProsecutionIT extends BaseIT {
     }
 
     @Test
+    void initiateCCProsecutionWithOrganisationGuardian() {
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-organisation-guardian.json");
+        final String expectedPayload = readFile("expected/initiate_cc_expected_output-with-organisation-guardian.json");
+        final String ccPayLoad = replaceValues(staticPayLoad);
+        final InitiateCCProsecutionHelper initiateCCProsecutionHelper = new InitiateCCProsecutionHelper();
+        initiateCCProsecutionHelper.initiateCCProsecution(ccPayLoad);
+        initiateCCProsecutionHelper.thenProsecutionReceivedEventShouldBeRaised();
+        initiateCCProsecutionHelper.verifyCourtProceedingsForCaseCreationHasBeenInitiated(caseUrn, expectedPayload);
+        initiateCCProsecutionHelper.thenEventsShouldBeRaised(new String[]{PUBLIC_PROSECUTIONCASEFILE_CC_CASE_RECEIVED});
+    }
+
+    @Test
     void initiateCCProsecutionForMCC() {
         stubGetOrganisationUnitWithOneCourtroom();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-mcc.json");

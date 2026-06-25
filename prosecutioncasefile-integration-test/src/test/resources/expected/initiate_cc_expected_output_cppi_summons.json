@@ -268,6 +268,22 @@
                 "title": "Baron"
               }
             ],
+            "associatedPersons": [
+              {
+                "person": {
+                  "address": {
+                    "address1": "Address Line 1",
+                    "address2": "Address Line 2",
+                    "address3": "Address Line 3",
+                    "address4": "Address Line 4",
+                    "address5": "Address Line 5",
+                    "postcode": "CR0 1XX"
+                  },
+                  "lastName": "Parent Guardian Organisation"
+                },
+                "role": "ParentGuardian"
+              }
+            ],
             "courtProceedingsInitiated": "2021-01-06T01:45:01.368Z",
             "croNumber": "123456/20M",
             "id": "f328187d-c8d7-4ce5-be60-d071a39224fd",

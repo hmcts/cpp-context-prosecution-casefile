@@ -1,17 +1,24 @@
 package uk.gov.moj.cpp.prosecution.casefile.event.processor.converter;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 import static uk.gov.moj.cpp.prosecution.casefile.event.processor.utils.CaseReceivedHelper.GIVEN_NAME_2;
 import static uk.gov.moj.cpp.prosecution.casefile.event.processor.utils.CaseReceivedHelper.GIVEN_NAME_3;
+import static uk.gov.moj.cpp.prosecution.casefile.event.processor.utils.CaseReceivedHelper.buildDefendantWithOrganisationGuardian;
+import static uk.gov.moj.cpp.prosecution.casefile.event.processor.utils.CaseReceivedHelper.buildDefendantWithTitle;
 import static uk.gov.moj.cpp.prosecution.casefile.event.processor.utils.CaseReceivedHelper.buildProsecutionWithReferenceData;
+import static uk.gov.moj.cpp.prosecution.casefile.event.processor.utils.CaseReceivedHelper.getReferenceDataVO;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.AlcoholLevelMethodReferenceData.alcoholLevelMethodReferenceData;
 
+import uk.gov.justice.core.courts.AssociatedPerson;
 import uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil;
 import uk.gov.moj.cpp.prosecution.casefile.domain.ParamsVO;
 import uk.gov.moj.cpp.prosecution.casefile.domain.ProsecutionWithReferenceData;
@@ -46,14 +53,14 @@ public class ProsecutionCaseFileDefendantToCCDefendantConverterTest {
 
     @BeforeEach
     public void setUp() {
-        converter =  new ProsecutionCaseFileDefendantToCCDefendantConverter();
+        converter = new ProsecutionCaseFileDefendantToCCDefendantConverter();
 
         var prosecutionCaseFileOffenceToCourtsOffenceConverter = new ProsecutionCaseFileOffenceToCourtsOffenceConverter();
         ReflectionUtil.setField(prosecutionCaseFileOffenceToCourtsOffenceConverter, "referenceDataQueryService", referenceDataQueryService);
 
         ReflectionUtil.setField(converter, "prosecutionCaseToCCPersonDefendantConverterToCCOffenceConverter", prosecutionCaseToCCPersonDefendantConverterToCCOffenceConverter);
         ReflectionUtil.setField(converter, "prosecutionCaseFileToCCLegalEntityDefendantConverter", prosecutionCaseFileToCCLegalEntityDefendantConverter);
-        ReflectionUtil.setField(converter, "prosecutionCaseFileOffenceToCourtsOffenceConverter",  prosecutionCaseFileOffenceToCourtsOffenceConverter);
+        ReflectionUtil.setField(converter, "prosecutionCaseFileOffenceToCourtsOffenceConverter", prosecutionCaseFileOffenceToCourtsOffenceConverter);
     }
 
     @Test
@@ -97,6 +104,49 @@ public class ProsecutionCaseFileDefendantToCCDefendantConverterTest {
         assertThat(defendants.size(), equalTo(courtsDefendants.size()));
         assertNull(courtsDefendants.get(0).getAliases());
         assertNull(courtsDefendants.get(1).getAliases());
+    }
+
+    @Test
+    public void convertToCourtsDefendant_whenParentGuardianIsIndividual_shouldMapPersonDetails() {
+        final Defendant defendant = buildDefendantWithTitle("MR");
+        final ParamsVO paramsVO = buildParamsVO();
+
+        when(referenceDataQueryService.retrieveAlcoholLevelMethods()).thenReturn(asList(
+                alcoholLevelMethodReferenceData().withMethodCode("A").withMethodDescription("Blood").build()));
+
+        final List<uk.gov.justice.core.courts.Defendant> result = converter.convert(singletonList(defendant), paramsVO);
+
+        final List<AssociatedPerson> associatedPersons = result.get(0).getAssociatedPersons();
+        assertThat(associatedPersons, hasSize(1));
+        assertThat(associatedPersons.get(0).getRole(), equalTo("ParentGuardian"));
+        assertThat(associatedPersons.get(0).getPerson().getFirstName(), equalTo("Eugene"));
+        assertThat(associatedPersons.get(0).getPerson().getLastName(), equalTo("Tooms"));
+    }
+
+    @Test
+    public void convertToCourtsDefendant_whenParentGuardianIsOrganisation_shouldMapOrganisationNameToAssociatedPerson() {
+        final String organisationName = "Guardian Corp Ltd";
+        final Defendant defendant = buildDefendantWithOrganisationGuardian(organisationName);
+        final ParamsVO paramsVO = buildParamsVO();
+
+        when(referenceDataQueryService.retrieveAlcoholLevelMethods()).thenReturn(asList(
+                alcoholLevelMethodReferenceData().withMethodCode("A").withMethodDescription("Blood").build()));
+
+        final List<uk.gov.justice.core.courts.Defendant> result = converter.convert(singletonList(defendant), paramsVO);
+
+        final List<AssociatedPerson> associatedPersons = result.get(0).getAssociatedPersons();
+        assertThat(associatedPersons, is(not(nullValue())));
+        assertThat(associatedPersons, hasSize(1));
+        assertThat(associatedPersons.get(0).getRole(), equalTo("ParentGuardian"));
+        assertThat(associatedPersons.get(0).getPerson().getLastName(), equalTo(organisationName));
+    }
+
+    private ParamsVO buildParamsVO() {
+        final ParamsVO paramsVO = new ParamsVO();
+        paramsVO.setCaseId(buildProsecutionWithReferenceData(EITHER_WAY).getProsecution().getCaseDetails().getCaseId());
+        paramsVO.setReferenceDataVO(getReferenceDataVO());
+        paramsVO.setInitiationCode("J");
+        return paramsVO;
     }
 
     private void assertAliasMiddleNameValues(final List<uk.gov.justice.core.courts.Defendant> courtsDefendants) {

@@ -515,7 +515,8 @@ public class ProsecutionCaseFile implements Aggregate {
                                 .filter(status -> MigrationCaseStatus.INACTIVE == status)
                                 .isPresent();
 
-        final List<DefendantProblem> defendantErrors = validateDefendantErrors(prosecution.getCaseDetails(), prosecutionChannel, defendantsWithReferenceData, referenceDataQueryService, builder, Boolean.FALSE, isMCCWithListNewHearing,isStandaloneCaseWithoutHearing, isCivil);
+        final boolean isEnforcement = isCivil && prosecution.getCaseDetails().getRelatedUrn() != null;
+        final List<DefendantProblem> defendantErrors = validateDefendantErrors(prosecution.getCaseDetails(), prosecutionChannel, defendantsWithReferenceData, referenceDataQueryService, builder, Boolean.FALSE, isMCCWithListNewHearing, isStandaloneCaseWithoutHearing, isCivil, isEnforcement);
 
         if (messageFromCppiOrMccOrCivil && prosecutionReceived) {
             caseProblems.add(newProblem(DUPLICATED_PROSECUTION, "urn", prosecution.getCaseDetails().getProsecutorCaseReference()));
@@ -835,7 +836,7 @@ public class ProsecutionCaseFile implements Aggregate {
 
     public Stream<Object> addErrorCorrectedDefendantsForSPI(final UUID caseId, final UUID externalId, final DefendantsWithReferenceData defendantsWithReferenceData, final ReferenceDataQueryService referenceDataQueryService,final Boolean isCivil) {
         final Builder<Object> builder = builder();
-        final List<DefendantProblem> defendantErrors = validateDefendantErrors(this.caseDetails, SPI, defendantsWithReferenceData, referenceDataQueryService, builder, Boolean.FALSE, false, false,isCivil);
+        final List<DefendantProblem> defendantErrors = validateDefendantErrors(this.caseDetails, SPI, defendantsWithReferenceData, referenceDataQueryService, builder, Boolean.FALSE, false, false, isCivil, false);
         return addDefendants(caseId, externalId, defendantsWithReferenceData, defendantErrors, builder);
     }
 

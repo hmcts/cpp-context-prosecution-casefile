@@ -110,5 +110,7 @@ public interface ReferenceDataQueryService {
 
     List<MojOffences> retrieveOffencesByType(final String type);
 
+    List<MojOffences> retrieveAllActiveMojOffences();
+
     Optional<LjaDetails> getLjaDetails(String lja, String id);
 }

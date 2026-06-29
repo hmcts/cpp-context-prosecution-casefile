@@ -89,6 +89,9 @@ public class GroupProsecutionCaseFile implements Aggregate {
                 .filter(p -> p.getGroupProsecution().getIsGroupMaster())
                 .findFirst();
         final Boolean isCivil = masterCaseData.isPresent() && ofNullable(masterCaseData.get().getGroupProsecution().getIsCivil()).orElse(false);
+        final boolean isEnforcement = masterCaseData.isPresent() && isCivil
+                && masterCaseData.get().getGroupProsecution().getCaseDetails() != null
+                && masterCaseData.get().getGroupProsecution().getCaseDetails().getRelatedUrn() != null;
         String receivedInitiationCode = null;
         if (masterCaseData.isPresent() && masterCaseData.get().getGroupProsecution() != null &&
                 masterCaseData.get().getGroupProsecution().getCaseDetails() != null &&
@@ -118,7 +121,7 @@ public class GroupProsecutionCaseFile implements Aggregate {
                     caseProblems.addAll(validate(prosecutionWithReferenceData, referenceDataQueryService, getCaseValidationRulesForCivil(prosecutionWithReferenceData.getProsecution().getCaseDetails().getInitiationCode())))
         );
         LOGGER.info("caseProblems validated for submissionId {} with count {} ", groupProsecutionList.getExternalId(), caseProblems.size());
-        final List<DefendantProblem> defendantProblems = validateDefendants(groupProsecutionList, defendantRefDataEnrichers, referenceDataQueryService, builder,isCivil);
+        final List<DefendantProblem> defendantProblems = validateDefendants(groupProsecutionList, defendantRefDataEnrichers, referenceDataQueryService, builder, isCivil, isEnforcement);
 
         final boolean hasErrors = isNotEmpty(groupCaseProblems) || isNotEmpty(caseProblems) || isNotEmpty(defendantProblems);
 
@@ -189,13 +192,13 @@ public class GroupProsecutionCaseFile implements Aggregate {
         );
     }
 
-    private List<DefendantProblem> validateDefendants(final GroupProsecutionList groupProsecutionList, final List<DefendantRefDataEnricher> defendantRefDataEnrichers, final ReferenceDataQueryService referenceDataQueryService, final Stream.Builder builder,final Boolean isCivil) {
+    private List<DefendantProblem> validateDefendants(final GroupProsecutionList groupProsecutionList, final List<DefendantRefDataEnricher> defendantRefDataEnrichers, final ReferenceDataQueryService referenceDataQueryService, final Stream.Builder builder, final Boolean isCivil, final boolean isEnforcement) {
         final Map<UUID, DefendantsWithReferenceData> defendantsWithReferenceDataMap = buildDefendantsWithReferenceDataByCaseId(groupProsecutionList.getGroupProsecutionWithReferenceDataList(), groupProsecutionList.getChannel(), groupProsecutionList.getExternalId(), defendantRefDataEnrichers);
 
         return groupProsecutionList.getGroupProsecutionWithReferenceDataList().stream()
                 .flatMap(groupProsecutionWithReferenceData -> {
                     final DefendantsWithReferenceData defendantsWithReferenceData = defendantsWithReferenceDataMap.get(groupProsecutionWithReferenceData.getGroupProsecution().getCaseDetails().getCaseId());
-                    final List<DefendantProblem> errors = validateDefendantErrors(groupProsecutionWithReferenceData.getGroupProsecution().getCaseDetails(), groupProsecutionList.getChannel(), defendantsWithReferenceData, referenceDataQueryService, builder, Boolean.TRUE, false, false,isCivil);
+                    final List<DefendantProblem> errors = validateDefendantErrors(groupProsecutionWithReferenceData.getGroupProsecution().getCaseDetails(), groupProsecutionList.getChannel(), defendantsWithReferenceData, referenceDataQueryService, builder, Boolean.TRUE, false, false, isCivil, isEnforcement);
                     return errors.stream();
                 }).toList();
     }

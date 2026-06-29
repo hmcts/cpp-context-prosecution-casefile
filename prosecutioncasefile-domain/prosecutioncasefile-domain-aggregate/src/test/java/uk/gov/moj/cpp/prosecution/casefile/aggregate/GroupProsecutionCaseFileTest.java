@@ -30,6 +30,7 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Offence;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.OrganisationUnitWithCourtroomReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ParentGuardianInformation;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.SelfDefinedInformation;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.MojOffences;
 import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.GroupProsecutionRejected;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.SummonsCodeReferenceData;
@@ -111,6 +112,7 @@ public class GroupProsecutionCaseFileTest {
                 Optional.of(OrganisationUnitWithCourtroomReferenceData.organisationUnitWithCourtroomReferenceData().build());
 
         when(referenceDataQueryService.retrieveOrganisationUnitWithCourtroom("C55BN00")).thenReturn(optionalOrganisationUnitWithCourtroomReferenceData);
+        when(referenceDataQueryService.retrieveAllActiveMojOffences()).thenReturn(asList(MojOffences.mojOffences().withCjsOffenceCode(OFFENCE_CODE).build()));
 
         final List<GroupProsecutionWithReferenceData> groupProsecutionWithReferenceDataList = new ArrayList<>();
         final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
@@ -198,6 +200,7 @@ public class GroupProsecutionCaseFileTest {
         final Optional<OrganisationUnitWithCourtroomReferenceData> optionalOrganisationUnitWithCourtroomReferenceData =
                 Optional.of(OrganisationUnitWithCourtroomReferenceData.organisationUnitWithCourtroomReferenceData().build());
         when(referenceDataQueryService.retrieveOrganisationUnitWithCourtroom("C55BN00")).thenReturn(optionalOrganisationUnitWithCourtroomReferenceData);
+        when(referenceDataQueryService.retrieveAllActiveMojOffences()).thenReturn(asList(MojOffences.mojOffences().withCjsOffenceCode(OFFENCE_CODE).build()));
 
         final List<GroupProsecutionWithReferenceData> groupProsecutionWithReferenceDataList = new ArrayList<>();
 

@@ -299,6 +299,7 @@ public class ProsecutionCaseFileTest {
         when(referenceDataQueryService.getInitiationCodes()).thenReturn(of("J", "C", SUMMONS_INITIATION_CODE));
         when(referenceDataQueryService.retrieveOffenceData(any(Offence.class), any(String.class))).thenReturn(of(offenceReferenceData().withCjsOffenceCode(OFFENCE_CODE).build()));
         when(referenceDataQueryService.retrieveOffencesByType("VP")).thenReturn(Collections.singletonList(MojOffences.mojOffences().withOffenceId(offenceId).withCjsOffenceCode(OFFENCE_CODE).build()));
+        when(referenceDataQueryService.retrieveAllActiveMojOffences()).thenReturn(of(MojOffences.mojOffences().withCjsOffenceCode(OFFENCE_CODE).build()));
 
         prosecutionCaseFile = new ProsecutionCaseFile();
 

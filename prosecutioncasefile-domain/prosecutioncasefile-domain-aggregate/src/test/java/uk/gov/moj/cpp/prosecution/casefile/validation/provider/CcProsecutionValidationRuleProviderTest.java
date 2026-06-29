@@ -13,7 +13,7 @@ import uk.gov.moj.cpp.prosecution.casefile.validation.rules.CaseInitiationValida
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.ProsecutorReferenceDataValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.SummonsCodeValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.ValidationRule;
-import uk.gov.moj.cpp.prosecution.casefile.validation.rules.EnforcementOffencesValidationRule;
+import uk.gov.moj.cpp.prosecution.casefile.validation.rules.MojOffencesValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.CroNumberSpiValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.CroNumberValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.PncIdSpiValidationRule;
@@ -125,20 +125,20 @@ public class CcProsecutionValidationRuleProviderTest {
     }
 
     @Test
-    public void shouldUseEnforcementRuleSetWhenIsEnforcementIsTrue() {
+    public void shouldUseMojOffencesRuleSetForAllOtherInitiationCodeCases() {
         final List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> validationRules = CcProsecutionValidationRuleProvider
-                .getDefendantValidationRules(INITIATION_CODE_OTHER, Channel.CIVIL, Boolean.TRUE, true);
+                .getDefendantValidationRules(INITIATION_CODE_OTHER, Channel.CIVIL, Boolean.TRUE);
 
-        assertTrue(validationRules.stream().map(ValidationRule::getClass).anyMatch(s -> s.equals(EnforcementOffencesValidationRule.class)));
+        assertTrue(validationRules.stream().map(ValidationRule::getClass).anyMatch(s -> s.equals(MojOffencesValidationRule.class)));
         assertFalse(validationRules.stream().map(ValidationRule::getClass).anyMatch(s -> s.equals(OffenceCodeValidationAndEnricherRule.class)));
     }
 
     @Test
-    public void shouldNotUseEnforcementRuleSetWhenIsEnforcementIsFalse() {
+    public void shouldNotUseMojOffencesRuleSetForNonOtherInitiationCodeCases() {
         final List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> validationRules = CcProsecutionValidationRuleProvider
-                .getDefendantValidationRules(INITIATION_CODE_OTHER, Channel.CIVIL, Boolean.TRUE, false);
+                .getDefendantValidationRules(INITIATION_CODE_CHARGE_CASE, Channel.CIVIL, Boolean.TRUE);
 
-        assertFalse(validationRules.stream().map(ValidationRule::getClass).anyMatch(s -> s.equals(EnforcementOffencesValidationRule.class)));
+        assertFalse(validationRules.stream().map(ValidationRule::getClass).anyMatch(s -> s.equals(MojOffencesValidationRule.class)));
     }
 
     @Test

@@ -29,7 +29,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class EnforcementOffencesValidationRuleTest {
+class MojOffencesValidationRuleTest {
 
     private static final String ALLOWED_CODE = "EF001";
     private static final String DISALLOWED_CODE = "XX999";
@@ -41,7 +41,7 @@ class EnforcementOffencesValidationRuleTest {
     DefendantWithReferenceData defendantWithReferenceData;
 
     @InjectMocks
-    private EnforcementOffencesValidationRule underTest;
+    private MojOffencesValidationRule underTest;
 
     @Nested
     @DisplayName("when submitted offence exists in active MOJ ref data")

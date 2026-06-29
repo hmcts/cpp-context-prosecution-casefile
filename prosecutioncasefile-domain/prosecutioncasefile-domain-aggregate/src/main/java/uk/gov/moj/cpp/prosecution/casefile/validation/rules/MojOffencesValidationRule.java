@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class EnforcementOffencesValidationRule implements ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService> {
+public class MojOffencesValidationRule implements ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService> {
 
     @Override
     public ValidationResult validate(final DefendantWithReferenceData defendantWithReferenceData,

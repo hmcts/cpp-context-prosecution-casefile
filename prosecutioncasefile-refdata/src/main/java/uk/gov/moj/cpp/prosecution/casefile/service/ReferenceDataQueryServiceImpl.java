@@ -301,6 +301,11 @@ public class ReferenceDataQueryServiceImpl implements ReferenceDataQueryService 
     }
 
     @Override
+    public List<MojOffences> retrieveAllActiveMojOffences() {
+        return getRefDataStream(REFERENCEDATA_QUERY_MOJ_OFFENCES, MOJ_OFFENCES, createObjectBuilder()).map(asMojOffencesRefData()).collect(Collectors.toList());
+    }
+
+    @Override
     public Optional<OrganisationUnitWithCourtroomReferenceData> retrieveOrganisationUnitWithCourtroom(final String ouCode) {
         final JsonEnvelope envelope = envelopeFrom(getMetadataBuilder(REFERENCEDATA_QUERY_COURTROOMS_UNITS), createObjectBuilder().add(OU_COURTROOM_CODE, ouCode));
         final JsonValue response = requester.requestAsAdmin(envelope, JsonObject.class).payload();

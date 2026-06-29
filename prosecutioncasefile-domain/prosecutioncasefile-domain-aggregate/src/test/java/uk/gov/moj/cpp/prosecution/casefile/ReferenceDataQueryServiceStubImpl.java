@@ -218,6 +218,11 @@ public class ReferenceDataQueryServiceStubImpl implements ReferenceDataQueryServ
     }
 
     @Override
+    public List<MojOffences> retrieveAllActiveMojOffences() {
+        return new ArrayList<>();
+    }
+
+    @Override
     public Optional<LjaDetails> getLjaDetails(final String lja, final String id) {
         return empty();
     }

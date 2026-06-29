@@ -13,10 +13,12 @@ import uk.gov.moj.cpp.prosecution.casefile.validation.rules.CaseInitiationValida
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.ProsecutorReferenceDataValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.SummonsCodeValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.ValidationRule;
+import uk.gov.moj.cpp.prosecution.casefile.validation.rules.EnforcementOffencesValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.CroNumberSpiValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.CroNumberValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.PncIdSpiValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.PncIdValidationRule;
+import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.offence.OffenceCodeValidationAndEnricherRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.offence.OffenceGenericValidationAndEnricherRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.offence.StatementOfFactsValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.offence.StatementOfFactsWelshValidationRule;
@@ -41,6 +43,7 @@ public class CcProsecutionValidationRuleProviderTest {
     private static final String INITIATION_CODE_CHARGE_CASE = "C";
     private static final String INITIATION_CODE_FOR_SUMMONS = "S";
     private static final String INITIATION_CODE_FOR_SJP = "J";
+    private static final String INITIATION_CODE_OTHER = "O";
 
     @Test
     public void shouldValidateDefendantValidateSpiRules() {
@@ -119,6 +122,23 @@ public class CcProsecutionValidationRuleProviderTest {
         assertTrue(validationRules.stream().map((Function<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>::getClass).anyMatch(s -> s.equals(CroNumberValidationRule.class)));
         assertTrue(validationRules.stream().map((Function<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>::getClass).anyMatch(s -> s.equals(PncIdValidationRule.class)));
         assertTrue(validationRules.stream().map((Function<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>::getClass).noneMatch(s -> s.equals(StatementOfFactsWelshValidationRule.class)));
+    }
+
+    @Test
+    public void shouldUseEnforcementRuleSetWhenIsEnforcementIsTrue() {
+        final List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> validationRules = CcProsecutionValidationRuleProvider
+                .getDefendantValidationRules(INITIATION_CODE_OTHER, Channel.CIVIL, Boolean.TRUE, true);
+
+        assertTrue(validationRules.stream().map(ValidationRule::getClass).anyMatch(s -> s.equals(EnforcementOffencesValidationRule.class)));
+        assertFalse(validationRules.stream().map(ValidationRule::getClass).anyMatch(s -> s.equals(OffenceCodeValidationAndEnricherRule.class)));
+    }
+
+    @Test
+    public void shouldNotUseEnforcementRuleSetWhenIsEnforcementIsFalse() {
+        final List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> validationRules = CcProsecutionValidationRuleProvider
+                .getDefendantValidationRules(INITIATION_CODE_OTHER, Channel.CIVIL, Boolean.TRUE, false);
+
+        assertFalse(validationRules.stream().map(ValidationRule::getClass).anyMatch(s -> s.equals(EnforcementOffencesValidationRule.class)));
     }
 
     @Test

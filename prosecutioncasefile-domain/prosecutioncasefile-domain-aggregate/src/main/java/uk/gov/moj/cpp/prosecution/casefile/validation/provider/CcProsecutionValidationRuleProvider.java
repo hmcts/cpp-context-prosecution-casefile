@@ -56,6 +56,7 @@ import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.PncIdSpiVa
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.PncIdValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.PostCodeValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.SelfDefinedEthnicityValidationAndEnricherRule;
+import uk.gov.moj.cpp.prosecution.casefile.validation.rules.EnforcementOffencesValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.offence.ArrestDateValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.offence.ArrestDateValidationRuleForCivil;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.offence.ChargeDateValidationRule;
@@ -253,6 +254,21 @@ public class CcProsecutionValidationRuleProvider {
             new HearingTypeCodeValidationRule(),
             new LaidDateValidationRule()
     ));
+    private static final List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> GROUP_ENFORCEMENT_DEFENDANT_RULE_SET = unmodifiableList(asList(
+            new ArrestDateValidationRuleForCivil(),
+            new DefendantDateOfBirthValidationRule(),
+            new ParentGuardianDateOfBirthValidationRule(),
+            new CourtHearingLocationValidationRule(),
+            new OffenderCodeValidationAndEnricherRule(),
+            new OffenceLocationValidationAndEnricherRule(),
+            new NationalityValidationAndEnricherRule(),
+            new VehicleCodeValidationAndEnricherRule(),
+            new EnforcementOffencesValidationRule(),
+            new CourtReceivedFromCodeCourtValidationRules(),
+            new CourtReceivedToCodeCourtValidationRules(),
+            new HearingTypeCodeValidationRule(),
+            new LaidDateValidationRule()
+    ));
 
     private static final Map<String, List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>>> defendantValidationMap = of(
             SUMMONS.getCode(), Stream.of(COMMON_DEFENDANT_RULE_SET, NON_POLICE_DEFENDANT_RULE_SET, SUMMONS_DEFENDANT_RULE_SET).flatMap(Collection::stream).toList(),
@@ -275,6 +291,9 @@ public class CcProsecutionValidationRuleProvider {
     private static final Map<String, List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>>> defendantValidationMapForGroupCivilCases = of(
             SUMMONS.getCode(), Stream.of(GROUP_CIVIL_DEFENDANT_RULE_SET).flatMap(Collection::stream).toList(),
             OTHER.getCode(), Stream.of(GROUP_CIVIL_DEFENDANT_RULE_SET).flatMap(Collection::stream).toList());
+    private static final Map<String, List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>>> defendantValidationMapForGroupEnforcementCases = of(
+            SUMMONS.getCode(), Stream.of(GROUP_ENFORCEMENT_DEFENDANT_RULE_SET).flatMap(Collection::stream).toList(),
+            OTHER.getCode(), Stream.of(GROUP_ENFORCEMENT_DEFENDANT_RULE_SET).flatMap(Collection::stream).toList());
 
     private static final Map<String, List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>>> defendantValidationMapMCCCivil = of(
             SUMMONS.getCode(), Stream.of(GROUP_CIVIL_DEFENDANT_RULE_SET,COMMON_DEFENDANT_RULE_SET, NON_POLICE_DEFENDANT_RULE_SET, SUMMONS_DEFENDANT_RULE_MCC_SET).flatMap(Collection::stream).toList(),
@@ -292,6 +311,16 @@ public class CcProsecutionValidationRuleProvider {
             return COMMON_CASE_RULE_SET;
         }
 
+    }
+
+    public static List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> getDefendantValidationRules(final String defendantInitiationCode,
+                                                                                                                          final Channel channel,
+                                                                                                                          final Boolean isCivil,
+                                                                                                                          final boolean isEnforcement) {
+        if (isEnforcement) {
+            return getValidationRules(defendantInitiationCode, COMMON_DEFENDANT_RULE_SET, SPI_DEFENDANT_RULE_SET, defendantValidationMapForGroupEnforcementCases);
+        }
+        return getDefendantValidationRules(defendantInitiationCode, channel, isCivil);
     }
 
     public static List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> getDefendantValidationRules(final String defendantInitiationCode,

@@ -33,6 +33,7 @@ import static uk.gov.moj.cpp.prosecutioncasefile.query.view.utils.TestUtils.crea
 import static uk.gov.moj.cpp.prosecutioncasefile.query.view.utils.TestUtils.newBusinessValidationErrorSummary;
 
 import uk.gov.moj.cpp.prosecutioncasefile.mapping.FilterParameter;
+import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.BusinessValidationErrorCaseDetails;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.BusinessValidationErrorDetails;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.BusinessValidationErrorSummary;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.pagination.PaginationParameter;
@@ -248,6 +249,22 @@ public class BusinessErrorDetailsServiceTest {
 
         verify(businessValidationErrorSummaryRepository).fetchFilteredCaseErrorSummary(filterParameter, paginationParameter);
         verify(businessValidationErrorRepository).fetchAllCaseErrorDetailsByCaseIds(caseIds, paginationParameter);
+    }
+
+    @Test
+    public void shouldFindAllErrorsByCaseIdWithPopulatedCaseDetails() {
+        final BusinessValidationErrorCaseDetails caseDetails = new BusinessValidationErrorCaseDetails();
+        caseDetails.setCaseDetails("{\"defendants\": []}");
+
+        when(businessValidationErrorRepository.findByCaseId(CASE_ID))
+                .thenReturn(asList(createCaseLevelError()));
+        when(businessValidationErrorCaseDetailsRepository.findByCaseId(CASE_ID))
+                .thenReturn(asList(caseDetails));
+
+        final List<BusinessValidationErrorView> result = businessErrorDetailsService.findAllErrorsByCaseId(CASE_ID);
+
+        assertThat(result, notNullValue());
+        assertThat(result.size(), is(1));
     }
 
     @Test

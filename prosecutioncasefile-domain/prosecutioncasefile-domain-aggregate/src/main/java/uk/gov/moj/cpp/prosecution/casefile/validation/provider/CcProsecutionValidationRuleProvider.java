@@ -272,9 +272,12 @@ public class CcProsecutionValidationRuleProvider {
             REQUISITION.getCode(), Stream.of(COMMON_DEFENDANT_RULE_SET, SPI_DEFENDANT_RULE_SET, REQUISITION_DEFENDANT_RULE_SET).flatMap(Collection::stream).toList(),
             OTHER.getCode(), Stream.of(COMMON_DEFENDANT_RULE_SET, SPI_DEFENDANT_RULE_SET, OTHER_DEFENDANT_RULE_SET).flatMap(Collection::stream).toList(),
             SJP.getCode(), SPI_DEFENDANT_RULE_SET_FOR_INITIATION_CODE);
+    private static final List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> CIVIL_PAST_HEARING_DATE_RULE_SET = unmodifiableList(asList(
+            new DateOfHearingPastDateValidationAndEnricherRule()
+    ));
     private static final Map<String, List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>>> defendantValidationMapForGroupCivilCases = of(
-            SUMMONS.getCode(), Stream.of(GROUP_CIVIL_DEFENDANT_RULE_SET).flatMap(Collection::stream).toList(),
-            OTHER.getCode(), Stream.of(GROUP_CIVIL_DEFENDANT_RULE_SET).flatMap(Collection::stream).toList());
+            SUMMONS.getCode(), Stream.of(GROUP_CIVIL_DEFENDANT_RULE_SET, CIVIL_PAST_HEARING_DATE_RULE_SET).flatMap(Collection::stream).toList(),
+            OTHER.getCode(), Stream.of(GROUP_CIVIL_DEFENDANT_RULE_SET, CIVIL_PAST_HEARING_DATE_RULE_SET).flatMap(Collection::stream).toList());
 
     private static final Map<String, List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>>> defendantValidationMapMCCCivil = of(
             SUMMONS.getCode(), Stream.of(GROUP_CIVIL_DEFENDANT_RULE_SET,COMMON_DEFENDANT_RULE_SET, NON_POLICE_DEFENDANT_RULE_SET, SUMMONS_DEFENDANT_RULE_MCC_SET).flatMap(Collection::stream).toList(),

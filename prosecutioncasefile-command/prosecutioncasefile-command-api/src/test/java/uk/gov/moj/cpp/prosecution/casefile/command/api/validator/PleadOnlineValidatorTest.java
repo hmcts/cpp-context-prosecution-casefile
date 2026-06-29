@@ -7,15 +7,14 @@ import static org.hamcrest.Matchers.hasSize;
 import static uk.gov.justice.core.courts.Defendant.defendant;
 import static uk.gov.justice.core.courts.Plea.plea;
 import static uk.gov.justice.core.courts.ProsecutionCase.prosecutionCase;
+import static uk.gov.justice.services.messaging.JsonObjects.createArrayBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.FinancialMeans.financialMeans;
 import static uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.Offence.offence;
 import static uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.PersonalDetails.personalDetails;
 import static uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.PleaType.GUILTY;
 import static uk.gov.moj.cps.prosecutioncasefile.command.api.PleadOnline.pleadOnline;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.justice.core.courts.Offence;
 import uk.gov.justice.core.courts.ProsecutionCase;
 import uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.Benefits;
@@ -24,10 +23,12 @@ import uk.gov.moj.cps.prosecutioncasefile.command.api.PleadOnline;
 import java.util.List;
 import java.util.Map;
 
-import javax.json.Json;
 import javax.json.JsonObject;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class PleadOnlineValidatorTest {
@@ -131,14 +132,13 @@ public class PleadOnlineValidatorTest {
 
     @Test
     public void shouldValidateWithJsonPayload_WhenCaseAlreadyReviewed() {
-        final JsonObject jsonObject = Json.createObjectBuilder()
+        final JsonObject jsonObject = createObjectBuilder()
                 .add("status", "")
                 .add("completed", false)
                 .add("assigned", false)
-                .add("defendant", Json
-                        .createObjectBuilder()
-                        .add("offences", Json.createArrayBuilder()
-                                .add(Json.createObjectBuilder()
+                .add("defendant", createObjectBuilder()
+                        .add("offences", createArrayBuilder()
+                                .add(createObjectBuilder()
                                         .add("pendingWithdrawal", true)
                                         .build())
                                 .build()
@@ -153,14 +153,13 @@ public class PleadOnlineValidatorTest {
 
     @Test
     public void shouldValidateWithJsonPayload_WhenCaseAdjournedPostConviction() {
-        final JsonObject jsonObject = Json.createObjectBuilder()
+        final JsonObject jsonObject = createObjectBuilder()
                 .add("status", "")
                 .add("completed", false)
                 .add("assigned", false)
-                .add("defendant", Json
-                        .createObjectBuilder()
-                        .add("offences", Json.createArrayBuilder()
-                                .add(Json.createObjectBuilder()
+                .add("defendant", createObjectBuilder()
+                        .add("offences", createArrayBuilder()
+                                .add(createObjectBuilder()
                                         .add("pendingWithdrawal", false)
                                         .add("convictionDate", "2020-12-23")
                                         .build())
@@ -176,14 +175,13 @@ public class PleadOnlineValidatorTest {
 
     @Test
     public void shouldValidateWithJsonPayload_WhenPleaAlreadySubmitted() {
-        final JsonObject jsonObject = Json.createObjectBuilder()
+        final JsonObject jsonObject = createObjectBuilder()
                 .add("status", "")
                 .add("completed", false)
                 .add("assigned", false)
-                .add("defendant", Json
-                        .createObjectBuilder()
-                        .add("offences", Json.createArrayBuilder()
-                                .add(Json.createObjectBuilder()
+                .add("defendant", createObjectBuilder()
+                        .add("offences", createArrayBuilder()
+                                .add(createObjectBuilder()
                                         .add("pendingWithdrawal", false)
                                         .add("plea", "Guilty")
                                         .build())
@@ -199,14 +197,13 @@ public class PleadOnlineValidatorTest {
 
     @Test
     public void shouldValidateWithJsonPayload() {
-        final JsonObject jsonObject = Json.createObjectBuilder()
+        final JsonObject jsonObject = createObjectBuilder()
                 .add("status", "")
                 .add("completed", false)
                 .add("assigned", false)
-                .add("defendant", Json
-                        .createObjectBuilder()
-                        .add("offences", Json.createArrayBuilder()
-                                .add(Json.createObjectBuilder()
+                .add("defendant", createObjectBuilder()
+                        .add("offences", createArrayBuilder()
+                                .add(createObjectBuilder()
                                         .add("pendingWithdrawal", false)
                                         .build())
                                 .build())

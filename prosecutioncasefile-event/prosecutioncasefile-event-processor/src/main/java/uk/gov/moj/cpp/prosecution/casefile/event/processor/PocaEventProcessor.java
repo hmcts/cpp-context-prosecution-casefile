@@ -1,10 +1,10 @@
 package uk.gov.moj.cpp.prosecution.casefile.event.processor;
 
 import static java.util.Objects.nonNull;
-import static javax.json.Json.createObjectBuilder;
 import static uk.gov.justice.services.core.annotation.Component.EVENT_PROCESSOR;
 import static uk.gov.justice.services.messaging.Envelope.metadataFrom;
 import static uk.gov.justice.services.messaging.JsonEnvelope.envelopeFrom;
+import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 
 import uk.gov.justice.core.courts.CourtApplication;
 import uk.gov.justice.core.courts.CourtApplicationParty;
@@ -28,7 +28,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import javax.inject.Inject;
-import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
@@ -87,7 +86,7 @@ public class PocaEventProcessor {
 
         final CourtApplicationSubject courtApplicationSubject = CourtApplicationSubject.courtApplicationSubject().withCourtApplicationId(courtApplication.getId()).build();
 
-        final JsonObject applicationMaterialCommandPayload = Json.createObjectBuilder()
+        final JsonObject applicationMaterialCommandPayload = createObjectBuilder()
                 .add("applicationId", courtApplication.getId().toString())
                 .add("submissionId", UUID.randomUUID().toString())
                 .add("material", fileId)

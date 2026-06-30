@@ -125,7 +125,7 @@ public class CcProsecutionValidationRuleProviderTest {
     }
 
     @Test
-    public void shouldUseMojOffencesRuleSetForAllOtherInitiationCodeCases() {
+    public void shouldUseMojOffencesRuleSetForCivilCasesWithOtherInitiationCode() {
         final List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> validationRules = CcProsecutionValidationRuleProvider
                 .getDefendantValidationRules(INITIATION_CODE_OTHER, Channel.CIVIL, Boolean.TRUE);
 

@@ -248,21 +248,6 @@ public class CcProsecutionValidationRuleProvider {
             new OffenceLocationValidationAndEnricherRule(),
             new NationalityValidationAndEnricherRule(),
             new VehicleCodeValidationAndEnricherRule(),
-            new OffenceCodeValidationAndEnricherRule(),
-            new CourtReceivedFromCodeCourtValidationRules(),
-            new CourtReceivedToCodeCourtValidationRules(),
-            new HearingTypeCodeValidationRule(),
-            new LaidDateValidationRule()
-    ));
-    private static final List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> OTHER_INITIATION_CODE_DEFENDANT_RULE_SET = unmodifiableList(asList(
-            new ArrestDateValidationRuleForCivil(),
-            new DefendantDateOfBirthValidationRule(),
-            new ParentGuardianDateOfBirthValidationRule(),
-            new CourtHearingLocationValidationRule(),
-            new OffenderCodeValidationAndEnricherRule(),
-            new OffenceLocationValidationAndEnricherRule(),
-            new NationalityValidationAndEnricherRule(),
-            new VehicleCodeValidationAndEnricherRule(),
             new MojOffencesValidationRule(),
             new CourtReceivedFromCodeCourtValidationRules(),
             new CourtReceivedToCodeCourtValidationRules(),
@@ -291,10 +276,6 @@ public class CcProsecutionValidationRuleProvider {
     private static final Map<String, List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>>> defendantValidationMapForGroupCivilCases = of(
             SUMMONS.getCode(), Stream.of(GROUP_CIVIL_DEFENDANT_RULE_SET).flatMap(Collection::stream).toList(),
             OTHER.getCode(), Stream.of(GROUP_CIVIL_DEFENDANT_RULE_SET).flatMap(Collection::stream).toList());
-    private static final Map<String, List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>>> defendantValidationMapForOtherInitiationCodeCases = of(
-            SUMMONS.getCode(), Stream.of(OTHER_INITIATION_CODE_DEFENDANT_RULE_SET).flatMap(Collection::stream).toList(),
-            OTHER.getCode(), Stream.of(OTHER_INITIATION_CODE_DEFENDANT_RULE_SET).flatMap(Collection::stream).toList());
-
     private static final Map<String, List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>>> defendantValidationMapMCCCivil = of(
             SUMMONS.getCode(), Stream.of(GROUP_CIVIL_DEFENDANT_RULE_SET,COMMON_DEFENDANT_RULE_SET, NON_POLICE_DEFENDANT_RULE_SET, SUMMONS_DEFENDANT_RULE_MCC_SET).flatMap(Collection::stream).toList(),
             OTHER.getCode(), Stream.of(GROUP_CIVIL_DEFENDANT_RULE_SET,COMMON_DEFENDANT_RULE_SET, NON_POLICE_DEFENDANT_RULE_SET, CHARGE_DEFENDANT_RULE_SET_CIVIL).flatMap(Collection::stream).toList());
@@ -316,9 +297,6 @@ public class CcProsecutionValidationRuleProvider {
     public static List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> getDefendantValidationRules(final String defendantInitiationCode,
                                                                                                                           final Channel channel,
                                                                                                                           final Boolean isCivil) {
-        if (OTHER.getCode().equalsIgnoreCase(defendantInitiationCode)) {
-            return getValidationRules(defendantInitiationCode, COMMON_DEFENDANT_RULE_SET, SPI_DEFENDANT_RULE_SET, defendantValidationMapForOtherInitiationCodeCases);
-        }
         if (nonNull(channel) && CIVIL.equals(channel) && nonNull(isCivil) && (isCivil)) {
             return getValidationRules(defendantInitiationCode, COMMON_DEFENDANT_RULE_SET, SPI_DEFENDANT_RULE_SET, defendantValidationMapForGroupCivilCases);
         } else if (nonNull(channel) && MCC.equals(channel) && nonNull(isCivil) && (isCivil)) {

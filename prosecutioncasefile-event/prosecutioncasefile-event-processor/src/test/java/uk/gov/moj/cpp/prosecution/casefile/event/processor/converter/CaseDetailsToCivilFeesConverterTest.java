@@ -2,7 +2,7 @@ package uk.gov.moj.cpp.prosecution.casefile.event.processor.converter;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static uk.gov.justice.core.courts.FeeStatus.NOT_APPLICABLE;
+import static uk.gov.justice.core.courts.FeeStatus.OUTSTANDING;
 import static uk.gov.justice.core.courts.FeeType.INITIAL;
 
 import uk.gov.justice.core.courts.CivilFees;
@@ -29,11 +29,22 @@ public class CaseDetailsToCivilFeesConverterTest {
     }
 
     @Test
+    public void shouldReturnNullWhenStatusIsNotApplicable() {
+        CaseDetails caseDetails = CaseDetails.caseDetails()
+                .withFeeStatus("NOT_APPLICABLE")
+                .build();
+
+        List<CivilFees> civilFees = underTest.convert(caseDetails);
+
+        assertNull(civilFees);
+    }
+
+    @Test
     public void shouldCreateCivilFeesObject() {
         UUID feeId = UUID.randomUUID();
         UUID caseId = UUID.randomUUID();
         FeeType feeType = INITIAL;
-        FeeStatus feeStatus = NOT_APPLICABLE;
+        FeeStatus feeStatus = OUTSTANDING;
         String paymentReference = "somePaymentReference";
 
         CaseDetails caseDetails = CaseDetails.caseDetails()

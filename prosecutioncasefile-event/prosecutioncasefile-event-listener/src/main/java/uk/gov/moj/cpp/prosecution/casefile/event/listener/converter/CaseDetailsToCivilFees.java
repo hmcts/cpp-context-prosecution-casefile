@@ -18,30 +18,40 @@ public class CaseDetailsToCivilFees implements Converter<CaseDetails, Set<CivilF
     @SuppressWarnings("squid:S1135")
     public Set<CivilFees> convert(final CaseDetails caseDetails) {
 
-        if(isEmpty(caseDetails.getFeeStatus()) && isEmpty(caseDetails.getContestedFeeStatus())) {
+        final String feeStatus = normalize(caseDetails.getFeeStatus());
+        final String contestedFeeStatus = normalize(caseDetails.getContestedFeeStatus());
+
+        if (isEmpty(feeStatus) && isEmpty(contestedFeeStatus)) {
             return null;
         }
 
         Set<CivilFees> civilFeesSet = new HashSet<>();
 
-        if(StringUtils.isNotEmpty(caseDetails.getFeeStatus())) {
+        if (StringUtils.isNotEmpty(feeStatus)) {
             civilFeesSet.add(createCivilFee(caseDetails.getFeeId(),
                     caseDetails.getCaseId(),
                     caseDetails.getFeeType(),
-                    caseDetails.getFeeStatus(),
+                    feeStatus,
                     caseDetails.getPaymentReference()));
         }
 
-        if(StringUtils.isNotEmpty(caseDetails.getContestedFeeStatus())) {
+        if (StringUtils.isNotEmpty(contestedFeeStatus)) {
             civilFeesSet.add(createCivilFee(caseDetails.getContestedFeeId(),
                     caseDetails.getCaseId(),
                     caseDetails.getContestedFeeType(),
-                    caseDetails.getContestedFeeStatus(),
+                    contestedFeeStatus,
                     caseDetails.getContestedFeePaymentReference()));
         }
 
         return civilFeesSet;
 
+    }
+
+    private String normalize(final String status) {
+        if (status == null) return null;
+        final String trimmed = status.trim();
+        if (trimmed.isEmpty()) return null;
+        return "NOT_APPLICABLE".equalsIgnoreCase(trimmed) ? null : trimmed;
     }
 
     private CivilFees createCivilFee(UUID feeId, UUID caseId, String feeType, String feeStatus, String paymentReference) {

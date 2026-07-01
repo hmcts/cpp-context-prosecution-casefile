@@ -8,6 +8,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.validation.rules.ValidationRes
 import static uk.gov.moj.cpp.prosecution.casefile.validation.rules.ValidationResult.newValidationResult;
 
 import uk.gov.moj.cpp.prosecution.casefile.domain.DefendantWithReferenceData;
+import uk.gov.moj.cpp.prosecution.casefile.domain.ReferenceDataVO;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.MojOffences;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ProblemValue;
 import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
@@ -23,7 +24,14 @@ public class MojOffencesValidationRule implements ValidationRule<DefendantWithRe
     public ValidationResult validate(final DefendantWithReferenceData defendantWithReferenceData,
                                      final ReferenceDataQueryService referenceDataQueryService) {
 
-        final Set<String> allowedCodes = referenceDataQueryService.retrieveAllActiveMojOffences().stream()
+        final ReferenceDataVO referenceDataVO = defendantWithReferenceData.getReferenceDataVO();
+        List<MojOffences> mojOffences = referenceDataVO.getMojOffencesReferenceData();
+        if (mojOffences == null) {
+            mojOffences = referenceDataQueryService.retrieveAllActiveMojOffences();
+            referenceDataVO.setMojOffencesReferenceData(mojOffences);
+        }
+
+        final Set<String> allowedCodes = mojOffences.stream()
                 .map(MojOffences::getCjsOffenceCode)
                 .collect(Collectors.toSet());
 

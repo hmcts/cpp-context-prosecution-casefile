@@ -6,11 +6,16 @@ import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.Is.is;
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode.ENFORCEMENT_OFFENCE_NOT_FOUND;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.rules.FieldName.OFFENCE_CODE;
 
 import uk.gov.moj.cpp.prosecution.casefile.domain.DefendantWithReferenceData;
+import uk.gov.moj.cpp.prosecution.casefile.domain.ReferenceDataVO;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.MojOffences;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Offence;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Problem;
@@ -19,6 +24,7 @@ import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 import java.util.List;
 import java.util.UUID;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -42,6 +48,11 @@ class MojOffencesValidationRuleTest {
 
     @InjectMocks
     private MojOffencesValidationRule underTest;
+
+    @BeforeEach
+    void setUp() {
+        lenient().when(defendantWithReferenceData.getReferenceDataVO()).thenReturn(new ReferenceDataVO());
+    }
 
     @Nested
     @DisplayName("when submitted offence exists in active MOJ ref data")
@@ -109,6 +120,32 @@ class MojOffencesValidationRuleTest {
             assertThat(problems, hasSize(1));
             assertThat(problems.get(0).getValues(), hasSize(1));
             assertThat(problems.get(0).getValues().get(0).getValue(), is(DISALLOWED_CODE));
+        }
+    }
+
+    @Nested
+    @DisplayName("enricher caching behaviour")
+    class CachingBehaviour {
+
+        @Test
+        void validate_secondDefendantOnSameCase_shouldNotCallServiceAgain() {
+            final ReferenceDataVO sharedVO = new ReferenceDataVO();
+
+            final DefendantWithReferenceData firstDefendant = mock(DefendantWithReferenceData.class, Answers.RETURNS_DEEP_STUBS);
+            when(firstDefendant.getReferenceDataVO()).thenReturn(sharedVO);
+            when(firstDefendant.getDefendant().getOffences()).thenReturn(singletonList(offence(UUID.randomUUID(), ALLOWED_CODE)));
+
+            final DefendantWithReferenceData secondDefendant = mock(DefendantWithReferenceData.class, Answers.RETURNS_DEEP_STUBS);
+            when(secondDefendant.getReferenceDataVO()).thenReturn(sharedVO);
+            when(secondDefendant.getDefendant().getOffences()).thenReturn(singletonList(offence(UUID.randomUUID(), ALLOWED_CODE)));
+
+            when(referenceDataQueryService.retrieveAllActiveMojOffences())
+                    .thenReturn(singletonList(MojOffences.mojOffences().withCjsOffenceCode(ALLOWED_CODE).build()));
+
+            underTest.validate(firstDefendant, referenceDataQueryService);
+            underTest.validate(secondDefendant, referenceDataQueryService);
+
+            verify(referenceDataQueryService, times(1)).retrieveAllActiveMojOffences();
         }
     }
 

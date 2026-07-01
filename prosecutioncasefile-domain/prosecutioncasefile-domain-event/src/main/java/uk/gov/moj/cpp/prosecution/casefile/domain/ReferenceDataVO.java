@@ -4,6 +4,7 @@ import static java.util.Optional.empty;
 
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.AlcoholLevelMethodReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.BailStatusReferenceData;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.MojOffences;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseMarker;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.HearingType;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ModeOfTrialReasonsReferenceData;
@@ -43,6 +44,7 @@ public class ReferenceDataVO {
     private List<PoliceForceReferenceData> policeForceReferenceData;
     private HearingType hearingType;
     private List<ModeOfTrialReasonsReferenceData> modeOfTrialReasonsReferenceData = new ArrayList<>();
+    private List<MojOffences> mojOffencesReferenceData;
 
     public ProsecutorsReferenceData getProsecutorsReferenceData() {
         return prosecutorsReferenceData;
@@ -186,5 +188,13 @@ public class ReferenceDataVO {
 
     public void setModeOfTrialReferenceData(final List<ModeOfTrialReasonsReferenceData> modeOfTrialReasonsReferenceData) {
         this.modeOfTrialReasonsReferenceData = modeOfTrialReasonsReferenceData;
+    }
+
+    public List<MojOffences> getMojOffencesReferenceData() {
+        return mojOffencesReferenceData;
+    }
+
+    public void setMojOffencesReferenceData(final List<MojOffences> mojOffencesReferenceData) {
+        this.mojOffencesReferenceData = mojOffencesReferenceData;
     }
 }

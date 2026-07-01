@@ -26,11 +26,22 @@ public class CaseDetailsToCivilFeesTest {
     }
 
     @Test
+    public void shouldReturnNullWhenStatusIsNotApplicable() {
+        CaseDetails caseDetails = CaseDetails.caseDetails()
+                .withFeeStatus("NOT_APPLICABLE")
+                .build();
+
+        Set<CivilFees> civilFees = underTest.convert(caseDetails);
+
+        assertNull(civilFees);
+    }
+
+    @Test
     public void shouldCreateCivilFeesObject() {
         UUID feeId = UUID.randomUUID();
         UUID caseId = UUID.randomUUID();
         String feeType = "someFeeType";
-        String feeStatus = "someFeeStatus";
+        String feeStatus = "OUTSTANDING";
         String paymentReference = "somePaymentReference";
 
         CaseDetails caseDetails = CaseDetails.caseDetails()

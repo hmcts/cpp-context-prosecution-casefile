@@ -21,28 +21,38 @@ public class CaseDetailsToCivilFeesConverter implements Converter<CaseDetails, L
     @SuppressWarnings("squid:S1188")
     public List<CivilFees> convert(final CaseDetails caseDetails) {
 
-        if(isEmpty(caseDetails.getFeeStatus()) && isEmpty(caseDetails.getContestedFeeStatus())) {
+        final String feeStatus = normalize(caseDetails.getFeeStatus());
+        final String contestedFeeStatus = normalize(caseDetails.getContestedFeeStatus());
+
+        if (isEmpty(feeStatus) && isEmpty(contestedFeeStatus)) {
             return null;
         }
 
         List<CivilFees> civilFeesList = new ArrayList<>();
 
-        if(StringUtils.isNotEmpty(caseDetails.getFeeStatus())) {
+        if (StringUtils.isNotEmpty(feeStatus)) {
             civilFeesList.add(createCivilFee(caseDetails.getFeeId(),
                     caseDetails.getFeeType(),
-                    caseDetails.getFeeStatus(),
+                    feeStatus,
                     caseDetails.getPaymentReference()));
         }
 
-        if(StringUtils.isNotEmpty(caseDetails.getContestedFeeStatus())) {
+        if (StringUtils.isNotEmpty(contestedFeeStatus)) {
             civilFeesList.add(createCivilFee(caseDetails.getContestedFeeId(),
                     caseDetails.getContestedFeeType(),
-                    caseDetails.getContestedFeeStatus(),
+                    contestedFeeStatus,
                     caseDetails.getContestedFeePaymentReference()));
         }
 
         return civilFeesList;
 
+    }
+
+    private String normalize(final String status) {
+        if (status == null) return null;
+        final String trimmed = status.trim();
+        if (trimmed.isEmpty()) return null;
+        return "NOT_APPLICABLE".equalsIgnoreCase(trimmed) ? null : trimmed;
     }
 
     private CivilFees createCivilFee(UUID feeId, String feeType, String feeStatus, String paymentReference) {

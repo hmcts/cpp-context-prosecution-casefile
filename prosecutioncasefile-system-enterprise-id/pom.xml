@@ -5,7 +5,7 @@
     <parent>
         <groupId>uk.gov.moj.cpp.prosecution.casefile</groupId>
         <artifactId>prosecutioncasefile-parent</artifactId>
-        <version>25.104.1-M2-SNAPSHOT</version>
+        <version>25.104.2-M2-SNAPSHOT</version>
     </parent>
 
     <artifactId>prosecutioncasefile-system-enterprise-id</artifactId>

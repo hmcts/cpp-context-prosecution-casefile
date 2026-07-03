@@ -54,6 +54,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PR
 import static uk.gov.moj.cpp.prosecution.casefile.helper.QueryHelper.verifyCaseErrors;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.assertErrorsExpected;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.assertCivilCaseErrorsExpected;
+import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.assertCivilDefendantErrorsContain;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.assertErrorsExpectedForCivil;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.assertExpctedErrorPayload;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.assertNoErrorsExpected;
@@ -687,6 +688,32 @@ class ValidationErrorIT extends BaseIT {
         final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
         assertThat(privateEvent.isPresent(), is(true));
         assertCivilCaseErrorsExpected("expected/civil_case_duplicated_prosecution_problem.json", privateEvent.get());
+    }
+
+    @Test
+    void shouldRejectCivilChargeCaseWhenHearingDateIsInThePast() {
+        stubOffencesForOffenceCodeForGroupCases();
+        final String ccPayLoad = replaceValues(
+                readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-civil-charge-past-hearing-date.json"),
+                randomUUID().toString());
+        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
+        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
+        final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
+        assertThat(privateEvent.isPresent(), is(true));
+        assertCivilDefendantErrorsContain(privateEvent.get(), "DATE_OF_HEARING_IN_THE_PAST");
+    }
+
+    @Test
+    void shouldRejectCivilSummonsCaseWhenHearingDateIsInThePast() {
+        stubOffencesForOffenceCodeForGroupCases();
+        final String ccPayLoad = replaceValues(
+                readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-civil-summons-past-hearing-date.json"),
+                randomUUID().toString());
+        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
+        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
+        final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
+        assertThat(privateEvent.isPresent(), is(true));
+        assertCivilDefendantErrorsContain(privateEvent.get(), "DATE_OF_HEARING_IN_THE_PAST");
     }
 
     @Test

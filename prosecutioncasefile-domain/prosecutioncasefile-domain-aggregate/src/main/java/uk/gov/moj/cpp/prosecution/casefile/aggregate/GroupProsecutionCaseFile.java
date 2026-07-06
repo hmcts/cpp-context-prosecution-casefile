@@ -195,7 +195,7 @@ public class GroupProsecutionCaseFile implements Aggregate {
         return groupProsecutionList.getGroupProsecutionWithReferenceDataList().stream()
                 .flatMap(groupProsecutionWithReferenceData -> {
                     final DefendantsWithReferenceData defendantsWithReferenceData = defendantsWithReferenceDataMap.get(groupProsecutionWithReferenceData.getGroupProsecution().getCaseDetails().getCaseId());
-                    final List<DefendantProblem> errors = validateDefendantErrors(groupProsecutionWithReferenceData.getGroupProsecution().getCaseDetails(), groupProsecutionList.getChannel(), defendantsWithReferenceData, referenceDataQueryService, builder, Boolean.TRUE, false, false,isCivil);
+                    final List<DefendantProblem> errors = validateDefendantErrors(groupProsecutionWithReferenceData.getGroupProsecution().getCaseDetails(), groupProsecutionList.getChannel(), defendantsWithReferenceData, referenceDataQueryService, builder, false, false, isCivil);
                     return errors.stream();
                 }).toList();
     }

@@ -421,6 +421,46 @@ public class ProsecutionCaseFileTest {
     }
 
     @Test
+    public void receiveCCCase_civilCaseWithInvalidCaseMarker_shouldNotBeRejected() {
+        final ProsecutionWithReferenceData prosecution = buildCivilProsecutionWithInvalidCaseMarker(
+                of(buildDefendantWithOffence(OFFENCE_COMMITTED_DATE, OFFENCE_CHARGE_DATE, PROSECUTOR_DEFENDANT_REFERENCE_ONE)),
+                true);
+
+        final List<Object> events = prosecutionCaseFile.receiveCCCase(prosecution, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService)
+                .collect(toList());
+
+        assertThat(getFirstMatching(events, CcProsecutionRejected.class).isPresent(), is(false));
+    }
+
+    @Test
+    public void receiveCCCase_nonCivilCaseWithInvalidCaseMarker_shouldBeRejectedWithCaseErrors() {
+        final ProsecutionWithReferenceData prosecution = buildCivilProsecutionWithInvalidCaseMarker(
+                of(buildDefendantWithOffence(OFFENCE_COMMITTED_DATE, OFFENCE_CHARGE_DATE, PROSECUTOR_DEFENDANT_REFERENCE_ONE)),
+                false);
+
+        final List<Object> events = prosecutionCaseFile.receiveCCCase(prosecution, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService)
+                .collect(toList());
+
+        final Optional<CcProsecutionRejected> rejection = getFirstMatching(events, CcProsecutionRejected.class);
+        assertThat(rejection.isPresent(), is(true));
+        assertThat(rejection.get().getCaseErrors(), not(empty()));
+    }
+
+    @Test
+    public void receiveCCCase_civilCaseWithUnrecognisedProsecutorAuthority_shouldBeRejectedWithProsecutorOucodeNotRecognised() {
+        final ProsecutionWithReferenceData prosecution = buildCivilProsecutionWithUnrecognisedProsecutor(
+                of(buildDefendantWithOffence(OFFENCE_COMMITTED_DATE, OFFENCE_CHARGE_DATE, PROSECUTOR_DEFENDANT_REFERENCE_ONE)));
+
+        final List<Object> events = prosecutionCaseFile.receiveCCCase(prosecution, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService)
+                .collect(toList());
+
+        final Optional<CcProsecutionRejected> rejection = getFirstMatching(events, CcProsecutionRejected.class);
+        assertThat(rejection.isPresent(), is(true));
+        assertThat(rejection.get().getCaseErrors(), hasSize(1));
+        assertThat(rejection.get().getCaseErrors().get(0).getCode(), is(ProblemCode.PROSECUTOR_OUCODE_NOT_RECOGNISED.name()));
+    }
+
+    @Test
     public void shouldCreateCCCaseWithWarningsForCPPIWithMultipleDefendants() {
         final LocalDate offenceCommittedDate = of(2018, 3, 2);
         final LocalDate offenceChargeDate = of(2018, 11, 2);
@@ -1890,6 +1930,60 @@ public class ProsecutionCaseFileTest {
                 .withDefendants(defendantList)
                 .withChannel(channel)
                 .withIsCivil(isCivil)
+                .build());
+        prosecutionWithReferenceData.setReferenceDataVO(referenceDataVO);
+        prosecutionWithReferenceData.setExternalId(EXTERNAL_ID);
+        return prosecutionWithReferenceData;
+    }
+
+    private ProsecutionWithReferenceData buildCivilProsecutionWithInvalidCaseMarker(
+            final List<uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant> defendantList,
+            final boolean isCivil) {
+        final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
+        referenceDataVO.setOffenceReferenceData(singletonList(offenceReferenceData().withCjsOffenceCode(OFFENCE_CODE).withProsecutionTimeLimit("6").withOffenceStartDate(OFFENCE_START_DATE).build()));
+        referenceDataVO.addCountryNationalityReferenceData(referenceDataCountryNationality().build());
+        referenceDataVO.setInitiationTypes(asList("J", "C"));
+        referenceDataVO.setProsecutorsReferenceData(prosecutorsReferenceData().withId(randomUUID()).build());
+
+        final ProsecutionWithReferenceData prosecutionWithReferenceData = new ProsecutionWithReferenceData(prosecution()
+                .withCaseDetails(caseDetails()
+                        .withCaseId(CASE_ID)
+                        .withInitiationCode("C")
+                        .withProsecutorCaseReference(PROSECUTOR_CASE_REFERENCE)
+                        .withOriginatingOrganisation(ORIGINATING_ORGANISATION)
+                        .withCpsOrganisation(CPS_ORGANISATION)
+                        .withCaseMarkers(singletonList(caseMarker().withMarkerTypeCode(INVALID_CASE_MARKER_CODE).build()))
+                        .build())
+                .withDefendants(defendantList)
+                .withChannel(CIVIL)
+                .withIsCivil(isCivil)
+                .build());
+        prosecutionWithReferenceData.setReferenceDataVO(referenceDataVO);
+        prosecutionWithReferenceData.setExternalId(EXTERNAL_ID);
+        return prosecutionWithReferenceData;
+    }
+
+    private ProsecutionWithReferenceData buildCivilProsecutionWithUnrecognisedProsecutor(
+            final List<uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant> defendantList) {
+        final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
+        referenceDataVO.setOffenceReferenceData(singletonList(offenceReferenceData().withCjsOffenceCode(OFFENCE_CODE).withProsecutionTimeLimit("6").withOffenceStartDate(OFFENCE_START_DATE).build()));
+        referenceDataVO.addCountryNationalityReferenceData(referenceDataCountryNationality().build());
+        referenceDataVO.setInitiationTypes(asList("J", "C"));
+        // prosecutorsReferenceData intentionally absent — triggers PROSECUTOR_OUCODE_NOT_RECOGNISED
+
+        final Prosecutor prosecutor = new Prosecutor.Builder().withProsecutingAuthority("UNRECOGNISED_OU").build();
+        final ProsecutionWithReferenceData prosecutionWithReferenceData = new ProsecutionWithReferenceData(prosecution()
+                .withCaseDetails(caseDetails()
+                        .withCaseId(CASE_ID)
+                        .withInitiationCode("C")
+                        .withProsecutor(prosecutor)
+                        .withProsecutorCaseReference(PROSECUTOR_CASE_REFERENCE)
+                        .withOriginatingOrganisation(ORIGINATING_ORGANISATION)
+                        .withCpsOrganisation(CPS_ORGANISATION)
+                        .build())
+                .withDefendants(defendantList)
+                .withChannel(CIVIL)
+                .withIsCivil(true)
                 .build());
         prosecutionWithReferenceData.setReferenceDataVO(referenceDataVO);
         prosecutionWithReferenceData.setExternalId(EXTERNAL_ID);

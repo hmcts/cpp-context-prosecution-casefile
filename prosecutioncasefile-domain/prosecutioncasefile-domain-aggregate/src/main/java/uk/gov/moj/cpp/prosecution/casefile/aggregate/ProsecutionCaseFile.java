@@ -56,6 +56,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode.SUMMONS
 import static uk.gov.moj.cpp.prosecution.casefile.validation.Problems.newProblem;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.ValidationRuleExecutor.validate;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.provider.CcProsecutionValidationRuleProvider.getCaseValidationRules;
+import static uk.gov.moj.cpp.prosecution.casefile.validation.provider.CcProsecutionValidationRuleProvider.getCaseValidationRulesForCivil;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.provider.CcProsecutionValidationRuleProvider.getDefendantValidationRules;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.provider.SjpProsecutionWarningRuleProvider.getWarningRules;
 import static uk.gov.moj.cps.prosecutioncasefile.domain.event.BulkscanMaterialRejected.bulkscanMaterialRejected;
@@ -504,7 +505,8 @@ public class ProsecutionCaseFile implements Aggregate {
 
         final Boolean isCivil = Optional.ofNullable(receivedProsecutionWithReferenceData.getProsecution().getIsCivil()).orElse(false);
 
-        final List<Problem> caseProblems = validate(prosecutionWithReferenceData, referenceDataQueryService, getCaseValidationRules(receivedInitiationCode));
+        final List<Problem> caseProblems = validate(prosecutionWithReferenceData, referenceDataQueryService,
+                Boolean.TRUE.equals(isCivil) ? getCaseValidationRulesForCivil(receivedInitiationCode) : getCaseValidationRules(receivedInitiationCode));
         boolean isMCCWithListNewHearing = MCC.equals(prosecutionChannel) && Objects.nonNull(prosecutionWithReferenceData.getProsecution().getListNewHearing());
 
         //ACTIVE // INACTIVE
@@ -515,7 +517,7 @@ public class ProsecutionCaseFile implements Aggregate {
                                 .filter(status -> MigrationCaseStatus.INACTIVE == status)
                                 .isPresent();
 
-        final List<DefendantProblem> defendantErrors = validateDefendantErrors(prosecution.getCaseDetails(), prosecutionChannel, defendantsWithReferenceData, referenceDataQueryService, builder, Boolean.FALSE, isMCCWithListNewHearing,isStandaloneCaseWithoutHearing, isCivil);
+        final List<DefendantProblem> defendantErrors = validateDefendantErrors(prosecution.getCaseDetails(), prosecutionChannel, defendantsWithReferenceData, referenceDataQueryService, builder, isMCCWithListNewHearing, isStandaloneCaseWithoutHearing, isCivil);
 
         if (messageFromCppiOrMccOrCivil && prosecutionReceived) {
             caseProblems.add(newProblem(DUPLICATED_PROSECUTION, "urn", prosecution.getCaseDetails().getProsecutorCaseReference()));
@@ -835,7 +837,7 @@ public class ProsecutionCaseFile implements Aggregate {
 
     public Stream<Object> addErrorCorrectedDefendantsForSPI(final UUID caseId, final UUID externalId, final DefendantsWithReferenceData defendantsWithReferenceData, final ReferenceDataQueryService referenceDataQueryService,final Boolean isCivil) {
         final Builder<Object> builder = builder();
-        final List<DefendantProblem> defendantErrors = validateDefendantErrors(this.caseDetails, SPI, defendantsWithReferenceData, referenceDataQueryService, builder, Boolean.FALSE, false, false,isCivil);
+        final List<DefendantProblem> defendantErrors = validateDefendantErrors(this.caseDetails, SPI, defendantsWithReferenceData, referenceDataQueryService, builder, false, false, isCivil);
         return addDefendants(caseId, externalId, defendantsWithReferenceData, defendantErrors, builder);
     }
 

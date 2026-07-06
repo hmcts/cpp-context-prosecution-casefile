@@ -211,7 +211,7 @@ public class CcProsecutionValidationRuleProvider {
             new ParentGuardianPrimaryEmailAddressValidationRule(),
             new ParentGuardianSecondaryEmailAddressValidationRule(),
             new OffenderCodeValidationAndEnricherRule(),
-            new SelfDefinedEthnicityValidationAndEnricherRule(),
+            new SelfDefinedEthnicityValidationAndEnricherRule(),//--start here
             new OffenceLocationValidationAndEnricherRule(),
             new ObservedEthnicityValidationAndEnricherRule(),
             new OffenceAlcoholLevelValidationAndEnricherRule(),

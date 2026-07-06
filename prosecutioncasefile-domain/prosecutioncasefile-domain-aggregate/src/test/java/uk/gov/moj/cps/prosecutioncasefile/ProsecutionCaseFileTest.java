@@ -791,7 +791,7 @@ public class ProsecutionCaseFileTest {
         final UUID fileStoreId = randomUUID();
         prosecutionCaseFile.addMaterial(randomUUID(), "B01AF00", randomUUID().toString(),
                 new Material("SJPN", fileStoreId, "pdf", false),
-                referenceDataQueryService, false, null);
+                referenceDataQueryService, false, null, null);
         final Stream<Object> objectStream = prosecutionCaseFile.expireBulkScanPendingMaterial(fileStoreId, now);
         assertThatTheEventReturnedIsOfType(objectStream, BulkscanMaterialRejected.class);
     }

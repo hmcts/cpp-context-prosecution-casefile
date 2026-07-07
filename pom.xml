@@ -4,12 +4,12 @@
     <parent>
         <groupId>uk.gov.moj.cpp.common</groupId>
         <artifactId>service-parent-pom</artifactId>
-        <version>25.104.0-M4</version>
+        <version>25.104.0-M6</version>
     </parent>
 
     <groupId>uk.gov.moj.cpp.prosecution.casefile</groupId>
     <artifactId>prosecutioncasefile-parent</artifactId>
-    <version>25.104.2-M2-SNAPSHOT</version>
+    <version>25.104.0-M2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Prosecution Casefile Microservice - Parent</name>
     <description>Casefile Microservice - Prosecution Context</description>
@@ -23,7 +23,7 @@
         <mvn.site.url>file://${project.build.directory}/site</mvn.site.url>
         <cpp.framework.action.mapping.enabled>true</cpp.framework.action.mapping.enabled>
         <authorisation.service.version>0.1.49</authorisation.service.version>
-        <coredomain.version>25.104.0-M4</coredomain.version>
+        <coredomain.version>25.104.0-M6</coredomain.version>
         <cpp.structure.version>2.0.335</cpp.structure.version>
         <referencedata.version>17.103.133</referencedata.version>
         <referencedata.offences.version>17.0.38</referencedata.offences.version>

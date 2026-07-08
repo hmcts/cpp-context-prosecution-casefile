@@ -1,0 +1,18 @@
+[
+  {
+    "code": "OFFENCE_CODE_NOT_SUPPORTED",
+    "values": [
+      {
+        "id": "032575aa-85e7-11e9-bc42-526af7764f64",
+        "key": "offence_offenceCode",
+        "value": "RT88007"
+      },
+      {
+        "id": "032575aa-85e7-11e9-bc42-526af7764f64",
+        "key": "offence_offenceSequenceNo",
+        "value": "1"
+      }
+    ]
+  }
+]
+

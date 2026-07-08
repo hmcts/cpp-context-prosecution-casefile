@@ -43,7 +43,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  */
 
 @ExtendWith(MockitoExtension.class)
-public class OffenceBackDutyValidationRuleAndEnricherRuleTest {
+class OffenceBackDutyValidationRuleAndEnricherRuleTest {
 
     private static final String MOCK_OFFENCE_CODE = "OFFENCE_CODE";
 
@@ -57,7 +57,7 @@ public class OffenceBackDutyValidationRuleAndEnricherRuleTest {
     private OffenceBackDutyValidationRuleAndEnricherRule offenceBackDutyValidationRuleAndEnricherRule;
 
     @Test
-    public void shouldValidateOffencesAreNull() {
+    void shouldValidateOffencesAreNull() {
         //given
         final DefendantWithReferenceData defendantWithReferenceData = getMockDefendantWithReferenceData(null);
 
@@ -70,7 +70,7 @@ public class OffenceBackDutyValidationRuleAndEnricherRuleTest {
     }
 
     @Test
-    public void shouldValidateOffenceBackDutyValueIsNull() {
+    void shouldValidateOffenceBackDutyValueIsNull() {
         //given
         final Offence offence = Offence.offence()
                 .withOffenceId(UUID.randomUUID())
@@ -94,7 +94,7 @@ public class OffenceBackDutyValidationRuleAndEnricherRuleTest {
 
 
     @Test
-    public void shouldValidationOffenceGivesOffenceCodeAndOffenceSequenceNo() {
+    void shouldValidationOffenceGivesOffenceCodeAndOffenceSequenceNo() {
         //given
         final Offence offence = Offence.offence()
                 .withOffenceId(UUID.randomUUID())
@@ -118,7 +118,7 @@ public class OffenceBackDutyValidationRuleAndEnricherRuleTest {
 
     }
     @Test
-    public void shouldValidateOffenceBackDutyFromAndToAreNull() {
+    void shouldValidateOffenceBackDutyFromAndToAreNull() {
         //given
         final Offence offence = Offence.offence()
                 .withOffenceId(UUID.randomUUID())
@@ -138,7 +138,7 @@ public class OffenceBackDutyValidationRuleAndEnricherRuleTest {
     }
 
     @Test
-    public void shouldValidateOffenceBackDutyFrom() {
+    void shouldValidateOffenceBackDutyFrom() {
         //given
         final Offence offence = Offence.offence()
                 .withOffenceId(UUID.randomUUID())
@@ -163,7 +163,7 @@ public class OffenceBackDutyValidationRuleAndEnricherRuleTest {
     }
 
     @Test
-    public void shouldValidateOffenceBackDutyTo() {
+    void shouldValidateOffenceBackDutyTo() {
         //given
         final Offence offence = Offence.offence()
                 .withOffenceId(UUID.randomUUID())
@@ -188,7 +188,7 @@ public class OffenceBackDutyValidationRuleAndEnricherRuleTest {
     }
 
     @Test
-    public void shouldDetermineOffenceBackDutyFromDateEqualToToDateIsValid() {
+    void shouldDetermineOffenceBackDutyFromDateEqualToToDateIsValid() {
         //given
         LocalDate backDutyDate = LocalDate.now();
         final Offence offence = Offence.offence()
@@ -211,7 +211,7 @@ public class OffenceBackDutyValidationRuleAndEnricherRuleTest {
     }
 
     @Test
-    public void shouldValidateOffenceBackDutyFromDateAfterToDate() {
+    void shouldValidateOffenceBackDutyFromDateAfterToDate() {
         //given
         final Offence offence = Offence.offence()
                 .withOffenceId(UUID.randomUUID())
@@ -236,6 +236,48 @@ public class OffenceBackDutyValidationRuleAndEnricherRuleTest {
         assertThat(problem.get().getValues().get(2).getValue(), is(notNullValue()));
     }
 
+    @Test
+    void shouldValidateBackDutyForCivilCaseUsingOffenceDataList() {
+        //given
+        final Offence offence = Offence.offence()
+                .withOffenceId(UUID.randomUUID())
+                .withOffenceCode(MOCK_OFFENCE_CODE)
+                .withOffenceSequenceNumber(1)
+                .build();
+
+        final DefendantWithReferenceData defendantWithReferenceData = getMockDefendantWithReferenceData(true, offence);
+
+        //when
+        when(referenceDataQueryService.retrieveOffenceDataList(any(), any())).thenReturn(getMockOffenceCodesReferenceData(MOCK_OFFENCE_CODE));
+        final ValidationResult validateResult = offenceBackDutyValidationRuleAndEnricherRule.validate(defendantWithReferenceData, referenceDataQueryService);
+
+        //Then
+        final Optional<Problem> problem = validateResult.problems().stream().filter(
+                p -> p.getCode().equals(ProblemCode.BACK_DUTY_AMOUNT_MISSING.name())).findFirst();
+        assertThat(problem.isPresent(), is(true));
+        assertThat(problem.get().getValues().get(0).getValue(), is(notNullValue()));
+    }
+
+    @Test
+    void shouldReturnValidForCivilCaseWhenNoMatchingBackDutyOffenceFound() {
+        //given
+        final Offence offence = Offence.offence()
+                .withOffenceId(UUID.randomUUID())
+                .withOffenceCode(MOCK_OFFENCE_CODE)
+                .withOffenceSequenceNumber(1)
+                .build();
+
+        final DefendantWithReferenceData defendantWithReferenceData = getMockDefendantWithReferenceData(true, offence);
+
+        //when
+        when(referenceDataQueryService.retrieveOffenceDataList(any(), any()))
+                .thenReturn(Arrays.asList(offenceReferenceData().withCjsOffenceCode(MOCK_OFFENCE_CODE).withBackDuty(false).build()));
+        final ValidationResult validateResult = offenceBackDutyValidationRuleAndEnricherRule.validate(defendantWithReferenceData, referenceDataQueryService);
+
+        //Then
+        assertThat(validateResult.isValid(), is(true));
+    }
+
     private List<OffenceReferenceData> getMockOffenceCodesReferenceData(final String offenceCode) {
         return Arrays.asList(offenceReferenceData().withCjsOffenceCode(offenceCode)
                 .withBackDuty(true)
@@ -244,6 +286,10 @@ public class OffenceBackDutyValidationRuleAndEnricherRuleTest {
     }
 
     private DefendantWithReferenceData getMockDefendantWithReferenceData(final Offence... offences) {
+        return getMockDefendantWithReferenceData(false, offences);
+    }
+
+    private DefendantWithReferenceData getMockDefendantWithReferenceData(final boolean isCivil, final Offence... offences) {
         final String DEFENDANT_ID = "1234243";
         final CaseDetails caseDetails = CaseDetails.caseDetails().withInitiationCode("S").build();
         List<Offence> offenceList = offences == null ? Collections.emptyList() : Arrays.asList(offences);
@@ -252,6 +298,9 @@ public class OffenceBackDutyValidationRuleAndEnricherRuleTest {
                 .withInitiationCode("C")
                 .build();
 
+        if (isCivil) {
+            return new DefendantWithReferenceData(defendant, referenceDataVO, caseDetails, false, false, false, true);
+        }
         return new DefendantWithReferenceData(defendant, referenceDataVO, caseDetails);
     }
 }

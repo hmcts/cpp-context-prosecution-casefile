@@ -93,4 +93,45 @@ public class SummonsCodeValidationRuleTest {
         assertThat(optionalProblem.get().getValues().get(0).getKey(), is(CASE_SUMMONS_CODE.getValue()));
         assertThat(optionalProblem.get().getValues().get(0).getValue(), is(invalidSummonsCode));
     }
+
+    @Test
+    void shouldReturnValidWhenCivilCaseAndSummonsCodeIsA() {
+        when(prosecutionWithReferenceData.getProsecution().getCaseDetails().getInitiationCode()).thenReturn("S");
+        when(prosecutionWithReferenceData.getProsecution().getCaseDetails().getSummonsCode()).thenReturn("A");
+        when(prosecutionWithReferenceData.getProsecution().getIsCivil()).thenReturn(true);
+
+        final Optional<Problem> optionalProblem = new SummonsCodeValidationRule().validate(prosecutionWithReferenceData, referenceDataQueryService)
+                .problems().stream().findFirst();
+
+        assertThat(optionalProblem.isPresent(), is(false));
+    }
+
+    @Test
+    void shouldReturnProblemWhenCivilCaseAndSummonsCodeIsNotA() {
+        final String nonCivilSummonsCode = "M";
+        when(prosecutionWithReferenceData.getProsecution().getCaseDetails().getInitiationCode()).thenReturn("S");
+        when(prosecutionWithReferenceData.getProsecution().getCaseDetails().getSummonsCode()).thenReturn(nonCivilSummonsCode);
+        when(prosecutionWithReferenceData.getProsecution().getIsCivil()).thenReturn(true);
+
+        final Optional<Problem> optionalProblem = new SummonsCodeValidationRule().validate(prosecutionWithReferenceData, referenceDataQueryService)
+                .problems().stream().findFirst();
+
+        assertThat(optionalProblem.get().getCode(), is(SUMMONS_CODE_INVALID.name()));
+        assertThat(optionalProblem.get().getValues().get(0).getKey(), is(CASE_SUMMONS_CODE.getValue()));
+        assertThat(optionalProblem.get().getValues().get(0).getValue(), is(nonCivilSummonsCode));
+    }
+
+    @Test
+    void shouldReturnProblemWhenCivilCaseAndSummonsCodeIsNull() {
+        when(prosecutionWithReferenceData.getProsecution().getCaseDetails().getInitiationCode()).thenReturn("S");
+        when(prosecutionWithReferenceData.getProsecution().getCaseDetails().getSummonsCode()).thenReturn(null);
+        when(prosecutionWithReferenceData.getProsecution().getIsCivil()).thenReturn(true);
+
+        final Optional<Problem> optionalProblem = new SummonsCodeValidationRule().validate(prosecutionWithReferenceData, referenceDataQueryService)
+                .problems().stream().findFirst();
+
+        assertThat(optionalProblem.get().getCode(), is(SUMMONS_CODE_INVALID.name()));
+        assertThat(optionalProblem.get().getValues().get(0).getKey(), is(CASE_SUMMONS_CODE.getValue()));
+        assertThat(optionalProblem.get().getValues().get(0).getValue(), is(""));
+    }
 }

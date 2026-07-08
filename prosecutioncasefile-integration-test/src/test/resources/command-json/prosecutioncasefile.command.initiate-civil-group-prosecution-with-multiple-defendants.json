@@ -1,0 +1,103 @@
+{
+  "groupProsecutions": [
+    {
+      "caseDetails": {
+        "originatingOrganisation": "GAFTL00",
+        "caseId": "CASE_ID_1",
+        "initiationCode": "INITIATION_CODE",
+        "prosecutorCaseReference": "CASE_URN_1",
+        "prosecutor": {
+          "prosecutingAuthority": "prosAut"
+        },
+        "dateReceived": "DATE_RECEIVED"
+      },
+      "defendants": [
+        {
+          "id": "DEFENDANT_ID_1",
+          "prosecutorDefendantReference": "DEFENDANT_REFERENCE_1",
+          "documentationLanguage": "E",
+          "hearingLanguage": "E",
+          "custodyStatus": "B",
+          "individual": {
+            "bailConditions": "standard conditions",
+            "personalInformation": {
+              "address": {
+                "address1": "340",
+                "postcode": "SW11 1JU"
+              },
+              "firstName": "John",
+              "lastName": "Smith"
+            },
+            "selfDefinedInformation": {
+              "dateOfBirth": "1970-11-11",
+              "gender": "MALE"
+            }
+          },
+          "offences": [
+            {
+              "offenceCode": "OFCODE12",
+              "offenceId": "OFFENCE_ID_1",
+              "offenceSequenceNumber": 1,
+              "offenceCommittedDate": "2018-09-10",
+              "offenceLocation": "Croydon",
+              "offenceWording": "TV Licence not paid",
+              "arrestDate": "2018-12-04"
+            }
+          ],
+          "initialHearing": {
+            "courtHearingLocation": "B01LY00",
+            "dateOfHearing": "2050-02-04",
+            "timeOfHearing": "09:05:01.001"
+          },
+          "postingDate": "2018-09-10"
+        },
+        {
+          "id": "DEFENDANT_ID_2",
+          "prosecutorDefendantReference": "DEFENDANT_REFERENCE_2",
+          "documentationLanguage": "E",
+          "hearingLanguage": "E",
+          "custodyStatus": "B",
+          "individual": {
+            "bailConditions": "standard conditions",
+            "personalInformation": {
+              "address": {
+                "address1": "341",
+                "postcode": "SW11 1JU"
+              },
+              "firstName": "Jane",
+              "lastName": "Doe"
+            },
+            "selfDefinedInformation": {
+              "dateOfBirth": "1975-06-15",
+              "gender": "FEMALE"
+            }
+          },
+          "offences": [
+            {
+              "offenceCode": "OFCODE12",
+              "offenceId": "OFFENCE_ID_2",
+              "offenceSequenceNumber": 1,
+              "offenceCommittedDate": "2018-09-10",
+              "offenceLocation": "Croydon",
+              "offenceWording": "TV Licence not paid",
+              "arrestDate": "2018-12-04"
+            }
+          ],
+          "initialHearing": {
+            "courtHearingLocation": "B01LY00",
+            "dateOfHearing": "2050-02-04",
+            "timeOfHearing": "09:05:01.001"
+          },
+          "postingDate": "2018-09-10"
+        }
+      ],
+      "groupId": "GROUP_ID",
+      "isCivil": true,
+      "isGroupMaster": true,
+      "isGroupMember": true,
+      "paymentReference": "payment_reference"
+    }
+  ],
+  "channel": "CIVIL",
+  "externalId": "EXTERNAL_ID"
+}

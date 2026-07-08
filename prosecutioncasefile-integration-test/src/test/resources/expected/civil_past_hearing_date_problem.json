@@ -1,0 +1,11 @@
+[
+  {
+    "code": "DATE_OF_HEARING_IN_THE_PAST",
+    "values": [
+      {
+        "key": "initialHearing_dateOfHearing",
+        "value": "2020-01-01"
+      }
+    ]
+  }
+]

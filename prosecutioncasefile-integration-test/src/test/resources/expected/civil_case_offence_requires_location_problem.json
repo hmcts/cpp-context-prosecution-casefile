@@ -1,0 +1,22 @@
+[
+  {
+    "code": "OFFENCE_REQUIRES_A_LOCATION",
+    "values": [
+      {
+        "id": "2013c181-7458-4fb2-a637-b596fbe0e792",
+        "key": "offence_offenceLocation",
+        "value": ""
+      },
+      {
+        "id": "2013c181-7458-4fb2-a637-b596fbe0e792",
+        "key": "offence_offenceCode",
+        "value": "OFCODE12"
+      },
+      {
+        "id": "2013c181-7458-4fb2-a637-b596fbe0e792",
+        "key": "offence_offenceSequenceNo",
+        "value": "1"
+      }
+    ]
+  }
+]

@@ -223,7 +223,7 @@ public class ProsecutionCaseFileHelper {
         final List<DefendantProblem> defendantErrors = new ArrayList<>();
 
         defendantsWithReferenceData.getDefendants().forEach(defendant -> {
-            final DefendantWithReferenceData defendantWithReferenceData = new DefendantWithReferenceData(defendant, defendantsWithReferenceData.getReferenceDataVO(), defendantsWithReferenceData.getCaseDetails(), isMCCWithListNewHearing, MCC.equals(channel), isInactiveMigratedCase);
+            final DefendantWithReferenceData defendantWithReferenceData = new DefendantWithReferenceData(defendant, defendantsWithReferenceData.getReferenceDataVO(), defendantsWithReferenceData.getCaseDetails(), isMCCWithListNewHearing, MCC.equals(channel), isInactiveMigratedCase, defendantsWithReferenceData.isCivil());
             final String defendantInitiationCode = defendant.getInitiationCode();
             final String initiationCode = defendantInitiationCode != null && isValidInitiationCode(defendantInitiationCode) ? defendant.getInitiationCode() : caseDetails.getInitiationCode();
 
@@ -335,8 +335,9 @@ public class ProsecutionCaseFileHelper {
             return feeStatus;
         } else if (paymentReference != null) {
             return FeeStatus.SATISFIED.name();
+        } else {
+            return DEFAULT_FEE_STATUS;
         }
-        return DEFAULT_FEE_STATUS;
     }
 
     public static String getDefendantId(final Optional<Defendant> associatedDefendant) {
@@ -368,7 +369,7 @@ public class ProsecutionCaseFileHelper {
         final List<Problem> materialWarnings = materialRejections.stream()
                 .filter(problem -> problem.getCode().equals(DUPLICATE_DEFENDANT.toString()))
                 .flatMap(problem -> DefendantWarningsValidationRule.INSTANCE.validate(caseDocumentWithReferenceData, referenceDataQueryService).problems().stream())
-                .collect(Collectors.toList());
+                .toList();
 
         final MaterialAddedV2.Builder materialAddedV2builder = materialAddedV2();
 
@@ -501,13 +502,15 @@ public class ProsecutionCaseFileHelper {
                 .map(defendant -> {
                     final Individual individual = defendant.getIndividual();
                     final String organisationName = defendant.getOrganisationName();
-                    String fullName = null;
+                    String fullName;
 
                     if (nonNull(individual) && nonNull(individual.getPersonalInformation())) {
                         final PersonalInformation personalInformation = individual.getPersonalInformation();
                         fullName = format("%s %s", personalInformation.getFirstName(), personalInformation.getLastName());
                     } else if (nonNull(organisationName) && !organisationName.isEmpty()) {
                         fullName = defendant.getOrganisationName();
+                    }else {
+                        fullName = null;
                     }
                     return fullName;
                 }).findFirst().orElse(null);
@@ -613,8 +616,9 @@ public class ProsecutionCaseFileHelper {
             return ofNullable(defendantSubject.getProsecutorPersonDefendantDetails().getProsecutorDefendantId());
         } else if (defendantSubject.getProsecutorOrganisationDefendantDetails() != null && !isEmpty(defendantSubject.getProsecutorOrganisationDefendantDetails().getProsecutorDefendantId())) {
             return ofNullable(defendantSubject.getProsecutorOrganisationDefendantDetails().getProsecutorDefendantId());
+        } else {
+            return empty();
         }
-        return empty();
     }
 
     public static Optional<String> getCpsDefendantId(final DefendantSubject defendantSubject) {
@@ -624,7 +628,8 @@ public class ProsecutionCaseFileHelper {
             return ofNullable(defendantSubject.getCpsPersonDefendantDetails().getCpsDefendantId());
         } else if (defendantSubject.getCpsOrganisationDefendantDetails() != null && !isEmpty(defendantSubject.getCpsOrganisationDefendantDetails().getCpsDefendantId())) {
             return ofNullable(defendantSubject.getCpsOrganisationDefendantDetails().getCpsDefendantId());
+        } else {
+            return empty();
         }
-        return empty();
     }
 }

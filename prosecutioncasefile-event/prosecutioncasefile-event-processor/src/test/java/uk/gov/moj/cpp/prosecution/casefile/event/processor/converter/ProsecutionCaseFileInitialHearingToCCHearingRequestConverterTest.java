@@ -279,7 +279,7 @@ public class ProsecutionCaseFileInitialHearingToCCHearingRequestConverterTest {
 
         final List<ListHearingRequest> result = prosecutionCaseFileInitialHearingToCCHearingRequestConverter.convert(defendants, paramsVO);
 
-        assertThat(result.get(0).getListedEndDateTime().toString(), is("2026-07-28T23:59:59.999999999Z"));
+        assertThat(result.get(0).getListedEndDateTime().toString(), is("2026-07-28T00:00Z"));
     }
 
     @Test

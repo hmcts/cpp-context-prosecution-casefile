@@ -194,7 +194,7 @@ public class ProsecutionCaseFileInitialHearingToCCHearingRequestConverter implem
         try {
             if (!endDateISO.contains("T")) {
                 return LocalDate.parse(endDateISO, DateTimeFormatter.ISO_LOCAL_DATE)
-                        .atTime(LocalTime.MAX)
+                        .atTime(LocalTime.MIN)
                         .atZone(ZoneOffset.UTC);
             }
             return ZonedDateTime.parse(endDateISO);

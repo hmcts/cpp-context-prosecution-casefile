@@ -421,6 +421,42 @@ public class ProsecutionCaseFileTest {
     }
 
     @Test
+    public void shouldUseCivilCaseValidationRulesAndIgnoreInvalidCaseMarkerWhenIsCivilTrue() {
+        final LocalDate offenceCommittedDate = of(2018, 3, 2);
+        final LocalDate offenceChargeDate = of(2018, 11, 2);
+
+        final ProsecutionWithReferenceData prosecutionWithReferenceData = getProsecutionWithReferenceDataAndCivilFees(
+                of(buildDefendantWithOffence(offenceCommittedDate, offenceChargeDate, PROSECUTOR_DEFENDANT_REFERENCE_ONE)),
+                CIVIL, true, Collections.emptyList(), singletonList(caseMarker().withMarkerTypeCode(INVALID_CASE_MARKER_CODE).build()));
+
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(),
+                referenceDataQueryService);
+
+        final List<Object> eventList = objectStream.collect(toList());
+
+        assertThat(getFirstMatching(eventList, CcProsecutionRejected.class).isPresent(), is(false));
+    }
+
+    @Test
+    public void shouldUseStandardCaseValidationRulesAndRejectInvalidCaseMarkerWhenIsCivilFalse() {
+        final LocalDate offenceCommittedDate = of(2018, 3, 2);
+        final LocalDate offenceChargeDate = of(2018, 11, 2);
+
+        final ProsecutionWithReferenceData prosecutionWithReferenceData = getProsecutionWithReferenceDataAndCivilFees(
+                of(buildDefendantWithOffence(offenceCommittedDate, offenceChargeDate, PROSECUTOR_DEFENDANT_REFERENCE_ONE)),
+                CPPI, false, Collections.emptyList(), singletonList(caseMarker().withMarkerTypeCode(INVALID_CASE_MARKER_CODE).build()));
+
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(),
+                referenceDataQueryService);
+
+        final List<Object> eventList = objectStream.collect(toList());
+
+        final Optional<CcProsecutionRejected> ccProsecutionRejected = getFirstMatching(eventList, CcProsecutionRejected.class);
+        assertThat(ccProsecutionRejected.isPresent(), is(true));
+        assertThat(ccProsecutionRejected.get().getCaseErrors().get(0).getCode(), is(ProblemCode.CASE_MARKER_IS_INVALID.name()));
+    }
+
+    @Test
     public void shouldCreateCCCaseWithWarningsForCPPIWithMultipleDefendants() {
         final LocalDate offenceCommittedDate = of(2018, 3, 2);
         final LocalDate offenceChargeDate = of(2018, 11, 2);
@@ -1933,6 +1969,10 @@ public class ProsecutionCaseFileTest {
     }
 
     private ProsecutionWithReferenceData getProsecutionWithReferenceDataAndCivilFees(final List<uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant> defendantList, final Channel channel, boolean isCivil, List<CivilFees> civilFees) {
+        return getProsecutionWithReferenceDataAndCivilFees(defendantList, channel, isCivil, civilFees, null);
+    }
+
+    private ProsecutionWithReferenceData getProsecutionWithReferenceDataAndCivilFees(final List<uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant> defendantList, final Channel channel, boolean isCivil, List<CivilFees> civilFees, List<CaseMarker> caseMarkers) {
         final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
         referenceDataVO.setOffenceReferenceData(singletonList(offenceReferenceData().withCjsOffenceCode(OFFENCE_CODE).withProsecutionTimeLimit("6").withOffenceStartDate(OFFENCE_START_DATE).build()));
         referenceDataVO.addCountryNationalityReferenceData(referenceDataCountryNationality().build());
@@ -1950,6 +1990,7 @@ public class ProsecutionCaseFileTest {
                         .withCpsOrganisation(CPS_ORGANISATION)
                         .withFeeStatus(CollectionUtils.isNotEmpty(civilFees) ? civilFees.get(0).getFeeStatus(): null)
                         .withPaymentReference(CollectionUtils.isNotEmpty(civilFees) ? civilFees.get(0).getPaymentReference(): null)
+                        .withCaseMarkers(caseMarkers)
                         .build())
                 .withDefendants(defendantList)
                 .withChannel(channel)

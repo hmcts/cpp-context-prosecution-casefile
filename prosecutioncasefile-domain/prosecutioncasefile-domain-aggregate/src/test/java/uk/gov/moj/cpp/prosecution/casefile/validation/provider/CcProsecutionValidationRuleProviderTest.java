@@ -10,6 +10,7 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel;
 import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 import uk.gov.moj.cpp.prosecution.casefile.validation.CaseType;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.CaseInitiationValidationRule;
+import uk.gov.moj.cpp.prosecution.casefile.validation.rules.CaseMarkersValidationAndEnricherRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.ProsecutorReferenceDataValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.SummonsCodeValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.ValidationRule;
@@ -174,5 +175,27 @@ public class CcProsecutionValidationRuleProviderTest {
         assertTrue(validationRules.stream().map((Function<ValidationRule<ProsecutionWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<ProsecutionWithReferenceData, ReferenceDataQueryService>::getClass).anyMatch(s-> s.equals(SummonsCodeValidationRule.class)));
     }
 
+    @Test
+    public void shouldReturnCivilCaseValidationRulesWhenIsCivilTrue() {
+
+        final List<ValidationRule<ProsecutionWithReferenceData, ReferenceDataQueryService>> validationRules = CcProsecutionValidationRuleProvider
+                .getCaseValidationRules(INITIATION_CODE_CHARGE_CASE, Boolean.TRUE);
+
+        assertTrue(validationRules.stream().map((Function<ValidationRule<ProsecutionWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<ProsecutionWithReferenceData, ReferenceDataQueryService>::getClass).anyMatch(s -> s.equals(CaseInitiationValidationRule.class)));
+        assertTrue(validationRules.stream().map((Function<ValidationRule<ProsecutionWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<ProsecutionWithReferenceData, ReferenceDataQueryService>::getClass).anyMatch(s -> s.equals(ProsecutorReferenceDataValidationRule.class)));
+        assertFalse(validationRules.stream().map((Function<ValidationRule<ProsecutionWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<ProsecutionWithReferenceData, ReferenceDataQueryService>::getClass).anyMatch(s -> s.equals(CaseMarkersValidationAndEnricherRule.class)));
+    }
+
+    @Test
+    public void shouldReturnStandardCaseValidationRulesWhenIsCivilFalseOrNull() {
+
+        final List<ValidationRule<ProsecutionWithReferenceData, ReferenceDataQueryService>> validationRulesForFalse = CcProsecutionValidationRuleProvider
+                .getCaseValidationRules(INITIATION_CODE_CHARGE_CASE, Boolean.FALSE);
+        final List<ValidationRule<ProsecutionWithReferenceData, ReferenceDataQueryService>> validationRulesForNull = CcProsecutionValidationRuleProvider
+                .getCaseValidationRules(INITIATION_CODE_CHARGE_CASE, null);
+
+        assertTrue(validationRulesForFalse.stream().map((Function<ValidationRule<ProsecutionWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<ProsecutionWithReferenceData, ReferenceDataQueryService>::getClass).anyMatch(s -> s.equals(CaseMarkersValidationAndEnricherRule.class)));
+        assertTrue(validationRulesForNull.stream().map((Function<ValidationRule<ProsecutionWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<ProsecutionWithReferenceData, ReferenceDataQueryService>::getClass).anyMatch(s -> s.equals(CaseMarkersValidationAndEnricherRule.class)));
+    }
 
 }

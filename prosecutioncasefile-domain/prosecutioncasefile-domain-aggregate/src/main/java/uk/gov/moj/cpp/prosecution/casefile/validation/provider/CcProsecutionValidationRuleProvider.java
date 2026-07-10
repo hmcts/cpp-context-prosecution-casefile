@@ -334,6 +334,13 @@ public class CcProsecutionValidationRuleProvider {
         ));
     }
 
+    public static List<ValidationRule<ProsecutionWithReferenceData, ReferenceDataQueryService>> getCaseValidationRules(final String caseInitiationCode, final Boolean isCivil) {
+        if (nonNull(isCivil) && isCivil) {
+            return getCaseValidationRulesForCivil(caseInitiationCode);
+        }
+        return getCaseValidationRules(caseInitiationCode);
+    }
+
     private static List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> getValidationRules(
             final String defendantInitiationCode,
             final List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> commonDefendantRules,

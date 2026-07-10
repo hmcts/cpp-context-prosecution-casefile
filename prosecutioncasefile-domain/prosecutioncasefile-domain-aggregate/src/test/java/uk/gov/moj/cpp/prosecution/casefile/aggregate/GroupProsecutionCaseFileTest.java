@@ -221,6 +221,10 @@ public class GroupProsecutionCaseFileTest {
     }
 
     private GroupProsecutionWithReferenceData buildGroupProsecutionWithReferenceData(final String initiationCode, final UUID prosecutionCaseId, final Boolean isGroupMaster, final String prosecutorCaseReference){
+        return buildGroupProsecutionWithReferenceData(initiationCode, prosecutionCaseId, isGroupMaster, prosecutorCaseReference, LocalDate.now().minusDays(2));
+    }
+
+    private GroupProsecutionWithReferenceData buildGroupProsecutionWithReferenceData(final String initiationCode, final UUID prosecutionCaseId, final Boolean isGroupMaster, final String prosecutorCaseReference, final LocalDate chargeDate){
         return new GroupProsecutionWithReferenceData(GroupProsecution.groupProsecution()
                 .withGroupId(groupId)
                 .withIsCivil(true)
@@ -245,7 +249,7 @@ public class GroupProsecutionCaseFileTest {
                                 .withOffenceId(randomUUID())
                                 .withOffenceCode(OFFENCE_CODE)
                                 .withArrestDate(LocalDate.now().minusDays(2))
-                                .withChargeDate(LocalDate.now().minusDays(2))
+                                .withChargeDate(chargeDate)
                                 .withOffenceLocation("London")
                                 .withOffenceCommittedDate(LocalDate.now().minusDays(2))
                                 .withStatementOfFacts("statements")
@@ -257,5 +261,30 @@ public class GroupProsecutionCaseFileTest {
                                 .build())
                         .build()))
                 .build());
+    }
+
+    @Test
+    public void shouldNotRejectGroupCivilCaseForFutureChargeDate() {
+
+        final Optional<OrganisationUnitWithCourtroomReferenceData> optionalOrganisationUnitWithCourtroomReferenceData =
+                Optional.of(OrganisationUnitWithCourtroomReferenceData.organisationUnitWithCourtroomReferenceData().build());
+
+        when(referenceDataQueryService.retrieveOrganisationUnitWithCourtroom("C55BN00")).thenReturn(optionalOrganisationUnitWithCourtroomReferenceData);
+
+        final List<GroupProsecutionWithReferenceData> groupProsecutionWithReferenceDataList = new ArrayList<>();
+        final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
+        referenceDataVO.setInitiationTypes(Arrays.asList("O"));
+        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData1 = buildGroupProsecutionWithReferenceData(INITIATION_CODE_CIVIL_CASE, randomUUID(), true, "URN1", LocalDate.now().plusDays(5));
+        groupProsecutionWithReferenceData1.setReferenceDataVO(referenceDataVO);
+        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData2 = buildGroupProsecutionWithReferenceData(INITIATION_CODE_CIVIL_CASE, randomUUID(), false, "URN2", LocalDate.now().plusDays(5));
+        groupProsecutionWithReferenceData2.setReferenceDataVO(referenceDataVO);
+        groupProsecutionWithReferenceDataList.add(groupProsecutionWithReferenceData1);
+        groupProsecutionWithReferenceDataList.add(groupProsecutionWithReferenceData2);
+        final GroupProsecutionList groupProsecutionList = new GroupProsecutionList(groupProsecutionWithReferenceDataList);
+        groupProsecutionList.setChannel(Channel.CIVIL);
+
+        final Stream<Object> eventStream = groupProsecutionCaseFile.receiveGroupProsecution(groupProsecutionList, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
+        final Object object = eventStream.findFirst().get();
+        assertThat(object, is(instanceOf(GroupCasesReceived.class)));
     }
 }

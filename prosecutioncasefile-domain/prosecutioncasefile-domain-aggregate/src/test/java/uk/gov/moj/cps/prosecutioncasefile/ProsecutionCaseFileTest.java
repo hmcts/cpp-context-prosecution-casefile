@@ -457,6 +457,19 @@ public class ProsecutionCaseFileTest {
     }
 
     @Test
+    public void shouldNotRejectSingleNonManualCivilCaseForFutureChargeDate() {
+        final ProsecutionWithReferenceData prosecutionWithReferenceData =
+                getCivilProsecutionWithReferenceDataForSingleCase("O", now().plusDays(5));
+
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(),
+                referenceDataQueryService);
+
+        final List<Object> eventList = objectStream.collect(toList());
+
+        assertThat(getFirstMatching(eventList, CcProsecutionRejected.class).isPresent(), is(false));
+    }
+
+    @Test
     public void shouldCreateCCCaseWithWarningsForCPPIWithMultipleDefendants() {
         final LocalDate offenceCommittedDate = of(2018, 3, 2);
         final LocalDate offenceChargeDate = of(2018, 11, 2);
@@ -1995,6 +2008,53 @@ public class ProsecutionCaseFileTest {
                 .withDefendants(defendantList)
                 .withChannel(channel)
                 .withIsCivil(isCivil)
+                .build());
+        prosecutionWithReferenceData.setReferenceDataVO(referenceDataVO);
+        prosecutionWithReferenceData.setExternalId(EXTERNAL_ID);
+        return prosecutionWithReferenceData;
+    }
+
+    private ProsecutionWithReferenceData getCivilProsecutionWithReferenceDataForSingleCase(final String initiationCode, final LocalDate chargeDate) {
+        final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
+        referenceDataVO.setOffenceReferenceData(singletonList(offenceReferenceData().withCjsOffenceCode(OFFENCE_CODE).withProsecutionTimeLimit("6").withOffenceStartDate(OFFENCE_START_DATE).build()));
+        referenceDataVO.addCountryNationalityReferenceData(referenceDataCountryNationality().build());
+        referenceDataVO.setInitiationTypes(asList("J", "C", initiationCode));
+        referenceDataVO.setProsecutorsReferenceData(prosecutorsReferenceData()
+                .withId(randomUUID())
+                .build());
+
+        final uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant civilDefendant = defendant()
+                .withId(DEFENDANT_ID)
+                .withProsecutorDefendantReference(PROSECUTOR_DEFENDANT_REFERENCE_ONE)
+                .withIndividual(individual()
+                        .withPersonalInformation(personalInformation().withFirstName(FORENAME).withLastName(SURNAME).build())
+                        .withSelfDefinedInformation(selfDefinedInformation().withDateOfBirth(BIRTH_DATE).build())
+                        .build())
+                .withInitialHearing(initialHearing()
+                        .withDateOfHearing(DATE_OF_HEARING)
+                        .withCourtHearingLocation(COURT_HEARING_LOCATION)
+                        .build())
+                .withOffences(singletonList(offence()
+                        .withArrestDate(ARREST_DATE)
+                        .withOffenceCode(OFFENCE_CODE)
+                        .withOffenceSequenceNumber(1)
+                        .withOffenceId(offenceId)
+                        .withOffenceCommittedDate(now().minusDays(30))
+                        .withChargeDate(chargeDate)
+                        .build()))
+                .build();
+
+        final ProsecutionWithReferenceData prosecutionWithReferenceData = new ProsecutionWithReferenceData(prosecution()
+                .withCaseDetails(caseDetails()
+                        .withCaseId(CASE_ID)
+                        .withInitiationCode(initiationCode)
+                        .withProsecutorCaseReference(PROSECUTOR_CASE_REFERENCE)
+                        .withOriginatingOrganisation(ORIGINATING_ORGANISATION)
+                        .withCpsOrganisation(CPS_ORGANISATION)
+                        .build())
+                .withDefendants(singletonList(civilDefendant))
+                .withChannel(CIVIL)
+                .withIsCivil(true)
                 .build());
         prosecutionWithReferenceData.setReferenceDataVO(referenceDataVO);
         prosecutionWithReferenceData.setExternalId(EXTERNAL_ID);

@@ -15,6 +15,7 @@ import uk.gov.moj.cpp.prosecution.casefile.validation.rules.ProsecutorReferenceD
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.SummonsCodeValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.ValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.CroNumberSpiValidationRule;
+import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.DateOfHearingMoreThan31DaysInPastValidationAndEnricherRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.DateOfHearingPastDateValidationAndEnricherRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.CroNumberValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.DefendantInitiationCodeValidationRule;
@@ -142,19 +143,19 @@ public class CcProsecutionValidationRuleProviderTest {
     }
 
     @Test
-    public void shouldIncludeDateOfHearingPastDateValidationRuleForOtherInitiationCodeWhenChannelIsCivilAndIsCivilIsTrue() {
+    public void shouldIncludeDateOfHearingPastDateValidationRuleForOtherInitiationCodeWhenChannelIsCivilAndIsCivilIsTrueForGroupCase() {
 
         final List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> validationRules = CcProsecutionValidationRuleProvider
-                .getDefendantValidationRules(INITIATION_CODE_FOR_OTHER, Channel.CIVIL, Boolean.TRUE, Boolean.FALSE);
+                .getDefendantValidationRules(INITIATION_CODE_FOR_OTHER, Channel.CIVIL, Boolean.TRUE, Boolean.TRUE);
 
         assertTrue(validationRules.stream().map((Function<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>::getClass).anyMatch(s -> s.equals(DateOfHearingPastDateValidationAndEnricherRule.class)));
     }
 
     @Test
-    public void shouldIncludeDateOfHearingPastDateValidationRuleForSummonsInitiationCodeWhenChannelIsCivilAndIsCivilIsTrue() {
+    public void shouldIncludeDateOfHearingPastDateValidationRuleForSummonsInitiationCodeWhenChannelIsCivilAndIsCivilIsTrueForGroupCase() {
 
         final List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> validationRules = CcProsecutionValidationRuleProvider
-                .getDefendantValidationRules(INITIATION_CODE_FOR_SUMMONS, Channel.CIVIL, Boolean.TRUE, Boolean.FALSE);
+                .getDefendantValidationRules(INITIATION_CODE_FOR_SUMMONS, Channel.CIVIL, Boolean.TRUE, Boolean.TRUE);
 
         assertTrue(validationRules.stream().map((Function<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>::getClass).anyMatch(s -> s.equals(DateOfHearingPastDateValidationAndEnricherRule.class)));
     }
@@ -178,7 +179,22 @@ public class CcProsecutionValidationRuleProviderTest {
         assertFalse(groupCaseRules.stream().map((Function<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>::getClass).anyMatch(s -> s.equals(PostCodeValidationRule.class)));
 
         assertTrue(groupCaseRules.stream().map((Function<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>::getClass).anyMatch(s -> s.equals(DateOfHearingPastDateValidationAndEnricherRule.class)));
-        assertTrue(singleCaseRules.stream().map((Function<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>::getClass).anyMatch(s -> s.equals(DateOfHearingPastDateValidationAndEnricherRule.class)));
+        assertFalse(singleCaseRules.stream().map((Function<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>::getClass).anyMatch(s -> s.equals(DateOfHearingPastDateValidationAndEnricherRule.class)));
+    }
+
+    @Test
+    public void shouldIncludeDateOfHearingMoreThan31DaysInPastRuleOnlyForSingleCivilCase() {
+
+        final List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> singleCivilCaseRules = CcProsecutionValidationRuleProvider
+                .getDefendantValidationRules(INITIATION_CODE_FOR_OTHER, Channel.CIVIL, Boolean.TRUE, Boolean.FALSE);
+        final List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> groupCivilCaseRules = CcProsecutionValidationRuleProvider
+                .getDefendantValidationRules(INITIATION_CODE_FOR_OTHER, Channel.CIVIL, Boolean.TRUE, Boolean.TRUE);
+        final List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> mccCivilCaseRules = CcProsecutionValidationRuleProvider
+                .getDefendantValidationRules(INITIATION_CODE_FOR_OTHER, Channel.MCC, Boolean.TRUE, Boolean.FALSE);
+
+        assertTrue(singleCivilCaseRules.stream().map((Function<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>::getClass).anyMatch(s -> s.equals(DateOfHearingMoreThan31DaysInPastValidationAndEnricherRule.class)));
+        assertFalse(groupCivilCaseRules.stream().map((Function<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>::getClass).anyMatch(s -> s.equals(DateOfHearingMoreThan31DaysInPastValidationAndEnricherRule.class)));
+        assertFalse(mccCivilCaseRules.stream().map((Function<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>::getClass).anyMatch(s -> s.equals(DateOfHearingMoreThan31DaysInPastValidationAndEnricherRule.class)));
     }
 
     @Test

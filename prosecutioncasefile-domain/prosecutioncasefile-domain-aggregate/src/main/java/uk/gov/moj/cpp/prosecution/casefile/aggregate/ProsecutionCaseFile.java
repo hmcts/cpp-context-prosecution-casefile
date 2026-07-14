@@ -755,7 +755,7 @@ public class ProsecutionCaseFile implements Aggregate {
         final Prosecution prosecution = prosecutionWithReferenceData.getProsecution();
         final String incomingInitiationCode = prosecution.getCaseDetails().getInitiationCode();
         final Channel prosecutionChannel = prosecution.getChannel();
-        final List<DefendantProblem> defendantWarningsForIncomingMessage = prosecutionChannel == SPI ? List.of() : validateDefendantWarnings(defendantsWithReferenceData, incomingInitiationCode);
+        final List<DefendantProblem> defendantWarningsForIncomingMessage = prosecutionChannel == SPI ? List.of() : validateDefendantWarnings(defendantsWithReferenceData, incomingInitiationCode, prosecutionChannel);
 
         if (incomingInitiationCode.equals(SUMMONS_INITIATION_CODE)) {
             return apply(builder.add(defendantsParkedForSummonsApplicationApproval()
@@ -786,7 +786,7 @@ public class ProsecutionCaseFile implements Aggregate {
     }
 
     private Stream<Object> addDefendants(final UUID caseId, final UUID externalId, final DefendantsWithReferenceData defendantsWithReferenceData, List<DefendantProblem> defendantProblemList, final Builder<Object> builder) {
-        final List<DefendantProblem> defendantWarningsList = channel == CPPI ? validateDefendantWarnings(defendantsWithReferenceData, this.caseDetails.getInitiationCode()) : null;
+        final List<DefendantProblem> defendantWarningsList = channel == CPPI ? validateDefendantWarnings(defendantsWithReferenceData, this.caseDetails.getInitiationCode(), channel) : null;
         final List<Defendant> validDefendantList = channel == SPI ? validDefendants(defendantsWithReferenceData, defendantProblemList) : defendantsWithReferenceData.getDefendants();
         final String initiationCodeForSameCaseWithNewDefendant = defendantsWithReferenceData.getCaseDetails().getInitiationCode();
         if (!validDefendantList.isEmpty()) {

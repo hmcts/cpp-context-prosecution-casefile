@@ -35,6 +35,7 @@ import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.CourtRecei
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.CroNumberSpiValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.CroNumberValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.CustodyStatusValidationAndEnricherRule;
+import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.DateOfHearingMoreThan31DaysInPastValidationAndEnricherRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.DateOfHearingPastDateValidationAndEnricherRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.DateOfHearingValidationAndEnricherRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.DefendantDateOfBirthValidationRule;
@@ -276,9 +277,26 @@ public class CcProsecutionValidationRuleProvider {
             SUMMONS.getCode(), GROUP_CIVIL_DEFENDANT_RULE_SET,
             OTHER.getCode(), GROUP_CIVIL_DEFENDANT_RULE_SET);
 
+    private static final List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> SINGLE_CIVIL_CASE_ONLY_RULE_SET = unmodifiableList(asList(
+            new ArrestDateValidationRuleForCivil(),
+            new DefendantDateOfBirthValidationRule(),
+            new ParentGuardianDateOfBirthValidationRule(),
+            new CourtHearingLocationValidationRule(),
+            new OffenderCodeValidationAndEnricherRule(),
+            new OffenceLocationValidationAndEnricherRule(),
+            new NationalityValidationAndEnricherRule(),
+            new VehicleCodeValidationAndEnricherRule(),
+            new OffenceCodeValidationAndEnricherRule(),
+            new CourtReceivedFromCodeCourtValidationRules(),
+            new CourtReceivedToCodeCourtValidationRules(),
+            new HearingTypeCodeValidationRule(),
+            new LaidDateValidationRule(),
+            new DateOfHearingMoreThan31DaysInPastValidationAndEnricherRule()
+    ));
+
     private static final Map<String, List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>>> defendantValidationMapForSingleCivilCases = of(
-            SUMMONS.getCode(), Stream.of(GROUP_CIVIL_DEFENDANT_RULE_SET, COMMON_DEFENDANT_RULE_SET, SPI_DEFENDANT_RULE_SET).flatMap(Collection::stream).toList(),
-            OTHER.getCode(), Stream.of(GROUP_CIVIL_DEFENDANT_RULE_SET, COMMON_DEFENDANT_RULE_SET, SPI_DEFENDANT_RULE_SET).flatMap(Collection::stream).toList());
+            SUMMONS.getCode(), Stream.of(SINGLE_CIVIL_CASE_ONLY_RULE_SET, COMMON_DEFENDANT_RULE_SET, SPI_DEFENDANT_RULE_SET).flatMap(Collection::stream).toList(),
+            OTHER.getCode(), Stream.of(SINGLE_CIVIL_CASE_ONLY_RULE_SET, COMMON_DEFENDANT_RULE_SET, SPI_DEFENDANT_RULE_SET).flatMap(Collection::stream).toList());
 
     private static final Map<String, List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>>> defendantValidationMapMCCCivil = of(
             SUMMONS.getCode(), Stream.of(GROUP_CIVIL_DEFENDANT_RULE_SET,COMMON_DEFENDANT_RULE_SET, NON_POLICE_DEFENDANT_RULE_SET, SUMMONS_DEFENDANT_RULE_MCC_SET).flatMap(Collection::stream).toList(),

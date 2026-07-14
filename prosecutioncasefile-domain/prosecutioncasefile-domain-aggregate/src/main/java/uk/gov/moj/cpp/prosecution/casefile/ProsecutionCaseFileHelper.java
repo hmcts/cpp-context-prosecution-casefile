@@ -259,7 +259,7 @@ public class ProsecutionCaseFileHelper {
                 .anyMatch(code -> initiationCode.equalsIgnoreCase(String.valueOf(code)));
     }
 
-    public static List<DefendantProblem> validateDefendantWarnings(final DefendantsWithReferenceData defendantsWithReferenceData, final String initiationCode) {
+    public static List<DefendantProblem> validateDefendantWarnings(final DefendantsWithReferenceData defendantsWithReferenceData, final String initiationCode, final Channel channel) {
 
         final ReferenceDataValidationContext referenceDataValidationContext = ReferenceDataValidationContext.newInstance(defendantsWithReferenceData.getReferenceDataVO().getOffenceReferenceData(), defendantsWithReferenceData.getReferenceDataVO().getCountryNationalityReferenceData());
 
@@ -270,7 +270,7 @@ public class ProsecutionCaseFileHelper {
             final List<Problem> validationWarnings = validate(
                     defendant,
                     referenceDataValidationContext,
-                    CcProsecutionWarningRuleProvider.getWarningRules(initiationCode));
+                    CcProsecutionWarningRuleProvider.getWarningRules(initiationCode, channel));
             if (!validationWarnings.isEmpty()) {
                 defendantProblems.add(defendantProblem()
                         .withProblems(validationWarnings)

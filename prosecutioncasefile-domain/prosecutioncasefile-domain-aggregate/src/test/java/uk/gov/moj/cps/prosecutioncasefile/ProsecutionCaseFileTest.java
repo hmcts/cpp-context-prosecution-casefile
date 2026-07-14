@@ -470,6 +470,69 @@ public class ProsecutionCaseFileTest {
     }
 
     @Test
+    public void shouldRejectSingleNonManualCivilCaseForHearingDateMoreThan31DaysInPast() {
+        final ProsecutionWithReferenceData prosecutionWithReferenceData =
+                getCivilProsecutionWithReferenceDataForSingleCase("O", now().minusDays(2), now().minusDays(40).toString());
+
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(),
+                referenceDataQueryService);
+
+        final List<Object> eventList = objectStream.collect(toList());
+
+        final Optional<CcProsecutionRejected> ccProsecutionRejected = getFirstMatching(eventList, CcProsecutionRejected.class);
+        assertThat(ccProsecutionRejected.isPresent(), is(true));
+        assertThat(ccProsecutionRejected.get().getDefendantErrors().get(0).getProblems().stream()
+                .anyMatch(problem -> problem.getCode().equals(ProblemCode.DATE_OF_HEARING_MORE_THAN_31DAYS_IN_PAST.name())), is(true));
+        assertThat(ccProsecutionRejected.get().getDefendantErrors().get(0).getProblems().stream()
+                .anyMatch(problem -> problem.getCode().equals(ProblemCode.DATE_OF_HEARING_IN_THE_PAST.name())), is(false));
+    }
+
+    @Test
+    public void shouldNotRejectSingleNonManualCivilCaseForHearingDateWithin31DaysInPast() {
+        final ProsecutionWithReferenceData prosecutionWithReferenceData =
+                getCivilProsecutionWithReferenceDataForSingleCase("O", now().minusDays(2), now().minusDays(10).toString());
+
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(),
+                referenceDataQueryService);
+
+        final List<Object> eventList = objectStream.collect(toList());
+
+        assertThat(getFirstMatching(eventList, CcProsecutionRejected.class).isPresent(), is(false));
+    }
+
+    @Test
+    public void shouldRaiseOffenceOutOfTimeWarningForSingleNonManualCivilCase() {
+        final ProsecutionWithReferenceData prosecutionWithReferenceData =
+                getCivilProsecutionWithReferenceDataForSingleCase("O", now(), now().plusDays(5).toString(), now().minusMonths(10), CIVIL);
+
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(),
+                referenceDataQueryService);
+
+        final List<Object> eventList = objectStream.collect(toList());
+
+        assertThat(getFirstMatching(eventList, CcProsecutionRejected.class).isPresent(), is(false));
+        final Optional<CcCaseReceivedWithWarnings> ccCaseReceivedWithWarnings = getFirstMatching(eventList, CcCaseReceivedWithWarnings.class);
+        assertThat(ccCaseReceivedWithWarnings.isPresent(), is(true));
+        assertThat(ccCaseReceivedWithWarnings.get().getDefendantWarnings().get(0).getProblems().stream()
+                .anyMatch(problem -> problem.getCode().equals(ProblemCode.OFFENCE_OUT_OF_TIME.name())), is(true));
+    }
+
+    @Test
+    public void shouldNotRaiseOffenceOutOfTimeWarningForMccChannelCase() {
+        final ProsecutionWithReferenceData prosecutionWithReferenceData =
+                getCivilProsecutionWithReferenceDataForSingleCase("O", now(), now().plusDays(5).toString(), now().minusMonths(10), MCC);
+
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(),
+                referenceDataQueryService);
+
+        final List<Object> eventList = objectStream.collect(toList());
+
+        assertThat(getFirstMatching(eventList, CcProsecutionRejected.class).isPresent(), is(false));
+        final Optional<CcCaseReceivedWithWarnings> ccCaseReceivedWithWarnings = getFirstMatching(eventList, CcCaseReceivedWithWarnings.class);
+        assertThat(ccCaseReceivedWithWarnings.isPresent(), is(false));
+    }
+
+    @Test
     public void shouldCreateCCCaseWithWarningsForCPPIWithMultipleDefendants() {
         final LocalDate offenceCommittedDate = of(2018, 3, 2);
         final LocalDate offenceChargeDate = of(2018, 11, 2);
@@ -2015,6 +2078,14 @@ public class ProsecutionCaseFileTest {
     }
 
     private ProsecutionWithReferenceData getCivilProsecutionWithReferenceDataForSingleCase(final String initiationCode, final LocalDate chargeDate) {
+        return getCivilProsecutionWithReferenceDataForSingleCase(initiationCode, chargeDate, DATE_OF_HEARING);
+    }
+
+    private ProsecutionWithReferenceData getCivilProsecutionWithReferenceDataForSingleCase(final String initiationCode, final LocalDate chargeDate, final String dateOfHearing) {
+        return getCivilProsecutionWithReferenceDataForSingleCase(initiationCode, chargeDate, dateOfHearing, now().minusDays(30), CIVIL);
+    }
+
+    private ProsecutionWithReferenceData getCivilProsecutionWithReferenceDataForSingleCase(final String initiationCode, final LocalDate chargeDate, final String dateOfHearing, final LocalDate offenceCommittedDate, final Channel channel) {
         final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
         referenceDataVO.setOffenceReferenceData(singletonList(offenceReferenceData().withCjsOffenceCode(OFFENCE_CODE).withProsecutionTimeLimit("6").withOffenceStartDate(OFFENCE_START_DATE).build()));
         referenceDataVO.addCountryNationalityReferenceData(referenceDataCountryNationality().build());
@@ -2031,7 +2102,7 @@ public class ProsecutionCaseFileTest {
                         .withSelfDefinedInformation(selfDefinedInformation().withDateOfBirth(BIRTH_DATE).build())
                         .build())
                 .withInitialHearing(initialHearing()
-                        .withDateOfHearing(DATE_OF_HEARING)
+                        .withDateOfHearing(dateOfHearing)
                         .withCourtHearingLocation(COURT_HEARING_LOCATION)
                         .build())
                 .withOffences(singletonList(offence()
@@ -2039,7 +2110,7 @@ public class ProsecutionCaseFileTest {
                         .withOffenceCode(OFFENCE_CODE)
                         .withOffenceSequenceNumber(1)
                         .withOffenceId(offenceId)
-                        .withOffenceCommittedDate(now().minusDays(30))
+                        .withOffenceCommittedDate(offenceCommittedDate)
                         .withChargeDate(chargeDate)
                         .build()))
                 .build();
@@ -2053,7 +2124,7 @@ public class ProsecutionCaseFileTest {
                         .withCpsOrganisation(CPS_ORGANISATION)
                         .build())
                 .withDefendants(singletonList(civilDefendant))
-                .withChannel(CIVIL)
+                .withChannel(channel)
                 .withIsCivil(true)
                 .build());
         prosecutionWithReferenceData.setReferenceDataVO(referenceDataVO);

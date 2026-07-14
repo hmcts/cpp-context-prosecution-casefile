@@ -261,7 +261,7 @@ public class ProsecutionCaseFile implements Aggregate {
         defendantsWithReferenceData.setReferenceDataVO(referenceDataVO);
         defendantRefDataEnrichers.forEach(x -> x.enrich(defendantsWithReferenceData));
         final List<Problem> caseProblems = validate(prosecutionWithReferenceData, referenceDataQueryService, getCaseValidationRules(caseInitiationCode));
-        if (this.prosecutionReceived) {
+        if (this.prosecutionReceived || !this.applicationIdToDefendantIdsMap.isEmpty()) {
             caseProblems.add(newProblem(DUPLICATED_PROSECUTION, "urn", prosecution.getCaseDetails().getProsecutorCaseReference()));
         }
         final Boolean isCivil = prosecution.getIsCivil();
@@ -501,7 +501,7 @@ public class ProsecutionCaseFile implements Aggregate {
         boolean isMCCWithListNewHearing = MCC.equals(prosecutionChannel) && Objects.nonNull(prosecutionWithReferenceData.getProsecution().getListNewHearing());
         final List<DefendantProblem> defendantErrors = validateDefendantErrors(prosecution.getCaseDetails(), prosecutionChannel, defendantsWithReferenceData, referenceDataQueryService, builder, Boolean.FALSE, isMCCWithListNewHearing, isCivil);
 
-        if (messageFromCppiOrMccOrCivil && prosecutionReceived) {
+        if ((messageFromCppiOrMccOrCivil && prosecutionReceived) || !noDefendantsParkedForSummonsApplicationApproval) {
             caseProblems.add(newProblem(DUPLICATED_PROSECUTION, "urn", prosecution.getCaseDetails().getProsecutorCaseReference()));
         }
 

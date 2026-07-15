@@ -69,7 +69,7 @@ public class ProsecutionCaseFileDefendantToCCDefendantConverter implements Param
                                     .withProsecutionAuthorityReference(defendant.getProsecutorDefendantReference())
                                     .withProsecutionCaseId(paramsVO.getCaseId())
                                     .withLegalEntityDefendant(prosecutionCaseFileToCCLegalEntityDefendantConverter.convert(defendant))
-                                    .withNumberOfPreviousConvictionsCited(defendant.getNumPreviousConvictions())
+                                    .withNumberOfPreviousConvictionsCited(nonNegativeOrNull(defendant.getNumPreviousConvictions()))
                                     .withAssociatedPersons(defendant.getIndividual() != null ? buildAssociatedPersons(defendant.getIndividual().getParentGuardianInformation(), paramsVO.getReferenceDataVO()) : null);
 
                             if (isNotEmpty(defendant.getIndividualAliases())) {
@@ -193,6 +193,10 @@ public class ProsecutionCaseFileDefendantToCCDefendantConverter implements Param
         } else {
             return Optional.empty();
         }
+    }
+
+    private static Integer nonNegativeOrNull(final Integer value) {
+        return value == null || value < 0 ? null : value;
     }
 
     private Address buildAddress(final ParentGuardianInformation parentGuardianInformation) {

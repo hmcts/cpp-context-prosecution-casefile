@@ -421,6 +421,118 @@ public class ProsecutionCaseFileTest {
     }
 
     @Test
+    public void shouldUseCivilCaseValidationRulesAndIgnoreInvalidCaseMarkerWhenIsCivilTrue() {
+        final LocalDate offenceCommittedDate = of(2018, 3, 2);
+        final LocalDate offenceChargeDate = of(2018, 11, 2);
+
+        final ProsecutionWithReferenceData prosecutionWithReferenceData = getProsecutionWithReferenceDataAndCivilFees(
+                of(buildDefendantWithOffence(offenceCommittedDate, offenceChargeDate, PROSECUTOR_DEFENDANT_REFERENCE_ONE)),
+                CIVIL, true, Collections.emptyList(), singletonList(caseMarker().withMarkerTypeCode(INVALID_CASE_MARKER_CODE).build()));
+
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(),
+                referenceDataQueryService);
+
+        final List<Object> eventList = objectStream.collect(toList());
+
+        assertThat(getFirstMatching(eventList, CcProsecutionRejected.class).isPresent(), is(false));
+    }
+
+    @Test
+    public void shouldUseStandardCaseValidationRulesAndRejectInvalidCaseMarkerWhenIsCivilFalse() {
+        final LocalDate offenceCommittedDate = of(2018, 3, 2);
+        final LocalDate offenceChargeDate = of(2018, 11, 2);
+
+        final ProsecutionWithReferenceData prosecutionWithReferenceData = getProsecutionWithReferenceDataAndCivilFees(
+                of(buildDefendantWithOffence(offenceCommittedDate, offenceChargeDate, PROSECUTOR_DEFENDANT_REFERENCE_ONE)),
+                CPPI, false, Collections.emptyList(), singletonList(caseMarker().withMarkerTypeCode(INVALID_CASE_MARKER_CODE).build()));
+
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(),
+                referenceDataQueryService);
+
+        final List<Object> eventList = objectStream.collect(toList());
+
+        final Optional<CcProsecutionRejected> ccProsecutionRejected = getFirstMatching(eventList, CcProsecutionRejected.class);
+        assertThat(ccProsecutionRejected.isPresent(), is(true));
+        assertThat(ccProsecutionRejected.get().getCaseErrors().get(0).getCode(), is(ProblemCode.CASE_MARKER_IS_INVALID.name()));
+    }
+
+    @Test
+    public void shouldNotRejectSingleNonManualCivilCaseForFutureChargeDate() {
+        final ProsecutionWithReferenceData prosecutionWithReferenceData =
+                getCivilProsecutionWithReferenceDataForSingleCase("O", now().plusDays(5));
+
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(),
+                referenceDataQueryService);
+
+        final List<Object> eventList = objectStream.collect(toList());
+
+        assertThat(getFirstMatching(eventList, CcProsecutionRejected.class).isPresent(), is(false));
+    }
+
+    @Test
+    public void shouldRejectSingleNonManualCivilCaseForHearingDateMoreThan31DaysInPast() {
+        final ProsecutionWithReferenceData prosecutionWithReferenceData =
+                getCivilProsecutionWithReferenceDataForSingleCase("O", now().minusDays(2), now().minusDays(40).toString());
+
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(),
+                referenceDataQueryService);
+
+        final List<Object> eventList = objectStream.collect(toList());
+
+        final Optional<CcProsecutionRejected> ccProsecutionRejected = getFirstMatching(eventList, CcProsecutionRejected.class);
+        assertThat(ccProsecutionRejected.isPresent(), is(true));
+        assertThat(ccProsecutionRejected.get().getDefendantErrors().get(0).getProblems().stream()
+                .anyMatch(problem -> problem.getCode().equals(ProblemCode.DATE_OF_HEARING_MORE_THAN_31DAYS_IN_PAST.name())), is(true));
+        assertThat(ccProsecutionRejected.get().getDefendantErrors().get(0).getProblems().stream()
+                .anyMatch(problem -> problem.getCode().equals(ProblemCode.DATE_OF_HEARING_IN_THE_PAST.name())), is(false));
+    }
+
+    @Test
+    public void shouldNotRejectSingleNonManualCivilCaseForHearingDateWithin31DaysInPast() {
+        final ProsecutionWithReferenceData prosecutionWithReferenceData =
+                getCivilProsecutionWithReferenceDataForSingleCase("O", now().minusDays(2), now().minusDays(10).toString());
+
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(),
+                referenceDataQueryService);
+
+        final List<Object> eventList = objectStream.collect(toList());
+
+        assertThat(getFirstMatching(eventList, CcProsecutionRejected.class).isPresent(), is(false));
+    }
+
+    @Test
+    public void shouldRaiseOffenceOutOfTimeWarningForSingleNonManualCivilCase() {
+        final ProsecutionWithReferenceData prosecutionWithReferenceData =
+                getCivilProsecutionWithReferenceDataForSingleCase("O", now(), now().plusDays(5).toString(), now().minusMonths(10), CIVIL);
+
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(),
+                referenceDataQueryService);
+
+        final List<Object> eventList = objectStream.collect(toList());
+
+        assertThat(getFirstMatching(eventList, CcProsecutionRejected.class).isPresent(), is(false));
+        final Optional<CcCaseReceivedWithWarnings> ccCaseReceivedWithWarnings = getFirstMatching(eventList, CcCaseReceivedWithWarnings.class);
+        assertThat(ccCaseReceivedWithWarnings.isPresent(), is(true));
+        assertThat(ccCaseReceivedWithWarnings.get().getDefendantWarnings().get(0).getProblems().stream()
+                .anyMatch(problem -> problem.getCode().equals(ProblemCode.OFFENCE_OUT_OF_TIME.name())), is(true));
+    }
+
+    @Test
+    public void shouldNotRaiseOffenceOutOfTimeWarningForMccChannelCase() {
+        final ProsecutionWithReferenceData prosecutionWithReferenceData =
+                getCivilProsecutionWithReferenceDataForSingleCase("O", now(), now().plusDays(5).toString(), now().minusMonths(10), MCC);
+
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(),
+                referenceDataQueryService);
+
+        final List<Object> eventList = objectStream.collect(toList());
+
+        assertThat(getFirstMatching(eventList, CcProsecutionRejected.class).isPresent(), is(false));
+        final Optional<CcCaseReceivedWithWarnings> ccCaseReceivedWithWarnings = getFirstMatching(eventList, CcCaseReceivedWithWarnings.class);
+        assertThat(ccCaseReceivedWithWarnings.isPresent(), is(false));
+    }
+
+    @Test
     public void shouldCreateCCCaseWithWarningsForCPPIWithMultipleDefendants() {
         final LocalDate offenceCommittedDate = of(2018, 3, 2);
         final LocalDate offenceChargeDate = of(2018, 11, 2);
@@ -1933,6 +2045,10 @@ public class ProsecutionCaseFileTest {
     }
 
     private ProsecutionWithReferenceData getProsecutionWithReferenceDataAndCivilFees(final List<uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant> defendantList, final Channel channel, boolean isCivil, List<CivilFees> civilFees) {
+        return getProsecutionWithReferenceDataAndCivilFees(defendantList, channel, isCivil, civilFees, null);
+    }
+
+    private ProsecutionWithReferenceData getProsecutionWithReferenceDataAndCivilFees(final List<uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant> defendantList, final Channel channel, boolean isCivil, List<CivilFees> civilFees, List<CaseMarker> caseMarkers) {
         final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
         referenceDataVO.setOffenceReferenceData(singletonList(offenceReferenceData().withCjsOffenceCode(OFFENCE_CODE).withProsecutionTimeLimit("6").withOffenceStartDate(OFFENCE_START_DATE).build()));
         referenceDataVO.addCountryNationalityReferenceData(referenceDataCountryNationality().build());
@@ -1950,10 +2066,66 @@ public class ProsecutionCaseFileTest {
                         .withCpsOrganisation(CPS_ORGANISATION)
                         .withFeeStatus(CollectionUtils.isNotEmpty(civilFees) ? civilFees.get(0).getFeeStatus(): null)
                         .withPaymentReference(CollectionUtils.isNotEmpty(civilFees) ? civilFees.get(0).getPaymentReference(): null)
+                        .withCaseMarkers(caseMarkers)
                         .build())
                 .withDefendants(defendantList)
                 .withChannel(channel)
                 .withIsCivil(isCivil)
+                .build());
+        prosecutionWithReferenceData.setReferenceDataVO(referenceDataVO);
+        prosecutionWithReferenceData.setExternalId(EXTERNAL_ID);
+        return prosecutionWithReferenceData;
+    }
+
+    private ProsecutionWithReferenceData getCivilProsecutionWithReferenceDataForSingleCase(final String initiationCode, final LocalDate chargeDate) {
+        return getCivilProsecutionWithReferenceDataForSingleCase(initiationCode, chargeDate, DATE_OF_HEARING);
+    }
+
+    private ProsecutionWithReferenceData getCivilProsecutionWithReferenceDataForSingleCase(final String initiationCode, final LocalDate chargeDate, final String dateOfHearing) {
+        return getCivilProsecutionWithReferenceDataForSingleCase(initiationCode, chargeDate, dateOfHearing, now().minusDays(30), CIVIL);
+    }
+
+    private ProsecutionWithReferenceData getCivilProsecutionWithReferenceDataForSingleCase(final String initiationCode, final LocalDate chargeDate, final String dateOfHearing, final LocalDate offenceCommittedDate, final Channel channel) {
+        final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
+        referenceDataVO.setOffenceReferenceData(singletonList(offenceReferenceData().withCjsOffenceCode(OFFENCE_CODE).withProsecutionTimeLimit("6").withOffenceStartDate(OFFENCE_START_DATE).build()));
+        referenceDataVO.addCountryNationalityReferenceData(referenceDataCountryNationality().build());
+        referenceDataVO.setInitiationTypes(asList("J", "C", initiationCode));
+        referenceDataVO.setProsecutorsReferenceData(prosecutorsReferenceData()
+                .withId(randomUUID())
+                .build());
+
+        final uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant civilDefendant = defendant()
+                .withId(DEFENDANT_ID)
+                .withProsecutorDefendantReference(PROSECUTOR_DEFENDANT_REFERENCE_ONE)
+                .withIndividual(individual()
+                        .withPersonalInformation(personalInformation().withFirstName(FORENAME).withLastName(SURNAME).build())
+                        .withSelfDefinedInformation(selfDefinedInformation().withDateOfBirth(BIRTH_DATE).build())
+                        .build())
+                .withInitialHearing(initialHearing()
+                        .withDateOfHearing(dateOfHearing)
+                        .withCourtHearingLocation(COURT_HEARING_LOCATION)
+                        .build())
+                .withOffences(singletonList(offence()
+                        .withArrestDate(ARREST_DATE)
+                        .withOffenceCode(OFFENCE_CODE)
+                        .withOffenceSequenceNumber(1)
+                        .withOffenceId(offenceId)
+                        .withOffenceCommittedDate(offenceCommittedDate)
+                        .withChargeDate(chargeDate)
+                        .build()))
+                .build();
+
+        final ProsecutionWithReferenceData prosecutionWithReferenceData = new ProsecutionWithReferenceData(prosecution()
+                .withCaseDetails(caseDetails()
+                        .withCaseId(CASE_ID)
+                        .withInitiationCode(initiationCode)
+                        .withProsecutorCaseReference(PROSECUTOR_CASE_REFERENCE)
+                        .withOriginatingOrganisation(ORIGINATING_ORGANISATION)
+                        .withCpsOrganisation(CPS_ORGANISATION)
+                        .build())
+                .withDefendants(singletonList(civilDefendant))
+                .withChannel(channel)
+                .withIsCivil(true)
                 .build());
         prosecutionWithReferenceData.setReferenceDataVO(referenceDataVO);
         prosecutionWithReferenceData.setExternalId(EXTERNAL_ID);

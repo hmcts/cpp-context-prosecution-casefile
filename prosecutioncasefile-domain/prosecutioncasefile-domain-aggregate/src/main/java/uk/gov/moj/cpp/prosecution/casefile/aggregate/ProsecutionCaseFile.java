@@ -276,7 +276,7 @@ public class ProsecutionCaseFile implements Aggregate {
             caseProblems.add(newProblem(DUPLICATED_PROSECUTION, "urn", prosecution.getCaseDetails().getProsecutorCaseReference()));
         }
         final Boolean isCivil = prosecution.getIsCivil();
-        final List<Problem> defendantProblems = validate(defendantWithReferenceData, referenceDataQueryService, getDefendantValidationRules(caseInitiationCode, prosecutionChannel,isCivil));
+        final List<Problem> defendantProblems = validate(defendantWithReferenceData, referenceDataQueryService, getDefendantValidationRules(caseInitiationCode, prosecutionChannel,isCivil, Boolean.FALSE));
         final List<Problem> rejections = newArrayList(concat(caseProblems, defendantProblems));
         if (!rejections.isEmpty()) {
             builder.accept(new SjpProsecutionRejected(rejections, prosecutionWithReferenceData.getExternalId(), prosecution));
@@ -508,7 +508,7 @@ public class ProsecutionCaseFile implements Aggregate {
 
         final Boolean isCivil = Optional.ofNullable(receivedProsecutionWithReferenceData.getProsecution().getIsCivil()).orElse(false);
 
-        final List<Problem> caseProblems = validate(prosecutionWithReferenceData, referenceDataQueryService, getCaseValidationRules(receivedInitiationCode));
+        final List<Problem> caseProblems = validate(prosecutionWithReferenceData, referenceDataQueryService, getCaseValidationRules(receivedInitiationCode, isCivil));
         boolean isMCCWithListNewHearing = MCC.equals(prosecutionChannel) && Objects.nonNull(prosecutionWithReferenceData.getProsecution().getListNewHearing());
 
         //ACTIVE // INACTIVE
@@ -519,7 +519,7 @@ public class ProsecutionCaseFile implements Aggregate {
                                 .filter(status -> MigrationCaseStatus.INACTIVE == status)
                                 .isPresent();
 
-        final List<DefendantProblem> defendantErrors = validateDefendantErrors(prosecution.getCaseDetails(), prosecutionChannel, defendantsWithReferenceData, referenceDataQueryService, builder, Boolean.FALSE, isMCCWithListNewHearing,isStandaloneCaseWithoutHearing, isCivil);
+        final List<DefendantProblem> defendantErrors = validateDefendantErrors(prosecution.getCaseDetails(), prosecutionChannel, defendantsWithReferenceData, referenceDataQueryService, builder, isMCCWithListNewHearing,isStandaloneCaseWithoutHearing, isCivil, Boolean.FALSE);
 
         if ((messageFromCppiOrMccOrCivil && prosecutionReceived) || !noDefendantsParkedForSummonsApplicationApproval) {
             caseProblems.add(newProblem(DUPLICATED_PROSECUTION, "urn", prosecution.getCaseDetails().getProsecutorCaseReference()));
@@ -755,7 +755,7 @@ public class ProsecutionCaseFile implements Aggregate {
         final Prosecution prosecution = prosecutionWithReferenceData.getProsecution();
         final String incomingInitiationCode = prosecution.getCaseDetails().getInitiationCode();
         final Channel prosecutionChannel = prosecution.getChannel();
-        final List<DefendantProblem> defendantWarningsForIncomingMessage = prosecutionChannel == SPI ? List.of() : validateDefendantWarnings(defendantsWithReferenceData, incomingInitiationCode);
+        final List<DefendantProblem> defendantWarningsForIncomingMessage = prosecutionChannel == SPI ? List.of() : validateDefendantWarnings(defendantsWithReferenceData, incomingInitiationCode, prosecutionChannel);
 
         if (incomingInitiationCode.equals(SUMMONS_INITIATION_CODE)) {
             return apply(builder.add(defendantsParkedForSummonsApplicationApproval()
@@ -786,7 +786,7 @@ public class ProsecutionCaseFile implements Aggregate {
     }
 
     private Stream<Object> addDefendants(final UUID caseId, final UUID externalId, final DefendantsWithReferenceData defendantsWithReferenceData, List<DefendantProblem> defendantProblemList, final Builder<Object> builder) {
-        final List<DefendantProblem> defendantWarningsList = channel == CPPI ? validateDefendantWarnings(defendantsWithReferenceData, this.caseDetails.getInitiationCode()) : null;
+        final List<DefendantProblem> defendantWarningsList = channel == CPPI ? validateDefendantWarnings(defendantsWithReferenceData, this.caseDetails.getInitiationCode(), channel) : null;
         final List<Defendant> validDefendantList = channel == SPI ? validDefendants(defendantsWithReferenceData, defendantProblemList) : defendantsWithReferenceData.getDefendants();
         final String initiationCodeForSameCaseWithNewDefendant = defendantsWithReferenceData.getCaseDetails().getInitiationCode();
         if (!validDefendantList.isEmpty()) {
@@ -839,7 +839,7 @@ public class ProsecutionCaseFile implements Aggregate {
 
     public Stream<Object> addErrorCorrectedDefendantsForSPI(final UUID caseId, final UUID externalId, final DefendantsWithReferenceData defendantsWithReferenceData, final ReferenceDataQueryService referenceDataQueryService,final Boolean isCivil) {
         final Builder<Object> builder = builder();
-        final List<DefendantProblem> defendantErrors = validateDefendantErrors(this.caseDetails, SPI, defendantsWithReferenceData, referenceDataQueryService, builder, Boolean.FALSE, false, false,isCivil);
+        final List<DefendantProblem> defendantErrors = validateDefendantErrors(this.caseDetails, SPI, defendantsWithReferenceData, referenceDataQueryService, builder, false, false,isCivil, Boolean.FALSE);
         return addDefendants(caseId, externalId, defendantsWithReferenceData, defendantErrors, builder);
     }
 

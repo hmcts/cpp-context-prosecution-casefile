@@ -2,10 +2,13 @@ package uk.gov.moj.cpp.prosecution.casefile.validation.provider;
 
 
 import static java.util.Collections.emptyList;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CIVIL;
 
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant;
 import uk.gov.moj.cpp.prosecution.casefile.validation.context.ReferenceDataValidationContext;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.ValidationRule;
+import uk.gov.moj.cpp.prosecution.casefile.validation.rules.warning.ImprisonableOffenceValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.warning.OffenceInEffectOnOffenceCommittedDateValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.warning.OffenceOutOfTimeValidationRule;
 
@@ -20,11 +23,19 @@ public class CcProsecutionWarningRuleProvider {
                     OffenceOutOfTimeValidationRule.INSTANCE,
                     OffenceInEffectOnOffenceCommittedDateValidationRule.INSTANCE);
 
+    private static final List<ValidationRule<Defendant, ReferenceDataValidationContext>> CIVIL_WARNING_RULES =
+            ImmutableList.of(
+                    OffenceOutOfTimeValidationRule.INSTANCE,
+                    OffenceInEffectOnOffenceCommittedDateValidationRule.INSTANCE,
+                    ImprisonableOffenceValidationRule.INSTANCE);
+
     private CcProsecutionWarningRuleProvider() {
     }
 
-    public static List<ValidationRule<Defendant, ReferenceDataValidationContext>> getWarningRules(final String caseInitiationCode) {
-        if("C".equals(caseInitiationCode) || "Q".equals(caseInitiationCode)) {
+    public static List<ValidationRule<Defendant, ReferenceDataValidationContext>> getWarningRules(final String caseInitiationCode, final Channel channel) {
+        if (CIVIL.equals(channel) && ("O".equals(caseInitiationCode) || "S".equals(caseInitiationCode))) {
+            return CIVIL_WARNING_RULES;
+        } else if ("C".equals(caseInitiationCode) || "Q".equals(caseInitiationCode)) {
             return WARNING_RULES;
         } else {
             return emptyList();

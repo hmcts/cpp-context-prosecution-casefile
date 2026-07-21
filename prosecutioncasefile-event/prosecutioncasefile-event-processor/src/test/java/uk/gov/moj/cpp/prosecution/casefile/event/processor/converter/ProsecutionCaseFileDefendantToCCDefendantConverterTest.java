@@ -105,4 +105,61 @@ public class ProsecutionCaseFileDefendantToCCDefendantConverterTest {
         assertThat(courtsDefendants.get(0).getAliases().get(2).getMiddleName(), is(GIVEN_NAME_3));
         assertThat(courtsDefendants.get(0).getAliases().get(3).getMiddleName(), is(nullValue()));
     }
+
+    @Test
+    public void convertNegativeNumPreviousConvictionsShouldBeDropped() {
+        final ProsecutionWithReferenceData prosecutionWithReferenceData = buildProsecutionWithReferenceData(EITHER_WAY);
+        final List<Defendant> defendants = prosecutionWithReferenceData.getProsecution().getDefendants();
+        defendants.forEach(d -> ReflectionUtil.setField(d, "numPreviousConvictions", -1));
+
+        final ParamsVO paramsVO = new ParamsVO();
+        paramsVO.setCaseId(prosecutionWithReferenceData.getProsecution().getCaseDetails().getCaseId());
+        paramsVO.setReferenceDataVO(prosecutionWithReferenceData.getReferenceDataVO());
+        paramsVO.setInitiationCode("J");
+
+        when(referenceDataQueryService.retrieveAlcoholLevelMethods()).thenReturn(asList(alcoholLevelMethodReferenceData().withMethodCode("A").withMethodDescription("Blood").build(),
+                alcoholLevelMethodReferenceData().withMethodCode("B").withMethodDescription("Breath").build()));
+
+        final List<uk.gov.justice.core.courts.Defendant> courtsDefendants = converter.convert(defendants, paramsVO);
+
+        assertThat(courtsDefendants.get(0).getNumberOfPreviousConvictionsCited(), is(nullValue()));
+    }
+
+    @Test
+    public void convertNonNegativeNumPreviousConvictionsShouldBePreserved() {
+        final ProsecutionWithReferenceData prosecutionWithReferenceData = buildProsecutionWithReferenceData(EITHER_WAY);
+        final List<Defendant> defendants = prosecutionWithReferenceData.getProsecution().getDefendants();
+        defendants.forEach(d -> ReflectionUtil.setField(d, "numPreviousConvictions", 0));
+
+        final ParamsVO paramsVO = new ParamsVO();
+        paramsVO.setCaseId(prosecutionWithReferenceData.getProsecution().getCaseDetails().getCaseId());
+        paramsVO.setReferenceDataVO(prosecutionWithReferenceData.getReferenceDataVO());
+        paramsVO.setInitiationCode("J");
+
+        when(referenceDataQueryService.retrieveAlcoholLevelMethods()).thenReturn(asList(alcoholLevelMethodReferenceData().withMethodCode("A").withMethodDescription("Blood").build(),
+                alcoholLevelMethodReferenceData().withMethodCode("B").withMethodDescription("Breath").build()));
+
+        final List<uk.gov.justice.core.courts.Defendant> courtsDefendants = converter.convert(defendants, paramsVO);
+
+        assertThat(courtsDefendants.get(0).getNumberOfPreviousConvictionsCited(), is(0));
+    }
+
+    @Test
+    public void convertNullNumPreviousConvictionsShouldRemainNull() {
+        final ProsecutionWithReferenceData prosecutionWithReferenceData = buildProsecutionWithReferenceData(EITHER_WAY);
+        final List<Defendant> defendants = prosecutionWithReferenceData.getProsecution().getDefendants();
+        defendants.forEach(d -> ReflectionUtil.setField(d, "numPreviousConvictions", null));
+
+        final ParamsVO paramsVO = new ParamsVO();
+        paramsVO.setCaseId(prosecutionWithReferenceData.getProsecution().getCaseDetails().getCaseId());
+        paramsVO.setReferenceDataVO(prosecutionWithReferenceData.getReferenceDataVO());
+        paramsVO.setInitiationCode("J");
+
+        when(referenceDataQueryService.retrieveAlcoholLevelMethods()).thenReturn(asList(alcoholLevelMethodReferenceData().withMethodCode("A").withMethodDescription("Blood").build(),
+                alcoholLevelMethodReferenceData().withMethodCode("B").withMethodDescription("Breath").build()));
+
+        final List<uk.gov.justice.core.courts.Defendant> courtsDefendants = converter.convert(defendants, paramsVO);
+
+        assertThat(courtsDefendants.get(0).getNumberOfPreviousConvictionsCited(), is(nullValue()));
+    }
 }

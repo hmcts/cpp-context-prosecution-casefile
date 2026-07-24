@@ -1,5 +1,6 @@
 package uk.gov.moj.cpp.prosecution.casefile.validation.provider;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -214,6 +215,41 @@ public class CcProsecutionValidationRuleProviderTest {
         assertTrue(singleCivilCaseRules.stream().map((Function<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>::getClass).anyMatch(s -> s.equals(DateOfHearingMoreThan31DaysInPastValidationAndEnricherRule.class)));
         assertFalse(groupCivilCaseRules.stream().map((Function<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>::getClass).anyMatch(s -> s.equals(DateOfHearingMoreThan31DaysInPastValidationAndEnricherRule.class)));
         assertFalse(mccCivilCaseRules.stream().map((Function<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>::getClass).anyMatch(s -> s.equals(DateOfHearingMoreThan31DaysInPastValidationAndEnricherRule.class)));
+    }
+
+    @Test
+    public void shouldNotDuplicateOverlappingRulesForSingleCivilCase() {
+
+        final List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> singleCivilCaseRules = CcProsecutionValidationRuleProvider
+                .getDefendantValidationRules(INITIATION_CODE_FOR_OTHER, Channel.CIVIL, Boolean.TRUE, Boolean.FALSE);
+
+        final long distinctRuleClassCount = singleCivilCaseRules.stream()
+                .map(ValidationRule::getClass)
+                .distinct()
+                .count();
+
+        assertEquals(singleCivilCaseRules.size(), distinctRuleClassCount,
+                "Single civil case defendant validation rules should not contain the same rule class more than once");
+    }
+
+    @Test
+    public void shouldUseDateOfHearingInThePastRuleForSingleCivilSummonsCase() {
+
+        final List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> summonsRules = CcProsecutionValidationRuleProvider
+                .getDefendantValidationRules(INITIATION_CODE_FOR_SUMMONS, Channel.CIVIL, Boolean.TRUE, Boolean.FALSE);
+
+        assertTrue(summonsRules.stream().map((Function<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>::getClass).anyMatch(s -> s.equals(DateOfHearingPastDateValidationAndEnricherRule.class)));
+        assertFalse(summonsRules.stream().map((Function<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>::getClass).anyMatch(s -> s.equals(DateOfHearingMoreThan31DaysInPastValidationAndEnricherRule.class)));
+    }
+
+    @Test
+    public void shouldUseDateOfHearingMoreThan31DaysInPastRuleForSingleCivilOtherCase() {
+
+        final List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> otherRules = CcProsecutionValidationRuleProvider
+                .getDefendantValidationRules(INITIATION_CODE_FOR_OTHER, Channel.CIVIL, Boolean.TRUE, Boolean.FALSE);
+
+        assertTrue(otherRules.stream().map((Function<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>::getClass).anyMatch(s -> s.equals(DateOfHearingMoreThan31DaysInPastValidationAndEnricherRule.class)));
+        assertFalse(otherRules.stream().map((Function<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>, ? extends Class<? extends ValidationRule>>) ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>::getClass).anyMatch(s -> s.equals(DateOfHearingPastDateValidationAndEnricherRule.class)));
     }
 
     @Test

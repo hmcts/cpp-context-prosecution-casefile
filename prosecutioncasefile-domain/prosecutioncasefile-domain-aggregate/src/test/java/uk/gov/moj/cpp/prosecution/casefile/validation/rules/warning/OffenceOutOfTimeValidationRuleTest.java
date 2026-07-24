@@ -80,6 +80,30 @@ public class OffenceOutOfTimeValidationRuleTest {
 
 
     @Test
+    public void shouldNotReturnProblemOrCrashWhenChargeDateIsNull() {
+        final UUID id = UUID.randomUUID();
+
+        final Optional<Problem> result = OffenceOutOfTimeValidationRule.INSTANCE.validate(
+                Defendant.defendant()
+                        .withOffences(singletonList(Offence.offence()
+                                .withOffenceCode(OFFENCE_CODE)
+                                .withOffenceCommittedDate(OFFENCE_COMMITTED_DATE)
+                                .withChargeDate(null)
+                                .withOffenceId(id)
+                                .withOffenceSequenceNumber(1)
+                                .build()))
+                        .build(),
+                withOffenceCodeReferenceDataOnly(
+                        singletonList(OffenceReferenceData.offenceReferenceData()
+                                .withCjsOffenceCode(OFFENCE_CODE)
+                                .withProsecutionTimeLimit("6")
+                                .build())))
+                .problems().stream().findFirst();
+
+        assertThat(result, is(Optional.empty()));
+    }
+
+    @Test
     public void shouldReturnProblemWhenOffenceOverdue() {
         final UUID id = UUID.randomUUID();
         validateOffenceAndCheckResult(

@@ -90,4 +90,39 @@ public class DateOfHearingPastDateValidationAndEnricherRuleTest {
 
     }
 
+    @Test
+    void shouldReturnValidWhenOtherCaseTypeRegardlessOfDateOfHearing() {
+        // no stub for dateOfHearing: the rule must short-circuit to VALID for OTHER-type cases
+        // without ever inspecting the date, however far in the past it is.
+        when(defendantWithReferenceData.getCaseDetails().getInitiationCode()).thenReturn("O");
+
+        final Optional<Problem> optionalProblem = new DateOfHearingPastDateValidationAndEnricherRule().validate(defendantWithReferenceData, referenceDataQueryService)
+                .problems().stream().findFirst();
+
+        assertTrue(optionalProblem.isEmpty());
+    }
+
+    @Test
+    void shouldReturnValidWhenOtherCaseTypeCaseInsensitive() {
+        when(defendantWithReferenceData.getCaseDetails().getInitiationCode()).thenReturn("o");
+
+        final Optional<Problem> optionalProblem = new DateOfHearingPastDateValidationAndEnricherRule().validate(defendantWithReferenceData, referenceDataQueryService)
+                .problems().stream().findFirst();
+
+        assertTrue(optionalProblem.isEmpty());
+    }
+
+    @Test
+    void shouldReturnProblemWhenNonOtherCaseTypeAndDateOfHearingInPast() {
+        when(defendantWithReferenceData.getCaseDetails().getInitiationCode()).thenReturn("C");
+        when(defendantWithReferenceData.getDefendant().getInitialHearing().getDateOfHearing()).thenReturn(PAST_DATE_OF_HEARING);
+
+        final Optional<Problem> optionalProblem = new DateOfHearingPastDateValidationAndEnricherRule().validate(defendantWithReferenceData, referenceDataQueryService)
+                .problems().stream().findFirst();
+
+        assertThat(optionalProblem.isPresent(), is(true));
+        assertThat(optionalProblem.get().getCode(), is(DATE_OF_HEARING_IN_THE_PAST.name()));
+        assertThat(optionalProblem.get().getValues().get(0).getValue(), is(PAST_DATE_OF_HEARING));
+    }
+
 }

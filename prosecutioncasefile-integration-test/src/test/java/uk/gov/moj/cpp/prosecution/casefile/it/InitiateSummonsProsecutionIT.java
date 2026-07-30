@@ -11,6 +11,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PR
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CPPI;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.MCC;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.SPI;
+import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForOffenceCodeForGroupCases;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubGetOrganisationUnits;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.TestUtils.readFile;
 
@@ -30,8 +31,9 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+@SuppressWarnings("java:S2699")
 @ExtendWith(MockitoExtension.class)
-public class InitiateSummonsProsecutionIT extends BaseIT {
+class InitiateSummonsProsecutionIT extends BaseIT {
 
     private static final String COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_MCC_OR_CPPI = "command-json/prosecutioncasefile.command.initiate-channel-parametric-summons-prosecution.json";
     private static final String COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_MCC = "command-json/prosecutioncasefile.command.initiate-channel-mcc-summons-prosecution.json";
@@ -45,7 +47,7 @@ public class InitiateSummonsProsecutionIT extends BaseIT {
     private static final String COMMAND_PAYLOAD_FOR_SUBSEQUENT_INITIATE_SUMMONS_FOR_SPI = "command-json/prosecutioncasefile.command.subsequent_initiate-spi-summons-prosecution.json";
     private static final String EXPECTED_SUBSEQUENT_INITIATE_SUMMONS_APPLICATION_FOR_SPI = "expected/subsequent_initiate-summons-application-for-spi.json";
 
-    public static Stream<Arguments> channelToPayloadMappingForSummonsInitiation() {
+    static Stream<Arguments> channelToPayloadMappingForSummonsInitiation() {
         return Stream.of(
                 Arguments.of(MCC, COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_MCC_OR_CPPI, EXPECTED_INITIATE_SUMMONS_APPLICATION_FOR_MCC_OR_CPPI),
                 Arguments.of(CPPI, COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_MCC_OR_CPPI, EXPECTED_INITIATE_SUMMONS_APPLICATION_FOR_MCC_OR_CPPI),
@@ -54,13 +56,14 @@ public class InitiateSummonsProsecutionIT extends BaseIT {
     }
 
     @BeforeAll
-    public static void setup() {
+    static void setup() {
+        stubOffencesForOffenceCodeForGroupCases();
         stubGetOrganisationUnits();
     }
 
     @ParameterizedTest
     @MethodSource("channelToPayloadMappingForSummonsInitiation")
-    public void shouldNotInitiateCourtProceedingsWhenNewSummonsCaseIsCreated(final Channel channel, final String payloadPath, final String expectedPayloadPath) {
+    void shouldNotInitiateCourtProceedingsWhenNewSummonsCaseIsCreated(final Channel channel, final String payloadPath, final String expectedPayloadPath) {
         final InitiateCCProsecutionHelper helper = new InitiateCCProsecutionHelper();
         helper.initiateSummonsCaseForChannelAndVerifyApplicationCreatedInstead(channel, payloadPath, expectedPayloadPath);
 
@@ -68,7 +71,7 @@ public class InitiateSummonsProsecutionIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseNewSummonsApplicationForSameDefendantWhenEarlierApplicationWasRejectedForSameCaseReceivedViaCPPIChannel() {
+    void shouldRaiseNewSummonsApplicationForSameDefendantWhenEarlierApplicationWasRejectedForSameCaseReceivedViaCPPIChannel() {
         final InitiateCCProsecutionHelper helper = new InitiateCCProsecutionHelper();
         helper.initiateSummonsCaseForChannelAndVerifyApplicationCreatedInstead(CPPI, COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_MCC_OR_CPPI, EXPECTED_INITIATE_SUMMONS_APPLICATION_FOR_MCC_OR_CPPI);
 
@@ -81,7 +84,7 @@ public class InitiateSummonsProsecutionIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseNewSummonsApplicationForSameDefendantWhenEarlierApplicationWasRejectedForSameCaseReceivedViaMCCChannel() {
+    void shouldRaiseNewSummonsApplicationForSameDefendantWhenEarlierApplicationWasRejectedForSameCaseReceivedViaMCCChannel() {
         final InitiateCCProsecutionHelper helper = new InitiateCCProsecutionHelper();
         helper.initiateSummonsCaseForChannelAndVerifyApplicationCreatedInstead(MCC, COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_MCC_OR_CPPI, EXPECTED_INITIATE_SUMMONS_APPLICATION_FOR_MCC_OR_CPPI);
         helper.verifyPublicEventRaisedForManualCaseReceivedForMCCChannel();
@@ -96,7 +99,7 @@ public class InitiateSummonsProsecutionIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseNewSummonsApplicationForSameDefendantWhenEarlierApplicationWasRejectedForSameCaseReceivedViaSPIChannel() {
+    void shouldRaiseNewSummonsApplicationForSameDefendantWhenEarlierApplicationWasRejectedForSameCaseReceivedViaSPIChannel() {
         final InitiateCCProsecutionHelper helper = new InitiateCCProsecutionHelper();
         helper.initiateSummonsCaseForChannelAndVerifyApplicationCreatedInstead(SPI, COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_SPI, EXPECTED_INITIATE_SUMMONS_APPLICATION_FOR_SPI);
 
@@ -106,7 +109,7 @@ public class InitiateSummonsProsecutionIT extends BaseIT {
     }
 
     @Test
-    public void shouldRejectCaseWhenSameDefendantIsReceivedAndSummonsApplicationForTheDefendantHasAlreadyBeenApprovedViaCPPIChannel() {
+    void shouldRejectCaseWhenSameDefendantIsReceivedAndSummonsApplicationForTheDefendantHasAlreadyBeenApprovedViaCPPIChannel() {
         final InitiateCCProsecutionHelper helper = new InitiateCCProsecutionHelper();
         helper.initiateSummonsCaseForChannelAndVerifyApplicationCreatedInstead(CPPI, COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_MCC_OR_CPPI, EXPECTED_INITIATE_SUMMONS_APPLICATION_FOR_MCC_OR_CPPI);
 
@@ -124,7 +127,7 @@ public class InitiateSummonsProsecutionIT extends BaseIT {
 
     @Disabled
     @Test
-    public void shouldRejectCaseWhenSameDefendantIsReceivedAndSummonsApplicationForTheDefendantHasAlreadyBeenApprovedViaMCCChannel() {
+    void shouldRejectCaseWhenSameDefendantIsReceivedAndSummonsApplicationForTheDefendantHasAlreadyBeenApprovedViaMCCChannel() {
         final InitiateCCProsecutionHelper helper = new InitiateCCProsecutionHelper();
         helper.initiateSummonsCaseForChannelAndVerifyApplicationCreatedInstead(MCC, COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_MCC_OR_CPPI, EXPECTED_INITIATE_SUMMONS_APPLICATION_FOR_MCC_OR_CPPI);
 
@@ -147,7 +150,7 @@ public class InitiateSummonsProsecutionIT extends BaseIT {
     }
 
     @Test
-    public void shouldIgnoreAsDuplicateDefendantWhenSameDefendantIsReceivedAndSummonsApplicationForTheDefendantHasAlreadyBeenApprovedViaSPIChannel() {
+    void shouldIgnoreAsDuplicateDefendantWhenSameDefendantIsReceivedAndSummonsApplicationForTheDefendantHasAlreadyBeenApprovedViaSPIChannel() {
         final InitiateCCProsecutionHelper helper = new InitiateCCProsecutionHelper();
         helper.initiateSummonsCaseForChannelAndVerifyApplicationCreatedInstead(SPI, COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_SPI, EXPECTED_INITIATE_SUMMONS_APPLICATION_FOR_SPI);
 
@@ -163,7 +166,7 @@ public class InitiateSummonsProsecutionIT extends BaseIT {
     }
 
     @Test
-    public void shouldInitiateCaseWhenSummonsApplicationForTheDefendantHasAlreadyBeenApprovedViaMCCChannel() {
+    void shouldInitiateCaseWhenSummonsApplicationForTheDefendantHasAlreadyBeenApprovedViaMCCChannel() {
         final InitiateCCProsecutionHelper helper = new InitiateCCProsecutionHelper();
         helper.initiateSummonsCaseForChannelAndVerifyApplicationCreatedInstead(MCC, COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_MCC, EXPECTED_INITIATE_SUMMONS_APPLICATION_FOR_MCC);
 

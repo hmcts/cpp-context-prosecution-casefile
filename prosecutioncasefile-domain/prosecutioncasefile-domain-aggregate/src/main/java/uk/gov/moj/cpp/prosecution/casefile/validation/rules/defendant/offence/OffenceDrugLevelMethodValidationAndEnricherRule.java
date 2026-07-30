@@ -1,6 +1,7 @@
 package uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.offence;
 
 import static java.util.Optional.of;
+import static uk.gov.moj.cpp.prosecution.casefile.ValidationHelper.offenceReferenceDataList;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode.ALCOHOL_DRUG_LEVEL_METHOD_MISSING;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.Problems.newProblem;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.rules.FieldName.OFFENCE_ALCOHOL_LEVEL_METHOD;
@@ -33,7 +34,7 @@ public class OffenceDrugLevelMethodValidationAndEnricherRule implements Validati
         }
 
         final List<ProblemValue> problemValues = defendantWithReferenceData.getDefendant().getOffences().stream().map(offence ->
-                verifyAlcoholDrugLevelMethodRequired(offence, defendantWithReferenceData.getCaseDetails().getInitiationCode(), defendantWithReferenceData, referenceDataQueryService)).filter(Objects::nonNull).collect(Collectors.toList());
+                verifyAlcoholDrugLevelMethodRequired(offence, defendantWithReferenceData.getCaseDetails().getInitiationCode(), defendantWithReferenceData, referenceDataQueryService)).filter(Objects::nonNull).toList();
 
         if (null == problemValues || problemValues.isEmpty()) {
             return VALID;
@@ -46,15 +47,15 @@ public class OffenceDrugLevelMethodValidationAndEnricherRule implements Validati
     private ProblemValue verifyAlcoholDrugLevelMethodRequired(final Offence offence, final String initiationCode, final DefendantWithReferenceData defendantWithReferenceData, final ReferenceDataQueryService referenceDataQueryService) {
         final ReferenceDataVO referenceDataVO = defendantWithReferenceData.getReferenceDataVO();
         final List<OffenceReferenceData> offenceReferenceDataListFromVO = referenceDataVO.getOffenceReferenceData().stream()
-                .filter(rd -> rd.getCjsOffenceCode().equals(offence.getOffenceCode())).filter(Objects::nonNull).collect(Collectors.toList());
+                .filter(rd -> rd.getCjsOffenceCode().equals(offence.getOffenceCode())).filter(Objects::nonNull).toList();
 
         if (offenceReferenceDataListFromVO != null && !offenceReferenceDataListFromVO.isEmpty()) {
             return validateAlcoholDrugLevelMethod(offence, offenceReferenceDataListFromVO);
         }
 
-        final List<OffenceReferenceData> newOffenceReferenceDataList = referenceDataQueryService.retrieveOffenceData(offence, initiationCode).stream()
+        final List<OffenceReferenceData> newOffenceReferenceDataList = offenceReferenceDataList(referenceDataQueryService, offence, initiationCode, defendantWithReferenceData.isCivil()).stream()
                 .filter(rd -> rd.getCjsOffenceCode().equals(offence.getOffenceCode())).filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                .toList();
 
         if (newOffenceReferenceDataList != null && !newOffenceReferenceDataList.isEmpty()) {
             if (referenceDataVO.getOffenceReferenceData() != null) {

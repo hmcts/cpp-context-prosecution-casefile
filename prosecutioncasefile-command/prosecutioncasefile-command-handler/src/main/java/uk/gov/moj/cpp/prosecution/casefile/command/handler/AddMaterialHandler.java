@@ -83,7 +83,8 @@ public class AddMaterialHandler extends BaseProsecutionCaseFileHandler {
                         addMaterial.getMaterial(),
                         referenceDataQueryService,
                         addMaterial.getIsCpsCase(),
-                        addMaterial.getReceivedDateTime()));
+                        addMaterial.getReceivedDateTime(),
+                        addMaterial.getSubmissionId()));
     }
 
     @Handles("prosecutioncasefile.command.add-materials")

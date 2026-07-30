@@ -107,6 +107,22 @@ public class ValidationErrorHelper {
         assertEquals(expectedErrorsPayloadWithReplaceValues, actualPayload, LENIENT);
     }
 
+    public static void assertCivilCaseErrorsExpected(final String filename, final JsonEnvelope actualValidationErrors) {
+        final String expectedErrorsPayload = readFile(filename);
+        final String actualPayload = actualValidationErrors.payloadAsJsonObject().get("caseErrors").toString();
+        assertEquals(expectedErrorsPayload, actualPayload, LENIENT);
+    }
+
+    public static void assertCivilDefendantErrorsContain(final JsonEnvelope actualValidationErrors, final String... errorCodes) {
+        final String defendantErrors = actualValidationErrors.payloadAsJsonObject().get("defendantErrors").toString();
+        final JSONArray defendantErrorsArray = new JSONArray(defendantErrors);
+        final String actualPayload = defendantErrorsArray.getJSONObject(0).getJSONArray("problems").toString();
+        for (final String errorCode : errorCodes) {
+            assertThat("Expected error code [" + errorCode + "] in problems: " + actualPayload,
+                    actualPayload, containsString(errorCode));
+        }
+    }
+
 
 
     public static void assertExpctedErrorPayload(final String expectedCaseErrorsPayload, final JsonEnvelope actualValidationErrors) {

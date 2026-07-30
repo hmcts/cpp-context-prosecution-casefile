@@ -10,7 +10,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.stub.ProgressionStub.stubForAd
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ProgressionStub.stubForInitiateCourtProceedings;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ProgressionStub.stubForInitiateCourtProceedingsForApplication;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForOffenceCode;
-import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForOffenceCodeList;
+import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForOffenceCodeList_NonCivilOffence;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubApplicationTypes;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubFirstHearingApplicationType;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubGetAlcoholLevelMethods;
@@ -60,7 +60,7 @@ public class WiremockTestHelper {
         stubGetAllCountryNationalities();
         stubGetOrganisationUnitWithOneCourtroom();
         stubOffencesForOffenceCode();
-        stubOffencesForOffenceCodeList();
+        stubOffencesForOffenceCodeList_NonCivilOffence();
         stubGetProsecutor();
         stubGetInitiationTypes();
         stubGetSummonsCodes();

@@ -25,7 +25,8 @@ public class CourtHearingLocationValidationRule implements ValidationRule<Defend
 
     @Override
     public ValidationResult validate(final DefendantWithReferenceData defendantWithReferenceData, final ReferenceDataQueryService referenceDataQueryService) {
-        if (defendantWithReferenceData.isMCCWithListNewHearing() || defendantWithReferenceData.isInactiveMigratedCase() || isOtherCaseType(defendantWithReferenceData)) {
+        if (defendantWithReferenceData.isMCCWithListNewHearing() || defendantWithReferenceData.isInactiveMigratedCase()
+                || (isOtherCaseType(defendantWithReferenceData) && !defendantWithReferenceData.isMCC())) {
             return VALID;
         }
         final String courtHearingLocation = defendantWithReferenceData.getDefendant().getInitialHearing().getCourtHearingLocation();

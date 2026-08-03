@@ -18,15 +18,6 @@
     ]
   },
   {
-    "code": "COURT_HEARING_LOCATION_OUCODE_INVALID",
-    "values": [
-      {
-        "key": "initialHearing_courtHearingLocation",
-        "value": "BADLOC"
-      }
-    ]
-  },
-  {
     "code": "DEFENDANT_NATIONALITY_INVALID",
     "values": [
       {

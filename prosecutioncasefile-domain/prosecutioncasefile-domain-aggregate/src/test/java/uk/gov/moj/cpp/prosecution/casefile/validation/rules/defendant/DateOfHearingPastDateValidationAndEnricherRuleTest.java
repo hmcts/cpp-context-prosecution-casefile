@@ -113,6 +113,20 @@ public class DateOfHearingPastDateValidationAndEnricherRuleTest {
     }
 
     @Test
+    void shouldReturnProblemWhenOtherCaseTypeButMCCChannel() {
+        when(defendantWithReferenceData.getCaseDetails().getInitiationCode()).thenReturn("O");
+        when(defendantWithReferenceData.isMCC()).thenReturn(true);
+        when(defendantWithReferenceData.getDefendant().getInitialHearing().getDateOfHearing()).thenReturn(PAST_DATE_OF_HEARING);
+
+        final Optional<Problem> optionalProblem = new DateOfHearingPastDateValidationAndEnricherRule().validate(defendantWithReferenceData, referenceDataQueryService)
+                .problems().stream().findFirst();
+
+        assertThat(optionalProblem.isPresent(), is(true));
+        assertThat(optionalProblem.get().getCode(), is(DATE_OF_HEARING_IN_THE_PAST.name()));
+        assertThat(optionalProblem.get().getValues().get(0).getValue(), is(PAST_DATE_OF_HEARING));
+    }
+
+    @Test
     void shouldReturnProblemWhenNonOtherCaseTypeAndDateOfHearingInPast() {
         when(defendantWithReferenceData.getCaseDetails().getInitiationCode()).thenReturn("C");
         when(defendantWithReferenceData.getDefendant().getInitialHearing().getDateOfHearing()).thenReturn(PAST_DATE_OF_HEARING);

@@ -156,6 +156,20 @@ public class CourtHearingLocationValidationRuleTest {
     }
 
     @Test
+    void shouldReturnProblemWhenOtherCaseTypeButMCCChannel() {
+        when(defendantWithReferenceData.getCaseDetails().getInitiationCode()).thenReturn("O");
+        when(defendantWithReferenceData.isMCC()).thenReturn(true);
+        when(defendantWithReferenceData.getDefendant().getInitialHearing().getCourtHearingLocation()).thenReturn(INVALID_COURT_HEARING_LOCATION);
+        when(defendantWithReferenceData.getReferenceDataVO()).thenReturn(new ReferenceDataVO());
+
+        final Optional<Problem> optionalProblem = new CourtHearingLocationValidationRule().validate(defendantWithReferenceData, referenceDataQueryService)
+                .problems().stream().findFirst();
+
+        assertThat(optionalProblem.get().getCode(), is(COURT_HEARING_LOCATION_OUCODE_INVALID.name()));
+        assertThat(optionalProblem.get().getValues().get(0).getValue(), is(INVALID_COURT_HEARING_LOCATION));
+    }
+
+    @Test
     void shouldReturnProblemWhenNonOtherCaseTypeAndCourtHearingLocationInvalid() {
         when(defendantWithReferenceData.getCaseDetails().getInitiationCode()).thenReturn("C");
         when(defendantWithReferenceData.getDefendant().getInitialHearing().getCourtHearingLocation()).thenReturn(INVALID_COURT_HEARING_LOCATION);

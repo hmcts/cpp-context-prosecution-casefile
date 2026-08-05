@@ -1,6 +1,7 @@
 package uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.offence;
 
 import static java.util.Optional.of;
+import static uk.gov.moj.cpp.prosecution.casefile.ValidationHelper.offenceReferenceDataList;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode.ALCOHOL_DRUG_LEVEL_AMOUNT_MISSING;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.Problems.newProblem;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.rules.FieldName.OFFENCE_ALCOHOL_LEVEL_AMOUNT;
@@ -52,7 +53,7 @@ public class OffenceDrugLevelAmountValidationAndEnricherRule implements Validati
             return validateAlcoholDrugLevelAmount(offence, offenceReferenceDataListFromVO);
         }
 
-        final List<OffenceReferenceData> newOffenceReferenceDataList = referenceDataQueryService.retrieveOffenceData(offence, initiationCode).stream()
+        final List<OffenceReferenceData> newOffenceReferenceDataList = offenceReferenceDataList(referenceDataQueryService, offence, initiationCode, defendantWithReferenceData.isCivil()).stream()
                 .filter(rd -> rd.getCjsOffenceCode().equals(offence.getOffenceCode())).filter(Objects::nonNull)
                 .collect(Collectors.toList());
 

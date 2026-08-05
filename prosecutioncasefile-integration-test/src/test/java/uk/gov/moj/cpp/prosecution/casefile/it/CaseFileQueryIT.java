@@ -14,7 +14,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.stub.ProgressionStub.stubDefen
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ProgressionStub.stubGetProsecutionCase;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ProgressionStub.stubGetProsecutionCaseLegalEntity;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ProgressionStub.stubSearchCases;
-import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForOffenceCodeList;
+import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForOffenceCodeList_NonCivilOffence;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.SjpStub.stubCaseByUrnPostcode;
 
 import uk.gov.justice.services.common.converter.StringToJsonObjectConverter;
@@ -24,7 +24,7 @@ import jakarta.json.JsonObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class CaseFileQueryIT extends BaseIT {
+class CaseFileQueryIT extends BaseIT {
 
     private static final String USER_ID = "07e9cd55-0eff-4eb3-961f-0d83e259e415";
     private final StringToJsonObjectConverter stringToJsonObjectConverter = new StringToJsonObjectConverter();
@@ -36,7 +36,7 @@ public class CaseFileQueryIT extends BaseIT {
     private final String dob = "1990-01-02";
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         caseUrn = randomAlphanumeric(10);
         caseId = randomUUID().toString();
         defendantId = randomUUID().toString();
@@ -44,12 +44,13 @@ public class CaseFileQueryIT extends BaseIT {
     }
 
     @Test
-    public void shouldReturnBadRequestWhenNoCaseUrnAndPostcodeAndDefendantTypeWhenQueryCaseForCitizen() {
+    @SuppressWarnings("java:S2699")
+    void shouldReturnBadRequestWhenNoCaseUrnAndPostcodeAndDefendantTypeWhenQueryCaseForCitizen() {
         getCaseForCitizenWithNoMandatoryQueryParams(USER_ID, status().is(BAD_REQUEST));
     }
 
     @Test
-    public void shouldReturnCaseDefendantWhenFoundMatchInSjp() {
+    void shouldReturnCaseDefendantWhenFoundMatchInSjp() {
         stubCaseByUrnPostcode(caseUrn, postcode, dob);
         final String response = getCaseForCitizenWithMandatoryQueryParams(USER_ID, caseUrn, postcode, "PERSON", dob, status().is(OK));
 
@@ -58,7 +59,7 @@ public class CaseFileQueryIT extends BaseIT {
     }
 
     @Test
-    public void shouldReturnCaseDefendantPersonFromProgressionWhenNoMatchInSjp() {
+    void shouldReturnCaseDefendantPersonFromProgressionWhenNoMatchInSjp() {
         stubSearchCases(caseUrn, caseId);
         stubGetProsecutionCase(caseId, caseUrn, postcode, dob);
         stubDefendantHearingDays(caseId, defendantId);
@@ -72,7 +73,7 @@ public class CaseFileQueryIT extends BaseIT {
     }
 
     @Test
-    public void shouldReturnCaseDefendantWhenFoundMatchInSjpWhenPCQVisited() {
+    void shouldReturnCaseDefendantWhenFoundMatchInSjpWhenPCQVisited() {
         stubCaseByUrnPostcode(caseUrn, postcode, dob);
         final String response = getCaseForCitizenWithMandatoryQueryParams(USER_ID, caseUrn, postcode, "PERSON", dob, status().is(OK));
         final JsonObject jsonResponse = stringToJsonObjectConverter.convert(response);
@@ -83,7 +84,7 @@ public class CaseFileQueryIT extends BaseIT {
     }
 
     @Test
-    public void shouldReturnCaseDefendantPersonFromProgressionWhenNoMatchInSjpWhenNotPCQVisited() {
+    void shouldReturnCaseDefendantPersonFromProgressionWhenNoMatchInSjpWhenNotPCQVisited() {
         stubSearchCases(caseUrn, caseId);
         stubGetProsecutionCase(caseId, caseUrn, postcode, dob);
         stubDefendantHearingDays(caseId, defendantId);
@@ -98,11 +99,11 @@ public class CaseFileQueryIT extends BaseIT {
     }
 
     @Test
-    public void shouldReturnCaseDefendantLegalEntityFromProgression() {
+    void shouldReturnCaseDefendantLegalEntityFromProgression() {
         stubSearchCases(caseUrn, caseId);
         stubGetProsecutionCaseLegalEntity(caseId, caseUrn, postcode);
         stubDefendantHearingDays(caseId, defendantId);
-        stubOffencesForOffenceCodeList();
+        stubOffencesForOffenceCodeList_NonCivilOffence();
 
         final String response = getCaseForCitizenWithMandatoryQueryParams(USER_ID, caseUrn, postcode, "LEGAL_ENTITY", dob, status().is(OK));
 

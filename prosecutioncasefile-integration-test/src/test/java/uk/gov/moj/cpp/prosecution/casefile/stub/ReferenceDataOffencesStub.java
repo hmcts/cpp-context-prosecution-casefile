@@ -1,6 +1,7 @@
 package uk.gov.moj.cpp.prosecution.casefile.stub;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.absent;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.matching;
@@ -26,8 +27,8 @@ public class ReferenceDataOffencesStub extends StubUtil {
         stubOffencesForOffenceCode("stub-data/referencedataoffences.offences.json");
     }
 
-    public static void stubOffencesForOffenceCodeList() {
-        stubOffencesForOffenceCodeList("stub-data/referencedataoffences.offences-list.json");
+    public static void stubOffencesForOffenceCodeList_NonCivilOffence() {
+        stubOffencesForOffenceCodeList_NonCivilOffence("stub-data/referencedataoffences.offences-list.json");
     }
 
     public static void stubOffencesForMojOffenceCodeList(final String cjsOffenceCode, final String offenceId, final String sowRef) {
@@ -35,7 +36,7 @@ public class ReferenceDataOffencesStub extends StubUtil {
     }
 
     public static void stubOffencesForOffenceCodeForGroupCases() {
-        stubOffencesForOffenceCode("stub-data/referencedataoffences.offences-for-group-cases.json");
+        stubOffencesForOffenceCodeListWithCivilOffence("stub-data/referencedataoffences.offences-list-civil-group-case.json");
     }
 
     public static void stubOffencesForOffenceCodeWithEitherWayModeOfTrial() {
@@ -64,11 +65,26 @@ public class ReferenceDataOffencesStub extends StubUtil {
     }
 
 
-    private static void stubOffencesForOffenceCodeList(final String referenceDataOffencesStubFile) {
+    private static void stubOffencesForOffenceCodeList_NonCivilOffence(final String referenceDataOffencesStubFile) {
         InternalEndpointMockUtils.stubPingFor("referencedataoffences-service");
 
         stubFor(get(urlPathEqualTo(REFERENCE_DATA_ACTION_QUERY_OFFENCES_LIST_URL))
                 .withQueryParam("cjsoffencecode", matching(".*"))
+                .withQueryParam("sowRef", absent())
+                .willReturn(aResponse().withStatus(SC_OK)
+                        .withHeader("CPPID", UUID.randomUUID().toString())
+                        .withHeader("Content-Type", REFERENCE_DATA_ACTION_QUERY_OFFENCES_MEDIA_TYPE)
+                        .withBody(resourceToString(referenceDataOffencesStubFile))));
+
+        waitForStubToBeReady(REFERENCE_DATA_ACTION_QUERY_OFFENCES_LIST_URL + "?cjsoffencecode=CA03013", REFERENCE_DATA_ACTION_QUERY_OFFENCES_MEDIA_TYPE);
+    }
+
+    private static void stubOffencesForOffenceCodeListWithCivilOffence(final String referenceDataOffencesStubFile) {
+        InternalEndpointMockUtils.stubPingFor("referencedataoffences-service");
+
+        stubFor(get(urlPathEqualTo(REFERENCE_DATA_ACTION_QUERY_OFFENCES_LIST_URL))
+                .withQueryParam("cjsoffencecode", matching(".*"))
+                .withQueryParam("sowRef", equalTo("MoJ"))
                 .willReturn(aResponse().withStatus(SC_OK)
                         .withHeader("CPPID", UUID.randomUUID().toString())
                         .withHeader("Content-Type", REFERENCE_DATA_ACTION_QUERY_OFFENCES_MEDIA_TYPE)

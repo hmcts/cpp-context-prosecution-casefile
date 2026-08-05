@@ -28,7 +28,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PR
 import static uk.gov.moj.cpp.prosecution.casefile.stub.DefenceStub.stubDefenceQueryServiceForForm;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ProgressionStub.stubProgressionQueryService;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ProgressionStub.stubProgressionQueryServiceForForm;
-import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForOffenceCodeList;
+import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForOffenceCodeList_NonCivilOffence;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForOffenceCodeWithEitherWayModeOfTrial;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubGetApplicationType;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubGetCaseMarkersWithCode;
@@ -79,7 +79,7 @@ import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
-public class CpsServeMaterialIT extends BaseIT {
+class CpsServeMaterialIT extends BaseIT {
 
     private static final String CASE_MARKER_CODE = "ABC";
     private static final String APPLICATION_TYPE_CODE = "CJ03564";
@@ -103,7 +103,6 @@ public class CpsServeMaterialIT extends BaseIT {
     private static final String COTR_PAYLOAD_DEFENDANT_CORPORATE = "stub-data/public.stagingprosecutors.cps-serve-cotr-received-for-corporate.json";
 
     private static final String PTPH_PAYLOAD_ASN_ONLY = "stub-data/public.stagingprosecutors.cps-serve-ptph-received_for_asn_only.json";
-    private static final String BCM_PAYLOAD_ALL_INVALID_OFFENCES = "stub-data/public.stagingprosecutors.cps-serve-bcm-received_with_all_invlid_offences.json";
     private static final String BCM_PAYLOAD_DEFENDANT_DATA_ONLY = "stub-data/public.stagingprosecutors.cps-serve-bcm-received_for_defendantdata_only.json";
 
     private static final String PTPH_PAYLOAD_DEFENDANT_DATA_ONLY = "stub-data/public.stagingprosecutors.cps-serve-ptph-received_for_defendantdata_only.json";
@@ -188,14 +187,14 @@ public class CpsServeMaterialIT extends BaseIT {
     private String dateOfBirth2;
 
     @BeforeAll
-    public static void setup() {
+    static void setup() {
         stubGetCaseMarkersWithCode(CASE_MARKER_CODE);
         stubGetOrganisationUnitWithOneCourtroomForSubmitApplication();
         stubGetApplicationType(APPLICATION_TYPE_CODE);
     }
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         caseId = randomUUID();
         stubOffencesForOffenceCodeWithEitherWayModeOfTrial();
         externalId = randomUUID();
@@ -221,7 +220,7 @@ public class CpsServeMaterialIT extends BaseIT {
     }
 
     @Test
-    public void shouldHandle_PublicStagingProsecutors_CpsServePetReceived_WhenCaseIsNotPresent_RaisePrivateEventOnly() {
+    void shouldHandle_PublicStagingProsecutors_CpsServePetReceived_WhenCaseIsNotPresent_RaisePrivateEventOnly() {
         stubProgressionQueryServiceForForm(caseId, "progression.query.prosecutioncase-for-form-without-cps-defendant-id.json");
 
         sendPublicEvent(EventSelector.PUBLIC_STAGING_PROSECUTORS_CPS_SERVE_PET_RECEIVED, PET_PAYLOAD, asn1, caseUrn);
@@ -231,8 +230,8 @@ public class CpsServeMaterialIT extends BaseIT {
     }
 
     @Test
-    public void shouldMovePetFromPendingStatus() {
-        stubOffencesForOffenceCodeList();
+    void shouldMovePetFromPendingStatus() {
+        stubOffencesForOffenceCodeList_NonCivilOffence();
         stubProgressionQueryService(caseId, prepareProgressionResponse(readFile("stub-data/progression.query.prosecutioncase.json"), caseUrn));
 
         sendPublicEvent(EventSelector.PUBLIC_STAGING_PROSECUTORS_CPS_SERVE_PET_RECEIVED, PET_PAYLOAD, asn1, caseUrn);
@@ -246,8 +245,8 @@ public class CpsServeMaterialIT extends BaseIT {
     }
 
     @Test
-    public void shouldMoveBcmFromPendingStatus() {
-        stubOffencesForOffenceCodeList();
+    void shouldMoveBcmFromPendingStatus() {
+        stubOffencesForOffenceCodeList_NonCivilOffence();
         stubProgressionQueryServiceForForm(caseId, "progression.query.prosecutioncase-for-form-without-cps-defendant-id.json");
 
         sendPublicEvent(EventSelector.PUBLIC_STAGING_PROSECUTORS_CPS_SERVE_BCM_RECEIVED, BCM_PAYLOAD_ASN_ONLY, asn1, caseUrn);
@@ -312,7 +311,7 @@ public class CpsServeMaterialIT extends BaseIT {
     }
 
     @Test
-    public void shouldHandleCpsServePetReceived_WhenCaseUrnPresent_AsnMatchingOnly() {
+    void shouldHandleCpsServePetReceived_WhenCaseUrnPresent_AsnMatchingOnly() {
         createCPPICase();
 
         stubDefenceQueryServiceForForm(UUID.fromString(defendantId1), "defence.query.associated-organisation.json");
@@ -344,7 +343,7 @@ public class CpsServeMaterialIT extends BaseIT {
     }
 
     @Test
-    public void shouldHandleCpsServePetReceived_WhenCaseUrnPresent_OneDefendantMatchedOnly() {
+    void shouldHandleCpsServePetReceived_WhenCaseUrnPresent_OneDefendantMatchedOnly() {
         createCPPICase();
 
         stubProgressionQueryServiceForForm(caseId, "progression.query.prosecutioncase-for-form-without-cps-defendant-id.json");
@@ -367,7 +366,7 @@ public class CpsServeMaterialIT extends BaseIT {
 
 
     @Test
-    public void shouldHandleCpsServePetReceived_WhenCaseUrnPresent_DefendantDataOnly() {
+    void shouldHandleCpsServePetReceived_WhenCaseUrnPresent_DefendantDataOnly() {
         createCPPICase_WithoutAsn();
 
         stubProgressionQueryServiceForForm(caseId, "progression.query.prosecutioncase-for-form-without-cps-defendant-id.json");
@@ -395,7 +394,7 @@ public class CpsServeMaterialIT extends BaseIT {
     }
 
     @Test
-    public void shouldHandleCpsServePetReceived_WhenCaseUrnPresent_CpsDefendantIdMatchForOneDefendant_ButNoRulesMatchForSecondDefendant() {
+    void shouldHandleCpsServePetReceived_WhenCaseUrnPresent_CpsDefendantIdMatchForOneDefendant_ButNoRulesMatchForSecondDefendant() {
         final String cpsDefendantId = "thisIsACpsId";
 
         createCPPICase_WithoutAsn();
@@ -430,7 +429,7 @@ public class CpsServeMaterialIT extends BaseIT {
     }
 
     @Test
-    public void shouldHandlePublicStagingProsecutorsCpsServeBcmReceivedAndRaisePrivateEvent() {
+    void shouldHandlePublicStagingProsecutorsCpsServeBcmReceivedAndRaisePrivateEvent() {
         final CpsServeMaterialHelper cpsServeMaterialHelper = new CpsServeMaterialHelper();
         sendPublicEvent(EventSelector.PUBLIC_STAGING_PROSECUTORS_CPS_SERVE_BCM_RECEIVED, BCM_PAYLOAD, caseUrn);
         final Optional<JsonEnvelope> privateEvent = cpsServeMaterialHelper.retrieveEvent(EventSelector.EVENT_SELECTOR_CPS_SERVE_BCM_RECEIVED);
@@ -438,8 +437,8 @@ public class CpsServeMaterialIT extends BaseIT {
     }
 
     @Test
-    public void shouldHandleCpsServeBcmReceivedWhenCaseUrnPresent_AsnMatchingOnly() {
-        stubOffencesForOffenceCodeList();
+    void shouldHandleCpsServeBcmReceivedWhenCaseUrnPresent_AsnMatchingOnly() {
+        stubOffencesForOffenceCodeList_NonCivilOffence();
         createCPPICase();
         stubProgressionQueryServiceForForm(caseId, "progression.query.prosecutioncase-for-form-without-cps-defendant-id.json");
 
@@ -493,8 +492,8 @@ public class CpsServeMaterialIT extends BaseIT {
     }
 
     @Test
-    public void shouldHandleCpsServePtphReceivedWhenCaseUrnPresent_AsnMatchingOnly() {
-        stubOffencesForOffenceCodeList();
+    void shouldHandleCpsServePtphReceivedWhenCaseUrnPresent_AsnMatchingOnly() {
+        stubOffencesForOffenceCodeList_NonCivilOffence();
         createCPPICase();
         stubProgressionQueryServiceForForm(caseId, "progression.query.prosecutioncase-for-form-without-cps-defendant-id.json");
         ReferenceDataStub.stubGetOrganisationUnits();
@@ -535,7 +534,7 @@ public class CpsServeMaterialIT extends BaseIT {
     }
 
     @Test
-    public void shouldHandleCpsServeBcmReceivedWhenCaseUrnPresent_OneDefendantMatchedOnly() {
+    void shouldHandleCpsServeBcmReceivedWhenCaseUrnPresent_OneDefendantMatchedOnly() {
         final String mismatchedAsn = "ASEC33563LS";
 
         createCPPICase();
@@ -561,7 +560,7 @@ public class CpsServeMaterialIT extends BaseIT {
     }
 
     @Test
-    public void shouldHandleCpsServePtphReceivedWhenCaseUrnPresent_OneDefendantMatchedOnly() {
+    void shouldHandleCpsServePtphReceivedWhenCaseUrnPresent_OneDefendantMatchedOnly() {
         final String mismatchedAsn = "ASEC33563LS";
 
         createCPPICase();
@@ -589,7 +588,7 @@ public class CpsServeMaterialIT extends BaseIT {
 
 
     @Test
-    public void shouldHandleCpsServeBcmReceivedWhenCaseUrnPresent_DefendantDataOnly_NoAsnPresentInCase() {
+    void shouldHandleCpsServeBcmReceivedWhenCaseUrnPresent_DefendantDataOnly_NoAsnPresentInCase() {
 
         createCPPICase_WithoutAsn();
         stubProgressionQueryServiceForForm(caseId, "progression.query.prosecutioncase-for-form-without-cps-defendant-id.json");
@@ -644,7 +643,7 @@ public class CpsServeMaterialIT extends BaseIT {
     }
 
     @Test
-    public void shouldHandleCpsServePtphReceivedWhenCaseUrnPresent_DefendantDataOnly() {
+    void shouldHandleCpsServePtphReceivedWhenCaseUrnPresent_DefendantDataOnly() {
 
         createCPPICase_WithoutAsn();
         stubProgressionQueryServiceForForm(caseId, "progression.query.prosecutioncase-for-form-without-cps-defendant-id.json");
@@ -691,7 +690,7 @@ public class CpsServeMaterialIT extends BaseIT {
 
 
     @Test
-    public void shouldHandleCpsServeBcmReceivedWhenCaseUrnPresent_CpsDefendantIdMatchForOneDefendant_ButNoRulesMatchForSecondDefendant() {
+    void shouldHandleCpsServeBcmReceivedWhenCaseUrnPresent_CpsDefendantIdMatchForOneDefendant_ButNoRulesMatchForSecondDefendant() {
         final String cpsDefendantId = "thisIsACpsId";
         createCPPICase_WithoutAsn();
         stubProgressionQueryServiceForForm(caseId, "progression.query.prosecutioncase-for-form-with-cps-defendant-id.json", cpsDefendantId, defendantId1);
@@ -746,7 +745,7 @@ public class CpsServeMaterialIT extends BaseIT {
     }
 
     @Test
-    public void shouldHandleCpsServeBcmReceivedWhenCaseUrnPresent_Rejection_AllDefendantInvalid() {
+    void shouldHandleCpsServeBcmReceivedWhenCaseUrnPresent_Rejection_AllDefendantInvalid() {
 
         createCPPICase();
         stubProgressionQueryServiceForForm(caseId, "progression.query.prosecutioncase-for-form-without-cps-defendant-id.json");
@@ -865,7 +864,7 @@ public class CpsServeMaterialIT extends BaseIT {
     }
 
     @Test
-    public void shouldHandlePublicStagingProsecutorsCpsServeCotrReceived_RaisePublicEvent_WhenCaseUrnNotPresent() {
+    void shouldHandlePublicStagingProsecutorsCpsServeCotrReceived_RaisePublicEvent_WhenCaseUrnNotPresent() {
         final CpsServeMaterialHelper cpsServeMaterialHelper = new CpsServeMaterialHelper();
         sendPublicEvent(EventSelector.PUBLIC_STAGING_PROSECUTORS_CPS_SERVE_COTR_RECEIVED, COTR_PAYLOAD, caseUrn);
         final Optional<JsonEnvelope> publicEvent = cpsServeMaterialHelper.retrieveEvent(EventSelector.PUBLIC_PROSECUTIONCASEFILE_CPS_SERVE_MATERIAL_STATUS_UPDATED);
@@ -873,7 +872,7 @@ public class CpsServeMaterialIT extends BaseIT {
     }
 
     @Test
-    public void shouldHandleCpsServeCotrReceivedWhenCaseUrnPresent_SubmissionSucess() {
+    void shouldHandleCpsServeCotrReceivedWhenCaseUrnPresent_SubmissionSucess() {
         final String cpsDefendantId = "thisIsACpsId";
 
         createCPPICase_WithoutAsn();
@@ -895,7 +894,7 @@ public class CpsServeMaterialIT extends BaseIT {
     }
 
     @Test
-    public void shouldHandleCpsServeCotrReceivedWhenCaseUrnPresent_SubmissionRejected() {
+    void shouldHandleCpsServeCotrReceivedWhenCaseUrnPresent_SubmissionRejected() {
         createCPPICase();
 
         stubProgressionQueryServiceForForm(caseId, "progression.query.prosecutioncase-for-form-without-cps-defendant-id.json");
@@ -912,7 +911,7 @@ public class CpsServeMaterialIT extends BaseIT {
     }
 
     @Test
-    public void shouldHandlePublicStagingProsecutorsCpsUpdateCotrReceived_RaisePublicEvent_WhenCaseUrnNotPresent() {
+    void shouldHandlePublicStagingProsecutorsCpsUpdateCotrReceived_RaisePublicEvent_WhenCaseUrnNotPresent() {
         final CpsServeMaterialHelper cpsServeMaterialHelper = new CpsServeMaterialHelper();
         sendPublicEvent(EventSelector.PUBLIC_STAGING_PROSECUTORS_CPS_UPDATE_COTR_RECEIVED, COTR_UPDATE_PAYLOAD, caseUrn);
 
@@ -921,7 +920,7 @@ public class CpsServeMaterialIT extends BaseIT {
     }
 
     @Test
-    public void shouldHandleCpsUpdateCotrReceivedWhenCaseUrnPresent_SubmissionSucess() {
+    void shouldHandleCpsUpdateCotrReceivedWhenCaseUrnPresent_SubmissionSucess() {
         final String cpsDefendantId = "thisIsACpsId";
 
         createCPPICase_WithoutAsn();
@@ -943,8 +942,7 @@ public class CpsServeMaterialIT extends BaseIT {
     }
 
     @Test
-    public void shouldHandleCpsUpdateCotrReceivedWhenCaseUrnPresent_SubmissionSuccess() {
-        final String cotrId = randomUUID().toString();
+    void shouldHandleCpsUpdateCotrReceivedWhenCaseUrnPresent_SubmissionSuccess() {
         createCPPICase();
 
         stubProgressionQueryServiceForForm(caseId, "progression.query.prosecutioncase-for-form-without-cps-defendant-id.json");
@@ -961,7 +959,7 @@ public class CpsServeMaterialIT extends BaseIT {
     }
 
     @Test
-    public void shouldHandleCpsServeCotrReceivedWhenCaseUrn_ASN_Exists_SubmissionSucess() {
+    void shouldHandleCpsServeCotrReceivedWhenCaseUrn_ASN_Exists_SubmissionSucess() {
         final String cpsDefendantId = "thisIsACpsId";
 
         createCPPICase();
@@ -983,7 +981,7 @@ public class CpsServeMaterialIT extends BaseIT {
     }
 
     @Test
-    public void shouldHandleCpsServeCotrReceivedWhenCaseUrn_Name_Exists_SubmissionSucess() {
+    void shouldHandleCpsServeCotrReceivedWhenCaseUrn_Name_Exists_SubmissionSucess() {
         createCPPICase_WithoutAsn();
         stubProgressionQueryServiceForForm(caseId, "progression.query.prosecutioncase-for-form-without-cps-defendant-id.json");
 
@@ -1003,7 +1001,7 @@ public class CpsServeMaterialIT extends BaseIT {
     }
 
     @Test
-    public void shouldHandleCpsServeCotrReceivedWhenCaseUrn_corporate_Exists_SubmissionSucess() {
+    void shouldHandleCpsServeCotrReceivedWhenCaseUrn_corporate_Exists_SubmissionSucess() {
         createCPPICaseForCorporate();
         stubProgressionQueryServiceForForm(caseId, "progression.query.prosecutioncase-for-form-without-cps-defendant-id.json");
 

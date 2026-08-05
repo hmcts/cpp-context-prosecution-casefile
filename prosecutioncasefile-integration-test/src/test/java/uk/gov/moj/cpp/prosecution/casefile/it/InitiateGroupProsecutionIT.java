@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import uk.gov.justice.services.common.converter.LocalDates;
 import uk.gov.moj.cpp.prosecution.casefile.helper.InitiateGroupProsecutionHelper;
 import jakarta.json.JsonObject;
+import uk.gov.justice.services.messaging.JsonEnvelope;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -14,6 +15,8 @@ import static java.util.UUID.randomUUID;
 import static uk.gov.justice.services.messaging.JsonObjects.createArrayBuilder;
 import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static uk.gov.justice.services.messaging.JsonEnvelope.envelopeFrom;
 import static uk.gov.justice.services.messaging.JsonEnvelope.metadataBuilder;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.WiremockTestHelper.createCommonMockEndpoints;
@@ -97,7 +100,7 @@ public class InitiateGroupProsecutionIT extends BaseIT {
     @Test
     public void shouldInitiateCourtProceedingsForApplication() {
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-group-prosecution.json");
-        final String payload = replaceValues(staticPayLoad, "S");
+        final String payload = replaceValues(staticPayLoad, "S"); //"S" = SUMMONS
         final InitiateGroupProsecutionHelper initiateGroupProsecutionHelper = new InitiateGroupProsecutionHelper();
         initiateGroupProsecutionHelper.initiateGroupProsecution(payload);
         initiateGroupProsecutionHelper.thenPrivateGroupCasesParkedForApprovalEventShouldBeRaised();
@@ -153,6 +156,17 @@ public class InitiateGroupProsecutionIT extends BaseIT {
     }
 
     @Test
+    void shouldRaiseGroupProsecutionRejectedForCivilCaseWithMoreThanOneDefendant() {
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-civil-group-prosecution-with-multiple-defendants.json");
+        final String payload = replaceValues(staticPayLoad, "O");
+        final InitiateGroupProsecutionHelper initiateGroupProsecutionHelper = new InitiateGroupProsecutionHelper();
+        initiateGroupProsecutionHelper.initiateGroupProsecution(payload);
+        final JsonEnvelope rejectedEvent = initiateGroupProsecutionHelper.thenPublicGroupProsecutionRejectedEventShouldBeRaised();
+        assertThat(rejectedEvent.payloadAsJsonObject().get("groupCaseErrors").toString(),
+                containsString("MORE_THAN_ONE_DEFENDANT_PER_PROSECUTION_CASE"));
+    }
+
+    @Test
     public void shouldRaiseGroupProsecutionRejectedWhenValidationFails() {
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-group-prosecution-with-one-case.json");
         final String payload = replaceValues(staticPayLoad, "S");
@@ -195,6 +209,25 @@ public class InitiateGroupProsecutionIT extends BaseIT {
                 .build(), payload));
     }
 
+    @Test
+    void shouldRaiseGroupProsecutionRejectedWhenCivilGroupCaseHasPastHearingDate() {
+        final String payload = replaceValues(readFile("command-json/prosecutioncasefile.command.initiate-civil-group-prosecution-past-hearing-date.json"), "O");
+        final InitiateGroupProsecutionHelper initiateGroupProsecutionHelper = new InitiateGroupProsecutionHelper();
+        initiateGroupProsecutionHelper.initiateGroupProsecution(payload);
+        final JsonEnvelope rejectedEvent = initiateGroupProsecutionHelper.thenPublicGroupProsecutionRejectedEventShouldBeRaised();
+        assertThat(rejectedEvent.payloadAsJsonObject().get("groupCaseErrors").toString(), containsString("DATE_OF_HEARING_IN_THE_PAST"));
+    }
+
+    @Test
+    void shouldRaiseGroupProsecutionRejectedWhenCivilGroupCaseHasDuplicateUrn() {
+        final String payload = replaceValues(readFile("command-json/prosecutioncasefile.command.initiate-civil-group-prosecution-duplicate-urn.json"), "O");
+        final InitiateGroupProsecutionHelper initiateGroupProsecutionHelper = new InitiateGroupProsecutionHelper();
+        initiateGroupProsecutionHelper.initiateGroupProsecution(payload);
+        final JsonEnvelope rejectedEvent = initiateGroupProsecutionHelper.thenPublicGroupProsecutionRejectedEventShouldBeRaised();
+        assertThat(rejectedEvent.payloadAsJsonObject().get("groupCaseErrors").toString(), containsString("DUPLICATED_PROSECUTION"));
+    }
+
+    // initiationCode "O" = OTHER (civil group case path), "S" = SUMMONS (summons application path)
     private String replaceValues(final String payload, final String initiationCode) {
         return payload
                 .replace("CASE_ID_1", this.caseId1.toString())

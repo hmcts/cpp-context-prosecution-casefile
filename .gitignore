@@ -72,3 +72,6 @@ lightning-jenkins.properties
 /META-INF/
 /org/
 
+# Maven Shade plugin generated artifact
+dependency-reduced-pom.xml
+

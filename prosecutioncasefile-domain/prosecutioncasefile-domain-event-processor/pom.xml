@@ -246,6 +246,17 @@
                         </exclusions>
                     </dependency>
                     <dependency>
+                        <groupId>uk.gov.moj.cpp.progression</groupId>
+                        <artifactId>progression-datatypes-common</artifactId>
+                        <version>${progression.version}</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>*</groupId>
+                                <artifactId>*</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                    <dependency>
                         <groupId>uk.gov.moj.cpp.core.domain</groupId>
                         <artifactId>criminal-court-public-model</artifactId>
                         <version>${criminal-court-public-model.version}</version>

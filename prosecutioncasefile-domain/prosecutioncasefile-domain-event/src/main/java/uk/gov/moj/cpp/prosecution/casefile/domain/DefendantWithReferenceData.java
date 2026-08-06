@@ -13,6 +13,9 @@ public class DefendantWithReferenceData {
 
     private  final boolean isMCCWithListNewHearing;
     private final boolean isMCC ;
+    private final boolean isInactiveMigratedCase;
+    private boolean isCivil;
+
 
 
     public DefendantWithReferenceData(final Defendant defendant, ReferenceDataVO referenceDataVO, CaseDetails caseDetails) {
@@ -21,14 +24,17 @@ public class DefendantWithReferenceData {
         this.caseDetails = caseDetails;
         this.isMCCWithListNewHearing = false;
         this.isMCC = false;
+        this.isInactiveMigratedCase = false;
     }
 
-    public DefendantWithReferenceData(final Defendant defendant, ReferenceDataVO referenceDataVO, CaseDetails caseDetails, boolean  isMCCWithListNewHearing, boolean isMCC) {
+    public DefendantWithReferenceData(final Defendant defendant, ReferenceDataVO referenceDataVO, CaseDetails caseDetails, boolean  isMCCWithListNewHearing, boolean isMCC, final boolean isInactiveMigratedCase, final boolean isCivil) {
         this.defendant = defendant;
         this.referenceDataVO = referenceDataVO;
         this.caseDetails = caseDetails;
         this.isMCCWithListNewHearing = isMCCWithListNewHearing;
         this.isMCC = isMCC;
+        this.isInactiveMigratedCase = isInactiveMigratedCase;
+        this.isCivil = isCivil;
     }
 
     public Defendant getDefendant() {
@@ -47,7 +53,15 @@ public class DefendantWithReferenceData {
         return isMCCWithListNewHearing;
     }
 
+    public boolean isInactiveMigratedCase() {
+        return isInactiveMigratedCase;
+    }
+
     public boolean isMCC() {
         return isMCC;
+    }
+
+    public boolean isCivil() {
+        return isCivil;
     }
 }

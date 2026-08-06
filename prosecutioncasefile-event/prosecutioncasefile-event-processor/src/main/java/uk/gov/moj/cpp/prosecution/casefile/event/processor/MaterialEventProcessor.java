@@ -16,6 +16,8 @@ import static uk.gov.moj.cps.prosecutioncasefile.domain.event.DocumentBundleArri
 
 
 import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import uk.gov.justice.services.common.converter.ObjectToJsonObjectConverter;
 import uk.gov.justice.services.core.annotation.Handles;
@@ -62,6 +64,7 @@ import jakarta.json.JsonObjectBuilder;
 
 @ServiceComponent(EVENT_PROCESSOR)
 public class MaterialEventProcessor {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MaterialEventProcessor.class);
 
     private static final String PUBLIC_PROSECUTIONCASEFILE_MATERIAL_ADDED = "public.prosecutioncasefile.material-added";
     private static final String PUBLIC_PROSECUTIONCASEFILE_MATERIAL_ADDED_V2 = "public.prosecutioncasefile.material-added-v2";
@@ -302,6 +305,7 @@ public class MaterialEventProcessor {
 
     @Handles("prosecutioncasefile.events.material-rejected")
     public void handleMaterialRejected(final Envelope<MaterialRejected> materialRejectedEnvelope) {
+        LOGGER.info("..........Received material-rejected event with envelope");
         final MaterialRejected materialRejected = materialRejectedEnvelope.payload();
         final UUID fileStoreId = materialRejected.getMaterial().getFileStoreId();
         final JsonEnvelope materialRejectedJsonEnvelope = envelopeFrom(materialRejectedEnvelope.metadata(), NULL);

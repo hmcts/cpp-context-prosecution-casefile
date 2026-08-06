@@ -1,0 +1,34 @@
+[
+  {
+    "code": "DEFENDANT_DOB_IN_FUTURE",
+    "values": [{"key": "individual_selfDefinedInformation_dateOfBirth", "value": "2050-02-04"}]
+  },
+  {
+    "code": "DEFENDANT_PARENT_GUARDIAN_DATE_OF_BIRTH_IN_FUTURE",
+    "values": [{"key": "individual_parentGuardianInformation_dateOfBirth", "value": "2050-02-04"}]
+  },
+  {
+    "code": "COURT_HEARING_LOCATION_OUCODE_INVALID",
+    "values": [{"key": "initialHearing_courtHearingLocation", "value": "BADLOC"}]
+  },
+  {
+    "code": "DEFENDANT_NATIONALITY_INVALID",
+    "values": [{"key": "individual_selfDefinedInformation_nationality", "value": "ZZZ"}]
+  },
+  {
+    "code": "DEFENDANT_DOB_IN_FUTURE",
+    "values": [{"key": "individual_selfDefinedInformation_dateOfBirth", "value": "2050-02-04"}]
+  },
+  {
+    "code": "DEFENDANT_PARENT_GUARDIAN_DATE_OF_BIRTH_IN_FUTURE",
+    "values": [{"key": "individual_parentGuardianInformation_dateOfBirth", "value": "2050-02-04"}]
+  },
+  {
+    "code": "COURT_HEARING_LOCATION_OUCODE_INVALID",
+    "values": [{"key": "initialHearing_courtHearingLocation", "value": "BADLOC"}]
+  },
+  {
+    "code": "DEFENDANT_NATIONALITY_INVALID",
+    "values": [{"key": "individual_selfDefinedInformation_nationality", "value": "ZZZ"}]
+  }
+]

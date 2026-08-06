@@ -6,6 +6,11 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 import org.skyscreamer.jsonassert.ArrayValueMatcher;
 import org.skyscreamer.jsonassert.Customization;
 import org.skyscreamer.jsonassert.JSONCompareMode;
@@ -38,6 +43,7 @@ import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
 import static org.skyscreamer.jsonassert.JSONCompareMode.LENIENT;
 import static org.skyscreamer.jsonassert.JSONCompareMode.NON_EXTENSIBLE;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SELECTOR_CASE_VALIDATION_FAILED;
+import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SELECTOR_CC_PROSECUTION_RECEIVED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SELECTOR_CC_PROSECUTION_REJECTED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SELECTOR_DEFENDANT_VALIDATION_FAILED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SELECTOR_SJP_PROSECUTION_RECEIVED;
@@ -47,6 +53,8 @@ import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PR
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PROSECUTIONCASEFILE_DEFENDANT_VALIDATION_FAILED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.QueryHelper.verifyCaseErrors;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.assertErrorsExpected;
+import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.assertCivilCaseErrorsExpected;
+import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.assertCivilDefendantErrorsContain;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.assertErrorsExpectedForCivil;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.assertExpctedErrorPayload;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.assertNoErrorsExpected;
@@ -59,15 +67,18 @@ import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.q
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.replaceExpectedValues;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForGenericOffence;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForOffenceCode;
-import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForOffenceCodeList;
+import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForOffenceCodeForGroupCases;
+import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForOffenceCodeList_NonCivilOffence;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForOffenceLocationRequired;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesWithBackDuty;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubGetCaseMarkersWithCode;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubNonSjpProsecutors;
+import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubProsecutorsReturns404;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.TestUtils.readFile;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode.INVALID_DEFENDANT_INDIVIDUAL_POST_CODE;
 
-public class ValidationErrorIT extends BaseIT {
+@SuppressWarnings({"squid:S2699"})
+class ValidationErrorIT extends BaseIT {
 
     private static final String CASE_MARKER_CODE = "YO";
     private static final DateTimeFormatter DATE_FORMAT = ofPattern("yyyy-MM-dd");
@@ -83,12 +94,12 @@ public class ValidationErrorIT extends BaseIT {
     final InitiateCCProsecutionHelper initiateCCProsecutionHelper = new InitiateCCProsecutionHelper();
 
     @BeforeAll
-    public static void setupOnce() {
+    static void setupOnce() {
         stubGetCaseMarkersWithCode(CASE_MARKER_CODE);
     }
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         caseUrn = randomAlphanumeric(10);
         defendantId1 = randomUUID().toString();
         defendantId2 = randomUUID().toString();
@@ -99,7 +110,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorWhenInvalidInitiationCode() {
+    void shouldRaiseValidationErrorWhenInvalidInitiationCode() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-initiation-code.json");
 
@@ -134,7 +145,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorWhenInvalidOffenceAlcoholLevelMethod() {
+    void shouldRaiseValidationErrorWhenInvalidOffenceAlcoholLevelMethod() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-alocohol-level-method.json");
 
@@ -163,7 +174,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorWhenInvalidCustodyStatus() {
+    void shouldRaiseValidationErrorWhenInvalidCustodyStatus() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-custody-status.json");
 
@@ -182,7 +193,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorWhenInvalidPncId() {
+    void shouldRaiseValidationErrorWhenInvalidPncId() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-pncid.json");
 
@@ -199,7 +210,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorWhenInvalidPostCode() {
+    void shouldRaiseValidationErrorWhenInvalidPostCode() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-sjp-prosecution-with-invalid-postcode.json");
 
@@ -215,7 +226,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorWhenInvalidCroNumber() {
+    void shouldRaiseValidationErrorWhenInvalidCroNumber() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-cro-number.json");
 
@@ -233,7 +244,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorInvalidWhenStatementOfFacts() {
+    void shouldRaiseValidationErrorInvalidWhenStatementOfFacts() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-statement-of-facts.json");
 
@@ -251,7 +262,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldNotRaiseValidationErrorWhenStatementOfFactsFromMCCChannelWithSummonsTypeAsMCA() {
+    void shouldNotRaiseValidationErrorWhenStatementOfFactsFromMCCChannelWithSummonsTypeAsMCA() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-statement-of-facts.json");
 
@@ -264,7 +275,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldNotRaiseValidationErrorWhenStatementOfFactsFromMCCChannelWithSummonsTypeAsWitness() {
+    void shouldNotRaiseValidationErrorWhenStatementOfFactsFromMCCChannelWithSummonsTypeAsWitness() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-statement-of-facts.json");
 
@@ -277,7 +288,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldNotRaiseValidationErrorWhenStatementOfFactsFromCPPIChannel() {
+    void shouldNotRaiseValidationErrorWhenStatementOfFactsFromCPPIChannel() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-statement-of-facts.json");
 
@@ -290,7 +301,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorWhenStatementOfFactsFromCPPIChannelWithSummonsTypeAsMCA() {
+    void shouldRaiseValidationErrorWhenStatementOfFactsFromCPPIChannelWithSummonsTypeAsMCA() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-statement-of-facts.json");
 
@@ -312,7 +323,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorInvalidWhenStatementOfFactsWelsh() {
+    void shouldRaiseValidationErrorInvalidWhenStatementOfFactsWelsh() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-statement-of-facts-welsh.json");
 
@@ -330,7 +341,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorInvalidBailConditions() {
+    void shouldRaiseValidationErrorInvalidBailConditions() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-bail-conditions.json");
 
@@ -347,7 +358,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorInvalidAlcoholDrugLevelMethod() {
+    void shouldRaiseValidationErrorInvalidAlcoholDrugLevelMethod() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-alcohol-drug-level-method.json");
 
@@ -389,7 +400,7 @@ public class ValidationErrorIT extends BaseIT {
 
 
     @Test
-    public void shouldSubmitErrorCorrectionsAndRaiseCCCaseReceived() {
+    void shouldSubmitErrorCorrectionsAndRaiseCCCaseReceived() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-error-for-resolving.json");
 
@@ -428,20 +439,36 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void laidDateAndArrestDateValidationForCivilCase() {
+    void shouldRejectCivilSummonsCaseWithSummonsCodeAWhenOffenceIsCriminalOffence() {
+        stubOffencesForOffenceCodeForGroupCases();
         final UUID caseId = randomUUID();
-        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-civil-laid-date-arrest-date.json");
-        final String ccPayLoad = replaceValuesForOffenceLaidDateAndArrestDate(staticPayLoad, caseId.toString());
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-civil-summons-blacklisted-offence.json");
+        final String ccPayLoad = replaceValues(staticPayLoad, caseId.toString(), "A", "CPPI");
+
         final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
         resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
+
         final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
         assertThat(privateEvent.isPresent(), is(true));
-        assertErrorsExpectedForCivil("expected/defendant_validation_error_problems_for_laid_date_arrest_date.json", privateEvent.get());
-
+        assertErrorsExpectedForCivil("expected/civil_summons_criminal_offence_problem.json", privateEvent.get());
     }
 
     @Test
-    public void shouldRaiseValidationErrorInvalidOffenceCodeMethod() {
+    void shouldNotRaiseValidationErrorForCivilSummonsCaseWithSummonsCodeAWhenOffenceIsNonCriminalOffence() {
+        stubOffencesForOffenceCodeForGroupCases();
+        final UUID caseId = randomUUID();
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-civil-summons-civil-offence.json");
+        final String ccPayLoad = replaceValues(staticPayLoad, caseId.toString(), "A", "CPPI");
+
+        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
+        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
+
+        assertNoErrorsExpected(initiateCCProsecutionHelper);
+        queryAndVerifyCasesAreEmptyCollection(caseId);
+    }
+
+    @Test
+    void shouldRaiseValidationErrorInvalidOffenceCodeMethod() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-invalid-alcohol-drug-level-method.json");
 
@@ -460,7 +487,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldSubmitErrorCorrectionsForCorporateDefendantAndRaiseCCCaseReceived() {
+    void shouldSubmitErrorCorrectionsForCorporateDefendantAndRaiseCCCaseReceived() {
 
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-corporate-cc-prosecution-with-error-for-resolving.json");
@@ -495,7 +522,7 @@ public class ValidationErrorIT extends BaseIT {
 
 
     @Test
-    public void shouldRaiseValidationErrorWhenPayloadHasOffenceCodeErrors() {
+    void shouldRaiseValidationErrorWhenPayloadHasOffenceCodeErrors() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-offence-code-error.json");
 
@@ -527,7 +554,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldNOTRaiseValidationErrorWhenPayloadHasOffenceLocationErrors() {
+    void shouldNOTRaiseValidationErrorWhenPayloadHasOffenceLocationErrors() {
 
         stubOffencesForOffenceLocationRequired();
         final UUID caseId = randomUUID();
@@ -545,7 +572,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorWhenPayloadHasDefendantDOBErrors() {
+    void shouldRaiseValidationErrorWhenPayloadHasDefendantDOBErrors() {
 
         stubOffencesForOffenceLocationRequired();
         final UUID caseId = randomUUID();
@@ -574,8 +601,136 @@ public class ValidationErrorIT extends BaseIT {
 
     }
 
+    @ParameterizedTest(name = "[{index}] {0}")
+    @MethodSource("civilDefendantValidationScenarios")
+    void shouldRaiseCivilDefendantValidationErrors(final String fixture, final String expectedFile) {
+        stubOffencesForOffenceCodeForGroupCases();
+        final String ccPayLoad = replaceValues(readFile(fixture), randomUUID().toString());
+        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
+        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
+        final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
+        assertThat(privateEvent.isPresent(), is(true));
+        assertErrorsExpectedForCivil(expectedFile, privateEvent.get());
+    }
+
+    private static Stream<Arguments> civilDefendantValidationScenarios() {
+        return Stream.of(
+            Arguments.of(
+                "command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-civil-defendant-level-errors.json",
+                "expected/civil_case_all_defendant_level_errors_problem.json"),
+            Arguments.of(
+                "command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-mcc-civil-defendant-level-errors.json",
+                "expected/mcc_civil_all_defendant_level_errors_problem.json"),
+            Arguments.of(
+                "command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-mcc-civil-personal-info-errors.json",
+                "expected/mcc_civil_group_civil_personal_info_errors_problem.json")
+        );
+    }
+
+    @ParameterizedTest(name = "[{index}] {0}")
+    @MethodSource("civilLaidDateArrestDateScenarios")
+    void shouldRaiseLaidDateAndArrestDateValidationErrors(final String fixture, final String expectedFile) {
+        stubOffencesForOffenceCodeForGroupCases();
+        final String ccPayLoad = replaceValuesForOffenceLaidDateAndArrestDate(readFile(fixture), randomUUID().toString());
+        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
+        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
+        final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
+        assertThat(privateEvent.isPresent(), is(true));
+        assertErrorsExpectedForCivil(expectedFile, privateEvent.get());
+    }
+
+    private static Stream<Arguments> civilLaidDateArrestDateScenarios() {
+        return Stream.of(
+            Arguments.of(
+                "command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-civil-laid-date-arrest-date.json",
+                "expected/defendant_validation_error_problems_for_laid_date_arrest_date.json"),
+            Arguments.of(
+                "command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-mcc-civil-laid-date-arrest-date.json",
+                "expected/mcc_civil_laid_date_arrest_date_problem.json")
+        );
+    }
+
     @Test
-    public void shouldRaiseValidationErrorWhenPayloadHasDefendantAdditionalNationality() {
+    void shouldRaiseValidationErrorWhenCivilCasePayloadHasOffenceRequiresLocation() {
+        stubOffencesForOffenceLocationRequired("stub-data/referencedataoffences.offences-list-civil-location-required.json");
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-civil-offence-location-required.json");
+        final String ccPayLoad = replaceValues(staticPayLoad, randomUUID().toString());
+        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
+        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
+        final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
+        assertThat(privateEvent.isPresent(), is(true));
+        assertErrorsExpectedForCivil("expected/civil_case_offence_requires_location_problem.json", privateEvent.get());
+    }
+
+    @Test
+    void shouldRaiseValidationErrorWhenCivilCasePayloadHasInvalidCaseMarker() {
+        stubOffencesForOffenceCodeForGroupCases();
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-civil-invalid-case-marker.json");
+        final String ccPayLoad = replaceValues(staticPayLoad, randomUUID().toString());
+        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
+        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
+        final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
+        assertThat(privateEvent.isPresent(), is(true));
+        assertCivilCaseErrorsExpected("expected/civil_case_case_marker_invalid_problem.json", privateEvent.get());
+    }
+
+    @Test
+    void shouldRaiseValidationErrorWhenCivilCasePayloadHasUnrecognisedProsecutorOucode() {
+        stubOffencesForOffenceCodeForGroupCases();
+        stubProsecutorsReturns404();
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-civil-invalid-prosecutor.json");
+        final String ccPayLoad = replaceValues(staticPayLoad, randomUUID().toString());
+        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
+        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
+        final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
+        assertThat(privateEvent.isPresent(), is(true));
+        assertCivilCaseErrorsExpected("expected/civil_case_prosecutor_oucode_not_recognised_problem.json", privateEvent.get());
+    }
+
+    @Test
+    void shouldRaiseValidationErrorWhenCivilCaseIsSubmittedTwice() {
+        stubOffencesForOffenceCodeForGroupCases();
+        final UUID caseId = randomUUID();
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-civil-valid-for-duplicate.json");
+        final String ccPayLoad = replaceValues(staticPayLoad, caseId.toString());
+        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
+        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
+        final Optional<JsonEnvelope> firstSubmissionEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_RECEIVED);
+        assertThat(firstSubmissionEvent.isPresent(), is(true));
+        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
+        final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
+        assertThat(privateEvent.isPresent(), is(true));
+        assertCivilCaseErrorsExpected("expected/civil_case_duplicated_prosecution_problem.json", privateEvent.get());
+    }
+
+    @Test
+    void shouldRejectCivilChargeCaseWhenHearingDateIsInThePast() {
+        stubOffencesForOffenceCodeForGroupCases();
+        final String ccPayLoad = replaceValues(
+                readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-civil-charge-past-hearing-date.json"),
+                randomUUID().toString());
+        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
+        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
+        final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
+        assertThat(privateEvent.isPresent(), is(true));
+        assertCivilDefendantErrorsContain(privateEvent.get(), "DATE_OF_HEARING_IN_THE_PAST");
+    }
+
+    @Test
+    void shouldRejectCivilSummonsCaseWhenHearingDateIsInThePast() {
+        stubOffencesForOffenceCodeForGroupCases();
+        final String ccPayLoad = replaceValues(
+                readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-civil-summons-past-hearing-date.json"),
+                randomUUID().toString());
+        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
+        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
+        final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
+        assertThat(privateEvent.isPresent(), is(true));
+        assertCivilDefendantErrorsContain(privateEvent.get(), "DATE_OF_HEARING_IN_THE_PAST");
+    }
+
+    @Test
+    void shouldRaiseValidationErrorWhenPayloadHasDefendantAdditionalNationality() {
 
         stubOffencesForOffenceLocationRequired();
         final UUID caseId = randomUUID();
@@ -604,7 +759,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorWhenBackDutyIsMissing() {
+    void shouldRaiseValidationErrorWhenBackDutyIsMissing() {
         stubOffencesWithBackDuty();
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-when-backduty-is-missing.json");
@@ -636,7 +791,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorWhenBackDutyFromDateIsAfterToDateForSJPProsecution() {
+    void shouldRaiseValidationErrorWhenBackDutyFromDateIsAfterToDateForSJPProsecution() {
         stubOffencesWithBackDuty();
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-sjp-prosecution-when-backduty-fromdate-is-missing.json");
@@ -669,7 +824,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldRaiseValidationErrorWhenSjpISNotValid() {
+    void shouldRaiseValidationErrorWhenSjpISNotValid() {
 
         stubNonSjpProsecutors();
         final UUID caseId = randomUUID();
@@ -689,7 +844,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldNotRaiseValidationErrorWhenSjpISIsValid() {
+    void shouldNotRaiseValidationErrorWhenSjpISIsValid() {
 
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-sjp-prosecution-when-prosecutor-is-valid.json");
@@ -708,7 +863,7 @@ public class ValidationErrorIT extends BaseIT {
 
 
     @Test
-    public void shouldRaiseValidationErrorWhenPayloadHasOffenceLocationErrorsForSJPProsecution() {
+    void shouldRaiseValidationErrorWhenPayloadHasOffenceLocationErrorsForSJPProsecution() {
         stubOffencesForOffenceLocationRequired("stub-data/referencedataoffences.offences-with-offence-location-required.json");
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-sjp-prosecution-with-invalid-offence-location.json");
@@ -723,12 +878,12 @@ public class ValidationErrorIT extends BaseIT {
         final String expectedErrorsPayload = replaceValues(readFile("expected/expected_sjp_case_errors_for_invalid_offence_location.json"), caseId.toString());
         final String actualPayload = jsonEnvelope.get().payloadAsJsonObject().get("errors").toString();
         assertEquals(expectedErrorsPayload, actualPayload, LENIENT);
-        stubOffencesForOffenceCodeList();
+        stubOffencesForOffenceCodeList_NonCivilOffence();
 
     }
 
     @Test
-    public void shouldRaiseValidationErrorWhenPayloadHasGenericOffenceCode() {
+    void shouldRaiseValidationErrorWhenPayloadHasGenericOffenceCode() {
         stubOffencesForGenericOffence();
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-sjp-prosecution-with-generic-offence-code.json");
@@ -748,7 +903,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldNotRaiseValidationErrorWhenPayloadHasGenericAlteredOffenceCode() {
+    void shouldNotRaiseValidationErrorWhenPayloadHasGenericAlteredOffenceCode() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-sjp-prosecution-with-generic-altered-offence-code.json");
         final String sjpPayLoad = replaceValues(staticPayLoad, caseId.toString());
@@ -760,7 +915,7 @@ public class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    public void shouldSubmitOnlyErrorCorrectionsAndRaiseForDefendantShouldClearFromBusinessError() {
+    void shouldSubmitOnlyErrorCorrectionsAndRaiseForDefendantShouldClearFromBusinessError() {
         final UUID caseId = randomUUID();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-hearing-date-error-for-resolving.json");
 

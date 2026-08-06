@@ -17,7 +17,6 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static java.util.stream.Stream.builder;
 import static java.util.stream.Stream.of;
-import static jakarta.json.Json.createArrayBuilder;
 import static org.apache.commons.collections.CollectionUtils.isEmpty;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static org.apache.commons.collections.ListUtils.union;
@@ -25,12 +24,19 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import static uk.gov.justice.domain.aggregate.matcher.EventSwitcher.match;
 import static uk.gov.justice.domain.aggregate.matcher.EventSwitcher.otherwiseDoNothing;
 import static uk.gov.justice.domain.aggregate.matcher.EventSwitcher.when;
+import static uk.gov.justice.services.messaging.JsonObjects.createArrayBuilder;
 import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
+import static uk.gov.justice.services.messaging.JsonObjects.createReader;
 import static uk.gov.moj.cpp.json.schemas.prosecutioncasefile.events.CaseReceivedWithDuplicateDefendants.caseReceivedWithDuplicateDefendants;
 import static uk.gov.moj.cpp.prosecution.casefile.CaseType.CC;
 import static uk.gov.moj.cpp.prosecution.casefile.CaseType.SJP;
 import static uk.gov.moj.cpp.prosecution.casefile.CaseType.UNKNOWN;
-import static uk.gov.moj.cpp.prosecution.casefile.ProsecutionCaseFileHelper.*;
+import static uk.gov.moj.cpp.prosecution.casefile.ProsecutionCaseFileHelper.addJsonProperty;
+import static uk.gov.moj.cpp.prosecution.casefile.ProsecutionCaseFileHelper.buildDefendantWithReferenceData;
+import static uk.gov.moj.cpp.prosecution.casefile.ProsecutionCaseFileHelper.getDefendantId;
+import static uk.gov.moj.cpp.prosecution.casefile.ProsecutionCaseFileHelper.setCivilFees;
+import static uk.gov.moj.cpp.prosecution.casefile.ProsecutionCaseFileHelper.validateDefendantErrors;
+import static uk.gov.moj.cpp.prosecution.casefile.ProsecutionCaseFileHelper.validateDefendantWarnings;
 import static uk.gov.moj.cpp.prosecution.casefile.ValidationHelper.buildCaseValidationFailedEvent;
 import static uk.gov.moj.cpp.prosecution.casefile.domain.DomainConstants.PROBLEM_CODE_DOCUMENT_NOT_MATCHED;
 import static uk.gov.moj.cpp.prosecution.casefile.domain.DomainConstants.SOURCE_CPS_FOR_PUBLIC_EVENTS;
@@ -64,6 +70,8 @@ import static uk.gov.moj.cps.prosecutioncasefile.domain.event.SummonsApplication
 import static uk.gov.moj.cps.prosecutioncasefile.domain.event.UploadCaseDocumentRecorded.uploadCaseDocumentRecorded;
 
 import uk.gov.justice.core.courts.CourtDocumentAdded;
+import uk.gov.justice.core.courts.MigrationCaseStatus;
+import uk.gov.justice.core.courts.MigrationSourceSystem;
 import uk.gov.justice.core.courts.SummonsApprovedOutcome;
 import uk.gov.justice.cps.prosecutioncasefile.InitialHearing;
 import uk.gov.justice.domain.aggregate.Aggregate;
@@ -103,13 +111,13 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.DefendantProblem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.DefendantSubject;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.DocumentCategory;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Individual;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Language;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Material;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.OffenceReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.PersonalInformation;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Problem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecution;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.SelfDefinedInformation;
-import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Language;
 import uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.PleadOnline;
 import uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.PleadOnlinePcqVisited;
 import uk.gov.moj.cpp.prosecution.casefile.refdata.defendant.DefendantRefDataEnricher;
@@ -169,7 +177,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
 
-import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
@@ -178,9 +185,13 @@ import jakarta.json.JsonReader;
 
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("java:S4738")
 public class ProsecutionCaseFile implements Aggregate {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProsecutionCaseFile.class);
+
     private static final long serialVersionUID = 8155753984190031446L;
     private static final String EXPIRED_AT = "expiredAt";
     private static final String SUMMONS_INITIATION_CODE = "S";
@@ -418,7 +429,7 @@ public class ProsecutionCaseFile implements Aggregate {
             final String id = errorField.containsKey("id") ? errorField.getString("id") : null;
             addJsonProperty(mutableJsonObject, value, fieldName, id);
         }));
-        try (JsonReader jsonReader = Json.createReader(new StringReader(mutableJsonObject.getAsJsonObject().toString()))) {
+        try (JsonReader jsonReader = createReader(new StringReader(mutableJsonObject.getAsJsonObject().toString()))) {
             final JsonObject updatedJsonObject = jsonReader.readObject();
             this.caseDetails = jsonObjectToObjectConverter.convert(updatedJsonObject, CaseDetails.class);
         }
@@ -444,7 +455,7 @@ public class ProsecutionCaseFile implements Aggregate {
                     }
             );
 
-            try (JsonReader jsonReader = Json.createReader(new StringReader(mutableJsonObject.getAsJsonObject().toString()))) {
+            try (JsonReader jsonReader = createReader(new StringReader(mutableJsonObject.getAsJsonObject().toString()))) {
                 return jsonReader.readObject();
             }
         }).collect(toList());
@@ -499,7 +510,16 @@ public class ProsecutionCaseFile implements Aggregate {
 
         final List<Problem> caseProblems = validate(prosecutionWithReferenceData, referenceDataQueryService, getCaseValidationRules(receivedInitiationCode));
         boolean isMCCWithListNewHearing = MCC.equals(prosecutionChannel) && Objects.nonNull(prosecutionWithReferenceData.getProsecution().getListNewHearing());
-        final List<DefendantProblem> defendantErrors = validateDefendantErrors(prosecution.getCaseDetails(), prosecutionChannel, defendantsWithReferenceData, referenceDataQueryService, builder, Boolean.FALSE, isMCCWithListNewHearing, isCivil);
+
+        //ACTIVE // INACTIVE
+        boolean isStandaloneCaseWithoutHearing =
+                MCC.equals(prosecutionChannel) &&
+                        Optional.ofNullable(prosecution.getMigrationSourceSystem())
+                                .map(MigrationSourceSystem::getMigrationCaseStatus)
+                                .filter(status -> MigrationCaseStatus.INACTIVE == status)
+                                .isPresent();
+
+        final List<DefendantProblem> defendantErrors = validateDefendantErrors(prosecution.getCaseDetails(), prosecutionChannel, defendantsWithReferenceData, referenceDataQueryService, builder, Boolean.FALSE, isMCCWithListNewHearing,isStandaloneCaseWithoutHearing, isCivil);
 
         if ((messageFromCppiOrMccOrCivil && prosecutionReceived) || !noDefendantsParkedForSummonsApplicationApproval) {
             caseProblems.add(newProblem(DUPLICATED_PROSECUTION, "urn", prosecution.getCaseDetails().getProsecutorCaseReference()));
@@ -819,7 +839,7 @@ public class ProsecutionCaseFile implements Aggregate {
 
     public Stream<Object> addErrorCorrectedDefendantsForSPI(final UUID caseId, final UUID externalId, final DefendantsWithReferenceData defendantsWithReferenceData, final ReferenceDataQueryService referenceDataQueryService,final Boolean isCivil) {
         final Builder<Object> builder = builder();
-        final List<DefendantProblem> defendantErrors = validateDefendantErrors(this.caseDetails, SPI, defendantsWithReferenceData, referenceDataQueryService, builder, Boolean.FALSE, false, isCivil);
+        final List<DefendantProblem> defendantErrors = validateDefendantErrors(this.caseDetails, SPI, defendantsWithReferenceData, referenceDataQueryService, builder, Boolean.FALSE, false, false,isCivil);
         return addDefendants(caseId, externalId, defendantsWithReferenceData, defendantErrors, builder);
     }
 
@@ -867,9 +887,9 @@ public class ProsecutionCaseFile implements Aggregate {
     public Stream<Object> addMaterial(final UUID caseId, final String prosecutingAuthority,
                                       final String prosecutorDefendantId, final Material material,
                                       final ReferenceDataQueryService referenceDataQueryService, final Boolean isCpsCase,
-                                      final ZonedDateTime receivedDateTime) {
+                                      final ZonedDateTime receivedDateTime, final UUID submissionId) {
         final Object event = isProsecutionAccepted()
-                ? validateMaterial(caseId, prosecutingAuthority, prosecutorDefendantId, material, referenceDataQueryService, receivedDateTime, isCpsCase)
+                ? validateMaterial(caseId, prosecutingAuthority, prosecutorDefendantId, material, referenceDataQueryService, receivedDateTime, isCpsCase, submissionId)
                 : ProsecutionCaseFileHelper.markMaterialAsPending(caseId, prosecutingAuthority, prosecutorDefendantId, material, null, isCpsCase, null);
 
         return apply(of(event));
@@ -882,7 +902,7 @@ public class ProsecutionCaseFile implements Aggregate {
         final Stream.Builder<Object> streamBuilder = Stream.builder();
         materials.forEach(material -> {
             final Object event = isProsecutionAccepted()
-                    ? validateMaterial(caseId, prosecutingAuthority, prosecutorDefendantId, material, referenceDataQueryService, receivedDateTime, isCpsCase)
+                    ? validateMaterial(caseId, prosecutingAuthority, prosecutorDefendantId, material, referenceDataQueryService, receivedDateTime, isCpsCase, null)
                     : ProsecutionCaseFileHelper.markMaterialAsPending(caseId, prosecutingAuthority, prosecutorDefendantId, material, null, isCpsCase, null);
             streamBuilder.add(event);
         });
@@ -927,7 +947,7 @@ public class ProsecutionCaseFile implements Aggregate {
         final Stream.Builder<Object> streamBuilder = builder();
 
         if (isProsecutionAccepted()) {
-            final Object resultingEvent = validateMaterialWithDocumentDetails(caseId, prosecutingAuthority, prosecutorDefendantId, material, referenceDataQueryService, receivedDateTime, true, documentDetails);
+            final Object resultingEvent = validateMaterialWithDocumentDetails(caseId, prosecutingAuthority, prosecutorDefendantId, material, referenceDataQueryService, receivedDateTime, true, documentDetails, null);
 
             streamBuilder.add(resultingEvent);
 
@@ -1266,11 +1286,8 @@ public class ProsecutionCaseFile implements Aggregate {
                     }
                 }),
                 when(CaseDetailsUpdated.class).apply(e -> {
-                    final CaseDetails base = this.caseDetails != null
-                            ? this.caseDetails
-                            : CaseDetails.caseDetails().withCaseId(UUID.fromString(e.getCaseId())).build();
                     CaseDetails updatedCaseDetails = CaseDetails.caseDetails()
-                            .withValuesFrom(base)
+                            .withValuesFrom(this.caseDetails)
                             .withFeeStatus(e.getFeeStatus())
                             .withContestedFeeStatus(e.getContestedFeeStatus())
                             .withContestedFeePaymentReference(e.getContestedPaymentReference())
@@ -1497,8 +1514,8 @@ public class ProsecutionCaseFile implements Aggregate {
         return isCaseEjected;
     }
 
-    private Object validateMaterial(final UUID caseId, final String prosecutingAuthority, final String prosecutorDefendantId, final Material material, final ReferenceDataQueryService referenceDataQueryService, final ZonedDateTime receivedDateTime, Boolean isCpsCase) {
-        return validateMaterialWithDocumentDetails(caseId, prosecutingAuthority, prosecutorDefendantId, material, referenceDataQueryService, receivedDateTime, isCpsCase, null);
+    private Object validateMaterial(final UUID caseId, final String prosecutingAuthority, final String prosecutorDefendantId, final Material material, final ReferenceDataQueryService referenceDataQueryService, final ZonedDateTime receivedDateTime, Boolean isCpsCase, final UUID submissionId) {
+        return validateMaterialWithDocumentDetails(caseId, prosecutingAuthority, prosecutorDefendantId, material, referenceDataQueryService, receivedDateTime, isCpsCase, null, submissionId);
     }
 
     private Object validateMaterialV2(AddMaterialCommonV2 addMaterialCommonV2, final ReferenceDataQueryService referenceDataQueryService) {
@@ -1508,7 +1525,7 @@ public class ProsecutionCaseFile implements Aggregate {
 
     @SuppressWarnings("java:S107")
     private Object validateMaterialWithDocumentDetails(final UUID caseId, final String prosecutingAuthority, final String prosecutorDefendantId, final Material material, final ReferenceDataQueryService referenceDataQueryService, final ZonedDateTime receivedDateTime, final Boolean isCpsCase,
-                                                       final DocumentDetails documentDetails) {
+                                                       final DocumentDetails documentDetails, final UUID submissionId) {
         final CaseDocumentWithReferenceData caseDocumentWithReferenceData = new CaseDocumentWithReferenceData(referralReasonId, isCaseReferredToCourt(), material,
                 prosecutorDefendantId, defendants, material.getDocumentType(), isCaseAssigned(), isCaseEjected());
 
@@ -1548,8 +1565,13 @@ public class ProsecutionCaseFile implements Aggregate {
                     .withSectionCode(sectionCode)
                     .build();
         } else {
+            final MaterialRejected.Builder materialRejectedBuilder = materialRejected();
+            if(nonNull(submissionId)){
+                LOGGER.info("Adding submissionId {} to materialRejected event", submissionId);
+                materialRejectedBuilder.withSubmissionId(submissionId);
+            }
 
-            return materialRejected()
+            return materialRejectedBuilder
                     .withCaseId(caseId)
                     .withProsecutingAuthority(prosecutingAuthority)
                     .withProsecutorDefendantId(prosecutorDefendantId)
@@ -1613,7 +1635,8 @@ public class ProsecutionCaseFile implements Aggregate {
                 materialPending.getCmsDocumentId() != null ?
                         new DocumentDetails(materialPending.getCmsDocumentId(),
                                 materialPending.getMaterialType(),
-                                materialPending.getSectionCode()) : null);
+                                materialPending.getSectionCode()) : null,
+                null);
     }
 
     private Object validatePendingMaterialV2(final MaterialPendingV2 materialPending, final ReferenceDataQueryService referenceDataQueryService) {
@@ -1942,7 +1965,7 @@ public class ProsecutionCaseFile implements Aggregate {
                     .stream()
                     .map((d) -> {
                         final JsonObjectBuilder defendantJsonObjectBuilder = createObjectBuilder(objectToJsonObjectConverter.convert(d));
-                        final JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
+                        final JsonArrayBuilder jsonArrayBuilder = createArrayBuilder();
 
                         d.getOffences().forEach((o) -> {
                             final JsonObjectBuilder offenceJsonObjectBuilder = createObjectBuilder(objectToJsonObjectConverter.convert(o));

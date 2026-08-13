@@ -1,6 +1,6 @@
 package uk.gov.moj.cpp.prosecution.casefile.event.listener.converter;
 
-import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import uk.gov.justice.services.common.converter.Converter;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseDetails;
@@ -10,21 +10,24 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import org.apache.commons.lang3.StringUtils;
-
 @SuppressWarnings("java:S1168")
 public class CaseDetailsToCivilFees implements Converter<CaseDetails, Set<CivilFees>> {
-    
+
+    private static final String NOT_APPLICABLE = "NOT_APPLICABLE";
+
     @SuppressWarnings("squid:S1135")
     public Set<CivilFees> convert(final CaseDetails caseDetails) {
 
-        if(isEmpty(caseDetails.getFeeStatus()) && isEmpty(caseDetails.getContestedFeeStatus())) {
+        final boolean hasFee = isApplicable(caseDetails.getFeeStatus());
+        final boolean hasContestedFee = isApplicable(caseDetails.getContestedFeeStatus());
+
+        if(!hasFee && !hasContestedFee) {
             return null;
         }
 
         Set<CivilFees> civilFeesSet = new HashSet<>();
 
-        if(StringUtils.isNotEmpty(caseDetails.getFeeStatus())) {
+        if(hasFee) {
             civilFeesSet.add(createCivilFee(caseDetails.getFeeId(),
                     caseDetails.getCaseId(),
                     caseDetails.getFeeType(),
@@ -32,7 +35,7 @@ public class CaseDetailsToCivilFees implements Converter<CaseDetails, Set<CivilF
                     caseDetails.getPaymentReference()));
         }
 
-        if(StringUtils.isNotEmpty(caseDetails.getContestedFeeStatus())) {
+        if(hasContestedFee) {
             civilFeesSet.add(createCivilFee(caseDetails.getContestedFeeId(),
                     caseDetails.getCaseId(),
                     caseDetails.getContestedFeeType(),
@@ -42,6 +45,10 @@ public class CaseDetailsToCivilFees implements Converter<CaseDetails, Set<CivilF
 
         return civilFeesSet;
 
+    }
+
+    private boolean isApplicable(final String feeStatus) {
+        return !isBlank(feeStatus) && !NOT_APPLICABLE.equalsIgnoreCase(feeStatus);
     }
 
     private CivilFees createCivilFee(UUID feeId, UUID caseId, String feeType, String feeStatus, String paymentReference) {

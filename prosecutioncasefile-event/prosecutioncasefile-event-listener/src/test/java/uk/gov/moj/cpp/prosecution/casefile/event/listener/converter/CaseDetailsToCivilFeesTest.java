@@ -26,6 +26,30 @@ public class CaseDetailsToCivilFeesTest {
     }
 
     @Test
+    public void shouldReturnNullWhenFeeStatusIsBlank() {
+        CaseDetails caseDetails = CaseDetails.caseDetails()
+                .withFeeStatus("   ")
+                .withContestedFeeStatus("")
+                .build();
+
+        Set<CivilFees> civilFees = underTest.convert(caseDetails);
+
+        assertNull(civilFees);
+    }
+
+    @Test
+    public void shouldReturnNullWhenFeeStatusIsNotApplicable() {
+        CaseDetails caseDetails = CaseDetails.caseDetails()
+                .withFeeStatus("NOT_APPLICABLE")
+                .withContestedFeeStatus("not_applicable")
+                .build();
+
+        Set<CivilFees> civilFees = underTest.convert(caseDetails);
+
+        assertNull(civilFees);
+    }
+
+    @Test
     public void shouldCreateCivilFeesObject() {
         UUID feeId = UUID.randomUUID();
         UUID caseId = UUID.randomUUID();

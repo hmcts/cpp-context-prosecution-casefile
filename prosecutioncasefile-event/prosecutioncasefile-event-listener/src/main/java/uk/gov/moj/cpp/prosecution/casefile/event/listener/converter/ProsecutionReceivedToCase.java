@@ -37,6 +37,9 @@ public class ProsecutionReceivedToCase implements Converter<Prosecution, CaseDet
     }
 
     private Set<CivilFees> getCivilFees(final Prosecution prosecution) {
+        if (!Boolean.TRUE.equals(prosecution.getIsCivil())) {
+            return null;
+        }
         return caseDetailsToCivilFees.convert(prosecution.getCaseDetails());
     }
 

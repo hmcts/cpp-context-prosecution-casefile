@@ -4,6 +4,7 @@ import static java.util.Arrays.asList;
 import static java.util.UUID.randomUUID;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 import static uk.gov.moj.cpp.prosecution.casefile.aggregate.GroupProsecutionCaseFile.INITIATION_CODE_CIVIL_CASE;
@@ -22,6 +23,7 @@ import uk.gov.moj.cpp.prosecution.casefile.domain.ReferenceDataVO;
 import uk.gov.moj.cpp.prosecution.casefile.event.GroupCasesParkedForApproval;
 import uk.gov.moj.cpp.prosecution.casefile.event.GroupCasesReceived;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseDetails;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseProblem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.GroupProsecution;
@@ -29,8 +31,10 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Individual;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Offence;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.OrganisationUnitWithCourtroomReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ParentGuardianInformation;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Problem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.SelfDefinedInformation;
 import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
+import uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.GroupProsecutionRejected;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.SummonsCodeReferenceData;
 import java.time.LocalDate;
@@ -45,6 +49,8 @@ import java.util.stream.Stream;
 public class GroupProsecutionCaseFileTest {
 
     private static final String OFFENCE_CODE = "998A";
+    private static final String URN_1 = "URN1";
+    private static final String URN_2 = "URN2";
 
     @Mock
     private ReferenceDataQueryService referenceDataQueryService;
@@ -151,6 +157,101 @@ public class GroupProsecutionCaseFileTest {
         final Stream<Object> eventStream = groupProsecutionCaseFile.receiveGroupProsecution(groupProsecutionList, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
         assertThat(eventStream.findFirst().get(), is(instanceOf(GroupProsecutionRejected.class)));
 
+    }
+
+    @Test
+    public void shouldRaiseGroupProsecutionRejectedWithCaseErrorsGroupedPerCaseReference() {
+
+        final Optional<OrganisationUnitWithCourtroomReferenceData> optionalOrganisationUnitWithCourtroomReferenceData =
+                Optional.of(OrganisationUnitWithCourtroomReferenceData.organisationUnitWithCourtroomReferenceData().build());
+
+        when(referenceDataQueryService.retrieveOrganisationUnitWithCourtroom("C55BN00")).thenReturn(optionalOrganisationUnitWithCourtroomReferenceData);
+
+        // master case is initiated as "O" but only "S" is a known initiation type for it -> one case-level problem
+        final ReferenceDataVO masterReferenceDataVO = new ReferenceDataVO();
+        masterReferenceDataVO.setInitiationTypes(Arrays.asList(INITIATION_CODE_FOR_SUMMONS));
+        final GroupProsecutionWithReferenceData masterCase = buildGroupProsecutionWithReferenceData(INITIATION_CODE_CIVIL_CASE, randomUUID(), true, URN_1);
+        masterCase.setReferenceDataVO(masterReferenceDataVO);
+
+        // second case is initiated as "S" but only "O" is a known initiation type for it, and its summons code is not
+        // a recognised one -> two case-level problems, distinct from the master case's
+        final ReferenceDataVO secondReferenceDataVO = new ReferenceDataVO();
+        secondReferenceDataVO.setInitiationTypes(Arrays.asList(INITIATION_CODE_CIVIL_CASE));
+        final GroupProsecutionWithReferenceData secondCase = buildGroupProsecutionWithReferenceData(INITIATION_CODE_FOR_SUMMONS, randomUUID(), false, URN_2);
+        secondCase.setReferenceDataVO(secondReferenceDataVO);
+
+        final List<GroupProsecutionWithReferenceData> groupProsecutionWithReferenceDataList = new ArrayList<>();
+        groupProsecutionWithReferenceDataList.add(masterCase);
+        groupProsecutionWithReferenceDataList.add(secondCase);
+        final GroupProsecutionList groupProsecutionList = new GroupProsecutionList(groupProsecutionWithReferenceDataList);
+        groupProsecutionList.setChannel(Channel.CIVIL);
+
+        final Stream<Object> eventStream = groupProsecutionCaseFile.receiveGroupProsecution(groupProsecutionList, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
+
+        final Object event = eventStream.findFirst().get();
+        assertThat(event, is(instanceOf(GroupProsecutionRejected.class)));
+        final GroupProsecutionRejected groupProsecutionRejected = (GroupProsecutionRejected) event;
+
+        final List<CaseProblem> caseErrors = groupProsecutionRejected.getCaseErrors();
+        assertThat(caseErrors, Matchers.hasSize(2));
+
+        final CaseProblem masterCaseProblem = caseProblemFor(caseErrors, URN_1);
+        assertThat(masterCaseProblem.getProblems(), Matchers.hasSize(1));
+        assertThat(masterCaseProblem.getProblems().get(0).getCode(), is(ProblemCode.CASE_INITIATION_CODE_INVALID.name()));
+        assertThat(masterCaseProblem.getProblems().get(0).getValues().get(0).getValue(), is(INITIATION_CODE_CIVIL_CASE));
+
+        final CaseProblem secondCaseProblem = caseProblemFor(caseErrors, URN_2);
+        assertThat(secondCaseProblem.getProblems(), Matchers.hasSize(2));
+        assertThat(secondCaseProblem.getProblems().get(0).getCode(), is(ProblemCode.CASE_INITIATION_CODE_INVALID.name()));
+        assertThat(secondCaseProblem.getProblems().get(0).getValues().get(0).getValue(), is(INITIATION_CODE_FOR_SUMMONS));
+        assertThat(secondCaseProblem.getProblems().get(1).getCode(), is(ProblemCode.SUMMONS_CODE_INVALID.name()));
+
+        // case-level problems must not leak into the group-level errors
+        assertThat(groupProsecutionRejected.getGroupCaseErrors(), Matchers.empty());
+    }
+
+    @Test
+    void shouldWrapProblemsIntoSingleCaseProblemWithNullReferenceOnRejectGroupProsecution() {
+        seedAggregateWithMasterCase();
+
+        final Problem problem1 = Problem.problem().withCode("DUPLICATED_PROSECUTION").build();
+        final Problem problem2 = Problem.problem().withCode("ANOTHER_PROBLEM").build();
+
+        final Stream<Object> eventStream = groupProsecutionCaseFile.rejectGroupProsecution(asList(problem1, problem2));
+        final Object event = eventStream.findFirst().get();
+        assertThat(event, is(instanceOf(GroupProsecutionRejected.class)));
+
+        final GroupProsecutionRejected rejected = (GroupProsecutionRejected) event;
+        assertThat(rejected.getGroupCaseErrors(), Matchers.hasSize(1));
+
+        final CaseProblem wrapper = rejected.getGroupCaseErrors().get(0);
+        assertThat(wrapper.getProsecutorCaseReference(), is(nullValue()));
+        assertThat(wrapper.getProblems(), Matchers.contains(problem1, problem2));
+    }
+
+    @Test
+    void shouldOmitGroupCaseErrorsWhenRejectGroupProsecutionCalledWithNoProblems() {
+        seedAggregateWithMasterCase();
+
+        final Stream<Object> eventStream = groupProsecutionCaseFile.rejectGroupProsecution();
+        final GroupProsecutionRejected rejected = (GroupProsecutionRejected) eventStream.findFirst().get();
+
+        assertThat(rejected.getGroupCaseErrors(), is(nullValue()));
+    }
+
+    private void seedAggregateWithMasterCase() {
+        final GroupProsecutionWithReferenceData masterCase = buildGroupProsecutionWithReferenceData(INITIATION_CODE_CIVIL_CASE, randomUUID(), true, URN_1);
+        final GroupProsecutionList groupProsecutionList = new GroupProsecutionList(asList(masterCase));
+        groupProsecutionCaseFile.apply(GroupCasesReceived.groupCasesReceived()
+                .withGroupProsecutionList(groupProsecutionList)
+                .build());
+    }
+
+    private CaseProblem caseProblemFor(final List<CaseProblem> caseErrors, final String prosecutorCaseReference) {
+        return caseErrors.stream()
+                .filter(caseProblem -> prosecutorCaseReference.equals(caseProblem.getProsecutorCaseReference()))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("No CaseProblem found for prosecutorCaseReference " + prosecutorCaseReference));
     }
 
     private GroupProsecutionWithReferenceData buildGroupProsecutionWithReferenceDataWithouSummonCode(final String initiationCode, final Boolean isGroupMaster, final String prosecutorCaseReference){

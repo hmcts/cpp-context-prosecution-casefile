@@ -1,11 +1,16 @@
 [
   {
-    "code": "CASE_MARKER_IS_INVALID",
-    "values": [
+    "prosecutorCaseReference": "CASE-URN",
+    "problems": [
       {
-        "id": "0",
-        "key": "caseMarkers",
-        "value": "BADMARKER"
+        "code": "CASE_MARKER_IS_INVALID",
+        "values": [
+          {
+            "id": "0",
+            "key": "caseMarkers",
+            "value": "BADMARKER"
+          }
+        ]
       }
     ]
   }

@@ -4,6 +4,7 @@ import static java.util.UUID.randomUUID;
 import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
@@ -100,9 +101,10 @@ public class RejectGroupCaseHandlerTest {
         final JsonEnvelope envelope = (JsonEnvelope) groupArgumentCaptor.getAllValues().get(0).findFirst().orElse(null);
         GroupProsecutionRejected groupProsecutionRejected = jsonObjectToObjectConverter.convert(envelope.payloadAsJsonObject(), GroupProsecutionRejected.class);
 
-        assertThat(groupProsecutionRejected.getGroupCaseErrors().get(0).getCode(), is(DUPLICATED_PROSECUTION.toString()));
-        assertThat(groupProsecutionRejected.getGroupCaseErrors().get(0).getValues().get(0).getKey(), is("urn"));
-        assertThat(groupProsecutionRejected.getGroupCaseErrors().get(0).getValues().get(0).getValue(), is(CASE_URN));
+        assertThat(groupProsecutionRejected.getGroupCaseErrors().get(0).getProsecutorCaseReference(), is(nullValue()));
+        assertThat(groupProsecutionRejected.getGroupCaseErrors().get(0).getProblems().get(0).getCode(), is(DUPLICATED_PROSECUTION.toString()));
+        assertThat(groupProsecutionRejected.getGroupCaseErrors().get(0).getProblems().get(0).getValues().get(0).getKey(), is("urn"));
+        assertThat(groupProsecutionRejected.getGroupCaseErrors().get(0).getProblems().get(0).getValues().get(0).getValue(), is(CASE_URN));
     }
 
     @Test

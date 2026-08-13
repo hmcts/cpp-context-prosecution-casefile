@@ -21,6 +21,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.empty;
@@ -122,6 +123,7 @@ import uk.gov.moj.cpp.prosecution.casefile.event.CcCaseReceivedWithWarnings;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.BailStatusReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseDetails;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseMarker;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseProblem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CivilFees;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CpsPersonDefendantDetails;
@@ -359,6 +361,84 @@ public class ProsecutionCaseFileTest {
         assertThat(ccProsecutionRejected.get().getCaseErrors(), hasSize(1));
         assertThat(ccProsecutionRejected.get().getDefendantErrors().size(), is(1));
         assertThat(ccProsecutionRejected.get().getDefendantErrors().get(0).getProsecutorDefendantReference(), is(PROSECUTOR_DEFENDANT_REFERENCE_TWO));
+    }
+
+    @Test
+    public void shouldRaiseCaseRejectedWithCivilCaseErrorsWrappingCaseProblemsForCivilCase() {
+        final LocalDate offenceCommittedDate = of(2018, 3, 2);
+        final ProsecutionWithReferenceData referenceData = getProsecutionWithReferenceDataAndCivilFees(
+                of(buildDefendant(SECOND_FORENAME, SECOND_SURNAME, SECOND_BIRTH_DATE, SECOND_DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE)), CIVIL, true, emptyList());
+        prosecutionCaseFile.apply(ccCaseReceived().withProsecutionWithReferenceData(referenceData).build());
+
+        final ProsecutionWithReferenceData subsequentReferenceData = getProsecutionWithReferenceDataAndCivilFees(
+                of(buildDefendantWithOffence(offenceCommittedDate, now().plusYears(1), PROSECUTOR_DEFENDANT_REFERENCE_TWO)), CIVIL, true, emptyList());
+
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(subsequentReferenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
+        final List<Object> eventList = objectStream.collect(toList());
+
+        final Optional<CcProsecutionRejected> ccProsecutionRejected = getFirstMatching(eventList, CcProsecutionRejected.class);
+
+        assertThat(ccProsecutionRejected.isPresent(), is(true));
+
+        final List<CaseProblem> civilCaseErrors = ccProsecutionRejected.get().getCivilCaseErrors();
+        assertThat(civilCaseErrors, hasSize(1));
+        assertThat(civilCaseErrors.get(0).getProsecutorCaseReference(), is(PROSECUTOR_CASE_REFERENCE));
+        assertThat(civilCaseErrors.get(0).getProblems(), hasSize(1));
+        assertThat(civilCaseErrors.get(0).getProblems().get(0).getCode(), is(ProblemCode.DUPLICATED_PROSECUTION.name()));
+
+        // a civil case must not populate the legacy flat caseErrors field
+        assertThat(ccProsecutionRejected.get().getCaseErrors(), is(nullValue()));
+    }
+
+    @Test
+    public void shouldRaiseCaseRejectedWithFlatCaseErrorsAndNoCivilCaseErrorsForNonCivilCase() {
+        final LocalDate offenceCommittedDate = of(2018, 3, 2);
+        final ProsecutionWithReferenceData referenceData = getProsecutionWithReferenceDataAndCivilFees(
+                of(buildDefendant(SECOND_FORENAME, SECOND_SURNAME, SECOND_BIRTH_DATE, SECOND_DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE)), CPPI, false, emptyList());
+        prosecutionCaseFile.apply(ccCaseReceived().withProsecutionWithReferenceData(referenceData).build());
+
+        final ProsecutionWithReferenceData subsequentReferenceData = getProsecutionWithReferenceDataAndCivilFees(
+                of(buildDefendantWithOffence(offenceCommittedDate, now().plusYears(1), PROSECUTOR_DEFENDANT_REFERENCE_TWO)), CPPI, false, emptyList());
+
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(subsequentReferenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
+        final List<Object> eventList = objectStream.collect(toList());
+
+        final Optional<CcProsecutionRejected> ccProsecutionRejected = getFirstMatching(eventList, CcProsecutionRejected.class);
+
+        assertThat(ccProsecutionRejected.isPresent(), is(true));
+
+        final List<Problem> caseErrors = ccProsecutionRejected.get().getCaseErrors();
+        assertThat(caseErrors, hasSize(1));
+        assertThat(caseErrors.get(0).getCode(), is(ProblemCode.DUPLICATED_PROSECUTION.name()));
+
+        // a non-civil case must not populate the new civilCaseErrors field
+        assertThat(ccProsecutionRejected.get().getCivilCaseErrors(), is(nullValue()));
+    }
+
+    @Test
+    public void shouldRaiseCaseRejectedWithFlatCaseErrorsForMCCCaseFlaggedAsCivil() {
+        // isCivil can be true for MCC-channel cases (a separate migrated-case path); the civil-only
+        // branch must not intercept them, since ProsecutionRejectedProcessor's MCC branch reads
+        // getCaseErrors() unconditionally and would NPE / silently drop errors otherwise.
+        final LocalDate offenceCommittedDate = of(2018, 3, 2);
+        final ProsecutionWithReferenceData referenceData = getProsecutionWithReferenceDataAndCivilFees(
+                of(buildDefendant(SECOND_FORENAME, SECOND_SURNAME, SECOND_BIRTH_DATE, SECOND_DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE)), MCC, true, emptyList());
+        prosecutionCaseFile.apply(ccCaseReceived().withProsecutionWithReferenceData(referenceData).build());
+
+        final ProsecutionWithReferenceData subsequentReferenceData = getProsecutionWithReferenceDataAndCivilFees(
+                of(buildDefendantWithOffence(offenceCommittedDate, now().plusYears(1), PROSECUTOR_DEFENDANT_REFERENCE_TWO)), MCC, true, emptyList());
+
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(subsequentReferenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
+        final List<Object> eventList = objectStream.collect(toList());
+
+        final Optional<CcProsecutionRejected> ccProsecutionRejected = getFirstMatching(eventList, CcProsecutionRejected.class);
+
+        assertThat(ccProsecutionRejected.isPresent(), is(true));
+
+        final List<Problem> caseErrors = ccProsecutionRejected.get().getCaseErrors();
+        assertThat(caseErrors, hasSize(1));
+        assertThat(caseErrors.get(0).getCode(), is(ProblemCode.DUPLICATED_PROSECUTION.name()));
+        assertThat(ccProsecutionRejected.get().getCivilCaseErrors(), is(nullValue()));
     }
 
     @Test

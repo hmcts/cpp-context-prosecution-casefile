@@ -116,6 +116,7 @@ public class EventSelector {
 
     public static final String PUBLIC_STAGING_PROSECUTORS_CPS_SERVE_PTPH_RECEIVED = "public.stagingprosecutors.cps-serve-ptph-received";
     public static final String PUBLIC_GROUP_PROSECUTION_REJECTED_EVENT = "public.prosecutioncasefile.group-prosecution-rejected";
+    public static final String PUBLIC_CIVIL_PROSECUTION_REJECTED_EVENT = "public.prosecutioncasefile.civil-prosecution-rejected";
 
 
 }

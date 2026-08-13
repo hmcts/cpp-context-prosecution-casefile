@@ -8,6 +8,7 @@ import static uk.gov.justice.domain.aggregate.matcher.EventSwitcher.otherwiseDoN
 import static uk.gov.justice.domain.aggregate.matcher.EventSwitcher.when;
 import static uk.gov.moj.cpp.prosecution.casefile.ProsecutionCaseFileHelper.buildDefendantWithReferenceData;
 import static uk.gov.moj.cpp.prosecution.casefile.ProsecutionCaseFileHelper.validateDefendantErrors;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseProblem.caseProblem;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.ValidationRuleExecutor.validate;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.provider.CcProsecutionValidationRuleProvider.getCaseValidationRulesForCivil;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.provider.CcProsecutionValidationRuleProvider.getGroupCasesValidationRules;
@@ -19,6 +20,7 @@ import uk.gov.moj.cpp.prosecution.casefile.domain.GroupProsecutionWithReferenceD
 import uk.gov.moj.cpp.prosecution.casefile.domain.ProsecutionWithReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.event.GroupCasesParkedForApproval;
 import uk.gov.moj.cpp.prosecution.casefile.event.GroupCasesReceived;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseProblem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.DefendantProblem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.GroupProsecution;
@@ -105,7 +107,7 @@ public class GroupProsecutionCaseFile implements Aggregate {
 
         LOGGER.info("groupCaseProblems validated for submissionId {} with count {} ", groupProsecutionList.getExternalId(), groupCaseProblems.size());
 
-        final List<Problem> caseProblems = new ArrayList<>();
+        final List<CaseProblem> caseProblems = new ArrayList<>();
 
         final List<ProsecutionWithReferenceData> prosecutionWithReferenceDataList = groupProsecutionList.getGroupProsecutionWithReferenceDataList().stream()
                 .map(groupProsecutionWithReferenceData -> convertToProsecutionWithReferenceData(groupProsecutionWithReferenceData, groupProsecutionList.getChannel(), groupProsecutionList.getExternalId()))
@@ -113,10 +115,15 @@ public class GroupProsecutionCaseFile implements Aggregate {
 
         groupCasesReferenceDataEnrichers.forEach(x -> x.enrich(prosecutionWithReferenceDataList));
 
-        prosecutionWithReferenceDataList.forEach(
-                prosecutionWithReferenceData ->
-                    caseProblems.addAll(validate(prosecutionWithReferenceData, referenceDataQueryService, getCaseValidationRulesForCivil(prosecutionWithReferenceData.getProsecution().getCaseDetails().getInitiationCode())))
-        );
+        prosecutionWithReferenceDataList.forEach(prosecutionWithReferenceData -> {
+            final List<Problem> problemsForCase = validate(prosecutionWithReferenceData, referenceDataQueryService, getCaseValidationRulesForCivil(prosecutionWithReferenceData.getProsecution().getCaseDetails().getInitiationCode()));
+            if (isNotEmpty(problemsForCase)) {
+                caseProblems.add(caseProblem()
+                        .withProblems(problemsForCase)
+                        .withProsecutorCaseReference(prosecutionWithReferenceData.getProsecution().getCaseDetails().getProsecutorCaseReference())
+                        .build());
+            }
+        });
         LOGGER.info("caseProblems validated for submissionId {} with count {} ", groupProsecutionList.getExternalId(), caseProblems.size());
         final List<DefendantProblem> defendantProblems = validateDefendants(groupProsecutionList, defendantRefDataEnrichers, referenceDataQueryService, builder,isCivil);
 
@@ -126,7 +133,7 @@ public class GroupProsecutionCaseFile implements Aggregate {
             return apply(builder.add(GroupProsecutionRejected.groupProsecutionRejected()
                     .withGroupProsecutions(groupProsecutionList.getGroupProsecutionWithReferenceDataList().stream().map(GroupProsecutionWithReferenceData::getGroupProsecution).toList())
                     .withChannel(groupProsecutionList.getChannel())
-                    .withGroupCaseErrors(groupCaseProblems)
+                    .withGroupCaseErrors(toGroupCaseErrors(groupCaseProblems))
                     .withCaseErrors(caseProblems)
                     .withDefendantErrors(defendantProblems)
                     .withExternalId(groupProsecutionList.getExternalId()).build())
@@ -183,10 +190,31 @@ public class GroupProsecutionCaseFile implements Aggregate {
                         .withGroupProsecutions(this.groupProsecutions)
                         .withChannel(this.channel)
                         .withExternalId(this.externalId)
-                        .withGroupCaseErrors(problems)
+                        .withGroupCaseErrors(toGroupCaseErrors(problems))
                         .build())
                 .build()
         );
+    }
+
+    /**
+     * Group-level problems aren't tied to any one case, so prosecutorCaseReference is always null here —
+     * unlike caseProblems, which are grouped per case reference. A null input (no problems given, e.g. the
+     * no-arg rejectGroupProsecution()) returns null so the field is omitted from the event rather than
+     * published as an empty list, preserving the previous wire shape for that path.
+     */
+    private static List<CaseProblem> toGroupCaseErrors(final List<Problem> groupProblems) {
+        if (groupProblems == null) {
+            return null;
+        }
+        if (groupProblems.isEmpty()) {
+            return new ArrayList<>();
+        }
+        final List<CaseProblem> groupCaseErrors = new ArrayList<>();
+        groupCaseErrors.add(caseProblem()
+                .withProblems(groupProblems)
+                .withProsecutorCaseReference(null)
+                .build());
+        return groupCaseErrors;
     }
 
     private List<DefendantProblem> validateDefendants(final GroupProsecutionList groupProsecutionList, final List<DefendantRefDataEnricher> defendantRefDataEnrichers, final ReferenceDataQueryService referenceDataQueryService, final Stream.Builder builder,final Boolean isCivil) {

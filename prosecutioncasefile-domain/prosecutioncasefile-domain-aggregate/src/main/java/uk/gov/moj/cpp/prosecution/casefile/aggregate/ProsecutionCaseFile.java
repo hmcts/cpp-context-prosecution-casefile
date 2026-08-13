@@ -45,6 +45,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.event.CcCaseReceived.ccCaseRec
 import static uk.gov.moj.cpp.prosecution.casefile.event.CcCaseReceivedWithWarnings.ccCaseReceivedWithWarnings;
 import static uk.gov.moj.cpp.prosecution.casefile.event.DefendantsParkedForSummonsApplicationApproval.defendantsParkedForSummonsApplicationApproval;
 import static uk.gov.moj.cpp.prosecution.casefile.event.ProsecutionDefendantsAdded.prosecutionDefendantsAdded;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseProblem.caseProblem;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CIVIL;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CPPI;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.MCC;
@@ -103,6 +104,7 @@ import uk.gov.moj.cpp.prosecution.casefile.event.SjpCaseUnAssigned;
 import uk.gov.moj.cpp.prosecution.casefile.event.SjpValidationFailed;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.AddMaterialSubmissionV2;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseDetails;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseProblem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CmsDocumentIdentifier;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CourtDocument;
@@ -134,6 +136,7 @@ import uk.gov.moj.cps.prosecutioncasefile.domain.event.CaseDocumentReviewRequire
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.CaseFiltered;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.CaseReferredToCourtRecorded;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.CaseUpdatedWithDefendant;
+import uk.gov.moj.cps.prosecutioncasefile.domain.event.CcProsecutionRejected;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.DefendantsReceivedNotAdded;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.DocumentType;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.GroupIdRecordedForSummonsApplication;
@@ -538,12 +541,31 @@ public class ProsecutionCaseFile implements Aggregate {
             return apply(builder.add(buildCaseValidationFailedEvent(prosecution, externalId, caseProblems, defendantsWithReferenceData)).build());
         }
 
-        return apply(builder.add(ccProsecutionRejected()
-                        .withCaseErrors(caseProblems)
-                        .withProsecution(prosecution)
-                        .withDefendantErrors(defendantErrors)
-                        .withExternalId(externalId).build())
+        final CcProsecutionRejected.Builder ccProsecutionRejectedBuilder = ccProsecutionRejected()
+                .withProsecution(prosecution)
+                .withDefendantErrors(defendantErrors)
+                .withExternalId(externalId);
+
+        if (isCivil && CIVIL.equals(prosecutionChannel)) {
+            ccProsecutionRejectedBuilder.withCivilCaseErrors(toCivilCaseErrors(caseProblems, prosecution.getCaseDetails().getProsecutorCaseReference()));
+        } else {
+            ccProsecutionRejectedBuilder.withCaseErrors(caseProblems);
+        }
+
+        return apply(builder.add(ccProsecutionRejectedBuilder.build())
                 .build());
+    }
+
+    private static List<CaseProblem> toCivilCaseErrors(final List<Problem> caseProblems, final String prosecutorCaseReference) {
+        final List<CaseProblem> civilCaseErrors = new ArrayList<>();
+        if (isEmpty(caseProblems)) {
+            return civilCaseErrors;
+        }
+        civilCaseErrors.add(caseProblem()
+                .withProblems(caseProblems)
+                .withProsecutorCaseReference(prosecutorCaseReference)
+                .build());
+        return civilCaseErrors;
     }
 
     private boolean shouldCaseBeRejectedBasedOnInitiationCode(final String receivedInitiationCode) {

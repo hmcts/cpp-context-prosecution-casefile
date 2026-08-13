@@ -12,6 +12,12 @@
         "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/problem.json"
       }
     },
+    "civilCaseErrors": {
+      "type": "array",
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/case-problem.json"
+      }
+    },
     "defendantErrors": {
       "type": "array",
       "items": {

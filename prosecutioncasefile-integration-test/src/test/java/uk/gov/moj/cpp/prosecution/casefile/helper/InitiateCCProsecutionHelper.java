@@ -5,6 +5,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.findAll;
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 import static com.jayway.awaitility.Awaitility.await;
+import static com.jayway.jsonpath.matchers.JsonPathMatchers.isJson;
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.withJsonPath;
 import static java.lang.String.format;
 import static java.util.Objects.nonNull;
@@ -39,6 +40,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SEL
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SELECTOR_DEFENDANT_VALIDATION_FAILED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SELECTOR_PROSECUTION_CASE_UNSUPPORTED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PROSECUTIONCASEFILE_HANDLER_CASE_UPDATED_INITIATE_IDPC_MATCH;
+import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_CIVIL_PROSECUTION_REJECTED_EVENT;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_EVENT_SELECTOR_PROSECUTION_REJECTED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PROGRESSION_CASE_DEFENDANT_CHANGED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PROGRESSION_COURT_APPLICATION_SUMMONS_APPROVED;
@@ -152,6 +154,7 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
                 PUBLIC_PROSECUTIONCASEFILE_DEFENDANT_VALIDATION_FAILED,
                 PUBLIC_PROSECUTIONCASEFILE_MANUAL_CASE_RECEIVED,
                 PUBLIC_PROSECUTIONCASEFILE_PROSECUTION_DEFENDANTS_ADDED,
+                PUBLIC_CIVIL_PROSECUTION_REJECTED_EVENT,
                 PUBLIC_PROSECUTIONCASEFILE_PROSECUTION_SUBMISSION_SUCCEEDED);
     }
 
@@ -515,6 +518,18 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
                 .replace("EXTERNAL_ID", this.externalId.toString())
                 .replaceAll("DATE_OF_HEARING", LocalDates.to(LocalDate.now()))
                 .replaceAll("APPLICATION_DUE_DATE", LocalDates.to(LocalDate.now()));
+    }
+
+    /**
+     * The public civil-prosecution-rejected subscription is shared across the tests in a class, so
+     * select the message for this specific case rather than taking whatever is next on the topic.
+     */
+    public JsonEnvelope thenPublicCivilProsecutionRejectedEventShouldBeRaised(final UUID rejectedCaseId) {
+        final Matcher<Object> caseIdMatcher = isJson(withJsonPath("$.caseId", is(rejectedCaseId.toString())));
+        final Optional<JsonEnvelope> jsonEnvelope = retrieveMessageWithMatchers(PUBLIC_CIVIL_PROSECUTION_REJECTED_EVENT, caseIdMatcher);
+        assertThat("Expected public event " + PUBLIC_CIVIL_PROSECUTION_REJECTED_EVENT + " to be raised for case " + rejectedCaseId,
+                jsonEnvelope.isPresent(), is(true));
+        return jsonEnvelope.get();
     }
 
     public JsonEnvelope thenProsecutionReceivedEventShouldBeRaised() {

@@ -1,5 +1,16 @@
 [
   {
-    "code": "DUPLICATED_PROSECUTION"
+    "prosecutorCaseReference": "CASE-URN",
+    "problems": [
+      {
+        "code": "DUPLICATED_PROSECUTION",
+        "values": [
+          {
+            "key": "urn",
+            "value": "CASE-URN"
+          }
+        ]
+      }
+    ]
   }
 ]

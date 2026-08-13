@@ -5,17 +5,24 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import uk.gov.justice.services.common.converter.LocalDates;
 import uk.gov.moj.cpp.prosecution.casefile.helper.InitiateGroupProsecutionHelper;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
+import javax.json.JsonValue;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static java.util.Arrays.asList;
 import static java.util.UUID.randomUUID;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static uk.gov.justice.services.messaging.JsonObjects.createArrayBuilder;
 import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static uk.gov.justice.services.messaging.JsonEnvelope.envelopeFrom;
 import static uk.gov.justice.services.messaging.JsonEnvelope.metadataBuilder;
@@ -218,6 +225,46 @@ public class InitiateGroupProsecutionIT extends BaseIT {
         assertThat(rejectedEvent.payloadAsJsonObject().get("groupCaseErrors").toString(), containsString("DATE_OF_HEARING_IN_THE_PAST"));
     }
 
+    /**
+     * caseErrors on group-prosecution-rejected is now "one case-problem.json per case that failed
+     * case-level validation", each tagged with THAT case's own prosecutorCaseReference, rather than
+     * one flat merged list of problem.json objects for the whole submission.
+     *
+     * The fixture puts a distinct INVALID initiationCode on case 2 ("Z") and case 3 ("Y") while the
+     * master case 1 keeps a valid one, so the assertion can prove three things at once:
+     * only the failing cases appear, each is tagged with its own reference, and each carries only
+     * its own problem values (no cross-case merging).
+     */
+    @Test
+    void shouldTagEachCasesProblemsWithThatCasesOwnProsecutorCaseReferenceOnGroupProsecutionRejected() {
+        final String payload = replaceValues(readFile("command-json/prosecutioncasefile.command.initiate-civil-group-prosecution-with-case-level-errors-on-multiple-cases.json"), "O");
+        final InitiateGroupProsecutionHelper initiateGroupProsecutionHelper = new InitiateGroupProsecutionHelper();
+        initiateGroupProsecutionHelper.initiateGroupProsecution(payload);
+        final JsonEnvelope rejectedEvent = initiateGroupProsecutionHelper.thenPublicGroupProsecutionRejectedEventShouldBeRaised();
+
+        final JsonArray caseErrors = rejectedEvent.payloadAsJsonObject().getJsonArray("caseErrors");
+        assertThat("expected one case-problem per failing case, got " + caseErrors, caseErrors.size(), is(2));
+
+        final Map<String, JsonArray> problemsByCaseReference = new HashMap<>();
+        for (final JsonValue caseError : caseErrors) {
+            final JsonObject caseProblem = (JsonObject) caseError;
+            problemsByCaseReference.put(caseProblem.getString("prosecutorCaseReference"), caseProblem.getJsonArray("problems"));
+        }
+
+        assertThat(problemsByCaseReference.keySet(), containsInAnyOrder(caseUrn2, caseUrn3));
+        assertThat("the valid master case must not appear in caseErrors", problemsByCaseReference.containsKey(caseUrn1), is(false));
+
+        assertCaseHasOnlyItsOwnInitiationCodeProblem(problemsByCaseReference.get(caseUrn2), "Z");
+        assertCaseHasOnlyItsOwnInitiationCodeProblem(problemsByCaseReference.get(caseUrn3), "Y");
+    }
+
+    private void assertCaseHasOnlyItsOwnInitiationCodeProblem(final JsonArray problems, final String expectedInitiationCode) {
+        assertThat("expected exactly one problem, got " + problems, problems.size(), is(1));
+        final JsonObject problem = problems.getJsonObject(0);
+        assertThat(problem.getString("code"), is("CASE_INITIATION_CODE_INVALID"));
+        assertThat(problem.getJsonArray("values").getJsonObject(0).getString("value"), is(expectedInitiationCode));
+    }
+
     @Test
     void shouldRaiseGroupProsecutionRejectedWhenCivilGroupCaseHasDuplicateUrn() {
         final String payload = replaceValues(readFile("command-json/prosecutioncasefile.command.initiate-civil-group-prosecution-duplicate-urn.json"), "O");
@@ -225,6 +272,47 @@ public class InitiateGroupProsecutionIT extends BaseIT {
         initiateGroupProsecutionHelper.initiateGroupProsecution(payload);
         final JsonEnvelope rejectedEvent = initiateGroupProsecutionHelper.thenPublicGroupProsecutionRejectedEventShouldBeRaised();
         assertThat(rejectedEvent.payloadAsJsonObject().get("groupCaseErrors").toString(), containsString("DUPLICATED_PROSECUTION"));
+    }
+
+    /**
+     * groupCaseErrors on group-prosecution-rejected is now a list of case-problem.json entries (the same
+     * wrapper shape as caseErrors) rather than a flat list of problem.json entries.
+     *
+     * Group-level problems belong to the submission as a whole, not to one case, so all of them are wrapped
+     * in a single case-problem whose prosecutorCaseReference is null. The framework's ObjectMapper serialises
+     * with NON_ABSENT inclusion, so a null prosecutorCaseReference means the key is omitted from the published
+     * JSON altogether — hence the assertion that the key is simply not there.
+     *
+     * The duplicate-URN fixture puts the same prosecutorCaseReference on both cases in the group, which trips
+     * the group-level DuplicateProsecutionReferenceValidationRule while both cases pass case-level validation.
+     */
+    @Test
+    void shouldWrapGroupLevelProblemsInOneCaseProblemWithNoProsecutorCaseReferenceOnGroupProsecutionRejected() {
+        final String payload = replaceValues(readFile("command-json/prosecutioncasefile.command.initiate-civil-group-prosecution-duplicate-urn.json"), "O");
+        final InitiateGroupProsecutionHelper initiateGroupProsecutionHelper = new InitiateGroupProsecutionHelper();
+        initiateGroupProsecutionHelper.initiateGroupProsecution(payload);
+        final JsonEnvelope rejectedEvent = initiateGroupProsecutionHelper.thenPublicGroupProsecutionRejectedEventShouldBeRaised();
+
+        final JsonArray groupCaseErrors = rejectedEvent.payloadAsJsonObject().getJsonArray("groupCaseErrors");
+        assertThat("all group-level problems must be wrapped in exactly one case-problem, got " + groupCaseErrors,
+                groupCaseErrors.size(), is(1));
+
+        final JsonObject groupCaseError = groupCaseErrors.getJsonObject(0);
+        assertThat("a group-level problem is not attributable to a single case, so prosecutorCaseReference must not be published: " + groupCaseError,
+                groupCaseError.containsKey("prosecutorCaseReference"), is(false));
+        assertThat("case-problem wrapper must carry only problems for group-level errors: " + groupCaseError,
+                groupCaseError.keySet(), contains("problems"));
+
+        final JsonArray problems = groupCaseError.getJsonArray("problems");
+        assertThat("expected exactly one group-level problem, got " + problems, problems.size(), is(1));
+
+        final JsonObject duplicateUrnProblem = problems.getJsonObject(0);
+        assertThat(duplicateUrnProblem.getString("code"), is("DUPLICATED_PROSECUTION"));
+
+        final JsonArray values = duplicateUrnProblem.getJsonArray("values");
+        assertThat("expected the duplicated urn to be reported once, got " + values, values.size(), is(1));
+        assertThat(values.getJsonObject(0).getString("key"), is(caseUrn1));
+        assertThat(values.getJsonObject(0).getString("value"), is("2"));
     }
 
     // initiationCode "O" = OTHER (civil group case path), "S" = SUMMONS (summons application path)

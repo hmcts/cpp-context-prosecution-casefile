@@ -47,9 +47,9 @@ public class CaseDetailsToCivilFeesConverterTest {
         List<CivilFees> civilFees = underTest.convert(caseDetails);
 
         assertEquals(civilFees.get(0).getFeeId(), feeId);
-        assertEquals(civilFees.get(0).getFeeType(), feeType);
-        assertEquals(civilFees.get(0).getFeeStatus(), feeStatus);
-        assertEquals(civilFees.get(0).getPaymentReference(), paymentReference);
+        assertEquals(feeType, civilFees.get(0).getFeeType());
+        assertEquals(feeStatus, civilFees.get(0).getFeeStatus());
+        assertEquals(paymentReference, civilFees.get(0).getPaymentReference());
     }
 
     @Test
@@ -60,7 +60,7 @@ public class CaseDetailsToCivilFeesConverterTest {
 
         List<CivilFees> civilFees = underTest.convert(caseDetails);
 
-        assertEquals(civilFees.get(0).getFeeStatus(), NOT_APPLICABLE);
+        assertEquals(NOT_APPLICABLE, civilFees.get(0).getFeeStatus());
         assertNull(civilFees.get(0).getFeeType());
         assertNull(civilFees.get(0).getFeeId());
     }
@@ -73,7 +73,7 @@ public class CaseDetailsToCivilFeesConverterTest {
 
         List<CivilFees> civilFees = underTest.convert(caseDetails);
 
-        assertEquals(civilFees.get(0).getFeeStatus(), NOT_APPLICABLE);
+        assertEquals(NOT_APPLICABLE, civilFees.get(0).getFeeStatus());
         assertNull(civilFees.get(0).getFeeType());
         assertNull(civilFees.get(0).getFeeId());
     }

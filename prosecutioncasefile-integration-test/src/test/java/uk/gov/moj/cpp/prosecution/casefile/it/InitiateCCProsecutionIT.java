@@ -201,7 +201,7 @@ public class InitiateCCProsecutionIT extends BaseIT {
     }
 
     @Test
-    public void initiateCCProsecutionOfCivilCaseWithNotApplicableFeeStatusAndNoFeeIdViaMCCJourney() {
+    void initiateCCProsecutionOfCivilCaseWithNotApplicableFeeStatusAndNoFeeIdViaMCCJourney() {
         final UUID offenceId = randomUUID();
         stubGetPoliceForces();
         stubGetOrganisationUnitWithOneCourtroom();

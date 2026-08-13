@@ -49,7 +49,7 @@ public class ProsecutionReceivedWithWarningsToCaseTest extends ConverterBaseTest
     private ContactDetailsToContactDetailsEntity contactDetailsToContactDetailsEntity;
 
     @Test
-    public void testConvertSelfDefinedInformationToSelfDefinedInformationDetails() {
+    void testConvertSelfDefinedInformationToSelfDefinedInformationDetails() {
         final SjpProsecutionReceivedWithWarnings prosecutionReceived = new SjpProsecutionReceivedWithWarnings(randomUUID(), createProsecution(), emptyList());
 
         final CaseDetails caseDetails = converter.convert(prosecutionReceived);
@@ -57,7 +57,7 @@ public class ProsecutionReceivedWithWarningsToCaseTest extends ConverterBaseTest
     }
 
     @Test
-    public void shouldPersistCivilFeesWhenCaseIsCivil() {
+    void shouldPersistCivilFeesWhenCaseIsCivil() {
         final SjpProsecutionReceivedWithWarnings prosecutionReceived = new SjpProsecutionReceivedWithWarnings(randomUUID(),
                 createProsecutionWithFeeStatus("PAID", "PAID", true), emptyList());
 
@@ -67,7 +67,7 @@ public class ProsecutionReceivedWithWarningsToCaseTest extends ConverterBaseTest
     }
 
     @Test
-    public void shouldNotPersistCivilFeesWhenCaseIsNotCivil() {
+    void shouldNotPersistCivilFeesWhenCaseIsNotCivil() {
         final SjpProsecutionReceivedWithWarnings prosecutionReceived = new SjpProsecutionReceivedWithWarnings(randomUUID(),
                 createProsecutionWithFeeStatus("PAID", "PAID", false), emptyList());
 

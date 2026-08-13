@@ -54,7 +54,7 @@ public class CCCaseToProsecutionCaseConverterTest {
     private CaseDetailsToCivilFeesConverter caseDetailsToCivilFeesConverter;
 
     @Test
-    public void convertSjpProsecutionToCCCase() {
+    void convertSjpProsecutionToCCCase() {
 
         final CcCaseReceived ccCaseReceived = ccCaseReceived().withProsecutionWithReferenceData(buildProsecutionWithReferenceData(EITHER_WAY)).build();
         final List<Defendant> defendants = ccCaseReceived.getProsecutionWithReferenceData().getProsecution().getDefendants();
@@ -90,7 +90,7 @@ public class CCCaseToProsecutionCaseConverterTest {
     }
 
     @Test
-    public void convertMigrationProsecutionToCCCase() {
+    void convertMigrationProsecutionToCCCase() {
         final CcCaseReceived ccCaseReceived = ccCaseReceived().withProsecutionWithReferenceData(
                 buildProsecutionWithReferenceData(EITHER_WAY,randomUUID().toString(),false, MigrationSourceSystem.migrationSourceSystem()
                         .withMigrationSourceSystemCaseIdentifier(XHIBIT_IDENTIFIER)
@@ -136,7 +136,7 @@ public class CCCaseToProsecutionCaseConverterTest {
     }
 
     @Test
-    public void convertProsecutionToCCCaseWithNSP() {
+    void convertProsecutionToCCCaseWithNSP() {
         final CcCaseReceived ccCaseReceived = ccCaseReceived().withProsecutionWithReferenceData(buildProsecutionWithReferenceDataWithContactEmail("Either Way", randomUUID().toString(), false)).build();
         final List<Defendant> defendants = ccCaseReceived.getProsecutionWithReferenceData().getProsecution().getDefendants();
 
@@ -168,7 +168,7 @@ public class CCCaseToProsecutionCaseConverterTest {
     }
 
     @Test
-    public void shouldConvertCivilFeesWhenCaseIsCivil() {
+    void shouldConvertCivilFeesWhenCaseIsCivil() {
         final ProsecutionWithReferenceData civilProsecutionWithReferenceData = buildProsecutionWithReferenceData(EITHER_WAY);
         final CcCaseReceived ccCaseReceived = ccCaseReceived().withProsecutionWithReferenceData(civilProsecutionWithReferenceData).build();
         final List<CivilFees> civilFees = singletonList(CivilFees.civilFees().withFeeId(randomUUID()).build());
@@ -181,7 +181,7 @@ public class CCCaseToProsecutionCaseConverterTest {
     }
 
     @Test
-    public void shouldNotConvertCivilFeesWhenCaseIsNotCivil() {
+    void shouldNotConvertCivilFeesWhenCaseIsNotCivil() {
         final ProsecutionWithReferenceData civilProsecutionWithReferenceData = buildProsecutionWithReferenceData(EITHER_WAY);
         final Prosecution nonCivilProsecution = Prosecution.prosecution().withValuesFrom(civilProsecutionWithReferenceData.getProsecution()).withIsCivil(false).build();
         final ProsecutionWithReferenceData nonCivilProsecutionWithReferenceData = new ProsecutionWithReferenceData(nonCivilProsecution, civilProsecutionWithReferenceData.getReferenceDataVO(), civilProsecutionWithReferenceData.getExternalId());

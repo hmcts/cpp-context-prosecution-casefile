@@ -54,7 +54,7 @@ public class ProsecutionReceivedToCaseTest extends ConverterBaseTest{
     private ContactDetailsToContactDetailsEntity contactDetailsToContactDetailsEntity;
 
     @Test
-    public void testConvertSelfDefinedInformationToSelfDefinedInformationDetails() {
+    void testConvertSelfDefinedInformationToSelfDefinedInformationDetails() {
         final SjpProsecutionReceived prosecutionReceived = new SjpProsecutionReceived(randomUUID(), createProsecution());
 
         final CaseDetails caseDetails = converter.convert(prosecutionReceived.getProsecution());
@@ -62,35 +62,35 @@ public class ProsecutionReceivedToCaseTest extends ConverterBaseTest{
     }
 
     @Test
-    public void testConvertSelfDefinedInformationToSelfDefinedInformationDetailsAndENGLISHAndWELSHLanguageCheck() {
+    void testConvertSelfDefinedInformationToSelfDefinedInformationDetailsAndENGLISHAndWELSHLanguageCheck() {
         final SjpProsecutionReceived prosecutionReceived = new SjpProsecutionReceived(randomUUID(), createProsecutionWithLanguage(Language.ENGLISH, Language.WELSH));
         final CaseDetails caseDetails = converter.convert(prosecutionReceived.getProsecution());
         assertCaseDetails(caseDetails, Language.E, Language.W);
     }
 
     @Test
-    public void testConvertSelfDefinedInformationToSelfDefinedInformationDetailsAndWALSHAndEnglishLanguageCheck() {
+    void testConvertSelfDefinedInformationToSelfDefinedInformationDetailsAndWALSHAndEnglishLanguageCheck() {
         final SjpProsecutionReceived prosecutionReceived = new SjpProsecutionReceived(randomUUID(), createProsecutionWithLanguage(Language.WELSH, Language.ENGLISH));
         final CaseDetails caseDetails = converter.convert(prosecutionReceived.getProsecution());
         assertCaseDetails(caseDetails, Language.W, Language.E);
     }
 
     @Test
-    public void testConvertSelfDefinedInformationToSelfDefinedInformationDetailsAndENGLISHLanguageCheck() {
+    void testConvertSelfDefinedInformationToSelfDefinedInformationDetailsAndENGLISHLanguageCheck() {
         final SjpProsecutionReceived prosecutionReceived = new SjpProsecutionReceived(randomUUID(), createProsecutionWithLanguage(Language.ENGLISH, Language.ENGLISH));
         final CaseDetails caseDetails = converter.convert(prosecutionReceived.getProsecution());
         assertCaseDetails(caseDetails, Language.E, Language.E);
     }
 
     @Test
-    public void testConvertSelfDefinedInformationToSelfDefinedInformationDetailsAndWALSHLanguageCheck() {
+    void testConvertSelfDefinedInformationToSelfDefinedInformationDetailsAndWALSHLanguageCheck() {
         final SjpProsecutionReceived prosecutionReceived = new SjpProsecutionReceived(randomUUID(), createProsecutionWithLanguage(Language.WELSH, Language.WELSH));
         final CaseDetails caseDetails = converter.convert(prosecutionReceived.getProsecution());
         assertCaseDetails(caseDetails, Language.W, Language.W);
     }
 
     @Test
-    public void shouldPersistCivilFeesWhenFeeStatusIsPresent() {
+    void shouldPersistCivilFeesWhenFeeStatusIsPresent() {
         final SjpProsecutionReceived prosecutionReceived = new SjpProsecutionReceived(randomUUID(),
                 createProsecutionWithFeeStatus("PAID", "PAID", true));
 
@@ -100,7 +100,7 @@ public class ProsecutionReceivedToCaseTest extends ConverterBaseTest{
     }
 
     @Test
-    public void shouldNotPersistCivilFeesWhenFeeStatusIsNull() {
+    void shouldNotPersistCivilFeesWhenFeeStatusIsNull() {
         final SjpProsecutionReceived prosecutionReceived = new SjpProsecutionReceived(randomUUID(),
                 createProsecutionWithFeeStatus(null, null, true));
 
@@ -110,7 +110,7 @@ public class ProsecutionReceivedToCaseTest extends ConverterBaseTest{
     }
 
     @Test
-    public void shouldNotPersistCivilFeesWhenFeeStatusIsEmpty() {
+    void shouldNotPersistCivilFeesWhenFeeStatusIsEmpty() {
         final SjpProsecutionReceived prosecutionReceived = new SjpProsecutionReceived(randomUUID(),
                 createProsecutionWithFeeStatus("", "", true));
 
@@ -120,7 +120,7 @@ public class ProsecutionReceivedToCaseTest extends ConverterBaseTest{
     }
 
     @Test
-    public void shouldPersistCivilFeesWhenFeeStatusIsNotApplicable() {
+    void shouldPersistCivilFeesWhenFeeStatusIsNotApplicable() {
         final SjpProsecutionReceived prosecutionReceived = new SjpProsecutionReceived(randomUUID(),
                 createProsecutionWithFeeStatus("NOT_APPLICABLE", "not_applicable", true));
 
@@ -130,7 +130,7 @@ public class ProsecutionReceivedToCaseTest extends ConverterBaseTest{
     }
 
     @Test
-    public void shouldPersistBothCivilFeesWhenContestedFeeStatusIsNotApplicable() {
+    void shouldPersistBothCivilFeesWhenContestedFeeStatusIsNotApplicable() {
         final SjpProsecutionReceived prosecutionReceived = new SjpProsecutionReceived(randomUUID(),
                 createProsecutionWithFeeStatus("PAID", "NOT_APPLICABLE", true));
 
@@ -141,7 +141,7 @@ public class ProsecutionReceivedToCaseTest extends ConverterBaseTest{
     }
 
     @Test
-    public void shouldNotPersistCivilFeesWhenCaseIsNotCivil() {
+    void shouldNotPersistCivilFeesWhenCaseIsNotCivil() {
         final SjpProsecutionReceived prosecutionReceived = new SjpProsecutionReceived(randomUUID(),
                 createProsecutionWithFeeStatus("PAID", "PAID", false));
 

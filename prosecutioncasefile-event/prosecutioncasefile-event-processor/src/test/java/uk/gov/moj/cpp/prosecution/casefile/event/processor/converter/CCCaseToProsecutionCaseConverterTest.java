@@ -5,20 +5,27 @@ import static java.util.UUID.randomUUID;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static uk.gov.moj.cpp.prosecution.casefile.event.CcCaseReceived.ccCaseReceived;
 import static uk.gov.moj.cpp.prosecution.casefile.event.processor.utils.CaseReceivedHelper.CPS_PROSECUTOR_ID;
 import static uk.gov.moj.cpp.prosecution.casefile.event.processor.utils.CaseReceivedHelper.buildProsecutionWithReferenceData;
 import static uk.gov.moj.cpp.prosecution.casefile.event.processor.utils.CaseReceivedHelper.buildProsecutionWithReferenceDataWithContactEmail;
 
+import uk.gov.justice.core.courts.CivilFees;
 import uk.gov.justice.core.courts.DefendantFineAccountNumber;
 import uk.gov.justice.core.courts.InitiateCourtProceedings;
 import uk.gov.justice.core.courts.MigrationCaseStatus;
 import uk.gov.justice.core.courts.MigrationSourceSystem;
 import uk.gov.justice.core.courts.ProsecutionCase;
 import uk.gov.moj.cpp.prosecution.casefile.domain.ParamsVO;
+import uk.gov.moj.cpp.prosecution.casefile.domain.ProsecutionWithReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.event.CcCaseReceived;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseDetails;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecution;
 
 import java.util.List;
 
@@ -158,6 +165,33 @@ public class CCCaseToProsecutionCaseConverterTest {
         assertThat(convertedProsecutionCase.getProsecutionCaseIdentifier().getAddress().getAddress5(), equalTo(ccCaseReceived.getProsecutionWithReferenceData().getReferenceDataVO().getProsecutorsReferenceData().getAddress().getAddress5()));
         assertThat(convertedProsecutionCase.getProsecutionCaseIdentifier().getProsecutionAuthorityOUCode(), equalTo(ccCaseReceived.getProsecutionWithReferenceData().getReferenceDataVO().getProsecutorsReferenceData().getOucode()));
 
+    }
+
+    @Test
+    public void shouldConvertCivilFeesWhenCaseIsCivil() {
+        final ProsecutionWithReferenceData civilProsecutionWithReferenceData = buildProsecutionWithReferenceData(EITHER_WAY);
+        final CcCaseReceived ccCaseReceived = ccCaseReceived().withProsecutionWithReferenceData(civilProsecutionWithReferenceData).build();
+        final List<CivilFees> civilFees = singletonList(CivilFees.civilFees().withFeeId(randomUUID()).build());
+        when(caseDetailsToCivilFeesConverter.convert(civilProsecutionWithReferenceData.getProsecution().getCaseDetails())).thenReturn(civilFees);
+
+        final InitiateCourtProceedings convertedCourtProceedings = ccCaseToProsecutionCaseConverter.convert(ccCaseReceived);
+
+        final ProsecutionCase convertedProsecutionCase = convertedCourtProceedings.getInitiateCourtProceedings().getProsecutionCases().get(0);
+        assertThat(convertedProsecutionCase.getCivilFees(), equalTo(civilFees));
+    }
+
+    @Test
+    public void shouldNotConvertCivilFeesWhenCaseIsNotCivil() {
+        final ProsecutionWithReferenceData civilProsecutionWithReferenceData = buildProsecutionWithReferenceData(EITHER_WAY);
+        final Prosecution nonCivilProsecution = Prosecution.prosecution().withValuesFrom(civilProsecutionWithReferenceData.getProsecution()).withIsCivil(false).build();
+        final ProsecutionWithReferenceData nonCivilProsecutionWithReferenceData = new ProsecutionWithReferenceData(nonCivilProsecution, civilProsecutionWithReferenceData.getReferenceDataVO(), civilProsecutionWithReferenceData.getExternalId());
+        final CcCaseReceived ccCaseReceived = ccCaseReceived().withProsecutionWithReferenceData(nonCivilProsecutionWithReferenceData).build();
+
+        final InitiateCourtProceedings convertedCourtProceedings = ccCaseToProsecutionCaseConverter.convert(ccCaseReceived);
+
+        final ProsecutionCase convertedProsecutionCase = convertedCourtProceedings.getInitiateCourtProceedings().getProsecutionCases().get(0);
+        verify(caseDetailsToCivilFeesConverter, never()).convert(any());
+        assertNull(convertedProsecutionCase.getCivilFees());
     }
 
 }

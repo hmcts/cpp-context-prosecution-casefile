@@ -40,11 +40,6 @@
     ],
     "prosecutionCases": [
       {
-        "civilFees": [
-          {
-            "feeStatus": "NOT_APPLICABLE"
-          }
-        ],
         "defendants": [
           {
             "associatedPersons": [

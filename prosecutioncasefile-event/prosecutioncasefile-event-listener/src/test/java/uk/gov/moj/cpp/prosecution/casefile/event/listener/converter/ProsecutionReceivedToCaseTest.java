@@ -92,7 +92,7 @@ public class ProsecutionReceivedToCaseTest extends ConverterBaseTest{
     @Test
     public void shouldPersistCivilFeesWhenFeeStatusIsPresent() {
         final SjpProsecutionReceived prosecutionReceived = new SjpProsecutionReceived(randomUUID(),
-                createProsecutionWithFeeStatus("PAID", "PAID"));
+                createProsecutionWithFeeStatus("PAID", "PAID", true));
 
         final CaseDetails caseDetails = converter.convert(prosecutionReceived.getProsecution());
 
@@ -102,7 +102,7 @@ public class ProsecutionReceivedToCaseTest extends ConverterBaseTest{
     @Test
     public void shouldNotPersistCivilFeesWhenFeeStatusIsNull() {
         final SjpProsecutionReceived prosecutionReceived = new SjpProsecutionReceived(randomUUID(),
-                createProsecutionWithFeeStatus(null, null));
+                createProsecutionWithFeeStatus(null, null, true));
 
         final CaseDetails caseDetails = converter.convert(prosecutionReceived.getProsecution());
 
@@ -110,9 +110,9 @@ public class ProsecutionReceivedToCaseTest extends ConverterBaseTest{
     }
 
     @Test
-    public void shouldNotPersistCivilFeesWhenFeeStatusIsBlank() {
+    public void shouldNotPersistCivilFeesWhenFeeStatusIsEmpty() {
         final SjpProsecutionReceived prosecutionReceived = new SjpProsecutionReceived(randomUUID(),
-                createProsecutionWithFeeStatus("   ", ""));
+                createProsecutionWithFeeStatus("", "", true));
 
         final CaseDetails caseDetails = converter.convert(prosecutionReceived.getProsecution());
 
@@ -120,24 +120,33 @@ public class ProsecutionReceivedToCaseTest extends ConverterBaseTest{
     }
 
     @Test
-    public void shouldNotPersistCivilFeesWhenFeeStatusIsNotApplicable() {
+    public void shouldPersistCivilFeesWhenFeeStatusIsNotApplicable() {
         final SjpProsecutionReceived prosecutionReceived = new SjpProsecutionReceived(randomUUID(),
-                createProsecutionWithFeeStatus("NOT_APPLICABLE", "not_applicable"));
+                createProsecutionWithFeeStatus("NOT_APPLICABLE", "not_applicable", true));
 
         final CaseDetails caseDetails = converter.convert(prosecutionReceived.getProsecution());
 
-        assertThat(caseDetails.getCivilFees(), is(nullValue()));
+        assertThat(caseDetails.getCivilFees(), hasSize(2));
     }
 
     @Test
-    public void shouldPersistOnlyApplicableCivilFeeWhenContestedFeeStatusIsNotApplicable() {
+    public void shouldPersistBothCivilFeesWhenContestedFeeStatusIsNotApplicable() {
         final SjpProsecutionReceived prosecutionReceived = new SjpProsecutionReceived(randomUUID(),
-                createProsecutionWithFeeStatus("PAID", "NOT_APPLICABLE"));
+                createProsecutionWithFeeStatus("PAID", "NOT_APPLICABLE", true));
 
         final CaseDetails caseDetails = converter.convert(prosecutionReceived.getProsecution());
         final Set<CivilFees> civilFees = caseDetails.getCivilFees();
 
-        assertThat(civilFees, hasSize(1));
-        assertThat(civilFees.iterator().next().getFeeStatus(), is("PAID"));
+        assertThat(civilFees, hasSize(2));
+    }
+
+    @Test
+    public void shouldNotPersistCivilFeesWhenCaseIsNotCivil() {
+        final SjpProsecutionReceived prosecutionReceived = new SjpProsecutionReceived(randomUUID(),
+                createProsecutionWithFeeStatus("PAID", "PAID", false));
+
+        final CaseDetails caseDetails = converter.convert(prosecutionReceived.getProsecution());
+
+        assertThat(caseDetails.getCivilFees(), is(nullValue()));
     }
 }

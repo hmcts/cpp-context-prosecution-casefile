@@ -26,9 +26,9 @@ public class CaseDetailsToCivilFeesTest {
     }
 
     @Test
-    public void shouldReturnNullWhenFeeStatusIsBlank() {
+    public void shouldReturnNullWhenFeeStatusIsEmpty() {
         CaseDetails caseDetails = CaseDetails.caseDetails()
-                .withFeeStatus("   ")
+                .withFeeStatus("")
                 .withContestedFeeStatus("")
                 .build();
 
@@ -38,7 +38,7 @@ public class CaseDetailsToCivilFeesTest {
     }
 
     @Test
-    public void shouldReturnNullWhenFeeStatusIsNotApplicable() {
+    public void shouldPersistCivilFeesWhenFeeStatusIsNotApplicable() {
         CaseDetails caseDetails = CaseDetails.caseDetails()
                 .withFeeStatus("NOT_APPLICABLE")
                 .withContestedFeeStatus("not_applicable")
@@ -46,7 +46,7 @@ public class CaseDetailsToCivilFeesTest {
 
         Set<CivilFees> civilFees = underTest.convert(caseDetails);
 
-        assertNull(civilFees);
+        assertEquals(2, civilFees.size());
     }
 
     @Test

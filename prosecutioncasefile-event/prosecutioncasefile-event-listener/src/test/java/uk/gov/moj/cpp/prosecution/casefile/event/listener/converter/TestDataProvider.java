@@ -279,6 +279,10 @@ public class TestDataProvider {
     }
 
     public static Prosecution createProsecutionWithFeeStatus(final String feeStatus, final String contestedFeeStatus) {
+        return createProsecutionWithFeeStatus(feeStatus, contestedFeeStatus, null);
+    }
+
+    public static Prosecution createProsecutionWithFeeStatus(final String feeStatus, final String contestedFeeStatus, final Boolean isCivil) {
         final CaseDetails caseDetails = CaseDetails.caseDetails()
                 .withCaseId(CASE_ID)
                 .withProsecutor(createProsecutor())
@@ -293,7 +297,7 @@ public class TestDataProvider {
                 .withContestedFeePaymentReference("contestedPaymentReference")
                 .build();
 
-        return Prosecution.prosecution().withCaseDetails(caseDetails).withChannel(Channel.SPI).withDefendants(singletonList(createDefendant())).build();
+        return Prosecution.prosecution().withCaseDetails(caseDetails).withChannel(Channel.SPI).withIsCivil(isCivil).withDefendants(singletonList(createDefendant())).build();
     }
 
 }

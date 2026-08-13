@@ -1,5 +1,6 @@
 package uk.gov.moj.cpp.prosecution.casefile.event.processor.converter;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 import uk.gov.justice.core.courts.CivilFees;
@@ -46,6 +47,6 @@ public class CaseDetailsToCivilFeesConverter implements Converter<CaseDetails, L
     }
 
     private CivilFees createCivilFee(UUID feeId, String feeType, String feeStatus, String paymentReference) {
-        return new CivilFees(feeId, FeeStatus.valueOf(feeStatus), FeeType.valueOf(feeType), paymentReference);
+        return new CivilFees(feeId, FeeStatus.valueOf(feeStatus), isBlank(feeType) ? null : FeeType.valueOf(feeType), paymentReference);
     }
 }

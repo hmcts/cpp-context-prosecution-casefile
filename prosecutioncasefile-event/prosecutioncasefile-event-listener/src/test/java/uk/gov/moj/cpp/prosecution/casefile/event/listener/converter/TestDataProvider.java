@@ -278,4 +278,22 @@ public class TestDataProvider {
         return Prosecution.prosecution().withCaseDetails(createCaseDetails()).withChannel(Channel.SPI).withDefendants(singletonList(createDefendantWithLanguages(documentLanguage, hearingLanguage))).build();
     }
 
+    public static Prosecution createProsecutionWithFeeStatus(final String feeStatus, final String contestedFeeStatus) {
+        final CaseDetails caseDetails = CaseDetails.caseDetails()
+                .withCaseId(CASE_ID)
+                .withProsecutor(createProsecutor())
+                .withProsecutorCaseReference(CASE_REFERENCE)
+                .withFeeId(randomUUID())
+                .withFeeType("feeType")
+                .withFeeStatus(feeStatus)
+                .withPaymentReference("paymentReference")
+                .withContestedFeeId(randomUUID())
+                .withContestedFeeType("contestedFeeType")
+                .withContestedFeeStatus(contestedFeeStatus)
+                .withContestedFeePaymentReference("contestedPaymentReference")
+                .build();
+
+        return Prosecution.prosecution().withCaseDetails(caseDetails).withChannel(Channel.SPI).withDefendants(singletonList(createDefendant())).build();
+    }
+
 }

@@ -101,7 +101,7 @@ public class ReferenceDataQueryServiceImpl implements ReferenceDataQueryService 
     private static final String REFERENCEDATA_QUERY_HEARING_TYPES = "referencedata.query.hearing-types";
     private static final String REFERENCEDATA_QUERY_LICENCE_CODE = "referencedata.query.licence-codes";
     private static final String REFERENCE_DATA_QUERY_OFFENCE_ALL_VERSIONS = "referencedataoffences.query.offences-all-versions";
-    private static final String REFERENCE_DATA_OFFENCE_QUERY_OFFENCE_LIST = "referencedataoffences.query.offences-list";
+    private static final String REFERENCE_DATA_OFFENCE_QUERY_OFFENCE_LIST_WITH_BLACKLIST_CHECK = "referencedataoffences.query.offences-list-with-blacklist-check";
     private static final String REFERENCEDATA_QUERY_SUMMONS_CODES = "referencedata.query.summons-codes";
     private static final String REFERENCEDATA_QUERY_POLICE_RANKS = "referencedata.query.police-ranks";
     private static final String REFERENCEDATA_QUERY_COUNTRY_NATIONALITIES = "referencedata.query.country-nationality";
@@ -390,11 +390,12 @@ public class ReferenceDataQueryServiceImpl implements ReferenceDataQueryService 
     }
 
     @Override
-    public List<OffenceReferenceData> retrieveOffenceDataList(final List<String> cjsOffenceCodeList, Optional<String> sowRef) {
+    public List<OffenceReferenceData> retrieveOffenceDataList(final List<String> cjsOffenceCodeList, final Optional<String> sowRef, final Optional<LocalDate> offenceCommittedDate) {
         final JsonObjectBuilder jsonObjectBuilder = createObjectBuilder().add("cjsoffencecode", String.join(",", cjsOffenceCodeList));
         sowRef.ifPresent(sowRefValue -> jsonObjectBuilder.add("sowRef", sowRefValue));
+        offenceCommittedDate.ifPresent(date -> jsonObjectBuilder.add("date", date.toString()));
 
-        final JsonEnvelope envelope = envelopeFrom(getMetadataBuilder(REFERENCE_DATA_OFFENCE_QUERY_OFFENCE_LIST), jsonObjectBuilder);
+        final JsonEnvelope envelope = envelopeFrom(getMetadataBuilder(REFERENCE_DATA_OFFENCE_QUERY_OFFENCE_LIST_WITH_BLACKLIST_CHECK), jsonObjectBuilder);
         final JsonArray response = requester.requestAsAdmin(envelope, JsonObject.class).payload().getJsonArray("offences");
 
         List<OffenceReferenceData> offenceReferenceDataList = null;

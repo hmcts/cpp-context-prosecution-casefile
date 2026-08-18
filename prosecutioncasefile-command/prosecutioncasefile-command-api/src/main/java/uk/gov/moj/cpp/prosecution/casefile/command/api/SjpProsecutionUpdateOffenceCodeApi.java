@@ -39,7 +39,7 @@ public class SjpProsecutionUpdateOffenceCodeApi {
 
         final JsonObject payload = envelope.payloadAsJsonObject();
 
-        final List<OffenceReferenceData> offencesRefData = referenceDataQueryService.retrieveOffenceDataList(Lists.newArrayList(payload.getString(OFFENCE_CODE)), Optional.empty());
+        final List<OffenceReferenceData> offencesRefData = referenceDataQueryService.retrieveOffenceDataList(Lists.newArrayList(payload.getString(OFFENCE_CODE)), Optional.empty(), Optional.empty());
         final OffenceReferenceData offenceReferenceData = offencesRefData.get(0);
 
         final JsonObject commandPayload = createObjectBuilder()

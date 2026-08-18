@@ -234,11 +234,32 @@ public class CaseReceivedHelper {
     }
 
     private static List<OffenceReferenceData> getOffenceReferenceData() {
-        return singletonList(new OffenceReferenceData(true, "TVL-ABC", buildPressRestrictableReferenceData().getCppDateOfLastUpdate(), Details.details().build(),
-                buildPressRestrictableReferenceData().getDrugsOrAlcoholRelated(), "dvlaCode", true, buildPressRestrictableReferenceData().getExParte(), buildPressRestrictableReferenceData().getLegislation(), buildPressRestrictableReferenceData().getLegislationWelsh(),
-                buildPressRestrictableReferenceData().getLocationRequired(), "Max Penalty", buildPressRestrictableReferenceData().getModeOfTrial(),
-                buildPressRestrictableReferenceData().getModeOfTrialDerived(), buildPressRestrictableReferenceData().getOffenceEndDate(), randomUUID(), buildPressRestrictableReferenceData().getOffenceStartDate(), buildPressRestrictableReferenceData().getPnldDateOfLastUpdate(), buildPressRestrictableReferenceData().getProsecutionTimeLimit(),
-                buildPressRestrictableReferenceData().getReportRestrictResultCode(), buildPressRestrictableReferenceData().getTitle(), buildPressRestrictableReferenceData().getTitleWelsh(), buildPressRestrictableReferenceData().getValidFrom(), buildPressRestrictableReferenceData().getValidTo()));
+        return singletonList(offenceReferenceData()
+                .withBackDuty(true)
+                .withCjsOffenceCode("TVL-ABC")
+                .withCppDateOfLastUpdate(buildPressRestrictableReferenceData().getCppDateOfLastUpdate())
+                .withDetails(Details.details().build())
+                .withDrugsOrAlcoholRelated(buildPressRestrictableReferenceData().getDrugsOrAlcoholRelated())
+                .withDvlaCode("dvlaCode")
+                .withEndorsableFlag(true)
+                .withExParte(buildPressRestrictableReferenceData().getExParte())
+                .withLegislation(buildPressRestrictableReferenceData().getLegislation())
+                .withLegislationWelsh(buildPressRestrictableReferenceData().getLegislationWelsh())
+                .withLocationRequired(buildPressRestrictableReferenceData().getLocationRequired())
+                .withMaxPenalty("Max Penalty")
+                .withModeOfTrial(buildPressRestrictableReferenceData().getModeOfTrial())
+                .withModeOfTrialDerived(buildPressRestrictableReferenceData().getModeOfTrialDerived())
+                .withOffenceEndDate(buildPressRestrictableReferenceData().getOffenceEndDate())
+                .withOffenceId(randomUUID())
+                .withOffenceStartDate(buildPressRestrictableReferenceData().getOffenceStartDate())
+                .withPnldDateOfLastUpdate(buildPressRestrictableReferenceData().getPnldDateOfLastUpdate())
+                .withProsecutionTimeLimit(buildPressRestrictableReferenceData().getProsecutionTimeLimit())
+                .withReportRestrictResultCode(buildPressRestrictableReferenceData().getReportRestrictResultCode())
+                .withTitle(buildPressRestrictableReferenceData().getTitle())
+                .withTitleWelsh(buildPressRestrictableReferenceData().getTitleWelsh())
+                .withValidFrom(buildPressRestrictableReferenceData().getValidFrom())
+                .withValidTo(buildPressRestrictableReferenceData().getValidTo())
+                .build());
     }
 
     private static List<OffenceReferenceData> buildOffenceReferenceData(final String modeOfTrial) {

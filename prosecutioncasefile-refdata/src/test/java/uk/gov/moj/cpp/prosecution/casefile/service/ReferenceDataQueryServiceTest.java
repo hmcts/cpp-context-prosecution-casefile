@@ -560,7 +560,7 @@ public class ReferenceDataQueryServiceTest {
     @Test
     void shouldReturnCivilOffenceDataRefData() {
 
-        final Metadata metadata = getMockMetadataWithName("NOT.referencedataoffences.query.offences-list");
+        final Metadata metadata = getMockMetadataWithName("NOT.referencedataoffences.query.offences-list-with-blacklist-check");
 
         final JsonObject expectedReferenceDataJsonObject = getMockReferenceDataOffenceData();
 
@@ -568,11 +568,48 @@ public class ReferenceDataQueryServiceTest {
 
         when(requester.requestAsAdmin(any(JsonEnvelope.class), eq(JsonObject.class))).thenReturn(mockRefDataEnvelope);
 
-        final List<OffenceReferenceData> offenceReferenceData = referenceDataService.retrieveOffenceDataList(List.of("OFCODE_12"), Optional.of("MoJ"));
+        final List<OffenceReferenceData> offenceReferenceData = referenceDataService.retrieveOffenceDataList(List.of("OFCODE_12"), Optional.of("MoJ"), Optional.empty());
 
         assertThat(offenceReferenceData, is(notNullValue()));
         assertThat(offenceReferenceData.size(), is(2));
         assertThat(offenceReferenceData.get(0).getCjsOffenceCode(), is("cjsOffenceCode"));
+    }
+
+    @Test
+    void shouldRetrieveOffenceDataListWithBlacklistCheckWhenOffenceCommittedDateProvided() {
+
+        final Metadata metadata = getMockMetadataWithName("NOT.referencedataoffences.query.offences-list-with-blacklist-check");
+
+        final JsonObject expectedReferenceDataJsonObject = createObjectBuilder().add("offences",
+                        createArrayBuilder()
+                                .add(createObjectBuilder()
+                                        .add("id", "4aaecac5-222b-402d-9047-84803679edac")
+                                        .add("cjsOffenceCode", "PC02554")
+                                        .add("blacklisted", true)
+                                        .add("blacklistValidFrom", "2026-01-01")
+                                        .add("blacklistValidTo", "2026-08-12")
+                                        .build())
+                                .build())
+                .build();
+
+        final Envelope<JsonObject> mockRefDataEnvelope = Envelope.envelopeFrom(metadata, expectedReferenceDataJsonObject);
+
+        when(requester.requestAsAdmin(any(JsonEnvelope.class), eq(JsonObject.class))).thenReturn(mockRefDataEnvelope);
+
+        final List<OffenceReferenceData> offenceReferenceData =
+                referenceDataService.retrieveOffenceDataList(List.of("PC02554"), Optional.empty(), Optional.of(LocalDate.of(2026, 8, 11)));
+
+        assertThat(offenceReferenceData, is(notNullValue()));
+        assertThat(offenceReferenceData.size(), is(1));
+        assertThat(offenceReferenceData.get(0).getCjsOffenceCode(), is("PC02554"));
+        assertThat(offenceReferenceData.get(0).getBlacklisted(), is(true));
+        assertThat(offenceReferenceData.get(0).getBlacklistValidTo(), is("2026-08-12"));
+
+        verify(requester).requestAsAdmin(jsonEnvelopeCaptor.capture(), eq(JsonObject.class));
+        final JsonEnvelope requestEnvelope = jsonEnvelopeCaptor.getValue();
+        verifyEnvelopeData(requestEnvelope, "referencedataoffences.query.offences-list-with-blacklist-check");
+        assertThat(requestEnvelope.payloadAsJsonObject().getString("cjsoffencecode"), is("PC02554"));
+        assertThat(requestEnvelope.payloadAsJsonObject().getString("date"), is("2026-08-11"));
     }
 
     @Test

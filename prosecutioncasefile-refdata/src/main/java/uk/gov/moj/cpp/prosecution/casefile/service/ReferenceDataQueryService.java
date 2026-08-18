@@ -29,6 +29,7 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.SelfdefinedEthnicityRefe
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.SummonsCodeReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.VehicleCodeReferenceData;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -86,7 +87,7 @@ public interface ReferenceDataQueryService {
 
     List<OffenceReferenceData> retrieveOffenceData(Offence offence, String initiationCode);
 
-    List<OffenceReferenceData> retrieveOffenceDataList(List<String> cjsOffenceCodeList, Optional<String> sowRef);
+    List<OffenceReferenceData> retrieveOffenceDataList(List<String> cjsOffenceCodeList, Optional<String> sowRef, Optional<LocalDate> offenceCommittedDate);
 
     List<PoliceForceReferenceData> retrievePoliceForceCode();
 

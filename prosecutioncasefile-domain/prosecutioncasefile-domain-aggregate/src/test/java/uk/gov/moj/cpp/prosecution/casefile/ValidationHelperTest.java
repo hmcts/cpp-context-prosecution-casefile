@@ -84,7 +84,7 @@ class ValidationHelperTest {
     void offenceReferenceDataList_whenCivil_should_callRetrieveOffenceDataListWithMojSowRef() {
         final Offence offence = offence(MOCK_OFFENCE_CODE);
         final OffenceReferenceData matching = offenceReferenceData().withCjsOffenceCode(MOCK_OFFENCE_CODE).build();
-        when(referenceDataQueryService.retrieveOffenceDataList(eq(List.of(MOCK_OFFENCE_CODE)), eq(Optional.of(ValidationHelper.SOW_REF_VALUE_MOJ))))
+        when(referenceDataQueryService.retrieveOffenceDataList(eq(List.of(MOCK_OFFENCE_CODE)), eq(Optional.of(ValidationHelper.SOW_REF_VALUE_MOJ)), eq(Optional.empty())))
                 .thenReturn(singletonList(matching));
 
         final List<OffenceReferenceData> result = ValidationHelper.offenceReferenceDataList(referenceDataQueryService, offence, INITIATION_CODE, true);
@@ -104,7 +104,7 @@ class ValidationHelperTest {
 
         assertThat(result, hasSize(1));
         assertThat(result.get(0).getCjsOffenceCode(), is(MOCK_OFFENCE_CODE));
-        verify(referenceDataQueryService, never()).retrieveOffenceDataList(any(), any());
+        verify(referenceDataQueryService, never()).retrieveOffenceDataList(any(), any(), any());
     }
 
     @Test
@@ -112,7 +112,7 @@ class ValidationHelperTest {
         final Offence offence = offence(MOCK_OFFENCE_CODE);
         final OffenceReferenceData nonMatching = offenceReferenceData().withCjsOffenceCode(OTHER_OFFENCE_CODE).build();
         final OffenceReferenceData matching = offenceReferenceData().withCjsOffenceCode(MOCK_OFFENCE_CODE).build();
-        when(referenceDataQueryService.retrieveOffenceDataList(any(), any())).thenReturn(asList(nonMatching, matching));
+        when(referenceDataQueryService.retrieveOffenceDataList(any(), any(), any())).thenReturn(asList(nonMatching, matching));
 
         final List<OffenceReferenceData> result = ValidationHelper.offenceReferenceDataList(referenceDataQueryService, offence, INITIATION_CODE, true);
 
@@ -136,7 +136,7 @@ class ValidationHelperTest {
     @Test
     void offenceReferenceDataList_whenCivilAndServiceReturnsEmpty_should_returnEmptyList() {
         final Offence offence = offence(MOCK_OFFENCE_CODE);
-        when(referenceDataQueryService.retrieveOffenceDataList(any(), any())).thenReturn(emptyList());
+        when(referenceDataQueryService.retrieveOffenceDataList(any(), any(), any())).thenReturn(emptyList());
 
         final List<OffenceReferenceData> result = ValidationHelper.offenceReferenceDataList(referenceDataQueryService, offence, INITIATION_CODE, true);
 

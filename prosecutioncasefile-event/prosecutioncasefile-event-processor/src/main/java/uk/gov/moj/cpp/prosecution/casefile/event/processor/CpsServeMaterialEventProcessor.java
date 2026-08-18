@@ -811,7 +811,7 @@ public class CpsServeMaterialEventProcessor {
                         map(cpsOffence -> cpsOffence.getString(CJS_OFFENCE_CODE)))
                 .collect(toList());
 
-        return referenceDataQueryService.retrieveOffenceDataList(cjsOffenceCodeList, sowRef);
+        return referenceDataQueryService.retrieveOffenceDataList(cjsOffenceCodeList, sowRef, Optional.empty());
     }
 
     private JsonArray retrieveAndBuildCpsDefendantIdsList(final UUID caseId) {

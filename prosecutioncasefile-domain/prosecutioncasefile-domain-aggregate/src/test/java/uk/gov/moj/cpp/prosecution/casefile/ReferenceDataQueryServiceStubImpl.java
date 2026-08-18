@@ -35,6 +35,7 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.SummonsCodeReferenceData
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.VehicleCodeReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -170,7 +171,7 @@ public class ReferenceDataQueryServiceStubImpl implements ReferenceDataQueryServ
     }
 
     @Override
-    public List<OffenceReferenceData> retrieveOffenceDataList(final List<String> cjsOffenceCodeList, Optional<String> sowRef) {
+    public List<OffenceReferenceData> retrieveOffenceDataList(final List<String> cjsOffenceCodeList, Optional<String> sowRef, Optional<LocalDate> offenceCommittedDate) {
         return null;
     }
 

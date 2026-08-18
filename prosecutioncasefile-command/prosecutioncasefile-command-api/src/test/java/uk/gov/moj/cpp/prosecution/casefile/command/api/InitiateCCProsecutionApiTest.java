@@ -301,7 +301,7 @@ public class InitiateCCProsecutionApiTest {
                 .withShortName("OWTW")
                 .build();
         when(referenceDataQueryService.getProsecutorsByOuCode(any(), any())).thenReturn(prosecutorsReferenceData);
-        when(referenceDataQueryService.retrieveOffenceDataList(any(), any())).thenReturn(asList(OffenceReferenceData.offenceReferenceData()
+        when(referenceDataQueryService.retrieveOffenceDataList(any(), any(), any())).thenReturn(asList(OffenceReferenceData.offenceReferenceData()
                 .withLocationRequired("N")
                 .withExParte(isExParte)
                 .build()));

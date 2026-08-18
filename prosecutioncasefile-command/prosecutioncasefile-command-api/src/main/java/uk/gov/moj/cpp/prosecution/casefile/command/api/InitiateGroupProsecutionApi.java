@@ -210,7 +210,7 @@ public class InitiateGroupProsecutionApi {
     }
 
     private OffenceReferenceData getOffenceReferenceData(final Offence offence) {
-        final List<OffenceReferenceData> offencesRefData = this.referenceDataQueryService.retrieveOffenceDataList(of(offence.getOffenceCode()), Optional.of("MoJ"));
+        final List<OffenceReferenceData> offencesRefData = this.referenceDataQueryService.retrieveOffenceDataList(of(offence.getOffenceCode()), Optional.of("MoJ"), Optional.ofNullable(offence.getOffenceCommittedDate()));
         return (offencesRefData != null && !offencesRefData.isEmpty()) ? offencesRefData.get(0) : null;
     }
 

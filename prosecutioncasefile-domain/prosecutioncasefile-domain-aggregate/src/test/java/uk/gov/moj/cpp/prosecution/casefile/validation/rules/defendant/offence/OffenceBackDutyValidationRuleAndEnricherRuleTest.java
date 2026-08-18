@@ -248,7 +248,7 @@ class OffenceBackDutyValidationRuleAndEnricherRuleTest {
         final DefendantWithReferenceData defendantWithReferenceData = getMockDefendantWithReferenceData(true, offence);
 
         //when
-        when(referenceDataQueryService.retrieveOffenceDataList(any(), any())).thenReturn(getMockOffenceCodesReferenceData(MOCK_OFFENCE_CODE));
+        when(referenceDataQueryService.retrieveOffenceDataList(any(), any(), any())).thenReturn(getMockOffenceCodesReferenceData(MOCK_OFFENCE_CODE));
         final ValidationResult validateResult = offenceBackDutyValidationRuleAndEnricherRule.validate(defendantWithReferenceData, referenceDataQueryService);
 
         //Then
@@ -270,7 +270,7 @@ class OffenceBackDutyValidationRuleAndEnricherRuleTest {
         final DefendantWithReferenceData defendantWithReferenceData = getMockDefendantWithReferenceData(true, offence);
 
         //when
-        when(referenceDataQueryService.retrieveOffenceDataList(any(), any()))
+        when(referenceDataQueryService.retrieveOffenceDataList(any(), any(), any()))
                 .thenReturn(Arrays.asList(offenceReferenceData().withCjsOffenceCode(MOCK_OFFENCE_CODE).withBackDuty(false).build()));
         final ValidationResult validateResult = offenceBackDutyValidationRuleAndEnricherRule.validate(defendantWithReferenceData, referenceDataQueryService);
 

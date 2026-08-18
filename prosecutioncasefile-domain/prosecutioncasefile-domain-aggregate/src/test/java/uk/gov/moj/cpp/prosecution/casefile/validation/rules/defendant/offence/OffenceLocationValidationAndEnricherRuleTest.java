@@ -103,7 +103,7 @@ class OffenceLocationValidationAndEnricherRuleTest {
     @Test
     void shouldFetchFromServiceForCivilCaseWhenVOEmpty() {
         final ReferenceDataVO realVO = new ReferenceDataVO();
-        when(referenceDataQueryService.retrieveOffenceDataList(any(), any()))
+        when(referenceDataQueryService.retrieveOffenceDataList(any(), any(), any()))
                 .thenReturn(Collections.singletonList(offenceReferenceData().withCjsOffenceCode(MOCK_OFFENCE_CODE).withLocationRequired("Y").build()));
         final DefendantWithReferenceData defendantWithReferenceData = buildDefendant(MOCK_OFFENCE_CODE, realVO, true);
 

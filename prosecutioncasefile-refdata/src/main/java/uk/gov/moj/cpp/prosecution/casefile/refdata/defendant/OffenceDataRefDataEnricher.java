@@ -9,11 +9,14 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Offence;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.OffenceReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -31,7 +34,6 @@ public class OffenceDataRefDataEnricher implements DefendantRefDataEnricher {
     public void enrich(final List<DefendantsWithReferenceData> defendantsWithReferenceDataList) {
         final Map<String, List<OffenceReferenceData>> offenceReferenceDataMap = new HashMap<>();
 
-
         for(final DefendantsWithReferenceData defendantsWithReferenceData: defendantsWithReferenceDataList) {
 
             final Optional<String> sowRef = defendantsWithReferenceData.isCivil() ? Optional.of(SOW_REF_VALUE) : Optional.empty();
@@ -42,16 +44,19 @@ public class OffenceDataRefDataEnricher implements DefendantRefDataEnricher {
                     .collect(Collectors.toList());
 
             final List<OffenceReferenceData> offenceReferenceDataList = new ArrayList<>();
+            final Set<String> seenKeys = new HashSet<>();
 
             offences.forEach(offence -> {
-                final String key = offence.getOffenceCode();
+                final LocalDate offenceCommittedDate = offence.getOffenceCommittedDate();
+                final String key = offence.getOffenceCode() + "|" + offenceCommittedDate;
                 List<OffenceReferenceData> offenceReferenceData = offenceReferenceDataMap.get(key);
                 if (isNull(offenceReferenceData)) {
-                    offenceReferenceData = referenceDataQueryService.retrieveOffenceDataList(Lists.newArrayList(offence.getOffenceCode()), sowRef);
-                    offenceReferenceDataMap.put(offence.getOffenceCode(), offenceReferenceData);
+                    offenceReferenceData = referenceDataQueryService.retrieveOffenceDataList(
+                            Lists.newArrayList(offence.getOffenceCode()), sowRef, Optional.ofNullable(offenceCommittedDate));
+                    offenceReferenceDataMap.put(key, offenceReferenceData);
                 }
 
-                if (!isOffenceRefDataExists(offenceReferenceDataList, offence.getOffenceCode())) {
+                if (seenKeys.add(key)) {
                     offenceReferenceDataList.addAll(offenceReferenceData);
                 }
             });
@@ -143,10 +148,6 @@ public class OffenceDataRefDataEnricher implements DefendantRefDataEnricher {
                 .withVerdict(offence.getVerdict())
                 .withConvictingCourtCode(offence.getConvictingCourtCode())
                 .build();
-    }
-
-    private boolean isOffenceRefDataExists(final List<OffenceReferenceData> offenceReferenceDataList, final String offenceCode) {
-        return offenceReferenceDataList.stream().anyMatch(offenceReferenceData -> offenceReferenceData.getCjsOffenceCode().equals(offenceCode));
     }
 
 }

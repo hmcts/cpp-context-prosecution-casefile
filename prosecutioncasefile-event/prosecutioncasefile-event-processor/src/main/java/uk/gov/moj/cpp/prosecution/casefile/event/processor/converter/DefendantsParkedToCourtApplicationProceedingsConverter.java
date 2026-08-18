@@ -82,7 +82,7 @@ public class DefendantsParkedToCourtApplicationProceedingsConverter implements P
         final ParamsVO paramsVO = getParamsVO(referenceDataVO, prosecution);
         final CaseDetails caseDetails = prosecution.getCaseDetails();
         final List<Defendant> defendants = prosecution.getDefendants();
-        final List<CourtApplicationParty> respondents = prosecutionCaseFileDefendantToCourtApplicationPartyConverter.convert(defendants, referenceDataVO, prosecution.getChannel());
+        final List<CourtApplicationParty> respondents = prosecutionCaseFileDefendantToCourtApplicationPartyConverter.convert(defendants, referenceDataVO, prosecution.getChannel(), prosecution.getListNewHearing());
 
         final CourtApplicationParty subject = respondents.get(0);
         final List<Offence> offences = defendants.stream().filter(d -> d.getId().equals(subject.getId().toString())).flatMap(defendant -> defendant.getOffences().stream()).collect(toList());

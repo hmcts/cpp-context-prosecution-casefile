@@ -6,6 +6,7 @@ import uk.gov.moj.cpp.prosecution.casefile.domain.ReferenceDataVO;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.DefendantProblem;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.HearingRequest;
 
 import java.util.List;
 import java.util.UUID;
@@ -30,10 +31,17 @@ public class ProsecutionDefendantsAdded {
 
     private final SummonsApprovedOutcome summonsApprovedOutcome;
 
+    /**
+     * The case-level hearing picked in the magistrates' "find a hearing" journey. Null for every
+     * historical event and for every journey that carries a per-defendant initialHearing instead.
+     */
+    private final HearingRequest listNewHearing;
+
     @JsonCreator
     public ProsecutionDefendantsAdded(final UUID caseId, final UUID externalId, final Channel channel,
                                       final List<Defendant> defendants, final ReferenceDataVO referenceDataVO,
-                                      final List<DefendantProblem> defendantWarnings, final SummonsApprovedOutcome summonsApprovedOutcome) {
+                                      final List<DefendantProblem> defendantWarnings, final SummonsApprovedOutcome summonsApprovedOutcome,
+                                      final HearingRequest listNewHearing) {
         this.caseId = caseId;
         this.externalId = externalId;
         this.channel = channel;
@@ -41,6 +49,7 @@ public class ProsecutionDefendantsAdded {
         this.referenceDataVO = referenceDataVO;
         this.defendantWarnings = defendantWarnings;
         this.summonsApprovedOutcome = summonsApprovedOutcome;
+        this.listNewHearing = listNewHearing;
     }
 
     public static Builder prosecutionDefendantsAdded() {
@@ -75,6 +84,10 @@ public class ProsecutionDefendantsAdded {
         return summonsApprovedOutcome;
     }
 
+    public HearingRequest getListNewHearing() {
+        return listNewHearing;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -101,7 +114,10 @@ public class ProsecutionDefendantsAdded {
         if (getDefendantWarnings() != null ? !getDefendantWarnings().equals(that.getDefendantWarnings()) : that.getDefendantWarnings() != null) {
             return false;
         }
-        return getSummonsApprovedOutcome() != null ? getSummonsApprovedOutcome().equals(that.getSummonsApprovedOutcome()) : that.getSummonsApprovedOutcome() == null;
+        if (getSummonsApprovedOutcome() != null ? !getSummonsApprovedOutcome().equals(that.getSummonsApprovedOutcome()) : that.getSummonsApprovedOutcome() != null) {
+            return false;
+        }
+        return getListNewHearing() != null ? getListNewHearing().equals(that.getListNewHearing()) : that.getListNewHearing() == null;
     }
 
     @Override
@@ -112,6 +128,7 @@ public class ProsecutionDefendantsAdded {
         result = 31 * result + (getDefendants() != null ? getDefendants().hashCode() : 0);
         result = 31 * result + (getDefendantWarnings() != null ? getDefendantWarnings().hashCode() : 0);
         result = 31 * result + (getSummonsApprovedOutcome() != null ? getSummonsApprovedOutcome().hashCode() : 0);
+        result = 31 * result + (getListNewHearing() != null ? getListNewHearing().hashCode() : 0);
         return result;
     }
 
@@ -124,6 +141,7 @@ public class ProsecutionDefendantsAdded {
                 ", defendants=" + defendants +
                 ", defendantWarnings=" + defendantWarnings +
                 ", summonsApprovedOutcome=" + summonsApprovedOutcome +
+                ", listNewHearing=" + listNewHearing +
                 '}';
     }
 
@@ -135,6 +153,7 @@ public class ProsecutionDefendantsAdded {
         private ReferenceDataVO referenceDataVO;
         private List<DefendantProblem> defendantWarnings;
         private SummonsApprovedOutcome summonsApprovedOutcome;
+        private HearingRequest listNewHearing;
 
         public Builder withCaseId(final UUID caseId) {
             this.caseId = caseId;
@@ -171,8 +190,13 @@ public class ProsecutionDefendantsAdded {
             return this;
         }
 
+        public Builder withListNewHearing(final HearingRequest listNewHearing) {
+            this.listNewHearing = listNewHearing;
+            return this;
+        }
+
         public ProsecutionDefendantsAdded build() {
-            return new ProsecutionDefendantsAdded(caseId, externalId, channel, defendants, referenceDataVO, defendantWarnings, summonsApprovedOutcome);
+            return new ProsecutionDefendantsAdded(caseId, externalId, channel, defendants, referenceDataVO, defendantWarnings, summonsApprovedOutcome, listNewHearing);
         }
     }
 }

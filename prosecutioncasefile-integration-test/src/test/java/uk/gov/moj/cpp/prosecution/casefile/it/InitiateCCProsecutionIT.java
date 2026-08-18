@@ -515,6 +515,46 @@ public class InitiateCCProsecutionIT extends BaseIT {
         initiateCCProsecutionHelper.verifyCourtProceedingsForCaseCreationHasBeenInitiated(defendantId1, expected);
     }
 
+    /**
+     * DD-43173 AC-010: WEEK_COMMENCING with no week-commencing date is rejected at the command boundary for
+     * initiation code S, as it already is for O.
+     */
+    @Test
+    void initiateCCProsecutionForMCCSummonsAndWeekCommencingWithoutStartDateBadRequest() {
+        stubGetOrganisationUnitWithOneCourtroomForMags();
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-mcc-summons-wc-no-week-commencing-date.json");
+        verifyBadRequestPayload(staticPayLoad);
+    }
+
+    /**
+     * DD-43173  AC-011: FIXED with an earliest start date in the past is rejected for initiation code S.
+     */
+    @Test
+    void initiateCCProsecutionForMCCSummonsAndFixedEarliestDateInThePastBadRequest() {
+        stubGetOrganisationUnitWithOneCourtroomForMags();
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-mcc-summons-fixed-past-earliest-date.json");
+        verifyBadRequestPayload(staticPayLoad);
+    }
+
+    /**
+     * DD-43173 AC-012: plea/verdict validation stays scoped to initiation code O. An MCC summons carrying a
+     * guilty plea with no convicting court code and a future verdict date is still accepted and
+     * parked for legal-adviser approval — extending that validation to S would break all MCC
+     * summons creation.
+     */
+    @Test
+    void initiateCCProsecutionForMCCSummonsWithPleaAndVerdictIsAccepted() {
+        stubGetOrganisationUnitWithOneCourtroomForMags();
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-mcc-summons-with-plea-and-verdict.json")
+                .replace("EARLIEST_START_DATE_TIME", InitiateCCProsecutionHelper.FIND_A_HEARING_EARLIEST_START);
+        final String ccPayLoad = replaceValues(staticPayLoad);
+
+        final InitiateCCProsecutionHelper initiateCCProsecutionHelper = new InitiateCCProsecutionHelper();
+        initiateCCProsecutionHelper.initiateCCProsecution(ccPayLoad);
+
+        initiateCCProsecutionHelper.thenEventsShouldBeRaised(new String[]{EVENT_DEFENDANTS_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL});
+    }
+
     private void verifyBadRequestPayload(final String staticPayLoad) {
         final String ccPayLoad = replaceValues(staticPayLoad);
         final InitiateCCProsecutionHelper initiateCCProsecutionHelper = new InitiateCCProsecutionHelper();

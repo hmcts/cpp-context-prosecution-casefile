@@ -224,7 +224,7 @@ public class ProsecutionCaseFileTest {
         Stream<Object> result = prosecutionCaseFile.receiveSjpProsecution(prosecutionWithReferenceData, newArrayList(caseRefDataEnrichers.iterator()), newArrayList(defendantRefDataEnrichers.iterator()), referenceDataQueryService);
 
         final ProsecutionCaseUnsupported prosecutionCaseUnsupported = (ProsecutionCaseUnsupported) result.findFirst().get();
-        assertThat(prosecutionCaseUnsupported.getErrorMessage(), is("Multiple Defendants Found"));
+        assertThat(prosecutionCaseUnsupported.getErrorMessage(), is("Duplicate SPI prosecution submission for case"));
     }
 
     @Test

@@ -7,6 +7,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static uk.gov.justice.core.courts.IndicatedPleaValue.INDICATED_GUILTY;
 import static uk.gov.justice.core.courts.InitiationCode.O;
+import static uk.gov.justice.core.courts.InitiationCode.S;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_API;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;
 import static uk.gov.justice.services.messaging.Envelope.metadataFrom;
@@ -106,13 +107,20 @@ public class InitiateCCProsecutionApi {
             throw new BadRequestException(LIST_NEW_HEARING_AND_INITIAL_HEARING_ARE_MUTUALLY_EXCLUSIVE);
         }
 
-        if (MCC.equals(channel) && O.name().equalsIgnoreCase(envelope.payload().getCaseDetails().getInitiationCode())) {
-            if (nonNull(listNewHearing)) {
-                validateWcdAndFixedDate(listNewHearing);
-            }
-            if (!isCivil) {
-                validatePleaAndVerdictInOffences(envelope);
-            }
+        final String initiationCode = envelope.payload().getCaseDetails().getInitiationCode();
+
+        // Found-hearing dates are validated for every MCC find-a-hearing route: Other (O) and
+        // Summons (S). Only reachable when a listNewHearing is present, so initialHearing-only
+        // payloads are unaffected.
+        if (MCC.equals(channel) && nonNull(listNewHearing)
+                && (O.name().equalsIgnoreCase(initiationCode) || S.name().equalsIgnoreCase(initiationCode))) {
+            validateWcdAndFixedDate(listNewHearing);
+        }
+
+        // Plea/verdict validation stays scoped to initiation code O. Extending it to S would
+        // reject MCC summons cases on plea/verdict grounds and break summons creation outright.
+        if (MCC.equals(channel) && O.name().equalsIgnoreCase(initiationCode) && !isCivil) {
+            validatePleaAndVerdictInOffences(envelope);
         }
 
 

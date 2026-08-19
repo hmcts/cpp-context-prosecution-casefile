@@ -8,7 +8,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -33,15 +32,12 @@ import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Plea.plea;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Verdict.verdict;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.VerdictType.verdictType;
 
-
 import uk.gov.justice.core.courts.CivilOffence;
 import uk.gov.justice.core.courts.DefendantFineAccountNumber;
-import uk.gov.justice.core.courts.FeeStatus;
 import uk.gov.justice.core.courts.MigrationSourceSystem;
-import uk.gov.justice.services.adapter.rest.exception.BadRequestException;
-
 import uk.gov.justice.core.courts.WeekCommencingDate;
 import uk.gov.justice.cps.prosecutioncasefile.InitialHearing;
+import uk.gov.justice.services.adapter.rest.exception.BadRequestException;
 import uk.gov.justice.services.core.sender.Sender;
 import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.moj.cpp.prosecution.casefile.command.api.service.CaseDetailsEnrichmentService;
@@ -74,7 +70,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.enterprise.inject.Instance;
@@ -84,9 +79,9 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
@@ -770,6 +765,104 @@ public class InitiateCCProsecutionApiTest {
         return HearingRequest.hearingRequest()
                 .withHearingDateTimeType(hearingDateTimeType)
                 .withEarliestStartDateTime(earliestDate)
+                .build();
+    }
+
+    /**
+     * DD-43173 AC-011: FIXED with an earliest start date in the past is rejected for initiation code S, as
+     * it already is for O.
+     */
+    @Test
+    void shouldThrowBadRequestExceptionWhenSummonsFoundHearingFixedEarliestDateIsInThePast() {
+        final Envelope<InitiateProsecution> envelope = envelope(summonsCaseProsecution(
+                buildHearingRequestWithFixedDateHearing(FIXED, ZonedDateTime.now().minusDays(1)), offence().build()));
+
+        final BadRequestException exception = assertThrows(BadRequestException.class,
+                () -> initiateCCProsecutionApi.initiateCCProsecution(envelope));
+
+        assertEquals(EARLIEST_START_DATE_MUST_BE_FUTURE_DATE, exception.getMessage());
+    }
+
+    /**
+     * DD-43173 AC-010: WEEK_COMMENCING without a week-commencing date is rejected for initiation code S.
+     */
+    @Test
+    void shouldThrowBadRequestExceptionWhenSummonsFoundHearingWeekCommencingDateIsMissing() {
+        final Envelope<InitiateProsecution> envelope = envelope(summonsCaseProsecution(
+                buildHearingRequestWithFixedDateHearing(WEEK_COMMENCING, ZonedDateTime.now().plusDays(5)), offence().build()));
+
+        final BadRequestException exception = assertThrows(BadRequestException.class,
+                () -> initiateCCProsecutionApi.initiateCCProsecution(envelope));
+
+        assertEquals(WEEK_COMMENCING_MUST_BE_PROVIDED, exception.getMessage());
+    }
+
+    /**
+     * DD-43173 AC-011 variant: FIXED with no earliest start date at all is rejected for initiation code S.
+     */
+    @Test
+    void shouldThrowBadRequestExceptionWhenSummonsFoundHearingFixedDateIsMissing() {
+        final Envelope<InitiateProsecution> envelope = envelope(summonsCaseProsecution(
+                buildHearingRequestWithWeekCommencing(FIXED, now().plusDays(5)), offence().build()));
+
+        final BadRequestException exception = assertThrows(BadRequestException.class,
+                () -> initiateCCProsecutionApi.initiateCCProsecution(envelope));
+
+        assertEquals(EARLIEST_START_DATE_MUST_BE_PROVIDED, exception.getMessage());
+    }
+
+    /**
+     * DD-43173 AC-012: plea/verdict validation stays scoped to initiation code O. An MCC summons carrying a
+     * guilty plea with no convicting court code, and a future verdict date, must still be accepted —
+     * extending that validation to S would break all MCC summons creation.
+     */
+    @Test
+    void shouldNotApplyPleaAndVerdictValidationToSummonsCases() {
+        final Offence offenceWithPleaAndVerdict = offence()
+                .withPlea(plea()
+                        .withPleaValue(INDICATED_GUILTY.name())
+                        .withPleaDate(now().plusDays(5))
+                        .build())
+                .withVerdict(verdict()
+                        .withVerdictDate(now().plusDays(5))
+                        .withVerdictType(verdictType().withCategoryType("GUILTY").build())
+                        .build())
+                .build();
+
+        final Envelope<InitiateProsecution> envelope = envelope(summonsCaseProsecution(
+                buildHearingRequestWithFixedDateHearing(FIXED, ZonedDateTime.now().plusDays(30)), offenceWithPleaAndVerdict));
+
+        initiateCCProsecutionApi.initiateCCProsecution(envelope);
+
+        verify(sender).send(any(Envelope.class));
+    }
+
+    /**
+     * DD-43173 NFR-1: an initialHearing-only summons never reaches the found-hearing validation at all.
+     */
+    @Test
+    void shouldNotApplyFoundHearingValidationToASummonsCarryingAnInitialHearingOnly() {
+        final InitiateProsecution prosecution = new InitiateProsecution.Builder()
+                .withCaseDetails(new CaseDetails.Builder().withProsecutor(NON_DVLA_PROSECUTOR).withInitiationCode("S").build())
+                .withDefendants(singletonList(defendant()
+                        .withOffences(singletonList(offence().build()))
+                        .withAddress(Address.address().build())
+                        .withInitialHearing(InitialHearing.initialHearing().build())
+                        .build()))
+                .withChannel(MCC)
+                .build();
+
+        initiateCCProsecutionApi.initiateCCProsecution(envelope(prosecution));
+
+        verify(sender).send(any(Envelope.class));
+    }
+
+    private InitiateProsecution summonsCaseProsecution(final HearingRequest listNewHearing, final Offence offence) {
+        return new InitiateProsecution.Builder()
+                .withCaseDetails(new CaseDetails.Builder().withProsecutor(NON_DVLA_PROSECUTOR).withInitiationCode("S").build())
+                .withDefendants(singletonList(buildDefendant(offence)))
+                .withChannel(MCC)
+                .withListNewHearing(listNewHearing)
                 .build();
     }
 

@@ -85,6 +85,13 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
     private static final String PROGRESSION_INITIATE_COURT_PROCEEDINGS = "progression.initiate-court-proceedings";
     private static final String CASE_MARKER_CODE = "ABC";
 
+    /**
+     * The slot the user picks in the magistrates' "find a hearing" journey. Fixed and comfortably
+     * more than 14 days ahead so the derived application due date is deterministic.
+     */
+    public static final String FIND_A_HEARING_EARLIEST_START = "2050-10-03T09:00:00Z";
+    public static final String FIND_A_HEARING_BOOKED_SLOT_OU_CODE = "C55BN00";
+
     private final UUID caseId;
     private final String caseUrn;
     private final String defendantId1;
@@ -393,6 +400,24 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
         verifyCourtProceedingsForSummonsApplicationHasBeenInitiated(expectedPayloadPath);
     }
 
+    /**
+     * Raises a summons case and captures the parked application (id + defendant ids) so the
+     * approval/rejection public events can be driven, without asserting the whole outbound payload.
+     * Used where the assertions are targeted rather than whole-document.
+     */
+    public void initiateSummonsCaseForChannelAndCaptureApplication(final Channel channel, final String payloadPath) {
+        whenInitiateSummonsCaseIsRaisedByChannel(channel, payloadPath);
+
+        final Optional<JsonEnvelope> jsonEnvelope = retrieveEvent(EVENT_DEFENDANTS_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL);
+        assertThat(jsonEnvelope.isPresent(), is(true));
+        final DefendantsParkedForSummonsApplicationApproval payload = jsonObjectToObjectConverter.convert(jsonEnvelope.get().payloadAsJsonObject(), DefendantsParkedForSummonsApplicationApproval.class);
+        this.applicationId = payload.getApplicationId();
+        stubForQueryApplication(applicationId);
+        this.defendantIds = payload.getProsecutionWithReferenceData().getProsecution().getDefendants().stream()
+                .map(Defendant::getId)
+                .collect(toList());
+    }
+
     public void initiateSubsequentSummonsCaseForChannelAndVerifyApplicationCreatedInstead(final Channel channel, final String payloadPath, final String expectedPayloadPath) {
         whenInitiateSummonsCaseIsRaisedByChannel(channel, payloadPath);
 
@@ -513,6 +538,7 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
                 .replace("DATE_RECEIVED", LocalDates.to(LocalDate.now()))
                 .replace("EXTERNAL_ID_2", this.externalId2.toString())
                 .replace("EXTERNAL_ID", this.externalId.toString())
+                .replaceAll("EARLIEST_START_DATE_TIME", FIND_A_HEARING_EARLIEST_START)
                 .replaceAll("DATE_OF_HEARING", LocalDates.to(LocalDate.now()))
                 .replaceAll("APPLICATION_DUE_DATE", LocalDates.to(LocalDate.now()));
     }
@@ -521,6 +547,52 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
         final Optional<JsonEnvelope> jsonEnvelope = retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_RECEIVED);
         assertThat(jsonEnvelope.isPresent(), is(true));
         return jsonEnvelope.get();
+    }
+
+    /**
+     * The raw InitiateCourtApplicationProceedings payload last sent to Progression for this case's
+     * summons application (the box hearing).
+     */
+    public JsonObject getLastSummonsApplicationPayload() {
+        return extractPayload(getLastLoggedRequestForSummonsApplicationApproval(this.caseUrn));
+    }
+
+    /**
+     * The raw InitiateCourtProceedings payload last sent to Progression for this case (the listing).
+     */
+    public JsonObject getLastCourtProceedingsPayload() {
+        return extractPayload(getLastLoggedRequest(this.caseUrn));
+    }
+
+    public void awaitCourtProceedingsInitiated() {
+        await().timeout(35, SECONDS)
+                .pollInterval(500, MILLISECONDS)
+                .pollDelay(500, MILLISECONDS)
+                .until(() -> findAll(postRequestedFor(urlMatching("/progression-service/command/api/rest/progression/initiatecourtproceedings"))
+                        .withRequestBody(containing(this.caseUrn))).size(), is(1));
+    }
+
+    public void awaitSummonsApplicationInitiated() {
+        await().timeout(35, SECONDS)
+                .pollInterval(500, MILLISECONDS)
+                .pollDelay(500, MILLISECONDS)
+                .until(() -> findAll(postRequestedFor(urlMatching("/progression-service/command/api/rest/progression/initiate-application"))
+                        .withRequestBody(containing(this.caseUrn))).size(), is(1));
+    }
+
+    private JsonObject extractPayload(final String loggedRequestBody) {
+        final JsonObject jsonObject;
+        try (final JsonReader jsonReader = createReader(new StringReader(loggedRequestBody))) {
+            jsonObject = jsonReader.readObject();
+        }
+        final String payload = new DefaultJsonObjectEnvelopeConverter().extractPayloadFromEnvelope(jsonObject).toString();
+        try (final JsonReader payloadReader = createReader(new StringReader(payload))) {
+            return payloadReader.readObject();
+        }
+    }
+
+    public List<String> getDefendantIds() {
+        return this.defendantIds;
     }
 
     public String getCaseUrn() {

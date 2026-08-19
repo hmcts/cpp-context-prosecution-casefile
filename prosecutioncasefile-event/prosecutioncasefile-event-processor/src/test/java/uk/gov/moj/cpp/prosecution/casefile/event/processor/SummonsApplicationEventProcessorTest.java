@@ -1,6 +1,7 @@
 package uk.gov.moj.cpp.prosecution.casefile.event.processor;
 
 import static java.time.ZonedDateTime.now;
+import static java.util.Collections.singletonList;
 import static java.util.UUID.randomUUID;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -13,6 +14,10 @@ import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseDetails.caseD
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CPPI;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.MCC;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.SPI;
+import static uk.gov.justice.core.courts.RotaSlot.rotaSlot;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant.defendant;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.HearingDateTimeType.FIXED;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.HearingRequest.hearingRequest;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecution.prosecution;
 
 import uk.gov.justice.core.courts.InitiateCourtApplicationProceedings;
@@ -120,6 +125,55 @@ public class SummonsApplicationEventProcessorTest {
         final Envelope<InitiateCourtApplicationProceedings> firstResultEnvelope = envelopeArgumentCaptor.getAllValues().get(0);
         assertThat(firstResultEnvelope.metadata().name(), is("progression.initiate-court-proceedings-for-application"));
         assertThat(firstResultEnvelope.payload(), is(outgoingPayload));
+    }
+
+    /**
+     * DD-43173 AC-001: an MCC Summons parked for approval that carries a case-level found hearing and no
+     * per-defendant initial hearing is handled without error — the box-hearing application command
+     * goes to Progression and the public manual-case-received event is emitted.
+     */
+    @Test
+    public void shouldIssueCommandToProgressionForAnMccFindAHearingSummons() {
+        given(envelope.metadata()).willReturn(metadata);
+        final DefendantsParkedForSummonsApplicationApproval payload = getFindAHearingPayload();
+        given(envelope.payload()).willReturn(payload);
+        given(defendantsParkedToCourtApplicationProceedingsConverter.convert(payload, metadata)).willReturn(outgoingPayload);
+
+        target.handleDefendantsParkedForSummonsApplicationApproval(envelope);
+
+        verify(sender, times(2)).send(envelopeArgumentCaptor.capture());
+        final Envelope<InitiateCourtApplicationProceedings> firstResultEnvelope = envelopeArgumentCaptor.getAllValues().get(0);
+        assertThat(firstResultEnvelope.metadata().name(), is("progression.initiate-court-proceedings-for-application"));
+        assertThat(firstResultEnvelope.payload(), is(outgoingPayload));
+
+        final Envelope<ManualCaseReceived> secondResultEnvelope = envelopeArgumentCaptor.getAllValues().get(1);
+        assertThat(secondResultEnvelope.metadata().name(), is("public.prosecutioncasefile.manual-case-received"));
+        assertThat(secondResultEnvelope.payload().getCaseId(), is(caseId));
+    }
+
+    private DefendantsParkedForSummonsApplicationApproval getFindAHearingPayload() {
+        final CaseDetails caseDetails = caseDetails()
+                .withCaseId(caseId)
+                .withInitiationCode("S")
+                .withProsecutorCaseReference(prosecutorCaseReference)
+                .build();
+        final Prosecution prosecution = prosecution()
+                .withChannel(MCC)
+                .withCaseDetails(caseDetails)
+                .withListNewHearing(hearingRequest()
+                        .withHearingDateTimeType(FIXED)
+                        .withEarliestStartDateTime(now().plusMonths(1))
+                        .withBookedSlots(singletonList(rotaSlot()
+                                .withOucode("B10LY00")
+                                .withStartTime(now().plusMonths(1))
+                                .build()))
+                        .build())
+                .withDefendants(singletonList(defendant().withId(randomUUID().toString()).build()))
+                .build();
+        return defendantsParkedForSummonsApplicationApproval()
+                .withApplicationId(applicationId)
+                .withProsecutionWithReferenceData(new ProsecutionWithReferenceData(prosecution))
+                .build();
     }
 
     private Metadata getMetaData() {

@@ -66,6 +66,7 @@ import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.Customization;
 import org.skyscreamer.jsonassert.comparator.CustomComparator;
 
+@SuppressWarnings("java:S2699")
 public class InitiateCCProsecutionIT extends BaseIT {
 
     private static final String ADD_DEFENDANT_TO_COURT_PROCEEDING = "/progression-service/command/api/rest/progression/adddefendantstocourtproceedings";

@@ -858,7 +858,7 @@ public class ProsecutionCaseFileTest {
         final ProsecutionCaseUnsupported eventObject = (ProsecutionCaseUnsupported) eventList.get(0);
 
         assertThat(eventList.size(), is(1));
-        assertThat(eventObject.getErrorMessage(), containsString("Multiple Defendants Found"));
+        assertThat(eventObject.getErrorMessage(), containsString("Duplicate SPI prosecution submission for case"));
         assertThat(eventObject.getPoliceSystemId(), is(subsequentProsecutionWithReferenceData.getProsecution().getCaseDetails().getPoliceSystemId()));
         assertThat(eventObject.getChannel(), is(SPI));
         assertThat(eventObject.getExternalId(), is(subsequentProsecutionWithReferenceData.getExternalId()));
@@ -904,7 +904,7 @@ public class ProsecutionCaseFileTest {
         final ProsecutionCaseUnsupported eventObject = (ProsecutionCaseUnsupported) eventList.get(0);
 
         assertThat(eventList.size(), is(1));
-        assertThat(eventObject.getErrorMessage(), containsString("Multiple Defendants Found"));
+        assertThat(eventObject.getErrorMessage(), containsString("Duplicate SPI prosecution submission for case"));
         assertThat(eventObject.getUrn(), is(subsequentProsecutionWithReferenceData.getProsecution().getCaseDetails().getProsecutorCaseReference()));
         assertThat(eventObject.getPoliceSystemId(), is(subsequentProsecutionWithReferenceData.getProsecution().getCaseDetails().getPoliceSystemId()));
         assertThat(eventObject.getChannel(), is(SPI));

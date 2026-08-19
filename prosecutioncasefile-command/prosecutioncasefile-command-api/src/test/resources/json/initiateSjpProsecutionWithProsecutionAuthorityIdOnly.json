@@ -1,0 +1,55 @@
+{
+  "caseDetails": {
+    "caseId": "51cac7fb-387c-4d19-9c80-8963fa8cf222",
+    "prosecutorCaseReference": "BED45615",
+    "initiationCode": "J",
+    "isRetrial": false,
+    "prosecutor": {
+      "prosecutionAuthorityId": "927709cd-712f-36bf-b469-6dddca06272d"
+    }
+  },
+  "defendants": [{
+    "id": "fb61fb76-3eee-4d16-844c-09664eac05d6",
+    "documentationLanguage": "E",
+    "hearingLanguage": "E",
+    "individual": {
+      "personalInformation": {
+        "title": "MR",
+        "firstName": "John",
+        "lastName": "Smith",
+        "address": {
+          "address1": "Address line 1",
+          "address2": "Locket Road",
+          "postcode": "HA3 7NR"
+        },
+        "contactDetails": {
+          "primaryEmail": "test@example.com",
+          "work": "07574954021"
+        }
+      },
+      "selfDefinedInformation": {
+        "gender": "NOT_SPECIFIED"
+      }
+    },
+    "asn": "0800PP0100000000021H",
+    "offences": [
+      {
+        "offenceId": "bd916661-bce5-477c-a91d-b24b85367fa8",
+        "offenceCode": "CL67011",
+        "offenceSequenceNumber": 1,
+        "offenceCommittedDate": "2026-08-05",
+        "offenceDateCode": 1,
+        "offenceWording": "Sample offence wording",
+        "chargeDate": "2026-08-05",
+        "offenceLocation": "London",
+        "appliedCompensation": 200,
+        "aocpEligible": false,
+        "modeOfTrialDerived": "Indictable"
+      }
+    ],
+    "appliedProsecutorCosts": 100,
+    "postingDate": "2026-08-07"
+  }],
+  "isCivil": false,
+  "channel": "%s"
+}

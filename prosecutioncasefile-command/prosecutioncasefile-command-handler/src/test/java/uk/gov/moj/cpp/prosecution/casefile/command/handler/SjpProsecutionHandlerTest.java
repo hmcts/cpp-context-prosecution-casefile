@@ -256,7 +256,7 @@ public class SjpProsecutionHandlerTest {
         sjpProsecutionHandler.handleInitiateSjpProsecutionWithReferenceData(envelope);
         matchEvent(verifyAppendAndGetArgumentFrom(eventStream),
                 "prosecutioncasefile.events.prosecution-case-unsupported",
-                () -> readJson("json/prosecutionCaseUnsupported.json", JsonValue.class));
+                () -> readJson("json/prosecutionCaseUnsupportedDuplicate.json", JsonValue.class));
     }
 
     @Test

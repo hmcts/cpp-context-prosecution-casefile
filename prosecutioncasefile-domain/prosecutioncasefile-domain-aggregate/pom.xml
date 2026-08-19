@@ -5,7 +5,7 @@
     <parent>
         <groupId>uk.gov.moj.cpp.prosecution.casefile</groupId>
         <artifactId>prosecutioncasefile-domain</artifactId>
-        <version>17.0.96-SNI-9470-SNAPSHOT</version>
+        <version>17.0.97-SNI-9470-SNAPSHOT</version>
     </parent>
 
     <artifactId>prosecutioncasefile-domain-aggregate</artifactId>

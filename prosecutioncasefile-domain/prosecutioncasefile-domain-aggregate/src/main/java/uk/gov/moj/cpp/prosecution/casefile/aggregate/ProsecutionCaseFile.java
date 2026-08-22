@@ -60,6 +60,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.validation.provider.CcProsecut
 import static uk.gov.moj.cpp.prosecution.casefile.validation.provider.CcProsecutionValidationRuleProvider.getDefendantValidationRules;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.provider.SjpProsecutionWarningRuleProvider.getWarningRules;
 import static uk.gov.moj.cps.prosecutioncasefile.domain.event.BulkscanMaterialRejected.bulkscanMaterialRejected;
+import static uk.gov.moj.cps.prosecutioncasefile.domain.event.CaseCreatedSuccessfullyWithWarnings.caseCreatedSuccessfullyWithWarnings;
 import static uk.gov.moj.cps.prosecutioncasefile.domain.event.CcProsecutionRejected.ccProsecutionRejected;
 import static uk.gov.moj.cps.prosecutioncasefile.domain.event.IdpcDefendantMatched.idpcDefendantMatched;
 import static uk.gov.moj.cps.prosecutioncasefile.domain.event.IdpcMaterialReceived.idpcMaterialReceived;
@@ -223,6 +224,7 @@ public class ProsecutionCaseFile implements Aggregate {
     private List<Defendant> rejectedApplicationDefendants = new ArrayList<>();
     private List<Problem> warnings = new ArrayList<>();
     private List<DefendantProblem> defendantWarnings = new ArrayList<>();
+    private List<CaseProblem> civilCaseWarnings = new ArrayList<>();
     private final Map<String, UUID> validDefendantIds = new HashMap<>();
     private CaseDetails caseDetails;
     private boolean caseReferredToCourt;
@@ -881,7 +883,22 @@ public class ProsecutionCaseFile implements Aggregate {
             final UUID externalId = getExternalIdFromDefendantIds(defendantIds);
 
             if (this.caseType.equals(CC)) {
-                builder.accept(this.warnings.isEmpty() ? new CaseCreatedSuccessfully(caseId, this.channel, externalId) : new CaseCreatedSuccessfullyWithWarnings(caseId, EMPTY_LIST, this.channel, this.defendantWarnings, externalId, this.warnings));
+                // Channel-only guard (no isCivil flag available here, unlike the civilCaseErrors guard above) —
+                // whoever adds the rule that populates civilCaseWarnings should confirm this is still sufficient.
+                // currently there are no casewarnings for criminal or civil hence all caseWarnings lists will be empty.
+                final List<CaseProblem> civilCaseWarningsForEvent = CIVIL.equals(this.channel) ? this.civilCaseWarnings : EMPTY_LIST;
+
+                builder.accept(this.warnings.isEmpty()
+                        ? new CaseCreatedSuccessfully(caseId, this.channel, externalId)
+                        : caseCreatedSuccessfullyWithWarnings()
+                                .withCaseId(caseId)
+                                .withCaseWarnings(EMPTY_LIST)
+                                .withChannel(this.channel)
+                                .withCivilCaseWarnings(civilCaseWarningsForEvent)
+                                .withDefendantWarnings(this.defendantWarnings)
+                                .withExternalId(externalId)
+                                .withWarnings(this.warnings)
+                                .build());
             } else {
                 builder.accept(this.warnings.isEmpty() ? new SjpCaseCreatedSuccessfully(caseId, this.channel, externalId) : new SjpCaseCreatedSuccessfullyWithWarnings(caseId, this.channel, externalId, this.warnings));
             }

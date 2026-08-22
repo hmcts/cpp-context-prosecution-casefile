@@ -38,12 +38,14 @@ import static uk.gov.justice.cps.prosecutioncasefile.InitialHearing.initialHeari
 import static uk.gov.justice.services.test.utils.core.random.RandomGenerator.INTEGER;
 import static uk.gov.justice.services.test.utils.core.random.RandomGenerator.STRING;
 import static uk.gov.justice.services.test.utils.core.random.RandomGenerator.values;
+import static uk.gov.moj.cpp.prosecution.casefile.CaseType.CC;
 import static uk.gov.moj.cpp.prosecution.casefile.domain.SummonsApplicationApprovedDetails.summonsApplicationApprovedDetails;
 import static uk.gov.moj.cpp.prosecution.casefile.domain.SummonsApplicationRejectedDetails.summonsApplicationRejectedDetails;
 import static uk.gov.moj.cpp.prosecution.casefile.event.CcCaseReceived.ccCaseReceived;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.BailStatusReferenceData.bailStatusReferenceData;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseDetails.caseDetails;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseMarker.caseMarker;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseProblem.caseProblem;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CIVIL;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CPPI;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.MCC;
@@ -105,6 +107,7 @@ import static uk.gov.moj.cps.prosecutioncasefile.TestConstants.THIRD_DEFENDANT_I
 import static uk.gov.moj.cps.prosecutioncasefile.TestConstants.THIRD_FORENAME;
 import static uk.gov.moj.cps.prosecutioncasefile.TestConstants.THIRD_SURNAME;
 import static uk.gov.moj.cps.prosecutioncasefile.TestConstants.URN;
+import static uk.gov.moj.cps.prosecutioncasefile.domain.event.CaseCreatedSuccessfullyWithWarnings.caseCreatedSuccessfullyWithWarnings;
 
 import com.google.common.collect.Lists;
 import uk.gov.justice.core.courts.FeeStatus;
@@ -1552,7 +1555,15 @@ public class ProsecutionCaseFileTest {
         final DefendantProblem secondDefendantWarning = defendantProblem().withProsecutorDefendantReference(PROSECUTOR_DEFENDANT_REFERENCE_TWO).withProblems(of(problem().withCode(OFFENCE_NOT_IN_EFFECT_ON_OFFENCE_COMMITTED_DATE).build())).build();
         prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID_2, secondMessage, of(secondDefendantWarning)));
         prosecutionCaseFile.apply(new CcCaseReceivedWithWarnings(firstMessage, emptyList(), of(firstDefendantWarning), summonsApprovedOutcome().withPersonalService(true).withProsecutorCost("£300.00").withSummonsSuppressed(false).build(), randomUUID()));
-        prosecutionCaseFile.apply(new CaseCreatedSuccessfullyWithWarnings(CASE_ID, emptyList(), SPI, of(firstDefendantWarning), EXTERNAL_ID, firstDefendantWarning.getProblems()));
+        prosecutionCaseFile.apply(caseCreatedSuccessfullyWithWarnings()
+                .withCaseId(CASE_ID)
+                .withCaseWarnings(emptyList())
+                .withChannel(SPI)
+                .withCivilCaseWarnings(emptyList())
+                .withDefendantWarnings(of(firstDefendantWarning))
+                .withExternalId(EXTERNAL_ID)
+                .withWarnings(firstDefendantWarning.getProblems())
+                .build());
 
         final SummonsApplicationApprovedDetails secondSummonsApplicationApprovedDetails = getSummonsApplicationApprovedDetails(APPLICATION_ID_2);
         final Stream<Object> objectStream = prosecutionCaseFile.approveCaseDefendants(secondSummonsApplicationApprovedDetails, of(), of(), isCivil);
@@ -1696,6 +1707,46 @@ public class ProsecutionCaseFileTest {
 
         final List<Object> resultEventList = resultObjectStream.collect(toList());
         assertThat(resultEventList, hasSize(0));
+    }
+
+    @Test
+    public void shouldIncludeCivilCaseWarningsOnCaseCreatedSuccessfullyWithWarningsForCivilChannel() {
+        final List<CaseProblem> civilCaseWarnings = of(caseProblem()
+                .withProsecutorCaseReference(PROSECUTOR_CASE_REFERENCE)
+                .withProblems(of(problem().withCode(OFFENCE_NOT_IN_EFFECT_ON_OFFENCE_COMMITTED_DATE).build()))
+                .build());
+
+        seedAcceptCaseWithWarnings(CIVIL, civilCaseWarnings);
+
+        final List<Object> eventList = prosecutionCaseFile.acceptCase(CASE_ID, of(fromString(DEFENDANT_ID)), referenceDataQueryService).collect(toList());
+
+        final Optional<CaseCreatedSuccessfullyWithWarnings> caseCreated = getFirstMatching(eventList, CaseCreatedSuccessfullyWithWarnings.class);
+        assertThat(caseCreated.isPresent(), is(true));
+        assertThat(caseCreated.get().getCivilCaseWarnings(), is(civilCaseWarnings));
+    }
+
+    @Test
+    public void shouldNotIncludeCivilCaseWarningsOnCaseCreatedSuccessfullyWithWarningsForNonCivilChannel() {
+        final List<CaseProblem> civilCaseWarnings = of(caseProblem()
+                .withProsecutorCaseReference(PROSECUTOR_CASE_REFERENCE)
+                .withProblems(of(problem().withCode(OFFENCE_NOT_IN_EFFECT_ON_OFFENCE_COMMITTED_DATE).build()))
+                .build());
+
+        seedAcceptCaseWithWarnings(CPPI, civilCaseWarnings);
+
+        final List<Object> eventList = prosecutionCaseFile.acceptCase(CASE_ID, of(fromString(DEFENDANT_ID)), referenceDataQueryService).collect(toList());
+
+        final Optional<CaseCreatedSuccessfullyWithWarnings> caseCreated = getFirstMatching(eventList, CaseCreatedSuccessfullyWithWarnings.class);
+        assertThat(caseCreated.isPresent(), is(true));
+        assertThat(caseCreated.get().getCivilCaseWarnings(), empty());
+    }
+
+    private void seedAcceptCaseWithWarnings(final Channel channel, final List<CaseProblem> civilCaseWarnings) {
+        ReflectionUtil.setField(prosecutionCaseFile, "prosecutionReceived", TRUE);
+        ReflectionUtil.setField(prosecutionCaseFile, "caseType", CC);
+        ReflectionUtil.setField(prosecutionCaseFile, "channel", channel);
+        ReflectionUtil.setField(prosecutionCaseFile, "warnings", of(problem().withCode(OFFENCE_NOT_IN_EFFECT_ON_OFFENCE_COMMITTED_DATE).build()));
+        ReflectionUtil.setField(prosecutionCaseFile, "civilCaseWarnings", civilCaseWarnings);
     }
 
 

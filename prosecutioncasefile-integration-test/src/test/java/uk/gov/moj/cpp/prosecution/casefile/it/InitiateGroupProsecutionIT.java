@@ -46,6 +46,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.stub.TestUtils.readFile;
 public class InitiateGroupProsecutionIT extends BaseIT {
     private static final String CASE_MARKER_CODE = "ABC";
     private static final String PUBLIC_COURT_APPLICATION_SUMMONS_APPROVED = "public.progression.court-application-summons-approved";
+    private static final String PUBLIC_GROUP_PROSECUTION_CASES_CREATED = "public.progression.group-prosecution-cases-created";
     private static final String PUBLIC_COURT_APPLICATION_SUMMONS_REJECTED = "public.progression.court-application-summons-rejected";
 
     private UUID groupId;
@@ -117,11 +118,23 @@ public class InitiateGroupProsecutionIT extends BaseIT {
         initiateGroupProsecutionHelper.verifyUploadMaterialCommandCalled();
         initiateGroupProsecutionHelper.verifyAddCourtDocumentCalled(caseId1.toString());
 
+        final JsonEnvelope parkedForSummonsApplicationApprovalEvent = initiateGroupProsecutionHelper.thenPublicGroupParkedForSummonsApplicationApprovalEventShouldBeRaised();
+        assertThat(parkedForSummonsApplicationApprovalEvent.payloadAsJsonObject().getString("channel"), is("CIVIL"));
+        assertThat(parkedForSummonsApplicationApprovalEvent.payloadAsJsonObject().getString("groupId"), is(groupId.toString()));
+
         final UUID applicationId = randomUUID();
         stubForQueryApplication(applicationId);
         sendPublicEventCourtApplicationSummonsApproved(caseId1, applicationId);
         initiateGroupProsecutionHelper.thenPrivateGroupCasesReceivedEventShouldBeRaised();
         initiateGroupProsecutionHelper.verifyInitiateCourtProceedingsForGroupCasesCommand(caseId1.toString());
+
+        // group-submission-approved (and its pre-existing sibling group-submission-succeeded) only
+        // fire once Progression confirms the group cases were actually created — a separate,
+        // later public event from the summons-approved one sent above.
+        sendPublicEventGroupProsecutionCasesCreated(groupId);
+
+        final JsonEnvelope submissionApprovedEvent = initiateGroupProsecutionHelper.thenPublicGroupSubmissionApprovedEventShouldBeRaised();
+        assertThat(submissionApprovedEvent.payloadAsJsonObject().getString("groupId"), is(groupId.toString()));
     }
 
 
@@ -137,9 +150,13 @@ public class InitiateGroupProsecutionIT extends BaseIT {
         initiateGroupProsecutionHelper.verifyCreateDocumentCalled(asList("dateReceived"));
         initiateGroupProsecutionHelper.verifyUploadMaterialCommandCalled();
         initiateGroupProsecutionHelper.verifyAddCourtDocumentCalled(caseId1.toString());
+        initiateGroupProsecutionHelper.thenPublicGroupParkedForSummonsApplicationApprovalEventShouldBeRaised();
 
         sendPublicEventCourtApplicationSummonsRejected(caseId1, randomUUID());
         initiateGroupProsecutionHelper.thenPublicGroupProsecutionRejectedEventShouldBeRaised();
+
+        final JsonEnvelope submissionRejectedEvent = initiateGroupProsecutionHelper.thenPublicGroupSubmissionRejectedEventShouldBeRaised();
+        assertThat(submissionRejectedEvent.payloadAsJsonObject().getString("groupId"), is(groupId.toString()));
     }
 
     @Test
@@ -180,6 +197,18 @@ public class InitiateGroupProsecutionIT extends BaseIT {
         final InitiateGroupProsecutionHelper initiateGroupProsecutionHelper = new InitiateGroupProsecutionHelper();
         initiateGroupProsecutionHelper.initiateGroupProsecution(payload);
         initiateGroupProsecutionHelper.thenPublicGroupProsecutionRejectedEventShouldBeRaised();
+    }
+
+    private void sendPublicEventGroupProsecutionCasesCreated(final UUID groupId) {
+        final JsonObject payload = createObjectBuilder()
+                .add("groupId", groupId.toString())
+                .build();
+
+        sendPublicEvent(PUBLIC_GROUP_PROSECUTION_CASES_CREATED, envelopeFrom(metadataBuilder()
+                .withId(randomUUID())
+                .withName(PUBLIC_GROUP_PROSECUTION_CASES_CREATED)
+                .withUserId(randomUUID().toString())
+                .build(), payload));
     }
 
     private void sendPublicEventCourtApplicationSummonsApproved(final UUID caseId, final UUID applicationId) {
@@ -263,6 +292,24 @@ public class InitiateGroupProsecutionIT extends BaseIT {
         final JsonObject problem = problems.getJsonObject(0);
         assertThat(problem.getString("code"), is("CASE_INITIATION_CODE_INVALID"));
         assertThat(problem.getJsonArray("values").getJsonObject(0).getString("value"), is(expectedInitiationCode));
+    }
+
+    /**
+     * Covers the PENDING -> FAILED status transition for a civil group submission rejected for
+     * OFFENCE_CODE_NOT_SUPPORTED (an offence code reference data doesn't recognise) — CPCI's
+     * business-validation-failure scenario. Deliberately a single defendant/single case so only
+     * the offence-code rule fires (not the unrelated more-than-one-defendant group rule).
+     */
+    @Test
+    void shouldRaiseGroupProsecutionRejectedWhenOffenceCodeIsNotSupported() {
+        final String payload = replaceValues(readFile("command-json/prosecutioncasefile.command.initiate-civil-group-prosecution-invalid-offence-code.json"), "O");
+        final InitiateGroupProsecutionHelper initiateGroupProsecutionHelper = new InitiateGroupProsecutionHelper();
+        initiateGroupProsecutionHelper.initiateGroupProsecution(payload);
+        final JsonEnvelope rejectedEvent = initiateGroupProsecutionHelper.thenPublicGroupProsecutionRejectedEventShouldBeRaised();
+        assertThat(rejectedEvent.payloadAsJsonObject().getString("channel"), is("CIVIL"));
+        // OFFENCE_CODE_NOT_SUPPORTED is a defendant/offence-level problem, so it is carried on
+        // defendantErrors rather than caseErrors (which is reserved for case-level validation rules).
+        assertThat(rejectedEvent.payloadAsJsonObject().get("defendantErrors").toString(), containsString("OFFENCE_CODE_NOT_SUPPORTED"));
     }
 
     @Test

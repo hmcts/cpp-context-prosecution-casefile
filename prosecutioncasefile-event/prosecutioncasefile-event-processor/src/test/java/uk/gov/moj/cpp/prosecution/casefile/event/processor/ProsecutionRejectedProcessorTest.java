@@ -11,6 +11,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithRandomUUID;
@@ -40,6 +41,7 @@ import uk.gov.moj.cps.prosecutioncasefile.domain.event.CcProsecutionRejected;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.ManualCaseReceived;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicCivilProsecutionRejected;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicProsecutionRejected;
+import uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicSubmissionRejected;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.SjpProsecutionRejected;
 
 import java.util.ArrayList;
@@ -75,7 +77,7 @@ public class ProsecutionRejectedProcessorTest {
     private ArgumentCaptor<Envelope<PublicProsecutionRejected>> publicEventCaptor;
 
     @Captor
-    private ArgumentCaptor<Envelope<PublicCivilProsecutionRejected>> publicCivilEventCaptor;
+    private ArgumentCaptor<Envelope> publicCivilEventCaptor;
 
     @Captor
     private ArgumentCaptor<Envelope<ManualCaseReceived>> publicMCCEventCaptor;
@@ -239,8 +241,8 @@ public class ProsecutionRejectedProcessorTest {
 
         prosecutionRejectedProcessor.handleCCProsecutionRejected(envelope);
 
-        verify(this.sender).send(this.publicCivilEventCaptor.capture());
-        final Envelope<PublicCivilProsecutionRejected> publicCivilEventCaptorValue = publicCivilEventCaptor.getValue();
+        verify(this.sender, times(2)).send(this.publicCivilEventCaptor.capture());
+        final Envelope<PublicCivilProsecutionRejected> publicCivilEventCaptorValue = publicCivilEventCaptor.getAllValues().get(0);
 
         assertThat(publicCivilEventCaptorValue.metadata().name(), is("public.prosecutioncasefile.civil-prosecution-rejected"));
 
@@ -271,8 +273,8 @@ public class ProsecutionRejectedProcessorTest {
 
         prosecutionRejectedProcessor.handleCCProsecutionRejected(envelope);
 
-        verify(this.sender).send(this.publicCivilEventCaptor.capture());
-        final PublicCivilProsecutionRejected publishedPayload = publicCivilEventCaptor.getValue().payload();
+        verify(this.sender, times(2)).send(this.publicCivilEventCaptor.capture());
+        final PublicCivilProsecutionRejected publishedPayload = (PublicCivilProsecutionRejected) publicCivilEventCaptor.getAllValues().get(0).payload();
 
         final List<CaseProblem> caseErrors = publishedPayload.getCaseErrors();
         assertThat(caseErrors, hasSize(1));
@@ -293,8 +295,8 @@ public class ProsecutionRejectedProcessorTest {
 
         prosecutionRejectedProcessor.handleCCProsecutionRejected(envelope);
 
-        verify(this.sender).send(this.publicCivilEventCaptor.capture());
-        final PublicCivilProsecutionRejected publishedPayload = publicCivilEventCaptor.getValue().payload();
+        verify(this.sender, times(2)).send(this.publicCivilEventCaptor.capture());
+        final PublicCivilProsecutionRejected publishedPayload = (PublicCivilProsecutionRejected) publicCivilEventCaptor.getAllValues().get(0).payload();
 
         assertThat(publishedPayload.getCaseErrors(), is(civilCaseErrors));
     }
@@ -323,12 +325,27 @@ public class ProsecutionRejectedProcessorTest {
 
         prosecutionRejectedProcessor.handleCCProsecutionRejected(envelope);
 
-        verify(this.sender).send(this.publicCivilEventCaptor.capture());
-        final PublicCivilProsecutionRejected publishedPayload = publicCivilEventCaptor.getValue().payload();
+        verify(this.sender, times(2)).send(this.publicCivilEventCaptor.capture());
+        final PublicCivilProsecutionRejected publishedPayload = (PublicCivilProsecutionRejected) publicCivilEventCaptor.getAllValues().get(0).payload();
 
         assertThat(publishedPayload.getCaseErrors(), is(notNullValue()));
         assertThat(publishedPayload.getCaseErrors(), is(empty()));
         assertThat(publishedPayload.getDefendantErrors(), hasSize(1));
+    }
+
+    @Test
+    public void shouldEmitSubmissionRejectedPublicEventWhenCCProsecutionRejectedWhenChannelCivil() {
+        final Envelope<CcProsecutionRejected> envelope = getCcProsecutionRejectedEnvelope(CIVIL, new ArrayList<>());
+
+        prosecutionRejectedProcessor.handleCCProsecutionRejected(envelope);
+
+        verify(this.sender, times(2)).send(this.publicCivilEventCaptor.capture());
+        final PublicSubmissionRejected publishedPayload = (PublicSubmissionRejected) publicCivilEventCaptor.getAllValues().get(1).payload();
+
+        assertThat(publicCivilEventCaptor.getAllValues().get(1).metadata().name(), is("public.prosecutioncasefile.submission-rejected"));
+        assertThat(publishedPayload.getCaseId(), is(envelope.payload().getProsecution().getCaseDetails().getCaseId()));
+        assertThat(publishedPayload.getExternalId(), is(envelope.payload().getExternalId()));
+        assertThat(publishedPayload.getChannel(), is(CIVIL));
     }
 
 }

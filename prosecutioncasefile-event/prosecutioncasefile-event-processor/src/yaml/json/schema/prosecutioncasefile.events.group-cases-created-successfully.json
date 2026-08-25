@@ -10,6 +10,14 @@
     "externalId": {
       "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid",
       "description": "ID originating from the client for referencing the original message"
+    },
+    "channel": {
+      "type": "string",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/pcf-definitions.json#/definitions/channel"
+    },
+    "initiationCode": {
+      "type": "string",
+      "description": "The initiation code of the group's master case, e.g. 'S' for a summons application"
     }
   },
   "required": [

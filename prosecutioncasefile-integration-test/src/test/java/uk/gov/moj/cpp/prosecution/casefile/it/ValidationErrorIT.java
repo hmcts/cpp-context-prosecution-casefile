@@ -695,6 +695,31 @@ class ValidationErrorIT extends BaseIT {
         assertThat(publicEvent.payloadAsJsonObject().getJsonArray("defendantErrors").isEmpty(), is(false));
     }
 
+    /**
+     * Covers the PENDING -> FAILED status transition for a civil single-case submission rejected
+     * for OFFENCE_CODE_NOT_SUPPORTED (an offence code reference data doesn't recognise) — CPCI's
+     * business-validation-failure scenario. No offence stub is registered for this test, so "XX"
+     * is deliberately never resolved by reference data, matching the existing non-civil precedent
+     * in shouldRaiseValidationErrorWhenPayloadHasOffenceCodeErrors.
+     */
+    @Test
+    void shouldRaisePublicCivilProsecutionRejectedWhenOffenceCodeIsNotSupported() {
+        final UUID caseId = randomUUID();
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-civil-invalid-offence-code.json");
+        final String ccPayLoad = replaceValues(staticPayLoad, caseId.toString());
+        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
+        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
+
+        final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
+        assertThat(privateEvent.isPresent(), is(true));
+        assertCivilDefendantErrorsContain(privateEvent.get(), "OFFENCE_CODE_NOT_SUPPORTED");
+
+        final JsonEnvelope publicEvent = initiateCCProsecutionHelper.thenPublicCivilProsecutionRejectedEventShouldBeRaised(caseId);
+        assertThat(publicEvent.payloadAsJsonObject().getString("channel"), is("CIVIL"));
+        assertThat(publicEvent.payloadAsJsonObject().getJsonArray("defendantErrors").isEmpty(), is(false));
+        assertThat(publicEvent.payloadAsJsonObject().getJsonArray("defendantErrors").toString(), CoreMatchers.containsString("OFFENCE_CODE_NOT_SUPPORTED"));
+    }
+
     @Test
     void shouldRaiseValidationErrorWhenCivilCasePayloadHasUnrecognisedProsecutorOucode() {
         stubOffencesForOffenceCodeForGroupCases();

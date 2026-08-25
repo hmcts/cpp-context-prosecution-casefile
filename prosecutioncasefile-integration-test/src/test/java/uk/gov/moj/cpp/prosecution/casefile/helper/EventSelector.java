@@ -117,6 +117,12 @@ public class EventSelector {
     public static final String PUBLIC_STAGING_PROSECUTORS_CPS_SERVE_PTPH_RECEIVED = "public.stagingprosecutors.cps-serve-ptph-received";
     public static final String PUBLIC_GROUP_PROSECUTION_REJECTED_EVENT = "public.prosecutioncasefile.group-prosecution-rejected";
     public static final String PUBLIC_CIVIL_PROSECUTION_REJECTED_EVENT = "public.prosecutioncasefile.civil-prosecution-rejected";
+    public static final String PUBLIC_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL_EVENT = "public.prosecutioncasefile.parked-for-summons-application-approval";
+    public static final String PUBLIC_GROUP_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL_EVENT = "public.prosecutioncasefile.group-parked-for-summons-application-approval";
+    public static final String PUBLIC_SUBMISSION_APPROVED_EVENT = "public.prosecutioncasefile.submission-approved";
+    public static final String PUBLIC_GROUP_SUBMISSION_APPROVED_EVENT = "public.prosecutioncasefile.group-submission-approved";
+    public static final String PUBLIC_SUBMISSION_REJECTED_EVENT = "public.prosecutioncasefile.submission-rejected";
+    public static final String PUBLIC_GROUP_SUBMISSION_REJECTED_EVENT = "public.prosecutioncasefile.group-submission-rejected";
 
 
 }

@@ -60,6 +60,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.validation.provider.CcProsecut
 import static uk.gov.moj.cpp.prosecution.casefile.validation.provider.CcProsecutionValidationRuleProvider.getDefendantValidationRules;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.provider.SjpProsecutionWarningRuleProvider.getWarningRules;
 import static uk.gov.moj.cps.prosecutioncasefile.domain.event.BulkscanMaterialRejected.bulkscanMaterialRejected;
+import static uk.gov.moj.cps.prosecutioncasefile.domain.event.CaseCreatedSuccessfully.caseCreatedSuccessfully;
 import static uk.gov.moj.cps.prosecutioncasefile.domain.event.CaseCreatedSuccessfullyWithWarnings.caseCreatedSuccessfullyWithWarnings;
 import static uk.gov.moj.cps.prosecutioncasefile.domain.event.CcProsecutionRejected.ccProsecutionRejected;
 import static uk.gov.moj.cps.prosecutioncasefile.domain.event.IdpcDefendantMatched.idpcDefendantMatched;
@@ -889,7 +890,12 @@ public class ProsecutionCaseFile implements Aggregate {
                 final List<CaseProblem> civilCaseWarningsForEvent = CIVIL.equals(this.channel) ? this.civilCaseWarnings : EMPTY_LIST;
 
                 builder.accept(this.warnings.isEmpty()
-                        ? new CaseCreatedSuccessfully(caseId, this.channel, externalId)
+                        ? caseCreatedSuccessfully()
+                                .withCaseId(caseId)
+                                .withChannel(this.channel)
+                                .withExternalId(externalId)
+                                .withInitiationCode(this.initiationCode)
+                                .build()
                         : caseCreatedSuccessfullyWithWarnings()
                                 .withCaseId(caseId)
                                 .withCaseWarnings(EMPTY_LIST)
@@ -1907,7 +1913,7 @@ public class ProsecutionCaseFile implements Aggregate {
                 .build()
         );
 
-        if (MCC.equals(this.channel) || CPPI.equals(this.channel)) {
+        if (MCC.equals(this.channel) || CPPI.equals(this.channel) || CIVIL.equals(this.channel)) {
             final List<Defendant> rejectedDefendants = defendants.stream().filter(defendant -> defendantIds.contains(fromString(defendant.getId()))).collect(toList());
             builder.add(ccProsecutionRejected()
                     .withProsecution(Prosecution.prosecution()
@@ -1915,6 +1921,7 @@ public class ProsecutionCaseFile implements Aggregate {
                             .withChannel(this.channel)
                             .withDefendants(rejectedDefendants).build())
                     .withCaseErrors(ImmutableList.of(newProblem(SUMMONS_APPLICATION_REJECTED, "rejectionReasons", summonsApplicationRejectedDetails.getSummonsRejectedOutcome().getReasons())))
+                    .withExternalId(getExternalIdFromDefendantIds(defendantIds))
                     .build()
             );
         }

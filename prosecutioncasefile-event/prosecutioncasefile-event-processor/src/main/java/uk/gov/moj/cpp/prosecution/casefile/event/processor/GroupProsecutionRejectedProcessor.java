@@ -6,6 +6,7 @@ import uk.gov.justice.services.core.sender.Sender;
 import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.GroupProsecutionRejected;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicGroupProsecutionRejected;
+import uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicGroupSubmissionRejected;
 
 import javax.inject.Inject;
 import java.util.UUID;
@@ -13,6 +14,7 @@ import java.util.UUID;
 import static uk.gov.justice.services.core.annotation.Component.EVENT_PROCESSOR;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;
 import static uk.gov.justice.services.messaging.JsonEnvelope.metadataFrom;
+import static uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicGroupSubmissionRejected.publicGroupSubmissionRejected;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +24,7 @@ public class GroupProsecutionRejectedProcessor {
     private static final Logger LOGGER = LoggerFactory.getLogger(GroupProsecutionRejectedProcessor.class);
 
     private static final String PUBLIC_GROUP_PROSECUTION_REJECTED_EVENT = "public.prosecutioncasefile.group-prosecution-rejected";
+    private static final String PUBLIC_GROUP_SUBMISSION_REJECTED_EVENT = "public.prosecutioncasefile.group-submission-rejected";
 
     @Inject
     private Sender sender;
@@ -41,6 +44,15 @@ public class GroupProsecutionRejectedProcessor {
                         .withExternalId(prosecutionRejected.getExternalId())
                         .withChannel(prosecutionRejected.getChannel())
                         .build()));
+
+        final PublicGroupSubmissionRejected publicGroupSubmissionRejected = publicGroupSubmissionRejected()
+                .withGroupId(groupId)
+                .withExternalId(prosecutionRejected.getExternalId())
+                .withChannel(prosecutionRejected.getChannel())
+                .build();
+        sender.send(envelopeFrom(
+                metadataFrom(groupProsecutionRejectedEvent.metadata()).withName(PUBLIC_GROUP_SUBMISSION_REJECTED_EVENT),
+                publicGroupSubmissionRejected));
 
     }
 

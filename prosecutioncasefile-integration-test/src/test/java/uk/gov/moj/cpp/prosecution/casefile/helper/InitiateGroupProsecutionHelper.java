@@ -35,6 +35,9 @@ import static org.hamcrest.core.IsNull.notNullValue;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_GROUP_CASES_PARKED_FOR_APPROVAL;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_GROUP_CASES_RECEIVED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_GROUP_ID_RECORDED_FOR_SUMMONS_APPLICATION;
+import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_GROUP_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL_EVENT;
+import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_GROUP_SUBMISSION_APPROVED_EVENT;
+import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_GROUP_SUBMISSION_REJECTED_EVENT;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_GROUP_PROSECUTION_REJECTED_EVENT;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.MaterialStub.UPLOAD_CASE_DOCUMENT_COMMAND_TYPE;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.MaterialStub.UPLOAD_FILE_URL;
@@ -54,6 +57,9 @@ public class InitiateGroupProsecutionHelper extends AbstractTestHelper {
     protected JmsMessageConsumerClient groupCasesReceivedEventsConsumer = createPrivateConsumer(EVENT_GROUP_CASES_RECEIVED);
     protected JmsMessageConsumerClient groupCasesParkedForApprovalEventsConsumer = createPrivateConsumer(EVENT_GROUP_CASES_PARKED_FOR_APPROVAL);
     protected JmsMessageConsumerClient groupProsecutionRejectedEventsConsumer = createPublicConsumer(PUBLIC_GROUP_PROSECUTION_REJECTED_EVENT);
+    protected JmsMessageConsumerClient groupParkedForSummonsApplicationApprovalEventsConsumer = createPublicConsumer(PUBLIC_GROUP_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL_EVENT);
+    protected JmsMessageConsumerClient groupSubmissionApprovedEventsConsumer = createPublicConsumer(PUBLIC_GROUP_SUBMISSION_APPROVED_EVENT);
+    protected JmsMessageConsumerClient groupSubmissionRejectedEventsConsumer = createPublicConsumer(PUBLIC_GROUP_SUBMISSION_REJECTED_EVENT);
     protected JmsMessageConsumerClient groupIdRecorderdForSummonsApplicationEventsConsumer = createPrivateConsumer(EVENT_GROUP_ID_RECORDED_FOR_SUMMONS_APPLICATION);
 
     protected final RestClient restClient = new RestClient();
@@ -84,6 +90,24 @@ public class InitiateGroupProsecutionHelper extends AbstractTestHelper {
 
     public JsonEnvelope thenPublicGroupProsecutionRejectedEventShouldBeRaised() {
         final JsonEnvelope jsonEnvelope = QueueUtil.getEventFromQueue(this.groupProsecutionRejectedEventsConsumer);
+        assertThat(jsonEnvelope, notNullValue());
+        return jsonEnvelope;
+    }
+
+    public JsonEnvelope thenPublicGroupParkedForSummonsApplicationApprovalEventShouldBeRaised() {
+        final JsonEnvelope jsonEnvelope = QueueUtil.getEventFromQueue(this.groupParkedForSummonsApplicationApprovalEventsConsumer);
+        assertThat(jsonEnvelope, notNullValue());
+        return jsonEnvelope;
+    }
+
+    public JsonEnvelope thenPublicGroupSubmissionApprovedEventShouldBeRaised() {
+        final JsonEnvelope jsonEnvelope = QueueUtil.getEventFromQueue(this.groupSubmissionApprovedEventsConsumer);
+        assertThat(jsonEnvelope, notNullValue());
+        return jsonEnvelope;
+    }
+
+    public JsonEnvelope thenPublicGroupSubmissionRejectedEventShouldBeRaised() {
+        final JsonEnvelope jsonEnvelope = QueueUtil.getEventFromQueue(this.groupSubmissionRejectedEventsConsumer);
         assertThat(jsonEnvelope, notNullValue());
         return jsonEnvelope;
     }

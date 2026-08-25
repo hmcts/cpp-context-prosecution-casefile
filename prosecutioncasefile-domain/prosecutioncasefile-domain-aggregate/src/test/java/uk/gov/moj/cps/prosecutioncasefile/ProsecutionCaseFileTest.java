@@ -1496,7 +1496,11 @@ public class ProsecutionCaseFileTest {
                 of(buildDefendant(FORENAME, updatedSurname, BIRTH_DATE, THIRD_DEFENDANT_ID, randomAlphabetic(10))), SPI, SUMMONS_INITIATION_CODE, EXTERNAL_ID_2);
         prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID, firstMessage, emptyList()));
         prosecutionCaseFile.apply(new CcCaseReceived(firstMessage, summonsApprovedOutcome().withPersonalService(true).withProsecutorCost("£300.00").withSummonsSuppressed(false).build(), randomUUID()));
-        prosecutionCaseFile.apply(new CaseCreatedSuccessfully(CASE_ID, SPI, EXTERNAL_ID));
+        prosecutionCaseFile.apply(CaseCreatedSuccessfully.caseCreatedSuccessfully()
+                .withCaseId(CASE_ID)
+                .withChannel(SPI)
+                .withExternalId(EXTERNAL_ID)
+                .build());
         prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID_2, secondMessage, emptyList()));
 
         final SummonsApplicationApprovedDetails secondSummonsApplicationApprovedDetails = getSummonsApplicationApprovedDetails(APPLICATION_ID_2);
@@ -1525,7 +1529,11 @@ public class ProsecutionCaseFileTest {
         prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID, firstMessage, emptyList()));
         prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID_2, secondMessage, emptyList()));
         prosecutionCaseFile.apply(new CcCaseReceived(firstMessage, summonsApprovedOutcome().withPersonalService(true).withProsecutorCost("£300.00").withSummonsSuppressed(false).build(), randomUUID()));
-        prosecutionCaseFile.apply(new CaseCreatedSuccessfully(CASE_ID, SPI, EXTERNAL_ID));
+        prosecutionCaseFile.apply(CaseCreatedSuccessfully.caseCreatedSuccessfully()
+                .withCaseId(CASE_ID)
+                .withChannel(SPI)
+                .withExternalId(EXTERNAL_ID)
+                .build());
 
         final SummonsApplicationApprovedDetails secondSummonsApplicationApprovedDetails = getSummonsApplicationApprovedDetails(APPLICATION_ID_2);
         final Stream<Object> objectStream = prosecutionCaseFile.approveCaseDefendants(secondSummonsApplicationApprovedDetails, of(), of(), isCivil);
@@ -1635,6 +1643,35 @@ public class ProsecutionCaseFileTest {
         final List<Object> subsequentCaseMessageEventList = objectStreamPostSubsequentMessageReceived.collect(toList());
         assertThat(subsequentCaseMessageEventList.get(0), is(instanceOf(DefendantsParkedForSummonsApplicationApproval.class)));
         assertThat(prosecutionCaseFile.getDefendants(), hasSize(1));
+    }
+
+    @Test
+    public void shouldRaiseProsecutionCaseRejectedForCivilChannel() {
+        final SummonsApplicationRejectedDetails applicationRejectedCommandPayload = summonsApplicationRejectedDetails()
+                .withApplicationId(APPLICATION_ID)
+                .withCaseId(CASE_ID)
+                .withSummonsRejectedOutcome(summonsRejectedOutcome()
+                        .withReasons(ImmutableList.of("First Reason"))
+                        .build())
+                .build();
+        final ProsecutionWithReferenceData prosecutionWithReferenceData = getProsecutionWithReferenceData(
+                of(buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE)), CIVIL, "S");
+        prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID, prosecutionWithReferenceData, emptyList()));
+
+        final Stream<Object> objectStreamPostApplicationRejection = prosecutionCaseFile.rejectCaseDefendants(applicationRejectedCommandPayload);
+
+        final List<Object> rejectionEventList = objectStreamPostApplicationRejection.collect(toList());
+        assertThat(rejectionEventList.get(0), is(instanceOf(uk.gov.moj.cps.prosecutioncasefile.domain.event.SummonsApplicationRejected.class)));
+        assertThat(rejectionEventList.get(1), is(instanceOf(CcProsecutionRejected.class)));
+        final uk.gov.moj.cps.prosecutioncasefile.domain.event.SummonsApplicationRejected applicationRejected = (uk.gov.moj.cps.prosecutioncasefile.domain.event.SummonsApplicationRejected) rejectionEventList.get(0);
+        assertThat(applicationRejected.getDefendantIds(), contains(fromString(DEFENDANT_ID)));
+        assertThat(applicationRejected.getSummonsRejectedOutcome().getReasons(), contains("First Reason"));
+        assertThat(prosecutionCaseFile.isProsecutionReceived(), is(false));
+        assertThat(prosecutionCaseFile.getDefendants(), empty());
+
+        final CcProsecutionRejected ccProsecutionRejected = (CcProsecutionRejected) rejectionEventList.get(1);
+        assertThat(ccProsecutionRejected.getProsecution().getChannel(), is(CIVIL));
+        assertThat(ccProsecutionRejected.getExternalId(), is(EXTERNAL_ID));
     }
 
     @MethodSource("nonSpiChannels")

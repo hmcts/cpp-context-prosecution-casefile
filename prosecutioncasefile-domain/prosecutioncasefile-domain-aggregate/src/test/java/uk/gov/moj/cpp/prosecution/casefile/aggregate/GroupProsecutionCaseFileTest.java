@@ -67,15 +67,14 @@ public class GroupProsecutionCaseFileTest {
                 Optional.of(OrganisationUnitWithCourtroomReferenceData.organisationUnitWithCourtroomReferenceData().build());
 
         when(referenceDataQueryService.retrieveOrganisationUnitWithCourtroom("C55BN00")).thenReturn(optionalOrganisationUnitWithCourtroomReferenceData);
-        List<SummonsCodeReferenceData> summonsCodeReferenceDataList = new ArrayList<SummonsCodeReferenceData>();
-        summonsCodeReferenceDataList.add(SummonsCodeReferenceData.summonsCodeReferenceData().withSummonsCode("S02").build());
-        when(referenceDataQueryService.retrieveSummonsCodes()).thenReturn(summonsCodeReferenceDataList);
         final List<GroupProsecutionWithReferenceData> groupProsecutionWithReferenceDataList = new ArrayList<>();
         final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
         referenceDataVO.setInitiationTypes(Arrays.asList("S"));
-        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData1 = buildGroupProsecutionWithReferenceData(INITIATION_CODE_FOR_SUMMONS, randomUUID(), true, "URN1");
+        // "A" is the only valid civil summons code (SummonsCodeValidationRule) — both cases are
+        // civil (withIsCivil(true)), so both must use it for this scenario to actually park.
+        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData1 = buildGroupProsecutionWithReferenceData(INITIATION_CODE_FOR_SUMMONS, randomUUID(), true, "URN1", "A");
         groupProsecutionWithReferenceData1.setReferenceDataVO(referenceDataVO);
-        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData2 = buildGroupProsecutionWithReferenceData(INITIATION_CODE_FOR_SUMMONS, randomUUID(), false, "URN2");
+        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData2 = buildGroupProsecutionWithReferenceData(INITIATION_CODE_FOR_SUMMONS, randomUUID(), false, "URN2", "A");
         groupProsecutionWithReferenceData2.setReferenceDataVO(referenceDataVO);
         groupProsecutionWithReferenceDataList.add(groupProsecutionWithReferenceData1);
         groupProsecutionWithReferenceDataList.add(groupProsecutionWithReferenceData2);
@@ -322,6 +321,10 @@ public class GroupProsecutionCaseFileTest {
     }
 
     private GroupProsecutionWithReferenceData buildGroupProsecutionWithReferenceData(final String initiationCode, final UUID prosecutionCaseId, final Boolean isGroupMaster, final String prosecutorCaseReference){
+        return buildGroupProsecutionWithReferenceData(initiationCode, prosecutionCaseId, isGroupMaster, prosecutorCaseReference, "S02");
+    }
+
+    private GroupProsecutionWithReferenceData buildGroupProsecutionWithReferenceData(final String initiationCode, final UUID prosecutionCaseId, final Boolean isGroupMaster, final String prosecutorCaseReference, final String summonsCode){
         return new GroupProsecutionWithReferenceData(GroupProsecution.groupProsecution()
                 .withGroupId(groupId)
                 .withIsCivil(true)
@@ -329,7 +332,7 @@ public class GroupProsecutionCaseFileTest {
                 .withCaseDetails(CaseDetails.caseDetails()
                         .withCaseId(prosecutionCaseId)
                         .withInitiationCode(initiationCode)
-                        .withSummonsCode("S02")
+                        .withSummonsCode(summonsCode)
                         .withProsecutorCaseReference(prosecutorCaseReference)
                         .build())
                 .withDefendants(asList(Defendant.defendant()

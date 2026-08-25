@@ -14,10 +14,6 @@
     "channel": {
       "type": "string",
       "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/pcf-definitions.json#/definitions/channel"
-    },
-    "initiationCode": {
-      "type": "string",
-      "description": "The initiation code of the case that was created, e.g. 'S' for a summons application"
     }
   },
   "required": [

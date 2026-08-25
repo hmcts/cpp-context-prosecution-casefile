@@ -10,7 +10,6 @@ import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CIVIL;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.MCC;
 import static uk.gov.moj.cps.prosecutioncasefile.domain.event.ManualCaseReceived.manualCaseReceived;
 import static uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicProsecutionRejected.publicProsecutionRejected;
-import static uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicSubmissionRejected.publicSubmissionRejected;
 
 import uk.gov.justice.services.core.annotation.Handles;
 import uk.gov.justice.services.core.annotation.ServiceComponent;
@@ -24,7 +23,6 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecution;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.CcProsecutionRejected;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.ManualCaseReceived;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicCivilProsecutionRejected;
-import uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicSubmissionRejected;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.SjpProsecutionRejected;
 
 import java.util.Collection;
@@ -39,7 +37,6 @@ public class ProsecutionRejectedProcessor {
     private static final String PUBLIC_PROSECUTION_REJECTED_EVENT = "public.prosecutioncasefile.prosecution-rejected";
     private static final String PUBLIC_PROSECUTIONCASEFILE_MANUAL_CASE_RECEIVED = "public.prosecutioncasefile.manual-case-received";
     private static final String PUBLIC_CIVIL_PROSECUTION_REJECTED_EVENT = "public.prosecutioncasefile.civil-prosecution-rejected";
-    private static final String PUBLIC_SUBMISSION_REJECTED_EVENT = "public.prosecutioncasefile.submission-rejected";
 
     @Inject
     private Sender sender;
@@ -90,14 +87,6 @@ public class ProsecutionRejectedProcessor {
                             .withCaseId(ccProsecutionRejected.getProsecution().getCaseDetails().getCaseId())
                             .withCaseErrors(resolveCivilCaseErrors(ccProsecutionRejected))
                             .withDefendantErrors(ccProsecutionRejected.getDefendantErrors())
-                            .withExternalId(ccProsecutionRejected.getExternalId())
-                            .withChannel(ccProsecutionRejected.getProsecution().getChannel())
-                            .build()
-            ));
-            sender.send(envelopeFrom(
-                    metadataFrom(ccProsecutionRejectedEnvelope.metadata()).withName(PUBLIC_SUBMISSION_REJECTED_EVENT),
-                    publicSubmissionRejected()
-                            .withCaseId(ccProsecutionRejected.getProsecution().getCaseDetails().getCaseId())
                             .withExternalId(ccProsecutionRejected.getExternalId())
                             .withChannel(ccProsecutionRejected.getProsecution().getChannel())
                             .build()

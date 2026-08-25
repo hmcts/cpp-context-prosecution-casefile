@@ -261,18 +261,8 @@ public class GroupProsecutionCaseFile implements Aggregate {
         builder.accept(GroupCasesCreatedSuccessfully.groupCasesCreatedSuccessfully()
                 .withExternalId(this.externalId)
                 .withGroupId(groupId)
-                .withChannel(this.channel)
-                .withInitiationCode(getMasterCaseInitiationCode())
                 .build()
         );
         return apply(builder.build());
-    }
-
-    private String getMasterCaseInitiationCode() {
-        return this.groupProsecutions.stream()
-                .filter(GroupProsecution::getIsGroupMaster)
-                .findFirst()
-                .map(groupProsecution -> groupProsecution.getCaseDetails().getInitiationCode())
-                .orElse(null);
     }
 }

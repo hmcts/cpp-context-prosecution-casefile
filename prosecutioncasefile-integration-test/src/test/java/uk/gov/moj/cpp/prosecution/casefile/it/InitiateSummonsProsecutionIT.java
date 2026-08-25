@@ -196,8 +196,6 @@ class InitiateSummonsProsecutionIT extends BaseIT {
 
         helper.thenEventsShouldBeRaised(new String[]{EVENT_SELECTOR_CC_PROSECUTION_RECEIVED});
 
-        helper.whenProsecutionCaseIsConfirmedCreatedByProgression();
-
         final JsonEnvelope submissionApprovedEvent = helper.thenPublicSubmissionApprovedEventShouldBeRaised(helper.getCaseId());
         assertThat(submissionApprovedEvent.payloadAsJsonObject().getString("channel"), is("CIVIL"));
     }

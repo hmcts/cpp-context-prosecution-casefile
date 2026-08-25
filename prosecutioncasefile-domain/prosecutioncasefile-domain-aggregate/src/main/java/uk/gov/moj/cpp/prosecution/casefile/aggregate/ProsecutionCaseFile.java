@@ -894,7 +894,6 @@ public class ProsecutionCaseFile implements Aggregate {
                                 .withCaseId(caseId)
                                 .withChannel(this.channel)
                                 .withExternalId(externalId)
-                                .withInitiationCode(this.initiationCode)
                                 .build()
                         : caseCreatedSuccessfullyWithWarnings()
                                 .withCaseId(caseId)

@@ -6,7 +6,6 @@ import static java.util.UUID.randomUUID;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;
 import static uk.gov.justice.services.messaging.Envelope.metadataBuilder;
@@ -28,7 +27,6 @@ import uk.gov.moj.cps.prosecutioncasefile.domain.event.CaseCreatedSuccessfully;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.CaseCreatedSuccessfullyWithWarnings;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.ProsecutionSubmissionSucceeded;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.ProsecutionSubmissionSucceededWithWarnings;
-import uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicSubmissionApproved;
 
 import java.util.List;
 import java.util.UUID;
@@ -50,7 +48,6 @@ public class CaseCreatedEventProcessorTest {
     private static final String PROSECUTION_SUBMISSION_SUCCEEDED = "public.prosecutioncasefile.prosecution-submission-succeeded";
     private static final String CIVIL_PROSECUTION_SUBMISSION_SUCCEEDED = "public.prosecutioncasefile.civil.prosecution-submission-succeeded";
     private static final String PROSECUTION_SUBMISSION_SUCCEEDED_WITH_WARNINGS = "public.prosecutioncasefile.prosecution-submission-succeeded-with-warnings";
-    private static final String SUBMISSION_APPROVED = "public.prosecutioncasefile.submission-approved";
     private static final String DEFENDANT_REFERENCE = "TF12345";
     private static final String PROSECUTOR_CASE_REFERENCE = "TEST-CASE-REF";
     private final static String PROBLEM_VALUE_KEY_1 = "daysOverdue";
@@ -59,8 +56,6 @@ public class CaseCreatedEventProcessorTest {
     private final static String PROBLEM_VALUE_2 = "9";
     private final static String PROBLEM_CODE = "OFFENCE_OUT_OF_TIME";
     private final static Channel CHANNEL = randomEnum(Channel.class).next();
-    private static final String SUMMONS_INITIATION_CODE = "S";
-    private static final String NON_SUMMONS_INITIATION_CODE = "O";
 
     @InjectMocks
     private CaseCreatedEventProcessor caseCreatedEventProcessor;
@@ -72,9 +67,6 @@ public class CaseCreatedEventProcessorTest {
     private ArgumentCaptor<Envelope<ProsecutionSubmissionSucceeded>> captor;
 
     @Captor
-    private ArgumentCaptor<Envelope> multiCaptor;
-
-    @Captor
     private ArgumentCaptor<Envelope<ProsecutionSubmissionSucceededWithWarnings>> captorWithWarnings;
 
     @Test
@@ -84,12 +76,16 @@ public class CaseCreatedEventProcessorTest {
 
         caseCreatedEventProcessor.handleProsecutionCreated(envelope);
 
-        // No initiationCode is set here, so submission-approved never fires regardless of the
-        // randomised CHANNEL — only the succeeded-event name varies by channel.
         verify(sender).send(captor.capture());
+
         final Envelope<ProsecutionSubmissionSucceeded> receivedEnvelope = captor.getValue();
         final ProsecutionSubmissionSucceeded payload = receivedEnvelope.payload();
-        assertThat(receivedEnvelope.metadata().name(), is(CIVIL == CHANNEL ? CIVIL_PROSECUTION_SUBMISSION_SUCCEEDED : PROSECUTION_SUBMISSION_SUCCEEDED));
+        if(CIVIL == CHANNEL){
+            assertThat(receivedEnvelope.metadata().name(), is(CIVIL_PROSECUTION_SUBMISSION_SUCCEEDED));
+        } else {
+            assertThat(receivedEnvelope.metadata().name(), is(PROSECUTION_SUBMISSION_SUCCEEDED));
+        }
+
         assertThat(payload.getCaseId(), is(id));
         assertThat(payload.getExternalId(), is(envelope.payload().getExternalId()));
         assertThat(payload.getChannel(), is(CHANNEL));
@@ -99,57 +95,18 @@ public class CaseCreatedEventProcessorTest {
     public void shouldEmitCivilProsecutionSubmissionSucceededPublicEvent() {
 
         final UUID id = randomUUID();
-        final Envelope<CaseCreatedSuccessfully> envelope = buildCivilSummonsCaseCreatedSuccessfullyEnvelope(id);
+        final Envelope<CaseCreatedSuccessfully> envelope = buildCivilCaseCreatedSuccessfullyEnvelope(id);
 
         caseCreatedEventProcessor.handleProsecutionCreated(envelope);
 
-        verify(sender, times(2)).send(multiCaptor.capture());
+        verify(sender).send(captor.capture());
 
-        final Envelope<ProsecutionSubmissionSucceeded> receivedEnvelope = multiCaptor.getAllValues().get(0);
+        final Envelope<ProsecutionSubmissionSucceeded> receivedEnvelope = captor.getValue();
         final ProsecutionSubmissionSucceeded payload = receivedEnvelope.payload();
         assertThat(receivedEnvelope.metadata().name(), is(CIVIL_PROSECUTION_SUBMISSION_SUCCEEDED));
         assertThat(payload.getCaseId(), is(id));
         assertThat(payload.getExternalId(), is(envelope.payload().getExternalId()));
         assertThat(payload.getChannel(), is(CIVIL));
-    }
-
-    @Test
-    public void shouldEmitSubmissionApprovedPublicEventForCivilChannel() {
-        final UUID id = randomUUID();
-        final Envelope<CaseCreatedSuccessfully> envelope = buildCivilSummonsCaseCreatedSuccessfullyEnvelope(id);
-
-        caseCreatedEventProcessor.handleProsecutionCreated(envelope);
-
-        verify(sender, times(2)).send(multiCaptor.capture());
-
-        final Envelope<PublicSubmissionApproved> receivedEnvelope = multiCaptor.getAllValues().get(1);
-        final PublicSubmissionApproved payload = receivedEnvelope.payload();
-        assertThat(receivedEnvelope.metadata().name(), is(SUBMISSION_APPROVED));
-        assertThat(payload.getCaseId(), is(id));
-        assertThat(payload.getExternalId(), is(envelope.payload().getExternalId()));
-        assertThat(payload.getChannel(), is(CIVIL));
-    }
-
-    @Test
-    public void shouldNotEmitSubmissionApprovedForNonCivilChannel() {
-        final UUID id = randomUUID();
-        final Envelope<CaseCreatedSuccessfully> envelope = buildCaseCreatedSuccessfullyEnvelopeForChannel(id, Channel.MCC, SUMMONS_INITIATION_CODE);
-
-        caseCreatedEventProcessor.handleProsecutionCreated(envelope);
-
-        verify(sender).send(captor.capture());
-        assertThat(captor.getValue().metadata().name(), is(PROSECUTION_SUBMISSION_SUCCEEDED));
-    }
-
-    @Test
-    public void shouldNotEmitSubmissionApprovedForNonSummonsCivilCase() {
-        final UUID id = randomUUID();
-        final Envelope<CaseCreatedSuccessfully> envelope = buildCaseCreatedSuccessfullyEnvelopeForChannel(id, CIVIL, NON_SUMMONS_INITIATION_CODE);
-
-        caseCreatedEventProcessor.handleProsecutionCreated(envelope);
-
-        verify(sender).send(captor.capture());
-        assertThat(captor.getValue().metadata().name(), is(CIVIL_PROSECUTION_SUBMISSION_SUCCEEDED));
     }
 
 
@@ -209,11 +166,7 @@ public class CaseCreatedEventProcessorTest {
         return envelopeFrom(metadata, caseCreatedSuccessfully);
     }
 
-    private Envelope<CaseCreatedSuccessfully> buildCivilSummonsCaseCreatedSuccessfullyEnvelope(final UUID generatedRandomUUID) {
-        return buildCaseCreatedSuccessfullyEnvelopeForChannel(generatedRandomUUID, CIVIL, SUMMONS_INITIATION_CODE);
-    }
-
-    private Envelope<CaseCreatedSuccessfully> buildCaseCreatedSuccessfullyEnvelopeForChannel(final UUID generatedRandomUUID, final Channel channel, final String initiationCode) {
+    private Envelope<CaseCreatedSuccessfully> buildCivilCaseCreatedSuccessfullyEnvelope(final UUID generatedRandomUUID) {
         final Metadata metadata = metadataBuilder()
                 .withName(CASE_CREATED_SUCCESSFULLY)
                 .withId(randomUUID())
@@ -222,8 +175,7 @@ public class CaseCreatedEventProcessorTest {
         final CaseCreatedSuccessfully caseCreatedSuccessfully = caseCreatedSuccessfully()
                 .withCaseId(generatedRandomUUID)
                 .withExternalId(randomUUID())
-                .withChannel(channel)
-                .withInitiationCode(initiationCode)
+                .withChannel(CIVIL)
                 .build();
 
         return envelopeFrom(metadata, caseCreatedSuccessfully);

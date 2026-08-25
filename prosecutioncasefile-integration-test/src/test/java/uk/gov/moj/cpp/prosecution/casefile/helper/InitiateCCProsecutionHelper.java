@@ -45,7 +45,6 @@ import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_SU
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_SUBMISSION_REJECTED_EVENT;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_CIVIL_PROSECUTION_REJECTED_EVENT;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_EVENT_SELECTOR_PROSECUTION_REJECTED;
-import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PROGRESSION_CASE_CREATED_EVENT;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PROGRESSION_CASE_DEFENDANT_CHANGED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PROGRESSION_COURT_APPLICATION_SUMMONS_APPROVED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PROGRESSION_COURT_APPLICATION_SUMMONS_REJECTED;
@@ -443,11 +442,6 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
         sendPublicEvent(PUBLIC_PROGRESSION_COURT_APPLICATION_SUMMONS_APPROVED,
                 "stub-data/public.progression.court-application-summons-approved.json",
                 this.applicationId.toString(), this.caseId.toString(), this.prosecutorCost, String.valueOf(this.summonsSuppressed), String.valueOf(this.personalService));
-    }
-
-    public void whenProsecutionCaseIsConfirmedCreatedByProgression() {
-        sendPublicEvent(PUBLIC_PROGRESSION_CASE_CREATED_EVENT,
-                "stub-data/public.progression.prosecution-case-created.json", this.caseId.toString());
     }
 
     public void whenCaseDefendantChanged(final String defendantId) {

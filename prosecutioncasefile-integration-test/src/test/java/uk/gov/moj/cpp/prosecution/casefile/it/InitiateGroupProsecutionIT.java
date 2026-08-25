@@ -46,7 +46,6 @@ import static uk.gov.moj.cpp.prosecution.casefile.stub.TestUtils.readFile;
 public class InitiateGroupProsecutionIT extends BaseIT {
     private static final String CASE_MARKER_CODE = "ABC";
     private static final String PUBLIC_COURT_APPLICATION_SUMMONS_APPROVED = "public.progression.court-application-summons-approved";
-    private static final String PUBLIC_GROUP_PROSECUTION_CASES_CREATED = "public.progression.group-prosecution-cases-created";
     private static final String PUBLIC_COURT_APPLICATION_SUMMONS_REJECTED = "public.progression.court-application-summons-rejected";
 
     private UUID groupId;
@@ -128,11 +127,9 @@ public class InitiateGroupProsecutionIT extends BaseIT {
         initiateGroupProsecutionHelper.thenPrivateGroupCasesReceivedEventShouldBeRaised();
         initiateGroupProsecutionHelper.verifyInitiateCourtProceedingsForGroupCasesCommand(caseId1.toString());
 
-        // group-submission-approved (and its pre-existing sibling group-submission-succeeded) only
-        // fire once Progression confirms the group cases were actually created — a separate,
-        // later public event from the summons-approved one sent above.
-        sendPublicEventGroupProsecutionCasesCreated(groupId);
-
+        // group-submission-approved fires as soon as GroupCasesReceived is raised (i.e. as soon as
+        // the box approves the summons application) — it does not wait for Progression's later
+        // group-prosecution-cases-created confirmation.
         final JsonEnvelope submissionApprovedEvent = initiateGroupProsecutionHelper.thenPublicGroupSubmissionApprovedEventShouldBeRaised();
         assertThat(submissionApprovedEvent.payloadAsJsonObject().getString("groupId"), is(groupId.toString()));
     }
@@ -197,18 +194,6 @@ public class InitiateGroupProsecutionIT extends BaseIT {
         final InitiateGroupProsecutionHelper initiateGroupProsecutionHelper = new InitiateGroupProsecutionHelper();
         initiateGroupProsecutionHelper.initiateGroupProsecution(payload);
         initiateGroupProsecutionHelper.thenPublicGroupProsecutionRejectedEventShouldBeRaised();
-    }
-
-    private void sendPublicEventGroupProsecutionCasesCreated(final UUID groupId) {
-        final JsonObject payload = createObjectBuilder()
-                .add("groupId", groupId.toString())
-                .build();
-
-        sendPublicEvent(PUBLIC_GROUP_PROSECUTION_CASES_CREATED, envelopeFrom(metadataBuilder()
-                .withId(randomUUID())
-                .withName(PUBLIC_GROUP_PROSECUTION_CASES_CREATED)
-                .withUserId(randomUUID().toString())
-                .build(), payload));
     }
 
     private void sendPublicEventCourtApplicationSummonsApproved(final UUID caseId, final UUID applicationId) {

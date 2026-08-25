@@ -16,7 +16,6 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Problem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ProblemValue;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.GroupProsecutionRejected;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicGroupProsecutionRejected;
-import uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicGroupSubmissionRejected;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +50,7 @@ public class GroupProsecutionRejectedProcessorTest {
     private final static UUID EXTERNAL_ID = randomUUID();
 
     @Captor
-    private ArgumentCaptor<Envelope> senderArgCaptor;
+    private ArgumentCaptor<Envelope<PublicGroupProsecutionRejected>> senderArgCaptor;
 
     @Mock
     private Sender sender;
@@ -64,8 +63,8 @@ public class GroupProsecutionRejectedProcessorTest {
         final UUID groupId = randomUUID();
         final Envelope<GroupProsecutionRejected> envelope = buildGroupProsecutionRejectedEnvelope(groupId);
         groupProsecutionRejectedProcessor.handleGroupProsecutionRejected(envelope);
-        verify(sender, times(2)).send(senderArgCaptor.capture());
-        final Envelope<PublicGroupProsecutionRejected> publicEvent = senderArgCaptor.getAllValues().get(0);
+        verify(sender, times(1)).send(senderArgCaptor.capture());
+        final Envelope<PublicGroupProsecutionRejected> publicEvent = senderArgCaptor.getValue();
         final PublicGroupProsecutionRejected publicGroupProsecutionRejected = publicEvent.payload();
         assertThat(publicGroupProsecutionRejected.getGroupId(), is(groupId));
         assertThat(publicGroupProsecutionRejected.getChannel(), is(CHANNEL));
@@ -86,21 +85,6 @@ public class GroupProsecutionRejectedProcessorTest {
         assertThat(publishedGroupCaseErrors, hasSize(1));
         assertThat(publishedGroupCaseErrors.get(0).getProsecutorCaseReference(), is(nullValue()));
         assertThat(publishedGroupCaseErrors.get(0).getProblems(), is(getProblems(GROUP_PROBLEM_CODE)));
-    }
-
-    @Test
-    public void shouldEmitGroupSubmissionRejectedPublicEvent() {
-        final UUID groupId = randomUUID();
-        final Envelope<GroupProsecutionRejected> envelope = buildGroupProsecutionRejectedEnvelope(groupId);
-        groupProsecutionRejectedProcessor.handleGroupProsecutionRejected(envelope);
-        verify(sender, times(2)).send(senderArgCaptor.capture());
-
-        final Envelope<PublicGroupSubmissionRejected> publicEvent = senderArgCaptor.getAllValues().get(1);
-        final PublicGroupSubmissionRejected publicGroupSubmissionRejected = publicEvent.payload();
-        assertThat(publicEvent.metadata().name(), is("public.prosecutioncasefile.group-submission-rejected"));
-        assertThat(publicGroupSubmissionRejected.getGroupId(), is(groupId));
-        assertThat(publicGroupSubmissionRejected.getChannel(), is(CHANNEL));
-        assertThat(publicGroupSubmissionRejected.getExternalId(), is(EXTERNAL_ID));
     }
 
     private Envelope<GroupProsecutionRejected> buildGroupProsecutionRejectedEnvelope(final UUID groupId) {

@@ -1,6 +1,7 @@
 package uk.gov.moj.cpp.prosecutioncasefile.persistence.repository;
 
 import static java.util.Optional.empty;
+import static java.util.Optional.of;
 import static java.util.UUID.randomUUID;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -17,6 +18,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 
 import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
 import org.junit.Test;
@@ -43,8 +45,20 @@ public class BusinessValidationErrorRepositoryTest extends BaseTransactionalJuni
     private static final LocalDate DEFENDANTHEARINGDATE = LocalDate.now().plusMonths(1);
     private final String ERRORVALUE = "no marker ";
 
+    /**
+     * Caller-controlled filter values crafted to break out of a string-concatenated SQL/JPQL
+     * predicate. Referenced by the injection-resistance tests below (OWASP A03:2021).
+     */
+    private static final String TAUTOLOGY_PAYLOAD = "Nowhere' OR '1'='1";
+    private static final String COMMENT_TRUNCATION_PAYLOAD = COURTLOCATION + "' --";
+    private static final String STACKED_DDL_PAYLOAD = COURTLOCATION + "'; DROP TABLE business_validation_errors; --";
+    private static final String UNION_PAYLOAD = CASETYPE + "' UNION SELECT case_type FROM business_validation_errors WHERE '1'='1";
+
     @Inject
     private BusinessValidationErrorRepository businessValidationErrorsRepository;
+
+    @Inject
+    private EntityManager entityManager;
 
     @Test
     public void shouldReturnZeroIfThereIsNoOutstandingErrors() {
@@ -162,6 +176,123 @@ public class BusinessValidationErrorRepositoryTest extends BaseTransactionalJuni
     }
 
 
+
+    /*
+     * ------------------------------------------------------------------------------------------
+     * Injection resistance for prosecutioncasefile.query.counts-cases-errors (OWASP A03:2021).
+     *
+     * The DROMOS Stage02.1 review flagged the courtLocation / caseType / region filter values
+     * reaching this count query as a possible injection sink. countOfCasesWithOutstandingErrors
+     * builds its predicate with the JPA Criteria API (DeltaSpike criteria().eqIgnoreCase(...)),
+     * so each filter value is bound as a query parameter and never spliced into query text.
+     * These tests assert that behaviour observably, against a real database, so the finding
+     * cannot silently regress.
+     *
+     * region is filtered on a different table and is covered in ResolvedCasesRepositoryTest.
+     * ------------------------------------------------------------------------------------------
+     */
+
+    @Test
+    public void countOfCasesWithOutstandingErrors_withTautologyInCourtLocation_should_not_bypass_the_filter() {
+        produceAndSaveBusinessValidationErrors(50);
+
+        // Sanity check: there are 50 cases available to leak if the filter can be bypassed.
+        assertThat(businessValidationErrorsRepository.countOfCasesWithOutstandingErrors(empty(), empty()), is(50L));
+
+        final Long count = businessValidationErrorsRepository
+                .countOfCasesWithOutstandingErrors(of(TAUTOLOGY_PAYLOAD), empty());
+
+        // Bound as data: no stored court location equals the literal "Nowhere' OR '1'='1".
+        // Had it been concatenated, the OR would have matched every row and returned 50.
+        assertThat(count, is(0L));
+    }
+
+    @Test
+    public void countOfCasesWithOutstandingErrors_withTautologyInCaseType_should_not_bypass_the_filter() {
+        produceAndSaveBusinessValidationErrors(50);
+
+        final Long count = businessValidationErrorsRepository
+                .countOfCasesWithOutstandingErrors(empty(), of(TAUTOLOGY_PAYLOAD));
+
+        assertThat(count, is(0L));
+    }
+
+    @Test
+    public void countOfCasesWithOutstandingErrors_withCommentTruncationInCourtLocation_should_not_bypass_the_filter() {
+        produceAndSaveBusinessValidationErrors(50);
+
+        // "Leeds' --" would close the literal and comment out the rest of the predicate if
+        // concatenated, matching all 50 Leeds cases.
+        final Long count = businessValidationErrorsRepository
+                .countOfCasesWithOutstandingErrors(of(COMMENT_TRUNCATION_PAYLOAD), empty());
+
+        assertThat(count, is(0L));
+    }
+
+    @Test
+    public void countOfCasesWithOutstandingErrors_withUnionSelectInCaseType_should_not_bypass_the_filter() {
+        produceAndSaveBusinessValidationErrors(50);
+
+        final Long count = businessValidationErrorsRepository
+                .countOfCasesWithOutstandingErrors(empty(), of(UNION_PAYLOAD));
+
+        assertThat(count, is(0L));
+    }
+
+    @Test
+    public void countOfCasesWithOutstandingErrors_withStackedDropTableInCourtLocation_should_not_execute_it() {
+        produceAndSaveBusinessValidationErrors(50);
+
+        final Long count = businessValidationErrorsRepository
+                .countOfCasesWithOutstandingErrors(of(STACKED_DDL_PAYLOAD), empty());
+
+        assertThat(count, is(0L));
+
+        // The stacked DROP TABLE was never executed: the table is still there with its rows.
+        final Number rowCount = (Number) entityManager
+                .createNativeQuery("SELECT COUNT(*) FROM business_validation_errors")
+                .getSingleResult();
+        assertThat(rowCount.longValue() > 0L, is(true));
+        assertThat(businessValidationErrorsRepository.countOfCasesWithOutstandingErrors(empty(), empty()), is(50L));
+    }
+
+    @Test
+    public void countOfCasesWithOutstandingErrors_withInjectionStringStoredAsCourtLocation_should_match_it_as_a_literal_value() {
+        produceAndSaveBusinessValidationErrors(50);
+
+        // Store a row whose court location IS the injection string.
+        final BusinessValidationErrorDetails errorWithInjectionLikeCourtLocation = getBusinessValidationErrors();
+        errorWithInjectionLikeCourtLocation.setCourtLocation(TAUTOLOGY_PAYLOAD);
+        errorWithInjectionLikeCourtLocation.setCaseId(randomUUID());
+        errorWithInjectionLikeCourtLocation.setId(randomUUID());
+        businessValidationErrorsRepository.save(errorWithInjectionLikeCourtLocation);
+
+        final Long count = businessValidationErrorsRepository
+                .countOfCasesWithOutstandingErrors(of(TAUTOLOGY_PAYLOAD), empty());
+
+        // Exactly the one matching row — proving the value is compared as data, not parsed as SQL.
+        assertThat(count, is(1L));
+    }
+
+    @Test
+    public void countOfCasesWithOutstandingErrors_comparedAgainstAConcatenatedQuery_should_prove_the_payload_is_potent() {
+        produceAndSaveBusinessValidationErrors(50);
+
+        // Positive control. This is the vulnerable shape the security review describes: the
+        // caller-controlled value concatenated into the query text without encoding.
+        final String concatenatedQuery = "SELECT COUNT(DISTINCT e.caseId) FROM BusinessValidationErrorDetails e "
+                + "WHERE e.courtLocation = '" + TAUTOLOGY_PAYLOAD + "'";
+        final Long leakedByConcatenation = entityManager
+                .createQuery(concatenatedQuery, Long.class)
+                .getSingleResult();
+
+        // Concatenated, the payload defeats the filter and returns every case.
+        assertThat(leakedByConcatenation, is(50L));
+
+        // The production repository, given the very same value, returns nothing.
+        assertThat(businessValidationErrorsRepository
+                .countOfCasesWithOutstandingErrors(of(TAUTOLOGY_PAYLOAD), empty()), is(0L));
+    }
 
     private BusinessValidationErrorDetails getBusinessValidationErrors() {
         return getBusinessValidationErrors(ID, CASEID, DEFENDANTID);

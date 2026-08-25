@@ -9,7 +9,7 @@
 
     <groupId>uk.gov.moj.cpp.prosecution.casefile</groupId>
     <artifactId>prosecutioncasefile-parent</artifactId>
-    <version>25.104.4-M4-SNAPSHOT</version>
+    <version>25.104.5-M4-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Prosecution Casefile Microservice - Parent</name>
     <description>Casefile Microservice - Prosecution Context</description>

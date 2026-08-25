@@ -79,6 +79,7 @@ public class ProsecutionCaseFileInitialHearingToCCHearingRequestConverterTest {
             final OrganisationUnitWithCourtroomReferenceData inputOrganisationUnitReferenceData = ccCaseReceived.getProsecutionWithReferenceData().getReferenceDataVO().getOrganisationUnitWithCourtroomReferenceData().get();
 
             assertThat(inputOrganisationUnitReferenceData.getId(), equalTo(listHearingRequests.get(0).getCourtCentre().getId().toString()));
+            assertThat(inputOrganisationUnitReferenceData.getOucode(), equalTo(listHearingRequests.get(0).getCourtCentre().getCode()));
             assertThat(inputOrganisationUnitReferenceData.getOucodeL3WelshName(), equalTo(listHearingRequests.get(0).getCourtCentre().getWelshName()));
             assertThat(inputOrganisationUnitReferenceData.getOucodeL3Name(), equalTo(listHearingRequests.get(0).getCourtCentre().getName()));
             assertThat(inputOrganisationUnitReferenceData.getCourtRoom().getId(), equalTo(listHearingRequests.get(0).getCourtCentre().getRoomId().toString()));
@@ -239,6 +240,7 @@ public class ProsecutionCaseFileInitialHearingToCCHearingRequestConverterTest {
         ccCaseReceived.getProsecutionWithReferenceData().getReferenceDataVO().setOrganisationUnitWithCourtroomReferenceData(
                 of(organisationUnitWithCourtroomReferenceData()
                         .withId(randomUUID().toString())
+                        .withOucode("B01LY00")
                         .withOucodeL3Name("South Western (Lavender Hill)")
                         .withOucodeL3WelshName("Welsh Name")
                         .withCourtRoom(getCourtroom())

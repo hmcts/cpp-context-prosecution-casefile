@@ -36,6 +36,14 @@ public class ResolvedCasesRepositoryTest {
     private static final String COURT_LOCATION = "courtLocation";
     private static final String CASE_TYPE = "caseType";
 
+    /**
+     * Caller-controlled filter values crafted to break out of a string-concatenated SQL/JPQL
+     * predicate. Referenced by the injection-resistance tests below (OWASP A03:2021).
+     */
+    private static final String TAUTOLOGY_PAYLOAD = "nowhere' OR '1'='1";
+    private static final String COMMENT_TRUNCATION_PAYLOAD = REGION + "' --";
+    private static final String STACKED_DDL_PAYLOAD = REGION + "'; DROP TABLE resolved_cases; --";
+
 
     public static LocalDate fromDate = LocalDate.of(2020, 02, 1);
 
@@ -98,6 +106,67 @@ public class ResolvedCasesRepositoryTest {
     public void shouldTestCountOfCasesFixedByDateAndRegionAndCourtLocationAndCaseType() {
         long count = resolvedCasesRepository.countOfCasesFixedByDate(fromDate.plusDays(3), of(REGION), of(COURT_LOCATION), of(CASE_TYPE));
         assertThat(count, is(FILTER_RESULTS_FOR_JUST_DATE_AND_REGION_AND_COURT_LOCATION_AND_CASE_TYPE_COUNT));
+    }
+
+    /*
+     * ------------------------------------------------------------------------------------------
+     * Injection resistance for the region filter of prosecutioncasefile.query.counts-cases-errors
+     * (OWASP A03:2021). region reaches this repository only; courtLocation / caseType are also
+     * covered against business_validation_errors in BusinessValidationErrorRepositoryTest.
+     *
+     * countOfCasesFixedByDate builds its predicate with the JPA Criteria API
+     * (DeltaSpike criteria().eqIgnoreCase(...)), so every filter value is bound as a query
+     * parameter and never spliced into query text.
+     * ------------------------------------------------------------------------------------------
+     */
+
+    @Test
+    public void countOfCasesFixedByDate_withTautologyInRegion_should_not_bypass_the_filter() {
+        // Sanity check: 20 resolved cases on this date are available to leak if the filter
+        // can be bypassed.
+        assertThat(resolvedCasesRepository.countOfCasesFixedByDate(fromDate.plusDays(1), empty(), empty(), empty()),
+                is(FILTER_RESULTS_FOR_JUST_DATE_AND_REGION_COUNT));
+
+        final long count = resolvedCasesRepository
+                .countOfCasesFixedByDate(fromDate.plusDays(1), of(TAUTOLOGY_PAYLOAD), empty(), empty());
+
+        // Bound as data: no stored region equals the literal "nowhere' OR '1'='1".
+        // Had it been concatenated, the OR would have matched every row on that date.
+        assertThat(count, is(0L));
+    }
+
+    @Test
+    public void countOfCasesFixedByDate_withCommentTruncationInRegion_should_not_bypass_the_filter() {
+        // "region' --" would close the literal and comment out the rest of the predicate if
+        // concatenated, matching all 20 rows on that date.
+        final long count = resolvedCasesRepository
+                .countOfCasesFixedByDate(fromDate.plusDays(1), of(COMMENT_TRUNCATION_PAYLOAD), empty(), empty());
+
+        assertThat(count, is(0L));
+    }
+
+    @Test
+    public void countOfCasesFixedByDate_withStackedDropTableInRegion_should_not_execute_it() {
+        final long count = resolvedCasesRepository
+                .countOfCasesFixedByDate(fromDate.plusDays(1), of(STACKED_DDL_PAYLOAD), empty(), empty());
+
+        assertThat(count, is(0L));
+
+        // The stacked DROP TABLE was never executed: the table is still queryable with its rows.
+        assertThat(resolvedCasesRepository.countOfCasesFixedByDate(fromDate.plusDays(1), empty(), empty(), empty()),
+                is(FILTER_RESULTS_FOR_JUST_DATE_AND_REGION_COUNT));
+    }
+
+    @Test
+    public void countOfCasesFixedByDate_withInjectionStringStoredAsRegion_should_match_it_as_a_literal_value() {
+        resolvedCasesRepository.save(createResolvedCases(UUID.randomUUID(), UUID.randomUUID(),
+                fromDate.plusDays(1), of(TAUTOLOGY_PAYLOAD), empty(), empty()));
+
+        final long count = resolvedCasesRepository
+                .countOfCasesFixedByDate(fromDate.plusDays(1), of(TAUTOLOGY_PAYLOAD), empty(), empty());
+
+        // Exactly the one matching row — proving the value is compared as data, not parsed as SQL.
+        assertThat(count, is(1L));
     }
 
     public ResolvedCases createResolvedCases(final UUID ID, final UUID caseId,

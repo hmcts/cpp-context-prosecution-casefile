@@ -267,6 +267,7 @@ public class ProsecutionCaseFileInitialHearingToCCHearingRequestConverter implem
             roomId = getRoomId(roomId, courtRoom);
             roomName = getRoomName(roomName, courtRoom);
             courtCentreBuilder.withId(fromString(organisationUnitWithCourtroomReferenceData.getId()));
+            courtCentreBuilder.withCode(organisationUnitWithCourtroomReferenceData.getOucode());
             courtCentreBuilder.withName(organisationUnitWithCourtroomReferenceData.getOucodeL3Name());
             courtCentreBuilder.withWelshName(organisationUnitWithCourtroomReferenceData.getOucodeL3WelshName());
             courtCentreBuilder.withRoomId(roomId);

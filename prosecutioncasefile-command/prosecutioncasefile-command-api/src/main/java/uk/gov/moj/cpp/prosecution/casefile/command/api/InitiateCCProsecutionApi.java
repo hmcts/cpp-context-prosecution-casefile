@@ -243,6 +243,7 @@ public class InitiateCCProsecutionApi {
                 .withVehicleRelatedOffence(vehicleRelatedOffence)
                 .withVerdict(offence.getVerdict())
                 .withConvictingCourtCode(offence.getConvictingCourtCode())
+                .withConvictionDate(offence.getConvictionDate())
                 .build();
 
     }

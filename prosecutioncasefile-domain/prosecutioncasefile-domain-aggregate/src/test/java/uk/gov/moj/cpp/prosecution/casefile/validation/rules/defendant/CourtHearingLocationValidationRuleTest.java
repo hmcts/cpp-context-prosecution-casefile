@@ -60,6 +60,20 @@ public class CourtHearingLocationValidationRuleTest {
     }
 
     @Test
+    public void shouldReturnEmptyListWhenMigartedCaseIsInActive() {
+        when(defendantWithReferenceData.isInactiveMigratedCase()).thenReturn(true);
+
+        Optional<Problem> optionalProblem = new CourtHearingLocationValidationRule().validate(defendantWithReferenceData, referenceDataQueryService)
+                .problems().stream().findFirst();
+        assertThat(optionalProblem.isPresent(), is(false));
+
+        //should use cached value when invoked second time
+        optionalProblem = new CourtHearingLocationValidationRule().validate(defendantWithReferenceData, referenceDataQueryService)
+                .problems().stream().findFirst();
+        assertThat(optionalProblem.isPresent(), is(false));
+    }
+
+    @Test
     public void shouldReturnProblemWhenCourtHearingLocationIsInValid() {
         when(defendantWithReferenceData.getDefendant().getInitialHearing().getCourtHearingLocation()).thenReturn(COURT_HEARING_LOCATION);
         when(defendantWithReferenceData.getReferenceDataVO()).thenReturn(new ReferenceDataVO());

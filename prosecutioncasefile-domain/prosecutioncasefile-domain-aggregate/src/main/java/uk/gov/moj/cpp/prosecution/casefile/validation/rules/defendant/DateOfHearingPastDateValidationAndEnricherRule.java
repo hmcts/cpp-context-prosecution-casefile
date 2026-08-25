@@ -20,7 +20,7 @@ public class DateOfHearingPastDateValidationAndEnricherRule implements Validatio
 
     @Override
     public ValidationResult validate(final DefendantWithReferenceData defendantWithReferenceData, final ReferenceDataQueryService referenceDataQueryService) {
-        if(defendantWithReferenceData.isMCCWithListNewHearing()){
+        if(defendantWithReferenceData.isMCCWithListNewHearing() || defendantWithReferenceData.isInactiveMigratedCase()){
             return VALID;
         }
         final String dateOfHearing = defendantWithReferenceData.getDefendant().getInitialHearing().getDateOfHearing();

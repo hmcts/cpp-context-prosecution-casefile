@@ -133,6 +133,26 @@ public class InitiateCCProsecutionIT extends BaseIT {
     }
 
     @Test
+    void initiateCCProsecutionForMCCInActiveCase() {
+        stubGetOrganisationUnitWithOneCourtroom();
+        stubGetOrganisationUnitWithOneCourtroomForMags();
+        stubGetLocalJusticeAreas();
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-mcc-inactive.json");
+        final String expectedPayload = readFile("expected/initiate_cc_expected_output-mcc-inactive.json");
+        verifyCCEventAndProgressionCommandForMCC(staticPayLoad, expectedPayload);
+    }
+
+    @Test
+    void initiateCCProsecutionForMCCMigrationCaseInActiveCaseWithAccountFineNumber() {
+        stubGetOrganisationUnitWithOneCourtroom();
+        stubGetOrganisationUnitWithOneCourtroomForMags();
+        stubGetLocalJusticeAreas();
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-mcc-fine-account-number.json");
+        final String expectedPayload = replaceValuesForMCC(readFile("expected/initiate_cc_expected_output-mcc-fine-account-number.json"));
+        verifyCCEventAndProgressionCommandForMCC(staticPayLoad, expectedPayload);
+    }
+
+    @Test
     void initiateCCProsecutionForMCCWithRetrial() {
         stubGetOrganisationUnitWithOneCourtroom();
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-mcc-retrial.json");
@@ -483,6 +503,7 @@ public class InitiateCCProsecutionIT extends BaseIT {
     private void verifyCCEventAndProgressionCommandForMCC(final String staticPayLoad,
                                                           final String expectedPayload) {
         final String ccPayLoad = replaceValues(staticPayLoad);
+        final String expected = replaceValues(expectedPayload);
         final InitiateCCProsecutionHelper initiateCCProsecutionHelper = new InitiateCCProsecutionHelper();
         initiateCCProsecutionHelper.initiateCCProsecution(ccPayLoad);
         initiateCCProsecutionHelper.thenProsecutionReceivedEventShouldBeRaised();
@@ -491,7 +512,7 @@ public class InitiateCCProsecutionIT extends BaseIT {
                         PUBLIC_PROSECUTIONCASEFILE_CC_CASE_RECEIVED,
                         PUBLIC_PROSECUTIONCASEFILE_MANUAL_CASE_RECEIVED
                 });
-        initiateCCProsecutionHelper.verifyCourtProceedingsForCaseCreationHasBeenInitiated(defendantId1, expectedPayload);
+        initiateCCProsecutionHelper.verifyCourtProceedingsForCaseCreationHasBeenInitiated(defendantId1, expected);
     }
 
     private void verifyBadRequestPayload(final String staticPayLoad) {

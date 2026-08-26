@@ -2,7 +2,7 @@ package uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant;
 
 import static java.util.Objects.nonNull;
 import static java.util.Optional.of;
-import static uk.gov.moj.cpp.prosecution.casefile.validation.CaseTypeRules.isOtherCaseType;
+import static uk.gov.moj.cpp.prosecution.casefile.validation.CaseTypeRules.isOtherCaseTypeDateRangeSubmission;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode.COURT_HEARING_LOCATION_OUCODE_INVALID;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.Problems.newProblem;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.rules.FieldName.DEFENDANT_COURT_HEARING_LOCATION;
@@ -25,8 +25,7 @@ public class CourtHearingLocationValidationRule implements ValidationRule<Defend
 
     @Override
     public ValidationResult validate(final DefendantWithReferenceData defendantWithReferenceData, final ReferenceDataQueryService referenceDataQueryService) {
-        if (defendantWithReferenceData.isMCCWithListNewHearing() || defendantWithReferenceData.isInactiveMigratedCase()
-                || (isOtherCaseType(defendantWithReferenceData) && !defendantWithReferenceData.isMCC())) {
+        if (defendantWithReferenceData.isMCCWithListNewHearing() || defendantWithReferenceData.isInactiveMigratedCase() || isOtherCaseTypeDateRangeSubmission(defendantWithReferenceData)) {
             return VALID;
         }
         final String courtHearingLocation = defendantWithReferenceData.getDefendant().getInitialHearing().getCourtHearingLocation();

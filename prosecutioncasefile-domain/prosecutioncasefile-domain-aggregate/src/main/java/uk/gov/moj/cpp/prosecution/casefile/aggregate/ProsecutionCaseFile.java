@@ -1914,7 +1914,7 @@ public class ProsecutionCaseFile implements Aggregate {
                 .build()
         );
 
-        if (MCC.equals(this.channel) || CPPI.equals(this.channel) || CIVIL.equals(this.channel)) {
+        if (MCC.equals(this.channel) || CPPI.equals(this.channel)) {
             final List<Defendant> rejectedDefendants = defendants.stream().filter(defendant -> defendantIds.contains(fromString(defendant.getId()))).collect(toList());
             builder.add(ccProsecutionRejected()
                     .withProsecution(Prosecution.prosecution()

@@ -230,17 +230,7 @@ public class GroupProsecutionCaseFileTest {
     }
 
     @Test
-    void shouldOmitGroupCaseErrorsWhenRejectGroupProsecutionCalledWithNoProblems() {
-        seedAggregateWithMasterCase();
-
-        final Stream<Object> eventStream = groupProsecutionCaseFile.rejectGroupProsecution();
-        final GroupProsecutionRejected rejected = (GroupProsecutionRejected) eventStream.findFirst().get();
-
-        assertThat(rejected.getGroupCaseErrors(), is(nullValue()));
-    }
-
-    @Test
-    void shouldAlsoRaiseGroupSummonsApplicationRejectedWhenRejectGroupProsecutionCalledWithNoArgs() {
+    void shouldRaiseOnlyGroupSummonsApplicationRejectedWhenRejectGroupProsecutionCalledWithNoArgs() {
         final UUID externalId = randomUUID();
         final GroupProsecutionWithReferenceData masterCase = buildGroupProsecutionWithReferenceData(INITIATION_CODE_FOR_SUMMONS, randomUUID(), true, URN_1);
         final GroupProsecutionList groupProsecutionList = new GroupProsecutionList(asList(masterCase), externalId, Channel.CIVIL);
@@ -250,11 +240,12 @@ public class GroupProsecutionCaseFileTest {
 
         final List<Object> events = groupProsecutionCaseFile.rejectGroupProsecution().collect(java.util.stream.Collectors.toList());
 
-        assertThat(events, Matchers.hasSize(2));
-        assertThat(events.get(0), is(instanceOf(GroupProsecutionRejected.class)));
-        assertThat(events.get(1), is(instanceOf(GroupSummonsApplicationRejected.class)));
+        // The no-arg path (SA/SR box rejection) now raises ONLY GroupSummonsApplicationRejected —
+        // GroupProsecutionRejected is reserved for the List<Problem> path (e.g. duplicate-URN rejection).
+        assertThat(events, Matchers.hasSize(1));
+        assertThat(events.get(0), is(instanceOf(GroupSummonsApplicationRejected.class)));
 
-        final GroupSummonsApplicationRejected groupSummonsApplicationRejected = (GroupSummonsApplicationRejected) events.get(1);
+        final GroupSummonsApplicationRejected groupSummonsApplicationRejected = (GroupSummonsApplicationRejected) events.get(0);
         assertThat(groupSummonsApplicationRejected.getGroupId(), is(groupId));
         assertThat(groupSummonsApplicationRejected.getChannel(), is(Channel.CIVIL));
         assertThat(groupSummonsApplicationRejected.getExternalId(), is(externalId));

@@ -720,6 +720,29 @@ class ValidationErrorIT extends BaseIT {
         assertThat(publicEvent.payloadAsJsonObject().getJsonArray("defendantErrors").toString(), CoreMatchers.containsString("OFFENCE_CODE_NOT_SUPPORTED"));
     }
 
+    /**
+     * Same business-validation-failure scenario as shouldRaisePublicCivilProsecutionRejectedWhenOffenceCodeIsNotSupported
+     * but for a civil SUMMONS submission (initiationCode "S") rather than a plain civil case (initiationCode "O") —
+     * offence-code validation runs before the S/O initiation-code branch, so it should reject identically.
+     */
+    @Test
+    void shouldRaisePublicCivilProsecutionRejectedWhenOffenceCodeIsNotSupportedForSummonsApplication() {
+        final UUID caseId = randomUUID();
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-civil-summons-invalid-offence-code.json");
+        final String ccPayLoad = replaceValues(staticPayLoad, caseId.toString());
+        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
+        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
+
+        final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
+        assertThat(privateEvent.isPresent(), is(true));
+        assertCivilDefendantErrorsContain(privateEvent.get(), "OFFENCE_CODE_NOT_SUPPORTED");
+
+        final JsonEnvelope publicEvent = initiateCCProsecutionHelper.thenPublicCivilProsecutionRejectedEventShouldBeRaised(caseId);
+        assertThat(publicEvent.payloadAsJsonObject().getString("channel"), is("CIVIL"));
+        assertThat(publicEvent.payloadAsJsonObject().getJsonArray("defendantErrors").isEmpty(), is(false));
+        assertThat(publicEvent.payloadAsJsonObject().getJsonArray("defendantErrors").toString(), CoreMatchers.containsString("OFFENCE_CODE_NOT_SUPPORTED"));
+    }
+
     @Test
     void shouldRaiseValidationErrorWhenCivilCasePayloadHasUnrecognisedProsecutorOucode() {
         stubOffencesForOffenceCodeForGroupCases();

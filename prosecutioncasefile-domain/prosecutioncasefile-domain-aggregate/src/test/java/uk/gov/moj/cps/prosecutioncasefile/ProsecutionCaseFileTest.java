@@ -1684,17 +1684,18 @@ public class ProsecutionCaseFileTest {
         final Stream<Object> objectStreamPostApplicationRejection = prosecutionCaseFile.rejectCaseDefendants(applicationRejectedCommandPayload);
 
         final List<Object> rejectionEventList = objectStreamPostApplicationRejection.collect(toList());
+        // CIVIL no longer raises CcProsecutionRejected here — only SummonsApplicationRejected, which now
+        // carries channel/externalId directly (public.prosecutioncasefile.submission-rejected derives from
+        // this event instead of civil-prosecution-rejected for the SA/SR box-rejection path).
+        assertThat(rejectionEventList, hasSize(1));
         assertThat(rejectionEventList.get(0), is(instanceOf(uk.gov.moj.cps.prosecutioncasefile.domain.event.SummonsApplicationRejected.class)));
-        assertThat(rejectionEventList.get(1), is(instanceOf(CcProsecutionRejected.class)));
         final uk.gov.moj.cps.prosecutioncasefile.domain.event.SummonsApplicationRejected applicationRejected = (uk.gov.moj.cps.prosecutioncasefile.domain.event.SummonsApplicationRejected) rejectionEventList.get(0);
         assertThat(applicationRejected.getDefendantIds(), contains(fromString(DEFENDANT_ID)));
         assertThat(applicationRejected.getSummonsRejectedOutcome().getReasons(), contains("First Reason"));
+        assertThat(applicationRejected.getChannel(), is(CIVIL));
+        assertThat(applicationRejected.getExternalId(), is(EXTERNAL_ID));
         assertThat(prosecutionCaseFile.isProsecutionReceived(), is(false));
         assertThat(prosecutionCaseFile.getDefendants(), empty());
-
-        final CcProsecutionRejected ccProsecutionRejected = (CcProsecutionRejected) rejectionEventList.get(1);
-        assertThat(ccProsecutionRejected.getProsecution().getChannel(), is(CIVIL));
-        assertThat(ccProsecutionRejected.getExternalId(), is(EXTERNAL_ID));
     }
 
     @MethodSource("nonSpiChannels")

@@ -184,7 +184,6 @@ public class GroupProsecutionCaseFile implements Aggregate {
 
     public Stream<Object> rejectGroupProsecution() {
         final Stream.Builder<Object> builder = builder();
-        builder.add(buildGroupProsecutionRejected(null));
         builder.add(GroupSummonsApplicationRejected.groupSummonsApplicationRejected()
                 .withGroupId(this.groupProsecutions.get(0).getGroupId())
                 .withChannel(this.channel)

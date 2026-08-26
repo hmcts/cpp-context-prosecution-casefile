@@ -201,6 +201,19 @@ class InitiateSummonsProsecutionIT extends BaseIT {
     }
 
     @Test
+    void shouldRaiseCivilProsecutionSubmissionSucceededWhenCaseCreationConfirmedForCivilSingleCaseSummonsApplication() {
+        final InitiateCCProsecutionHelper helper = new InitiateCCProsecutionHelper();
+        helper.initiateSummonsCaseForChannelAndVerifyApplicationCreatedInstead(CIVIL, COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_MCC_OR_CPPI, EXPECTED_INITIATE_SUMMONS_APPLICATION_FOR_MCC_OR_CPPI);
+        helper.whenSummonsApplicationIsApprovedForDefendants();
+        helper.thenEventsShouldBeRaised(new String[]{EVENT_SELECTOR_CC_PROSECUTION_RECEIVED});
+
+        helper.whenProsecutionCaseIsConfirmedCreatedByProgression();
+
+        final JsonEnvelope civilSubmissionSucceededEvent = helper.thenPublicCivilProsecutionSubmissionSucceededEventShouldBeRaised(helper.getCaseId());
+        assertThat(civilSubmissionSucceededEvent.payloadAsJsonObject().getString("channel"), is("CIVIL"));
+    }
+
+    @Test
     void shouldInitiateCaseWhenSummonsApplicationForTheDefendantHasAlreadyBeenApprovedViaMCCChannel() {
         final InitiateCCProsecutionHelper helper = new InitiateCCProsecutionHelper();
         helper.initiateSummonsCaseForChannelAndVerifyApplicationCreatedInstead(MCC, COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_MCC, EXPECTED_INITIATE_SUMMONS_APPLICATION_FOR_MCC);

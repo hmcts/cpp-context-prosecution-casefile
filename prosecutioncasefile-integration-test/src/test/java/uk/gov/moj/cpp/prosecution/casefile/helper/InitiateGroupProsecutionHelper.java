@@ -38,6 +38,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_GRO
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_GROUP_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL_EVENT;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_GROUP_SUBMISSION_APPROVED_EVENT;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_GROUP_SUBMISSION_REJECTED_EVENT;
+import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_GROUP_SUBMISSION_SUCCEEDED_EVENT;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_GROUP_PROSECUTION_REJECTED_EVENT;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.MaterialStub.UPLOAD_CASE_DOCUMENT_COMMAND_TYPE;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.MaterialStub.UPLOAD_FILE_URL;
@@ -60,6 +61,7 @@ public class InitiateGroupProsecutionHelper extends AbstractTestHelper {
     protected JmsMessageConsumerClient groupParkedForSummonsApplicationApprovalEventsConsumer = createPublicConsumer(PUBLIC_GROUP_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL_EVENT);
     protected JmsMessageConsumerClient groupSubmissionApprovedEventsConsumer = createPublicConsumer(PUBLIC_GROUP_SUBMISSION_APPROVED_EVENT);
     protected JmsMessageConsumerClient groupSubmissionRejectedEventsConsumer = createPublicConsumer(PUBLIC_GROUP_SUBMISSION_REJECTED_EVENT);
+    protected JmsMessageConsumerClient groupSubmissionSucceededEventsConsumer = createPublicConsumer(PUBLIC_GROUP_SUBMISSION_SUCCEEDED_EVENT);
     protected JmsMessageConsumerClient groupIdRecorderdForSummonsApplicationEventsConsumer = createPrivateConsumer(EVENT_GROUP_ID_RECORDED_FOR_SUMMONS_APPLICATION);
 
     protected final RestClient restClient = new RestClient();
@@ -108,6 +110,12 @@ public class InitiateGroupProsecutionHelper extends AbstractTestHelper {
 
     public JsonEnvelope thenPublicGroupSubmissionRejectedEventShouldBeRaised() {
         final JsonEnvelope jsonEnvelope = QueueUtil.getEventFromQueue(this.groupSubmissionRejectedEventsConsumer);
+        assertThat(jsonEnvelope, notNullValue());
+        return jsonEnvelope;
+    }
+
+    public JsonEnvelope thenPublicGroupSubmissionSucceededEventShouldBeRaised() {
+        final JsonEnvelope jsonEnvelope = QueueUtil.getEventFromQueue(this.groupSubmissionSucceededEventsConsumer);
         assertThat(jsonEnvelope, notNullValue());
         return jsonEnvelope;
     }

@@ -85,7 +85,7 @@ public class CCCaseToProsecutionCaseConverter implements Converter<CcCaseReceive
 
         organisationUnitWithCourtroomReferenceData.ifPresent(unitWithCourtroomReferenceData -> paramsVO.setOucodeL1Code(unitWithCourtroomReferenceData.getOucodeL1Code()));
 
-        final List<CivilFees> civilFees = caseDetailsToCivilFeesConverter.convert(caseDetails);
+        final List<CivilFees> civilFees = Boolean.TRUE.equals(prosecution.getIsCivil()) ? caseDetailsToCivilFeesConverter.convert(caseDetails) : null;
 
         final MigrationSourceSystem migrationSourceSystem = ofNullable(prosecution.getMigrationSourceSystem()).filter(system -> nonNull(system.getMigrationSourceSystemName())).orElse(null);
 

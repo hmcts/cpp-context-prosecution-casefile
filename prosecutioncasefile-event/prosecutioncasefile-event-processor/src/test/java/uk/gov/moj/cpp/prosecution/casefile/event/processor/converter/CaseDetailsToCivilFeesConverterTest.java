@@ -47,8 +47,34 @@ public class CaseDetailsToCivilFeesConverterTest {
         List<CivilFees> civilFees = underTest.convert(caseDetails);
 
         assertEquals(civilFees.get(0).getFeeId(), feeId);
-        assertEquals(civilFees.get(0).getFeeType(), feeType);
-        assertEquals(civilFees.get(0).getFeeStatus(), feeStatus);
-        assertEquals(civilFees.get(0).getPaymentReference(), paymentReference);
+        assertEquals(feeType, civilFees.get(0).getFeeType());
+        assertEquals(feeStatus, civilFees.get(0).getFeeStatus());
+        assertEquals(paymentReference, civilFees.get(0).getPaymentReference());
+    }
+
+    @Test
+    public void shouldCreateCivilFeesObjectWhenFeeStatusIsNotApplicableAndFeeTypeIsMissing() {
+        CaseDetails caseDetails = CaseDetails.caseDetails()
+                .withFeeStatus(String.valueOf(NOT_APPLICABLE))
+                .build();
+
+        List<CivilFees> civilFees = underTest.convert(caseDetails);
+
+        assertEquals(NOT_APPLICABLE, civilFees.get(0).getFeeStatus());
+        assertNull(civilFees.get(0).getFeeType());
+        assertNull(civilFees.get(0).getFeeId());
+    }
+
+    @Test
+    public void shouldCreateCivilFeesObjectWhenContestedFeeStatusIsNotApplicableAndContestedFeeTypeIsMissing() {
+        CaseDetails caseDetails = CaseDetails.caseDetails()
+                .withContestedFeeStatus(String.valueOf(NOT_APPLICABLE))
+                .build();
+
+        List<CivilFees> civilFees = underTest.convert(caseDetails);
+
+        assertEquals(NOT_APPLICABLE, civilFees.get(0).getFeeStatus());
+        assertNull(civilFees.get(0).getFeeType());
+        assertNull(civilFees.get(0).getFeeId());
     }
 }

@@ -17,8 +17,6 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.hamcrest.core.IsNull.nullValue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -48,35 +46,21 @@ import uk.gov.justice.services.common.converter.JsonObjectToObjectConverter;
 import uk.gov.justice.services.common.converter.ObjectToJsonObjectConverter;
 import uk.gov.justice.services.common.converter.jackson.ObjectMapperProducer;
 import uk.gov.justice.services.core.sender.Sender;
-import uk.gov.justice.services.eventsourcing.source.core.EventSource;
-import uk.gov.justice.services.eventsourcing.source.core.EventStream;
 import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.Metadata;
 import uk.gov.justice.services.test.utils.core.random.RandomGenerator;
 import uk.gov.moj.cpp.progression.events.ApplicationProceedingsEdited;
-import uk.gov.moj.cpp.prosecution.casefile.domain.GroupProsecutionList;
-import uk.gov.moj.cpp.prosecution.casefile.domain.GroupProsecutionWithReferenceData;
-import uk.gov.moj.cpp.prosecution.casefile.domain.ProsecutionWithReferenceData;
-import uk.gov.moj.cpp.prosecution.casefile.event.DefendantsParkedForSummonsApplicationApproval;
-import uk.gov.moj.cpp.prosecution.casefile.event.GroupCasesParkedForApproval;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Address;
-import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ContactDetails;
-import uk.gov.moj.cpp.prosecution.casefile.json.schemas.GroupProsecution;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.PersonalInformation;
-import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecution;
 import uk.gov.moj.cps.prosecutioncasefile.command.handler.AcceptCase;
 import uk.gov.moj.cps.prosecutioncasefile.command.handler.AcceptGroupCases;
 import uk.gov.moj.cps.prosecutioncasefile.command.handler.CaseDefendantChangedCommand;
 import uk.gov.moj.cps.prosecutioncasefile.command.handler.RejectGroupCases;
-import uk.gov.moj.cps.prosecutioncasefile.domain.event.GroupIdRecordedForSummonsApplication;
-import uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicGroupSubmissionRejected;
-import uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicSubmissionRejected;
 
 import java.io.IOException;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import javax.json.JsonObject;
 
@@ -107,12 +91,6 @@ class ProgressionPublicEventProcessorTest {
     @Mock
     private Sender sender;
 
-    @Mock
-    private EventSource eventSource;
-
-    @Mock
-    private EventStream eventStream;
-
     @Spy
     private final ObjectMapper objectMapper = new ObjectMapperProducer().objectMapper();
 
@@ -136,9 +114,6 @@ class ProgressionPublicEventProcessorTest {
 
     @Captor
     private ArgumentCaptor<Envelope<JsonObject>> jsonObjectEnvelopeCaptor;
-
-    @Captor
-    private ArgumentCaptor<Envelope> rejectedEventCaptor;
 
     @Mock
     private JsonObjectToObjectConverter jsonObjectToObjectConverter;
@@ -278,9 +253,6 @@ class ProgressionPublicEventProcessorTest {
 
     @Test
     void shouldHandleCourtApplicationSummonsRejected() {
-        when(eventSource.getStreamById(CASE_ID)).thenReturn(eventStream);
-        when(eventStream.read()).thenReturn(Stream.empty());
-
         final Metadata metadata = metadataBuilder()
                 .withName("public.progression.court-application-summons-rejected")
                 .withId(randomUUID())
@@ -298,100 +270,6 @@ class ProgressionPublicEventProcessorTest {
                 withJsonPath("$.summonsRejectedOutcome.reasons", contains(REJECTION_REASON_1, REJECTION_REASON_2)),
                 withJsonPath("$.summonsRejectedOutcome.prosecutorEmailAddress", is(PROSECUTOR_EMAIL_ADDRESS))
         )));
-    }
-
-    @Test
-    void shouldEmitSubmissionRejectedForCivilSummonsRejection() {
-        final UUID externalId = randomUUID();
-        final ProsecutionWithReferenceData prosecutionWithReferenceData = new ProsecutionWithReferenceData(
-                Prosecution.prosecution().withChannel(Channel.CIVIL).build());
-        prosecutionWithReferenceData.setExternalId(externalId);
-        final DefendantsParkedForSummonsApplicationApproval parkedForApproval = DefendantsParkedForSummonsApplicationApproval.defendantsParkedForSummonsApplicationApproval()
-                .withApplicationId(APPLICATION_ID)
-                .withProsecutionWithReferenceData(prosecutionWithReferenceData)
-                .build();
-        final JsonEnvelope parkedEnvelope = JsonEnvelope.envelopeFrom(
-                metadataWithRandomUUID("prosecutioncasefile.events.defendants-parked-for-summons-application-approval").build(),
-                createObjectBuilder().build());
-
-        when(eventSource.getStreamById(CASE_ID)).thenReturn(eventStream);
-        when(eventStream.read()).thenReturn(Stream.of(parkedEnvelope));
-        when(jsonObjectToObjectConverter.convert(any(JsonObject.class), eq(DefendantsParkedForSummonsApplicationApproval.class))).thenReturn(parkedForApproval);
-
-        final Metadata metadata = metadataBuilder()
-                .withName("public.progression.court-application-summons-rejected")
-                .withId(randomUUID())
-                .build();
-        final Envelope<PublicProgressionCourtApplicationSummonsRejected> summonsApplicationRejectedEnvelope = getSummonsApplicationRejectedEnvelope(metadata);
-
-        progressionPublicEventProcessor.handleCourtApplicationSummonsRejected(summonsApplicationRejectedEnvelope);
-
-        verify(sender, times(2)).send(rejectedEventCaptor.capture());
-
-        final Envelope<PublicSubmissionRejected> submissionRejectedEnvelope = rejectedEventCaptor.getAllValues().get(0);
-        assertThat(submissionRejectedEnvelope.metadata().name(), is("public.prosecutioncasefile.submission-rejected"));
-        final PublicSubmissionRejected submissionRejectedPayload = submissionRejectedEnvelope.payload();
-        assertThat(submissionRejectedPayload.getCaseId(), is(CASE_ID));
-        assertThat(submissionRejectedPayload.getExternalId(), is(externalId));
-        assertThat(submissionRejectedPayload.getChannel(), is(Channel.CIVIL));
-
-        assertThat(rejectedEventCaptor.getAllValues().get(1).metadata().name(), is("prosecutioncasefile.command.reject-case-defendants-as-summons-application-rejected"));
-    }
-
-    @Test
-    void shouldEmitGroupSubmissionRejectedForCivilGroupSummonsRejection() {
-        final UUID groupId = randomUUID();
-        final UUID externalId = randomUUID();
-
-        final GroupIdRecordedForSummonsApplication groupIdRecorded = GroupIdRecordedForSummonsApplication.groupIdRecordedForSummonsApplication()
-                .withCaseId(CASE_ID)
-                .withGroupId(groupId)
-                .build();
-        final JsonEnvelope groupIdRecordedEnvelope = JsonEnvelope.envelopeFrom(
-                metadataWithRandomUUID("prosecutioncasefile.events.group-id-recorded-for-summons-application").build(),
-                createObjectBuilder().build());
-
-        final GroupProsecution masterCase = GroupProsecution.groupProsecution()
-                .withGroupId(groupId)
-                .withIsGroupMaster(true)
-                .build();
-        final GroupProsecutionList groupProsecutionList = new GroupProsecutionList(
-                ImmutableList.of(new GroupProsecutionWithReferenceData(masterCase)), externalId, Channel.CIVIL);
-        final GroupCasesParkedForApproval groupParkedForApproval = GroupCasesParkedForApproval.groupCasesParkedForApproval()
-                .withApplicationId(APPLICATION_ID)
-                .withGroupProsecutionList(groupProsecutionList)
-                .build();
-        final JsonEnvelope groupParkedEnvelope = JsonEnvelope.envelopeFrom(
-                metadataWithRandomUUID("prosecutioncasefile.events.group-cases-parked-for-approval").build(),
-                createObjectBuilder().build());
-
-        when(eventSource.getStreamById(CASE_ID)).thenReturn(eventStream);
-        when(eventStream.read()).thenReturn(Stream.of(groupIdRecordedEnvelope));
-        when(jsonObjectToObjectConverter.convert(any(JsonObject.class), eq(GroupIdRecordedForSummonsApplication.class))).thenReturn(groupIdRecorded);
-
-        final EventStream groupEventStream = org.mockito.Mockito.mock(EventStream.class);
-        when(eventSource.getStreamById(groupId)).thenReturn(groupEventStream);
-        when(groupEventStream.read()).thenReturn(Stream.of(groupParkedEnvelope));
-        when(jsonObjectToObjectConverter.convert(any(JsonObject.class), eq(GroupCasesParkedForApproval.class))).thenReturn(groupParkedForApproval);
-
-        final Metadata metadata = metadataBuilder()
-                .withName("public.progression.court-application-summons-rejected")
-                .withId(randomUUID())
-                .build();
-        final Envelope<PublicProgressionCourtApplicationSummonsRejected> summonsApplicationRejectedEnvelope = getSummonsApplicationRejectedEnvelope(metadata);
-
-        progressionPublicEventProcessor.handleCourtApplicationSummonsRejected(summonsApplicationRejectedEnvelope);
-
-        verify(sender, times(2)).send(rejectedEventCaptor.capture());
-
-        final Envelope<PublicGroupSubmissionRejected> groupSubmissionRejectedEnvelope = rejectedEventCaptor.getAllValues().get(0);
-        assertThat(groupSubmissionRejectedEnvelope.metadata().name(), is("public.prosecutioncasefile.group-submission-rejected"));
-        final PublicGroupSubmissionRejected groupSubmissionRejectedPayload = groupSubmissionRejectedEnvelope.payload();
-        assertThat(groupSubmissionRejectedPayload.getGroupId(), is(groupId));
-        assertThat(groupSubmissionRejectedPayload.getExternalId(), is(externalId));
-        assertThat(groupSubmissionRejectedPayload.getChannel(), is(Channel.CIVIL));
-
-        assertThat(rejectedEventCaptor.getAllValues().get(1).metadata().name(), is("prosecutioncasefile.command.reject-case-defendants-as-summons-application-rejected"));
     }
 
     @Test

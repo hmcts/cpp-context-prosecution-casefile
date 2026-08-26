@@ -26,8 +26,13 @@ import uk.gov.moj.cpp.prosecution.casefile.application.json.schemas.CourtApplica
 import uk.gov.moj.cpp.prosecution.casefile.event.processor.converter.ApplicationAcceptedToCourtApplicationProceedingsConverter;
 import uk.gov.moj.cpp.prosecution.casefile.event.processor.utils.ApplicationParameters;
 import uk.gov.moj.cpp.prosecution.casefile.event.processor.utils.EnvelopeHelper;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel;
+import uk.gov.moj.cps.prosecutioncasefile.domain.event.GroupSummonsApplicationRejected;
+import uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicGroupSubmissionRejected;
+import uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicSubmissionRejected;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.SubmitApplicationAccepted;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.SubmitApplicationValidationFailed;
+import uk.gov.moj.cps.prosecutioncasefile.domain.event.SummonsApplicationRejected;
 
 import java.util.UUID;
 
@@ -59,6 +64,12 @@ public class ApplicationEventProcessorTest {
     @Captor
     private ArgumentCaptor<Envelope> captorAdmin;
 
+    @Captor
+    private ArgumentCaptor<Envelope<PublicSubmissionRejected>> submissionRejectedCaptor;
+
+    @Captor
+    private ArgumentCaptor<Envelope<PublicGroupSubmissionRejected>> groupSubmissionRejectedCaptor;
+
     @Mock
     private ApplicationAcceptedToCourtApplicationProceedingsConverter converter;
 
@@ -67,6 +78,12 @@ public class ApplicationEventProcessorTest {
 
     @Mock
     private Envelope<SubmitApplicationValidationFailed> validationFailedEnvelope;
+
+    @Mock
+    private Envelope<SummonsApplicationRejected> summonsApplicationRejectedEnvelope;
+
+    @Mock
+    private Envelope<GroupSummonsApplicationRejected> groupSummonsApplicationRejectedEnvelope;
 
     @Mock
     private InitiateCourtApplicationProceedings outgoingPayload;
@@ -143,6 +160,80 @@ public class ApplicationEventProcessorTest {
 
         final Envelope<JsonObject> emailNotificationPublicEventEnvelope = captorAdmin.getAllValues().get(0);
         assertThat(emailNotificationPublicEventEnvelope.metadata().name(), is("notificationnotify.send-email-notification"));
+    }
+
+    @Test
+    public void shouldEmitSubmissionRejectedWhenSummonsApplicationRejectedForCivilChannel() {
+        final UUID caseId = randomUUID();
+        final UUID externalId = randomUUID();
+        given(summonsApplicationRejectedEnvelope.metadata()).willReturn(getMetaData("prosecutioncasefile.events.summons-application-rejected"));
+        final SummonsApplicationRejected payload = SummonsApplicationRejected.summonsApplicationRejected()
+                .withCaseId(caseId)
+                .withApplicationId(applicationId)
+                .withChannel(Channel.CIVIL)
+                .withExternalId(externalId)
+                .build();
+        given(summonsApplicationRejectedEnvelope.payload()).willReturn(payload);
+
+        applicationEventProcessor.handleSummonsApplicationRejected(summonsApplicationRejectedEnvelope);
+
+        verify(sender).send(submissionRejectedCaptor.capture());
+        final Envelope<PublicSubmissionRejected> resultEnvelope = submissionRejectedCaptor.getValue();
+        assertThat(resultEnvelope.metadata().name(), is("public.prosecutioncasefile.submission-rejected"));
+        assertThat(resultEnvelope.payload().getCaseId(), is(caseId));
+        assertThat(resultEnvelope.payload().getExternalId(), is(externalId));
+        assertThat(resultEnvelope.payload().getChannel(), is(Channel.CIVIL));
+    }
+
+    @Test
+    public void shouldNotEmitSubmissionRejectedWhenSummonsApplicationRejectedForNonCivilChannel() {
+        final SummonsApplicationRejected payload = SummonsApplicationRejected.summonsApplicationRejected()
+                .withCaseId(randomUUID())
+                .withApplicationId(applicationId)
+                .withChannel(Channel.MCC)
+                .withExternalId(randomUUID())
+                .build();
+        given(summonsApplicationRejectedEnvelope.payload()).willReturn(payload);
+
+        applicationEventProcessor.handleSummonsApplicationRejected(summonsApplicationRejectedEnvelope);
+
+        verify(sender, never()).send(any());
+    }
+
+    @Test
+    public void shouldEmitGroupSubmissionRejectedWhenGroupSummonsApplicationRejectedForCivilChannel() {
+        final UUID groupId = randomUUID();
+        final UUID externalId = randomUUID();
+        given(groupSummonsApplicationRejectedEnvelope.metadata()).willReturn(getMetaData("prosecutioncasefile.events.group-summons-application-rejected"));
+        final GroupSummonsApplicationRejected payload = GroupSummonsApplicationRejected.groupSummonsApplicationRejected()
+                .withGroupId(groupId)
+                .withChannel(Channel.CIVIL)
+                .withExternalId(externalId)
+                .build();
+        given(groupSummonsApplicationRejectedEnvelope.payload()).willReturn(payload);
+
+        applicationEventProcessor.handleGroupSummonsApplicationRejected(groupSummonsApplicationRejectedEnvelope);
+
+        verify(sender).send(groupSubmissionRejectedCaptor.capture());
+        final Envelope<PublicGroupSubmissionRejected> resultEnvelope = groupSubmissionRejectedCaptor.getValue();
+        assertThat(resultEnvelope.metadata().name(), is("public.prosecutioncasefile.group-submission-rejected"));
+        assertThat(resultEnvelope.payload().getGroupId(), is(groupId));
+        assertThat(resultEnvelope.payload().getExternalId(), is(externalId));
+        assertThat(resultEnvelope.payload().getChannel(), is(Channel.CIVIL));
+    }
+
+    @Test
+    public void shouldNotEmitGroupSubmissionRejectedWhenGroupSummonsApplicationRejectedForNonCivilChannel() {
+        final GroupSummonsApplicationRejected payload = GroupSummonsApplicationRejected.groupSummonsApplicationRejected()
+                .withGroupId(randomUUID())
+                .withChannel(Channel.SPI)
+                .withExternalId(randomUUID())
+                .build();
+        given(groupSummonsApplicationRejectedEnvelope.payload()).willReturn(payload);
+
+        applicationEventProcessor.handleGroupSummonsApplicationRejected(groupSummonsApplicationRejectedEnvelope);
+
+        verify(sender, never()).send(any());
     }
 
     private Metadata getMetaData(final String name) {

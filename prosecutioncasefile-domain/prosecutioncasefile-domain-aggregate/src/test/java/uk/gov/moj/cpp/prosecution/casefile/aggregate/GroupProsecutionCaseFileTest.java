@@ -36,6 +36,7 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.SelfDefinedInformation;
 import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 import uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.GroupProsecutionRejected;
+import uk.gov.moj.cps.prosecutioncasefile.domain.event.GroupSummonsApplicationRejected;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.SummonsCodeReferenceData;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -236,6 +237,38 @@ public class GroupProsecutionCaseFileTest {
         final GroupProsecutionRejected rejected = (GroupProsecutionRejected) eventStream.findFirst().get();
 
         assertThat(rejected.getGroupCaseErrors(), is(nullValue()));
+    }
+
+    @Test
+    void shouldAlsoRaiseGroupSummonsApplicationRejectedWhenRejectGroupProsecutionCalledWithNoArgs() {
+        final UUID externalId = randomUUID();
+        final GroupProsecutionWithReferenceData masterCase = buildGroupProsecutionWithReferenceData(INITIATION_CODE_FOR_SUMMONS, randomUUID(), true, URN_1);
+        final GroupProsecutionList groupProsecutionList = new GroupProsecutionList(asList(masterCase), externalId, Channel.CIVIL);
+        groupProsecutionCaseFile.apply(GroupCasesReceived.groupCasesReceived()
+                .withGroupProsecutionList(groupProsecutionList)
+                .build());
+
+        final List<Object> events = groupProsecutionCaseFile.rejectGroupProsecution().collect(java.util.stream.Collectors.toList());
+
+        assertThat(events, Matchers.hasSize(2));
+        assertThat(events.get(0), is(instanceOf(GroupProsecutionRejected.class)));
+        assertThat(events.get(1), is(instanceOf(GroupSummonsApplicationRejected.class)));
+
+        final GroupSummonsApplicationRejected groupSummonsApplicationRejected = (GroupSummonsApplicationRejected) events.get(1);
+        assertThat(groupSummonsApplicationRejected.getGroupId(), is(groupId));
+        assertThat(groupSummonsApplicationRejected.getChannel(), is(Channel.CIVIL));
+        assertThat(groupSummonsApplicationRejected.getExternalId(), is(externalId));
+    }
+
+    @Test
+    void shouldNotRaiseGroupSummonsApplicationRejectedWhenRejectGroupProsecutionCalledWithProblems() {
+        seedAggregateWithMasterCase();
+
+        final Problem problem = Problem.problem().withCode("DUPLICATED_PROSECUTION").build();
+        final List<Object> events = groupProsecutionCaseFile.rejectGroupProsecution(asList(problem)).collect(java.util.stream.Collectors.toList());
+
+        assertThat(events, Matchers.hasSize(1));
+        assertThat(events.get(0), is(instanceOf(GroupProsecutionRejected.class)));
     }
 
     private void seedAggregateWithMasterCase() {

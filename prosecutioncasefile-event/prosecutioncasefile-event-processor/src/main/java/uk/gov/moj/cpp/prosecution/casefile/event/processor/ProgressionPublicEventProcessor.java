@@ -16,10 +16,7 @@ import static uk.gov.justice.services.messaging.JsonObjects.getJsonObject;
 import static uk.gov.justice.services.messaging.JsonObjects.getString;
 import static uk.gov.moj.cps.prosecutioncasefile.command.handler.AcceptCase.acceptCase;
 import static uk.gov.moj.cps.prosecutioncasefile.command.handler.CaseDefendantChangedCommand.caseDefendantChangedCommand;
-import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CIVIL;
 import static uk.gov.moj.cps.prosecutioncasefile.command.handler.EjectCase.ejectCase;
-import static uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicGroupSubmissionRejected.publicGroupSubmissionRejected;
-import static uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicSubmissionRejected.publicSubmissionRejected;
 
 import uk.gov.justice.core.courts.CourtApplicationCase;
 import uk.gov.justice.core.courts.CourtApplicationCreated;
@@ -32,17 +29,11 @@ import uk.gov.justice.services.common.converter.ObjectToJsonObjectConverter;
 import uk.gov.justice.services.core.annotation.Handles;
 import uk.gov.justice.services.core.annotation.ServiceComponent;
 import uk.gov.justice.services.core.sender.Sender;
-import uk.gov.justice.services.eventsourcing.source.core.EventSource;
 import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.Metadata;
 import uk.gov.moj.cpp.progression.events.ApplicationProceedingsEdited;
-import uk.gov.moj.cpp.prosecution.casefile.domain.GroupProsecutionList;
-import uk.gov.moj.cpp.prosecution.casefile.domain.ProsecutionWithReferenceData;
-import uk.gov.moj.cpp.prosecution.casefile.event.DefendantsParkedForSummonsApplicationApproval;
-import uk.gov.moj.cpp.prosecution.casefile.event.GroupCasesParkedForApproval;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Address;
-import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ContactDetails;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.PersonalInformation;
 import uk.gov.moj.cps.prosecutioncasefile.command.handler.AcceptCase;
@@ -50,7 +41,6 @@ import uk.gov.moj.cps.prosecutioncasefile.command.handler.AcceptGroupCases;
 import uk.gov.moj.cps.prosecutioncasefile.command.handler.CaseDefendantChangedCommand;
 import uk.gov.moj.cps.prosecutioncasefile.command.handler.EjectCase;
 import uk.gov.moj.cps.prosecutioncasefile.command.handler.RejectGroupCases;
-import uk.gov.moj.cps.prosecutioncasefile.domain.event.GroupIdRecordedForSummonsApplication;
 
 import java.util.List;
 import java.util.Optional;
@@ -66,11 +56,6 @@ import org.slf4j.Logger;
 public class ProgressionPublicEventProcessor {
 
 
-    private static final String PUBLIC_SUBMISSION_REJECTED_EVENT = "public.prosecutioncasefile.submission-rejected";
-    private static final String PUBLIC_GROUP_SUBMISSION_REJECTED_EVENT = "public.prosecutioncasefile.group-submission-rejected";
-    private static final String EVENT_DEFENDANTS_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL = "prosecutioncasefile.events.defendants-parked-for-summons-application-approval";
-    private static final String EVENT_GROUP_ID_RECORDED_FOR_SUMMONS_APPLICATION = "prosecutioncasefile.events.group-id-recorded-for-summons-application";
-    private static final String EVENT_GROUP_CASES_PARKED_FOR_APPROVAL = "prosecutioncasefile.events.group-cases-parked-for-approval";
     public static final String APPLICATION_ID = "applicationId";
     private static final String FIELD_ID = "id";
     private static final String FIELD_GROUP_ID = "groupId";
@@ -88,9 +73,6 @@ public class ProgressionPublicEventProcessor {
 
     @Inject
     JsonObjectToObjectConverter jsonObjectToObjectConverter;
-
-    @Inject
-    private EventSource eventSource;
 
     private static final Logger LOGGER = getLogger(ProgressionPublicEventProcessor.class);
 
@@ -174,8 +156,6 @@ public class ProgressionPublicEventProcessor {
 
         final PublicProgressionCourtApplicationSummonsRejected eventPayload = envelope.payload();
 
-        emitSubmissionRejectedIfCivilSummons(eventPayload, envelope);
-
         final Metadata metadata = metadataFrom(envelope.metadata())
                 .withName("prosecutioncasefile.command.reject-case-defendants-as-summons-application-rejected")
                 .build();
@@ -186,69 +166,6 @@ public class ProgressionPublicEventProcessor {
                 .add("summonsRejectedOutcome", objectToJsonObjectConverter.convert(eventPayload.getSummonsRejectedOutcome()))
                 .build();
         sender.send(envelopeFrom(metadata, commandPayload));
-    }
-
-    /**
-     * public.progression.court-application-summons-rejected is the one event Progression sends for
-     * both single-case and group summons rejections (it collapses a group's case ids down to just
-     * the first one) — so this resolves which of the two it is from the one case's own event stream,
-     * rather than relying on any distinct "group" event that doesn't exist.
-     */
-    private void emitSubmissionRejectedIfCivilSummons(final PublicProgressionCourtApplicationSummonsRejected eventPayload, final Envelope<?> envelope) {
-        final List<JsonEnvelope> caseEvents = eventSource.getStreamById(eventPayload.getProsecutionCaseId()).read().collect(toList());
-
-        final Optional<DefendantsParkedForSummonsApplicationApproval> parkedEventForApplication = caseEvents.stream()
-                .filter(e -> EVENT_DEFENDANTS_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL.equals(e.metadata().name()))
-                .map(e -> jsonObjectToObjectConverter.convert(e.payloadAsJsonObject(), DefendantsParkedForSummonsApplicationApproval.class))
-                .filter(e -> eventPayload.getId().equals(e.getApplicationId()))
-                .findFirst();
-
-        if (parkedEventForApplication.isPresent()) {
-            emitSummonsSubmissionRejected(eventPayload, parkedEventForApplication.get().getProsecutionWithReferenceData(), envelope);
-            return;
-        }
-
-        final Optional<UUID> groupId = caseEvents.stream()
-                .filter(e -> EVENT_GROUP_ID_RECORDED_FOR_SUMMONS_APPLICATION.equals(e.metadata().name()))
-                .map(e -> jsonObjectToObjectConverter.convert(e.payloadAsJsonObject(), GroupIdRecordedForSummonsApplication.class))
-                .map(GroupIdRecordedForSummonsApplication::getGroupId)
-                .findFirst();
-
-        // Unlike the single-case path, GroupProsecutionCaseFile.approveGroupProsecution()/rejectGroupProsecution()
-        // take no applicationId at all — a group has exactly one parking, so no applicationId match is needed here.
-        groupId.ifPresent(id -> eventSource.getStreamById(id).read()
-                .filter(e -> EVENT_GROUP_CASES_PARKED_FOR_APPROVAL.equals(e.metadata().name()))
-                .map(e -> jsonObjectToObjectConverter.convert(e.payloadAsJsonObject(), GroupCasesParkedForApproval.class))
-                .findFirst()
-                .ifPresent(groupParkedEvent -> emitGroupSummonsSubmissionRejected(id, groupParkedEvent.getGroupProsecutionList(), envelope)));
-    }
-
-    private void emitSummonsSubmissionRejected(final PublicProgressionCourtApplicationSummonsRejected eventPayload, final ProsecutionWithReferenceData prosecutionWithReferenceData, final Envelope<?> envelope) {
-        final Channel channel = prosecutionWithReferenceData.getProsecution().getChannel();
-        if (CIVIL == channel) {
-            sender.send(envelopeFrom(
-                    metadataFrom(envelope.metadata()).withName(PUBLIC_SUBMISSION_REJECTED_EVENT),
-                    publicSubmissionRejected()
-                            .withCaseId(eventPayload.getProsecutionCaseId())
-                            .withExternalId(prosecutionWithReferenceData.getExternalId())
-                            .withChannel(channel)
-                            .build()
-            ));
-        }
-    }
-
-    private void emitGroupSummonsSubmissionRejected(final UUID groupId, final GroupProsecutionList groupProsecutionList, final Envelope<?> envelope) {
-        final Channel channel = groupProsecutionList.getChannel();
-        if (CIVIL == channel) {
-            sender.send(envelopeFrom(
-                    metadataFrom(envelope.metadata()).withName(PUBLIC_GROUP_SUBMISSION_REJECTED_EVENT),
-                    publicGroupSubmissionRejected()
-                            .withGroupId(groupId)
-                            .withExternalId(groupProsecutionList.getExternalId())
-                            .withChannel(channel)
-                            .build()
-            ));
-        }
     }
 
     @Handles("public.progression.court-application-summons-approved")

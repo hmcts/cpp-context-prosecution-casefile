@@ -1909,6 +1909,8 @@ public class ProsecutionCaseFile implements Aggregate {
                 .withApplicationId(summonsApplicationRejectedDetails.getApplicationId())
                 .withDefendantIds(defendantIds)
                 .withSummonsRejectedOutcome(summonsApplicationRejectedDetails.getSummonsRejectedOutcome())
+                .withChannel(this.channel)
+                .withExternalId(getExternalIdFromDefendantIds(defendantIds))
                 .build()
         );
 

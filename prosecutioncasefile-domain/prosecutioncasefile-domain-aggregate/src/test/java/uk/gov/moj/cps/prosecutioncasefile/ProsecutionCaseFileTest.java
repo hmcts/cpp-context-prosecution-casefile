@@ -1072,7 +1072,7 @@ public class ProsecutionCaseFileTest {
         assertThat(defendantsParkedForSummonsApplicationApproval.getProsecutionWithReferenceData().getProsecution().getDefendants().size(), is(1));
 
         prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID, referenceData, emptyList()));
-        prosecutionCaseFile.apply(new SummonsApplicationRejected(APPLICATION_ID, CASE_ID, newArrayList(fromString(SECOND_DEFENDANT_ID)), summonsRejectedOutcome().withReasons(ImmutableList.of("Rejection Reason")).build()));
+        prosecutionCaseFile.apply(SummonsApplicationRejected.summonsApplicationRejected().withApplicationId(APPLICATION_ID).withCaseId(CASE_ID).withDefendantIds(newArrayList(fromString(SECOND_DEFENDANT_ID))).withSummonsRejectedOutcome(summonsRejectedOutcome().withReasons(ImmutableList.of("Rejection Reason")).build()).build());
 
         final String updatedSurname = STRING.next();
         final ProsecutionWithReferenceData subsequentReferenceDataForSameDefendant = getProsecutionWithReferenceData(
@@ -1121,7 +1121,7 @@ public class ProsecutionCaseFileTest {
         final ProsecutionWithReferenceData referenceData = getProsecutionWithReferenceData(
                 of(buildDefendantWithInitiationCode(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE, "S")), SPI, "S");
         prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID, referenceData, emptyList()));
-        prosecutionCaseFile.apply(new SummonsApplicationRejected(APPLICATION_ID, CASE_ID, newArrayList(fromString(DEFENDANT_ID)), summonsRejectedOutcome().withReasons(ImmutableList.of("Rejection Reason")).build()));
+        prosecutionCaseFile.apply(SummonsApplicationRejected.summonsApplicationRejected().withApplicationId(APPLICATION_ID).withCaseId(CASE_ID).withDefendantIds(newArrayList(fromString(DEFENDANT_ID))).withSummonsRejectedOutcome(summonsRejectedOutcome().withReasons(ImmutableList.of("Rejection Reason")).build()).build());
 
         final String updatedSurname = STRING.next();
         final ProsecutionWithReferenceData subsequentReferenceDataForSameDefendant = getProsecutionWithReferenceData(
@@ -1423,9 +1423,32 @@ public class ProsecutionCaseFileTest {
         assertThat(applicationRejected.getDefendantIds(), contains(fromString(DEFENDANT_ID)));
         assertThat(applicationRejected.getDefendantIds(), not(contains(fromString(SECOND_DEFENDANT_ID))));
         assertThat(applicationRejected.getSummonsRejectedOutcome().getReasons(), contains("Rejection Reason"));
+        assertThat(applicationRejected.getChannel(), is(SPI));
         assertThat(prosecutionCaseFile.isProsecutionReceived(), is(false));
         assertThat(prosecutionCaseFile.getDefendants(), hasSize(1));
         assertThat(prosecutionCaseFile.getDefendants().get(0).getId(), is(SECOND_DEFENDANT_ID));
+    }
+
+    @Test
+    public void shouldRaiseSummonsApplicationRejectedEventWithChannelAndExternalId() {
+        final ProsecutionWithReferenceData referenceData = getProsecutionWithReferenceData(
+                of(buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE)), CIVIL, "S", EXTERNAL_ID);
+        prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID, referenceData, emptyList()));
+
+        final SummonsApplicationRejectedDetails summonsApplicationRejectedDetails = summonsApplicationRejectedDetails()
+                .withApplicationId(APPLICATION_ID)
+                .withCaseId(CASE_ID)
+                .withSummonsRejectedOutcome(summonsRejectedOutcome()
+                        .withReasons(ImmutableList.of("Rejection Reason"))
+                        .build())
+                .build();
+        final Stream<Object> objectStream = prosecutionCaseFile.rejectCaseDefendants(summonsApplicationRejectedDetails);
+
+        final List<Object> eventList = objectStream.collect(toList());
+        final uk.gov.moj.cps.prosecutioncasefile.domain.event.SummonsApplicationRejected applicationRejected =
+                (uk.gov.moj.cps.prosecutioncasefile.domain.event.SummonsApplicationRejected) eventList.get(0);
+        assertThat(applicationRejected.getChannel(), is(CIVIL));
+        assertThat(applicationRejected.getExternalId(), is(EXTERNAL_ID));
     }
 
     @Test
@@ -1434,7 +1457,7 @@ public class ProsecutionCaseFileTest {
                 of(buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE),
                         buildDefendant(SECOND_FORENAME, SECOND_SURNAME, SECOND_BIRTH_DATE, SECOND_DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_TWO)), SPI, "S");
         prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID, referenceData, emptyList()));
-        prosecutionCaseFile.apply(new SummonsApplicationRejected(APPLICATION_ID, CASE_ID, newArrayList(fromString(DEFENDANT_ID), fromString(SECOND_DEFENDANT_ID)), summonsRejectedOutcome().withReasons(ImmutableList.of("Rejection Reason")).build()));
+        prosecutionCaseFile.apply(SummonsApplicationRejected.summonsApplicationRejected().withApplicationId(APPLICATION_ID).withCaseId(CASE_ID).withDefendantIds(newArrayList(fromString(DEFENDANT_ID), fromString(SECOND_DEFENDANT_ID))).withSummonsRejectedOutcome(summonsRejectedOutcome().withReasons(ImmutableList.of("Rejection Reason")).build()).build());
 
         final String updatedSurname = STRING.next();
         final ProsecutionWithReferenceData subsequentReferenceDataForSameDefendant = getProsecutionWithReferenceData(
@@ -1459,7 +1482,7 @@ public class ProsecutionCaseFileTest {
                 of(buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE),
                         buildDefendant(SECOND_FORENAME, SECOND_SURNAME, SECOND_BIRTH_DATE, SECOND_DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_TWO)), SPI, SUMMONS_INITIATION_CODE);
         prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID, firstMessage, emptyList()));
-        prosecutionCaseFile.apply(new SummonsApplicationRejected(APPLICATION_ID, CASE_ID, newArrayList(fromString(DEFENDANT_ID), fromString(SECOND_DEFENDANT_ID)), summonsRejectedOutcome().withReasons(newArrayList("Rejection Reason")).build()));
+        prosecutionCaseFile.apply(SummonsApplicationRejected.summonsApplicationRejected().withApplicationId(APPLICATION_ID).withCaseId(CASE_ID).withDefendantIds(newArrayList(fromString(DEFENDANT_ID), fromString(SECOND_DEFENDANT_ID))).withSummonsRejectedOutcome(summonsRejectedOutcome().withReasons(newArrayList("Rejection Reason")).build()).build());
 
         final String updatedSurname = STRING.next();
         final ProsecutionWithReferenceData secondMessage = getProsecutionWithReferenceData(
@@ -1496,7 +1519,11 @@ public class ProsecutionCaseFileTest {
                 of(buildDefendant(FORENAME, updatedSurname, BIRTH_DATE, THIRD_DEFENDANT_ID, randomAlphabetic(10))), SPI, SUMMONS_INITIATION_CODE, EXTERNAL_ID_2);
         prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID, firstMessage, emptyList()));
         prosecutionCaseFile.apply(new CcCaseReceived(firstMessage, summonsApprovedOutcome().withPersonalService(true).withProsecutorCost("£300.00").withSummonsSuppressed(false).build(), randomUUID()));
-        prosecutionCaseFile.apply(new CaseCreatedSuccessfully(CASE_ID, SPI, EXTERNAL_ID));
+        prosecutionCaseFile.apply(CaseCreatedSuccessfully.caseCreatedSuccessfully()
+                .withCaseId(CASE_ID)
+                .withChannel(SPI)
+                .withExternalId(EXTERNAL_ID)
+                .build());
         prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID_2, secondMessage, emptyList()));
 
         final SummonsApplicationApprovedDetails secondSummonsApplicationApprovedDetails = getSummonsApplicationApprovedDetails(APPLICATION_ID_2);
@@ -1525,7 +1552,11 @@ public class ProsecutionCaseFileTest {
         prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID, firstMessage, emptyList()));
         prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID_2, secondMessage, emptyList()));
         prosecutionCaseFile.apply(new CcCaseReceived(firstMessage, summonsApprovedOutcome().withPersonalService(true).withProsecutorCost("£300.00").withSummonsSuppressed(false).build(), randomUUID()));
-        prosecutionCaseFile.apply(new CaseCreatedSuccessfully(CASE_ID, SPI, EXTERNAL_ID));
+        prosecutionCaseFile.apply(CaseCreatedSuccessfully.caseCreatedSuccessfully()
+                .withCaseId(CASE_ID)
+                .withChannel(SPI)
+                .withExternalId(EXTERNAL_ID)
+                .build());
 
         final SummonsApplicationApprovedDetails secondSummonsApplicationApprovedDetails = getSummonsApplicationApprovedDetails(APPLICATION_ID_2);
         final Stream<Object> objectStream = prosecutionCaseFile.approveCaseDefendants(secondSummonsApplicationApprovedDetails, of(), of(), isCivil);
@@ -1635,6 +1666,36 @@ public class ProsecutionCaseFileTest {
         final List<Object> subsequentCaseMessageEventList = objectStreamPostSubsequentMessageReceived.collect(toList());
         assertThat(subsequentCaseMessageEventList.get(0), is(instanceOf(DefendantsParkedForSummonsApplicationApproval.class)));
         assertThat(prosecutionCaseFile.getDefendants(), hasSize(1));
+    }
+
+    @Test
+    public void shouldRaiseProsecutionCaseRejectedForCivilChannel() {
+        final SummonsApplicationRejectedDetails applicationRejectedCommandPayload = summonsApplicationRejectedDetails()
+                .withApplicationId(APPLICATION_ID)
+                .withCaseId(CASE_ID)
+                .withSummonsRejectedOutcome(summonsRejectedOutcome()
+                        .withReasons(ImmutableList.of("First Reason"))
+                        .build())
+                .build();
+        final ProsecutionWithReferenceData prosecutionWithReferenceData = getProsecutionWithReferenceData(
+                of(buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE)), CIVIL, "S");
+        prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID, prosecutionWithReferenceData, emptyList()));
+
+        final Stream<Object> objectStreamPostApplicationRejection = prosecutionCaseFile.rejectCaseDefendants(applicationRejectedCommandPayload);
+
+        final List<Object> rejectionEventList = objectStreamPostApplicationRejection.collect(toList());
+        // CIVIL no longer raises CcProsecutionRejected here — only SummonsApplicationRejected, which now
+        // carries channel/externalId directly (public.prosecutioncasefile.submission-rejected derives from
+        // this event instead of civil-prosecution-rejected for the SA/SR box-rejection path).
+        assertThat(rejectionEventList, hasSize(1));
+        assertThat(rejectionEventList.get(0), is(instanceOf(uk.gov.moj.cps.prosecutioncasefile.domain.event.SummonsApplicationRejected.class)));
+        final uk.gov.moj.cps.prosecutioncasefile.domain.event.SummonsApplicationRejected applicationRejected = (uk.gov.moj.cps.prosecutioncasefile.domain.event.SummonsApplicationRejected) rejectionEventList.get(0);
+        assertThat(applicationRejected.getDefendantIds(), contains(fromString(DEFENDANT_ID)));
+        assertThat(applicationRejected.getSummonsRejectedOutcome().getReasons(), contains("First Reason"));
+        assertThat(applicationRejected.getChannel(), is(CIVIL));
+        assertThat(applicationRejected.getExternalId(), is(EXTERNAL_ID));
+        assertThat(prosecutionCaseFile.isProsecutionReceived(), is(false));
+        assertThat(prosecutionCaseFile.getDefendants(), empty());
     }
 
     @MethodSource("nonSpiChannels")
@@ -1820,7 +1881,7 @@ public class ProsecutionCaseFileTest {
                 of(buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE),
                         buildDefendant(SECOND_FORENAME, SECOND_SURNAME, SECOND_BIRTH_DATE, SECOND_DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_TWO)), SPI, SUMMONS_INITIATION_CODE);
         prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID, firstMessage, emptyList()));
-        prosecutionCaseFile.apply(new SummonsApplicationRejected(APPLICATION_ID, CASE_ID, newArrayList(fromString(DEFENDANT_ID), fromString(SECOND_DEFENDANT_ID)), summonsRejectedOutcome().withReasons(newArrayList("Rejection Reason")).build()));
+        prosecutionCaseFile.apply(SummonsApplicationRejected.summonsApplicationRejected().withApplicationId(APPLICATION_ID).withCaseId(CASE_ID).withDefendantIds(newArrayList(fromString(DEFENDANT_ID), fromString(SECOND_DEFENDANT_ID))).withSummonsRejectedOutcome(summonsRejectedOutcome().withReasons(newArrayList("Rejection Reason")).build()).build());
 
         Stream<Object> objectStream = prosecutionCaseFile.approveCaseDefendants(getSummonsApplicationApprovedDetails(APPLICATION_ID), of(), of(), isCivil);
 

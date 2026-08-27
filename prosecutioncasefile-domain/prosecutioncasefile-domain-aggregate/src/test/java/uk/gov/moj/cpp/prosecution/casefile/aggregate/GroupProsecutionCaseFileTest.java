@@ -36,6 +36,7 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.SelfDefinedInformation;
 import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 import uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.GroupProsecutionRejected;
+import uk.gov.moj.cps.prosecutioncasefile.domain.event.GroupSummonsApplicationRejected;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.SummonsCodeReferenceData;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -67,15 +68,14 @@ public class GroupProsecutionCaseFileTest {
                 Optional.of(OrganisationUnitWithCourtroomReferenceData.organisationUnitWithCourtroomReferenceData().build());
 
         when(referenceDataQueryService.retrieveOrganisationUnitWithCourtroom("C55BN00")).thenReturn(optionalOrganisationUnitWithCourtroomReferenceData);
-        List<SummonsCodeReferenceData> summonsCodeReferenceDataList = new ArrayList<SummonsCodeReferenceData>();
-        summonsCodeReferenceDataList.add(SummonsCodeReferenceData.summonsCodeReferenceData().withSummonsCode("S02").build());
-        when(referenceDataQueryService.retrieveSummonsCodes()).thenReturn(summonsCodeReferenceDataList);
         final List<GroupProsecutionWithReferenceData> groupProsecutionWithReferenceDataList = new ArrayList<>();
         final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
         referenceDataVO.setInitiationTypes(Arrays.asList("S"));
-        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData1 = buildGroupProsecutionWithReferenceData(INITIATION_CODE_FOR_SUMMONS, randomUUID(), true, "URN1");
+        // "A" is the only valid civil summons code (SummonsCodeValidationRule) — both cases are
+        // civil (withIsCivil(true)), so both must use it for this scenario to actually park.
+        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData1 = buildGroupProsecutionWithReferenceData(INITIATION_CODE_FOR_SUMMONS, randomUUID(), true, "URN1", "A");
         groupProsecutionWithReferenceData1.setReferenceDataVO(referenceDataVO);
-        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData2 = buildGroupProsecutionWithReferenceData(INITIATION_CODE_FOR_SUMMONS, randomUUID(), false, "URN2");
+        final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData2 = buildGroupProsecutionWithReferenceData(INITIATION_CODE_FOR_SUMMONS, randomUUID(), false, "URN2", "A");
         groupProsecutionWithReferenceData2.setReferenceDataVO(referenceDataVO);
         groupProsecutionWithReferenceDataList.add(groupProsecutionWithReferenceData1);
         groupProsecutionWithReferenceDataList.add(groupProsecutionWithReferenceData2);
@@ -230,13 +230,36 @@ public class GroupProsecutionCaseFileTest {
     }
 
     @Test
-    void shouldOmitGroupCaseErrorsWhenRejectGroupProsecutionCalledWithNoProblems() {
+    void shouldRaiseOnlyGroupSummonsApplicationRejectedWhenRejectGroupProsecutionCalledWithNoArgs() {
+        final UUID externalId = randomUUID();
+        final GroupProsecutionWithReferenceData masterCase = buildGroupProsecutionWithReferenceData(INITIATION_CODE_FOR_SUMMONS, randomUUID(), true, URN_1);
+        final GroupProsecutionList groupProsecutionList = new GroupProsecutionList(asList(masterCase), externalId, Channel.CIVIL);
+        groupProsecutionCaseFile.apply(GroupCasesReceived.groupCasesReceived()
+                .withGroupProsecutionList(groupProsecutionList)
+                .build());
+
+        final List<Object> events = groupProsecutionCaseFile.rejectGroupProsecution().collect(java.util.stream.Collectors.toList());
+
+        // The no-arg path (SA/SR box rejection) now raises ONLY GroupSummonsApplicationRejected —
+        // GroupProsecutionRejected is reserved for the List<Problem> path (e.g. duplicate-URN rejection).
+        assertThat(events, Matchers.hasSize(1));
+        assertThat(events.get(0), is(instanceOf(GroupSummonsApplicationRejected.class)));
+
+        final GroupSummonsApplicationRejected groupSummonsApplicationRejected = (GroupSummonsApplicationRejected) events.get(0);
+        assertThat(groupSummonsApplicationRejected.getGroupId(), is(groupId));
+        assertThat(groupSummonsApplicationRejected.getChannel(), is(Channel.CIVIL));
+        assertThat(groupSummonsApplicationRejected.getExternalId(), is(externalId));
+    }
+
+    @Test
+    void shouldNotRaiseGroupSummonsApplicationRejectedWhenRejectGroupProsecutionCalledWithProblems() {
         seedAggregateWithMasterCase();
 
-        final Stream<Object> eventStream = groupProsecutionCaseFile.rejectGroupProsecution();
-        final GroupProsecutionRejected rejected = (GroupProsecutionRejected) eventStream.findFirst().get();
+        final Problem problem = Problem.problem().withCode("DUPLICATED_PROSECUTION").build();
+        final List<Object> events = groupProsecutionCaseFile.rejectGroupProsecution(asList(problem)).collect(java.util.stream.Collectors.toList());
 
-        assertThat(rejected.getGroupCaseErrors(), is(nullValue()));
+        assertThat(events, Matchers.hasSize(1));
+        assertThat(events.get(0), is(instanceOf(GroupProsecutionRejected.class)));
     }
 
     private void seedAggregateWithMasterCase() {
@@ -322,6 +345,10 @@ public class GroupProsecutionCaseFileTest {
     }
 
     private GroupProsecutionWithReferenceData buildGroupProsecutionWithReferenceData(final String initiationCode, final UUID prosecutionCaseId, final Boolean isGroupMaster, final String prosecutorCaseReference){
+        return buildGroupProsecutionWithReferenceData(initiationCode, prosecutionCaseId, isGroupMaster, prosecutorCaseReference, "S02");
+    }
+
+    private GroupProsecutionWithReferenceData buildGroupProsecutionWithReferenceData(final String initiationCode, final UUID prosecutionCaseId, final Boolean isGroupMaster, final String prosecutorCaseReference, final String summonsCode){
         return new GroupProsecutionWithReferenceData(GroupProsecution.groupProsecution()
                 .withGroupId(groupId)
                 .withIsCivil(true)
@@ -329,7 +356,7 @@ public class GroupProsecutionCaseFileTest {
                 .withCaseDetails(CaseDetails.caseDetails()
                         .withCaseId(prosecutionCaseId)
                         .withInitiationCode(initiationCode)
-                        .withSummonsCode("S02")
+                        .withSummonsCode(summonsCode)
                         .withProsecutorCaseReference(prosecutorCaseReference)
                         .build())
                 .withDefendants(asList(Defendant.defendant()

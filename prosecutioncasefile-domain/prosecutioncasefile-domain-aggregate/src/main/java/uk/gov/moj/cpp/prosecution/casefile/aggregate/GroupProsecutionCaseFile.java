@@ -31,6 +31,7 @@ import uk.gov.moj.cpp.prosecution.casefile.refdata.proscase.GroupCasesReferenceD
 import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.GroupCasesCreatedSuccessfully;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.GroupProsecutionRejected;
+import uk.gov.moj.cps.prosecutioncasefile.domain.event.GroupSummonsApplicationRejected;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -182,18 +183,26 @@ public class GroupProsecutionCaseFile implements Aggregate {
 
 
     public Stream<Object> rejectGroupProsecution() {
-        return rejectGroupProsecution(null);
+        final Stream.Builder<Object> builder = builder();
+        builder.add(GroupSummonsApplicationRejected.groupSummonsApplicationRejected()
+                .withGroupId(this.groupProsecutions.get(0).getGroupId())
+                .withChannel(this.channel)
+                .withExternalId(this.externalId)
+                .build());
+        return apply(builder.build());
     }
 
     public Stream<Object> rejectGroupProsecution(final List<Problem> problems) {
-        return apply(builder().add(GroupProsecutionRejected.groupProsecutionRejected()
-                        .withGroupProsecutions(this.groupProsecutions)
-                        .withChannel(this.channel)
-                        .withExternalId(this.externalId)
-                        .withGroupCaseErrors(toGroupCaseErrors(problems))
-                        .build())
-                .build()
-        );
+        return apply(builder().add(buildGroupProsecutionRejected(problems)).build());
+    }
+
+    private GroupProsecutionRejected buildGroupProsecutionRejected(final List<Problem> problems) {
+        return GroupProsecutionRejected.groupProsecutionRejected()
+                .withGroupProsecutions(this.groupProsecutions)
+                .withChannel(this.channel)
+                .withExternalId(this.externalId)
+                .withGroupCaseErrors(toGroupCaseErrors(problems))
+                .build();
     }
 
     /**
@@ -250,6 +259,7 @@ public class GroupProsecutionCaseFile implements Aggregate {
                 .withCaseDetails(groupProsecutionWithReferenceData.getGroupProsecution().getCaseDetails())
                 .withDefendants(groupProsecutionWithReferenceData.getGroupProsecution().getDefendants())
                 .withChannel(channel)
+                .withIsCivil(groupProsecutionWithReferenceData.getGroupProsecution().getIsCivil())
                 .build();
 
         return new ProsecutionWithReferenceData(prosecution, groupProsecutionWithReferenceData.getReferenceDataVO(), externalId);

@@ -32,6 +32,7 @@ public class EventSelector {
     public static final String PUBLIC_DOCUMENT_REVIEW = "public.prosecutioncasefile.document-review-required";
     public static final String PUBLIC_MATERIAL_ADDED = "public.prosecutioncasefile.material-added";
     public static final String PUBLIC_PROSECUTIONCASEFILE_PROSECUTION_SUBMISSION_SUCCEEDED = "public.prosecutioncasefile.prosecution-submission-succeeded";
+    public static final String PUBLIC_PROSECUTIONCASEFILE_CIVIL_PROSECUTION_SUBMISSION_SUCCEEDED = "public.prosecutioncasefile.civil.prosecution-submission-succeeded";
     public static final String PUBLIC_PROSECUTIONCASEFILE_CPS_SERVE_MATERIAL_STATUS_UPDATED = "public.prosecutioncasefile.cps-serve-material-status-updated";
     public static final String PUBLIC_PROSECUTIONCASEFILE_CPS_SERVE_PET_SUBMITTED = "public.prosecutioncasefile.cps-serve-pet-submitted";
     public static final String PUBLIC_PROSECUTIONCASEFILE_CPS_SERVE_BCM_SUBMITTED = "public.prosecutioncasefile.cps-serve-bcm-submitted";
@@ -117,6 +118,13 @@ public class EventSelector {
     public static final String PUBLIC_STAGING_PROSECUTORS_CPS_SERVE_PTPH_RECEIVED = "public.stagingprosecutors.cps-serve-ptph-received";
     public static final String PUBLIC_GROUP_PROSECUTION_REJECTED_EVENT = "public.prosecutioncasefile.group-prosecution-rejected";
     public static final String PUBLIC_CIVIL_PROSECUTION_REJECTED_EVENT = "public.prosecutioncasefile.civil-prosecution-rejected";
+    public static final String PUBLIC_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL_EVENT = "public.prosecutioncasefile.parked-for-summons-application-approval";
+    public static final String PUBLIC_GROUP_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL_EVENT = "public.prosecutioncasefile.group-parked-for-summons-application-approval";
+    public static final String PUBLIC_SUBMISSION_APPROVED_EVENT = "public.prosecutioncasefile.submission-approved";
+    public static final String PUBLIC_GROUP_SUBMISSION_APPROVED_EVENT = "public.prosecutioncasefile.group-submission-approved";
+    public static final String PUBLIC_SUBMISSION_REJECTED_EVENT = "public.prosecutioncasefile.submission-rejected";
+    public static final String PUBLIC_GROUP_SUBMISSION_REJECTED_EVENT = "public.prosecutioncasefile.group-submission-rejected";
+    public static final String PUBLIC_GROUP_SUBMISSION_SUCCEEDED_EVENT = "public.prosecutioncasefile.group-submission-succeeded";
 
 
 }

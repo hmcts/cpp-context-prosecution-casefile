@@ -180,9 +180,8 @@ class InitiateSummonsProsecutionIT extends BaseIT {
 
         helper.whenSummonsApplicationIsRejectedForDefendants();
 
-        final JsonEnvelope rejectedEvent = helper.thenPublicCivilProsecutionRejectedEventShouldBeRaised(helper.getCaseId());
-        assertThat(rejectedEvent.payloadAsJsonObject().getString("channel"), is("CIVIL"));
-
+        // The SA/SR box-rejection path now raises only submission-rejected — civil-prosecution-rejected
+        // is reserved for business-validation failures at initial submission (a different rejection reason).
         final JsonEnvelope submissionRejectedEvent = helper.thenPublicSubmissionRejectedEventShouldBeRaised(helper.getCaseId());
         assertThat(submissionRejectedEvent.payloadAsJsonObject().getString("channel"), is("CIVIL"));
     }

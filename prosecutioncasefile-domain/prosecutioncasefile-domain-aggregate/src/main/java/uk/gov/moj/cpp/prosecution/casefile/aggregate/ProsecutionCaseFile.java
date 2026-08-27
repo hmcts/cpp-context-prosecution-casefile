@@ -273,7 +273,7 @@ public class ProsecutionCaseFile implements Aggregate {
         defendantRefDataEnrichers.forEach(x -> x.enrich(defendantsWithReferenceData));
         final List<Problem> caseProblems = validate(prosecutionWithReferenceData, referenceDataQueryService, getCaseValidationRules(caseInitiationCode));
 
-        if (this.prosecutionReceived || summonsApplicationAlreadyExistsForUrn(true)) {
+        if (this.prosecutionReceived  || summonsApplicationAlreadyExistsForUrn()) {
             caseProblems.add(newProblem(DUPLICATED_PROSECUTION, "urn", prosecution.getCaseDetails().getProsecutorCaseReference()));
         }
         final Boolean isCivil = prosecution.getIsCivil();
@@ -522,7 +522,7 @@ public class ProsecutionCaseFile implements Aggregate {
 
         final List<DefendantProblem> defendantErrors = validateDefendantErrors(prosecution.getCaseDetails(), prosecutionChannel, defendantsWithReferenceData, referenceDataQueryService, builder, Boolean.FALSE, isMCCWithListNewHearing,isStandaloneCaseWithoutHearing, isCivil);
 
-        if ((messageFromCppiOrMccOrCivil && prosecutionReceived) || summonsApplicationAlreadyExistsForUrn(messageFromCppiOrMccOrCivil)) {
+        if ((messageFromCppiOrMccOrCivil && prosecutionReceived) || summonsApplicationAlreadyExistsForUrn()) {
             caseProblems.add(newProblem(DUPLICATED_PROSECUTION, "urn", prosecution.getCaseDetails().getProsecutorCaseReference()));
         }
 
@@ -547,21 +547,8 @@ public class ProsecutionCaseFile implements Aggregate {
                 .build());
     }
 
-    /**
-     * A summons application claims the URN of this case file from the moment its defendants are parked, so any
-     * later creation attempt on the same URN is a duplicate.
-     * <p>
-     * A rejected application keeps that claim. The rejection only moves the application from
-     * {@code applicationIdToDefendantIdsMap} to {@code rejectedApplicationIdToDefendantIdsMap} and clears
-     * {@code prosecutionReceived} once no defendants remain, so neither of those can carry the state on its own.
-     * SPI is the exception on the CC path: the police legitimately re-send the same case after a rejection, so
-     * callers pass {@code false} there to keep a rejected application from reading as a duplicate.
-     *
-     * @param rejectedApplicationStillClaimsUrn whether an already-rejected application counts as a duplicate
-     */
-    private boolean summonsApplicationAlreadyExistsForUrn(final boolean rejectedApplicationStillClaimsUrn) {
-        return !this.applicationIdToDefendantIdsMap.isEmpty()
-                || (rejectedApplicationStillClaimsUrn && !this.rejectedApplicationIdToDefendantIdsMap.isEmpty());
+    private boolean summonsApplicationAlreadyExistsForUrn() {
+        return !this.applicationIdToDefendantIdsMap.isEmpty() || this.isSummonsCaseRejected;
     }
 
     private boolean shouldCaseBeRejectedBasedOnInitiationCode(final String receivedInitiationCode) {

@@ -1,0 +1,23 @@
+{
+  "offences": [
+    {
+      "offenceId": "032575aa-85e7-11e9-bc42-526af7764f64",
+      "cjsOffenceCode": "OFCODE12",
+      "modeOfTrial": "SNONIMP",
+      "validFrom": "2010-01-01",
+      "validTo": "2030-01-01",
+      "offenceStartDate": "2010-01-01",
+      "offenceEndDate": "2030-01-01",
+      "cppDateOfLastUpdate": "2017-12-10",
+      "pnldDateOfLastUpdate": "2017-06-10",
+      "title": "Obstruct person executing search warrant for TV receiver",
+      "legislation": "Contrary to regulations 32(a) & 34(3) of the Animals and Animal Products (Import and Export) (England) Regulations 2006",
+      "locationRequired": "N",
+      "endorsableFlag": false,
+      "blacklisted": true,
+      "blacklistValidFrom": "2018-01-01",
+      "blacklistValidTo": "2018-12-31",
+      "details": {}
+    }
+  ]
+}

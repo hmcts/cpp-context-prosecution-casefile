@@ -65,6 +65,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.q
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.queryAndVerifyCaseErrorsForDefendants;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.queryAndVerifyCasesAreEmptyCollection;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.replaceExpectedValues;
+import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForBlacklistedCivilOffence;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForGenericOffence;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForOffenceCode;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForOffenceCodeForGroupCases;
@@ -467,6 +468,27 @@ class ValidationErrorIT extends BaseIT {
         assertThat(defendantWarningsArray.isNull(0), is(true));
 
         queryAndVerifyCasesAreEmptyCollection(caseId);
+    }
+
+    @Test
+    void shouldRaiseOffenceNotInEffectWarningWhenCivilOffenceIsBlacklistedOnOffenceCommittedDate() {
+        stubOffencesForBlacklistedCivilOffence();
+        final UUID caseId = randomUUID();
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-civil-summons-civil-offence.json");
+        final String ccPayLoad = replaceValues(staticPayLoad, caseId.toString(), "A", "CPPI");
+
+        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
+        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
+
+        final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_DEFENDANTS_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL);
+        assertThat(privateEvent.isPresent(), is(true));
+
+        final String defendantWarnings = privateEvent.get().payloadAsJsonObject().get("defendantWarnings").toString();
+        final JSONArray defendantWarningsArray = new JSONArray(defendantWarnings);
+        assertThat(defendantWarningsArray.isNull(0), is(false));
+
+        final String problems = defendantWarningsArray.getJSONObject(0).getJSONArray("problems").toString();
+        assertThat(problems, CoreMatchers.containsString("OFFENCE_NOT_IN_EFFECT_ON_OFFENCE_COMMITTED_DATE"));
     }
 
     @Test

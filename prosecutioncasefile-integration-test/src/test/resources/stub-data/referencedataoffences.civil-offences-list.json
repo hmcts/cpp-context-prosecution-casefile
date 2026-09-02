@@ -9,6 +9,7 @@
       "offenceWording": "Arrested for Breach of Domestic Abuse Protection Notice",
       "pnldOffenceWording": "On **(..SPECIFY DATE..) at **(..SPECIFY TOWNSHIP..) **(..SPECIFY    THE DETAILS OF THE OFFENCE..)",
       "endorsableFlag": false,
+      "blacklisted": false,
       "locationRequired": "N",
       "offenceType": "VP",
       "canBeBulk": false,

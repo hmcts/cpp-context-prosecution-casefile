@@ -1,6 +1,7 @@
 package uk.gov.moj.cpp.prosecution.casefile.validation.rules.warning;
 
 import static java.lang.String.format;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.Optional.ofNullable;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -9,12 +10,14 @@ import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Offence.offence;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.OffenceReferenceData.offenceReferenceData;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode.OFFENCE_NOT_IN_EFFECT_ON_OFFENCE_COMMITTED_DATE;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.Problems.newProblem;
+import static uk.gov.moj.cpp.prosecution.casefile.validation.context.ReferenceDataValidationContext.newInstance;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.context.ReferenceDataValidationContext.withOffenceCodeReferenceDataOnly;
 
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Offence;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Problem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ProblemValue;
+import uk.gov.moj.cpp.prosecution.casefile.validation.context.ReferenceDataValidationContext;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.FieldName;
 
 import java.time.LocalDate;
@@ -120,6 +123,70 @@ public class OffenceInEffectOnOffenceCommittedDateValidationRuleTest {
                 OFFENCE_COMMITTED_DATE,
                 offenceStartDate,
                 offenceEndDate);
+    }
+
+    @Test
+    public void shouldReturnProblemWhenOffenceIsBlacklistedOnCommittedDateEvenThoughInEffectByDateWindow() {
+        final String offenceStartDate = OFFENCE_COMMITTED_DATE.minusYears(1).format(FORMATTER);
+        final String offenceEndDate = OFFENCE_COMMITTED_DATE.plusYears(1).format(FORMATTER);
+        final UUID id = UUID.randomUUID();
+
+        final Optional<Problem> result = validateOffenceWithBlacklistFlag(
+                id, offenceStartDate, offenceEndDate, true);
+
+        assertThat(result, getMatcher(id, offenceStartDate, offenceEndDate));
+    }
+
+    @Test
+    public void shouldNotReturnProblemWhenOffenceIsNotBlacklistedOnCommittedDate() {
+        final String offenceStartDate = OFFENCE_COMMITTED_DATE.minusYears(1).format(FORMATTER);
+        final String offenceEndDate = OFFENCE_COMMITTED_DATE.plusYears(1).format(FORMATTER);
+        final UUID id = UUID.randomUUID();
+
+        final Optional<Problem> result = validateOffenceWithBlacklistFlag(
+                id, offenceStartDate, offenceEndDate, false);
+
+        assertThat(result, is(Optional.empty()));
+    }
+
+    @Test
+    public void shouldNotReturnProblemWhenBlacklistedFlagNotSet() {
+        final String offenceStartDate = OFFENCE_COMMITTED_DATE.minusYears(1).format(FORMATTER);
+        final String offenceEndDate = OFFENCE_COMMITTED_DATE.plusYears(1).format(FORMATTER);
+        final UUID id = UUID.randomUUID();
+
+        final Optional<Problem> result = validateOffenceWithBlacklistFlag(
+                id, offenceStartDate, offenceEndDate, null);
+
+        assertThat(result, is(Optional.empty()));
+    }
+
+    private Optional<Problem> validateOffenceWithBlacklistFlag(
+            final UUID offenceId,
+            final String offenceStartDate,
+            final String offenceEndDate,
+            final Boolean blacklisted) {
+
+        final Offence offence = offence()
+                .withOffenceCode(OFFENCE_CODE)
+                .withOffenceSequenceNumber(1)
+                .withOffenceCommittedDate(OFFENCE_COMMITTED_DATE)
+                .withOffenceId(offenceId)
+                .build();
+
+        final Defendant defendant = Defendant.defendant().withOffences(singletonList(offence)).build();
+
+        final ReferenceDataValidationContext context = newInstance(
+                singletonList(offenceReferenceData()
+                        .withCjsOffenceCode(OFFENCE_CODE)
+                        .withOffenceStartDate(offenceStartDate)
+                        .withOffenceEndDate(offenceEndDate)
+                        .withBlacklisted(blacklisted)
+                        .build()),
+                emptyList());
+
+        return OffenceInEffectOnOffenceCommittedDateValidationRule.INSTANCE.validate(defendant, context)
+                .problems().stream().findFirst();
     }
 
     private Matcher<Optional<Problem>> getMatcher(UUID id, final String offenceStartDate, final String offenceEndDate) {

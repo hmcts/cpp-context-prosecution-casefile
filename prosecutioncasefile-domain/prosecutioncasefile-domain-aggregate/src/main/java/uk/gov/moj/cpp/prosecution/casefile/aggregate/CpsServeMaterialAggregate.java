@@ -1928,7 +1928,7 @@ public class CpsServeMaterialAggregate implements Aggregate {
             });
         });
 
-        return referenceDataQueryService.retrieveOffenceDataList(offenceCodeList, sowRef);
+        return referenceDataQueryService.retrieveOffenceDataList(offenceCodeList, sowRef, Optional.empty());
     }
 
     private List<OffenceReferenceData> retrieveOffencesFromReferenceDataForBcm(final List<CpsDefendantOffences> cpsDefendantOffences, final ReferenceDataQueryService referenceDataQueryService, final Optional<String> sowRef) {
@@ -1939,7 +1939,7 @@ public class CpsServeMaterialAggregate implements Aggregate {
             });
         });
 
-        return referenceDataQueryService.retrieveOffenceDataList(offenceCodeList, sowRef);
+        return referenceDataQueryService.retrieveOffenceDataList(offenceCodeList, sowRef, Optional.empty());
     }
 
     private JsonArray retrieveAndBuildCpsDefendantIdsList(final UUID caseId, final ProgressionService progressionService) {

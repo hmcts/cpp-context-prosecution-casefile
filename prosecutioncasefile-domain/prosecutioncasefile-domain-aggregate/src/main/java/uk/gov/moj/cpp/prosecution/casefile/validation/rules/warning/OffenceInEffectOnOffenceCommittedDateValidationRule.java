@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class OffenceInEffectOnOffenceCommittedDateValidationRule implements ValidationRule<Defendant, ReferenceDataValidationContext> {
 
@@ -36,21 +37,31 @@ public class OffenceInEffectOnOffenceCommittedDateValidationRule implements Vali
         final List<Problem> problems = new ArrayList<>();
         defendant
                 .getOffences()
-                .forEach(offence -> referenceDataValidationContext
-                        .getOffenceCodeReferenceData()
-                        .stream()
-                        .filter(referenceData -> offence.getOffenceCode().equals(referenceData.getCjsOffenceCode()))
-                        .findFirst()
-                        .filter(offenceReferenceData -> !offenceInEffectOnCommittedDate(offenceReferenceData, offence.getOffenceCommittedDate()))
-                        .ifPresent(offenceReferenceData ->
-                                problems.add(newProblem(OFFENCE_NOT_IN_EFFECT_ON_OFFENCE_COMMITTED_DATE,
-                                        new ProblemValue(offence.getOffenceId().toString(), "offenceInEffectDates", format(PROBLEM_VALUE,
-                                                offenceReferenceData.getCjsOffenceCode(),
-                                                offence.getOffenceCommittedDate().toString(),
-                                                ofNullable(offenceReferenceData.getOffenceStartDate()).orElse(NOT_SET),
-                                                ofNullable(offenceReferenceData.getOffenceEndDate()).orElse(NOT_SET))),
-                                        new ProblemValue(offence.getOffenceId().toString(), FieldName.OFFENCE_CODE.getValue(), offence.getOffenceCode()),
-                                        new ProblemValue(offence.getOffenceId().toString(), FieldName.OFFENCE_SEQUENCE_NO.getValue(), String.valueOf(offence.getOffenceSequenceNumber()))))));
+                .forEach(offence -> {
+                    final Optional<OffenceReferenceData> offenceReferenceData = referenceDataValidationContext
+                            .getOffenceCodeReferenceData()
+                            .stream()
+                            .filter(referenceData -> offence.getOffenceCode().equals(referenceData.getCjsOffenceCode()))
+                            .findFirst();
+
+                    final boolean notInEffectByDateWindow = offenceReferenceData
+                            .map(refData -> !offenceInEffectOnCommittedDate(refData, offence.getOffenceCommittedDate()))
+                            .orElse(false);
+
+                    final boolean blacklisted = referenceDataValidationContext
+                            .isOffenceBlacklisted(offence.getOffenceCode(), offence.getOffenceCommittedDate());
+
+                    if (notInEffectByDateWindow || blacklisted) {
+                        problems.add(newProblem(OFFENCE_NOT_IN_EFFECT_ON_OFFENCE_COMMITTED_DATE,
+                                new ProblemValue(offence.getOffenceId().toString(), "offenceInEffectDates", format(PROBLEM_VALUE,
+                                        offence.getOffenceCode(),
+                                        offence.getOffenceCommittedDate().toString(),
+                                        offenceReferenceData.map(OffenceReferenceData::getOffenceStartDate).orElse(NOT_SET),
+                                        offenceReferenceData.map(OffenceReferenceData::getOffenceEndDate).orElse(NOT_SET))),
+                                new ProblemValue(offence.getOffenceId().toString(), FieldName.OFFENCE_CODE.getValue(), offence.getOffenceCode()),
+                                new ProblemValue(offence.getOffenceId().toString(), FieldName.OFFENCE_SEQUENCE_NO.getValue(), String.valueOf(offence.getOffenceSequenceNumber()))));
+                    }
+                });
 
         return problems.isEmpty() ? VALID: newValidationResult(problems);
     }

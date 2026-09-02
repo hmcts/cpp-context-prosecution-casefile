@@ -42,7 +42,7 @@ public class SjpProsecutionUpdateOffenceCodeApiTest {
 
     @Test
     public void shouldSendCommandWhenUpdatingOffenceCode() {
-        when(referenceDataQueryService.retrieveOffenceDataList(any(), any()))
+        when(referenceDataQueryService.retrieveOffenceDataList(any(), any(), any()))
                 .thenReturn(singletonList(offenceReferenceData));
         when(objectToJsonObjectConverter.convert(offenceReferenceData))
                 .thenReturn(createObjectBuilder().build());

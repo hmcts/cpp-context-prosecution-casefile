@@ -270,7 +270,7 @@ public class InitiateCCProsecutionApi {
     }
 
     private OffenceReferenceData getOffenceReferenceData(final Offence offence, final Optional<String> sowRef) {
-        final List<OffenceReferenceData> offencesRefData = referenceDataQueryService.retrieveOffenceDataList(Lists.newArrayList(offence.getOffenceCode()), sowRef);
+        final List<OffenceReferenceData> offencesRefData = referenceDataQueryService.retrieveOffenceDataList(Lists.newArrayList(offence.getOffenceCode()), sowRef, Optional.ofNullable(offence.getOffenceCommittedDate()));
         return (offencesRefData != null && !offencesRefData.isEmpty()) ? offencesRefData.get(0) : null;
     }
 

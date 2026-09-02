@@ -80,7 +80,7 @@ class OffenceDrugLevelAmountValidationAndEnricherRuleTest {
     @Test
     void shouldEnrichRefDataAndReturnValidForCivilCaseWhenVOEmpty() {
         final ReferenceDataVO realVO = new ReferenceDataVO();
-        when(referenceDataQueryService.retrieveOffenceDataList(any(), any()))
+        when(referenceDataQueryService.retrieveOffenceDataList(any(), any(), any()))
                 .thenReturn(Collections.singletonList(offenceReferenceData().withCjsOffenceCode(MOCK_OFFENCE_CODE).build()));
         final DefendantWithReferenceData defendantWithReferenceData = buildDefendant(getOffenceWithAlcoholLevelInfo(MOCK_OFFENCE_CODE), realVO, true);
 

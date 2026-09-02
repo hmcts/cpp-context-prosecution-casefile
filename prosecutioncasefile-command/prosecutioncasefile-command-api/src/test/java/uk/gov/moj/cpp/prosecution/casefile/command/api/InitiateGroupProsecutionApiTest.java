@@ -69,7 +69,7 @@ class InitiateGroupProsecutionApiTest {
                 .withPoliceSystemId(POLICE_SYSTEM_ID)
                 .build();
         when(this.caseDetailsEnrichmentService.enrichCaseDetails(any(), any())).thenReturn(caseDetails);
-        when(this.referenceDataQueryService.retrieveOffenceDataList(any(), any())).thenReturn(singletonList(OffenceReferenceData.offenceReferenceData()
+        when(this.referenceDataQueryService.retrieveOffenceDataList(any(), any(), any())).thenReturn(singletonList(OffenceReferenceData.offenceReferenceData()
                 .withLocationRequired("N")
                 .build()));
 
@@ -101,7 +101,7 @@ class InitiateGroupProsecutionApiTest {
                 .build();
         when(this.caseDetailsEnrichmentService.enrichCaseDetails(any(), any())).thenReturn(caseDetails);
 
-        when(this.referenceDataQueryService.retrieveOffenceDataList(any(), any())).thenReturn(singletonList(OffenceReferenceData.offenceReferenceData()
+        when(this.referenceDataQueryService.retrieveOffenceDataList(any(), any(), any())).thenReturn(singletonList(OffenceReferenceData.offenceReferenceData()
                 .withLocationRequired("N")
                 .build()));
 

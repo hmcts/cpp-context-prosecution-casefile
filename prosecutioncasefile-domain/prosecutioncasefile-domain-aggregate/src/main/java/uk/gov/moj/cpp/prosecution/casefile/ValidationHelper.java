@@ -30,7 +30,7 @@ public class ValidationHelper {
     public static  List<OffenceReferenceData> offenceReferenceDataList (final ReferenceDataQueryService referenceDataQueryService, final Offence offence, final String initiationCode, final boolean isCivil) {
         List<OffenceReferenceData> newOffenceReferenceDataList;
         if (isCivil) {
-            newOffenceReferenceDataList = referenceDataQueryService.retrieveOffenceDataList(of(offence.getOffenceCode()), Optional.of(SOW_REF_VALUE_MOJ)).stream()
+            newOffenceReferenceDataList = referenceDataQueryService.retrieveOffenceDataList(of(offence.getOffenceCode()), Optional.of(SOW_REF_VALUE_MOJ), Optional.ofNullable(offence.getOffenceCommittedDate())).stream()
                     .filter(rd -> rd.getCjsOffenceCode().equals(offence.getOffenceCode())).filter(Objects::nonNull)
                     .toList();
         } else {

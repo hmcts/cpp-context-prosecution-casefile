@@ -9,6 +9,7 @@ import static org.hamcrest.Matchers.isA;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -23,6 +24,7 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.OffenceReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.refdata.defendant.OffenceDataRefDataEnricher;
 import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,7 +51,7 @@ public class OffenceRefDataEnricherTest {
 
     @BeforeEach
     public void setup() {
-        when(referenceDataQueryService.retrieveOffenceDataList(any(), any())).thenReturn(getMockOffenceReferenceData());
+        lenient().when(referenceDataQueryService.retrieveOffenceDataList(any(), any(), any())).thenReturn(getMockOffenceReferenceData());
     }
 
     @Test
@@ -68,7 +70,7 @@ public class OffenceRefDataEnricherTest {
         assertThat(defendantsWithReferenceDataList.get(1).getReferenceDataVO().getOffenceReferenceData().get(0), isA(OffenceReferenceData.class));
         assertThat(defendantsWithReferenceDataList.get(1).getDefendants().get(0).getOffences().get(0).getOffenceLocation(), is(nullValue()));
         assertThat(defendantsWithReferenceDataList.get(1).getDefendants().get(0).getOffences().get(0).getMaxPenalty(), is("Max Penalty"));
-        verify(referenceDataQueryService, times(1)).retrieveOffenceDataList(Lists.newArrayList(buildOffence().getOffenceCode()), Optional.of("MoJ"));
+        verify(referenceDataQueryService, times(1)).retrieveOffenceDataList(Lists.newArrayList(buildOffence().getOffenceCode()), Optional.of("MoJ"), Optional.empty());
     }
 
     @Test
@@ -79,7 +81,7 @@ public class OffenceRefDataEnricherTest {
         assertThat(defendantsWithReferenceData.getReferenceDataVO().getOffenceReferenceData().size(), is(1));
         assertThat(defendantsWithReferenceData.getReferenceDataVO().getOffenceReferenceData().get(0), isA(OffenceReferenceData.class));
         assertThat(defendantsWithReferenceData.getDefendants().get(0).getOffences().get(0).getOffenceLocation(), is("No location provided"));
-        verify(referenceDataQueryService, times(1)).retrieveOffenceDataList(Lists.newArrayList(buildOffenceWithEmptyOffenceLocation().getOffenceCode()), Optional.of("MoJ"));
+        verify(referenceDataQueryService, times(1)).retrieveOffenceDataList(Lists.newArrayList(buildOffenceWithEmptyOffenceLocation().getOffenceCode()), Optional.of("MoJ"), Optional.empty());
     }
 
     @Test
@@ -90,7 +92,7 @@ public class OffenceRefDataEnricherTest {
         assertThat(defendantsWithReferenceData.getReferenceDataVO().getOffenceReferenceData().size(), is(1));
         assertThat(defendantsWithReferenceData.getReferenceDataVO().getOffenceReferenceData().get(0), isA(OffenceReferenceData.class));
         assertThat(defendantsWithReferenceData.getDefendants().get(0).getOffences().get(0).getOffenceLocation(), is("No location provided"));
-        verify(referenceDataQueryService, times(1)).retrieveOffenceDataList(Lists.newArrayList(buildOffenceWithNullOffenceLocation().getOffenceCode()), Optional.empty());
+        verify(referenceDataQueryService, times(1)).retrieveOffenceDataList(Lists.newArrayList(buildOffenceWithNullOffenceLocation().getOffenceCode()), Optional.empty(), Optional.empty());
     }
 
     @Test
@@ -101,7 +103,7 @@ public class OffenceRefDataEnricherTest {
         assertThat(defendantsWithReferenceData.getReferenceDataVO().getOffenceReferenceData().size(), is(1));
         assertThat(defendantsWithReferenceData.getReferenceDataVO().getOffenceReferenceData().get(0), isA(OffenceReferenceData.class));
         assertThat(defendantsWithReferenceData.getDefendants().get(0).getOffences().get(0).getOffenceLocation(), is("No location provided"));
-        verify(referenceDataQueryService, times(1)).retrieveOffenceDataList(Lists.newArrayList(buildOffenceWithSpacedOffenceLocation().getOffenceCode()), Optional.empty());
+        verify(referenceDataQueryService, times(1)).retrieveOffenceDataList(Lists.newArrayList(buildOffenceWithSpacedOffenceLocation().getOffenceCode()), Optional.empty(), Optional.empty());
     }
 
     private DefendantsWithReferenceData getMockDefendantsWithReferenceData(final Offence offence, final String prosecutionAuthorityShortName) {
@@ -133,7 +135,7 @@ public class OffenceRefDataEnricherTest {
         assertThat(defendantsWithReferenceData.getReferenceDataVO().getOffenceReferenceData().get(0), isA(OffenceReferenceData.class));
         assertThat(defendantsWithReferenceData.getDefendants().get(0).getOffences().get(0).getOffenceLocation(), is(nullValue()));
         assertThat(defendantsWithReferenceData.getDefendants().get(0).getOffences().get(0).getMaxPenalty(), is("Max Penalty"));
-        verify(referenceDataQueryService, times(1)).retrieveOffenceDataList(Lists.newArrayList(buildOffence().getOffenceCode()), Optional.empty());
+        verify(referenceDataQueryService, times(1)).retrieveOffenceDataList(Lists.newArrayList(buildOffence().getOffenceCode()), Optional.empty(), Optional.empty());
     }
 
     private DefendantsWithReferenceData getMockDefendantsWithSameOffences(final Offence offence, final String prosecutionAuthorityShortName) {
@@ -180,5 +182,92 @@ public class OffenceRefDataEnricherTest {
                 .withValidFrom("2019-04-01")
                 .build()
         );
+    }
+
+    @Test
+    public void shouldPopulateOffenceReferenceDataWithBlacklistedFlagWhenOffenceHasCommittedDate() {
+        final Offence offence = Offence.offence()
+                .withOffenceCode("PC02554")
+                .withOffenceCommittedDate(LocalDate.of(2026, 8, 11))
+                .build();
+
+        when(referenceDataQueryService.retrieveOffenceDataList(
+                Lists.newArrayList("PC02554"), Optional.empty(), Optional.of(LocalDate.of(2026, 8, 11))))
+                .thenReturn(asList(OffenceReferenceData.offenceReferenceData()
+                        .withCjsOffenceCode("PC02554")
+                        .withOffenceId(OFFENCE_UUID)
+                        .withBlacklisted(true)
+                        .withBlacklistValidFrom("2026-08-01")
+                        .withBlacklistValidTo("2026-08-12")
+                        .build()));
+
+        final DefendantsWithReferenceData defendantsWithReferenceData = getMockDefendantsWithReferenceData(offence, null);
+        offenceDataRefDataEnricher.enrich(defendantsWithReferenceData);
+
+        final List<OffenceReferenceData> offenceReferenceData =
+                defendantsWithReferenceData.getReferenceDataVO().getOffenceReferenceData();
+        assertThat(offenceReferenceData.size(), is(1));
+        assertThat(offenceReferenceData.get(0).getCjsOffenceCode(), is("PC02554"));
+        assertThat(offenceReferenceData.get(0).getBlacklisted(), is(true));
+
+        verify(referenceDataQueryService, times(1)).retrieveOffenceDataList(
+                Lists.newArrayList("PC02554"), Optional.empty(), Optional.of(LocalDate.of(2026, 8, 11)));
+    }
+
+    @Test
+    public void shouldNotSendDateWhenOffenceCommittedDateIsNull() {
+        final DefendantsWithReferenceData defendantsWithReferenceData = getMockDefendantsWithReferenceData(buildOffence(), null);
+        offenceDataRefDataEnricher.enrich(defendantsWithReferenceData);
+
+        verify(referenceDataQueryService, times(1)).retrieveOffenceDataList(
+                Lists.newArrayList(buildOffence().getOffenceCode()), Optional.empty(), Optional.empty());
+    }
+
+    @Test
+    public void shouldQueryReferenceDataSeparatelyForSameOffenceCodeWithDifferentCommittedDates() {
+        final Offence offenceOnFirstDate = Offence.offence()
+                .withOffenceId(randomUUID())
+                .withOffenceCode("PC02554")
+                .withOffenceCommittedDate(LocalDate.of(2026, 1, 1))
+                .build();
+        final Offence offenceOnSecondDate = Offence.offence()
+                .withOffenceId(randomUUID())
+                .withOffenceCode("PC02554")
+                .withOffenceCommittedDate(LocalDate.of(2026, 8, 11))
+                .build();
+
+        when(referenceDataQueryService.retrieveOffenceDataList(
+                Lists.newArrayList("PC02554"), Optional.empty(), Optional.of(LocalDate.of(2026, 1, 1))))
+                .thenReturn(asList(OffenceReferenceData.offenceReferenceData()
+                        .withCjsOffenceCode("PC02554")
+                        .withBlacklisted(false)
+                        .build()));
+        when(referenceDataQueryService.retrieveOffenceDataList(
+                Lists.newArrayList("PC02554"), Optional.empty(), Optional.of(LocalDate.of(2026, 8, 11))))
+                .thenReturn(asList(OffenceReferenceData.offenceReferenceData()
+                        .withCjsOffenceCode("PC02554")
+                        .withBlacklisted(true)
+                        .build()));
+
+        final List<Offence> offences = new ArrayList<>(asList(offenceOnFirstDate, offenceOnSecondDate));
+        final Defendant defendant = new Defendant.Builder().withId(DEFENDANT_ID).withOffences(offences).withInitiationCode("S").build();
+        final DefendantsWithReferenceData defendantsWithReferenceData =
+                new DefendantsWithReferenceData(new ArrayList<>(asList(defendant)), null);
+        defendantsWithReferenceData.setCaseDetails(CaseDetails.caseDetails().withInitiationCode("P").build());
+
+        offenceDataRefDataEnricher.enrich(defendantsWithReferenceData);
+
+        final List<OffenceReferenceData> offenceReferenceData =
+                defendantsWithReferenceData.getReferenceDataVO().getOffenceReferenceData();
+
+        // Same offence code but different committed dates must NOT be deduplicated into a single
+        // reference-data lookup: each committed date can carry its own blacklist window/result.
+        assertThat(offenceReferenceData.size(), is(2));
+        assertThat(offenceReferenceData.stream().filter(OffenceReferenceData::getBlacklisted).count(), is(1L));
+
+        verify(referenceDataQueryService, times(1)).retrieveOffenceDataList(
+                Lists.newArrayList("PC02554"), Optional.empty(), Optional.of(LocalDate.of(2026, 1, 1)));
+        verify(referenceDataQueryService, times(1)).retrieveOffenceDataList(
+                Lists.newArrayList("PC02554"), Optional.empty(), Optional.of(LocalDate.of(2026, 8, 11)));
     }
 }

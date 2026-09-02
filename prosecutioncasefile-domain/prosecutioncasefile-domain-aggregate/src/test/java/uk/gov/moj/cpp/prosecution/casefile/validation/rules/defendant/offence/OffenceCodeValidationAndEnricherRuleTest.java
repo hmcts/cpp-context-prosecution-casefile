@@ -144,7 +144,7 @@ class OffenceCodeValidationAndEnricherRuleTest {
 
     @Test
     void shouldRaiseOffenceCodeNotSupportedForCivilCaseWhenRefDataNotFound() {
-        when(referenceDataQueryService.retrieveOffenceDataList(any(), any())).thenReturn(emptyList());
+        when(referenceDataQueryService.retrieveOffenceDataList(any(), any(), any())).thenReturn(emptyList());
         final DefendantWithReferenceData defendantWithReferenceData = getDefendantWithReferenceData(MOCK_OFFENCE_CODE, new ReferenceDataVO(), true);
 
         final ValidationResult result = offenceCodeValidationAndEnricherRule.validate(defendantWithReferenceData, referenceDataQueryService);
@@ -159,7 +159,7 @@ class OffenceCodeValidationAndEnricherRuleTest {
 
     @Test
     void shouldNotRaiseProblemForCivilCaseWhenRefDataFound() {
-        when(referenceDataQueryService.retrieveOffenceDataList(any(), any()))
+        when(referenceDataQueryService.retrieveOffenceDataList(any(), any(), any()))
                 .thenReturn(Collections.singletonList(offenceReferenceData().withCjsOffenceCode(MOCK_OFFENCE_CODE).build()));
         final DefendantWithReferenceData defendantWithReferenceData = getDefendantWithReferenceData(MOCK_OFFENCE_CODE, new ReferenceDataVO(), true);
 

@@ -371,7 +371,7 @@ public class CpsServeMaterialEventProcessorTest {
         final JsonObject jsonPayload = jsonFromString(getPayload("process-pending-cps-serve-pet.json"));
 
         final JsonObject offencePayload = jsonFromString(getPayload("referenceOffenceData.json"));
-        when(referenceDataQueryService.retrieveOffenceDataList(any(), any())).thenReturn(asList(jsonObjectToObjectConverter.convert(offencePayload, OffenceReferenceData.class)));
+        when(referenceDataQueryService.retrieveOffenceDataList(any(), any(), any())).thenReturn(asList(jsonObjectToObjectConverter.convert(offencePayload, OffenceReferenceData.class)));
 
         final JsonObject prosecutionCaseQueryResponse = createObjectBuilder().add("caseId", CASE_ID_VALUE.toString()).build();
         when(prosecutionCaseQueryService.getProsecutionCaseByCaseUrn(any(), any())).thenReturn(prosecutionCaseQueryResponse);
@@ -549,7 +549,7 @@ public class CpsServeMaterialEventProcessorTest {
         final JsonObject jsonPayload = jsonFromString(getPayload("process-pending-cps-serve-bcm.json").replaceAll("%SUBMISSION_ID%", submissionId));
 
         final JsonObject offencePayload = jsonFromString(getPayload("referenceOffenceData.json"));
-        when(referenceDataQueryService.retrieveOffenceDataList(any(), any())).thenReturn(asList(jsonObjectToObjectConverter.convert(offencePayload, OffenceReferenceData.class)));
+        when(referenceDataQueryService.retrieveOffenceDataList(any(), any(), any())).thenReturn(asList(jsonObjectToObjectConverter.convert(offencePayload, OffenceReferenceData.class)));
 
         final JsonObject prosecutionCaseFileResponseByUrn = jsonFromString(getPayload("prosecutionCaseFileQueryByCaseUrn.json").replaceAll("%CASE_ID%", CASE_ID_VALUE.toString()));
         when(prosecutionCaseQueryService.getProsecutionCaseByCaseUrn(any(), any())).thenReturn(prosecutionCaseFileResponseByUrn);
@@ -885,7 +885,7 @@ public class CpsServeMaterialEventProcessorTest {
         final JsonObject jsonPayload = jsonFromString(getPayload("process-pending-cps-serve-pet1.json"));
 
         final JsonObject offencePayload = jsonFromString(getPayload("referenceOffenceData.json"));
-        when(referenceDataQueryService.retrieveOffenceDataList(any(), any())).thenReturn(asList(jsonObjectToObjectConverter.convert(offencePayload, OffenceReferenceData.class)));
+        when(referenceDataQueryService.retrieveOffenceDataList(any(), any(), any())).thenReturn(asList(jsonObjectToObjectConverter.convert(offencePayload, OffenceReferenceData.class)));
 
         final JsonObject prosecutionCaseQueryResponse = createObjectBuilder()
                 .add("caseId", CASE_ID_VALUE.toString())

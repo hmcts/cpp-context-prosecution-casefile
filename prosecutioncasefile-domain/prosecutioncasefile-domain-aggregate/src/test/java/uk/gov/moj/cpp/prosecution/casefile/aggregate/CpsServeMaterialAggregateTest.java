@@ -337,7 +337,7 @@ public class CpsServeMaterialAggregateTest {
                 .withSubmissionStatus(SubmissionStatus.SUCCESS)
 
                 .build());
-        when(referenceDataQueryService.retrieveOffenceDataList(any(), any())).thenReturn(List.of(OffenceReferenceData.offenceReferenceData()
+        when(referenceDataQueryService.retrieveOffenceDataList(any(), any(), any())).thenReturn(List.of(OffenceReferenceData.offenceReferenceData()
                 .withCjsOffenceCode(randomUUID().toString())
                 .build()));
         when(progressionService.getProsecutionCase(any())).thenReturn(progressionCaseFileJson);
@@ -354,7 +354,7 @@ public class CpsServeMaterialAggregateTest {
                 listToJsonArrayConverter, defenceService);
 
         final ReceivedCpsServePetProcessed receivedCpsServePetProcessed = (ReceivedCpsServePetProcessed) eventStream.findFirst().get();
-        verify(referenceDataQueryService).retrieveOffenceDataList(captorArg1.capture(), captorArg2.capture());
+        verify(referenceDataQueryService).retrieveOffenceDataList(captorArg1.capture(), captorArg2.capture(), any());
         Optional<String> actualSowRef = captorArg2.getValue();
         assertThat(actualSowRef, is(Optional.empty()));
         assertThat(receivedCpsServePetProcessed.getCaseId(), is(caseId));

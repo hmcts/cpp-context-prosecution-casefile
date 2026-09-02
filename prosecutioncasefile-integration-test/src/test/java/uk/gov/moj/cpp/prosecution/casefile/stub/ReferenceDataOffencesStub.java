@@ -19,7 +19,7 @@ public class ReferenceDataOffencesStub extends StubUtil {
 
     private static final String REFERENCE_DATA_ACTION_QUERY_OFFENCES_URL = "/referencedataoffences-service/query/api/rest/referencedataoffences/offences/all-versions";
     private static final String REFERENCE_DATA_ACTION_QUERY_OFFENCES_ALL_VERSIONS_MEDIA_TYPE = "application/vnd.referencedataoffences.query.offences-all-versions+json";
-    private static final String REFERENCE_DATA_ACTION_QUERY_OFFENCES_LIST_URL = "/referencedataoffences-service/query/api/rest/referencedataoffences/offences";
+    private static final String REFERENCE_DATA_ACTION_QUERY_OFFENCES_LIST_URL = "/referencedataoffences-service/query/api/rest/referencedataoffences/offences/list-with-blacklist-check";
     private static final String REFERENCE_DATA_ACTION_QUERY_OFFENCES_LIST_MEDIA_TYPE = "application/vnd.referencedataoffences.offences-list-with-blacklist-check+json";
 
 

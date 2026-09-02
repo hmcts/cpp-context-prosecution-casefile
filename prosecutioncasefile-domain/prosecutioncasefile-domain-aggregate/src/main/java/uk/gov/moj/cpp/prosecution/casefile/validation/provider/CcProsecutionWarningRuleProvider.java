@@ -3,6 +3,7 @@ package uk.gov.moj.cpp.prosecution.casefile.validation.provider;
 
 import static java.util.Collections.emptyList;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CIVIL;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CPPI;
 
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant;
@@ -32,8 +33,11 @@ public class CcProsecutionWarningRuleProvider {
     private CcProsecutionWarningRuleProvider() {
     }
 
-    public static List<ValidationRule<Defendant, ReferenceDataValidationContext>> getWarningRules(final String caseInitiationCode, final Channel channel) {
-        if (CIVIL.equals(channel) && ("O".equals(caseInitiationCode) || "S".equals(caseInitiationCode))) {
+    public static List<ValidationRule<Defendant, ReferenceDataValidationContext>> getWarningRules(final String caseInitiationCode, final Channel channel, final boolean isCivil) {
+        // A civil offence submitted on the CPPI channel (isCivil=true) needs the same warnings as the
+        // dedicated CIVIL channel; MCC-channel civil offences deliberately stay warning-free here.
+        final boolean applyCivilWarningRules = CIVIL.equals(channel) || (CPPI.equals(channel) && isCivil);
+        if (applyCivilWarningRules && ("O".equals(caseInitiationCode) || "S".equals(caseInitiationCode))) {
             return CIVIL_WARNING_RULES;
         } else if ("C".equals(caseInitiationCode) || "Q".equals(caseInitiationCode)) {
             return WARNING_RULES;

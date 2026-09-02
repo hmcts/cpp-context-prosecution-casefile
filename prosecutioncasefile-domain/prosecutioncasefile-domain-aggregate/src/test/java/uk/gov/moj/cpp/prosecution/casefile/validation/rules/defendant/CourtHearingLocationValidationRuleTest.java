@@ -133,10 +133,12 @@ public class CourtHearingLocationValidationRuleTest {
     }
 
     @Test
-    void shouldReturnValidWhenOtherCaseTypeRegardlessOfCourtHearingLocation() {
+    void shouldReturnValidWhenOtherCaseTypeDateRangeSubmissionRegardlessOfCourtHearingLocation() {
         // no stub for courtHearingLocation/referenceDataVO/OUCODE lookup: the rule must short-circuit
-        // to VALID for OTHER-type cases without ever inspecting them, however bad the OUCODE is.
+        // to VALID for OTHER-type date-range (Enforcement, CIMD-3539) submissions without ever
+        // inspecting them, however bad the OUCODE is.
         when(defendantWithReferenceData.getCaseDetails().getInitiationCode()).thenReturn("O");
+        when(defendantWithReferenceData.getDefendant().getInitialHearing().getEndDate()).thenReturn("2026-08-20");
 
         final Optional<Problem> optionalProblem = new CourtHearingLocationValidationRule().validate(defendantWithReferenceData, referenceDataQueryService)
                 .problems().stream().findFirst();
@@ -146,8 +148,9 @@ public class CourtHearingLocationValidationRuleTest {
     }
 
     @Test
-    void shouldReturnValidWhenOtherCaseTypeCaseInsensitive() {
+    void shouldReturnValidWhenOtherCaseTypeDateRangeSubmissionCaseInsensitive() {
         when(defendantWithReferenceData.getCaseDetails().getInitiationCode()).thenReturn("o");
+        when(defendantWithReferenceData.getDefendant().getInitialHearing().getEndDate()).thenReturn("2026-08-20");
 
         final Optional<Problem> optionalProblem = new CourtHearingLocationValidationRule().validate(defendantWithReferenceData, referenceDataQueryService)
                 .problems().stream().findFirst();
@@ -158,7 +161,22 @@ public class CourtHearingLocationValidationRuleTest {
     @Test
     void shouldReturnProblemWhenOtherCaseTypeButMCCChannel() {
         when(defendantWithReferenceData.getCaseDetails().getInitiationCode()).thenReturn("O");
-        when(defendantWithReferenceData.isMCC()).thenReturn(true);
+        when(defendantWithReferenceData.getDefendant().getInitialHearing().getCourtHearingLocation()).thenReturn(INVALID_COURT_HEARING_LOCATION);
+        when(defendantWithReferenceData.getReferenceDataVO()).thenReturn(new ReferenceDataVO());
+
+        final Optional<Problem> optionalProblem = new CourtHearingLocationValidationRule().validate(defendantWithReferenceData, referenceDataQueryService)
+                .problems().stream().findFirst();
+
+        assertThat(optionalProblem.get().getCode(), is(COURT_HEARING_LOCATION_OUCODE_INVALID.name()));
+        assertThat(optionalProblem.get().getValues().get(0).getValue(), is(INVALID_COURT_HEARING_LOCATION));
+    }
+
+    @Test
+    void shouldReturnProblemWhenOtherCaseTypeSingleDateSubmissionAndCourtHearingLocationInvalid() {
+        // OTHER-type but NOT a date-range submission (no endDate) - an ordinary civil single-date
+        // (hearingDetails) submission - must still be validated normally, not bypassed.
+        when(defendantWithReferenceData.getCaseDetails().getInitiationCode()).thenReturn("O");
+        when(defendantWithReferenceData.getDefendant().getInitialHearing().getEndDate()).thenReturn(null);
         when(defendantWithReferenceData.getDefendant().getInitialHearing().getCourtHearingLocation()).thenReturn(INVALID_COURT_HEARING_LOCATION);
         when(defendantWithReferenceData.getReferenceDataVO()).thenReturn(new ReferenceDataVO());
 

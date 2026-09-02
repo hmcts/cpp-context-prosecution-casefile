@@ -1,7 +1,7 @@
 package uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant;
 
 import static java.util.Optional.of;
-import static uk.gov.moj.cpp.prosecution.casefile.validation.CaseTypeRules.isOtherCaseType;
+import static uk.gov.moj.cpp.prosecution.casefile.validation.CaseTypeRules.isOtherCaseTypeDateRangeSubmission;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode.DATE_OF_HEARING_IN_THE_PAST;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.Problems.newProblem;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.rules.ValidationResult.VALID;
@@ -21,8 +21,7 @@ public class DateOfHearingPastDateValidationAndEnricherRule implements Validatio
 
     @Override
     public ValidationResult validate(final DefendantWithReferenceData defendantWithReferenceData, final ReferenceDataQueryService referenceDataQueryService) {
-        if (defendantWithReferenceData.isMCCWithListNewHearing() || defendantWithReferenceData.isInactiveMigratedCase()
-                || (isOtherCaseType(defendantWithReferenceData) && !defendantWithReferenceData.isMCC())) {
+        if (defendantWithReferenceData.isMCCWithListNewHearing() || defendantWithReferenceData.isInactiveMigratedCase() || isOtherCaseTypeDateRangeSubmission(defendantWithReferenceData)) {
             return VALID;
         }
         final String dateOfHearing = defendantWithReferenceData.getDefendant().getInitialHearing().getDateOfHearing();

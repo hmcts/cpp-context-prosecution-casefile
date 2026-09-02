@@ -78,6 +78,7 @@ import javax.json.JsonReader;
 
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import org.hamcrest.Matcher;
+import org.json.JSONObject;
 import org.skyscreamer.jsonassert.Customization;
 import org.skyscreamer.jsonassert.comparator.CustomComparator;
 
@@ -247,6 +248,14 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
         customizedAsserts.add(new Customization("initiateCourtProceedings.listHearingRequests[0].listDefendantRequests[2].defendantOffences[1]", (o1, o2) -> true));
         customizedAsserts.add(new Customization("initiateCourtProceedings.listHearingRequests[0].listedEndDateTime", (o1, o2) -> true));
         customizedAsserts.add(new Customization("initiateCourtProceedings.listHearingRequests[0].courtScheduleId", (o1, o2) -> true));
+        // "code" (the OUCODE) is populated from live reference-data lookups and isn't asserted by
+        // these fixtures - compare courtCentre with that one field excluded rather than requiring
+        // every fixture to hardcode a specific reference-data value.
+        customizedAsserts.add(new Customization("initiateCourtProceedings.listHearingRequests[0].courtCentre", (actual, expected) -> {
+            final JSONObject actualWithoutCode = new JSONObject(actual.toString());
+            actualWithoutCode.remove("code");
+            return actualWithoutCode.similar(expected);
+        }));
         customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].id", (o1, o2) -> true));
         customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].civilFees[0]", (o1, o2) -> true));
         customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].civilFees[1]", (o1, o2) -> true));
@@ -353,7 +362,15 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
                 new Customization("initiateCourtProceedings.prosecutionCases[0].caseMarkers[1].id", (o1, o2) -> true),
                 new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[0].personDefendant.bailStatus", (o1, o2) -> true),
                 new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[0].offences[0].allocationDecision", (o1, o2) -> true),
-                new Customization("id", (o1, o2) -> true)
+                new Customization("id", (o1, o2) -> true),
+                // "code" (the OUCODE) is populated from live reference-data lookups and isn't asserted by
+                // these fixtures - compare courtCentre with that one field excluded rather than requiring
+                // every fixture to hardcode a specific reference-data value.
+                new Customization("initiateCourtProceedings.listHearingRequests[0].courtCentre", (actual, expected) -> {
+                    final JSONObject actualWithoutCode = new JSONObject(actual.toString());
+                    actualWithoutCode.remove("code");
+                    return actualWithoutCode.similar(expected);
+                })
         ));
     }
 

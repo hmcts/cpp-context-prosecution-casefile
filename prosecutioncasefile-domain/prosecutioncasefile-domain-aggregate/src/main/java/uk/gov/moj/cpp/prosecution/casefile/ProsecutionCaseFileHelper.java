@@ -272,7 +272,7 @@ public class ProsecutionCaseFileHelper {
             final List<Problem> validationWarnings = validate(
                     defendant,
                     referenceDataValidationContext,
-                    CcProsecutionWarningRuleProvider.getWarningRules(initiationCode, channel));
+                    CcProsecutionWarningRuleProvider.getWarningRules(initiationCode, channel, defendantsWithReferenceData.isCivil()));
             if (!validationWarnings.isEmpty()) {
                 defendantProblems.add(defendantProblem()
                         .withProblems(validationWarnings)

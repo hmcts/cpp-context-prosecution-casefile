@@ -100,7 +100,7 @@ public class GroupCasesParkedForApprovalToCourtApplicationProceedingsConverter i
                         .withCaseStatus("ACTIVE")
                         .build()))
                 .withType(getApplicationTypeForFirstHearing())
-                .withApplicationReceivedDate(to(caseDetails.getDateReceived()))
+                .withApplicationReceivedDate(nonNull(caseDetails.getDateReceived()) ? to(caseDetails.getDateReceived()) : null)
                 .withApplicant(applicant)
                 .withSubject(subject)
                 .withApplicationStatus(LISTED)

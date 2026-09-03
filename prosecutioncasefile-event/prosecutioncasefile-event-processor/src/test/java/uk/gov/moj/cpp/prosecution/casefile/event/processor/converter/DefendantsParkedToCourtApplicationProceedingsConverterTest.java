@@ -177,7 +177,29 @@ public class DefendantsParkedToCourtApplicationProceedingsConverterTest {
         assertThat(courtApplication.getType().getLinkType(), is(LinkType.FIRST_HEARING));
     }
 
+    @ParameterizedTest
+    @MethodSource("provideParametersForCCCaseTest")
+    void shouldConvertSuccessfullyWhenDateReceivedIsNull(Channel channel, String paymentRef, String actualFeeStatus, FeeStatus expectedFeeStatus) {
+        final DefendantsParkedForSummonsApplicationApproval source = buildDefendantsParkedForSummonsApplicationApproval(channel, paymentRef, actualFeeStatus, null);
+        final Prosecution prosecution = source.getProsecutionWithReferenceData().getProsecution();
+        final CaseDetails caseDetails = prosecution.getCaseDetails();
+        final List<Offence> offences = prosecution.getDefendants().stream().flatMap(defendant -> defendant.getOffences().stream()).collect(toList());
+        given(prosecutionToBoxHearingRequestConverter.convert(prosecution)).willReturn(boxHearingRequest);
+        given(prosecutionCaseFileCaseDetailsToProsecutionCaseIdentifierConverter.convert(eq(caseDetails), any(Metadata.class))).willReturn(prosecutionCaseIdentifier);
+        given(prosecutionCaseFileOffenceToCourtApplicationOffenceConverter.convert(eq(offences), any(ParamsVO.class))).willReturn(courtApplicationOffences);
+        given(prosecutionCaseFileDefendantToCourtApplicationPartyConverter.convert(eq(prosecution.getDefendants()), any(ReferenceDataVO.class), any(Channel.class))).willReturn(respondents);
+        given(prosecutionCaseFileProsecutorToCourtApplicationPartyConverter.convert(eq(caseDetails.getProsecutor()), any(ParamsVO.class), any(Metadata.class))).willReturn(applicant);
+
+        final InitiateCourtApplicationProceedings applicationProceedings = target.convert(source, buildMetadata());
+
+        assertThat(applicationProceedings.getCourtApplication().getApplicationReceivedDate(), nullValue());
+    }
+
     private DefendantsParkedForSummonsApplicationApproval buildDefendantsParkedForSummonsApplicationApproval(Channel channel, String paymentRef, final String actualFeeStatuss) {
+        return buildDefendantsParkedForSummonsApplicationApproval(channel, paymentRef, actualFeeStatuss, CASE_RECEIVED_DATE);
+    }
+
+    private DefendantsParkedForSummonsApplicationApproval buildDefendantsParkedForSummonsApplicationApproval(Channel channel, String paymentRef, final String actualFeeStatuss, final LocalDate dateReceived) {
 
         boolean isCivil = (channel == CIVIL);
 
@@ -190,7 +212,7 @@ public class DefendantsParkedToCourtApplicationProceedingsConverterTest {
                                 .withOriginatingOrganisation(ORIGINATING_ORGANISATION)
                                 .withCpsOrganisation(CPS_ORGANISATION)
                                 .withSummonsCode(values("A", "W", "B", "E").next())
-                                .withDateReceived(CASE_RECEIVED_DATE)
+                                .withDateReceived(dateReceived)
                                 .withFeeStatus(actualFeeStatuss)
                                 .withPaymentReference(paymentRef)
                                 .build())

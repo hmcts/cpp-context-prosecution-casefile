@@ -110,7 +110,7 @@ public class DefendantsParkedToCourtApplicationProceedingsConverter implements P
                         .withCaseStatus("ACTIVE")
                         .build()))
                 .withType(getApplicationTypeForFirstHearing())
-                .withApplicationReceivedDate(to(caseDetails.getDateReceived()))
+                .withApplicationReceivedDate(nonNull(caseDetails.getDateReceived()) ? to(caseDetails.getDateReceived()) : null)
                 .withApplicant(applicant)
                 .withSubject(subject)
                 .withApplicationStatus(LISTED)

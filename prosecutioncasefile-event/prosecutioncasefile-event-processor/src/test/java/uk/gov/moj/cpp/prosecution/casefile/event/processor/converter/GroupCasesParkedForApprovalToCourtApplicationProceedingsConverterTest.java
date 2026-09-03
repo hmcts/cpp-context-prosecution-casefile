@@ -148,10 +148,30 @@ public class GroupCasesParkedForApprovalToCourtApplicationProceedingsConverterTe
 
     }
 
+    @Test
+    public void shouldConvertSuccessfullyWhenDateReceivedIsNull() {
+        final List<GroupProsecutionWithReferenceData> groupProsecutions = asList(
+                createGroupProsecutionWithReferenceData(CASE_ID1, DEFENDANT_ID1, null));
+        final GroupCasesParkedForApproval source = GroupCasesParkedForApproval.groupCasesParkedForApproval()
+                .withApplicationId(UUID.randomUUID())
+                .withGroupProsecutionList(new GroupProsecutionList(groupProsecutions, UUID.randomUUID(), Channel.CIVIL))
+                .build();
+
+        given(prosecutionToBoxHearingRequestConverter.convert(any())).willReturn(boxHearingRequest());
+        given(prosecutionCaseFileCaseDetailsToProsecutionCaseIdentifierConverter.convert(any(CaseDetails.class), any(Metadata.class))).willReturn(prosecutionCaseIdentifier());
+        given(prosecutionCaseFileOffenceToCourtApplicationOffenceConverter.convert(anyList(), any(ParamsVO.class))).willReturn(courtApplicationOffences());
+        given(prosecutionCaseFileDefendantToCourtApplicationPartyConverter.convert(anyList(), any(ReferenceDataVO.class), any(Channel.class))).willReturn(respondents());
+        given(prosecutionCaseFileProsecutorToCourtApplicationPartyConverter.convert(any(), any(ParamsVO.class), any(Metadata.class))).willReturn(applicant());
+
+        final InitiateCourtApplicationProceedings applicationProceedings = converter.convert(source, buildMetadata());
+
+        assertThat(applicationProceedings.getCourtApplication().getApplicationReceivedDate(), nullValue());
+    }
+
     private GroupCasesParkedForApproval buildGroupCasesParkedForApproval() {
         final List<GroupProsecutionWithReferenceData> groupProsecutions = asList(
-                createGroupProsecutionWithReferenceData(CASE_ID1, DEFENDANT_ID1),
-                createGroupProsecutionWithReferenceData(CASE_ID2, DEFENDANT_ID2));
+                createGroupProsecutionWithReferenceData(CASE_ID1, DEFENDANT_ID1, CASE_RECEIVED_DATE),
+                createGroupProsecutionWithReferenceData(CASE_ID2, DEFENDANT_ID2, CASE_RECEIVED_DATE));
 
         return GroupCasesParkedForApproval.groupCasesParkedForApproval()
                 .withApplicationId(UUID.randomUUID())
@@ -159,7 +179,7 @@ public class GroupCasesParkedForApprovalToCourtApplicationProceedingsConverterTe
                 .build();
     }
 
-    private GroupProsecutionWithReferenceData createGroupProsecutionWithReferenceData(final UUID caseId, final String defendantId){
+    private GroupProsecutionWithReferenceData createGroupProsecutionWithReferenceData(final UUID caseId, final String defendantId, final LocalDate dateReceived){
         return new GroupProsecutionWithReferenceData(GroupProsecution.groupProsecution()
                 .withCaseDetails(caseDetails()
                         .withCaseId(caseId)
@@ -168,7 +188,7 @@ public class GroupCasesParkedForApprovalToCourtApplicationProceedingsConverterTe
                         .withOriginatingOrganisation(ORIGINATING_ORGANISATION)
                         .withCpsOrganisation(CPS_ORGANISATION)
                         .withSummonsCode(values("A", "W", "B", "E").next())
-                        .withDateReceived(CASE_RECEIVED_DATE)
+                        .withDateReceived(dateReceived)
                         .build())
                 .withDefendants(ImmutableList.of(defendant()
                         .withId(defendantId)

@@ -19,8 +19,8 @@ public class ReferenceDataOffencesStub extends StubUtil {
 
     private static final String REFERENCE_DATA_ACTION_QUERY_OFFENCES_URL = "/referencedataoffences-service/query/api/rest/referencedataoffences/offences/all-versions";
     private static final String REFERENCE_DATA_ACTION_QUERY_OFFENCES_ALL_VERSIONS_MEDIA_TYPE = "application/vnd.referencedataoffences.query.offences-all-versions+json";
-    private static final String REFERENCE_DATA_ACTION_QUERY_OFFENCES_LIST_URL = "/referencedataoffences-service/query/api/rest/referencedataoffences/offences/list-with-blacklist-check";
-    private static final String REFERENCE_DATA_ACTION_QUERY_OFFENCES_LIST_MEDIA_TYPE = "application/vnd.referencedataoffences.offences-list-with-blacklist-check+json";
+    private static final String REFERENCE_DATA_ACTION_QUERY_OFFENCES_LIST_URL = "/referencedataoffences-service/query/api/rest/referencedataoffences/offences";
+    private static final String REFERENCE_DATA_ACTION_QUERY_OFFENCES_MEDIA_TYPE = "application/vnd.referencedataoffences.offences-list+json";
 
 
     public static void stubOffencesForOffenceCode() {
@@ -37,10 +37,6 @@ public class ReferenceDataOffencesStub extends StubUtil {
 
     public static void stubOffencesForOffenceCodeForGroupCases() {
         stubOffencesForOffenceCodeListWithCivilOffence("stub-data/referencedataoffences.offences-list-civil-group-case.json");
-    }
-
-    public static void stubOffencesForBlacklistedCivilOffence() {
-        stubOffencesForOffenceCodeListWithCivilOffence("stub-data/referencedataoffences.offences-list-civil-offence-blacklisted.json");
     }
 
     public static void stubOffencesForOffenceCodeWithEitherWayModeOfTrial() {
@@ -77,10 +73,10 @@ public class ReferenceDataOffencesStub extends StubUtil {
                 .withQueryParam("sowRef", absent())
                 .willReturn(aResponse().withStatus(SC_OK)
                         .withHeader("CPPID", UUID.randomUUID().toString())
-                        .withHeader("Content-Type", REFERENCE_DATA_ACTION_QUERY_OFFENCES_LIST_MEDIA_TYPE)
+                        .withHeader("Content-Type", REFERENCE_DATA_ACTION_QUERY_OFFENCES_MEDIA_TYPE)
                         .withBody(resourceToString(referenceDataOffencesStubFile))));
 
-        waitForStubToBeReady(REFERENCE_DATA_ACTION_QUERY_OFFENCES_LIST_URL + "?cjsoffencecode=CA03013", REFERENCE_DATA_ACTION_QUERY_OFFENCES_LIST_MEDIA_TYPE);
+        waitForStubToBeReady(REFERENCE_DATA_ACTION_QUERY_OFFENCES_LIST_URL + "?cjsoffencecode=CA03013", REFERENCE_DATA_ACTION_QUERY_OFFENCES_MEDIA_TYPE);
     }
 
     private static void stubOffencesForOffenceCodeListWithCivilOffence(final String referenceDataOffencesStubFile) {
@@ -91,10 +87,10 @@ public class ReferenceDataOffencesStub extends StubUtil {
                 .withQueryParam("sowRef", equalTo("MoJ"))
                 .willReturn(aResponse().withStatus(SC_OK)
                         .withHeader("CPPID", UUID.randomUUID().toString())
-                        .withHeader("Content-Type", REFERENCE_DATA_ACTION_QUERY_OFFENCES_LIST_MEDIA_TYPE)
+                        .withHeader("Content-Type", REFERENCE_DATA_ACTION_QUERY_OFFENCES_MEDIA_TYPE)
                         .withBody(resourceToString(referenceDataOffencesStubFile))));
 
-        waitForStubToBeReady(REFERENCE_DATA_ACTION_QUERY_OFFENCES_LIST_URL + "?cjsoffencecode=CA03013", REFERENCE_DATA_ACTION_QUERY_OFFENCES_LIST_MEDIA_TYPE);
+        waitForStubToBeReady(REFERENCE_DATA_ACTION_QUERY_OFFENCES_LIST_URL + "?cjsoffencecode=CA03013", REFERENCE_DATA_ACTION_QUERY_OFFENCES_MEDIA_TYPE);
     }
 
     private static void stubOffencesForMojOffenceCodeList(final String referenceDataOffencesStubFile, final String cjsOffenceCode, final String offenceId, final String sowRef) {
@@ -105,13 +101,13 @@ public class ReferenceDataOffencesStub extends StubUtil {
                 .withQueryParam("sowRef", equalTo(sowRef))
                 .willReturn(aResponse().withStatus(SC_OK)
                         .withHeader("CPPID", UUID.randomUUID().toString())
-                        .withHeader("Content-Type", REFERENCE_DATA_ACTION_QUERY_OFFENCES_LIST_MEDIA_TYPE)
+                        .withHeader("Content-Type", REFERENCE_DATA_ACTION_QUERY_OFFENCES_MEDIA_TYPE)
                         .withBody(resourceToString(referenceDataOffencesStubFile)
                                 .replaceAll("OFFENCE_CODE", cjsOffenceCode)
                                 .replaceAll("OFFENCE_ID", offenceId)
                         )));
 
-        waitForStubToBeReady(REFERENCE_DATA_ACTION_QUERY_OFFENCES_LIST_URL + "?cjsoffencecode="+cjsOffenceCode+"&sowRef="+sowRef, REFERENCE_DATA_ACTION_QUERY_OFFENCES_LIST_MEDIA_TYPE);
+        waitForStubToBeReady(REFERENCE_DATA_ACTION_QUERY_OFFENCES_LIST_URL + "?cjsoffencecode="+cjsOffenceCode+"&sowRef="+sowRef, REFERENCE_DATA_ACTION_QUERY_OFFENCES_MEDIA_TYPE);
     }
 
     public static void stubOffencesForOffenceCodeNoDate() {
@@ -147,10 +143,10 @@ public class ReferenceDataOffencesStub extends StubUtil {
                 .withQueryParam("cjsoffencecode", matching(".*"))
                 .willReturn(aResponse().withStatus(SC_OK)
                         .withHeader("CPPID", UUID.randomUUID().toString())
-                        .withHeader("Content-Type", REFERENCE_DATA_ACTION_QUERY_OFFENCES_LIST_MEDIA_TYPE)
+                        .withHeader("Content-Type", REFERENCE_DATA_ACTION_QUERY_OFFENCES_MEDIA_TYPE)
                         .withBody(resourceToString(referenceDataOffencesStubFile))));
 
-        waitForStubToBeReady(REFERENCE_DATA_ACTION_QUERY_OFFENCES_LIST_URL + "?cjsoffencecode=CA03013", REFERENCE_DATA_ACTION_QUERY_OFFENCES_LIST_MEDIA_TYPE);
+        waitForStubToBeReady(REFERENCE_DATA_ACTION_QUERY_OFFENCES_LIST_URL + "?cjsoffencecode=CA03013", REFERENCE_DATA_ACTION_QUERY_OFFENCES_MEDIA_TYPE);
     }
 
     public static void stubOffencesForGenericOffence() {

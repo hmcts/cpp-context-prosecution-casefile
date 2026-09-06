@@ -74,7 +74,6 @@
               "offenceWording": "TV Licence not paid",
               "referenceData": {
                 "cjsOffenceCode": "OFCODE12",
-                "blacklisted": false,
                 "cppDateOfLastUpdate": "2017-12-10",
                 "details": {
                   "document": {
@@ -264,7 +263,6 @@
       "offenceReferenceData": [
         {
           "cjsOffenceCode": "OFCODE12",
-          "blacklisted": false,
           "cppDateOfLastUpdate": "2017-12-10",
           "details": {
             "document": {
@@ -439,7 +437,6 @@
         {
           "offenceId": "04c099cc-eba2-4c80-9eed-7c1ef21d706a",
           "cjsOffenceCode": "CA03013",
-          "blacklisted": false,
           "dvlaCode": "ABC123",
           "validFrom": "2017-10-10",
           "validTo": "2017-12-10",
@@ -613,7 +610,6 @@
         {
           "offenceId": "04c099cc-eba2-4c80-9eed-7c1ef21d706a",
           "cjsOffenceCode": "CA03010",
-          "blacklisted": false,
           "dvlaCode": "ABC123",
           "validFrom": "2017-10-10",
           "validTo": "2017-12-10",

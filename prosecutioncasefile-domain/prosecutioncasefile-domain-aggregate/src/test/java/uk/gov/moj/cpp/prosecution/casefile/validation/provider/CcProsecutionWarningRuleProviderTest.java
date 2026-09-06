@@ -26,7 +26,7 @@ public class CcProsecutionWarningRuleProviderTest {
     @Test
     public void shouldIncludeAllThreeWarningRulesForCivilChannelOtherInitiationCode() {
         final List<ValidationRule<Defendant, ReferenceDataValidationContext>> rules = CcProsecutionWarningRuleProvider
-                .getWarningRules(INITIATION_CODE_FOR_OTHER, Channel.CIVIL, false);
+                .getWarningRules(INITIATION_CODE_FOR_OTHER, Channel.CIVIL);
 
         assertTrue(rules.stream().map(warningRuleClass()).anyMatch(s -> s.equals(OffenceOutOfTimeValidationRule.class)));
         assertTrue(rules.stream().map(warningRuleClass()).anyMatch(s -> s.equals(OffenceInEffectOnOffenceCommittedDateValidationRule.class)));
@@ -36,35 +36,17 @@ public class CcProsecutionWarningRuleProviderTest {
     @Test
     public void shouldIncludeAllThreeWarningRulesForCivilChannelSummonsInitiationCode() {
         final List<ValidationRule<Defendant, ReferenceDataValidationContext>> rules = CcProsecutionWarningRuleProvider
-                .getWarningRules(INITIATION_CODE_FOR_SUMMONS, Channel.CIVIL, false);
+                .getWarningRules(INITIATION_CODE_FOR_SUMMONS, Channel.CIVIL);
 
         assertTrue(rules.stream().map(warningRuleClass()).anyMatch(s -> s.equals(OffenceOutOfTimeValidationRule.class)));
         assertTrue(rules.stream().map(warningRuleClass()).anyMatch(s -> s.equals(OffenceInEffectOnOffenceCommittedDateValidationRule.class)));
         assertTrue(rules.stream().map(warningRuleClass()).anyMatch(s -> s.equals(ImprisonableOffenceValidationRule.class)));
-    }
-
-    @Test
-    public void shouldIncludeAllThreeWarningRulesForCivilOffenceOnCppiChannelSummonsInitiationCode() {
-        final List<ValidationRule<Defendant, ReferenceDataValidationContext>> rules = CcProsecutionWarningRuleProvider
-                .getWarningRules(INITIATION_CODE_FOR_SUMMONS, Channel.CPPI, true);
-
-        assertTrue(rules.stream().map(warningRuleClass()).anyMatch(s -> s.equals(OffenceOutOfTimeValidationRule.class)));
-        assertTrue(rules.stream().map(warningRuleClass()).anyMatch(s -> s.equals(OffenceInEffectOnOffenceCommittedDateValidationRule.class)));
-        assertTrue(rules.stream().map(warningRuleClass()).anyMatch(s -> s.equals(ImprisonableOffenceValidationRule.class)));
-    }
-
-    @Test
-    public void shouldReturnEmptyListForCivilOffenceOnMccChannelOtherInitiationCode() {
-        final List<ValidationRule<Defendant, ReferenceDataValidationContext>> rules = CcProsecutionWarningRuleProvider
-                .getWarningRules(INITIATION_CODE_FOR_OTHER, Channel.MCC, true);
-
-        assertTrue(rules.isEmpty());
     }
 
     @Test
     public void shouldNotIncludeImprisonableOffenceRuleForMccChannelOtherInitiationCode() {
         final List<ValidationRule<Defendant, ReferenceDataValidationContext>> rules = CcProsecutionWarningRuleProvider
-                .getWarningRules(INITIATION_CODE_FOR_OTHER, Channel.MCC, false);
+                .getWarningRules(INITIATION_CODE_FOR_OTHER, Channel.MCC);
 
         assertTrue(rules.isEmpty());
     }
@@ -72,7 +54,7 @@ public class CcProsecutionWarningRuleProviderTest {
     @Test
     public void shouldNotIncludeImprisonableOffenceRuleForCppiChannelChargeInitiationCode() {
         final List<ValidationRule<Defendant, ReferenceDataValidationContext>> rules = CcProsecutionWarningRuleProvider
-                .getWarningRules(INITIATION_CODE_CHARGE, Channel.CPPI, false);
+                .getWarningRules(INITIATION_CODE_CHARGE, Channel.CPPI);
 
         assertTrue(rules.stream().map(warningRuleClass()).anyMatch(s -> s.equals(OffenceOutOfTimeValidationRule.class)));
         assertTrue(rules.stream().map(warningRuleClass()).anyMatch(s -> s.equals(OffenceInEffectOnOffenceCommittedDateValidationRule.class)));
@@ -82,7 +64,7 @@ public class CcProsecutionWarningRuleProviderTest {
     @Test
     public void shouldNotIncludeImprisonableOffenceRuleForCivilChannelRequisitionInitiationCode() {
         final List<ValidationRule<Defendant, ReferenceDataValidationContext>> rules = CcProsecutionWarningRuleProvider
-                .getWarningRules(INITIATION_CODE_REQUISITION, Channel.CIVIL, false);
+                .getWarningRules(INITIATION_CODE_REQUISITION, Channel.CIVIL);
 
         assertTrue(rules.stream().map(warningRuleClass()).anyMatch(s -> s.equals(OffenceOutOfTimeValidationRule.class)));
         assertTrue(rules.stream().map(warningRuleClass()).anyMatch(s -> s.equals(OffenceInEffectOnOffenceCommittedDateValidationRule.class)));
@@ -92,7 +74,7 @@ public class CcProsecutionWarningRuleProviderTest {
     @Test
     public void shouldReturnEmptyListForUnmappedInitiationCodeAndChannel() {
         final List<ValidationRule<Defendant, ReferenceDataValidationContext>> rules = CcProsecutionWarningRuleProvider
-                .getWarningRules("J", Channel.SPI, false);
+                .getWarningRules("J", Channel.SPI);
 
         assertTrue(rules.isEmpty());
     }

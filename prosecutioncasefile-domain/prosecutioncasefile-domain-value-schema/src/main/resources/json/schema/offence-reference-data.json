@@ -608,15 +608,6 @@
     },
     "exParte": {
       "type": "boolean"
-    },
-    "blacklisted": {
-      "type": "boolean"
-    },
-    "blacklistValidFrom": {
-      "$ref": "#/definitions/dateFormat"
-    },
-    "blacklistValidTo": {
-      "$ref": "#/definitions/dateFormat"
     }
   },
   "additionalProperties": false,

@@ -17,7 +17,6 @@
       "modeOfTrial": "SNONIMP",
       "modeOfTrialDerived": "Summary",
       "endorsableFlag": false,
-      "blacklisted": false,
       "maxPenalty": "Max Penalty",
       "details": {
         "document": {
@@ -191,7 +190,6 @@
       "modeOfTrial": "SNONIMP",
       "modeOfTrialDerived": "Summary",
       "endorsableFlag": false,
-      "blacklisted": false,
       "maxPenalty": "Max Penalty",
       "details": {
         "document": {
@@ -366,7 +364,6 @@
       "modeOfTrial": "SNONIMP",
       "modeOfTrialDerived": "Summary",
       "endorsableFlag": false,
-      "blacklisted": false,
       "maxPenalty": "Max Penalty",
       "details": {
         "document": {

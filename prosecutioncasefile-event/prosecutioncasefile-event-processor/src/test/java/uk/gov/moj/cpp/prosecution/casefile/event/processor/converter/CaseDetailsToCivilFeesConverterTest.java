@@ -70,7 +70,6 @@ public class CaseDetailsToCivilFeesConverterTest {
         CaseDetails caseDetails = CaseDetails.caseDetails()
                 .withContestedFeeStatus(String.valueOf(NOT_APPLICABLE))
                 .build();
-
         List<CivilFees> civilFees = underTest.convert(caseDetails);
 
         assertEquals(NOT_APPLICABLE, civilFees.get(0).getFeeStatus());

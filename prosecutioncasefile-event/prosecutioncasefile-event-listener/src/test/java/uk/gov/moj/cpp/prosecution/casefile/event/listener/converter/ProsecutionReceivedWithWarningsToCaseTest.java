@@ -2,7 +2,12 @@ package uk.gov.moj.cpp.prosecution.casefile.event.listener.converter;
 
 import static java.util.Collections.emptyList;
 import static java.util.UUID.randomUUID;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static uk.gov.moj.cpp.prosecution.casefile.event.listener.converter.TestDataProvider.createProsecution;
+import static uk.gov.moj.cpp.prosecution.casefile.event.listener.converter.TestDataProvider.createProsecutionWithFeeStatus;
 
 import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.setField;
 
@@ -54,10 +59,30 @@ public class ProsecutionReceivedWithWarningsToCaseTest extends ConverterBaseTest
     }
 
     @Test
-    public void testConvertSelfDefinedInformationToSelfDefinedInformationDetails() {
+    void testConvertSelfDefinedInformationToSelfDefinedInformationDetails() {
         final SjpProsecutionReceivedWithWarnings prosecutionReceived = new SjpProsecutionReceivedWithWarnings(randomUUID(), createProsecution(), emptyList());
 
         final CaseDetails caseDetails = converter.convert(prosecutionReceived);
         assertCaseDetails(caseDetails);
+    }
+
+    @Test
+    void shouldPersistCivilFeesWhenCaseIsCivil() {
+        final SjpProsecutionReceivedWithWarnings prosecutionReceived = new SjpProsecutionReceivedWithWarnings(randomUUID(),
+                createProsecutionWithFeeStatus("PAID", "PAID", true), emptyList());
+
+        final CaseDetails caseDetails = converter.convert(prosecutionReceived);
+
+        assertThat(caseDetails.getCivilFees(), hasSize(2));
+    }
+
+    @Test
+    void shouldNotPersistCivilFeesWhenCaseIsNotCivil() {
+        final SjpProsecutionReceivedWithWarnings prosecutionReceived = new SjpProsecutionReceivedWithWarnings(randomUUID(),
+                createProsecutionWithFeeStatus("PAID", "PAID", false), emptyList());
+
+        final CaseDetails caseDetails = converter.convert(prosecutionReceived);
+
+        assertThat(caseDetails.getCivilFees(), is(nullValue()));
     }
 }

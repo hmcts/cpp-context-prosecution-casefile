@@ -201,6 +201,39 @@ public class InitiateCCProsecutionIT extends BaseIT {
     }
 
     @Test
+    void initiateCCProsecutionOfCivilCaseWithNotApplicableFeeStatusAndNoFeeIdViaMCCJourney() {
+        final UUID offenceId = randomUUID();
+        stubGetPoliceForces();
+        stubGetOrganisationUnitWithOneCourtroom();
+        stubOffencesForMojOffenceCodeList(CIVIL_CJS_OFFENCE_CODE, offenceId.toString(), "MoJ");
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.initiate-cc-prosecution-with-mcc-civil-case-with civil-fees.json")
+                .replaceAll("INITIATION_CODE", "O")
+                .replaceAll("OFFENCE_CODE", CIVIL_CJS_OFFENCE_CODE)
+                .replaceAll("OFFENCE_ID", offenceId.toString())
+                .replace("\"feeStatus\": \"REFUNDED\"", "\"feeStatus\": \"NOT_APPLICABLE\"");
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        //Below data is coming from above input file.
+        String startDateTime = dateFormat.format(LocalDate.now().plusMonths(2).atTime(11,11,00));
+        final String expectedPayload = readFile("expected/initiate_cc_expected_output-civilcase-with-civil-fees-via-mcc-journey.json")
+                .replaceAll("LISTED_START_DATE_TIME", startDateTime)
+                .replaceAll("OFFENCE_CODE", CIVIL_CJS_OFFENCE_CODE)
+                .replaceAll("OFFENCE_ID", offenceId.toString());
+        // For a civil case, setCivilFees() always assigns a feeId/feeType regardless of the supplied
+        // feeStatus, so this exercises feeStatus=NOT_APPLICABLE without ever hitting a null feeType.
+        verifyCCEventAndProgressionCommandForMCC(staticPayLoad, expectedPayload);
+    }
+
+    @Test
+    void initiateCCProsecutionForMCCCriminalCaseWithNotApplicableFeeStatus() {
+        stubGetOrganisationUnitWithOneCourtroom();
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-mcc-not-applicable-fee-status.json");
+        final String expectedPayload = readFile("expected/initiate_cc_expected_output-mcc-not-applicable-fee-status.json");
+        // For a non-civil case, setCivilFees() is never invoked, so feeStatus=NOT_APPLICABLE reaches
+        // CaseDetailsToCivilFeesConverter with no feeType/feeId at all - this must not error.
+        verifyCCEventAndProgressionCommandForMCC(staticPayLoad, expectedPayload);
+    }
+
+    @Test
     void initiateCCProsecutionForMCCWhenOuCodeIsNull() {
 
         stubGetOrganisationUnitWithOneCourtroom();

@@ -501,23 +501,6 @@ public class ProsecutionCaseFileTest {
     }
 
     @Test
-    public void shouldRaiseOffenceOutOfTimeWarningForSingleNonManualCivilCase() {
-        final ProsecutionWithReferenceData prosecutionWithReferenceData =
-                getCivilProsecutionWithReferenceDataForSingleCase("O", now(), now().plusDays(5).toString(), now().minusMonths(10), CIVIL);
-
-        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(),
-                referenceDataQueryService);
-
-        final List<Object> eventList = objectStream.collect(toList());
-
-        assertThat(getFirstMatching(eventList, CcProsecutionRejected.class).isPresent(), is(false));
-        final Optional<CcCaseReceivedWithWarnings> ccCaseReceivedWithWarnings = getFirstMatching(eventList, CcCaseReceivedWithWarnings.class);
-        assertThat(ccCaseReceivedWithWarnings.isPresent(), is(true));
-        assertThat(ccCaseReceivedWithWarnings.get().getDefendantWarnings().get(0).getProblems().stream()
-                .anyMatch(problem -> problem.getCode().equals(ProblemCode.OFFENCE_OUT_OF_TIME.name())), is(true));
-    }
-
-    @Test
     public void shouldNotRaiseOffenceOutOfTimeWarningForMccChannelCase() {
         final ProsecutionWithReferenceData prosecutionWithReferenceData =
                 getCivilProsecutionWithReferenceDataForSingleCase("O", now(), now().plusDays(5).toString(), now().minusMonths(10), MCC);

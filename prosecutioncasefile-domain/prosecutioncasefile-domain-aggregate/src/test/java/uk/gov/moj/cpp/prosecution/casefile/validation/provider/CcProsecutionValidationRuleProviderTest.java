@@ -17,6 +17,7 @@ import uk.gov.moj.cpp.prosecution.casefile.validation.rules.SummonsCodeValidatio
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.ValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.CroNumberSpiValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.DateOfHearingPastDateValidationAndEnricherRule;
+import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.DateOfHearingPastDateValidationAndEnricherRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.DateOfHearingMoreThan31DaysInPastValidationAndEnricherRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.DateOfHearingPastDateValidationAndEnricherRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.defendant.CroNumberValidationRule;

@@ -6,12 +6,27 @@
     "documentId": {
       "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
     },
+    "documentUri": {
+      "type": "string",
+      "format": "uri"
+    },
     "caseId": {
       "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid"
     }
   },
   "required": [
-    "documentId",
     "caseId"
+  ],
+  "oneOf": [
+    {
+      "required": [
+        "documentId"
+      ]
+    },
+    {
+      "required": [
+        "documentUri"
+      ]
+    }
   ]
 }

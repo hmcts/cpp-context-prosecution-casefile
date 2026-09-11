@@ -299,6 +299,15 @@ public class InitiateCCProsecutionIT extends BaseIT {
     }
 
     @Test
+    void initiateCCProsecutionForMCCAndTrialWithIndicatedGuiltyPleaForLibraSetsIndicatedPlea() {
+        stubGetOrganisationUnitWithOneCourtroomForMags();
+        stubGetLocalJusticeAreas();
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-mcc-trial-indicated-guilty-plea-libra.json");
+        final String expectedPayload = readFile("expected/initiate_cc_expected_output-mcc-trial-indicated-guilty-plea-libra.json");
+        verifyCCEventAndProgressionCommandForMCC(staticPayLoad, expectedPayload);
+    }
+
+    @Test
     void initiateCCProsecutionForPostalRequisitionWithCorporateDefendant() {
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-requisition-corporate.json");
         final String expectedPayload = readFile("expected/initiate_cc_expected_output_requisition_corporate.json");

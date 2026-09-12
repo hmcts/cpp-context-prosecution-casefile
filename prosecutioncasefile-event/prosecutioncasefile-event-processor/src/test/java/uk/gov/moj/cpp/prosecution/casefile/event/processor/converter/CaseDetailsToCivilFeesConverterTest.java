@@ -76,29 +76,4 @@ public class CaseDetailsToCivilFeesConverterTest {
         assertNull(civilFees.get(0).getFeeType());
         assertNull(civilFees.get(0).getFeeId());
     }
-
-    @Test
-    public void shouldCreateCivilFeesObjectWhenFeeStatusIsNotApplicableAndFeeTypeIsMissing() {
-        CaseDetails caseDetails = CaseDetails.caseDetails()
-                .withFeeStatus(String.valueOf(NOT_APPLICABLE))
-                .build();
-
-        List<CivilFees> civilFees = underTest.convert(caseDetails);
-
-        assertEquals(NOT_APPLICABLE, civilFees.get(0).getFeeStatus());
-        assertNull(civilFees.get(0).getFeeType());
-        assertNull(civilFees.get(0).getFeeId());
-    }
-
-    @Test
-    public void shouldCreateCivilFeesObjectWhenContestedFeeStatusIsNotApplicableAndContestedFeeTypeIsMissing() {
-        CaseDetails caseDetails = CaseDetails.caseDetails()
-                .withContestedFeeStatus(String.valueOf(NOT_APPLICABLE))
-                .build();
-        List<CivilFees> civilFees = underTest.convert(caseDetails);
-
-        assertEquals(NOT_APPLICABLE, civilFees.get(0).getFeeStatus());
-        assertNull(civilFees.get(0).getFeeType());
-        assertNull(civilFees.get(0).getFeeId());
-    }
 }

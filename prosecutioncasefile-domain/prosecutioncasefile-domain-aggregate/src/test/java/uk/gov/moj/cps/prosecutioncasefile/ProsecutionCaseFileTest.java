@@ -1034,6 +1034,25 @@ public class ProsecutionCaseFileTest {
     }
 
     @Test
+    public void shouldDefaultContestedFeeStatusToNotApplicableWhenCivilSummonsApplicationIsApproved() {
+        // Given - a case parked pending summons approval; isCivil is not yet known at this point,
+        // so setCivilFees() no-ops and this.caseDetails carries no fee defaulting at all
+        final ProsecutionWithReferenceData referenceData = getProsecutionWithReferenceData(
+                of(buildDefendantWithInitiationCode(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE, "S")), SPI, "S");
+        prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID, referenceData, emptyList()));
+
+        // When - the summons application is approved and only now is the case known to be civil
+        final Stream<Object> objectStream = prosecutionCaseFile.approveCaseDefendants(getSummonsApplicationApprovedDetails(APPLICATION_ID), of(), of(), true);
+
+        // Then - the contested fee must default to NOT_APPLICABLE, not stay unset
+        final List<Object> eventList = objectStream.collect(toList());
+        final Optional<CcCaseReceived> firstMatchingEvent = getFirstMatching(eventList, CcCaseReceived.class);
+        final String contestedFeeStatus = firstMatchingEvent.get().getProsecutionWithReferenceData()
+                .getProsecution().getCaseDetails().getContestedFeeStatus();
+        assertThat(contestedFeeStatus, is(FeeStatus.NOT_APPLICABLE.name()));
+    }
+
+    @Test
     public void shouldRaiseNewCCCaseForSameDefendantWhenEarlierApplicationWasRejectedForSameCaseReceivedViaSpiChannel() {
         final ProsecutionWithReferenceData referenceData = getProsecutionWithReferenceData(
                 of(buildDefendantWithInitiationCode(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE, "S")), SPI, "S");

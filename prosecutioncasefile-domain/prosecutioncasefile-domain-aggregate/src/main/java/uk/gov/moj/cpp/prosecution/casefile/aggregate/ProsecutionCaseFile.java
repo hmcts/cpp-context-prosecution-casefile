@@ -1727,7 +1727,7 @@ public class ProsecutionCaseFile implements Aggregate {
         final List<DefendantProblem> defendantWarningsForApprovedDefendants = getDefendantWarningsForDefendants(approvedDefendants);
         final SummonsApprovedOutcome summonsApprovedOutcome = summonsApplicationApprovedDetails.getSummonsApprovedOutcome();
         final UUID externalId = getExternalIdFromDefendants(approvedDefendants);
-        final ProsecutionWithReferenceData prosecutionWithReferenceData = new ProsecutionWithReferenceData(prosecution()
+        final ProsecutionWithReferenceData builtProsecutionWithReferenceData = new ProsecutionWithReferenceData(prosecution()
                 .withCaseDetails(this.caseDetails)
                 .withDefendants(approvedDefendants)
                 .withChannel(this.channel)
@@ -1735,7 +1735,8 @@ public class ProsecutionCaseFile implements Aggregate {
                 .withIsGroupMaster(false)
                 .withIsGroupMember(false)
                 .build());
-        prosecutionWithReferenceData.setExternalId(externalId);
+        builtProsecutionWithReferenceData.setExternalId(externalId);
+        final ProsecutionWithReferenceData prosecutionWithReferenceData = setCivilFees(builtProsecutionWithReferenceData);
 
         caseRefDataEnrichers.forEach(x -> x.enrich(prosecutionWithReferenceData));
         final DefendantsWithReferenceData defendantsWithReferenceData = buildDefendantWithReferenceData(prosecutionWithReferenceData, defendantRefDataEnrichers);

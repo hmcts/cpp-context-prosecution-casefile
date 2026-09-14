@@ -6,9 +6,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.justice.core.courts.IndicatedPleaValue;
 import uk.gov.justice.core.courts.InitiationCode;
 import uk.gov.justice.core.courts.JurisdictionType;
 import uk.gov.justice.core.courts.LjaDetails;
+import uk.gov.justice.core.courts.MigrationSourceSystem;
+import uk.gov.justice.core.courts.Source;
 import uk.gov.moj.cpp.prosecution.casefile.domain.ParamsVO;
 import uk.gov.moj.cpp.prosecution.casefile.domain.ReferenceDataVO;
 import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
@@ -562,6 +565,211 @@ public class ProsecutionCaseFileOffenceToCourtsOffenceConverterTest {
         final uk.gov.justice.core.courts.Offence offence = coreOffences.get(0);
         assertThat(offence.getId(), is(offenceId));
         assertThat(offence.getConvictionDate(), is(pleaDate.toString()));
+    }
+
+    @Test
+    public void shouldEmitIndicatedGuiltyAsIndicatedPleaForLibra() {
+        final ReferenceDataVO referenceDataVO = buildReferenceDataWithOffenceAndModeOfTrial(EITHER_WAY);
+        final UUID offenceId = randomUUID();
+        final LocalDate pleaDate = LocalDate.now().minusDays(1);
+
+        final List<Offence> offences = List.of(offence()
+                .withOffenceId(offenceId)
+                .withOffenceCode("TVL-ABC")
+                .withOffenceCommittedDate(LocalDate.now())
+                .withPlea(Plea.plea()
+                        .withPleaDate(pleaDate)
+                        .withPleaValue("INDICATED_GUILTY")
+                        .build())
+                .build());
+
+        final ParamsVO paramsVO = new ParamsVO();
+        paramsVO.setReferenceDataVO(referenceDataVO);
+        paramsVO.setChannel(MCC);
+        paramsVO.setInitiationCode(InitiationCode.O.name());
+        paramsVO.setMigrationSourceSystem(MigrationSourceSystem.migrationSourceSystem()
+                .withMigrationSourceSystemName("LIBRA")
+                .build());
+
+        final List<uk.gov.justice.core.courts.Offence> coreOffences = converter.convert(offences, paramsVO);
+
+        final uk.gov.justice.core.courts.Offence offence = coreOffences.get(0);
+        assertNull(offence.getPlea());
+        assertNotNull(offence.getIndicatedPlea());
+        assertThat(offence.getIndicatedPlea().getOffenceId(), is(offenceId));
+        assertThat(offence.getIndicatedPlea().getIndicatedPleaValue(), is(IndicatedPleaValue.INDICATED_GUILTY));
+        assertThat(offence.getIndicatedPlea().getIndicatedPleaDate(), is(pleaDate.toString()));
+        assertThat(offence.getIndicatedPlea().getSource(), is(Source.IN_COURT));
+    }
+
+    @Test
+    public void shouldEmitIndicatedNotGuiltyAsIndicatedPleaForLibra() {
+        final ReferenceDataVO referenceDataVO = buildReferenceDataWithOffenceAndModeOfTrial(EITHER_WAY);
+        final UUID offenceId = randomUUID();
+        final LocalDate pleaDate = LocalDate.now().minusDays(1);
+
+        final List<Offence> offences = List.of(offence()
+                .withOffenceId(offenceId)
+                .withOffenceCode("TVL-ABC")
+                .withOffenceCommittedDate(LocalDate.now())
+                .withPlea(Plea.plea()
+                        .withPleaDate(pleaDate)
+                        .withPleaValue("INDICATED_NOT_GUILTY")
+                        .build())
+                .build());
+
+        final ParamsVO paramsVO = new ParamsVO();
+        paramsVO.setReferenceDataVO(referenceDataVO);
+        paramsVO.setChannel(MCC);
+        paramsVO.setInitiationCode(InitiationCode.O.name());
+        paramsVO.setMigrationSourceSystem(MigrationSourceSystem.migrationSourceSystem()
+                .withMigrationSourceSystemName("LIBRA")
+                .build());
+
+        final List<uk.gov.justice.core.courts.Offence> coreOffences = converter.convert(offences, paramsVO);
+
+        final uk.gov.justice.core.courts.Offence offence = coreOffences.get(0);
+        assertNull(offence.getPlea());
+        assertNotNull(offence.getIndicatedPlea());
+        assertThat(offence.getIndicatedPlea().getOffenceId(), is(offenceId));
+        assertThat(offence.getIndicatedPlea().getIndicatedPleaValue(), is(IndicatedPleaValue.INDICATED_NOT_GUILTY));
+        assertThat(offence.getIndicatedPlea().getIndicatedPleaDate(), is(pleaDate.toString()));
+        assertThat(offence.getIndicatedPlea().getSource(), is(Source.IN_COURT));
+    }
+
+    @Test
+    public void shouldKeepIndicatedGuiltyOnPleaObjectForXhibit() {
+        final ReferenceDataVO referenceDataVO = buildReferenceDataWithOffenceAndModeOfTrial(EITHER_WAY);
+        final UUID offenceId = randomUUID();
+        final LocalDate pleaDate = LocalDate.now().minusDays(1);
+
+        final List<Offence> offences = List.of(offence()
+                .withOffenceId(offenceId)
+                .withOffenceCode("TVL-ABC")
+                .withOffenceCommittedDate(LocalDate.now())
+                .withPlea(Plea.plea()
+                        .withPleaDate(pleaDate)
+                        .withPleaValue("INDICATED_GUILTY")
+                        .build())
+                .build());
+
+        final ParamsVO paramsVO = new ParamsVO();
+        paramsVO.setReferenceDataVO(referenceDataVO);
+        paramsVO.setChannel(MCC);
+        paramsVO.setInitiationCode(InitiationCode.O.name());
+        paramsVO.setMigrationSourceSystem(MigrationSourceSystem.migrationSourceSystem()
+                .withMigrationSourceSystemName("XHIBIT")
+                .build());
+
+        final List<uk.gov.justice.core.courts.Offence> coreOffences = converter.convert(offences, paramsVO);
+
+        final uk.gov.justice.core.courts.Offence offence = coreOffences.get(0);
+        assertNull(offence.getIndicatedPlea());
+        assertNotNull(offence.getPlea());
+        assertThat(offence.getPlea().getPleaValue(), is("INDICATED_GUILTY"));
+        assertThat(offence.getConvictionDate(), is(pleaDate.toString()));
+    }
+
+    @Test
+    public void shouldKeepGuiltyOnPleaObjectForLibra() {
+        final ReferenceDataVO referenceDataVO = buildReferenceDataWithOffenceAndModeOfTrial(EITHER_WAY);
+        final UUID offenceId = randomUUID();
+        final LocalDate pleaDate = LocalDate.now().minusDays(1);
+
+        final List<Offence> offences = List.of(offence()
+                .withOffenceId(offenceId)
+                .withOffenceCode("TVL-ABC")
+                .withOffenceCommittedDate(LocalDate.now())
+                .withPlea(Plea.plea()
+                        .withPleaDate(pleaDate)
+                        .withPleaValue("GUILTY")
+                        .build())
+                .build());
+
+        final ParamsVO paramsVO = new ParamsVO();
+        paramsVO.setReferenceDataVO(referenceDataVO);
+        paramsVO.setChannel(MCC);
+        paramsVO.setInitiationCode(InitiationCode.O.name());
+        paramsVO.setMigrationSourceSystem(MigrationSourceSystem.migrationSourceSystem()
+                .withMigrationSourceSystemName("LIBRA")
+                .build());
+
+        final List<uk.gov.justice.core.courts.Offence> coreOffences = converter.convert(offences, paramsVO);
+
+        final uk.gov.justice.core.courts.Offence offence = coreOffences.get(0);
+        assertNull(offence.getIndicatedPlea());
+        assertNotNull(offence.getPlea());
+        assertThat(offence.getPlea().getPleaValue(), is("GUILTY"));
+    }
+
+    @Test
+    public void shouldKeepIndicatedGuiltyOnPleaObjectWhenMigrationSourceSystemIsNull() {
+        final ReferenceDataVO referenceDataVO = buildReferenceDataWithOffenceAndModeOfTrial(EITHER_WAY);
+        final UUID offenceId = randomUUID();
+        final LocalDate pleaDate = LocalDate.now().minusDays(1);
+
+        final List<Offence> offences = List.of(offence()
+                .withOffenceId(offenceId)
+                .withOffenceCode("TVL-ABC")
+                .withOffenceCommittedDate(LocalDate.now())
+                .withPlea(Plea.plea()
+                        .withPleaDate(pleaDate)
+                        .withPleaValue("INDICATED_GUILTY")
+                        .build())
+                .build());
+
+        final ParamsVO paramsVO = new ParamsVO();
+        paramsVO.setReferenceDataVO(referenceDataVO);
+        paramsVO.setChannel(MCC);
+        paramsVO.setInitiationCode(InitiationCode.O.name());
+
+        final List<uk.gov.justice.core.courts.Offence> coreOffences = converter.convert(offences, paramsVO);
+
+        final uk.gov.justice.core.courts.Offence offence = coreOffences.get(0);
+        assertNull(offence.getIndicatedPlea());
+        assertNotNull(offence.getPlea());
+        assertThat(offence.getPlea().getPleaValue(), is("INDICATED_GUILTY"));
+    }
+
+    @Test
+    public void shouldSetConvictingCourtForLibraIndicatedGuiltyEvenWhenDivertedToIndicatedPlea() {
+        final ReferenceDataVO referenceDataVO = buildReferenceDataWithOffenceAndModeOfTrial(null);
+        final UUID offenceId = randomUUID();
+        final UUID courtCenterId = randomUUID();
+        final LocalDate pleaDate = LocalDate.now().minusDays(1);
+
+        final String convictingCourtCode = "COURT100";
+        when(referenceDataQueryService.retrieveOrganisationUnits(eq(convictingCourtCode)))
+                .thenReturn(List.of(OrganisationUnitReferenceData.organisationUnitReferenceData()
+                        .withId(courtCenterId.toString())
+                        .withOucodeL1Code(convictingCourtCode).build()));
+
+        final List<Offence> offences = List.of(offence()
+                .withOffenceId(offenceId)
+                .withOffenceCode("TVL-ABC")
+                .withOffenceCommittedDate(LocalDate.now())
+                .withPlea(Plea.plea()
+                        .withPleaDate(pleaDate)
+                        .withPleaValue("INDICATED_GUILTY")
+                        .build())
+                .withConvictingCourtCode(convictingCourtCode)
+                .build());
+
+        final ParamsVO paramsVO = new ParamsVO();
+        paramsVO.setReferenceDataVO(referenceDataVO);
+        paramsVO.setChannel(MCC);
+        paramsVO.setInitiationCode(InitiationCode.O.name());
+        paramsVO.setMigrationSourceSystem(MigrationSourceSystem.migrationSourceSystem()
+                .withMigrationSourceSystemName("LIBRA")
+                .build());
+
+        final List<uk.gov.justice.core.courts.Offence> coreOffences = converter.convert(offences, paramsVO);
+
+        final uk.gov.justice.core.courts.Offence offence = coreOffences.get(0);
+        assertNull(offence.getPlea());
+        assertNotNull(offence.getIndicatedPlea());
+        assertThat(offence.getConvictionDate(), is(pleaDate.toString()));
+        assertThat(offence.getConvictingCourt().getId(), is(courtCenterId));
     }
 
     @Test

@@ -88,6 +88,7 @@ public class CCCaseToProsecutionCaseConverter implements Converter<CcCaseReceive
         final List<CivilFees> civilFees = caseDetailsToCivilFeesConverter.convert(caseDetails);
 
         final MigrationSourceSystem migrationSourceSystem = ofNullable(prosecution.getMigrationSourceSystem()).filter(system -> nonNull(system.getMigrationSourceSystemName())).orElse(null);
+        paramsVO.setMigrationSourceSystem(migrationSourceSystem);
 
         final ProsecutionCase prosecutionCase = prosecutionCase()
                 .withProsecutionCaseIdentifier(buildProsecutorCaseIdentifier(caseDetails, prosecutionWithReferenceData))//issue with ref data

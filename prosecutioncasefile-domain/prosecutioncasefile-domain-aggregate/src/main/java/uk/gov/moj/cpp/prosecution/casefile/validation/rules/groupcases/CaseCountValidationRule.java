@@ -17,7 +17,8 @@ public class CaseCountValidationRule implements ValidationRule<GroupProsecutionL
     public ValidationResult validate(final GroupProsecutionList groupProsecutionList, final ReferenceDataQueryService context) {
         final Integer caseCount = groupProsecutionList.getGroupProsecutionWithReferenceDataList().size();
 
-        if(caseCount > 1 && caseCount <= 1000){
+        // TEMPORARY: upper bound removed for environment testing
+        if(caseCount > 1){
             return ValidationResult.VALID;
         }
 

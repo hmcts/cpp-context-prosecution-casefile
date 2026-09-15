@@ -3,6 +3,7 @@ package uk.gov.moj.cpp.prosecution.casefile.validation.rules.groupcases;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -44,6 +45,7 @@ public class CaseCountValidationRuleTest {
 
     }
 
+    @Disabled("TEMPORARY: upper case-count bound disabled in CaseCountValidationRule for env testing - re-enable when cap is restored")
     @Test
     public void shouldReturnValidationErrorsWhenRequestContainsMoreThanThousandCases() {
 

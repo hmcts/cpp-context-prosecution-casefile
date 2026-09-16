@@ -4,6 +4,8 @@ on [Keep a CHANGELOG](http://keepachangelog.com/). This project adheres to
 [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- Updated `service-parent-pom` and `coredomain.version` to `25.104.1`, which brings Liquibase `5.0.3` and the consolidated Maven plugin versions
 
 ## [25.104.0-M2] - 2026-07-07
 ### Changed

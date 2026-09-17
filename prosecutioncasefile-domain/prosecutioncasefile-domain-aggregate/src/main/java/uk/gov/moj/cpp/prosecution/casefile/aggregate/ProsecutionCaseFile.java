@@ -199,6 +199,7 @@ public class ProsecutionCaseFile implements Aggregate {
     private static final String EXPIRED_AT = "expiredAt";
     private static final String SUMMONS_INITIATION_CODE = "S";
     private static final String SJP_INITIATION_CODE = "J";
+    private static final String LIBRA_MIGRATION_SOURCE_SYSTEM = "LIBRA";
     public static final String METLI = "GALMT00";
     public static final String GM_00001 = "GM00001";
 
@@ -530,7 +531,11 @@ public class ProsecutionCaseFile implements Aggregate {
 
         final Boolean isCivil = Optional.ofNullable(receivedProsecutionWithReferenceData.getProsecution().getIsCivil()).orElse(false);
 
-        final List<Problem> caseProblems = validate(prosecutionWithReferenceData, referenceDataQueryService, getCaseValidationRules(receivedInitiationCode));
+        final boolean isLibraMigratedCase = Optional.ofNullable(prosecution.getMigrationSourceSystem())
+                .map(MigrationSourceSystem::getMigrationSourceSystemName)
+                .filter(LIBRA_MIGRATION_SOURCE_SYSTEM::equalsIgnoreCase)
+                .isPresent();
+        final List<Problem> caseProblems = validate(prosecutionWithReferenceData, referenceDataQueryService, getCaseValidationRules(receivedInitiationCode, isLibraMigratedCase));
         boolean isMCCWithListNewHearing = MCC.equals(prosecutionChannel) && Objects.nonNull(prosecutionWithReferenceData.getProsecution().getListNewHearing());
 
         //ACTIVE // INACTIVE

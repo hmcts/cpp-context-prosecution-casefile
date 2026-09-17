@@ -97,6 +97,11 @@ public class CcProsecutionValidationRuleProvider {
             new ProsecutorSJPValidationRule(),
             new ProsecutorAOCPValidationRule()
     ));
+    private static final List<ValidationRule<ProsecutionWithReferenceData, ReferenceDataQueryService>> LIBRA_SJP_CASE_RULE_SET = unmodifiableList(asList(
+            new CaseInitiationValidationRule(),
+            new SummonsCodeValidationRule(),
+            new ProsecutorReferenceDataValidationRule()
+    ));
     private static final List<ValidationRule<ProsecutionWithReferenceData, ReferenceDataQueryService>> COMMON_CASE_RULE_SET = unmodifiableList(asList(
             new CaseInitiationValidationRule(),
             new ProsecutorReferenceDataValidationRule(),
@@ -292,6 +297,13 @@ public class CcProsecutionValidationRuleProvider {
             return COMMON_CASE_RULE_SET;
         }
 
+    }
+
+    public static List<ValidationRule<ProsecutionWithReferenceData, ReferenceDataQueryService>> getCaseValidationRules(final String caseInitiationCode, final boolean isLibra) {
+        if (isLibra && SJP.getCode().equals(caseInitiationCode)) {
+            return LIBRA_SJP_CASE_RULE_SET;
+        }
+        return getCaseValidationRules(caseInitiationCode);
     }
 
     public static List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>> getDefendantValidationRules(final String defendantInitiationCode,

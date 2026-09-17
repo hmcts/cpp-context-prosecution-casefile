@@ -100,7 +100,8 @@ public class CcProsecutionValidationRuleProvider {
     private static final List<ValidationRule<ProsecutionWithReferenceData, ReferenceDataQueryService>> LIBRA_SJP_CASE_RULE_SET = unmodifiableList(asList(
             new CaseInitiationValidationRule(),
             new SummonsCodeValidationRule(),
-            new ProsecutorReferenceDataValidationRule()
+            new ProsecutorReferenceDataValidationRule(),
+            new CaseNewhearingListDefendantsValidationRule()
     ));
     private static final List<ValidationRule<ProsecutionWithReferenceData, ReferenceDataQueryService>> COMMON_CASE_RULE_SET = unmodifiableList(asList(
             new CaseInitiationValidationRule(),

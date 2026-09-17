@@ -67,4 +67,19 @@ class CaseNewhearingListDefendantsValidationRuleTest {
                         && result.problems().get(0).getValues().get(0).getKey().equals("listDefendantRequests"));
     }
 
+    @Test
+    void shouldReturnInvalidWithoutNpeWhenMCCAndListDefendantRequestsIsAbsent() {
+        HearingRequest newHearing = HearingRequest.hearingRequest().build();
+        Prosecution prosecution = Prosecution.prosecution().withChannel(Channel.MCC).withDefendants(List.of(Defendant.defendant().build())).withListNewHearing(newHearing).build();
+
+        ProsecutionWithReferenceData data = new ProsecutionWithReferenceData(prosecution, null);
+
+        ValidationResult result = rule.validate(data, null);
+
+        assertNotEquals(VALID, result);
+        assertTrue(result.problems().get(0).
+                getCode().equals("CASE_LIST_NEW_LISTING_HEARING")
+                        && result.problems().get(0).getValues().get(0).getKey().equals("listDefendantRequests"));
+    }
+
 }

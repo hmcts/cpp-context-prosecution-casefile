@@ -17,6 +17,8 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ProblemValue;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecution;
 import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 
+import java.util.List;
+
 
 public class CaseNewhearingListDefendantsValidationRule implements ValidationRule<ProsecutionWithReferenceData, ReferenceDataQueryService> {
 
@@ -29,7 +31,10 @@ public class CaseNewhearingListDefendantsValidationRule implements ValidationRul
         final boolean isMCCWithNewHearingList = Channel.MCC == channel && (nonNull(prosecution.getListNewHearing()));
 
         if (isMCCWithNewHearingList) {
-            return prosecution.getDefendants().size() == prosecution.getListNewHearing().getListDefendantRequests().size() ? VALID :
+            final List<?> listDefendantRequests = prosecution.getListNewHearing().getListDefendantRequests();
+            final boolean listDefendantRequestsMatchDefendants =
+                    nonNull(listDefendantRequests) && prosecution.getDefendants().size() == listDefendantRequests.size();
+            return listDefendantRequestsMatchDefendants ? VALID :
                     newValidationResult(of(newProblem(CASE_LIST_NEW_LISTING_HEARING, new ProblemValue(null, LIST_DEFENDANT_REQUESTS.getValue(), ""))));
         }
 

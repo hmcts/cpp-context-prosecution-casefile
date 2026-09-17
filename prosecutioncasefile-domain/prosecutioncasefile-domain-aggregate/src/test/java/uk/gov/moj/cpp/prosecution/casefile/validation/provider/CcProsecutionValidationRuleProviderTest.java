@@ -10,6 +10,7 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel;
 import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 import uk.gov.moj.cpp.prosecution.casefile.validation.CaseType;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.CaseInitiationValidationRule;
+import uk.gov.moj.cpp.prosecution.casefile.validation.rules.CaseNewhearingListDefendantsValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.ProsecutorReferenceDataValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.SummonsCodeValidationRule;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.ValidationRule;
@@ -83,6 +84,7 @@ public class CcProsecutionValidationRuleProviderTest {
         assertFalse(validationRules.stream().map(ValidationRule::getClass).anyMatch(s -> s.equals(ProsecutorAOCPValidationRule.class)));
         assertTrue(validationRules.stream().map(ValidationRule::getClass).anyMatch(s -> s.equals(CaseInitiationValidationRule.class)));
         assertTrue(validationRules.stream().map(ValidationRule::getClass).anyMatch(s -> s.equals(ProsecutorReferenceDataValidationRule.class)));
+        assertTrue(validationRules.stream().map(ValidationRule::getClass).anyMatch(s -> s.equals(CaseNewhearingListDefendantsValidationRule.class)));
     }
 
     @Test
@@ -93,6 +95,7 @@ public class CcProsecutionValidationRuleProviderTest {
 
         assertTrue(validationRules.stream().map(ValidationRule::getClass).anyMatch(s -> s.equals(ProsecutorSJPValidationRule.class)));
         assertTrue(validationRules.stream().map(ValidationRule::getClass).anyMatch(s -> s.equals(ProsecutorAOCPValidationRule.class)));
+        assertFalse(validationRules.stream().map(ValidationRule::getClass).anyMatch(s -> s.equals(CaseNewhearingListDefendantsValidationRule.class)));
     }
 
     @Test

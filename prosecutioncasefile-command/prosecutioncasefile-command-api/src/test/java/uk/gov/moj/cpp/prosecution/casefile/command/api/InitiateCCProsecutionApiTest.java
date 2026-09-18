@@ -866,4 +866,55 @@ public class InitiateCCProsecutionApiTest {
                 .build();
     }
 
+    @Test
+    void shouldThrowBadRequestWhenLibraSjpGuiltyPleaHasNoConvictingCourtCode() {
+        final Offence offence = offence()
+                .withPlea(plea().withPleaValue(INDICATED_GUILTY.name()).withPleaDate(now().minusDays(1)).build())
+                .build();
+
+        final Envelope<InitiateProsecution> envelope = envelope(libraSjpCaseProsecution(offence));
+
+        final BadRequestException exception = assertThrows(BadRequestException.class,
+                () -> initiateCCProsecutionApi.initiateCCProsecution(envelope));
+
+        assertEquals(CONVICTING_COURT_CODE_IS_MANDATORY, exception.getMessage());
+    }
+
+    @Test
+    void shouldAcceptLibraSjpGuiltyPleaWithConvictingCourtCode() {
+        final Offence offence = offence()
+                .withPlea(plea().withPleaValue(INDICATED_GUILTY.name()).withPleaDate(now().minusDays(1)).build())
+                .withConvictingCourtCode("B01LY00")
+                .build();
+
+        initiateCCProsecutionApi.initiateCCProsecution(envelope(libraSjpCaseProsecution(offence)));
+
+        verify(sender).send(any(Envelope.class));
+    }
+
+    @Test
+    void shouldNotApplyPleaAndVerdictValidationToNonLibraJCase() {
+        final Offence offence = offence()
+                .withPlea(plea().withPleaValue(INDICATED_GUILTY.name()).withPleaDate(now().minusDays(1)).build())
+                .build();
+        final InitiateProsecution prosecution = new InitiateProsecution.Builder()
+                .withCaseDetails(new CaseDetails.Builder().withProsecutor(NON_DVLA_PROSECUTOR).withInitiationCode("J").build())
+                .withDefendants(singletonList(buildDefendant(offence)))
+                .withChannel(MCC)
+                .build();
+
+        initiateCCProsecutionApi.initiateCCProsecution(envelope(prosecution));
+
+        verify(sender).send(any(Envelope.class));
+    }
+
+    private InitiateProsecution libraSjpCaseProsecution(final Offence offence) {
+        return new InitiateProsecution.Builder()
+                .withCaseDetails(new CaseDetails.Builder().withProsecutor(NON_DVLA_PROSECUTOR).withInitiationCode("J").build())
+                .withDefendants(singletonList(buildDefendant(offence)))
+                .withChannel(MCC)
+                .withMigrationSourceSystem(migrationSourceSystem().withMigrationSourceSystemName("LIBRA").build())
+                .build();
+    }
+
 }

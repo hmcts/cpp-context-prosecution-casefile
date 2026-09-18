@@ -135,6 +135,7 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Offence;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.OrganisationUnitReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Problem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ProblemValue;
+import uk.gov.justice.core.courts.MigrationSourceSystem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecution;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ProsecutionCaseSubject;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecutor;
@@ -477,6 +478,22 @@ public class ProsecutionCaseFileTest {
         assertThat(eventList.get(0), is(instanceOf(DefendantValidationPassed.class)));
         assertThat(eventList.get(1), is(instanceOf(DefendantValidationPassed.class)));
         assertThat(eventList.get(2), is(instanceOf(CcCaseReceived.class)));
+    }
+
+    @Test
+    public void shouldAcceptLibraMigratedSjpMccCaseWithoutSjpProsecutorValidation() {
+        final LocalDate offenceCommittedDate = of(2018, 3, 2);
+        final LocalDate offenceChargeDate = of(2018, 11, 2);
+
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(
+                getLibraProsecutionWithReferenceData(of(buildDefendantWithOffence(offenceCommittedDate, offenceChargeDate, PROSECUTOR_DEFENDANT_REFERENCE_ONE),
+                        buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_TWO)), "J"),
+                new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
+
+        final List<Object> eventList = objectStream.collect(toList());
+        final Optional<CcCaseReceived> ccCaseReceived = getFirstMatching(eventList, CcCaseReceived.class);
+
+        assertThat(ccCaseReceived.isPresent(), is(true));
     }
 
     @Test
@@ -1902,6 +1919,32 @@ public class ProsecutionCaseFileTest {
                         .build())
                 .withDefendants(defendantList)
                 .withChannel(SPI)
+                .build());
+        prosecutionWithReferenceData.setReferenceDataVO(referenceDataVO);
+        prosecutionWithReferenceData.setExternalId(EXTERNAL_ID);
+        return prosecutionWithReferenceData;
+    }
+
+    private ProsecutionWithReferenceData getLibraProsecutionWithReferenceData(final List<uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant> defendantList, final String initiationCode) {
+        final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
+        referenceDataVO.setOffenceReferenceData(singletonList(offenceReferenceData().withCjsOffenceCode(OFFENCE_CODE).withProsecutionTimeLimit("6 ").withOffenceStartDate(OFFENCE_START_DATE).build()));
+        referenceDataVO.addCountryNationalityReferenceData(referenceDataCountryNationality().build());
+        referenceDataVO.setInitiationTypes(asList("J", "C", "S"));
+        referenceDataVO.setProsecutorsReferenceData(prosecutorsReferenceData()
+                .withId(randomUUID())
+                .build());
+        final ProsecutionWithReferenceData prosecutionWithReferenceData = new ProsecutionWithReferenceData(prosecution()
+                .withCaseDetails(caseDetails()
+                        .withCaseId(CASE_ID)
+                        .withInitiationCode(initiationCode)
+                        .withProsecutorCaseReference(PROSECUTOR_CASE_REFERENCE)
+                        .withOriginatingOrganisation(ORIGINATING_ORGANISATION)
+                        .withCpsOrganisation(CPS_ORGANISATION)
+                        .withSummonsCode(values("A", "W", "B", "E").next())
+                        .build())
+                .withDefendants(defendantList)
+                .withChannel(MCC)
+                .withMigrationSourceSystem(new MigrationSourceSystem.Builder().withMigrationSourceSystemName("LIBRA").build())
                 .build());
         prosecutionWithReferenceData.setReferenceDataVO(referenceDataVO);
         prosecutionWithReferenceData.setExternalId(EXTERNAL_ID);

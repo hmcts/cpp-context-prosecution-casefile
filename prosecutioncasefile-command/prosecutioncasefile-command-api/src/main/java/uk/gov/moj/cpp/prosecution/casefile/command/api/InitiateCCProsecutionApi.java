@@ -6,6 +6,7 @@ import static java.util.Objects.nonNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static uk.gov.justice.core.courts.IndicatedPleaValue.INDICATED_GUILTY;
+import static uk.gov.justice.core.courts.InitiationCode.J;
 import static uk.gov.justice.core.courts.InitiationCode.O;
 import static uk.gov.justice.core.courts.InitiationCode.S;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_API;
@@ -75,6 +76,7 @@ public class InitiateCCProsecutionApi {
     private CaseDetailsEnrichmentService caseDetailsEnrichmentService;
 
     public static final String SOW_REF_VALUE = "MoJ";
+    private static final String LIBRA_MIGRATION_SOURCE_SYSTEM = "LIBRA";
 
     @SuppressWarnings("java:S1541")
     @Handles("prosecutioncasefile.command.initiate-cc-prosecution")
@@ -117,9 +119,12 @@ public class InitiateCCProsecutionApi {
             validateWcdAndFixedDate(listNewHearing);
         }
 
-        // Plea/verdict validation stays scoped to initiation code O. Extending it to S would
-        // reject MCC summons cases on plea/verdict grounds and break summons creation outright.
-        if (MCC.equals(channel) && O.name().equalsIgnoreCase(initiationCode) && !isCivil) {
+        final boolean isLibraSjpCase = J.name().equalsIgnoreCase(initiationCode)
+                && nonNull(envelope.payload().getMigrationSourceSystem())
+                && LIBRA_MIGRATION_SOURCE_SYSTEM.equalsIgnoreCase(envelope.payload().getMigrationSourceSystem().getMigrationSourceSystemName());
+
+        if (MCC.equals(channel) && !isCivil
+                && (O.name().equalsIgnoreCase(initiationCode) || isLibraSjpCase)) {
             validatePleaAndVerdictInOffences(envelope);
         }
 

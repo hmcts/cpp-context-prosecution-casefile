@@ -2,7 +2,6 @@ package uk.gov.moj.cpp.prosecution.casefile.validation.rules;
 
 import static java.util.Objects.nonNull;
 import static java.util.Optional.of;
-import static uk.gov.moj.cpp.prosecution.casefile.validation.CaseType.SJP;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode.CASE_LIST_NEW_LISTING_HEARING;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.Problems.newProblem;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.rules.FieldName.LIST_DEFENDANT_REQUESTS;
@@ -24,11 +23,9 @@ public class CaseNewhearingListDefendantsValidationRule implements ValidationRul
 
         final Prosecution prosecution = prosecutionWithReferenceData.getProsecution();
         final Channel channel = prosecution.getChannel();
-        final boolean isMCCLibraSjpWithNewHearingList = Channel.MCC == channel
-                && nonNull(prosecution.getListNewHearing())
-                && SJP.getCode().equals(prosecution.getCaseDetails().getInitiationCode());
+        final boolean isMCCWithNewHearingList = Channel.MCC == channel && (nonNull(prosecution.getListNewHearing()));
 
-        if (isMCCLibraSjpWithNewHearingList) {
+        if (isMCCWithNewHearingList) {
             return prosecution.getDefendants().size() == prosecution.getListNewHearing().getListDefendantRequests().size() ? VALID :
                     newValidationResult(of(newProblem(CASE_LIST_NEW_LISTING_HEARING, new ProblemValue(null, LIST_DEFENDANT_REQUESTS.getValue(), ""))));
         }

@@ -43,7 +43,7 @@ class CaseNewhearingListDefendantsValidationRuleTest {
     void shouldReturnValidWhenMCCAndListNewHearingHasSameNumberOfDefendants() {
 
         HearingRequest newHearing = HearingRequest.hearingRequest().withListDefendantRequests(List.of(ListDefendantRequest.listDefendantRequest().build())). build();
-        Prosecution prosecution = Prosecution.prosecution().withChannel(Channel.MCC).withCaseDetails(CaseDetails.caseDetails().withInitiationCode("J").build()).withDefendants(List.of(Defendant.defendant().build())).withListNewHearing(newHearing).build();
+        Prosecution prosecution = Prosecution.prosecution().withChannel(Channel.MCC).withDefendants(List.of(Defendant.defendant().build())).withListNewHearing(newHearing).build();
 
         ProsecutionWithReferenceData data = new ProsecutionWithReferenceData(prosecution, null);
 
@@ -54,7 +54,7 @@ class CaseNewhearingListDefendantsValidationRuleTest {
     @Test
     void shouldReturnInvalidWhenMCCAndListNewHearingHasDifferentNumberOfDefendants() {
         HearingRequest newHearing = HearingRequest.hearingRequest().withListDefendantRequests(List.of(ListDefendantRequest.listDefendantRequest().build())). build();
-        Prosecution prosecution = Prosecution.prosecution().withChannel(Channel.MCC).withCaseDetails(CaseDetails.caseDetails().withInitiationCode("J").build()).withDefendants(List.of(Defendant.defendant().build(), Defendant.defendant().build())).withListNewHearing(newHearing).build();
+        Prosecution prosecution = Prosecution.prosecution().withChannel(Channel.MCC).withDefendants(List.of(Defendant.defendant().build(), Defendant.defendant().build())).withListNewHearing(newHearing).build();
 
         ProsecutionWithReferenceData data = new ProsecutionWithReferenceData(prosecution, null);
 
@@ -64,23 +64,6 @@ class CaseNewhearingListDefendantsValidationRuleTest {
         assertTrue(result.problems().get(0).
                 getCode().equals("CASE_LIST_NEW_LISTING_HEARING")
                         && result.problems().get(0).getValues().get(0).getKey().equals("listDefendantRequests"));
-    }
-
-    @Test
-    void shouldReturnValidWhenMCCAndListNewHearingButInitiationCodeIsNotJ() {
-        HearingRequest newHearing = HearingRequest.hearingRequest().withListDefendantRequests(List.of(ListDefendantRequest.listDefendantRequest().build())).build();
-        Prosecution prosecution = Prosecution.prosecution()
-                .withChannel(Channel.MCC)
-                .withCaseDetails(CaseDetails.caseDetails().withInitiationCode("S").build())
-                .withDefendants(List.of(Defendant.defendant().build(), Defendant.defendant().build()))
-                .withListNewHearing(newHearing)
-                .build();
-
-        ProsecutionWithReferenceData data = new ProsecutionWithReferenceData(prosecution, null);
-
-        ValidationResult result = rule.validate(data, null);
-
-        assertEquals(VALID, result);
     }
 
 }

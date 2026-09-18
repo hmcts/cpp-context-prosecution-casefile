@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import uk.gov.moj.cpp.prosecution.casefile.domain.ProsecutionWithReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.*;
-import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 
 import java.util.List;
 
@@ -44,7 +43,7 @@ class CaseNewhearingListDefendantsValidationRuleTest {
     void shouldReturnValidWhenMCCAndListNewHearingHasSameNumberOfDefendants() {
 
         HearingRequest newHearing = HearingRequest.hearingRequest().withListDefendantRequests(List.of(ListDefendantRequest.listDefendantRequest().build())). build();
-        Prosecution prosecution = Prosecution.prosecution().withChannel(Channel.MCC).withDefendants(List.of(Defendant.defendant().build())).withListNewHearing(newHearing).build();
+        Prosecution prosecution = Prosecution.prosecution().withChannel(Channel.MCC).withCaseDetails(CaseDetails.caseDetails().withInitiationCode("J").build()).withDefendants(List.of(Defendant.defendant().build())).withListNewHearing(newHearing).build();
 
         ProsecutionWithReferenceData data = new ProsecutionWithReferenceData(prosecution, null);
 
@@ -55,7 +54,7 @@ class CaseNewhearingListDefendantsValidationRuleTest {
     @Test
     void shouldReturnInvalidWhenMCCAndListNewHearingHasDifferentNumberOfDefendants() {
         HearingRequest newHearing = HearingRequest.hearingRequest().withListDefendantRequests(List.of(ListDefendantRequest.listDefendantRequest().build())). build();
-        Prosecution prosecution = Prosecution.prosecution().withChannel(Channel.MCC).withDefendants(List.of(Defendant.defendant().build(), Defendant.defendant().build())).withListNewHearing(newHearing).build();
+        Prosecution prosecution = Prosecution.prosecution().withChannel(Channel.MCC).withCaseDetails(CaseDetails.caseDetails().withInitiationCode("J").build()).withDefendants(List.of(Defendant.defendant().build(), Defendant.defendant().build())).withListNewHearing(newHearing).build();
 
         ProsecutionWithReferenceData data = new ProsecutionWithReferenceData(prosecution, null);
 
@@ -68,18 +67,20 @@ class CaseNewhearingListDefendantsValidationRuleTest {
     }
 
     @Test
-    void shouldReturnInvalidWithoutNpeWhenMCCAndListDefendantRequestsIsAbsent() {
-        HearingRequest newHearing = HearingRequest.hearingRequest().build();
-        Prosecution prosecution = Prosecution.prosecution().withChannel(Channel.MCC).withDefendants(List.of(Defendant.defendant().build())).withListNewHearing(newHearing).build();
+    void shouldReturnValidWhenMCCAndListNewHearingButInitiationCodeIsNotJ() {
+        HearingRequest newHearing = HearingRequest.hearingRequest().withListDefendantRequests(List.of(ListDefendantRequest.listDefendantRequest().build())).build();
+        Prosecution prosecution = Prosecution.prosecution()
+                .withChannel(Channel.MCC)
+                .withCaseDetails(CaseDetails.caseDetails().withInitiationCode("S").build())
+                .withDefendants(List.of(Defendant.defendant().build(), Defendant.defendant().build()))
+                .withListNewHearing(newHearing)
+                .build();
 
         ProsecutionWithReferenceData data = new ProsecutionWithReferenceData(prosecution, null);
 
         ValidationResult result = rule.validate(data, null);
 
-        assertNotEquals(VALID, result);
-        assertTrue(result.problems().get(0).
-                getCode().equals("CASE_LIST_NEW_LISTING_HEARING")
-                        && result.problems().get(0).getValues().get(0).getKey().equals("listDefendantRequests"));
+        assertEquals(VALID, result);
     }
 
 }

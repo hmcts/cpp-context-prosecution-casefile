@@ -286,6 +286,15 @@ public class ProsecutionCaseFileTest {
         );
     }
 
+    public static Stream<Arguments> migratedLibraSummonsPredicateScenarios() {
+        return Stream.of(
+                Arguments.of(MCC, "LIBRA", false, true),
+                Arguments.of(MCC, "XHIBIT", true, false),
+                Arguments.of(MCC, null, true, false),
+                Arguments.of(SPI, "LIBRA", true, false)
+        );
+    }
+
     @BeforeEach
     public void setup() {
         when(referenceDataQueryService.isInitiationCodeValid(any())).thenReturn(true);
@@ -516,6 +525,58 @@ public class ProsecutionCaseFileTest {
         assertThat(eventList.size(), is(2));
         assertThat(firstMatchingEvent.isPresent(), is(true));
         assertThat(firstMatchingEvent.get().getProsecutionWithReferenceData().getExternalId(), is(externalIdForSecondMessage));
+    }
+
+    @ParameterizedTest
+    @MethodSource("migratedLibraSummonsPredicateScenarios")
+    public void migratedLibraSummonsShouldDirectCreateOnlyForMccWithExactLibraMarker(final Channel channel, final String migrationSourceSystemName, final boolean expectedParked, final boolean expectedCaseCreated) {
+        final List<Object> eventList = prosecutionCaseFile.receiveCCCase(
+                getSummonsProsecutionWithMigrationMarker(channel, migrationSourceSystemName),
+                new ArrayList<>(), new ArrayList<>(), referenceDataQueryService).collect(toList());
+
+        final boolean parked = getFirstMatching(eventList, DefendantsParkedForSummonsApplicationApproval.class).isPresent();
+        final boolean caseCreated = getFirstMatching(eventList, CcCaseReceived.class).isPresent()
+                || getFirstMatching(eventList, CcCaseReceivedWithWarnings.class).isPresent();
+
+        assertThat(parked, is(expectedParked));
+        assertThat(caseCreated, is(expectedCaseCreated));
+    }
+
+    @Test
+    public void shouldCreateCcCaseAndNotParkForMigratedLibraSummons() {
+        final LocalDate offenceCommittedDate = of(2018, 3, 2);
+        final LocalDate offenceChargeDate = of(2018, 11, 2);
+
+        final List<Object> eventList = prosecutionCaseFile.receiveCCCase(
+                getLibraProsecutionWithReferenceData(of(buildDefendantWithOffence(offenceCommittedDate, offenceChargeDate, PROSECUTOR_DEFENDANT_REFERENCE_ONE),
+                        buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_TWO)), SUMMONS_INITIATION_CODE),
+                new ArrayList<>(), new ArrayList<>(), referenceDataQueryService).collect(toList());
+
+        assertThat(getFirstMatching(eventList, CcCaseReceived.class).isPresent(), is(true));
+        assertThat(getFirstMatching(eventList, DefendantsParkedForSummonsApplicationApproval.class).isPresent(), is(false));
+    }
+
+    @Test
+    public void shouldRejectResubmittedMigratedLibraSummonsWithDuplicatedProsecutionOnUrn() {
+        final LocalDate offenceCommittedDate = of(2018, 3, 2);
+        final LocalDate offenceChargeDate = of(2018, 11, 2);
+
+        final List<Object> firstSubmission = prosecutionCaseFile.receiveCCCase(
+                getLibraProsecutionWithReferenceData(of(buildDefendantWithOffence(offenceCommittedDate, offenceChargeDate, PROSECUTOR_DEFENDANT_REFERENCE_ONE)), SUMMONS_INITIATION_CODE),
+                new ArrayList<>(), new ArrayList<>(), referenceDataQueryService).collect(toList());
+        assertThat(getFirstMatching(firstSubmission, CcCaseReceived.class).isPresent(), is(true));
+        assertThat(getFirstMatching(firstSubmission, DefendantsParkedForSummonsApplicationApproval.class).isPresent(), is(false));
+
+        final List<Object> resubmission = prosecutionCaseFile.receiveCCCase(
+                getLibraProsecutionWithReferenceData(of(buildDefendantWithOffence(offenceCommittedDate, offenceChargeDate, PROSECUTOR_DEFENDANT_REFERENCE_ONE)), SUMMONS_INITIATION_CODE),
+                new ArrayList<>(), new ArrayList<>(), referenceDataQueryService).collect(toList());
+
+        final Optional<CcProsecutionRejected> ccProsecutionRejected = getFirstMatching(resubmission, CcProsecutionRejected.class);
+        assertThat(ccProsecutionRejected.isPresent(), is(true));
+        final boolean duplicatedOnUrn = ccProsecutionRejected.get().getCaseErrors().stream()
+                .anyMatch(problem -> ProblemCode.DUPLICATED_PROSECUTION.name().equals(problem.getCode())
+                        && "urn".equals(problem.getValues().get(0).getKey()));
+        assertThat(duplicatedOnUrn, is(true));
     }
 
     @Test
@@ -1946,6 +2007,34 @@ public class ProsecutionCaseFileTest {
                 .withChannel(MCC)
                 .withMigrationSourceSystem(new MigrationSourceSystem.Builder().withMigrationSourceSystemName("LIBRA").build())
                 .build());
+        prosecutionWithReferenceData.setReferenceDataVO(referenceDataVO);
+        prosecutionWithReferenceData.setExternalId(EXTERNAL_ID);
+        return prosecutionWithReferenceData;
+    }
+
+    private ProsecutionWithReferenceData getSummonsProsecutionWithMigrationMarker(final Channel channel, final String migrationSourceSystemName) {
+        final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
+        referenceDataVO.setOffenceReferenceData(singletonList(offenceReferenceData().withCjsOffenceCode(OFFENCE_CODE).withProsecutionTimeLimit("6 ").withOffenceStartDate(OFFENCE_START_DATE).build()));
+        referenceDataVO.addCountryNationalityReferenceData(referenceDataCountryNationality().build());
+        referenceDataVO.setInitiationTypes(asList("J", "C", "S"));
+        referenceDataVO.setProsecutorsReferenceData(prosecutorsReferenceData()
+                .withId(randomUUID())
+                .build());
+        final Prosecution.Builder prosecutionBuilder = prosecution()
+                .withCaseDetails(caseDetails()
+                        .withCaseId(CASE_ID)
+                        .withInitiationCode(SUMMONS_INITIATION_CODE)
+                        .withProsecutorCaseReference(PROSECUTOR_CASE_REFERENCE)
+                        .withOriginatingOrganisation(ORIGINATING_ORGANISATION)
+                        .withCpsOrganisation(CPS_ORGANISATION)
+                        .withSummonsCode(values("A", "W", "B", "E").next())
+                        .build())
+                .withDefendants(of(buildDefendantWithOffence(of(2018, 3, 2), of(2018, 11, 2), PROSECUTOR_DEFENDANT_REFERENCE_ONE)))
+                .withChannel(channel);
+        if (migrationSourceSystemName != null) {
+            prosecutionBuilder.withMigrationSourceSystem(new MigrationSourceSystem.Builder().withMigrationSourceSystemName(migrationSourceSystemName).build());
+        }
+        final ProsecutionWithReferenceData prosecutionWithReferenceData = new ProsecutionWithReferenceData(prosecutionBuilder.build());
         prosecutionWithReferenceData.setReferenceDataVO(referenceDataVO);
         prosecutionWithReferenceData.setExternalId(EXTERNAL_ID);
         return prosecutionWithReferenceData;

@@ -784,7 +784,7 @@ public class ProsecutionCaseFile implements Aggregate {
         final Channel prosecutionChannel = prosecution.getChannel();
         final List<DefendantProblem> defendantWarningsForIncomingMessage = prosecutionChannel == SPI ? List.of() : validateDefendantWarnings(defendantsWithReferenceData, incomingInitiationCode);
 
-        if (incomingInitiationCode.equals(SUMMONS_INITIATION_CODE)) {
+        if (incomingInitiationCode.equals(SUMMONS_INITIATION_CODE) && !isMigratedLibraProsecution(prosecution)) {
             return apply(builder.add(defendantsParkedForSummonsApplicationApproval()
                     .withApplicationId(randomUUID())
                     .withProsecutionWithReferenceData(prosecutionWithReferenceData)
@@ -806,6 +806,14 @@ public class ProsecutionCaseFile implements Aggregate {
                 .withId(randomUUID())
                 .build();
         return apply(builder.add(ccCaseReceivedWithWarnings).build());
+    }
+
+    private boolean isMigratedLibraProsecution(final Prosecution prosecution) {
+        return MCC.equals(prosecution.getChannel())
+                && Optional.ofNullable(prosecution.getMigrationSourceSystem())
+                        .map(MigrationSourceSystem::getMigrationSourceSystemName)
+                        .filter(LIBRA_MIGRATION_SOURCE_SYSTEM::equals)
+                        .isPresent();
     }
 
     public Stream<Object> associateEnterpriseId(final String enterpriseId) {

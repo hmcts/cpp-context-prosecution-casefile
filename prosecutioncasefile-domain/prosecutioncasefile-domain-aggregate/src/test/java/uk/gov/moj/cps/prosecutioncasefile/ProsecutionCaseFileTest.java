@@ -1117,7 +1117,7 @@ public class ProsecutionCaseFileTest {
     }
 
     @Test
-    public void shouldRaiseNewCCCaseForSameDefendantWhenEarlierApplicationWasRejectedForSameCaseReceivedViaSpiChannel() {
+    public void shouldRejectNewCcCaseWithDuplicatedProsecutionWhenEarlierApplicationWasRejectedForSameCaseReceivedViaSpiChannel() {
         final ProsecutionWithReferenceData referenceData = getProsecutionWithReferenceData(
                 of(buildDefendantWithInitiationCode(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE, "S")), SPI, "S");
         prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID, referenceData, emptyList()));
@@ -1129,22 +1129,12 @@ public class ProsecutionCaseFileTest {
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(subsequentReferenceDataForSameDefendant, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
         final List<Object> eventList = objectStream.collect(toList());
-        assertThat(eventList, hasSize(2));
-        final Optional<CcCaseReceived> firstMatching = getFirstMatching(eventList, CcCaseReceived.class);
-        assertThat(firstMatching.isPresent(), is(true));
-        assertThat(firstMatching.get().getProsecutionWithReferenceData().getExternalId(), is(EXTERNAL_ID_2));
-        assertThat(firstMatching.get().getProsecutionWithReferenceData().getProsecution().getDefendants().get(0).getInitiationCode(), is("Q"));
-        assertThat(firstMatching.get().getProsecutionWithReferenceData().getProsecution().getDefendants(), hasSize(1));
-        assertThat(firstMatching.get().getProsecutionWithReferenceData().getProsecution().getDefendants().get(0).getId(), is(DEFENDANT_ID));
-        assertThat(firstMatching.get().getProsecutionWithReferenceData().getProsecution().getDefendants().get(0).getIndividual().getPersonalInformation().getFirstName(), is(FORENAME));
-        assertThat(firstMatching.get().getProsecutionWithReferenceData().getProsecution().getDefendants().get(0).getIndividual().getPersonalInformation().getLastName(), is(updatedSurname));
         assertThat(getFirstMatching(eventList, CcCaseReceived.class).isPresent(), is(false));
         final Optional<CaseValidationFailed> caseValidationFailed = getFirstMatching(eventList, CaseValidationFailed.class);
         assertThat(caseValidationFailed.isPresent(), is(true));
         assertThat(caseValidationFailed.get().getExternalId(), is(EXTERNAL_ID_2));
         assertThat(caseValidationFailed.get().getProblems(), hasSize(1));
         assertThat(caseValidationFailed.get().getProblems().get(0).getCode(), is(ProblemCode.DUPLICATED_PROSECUTION.name()));
-
     }
 
 
@@ -1472,22 +1462,12 @@ public class ProsecutionCaseFileTest {
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(subsequentReferenceDataForSameDefendant, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
         final List<Object> eventList = objectStream.collect(toList());
-        assertThat(eventList, hasSize(2));
-        final Optional<DefendantsParkedForSummonsApplicationApproval> firstMatching = getFirstMatching(eventList, DefendantsParkedForSummonsApplicationApproval.class);
-        assertThat(firstMatching.isPresent(), is(true));
-        assertThat(firstMatching.get().getProsecutionWithReferenceData().getExternalId(), is(EXTERNAL_ID_2));
-        assertThat(firstMatching.get().getApplicationId(), is(not(APPLICATION_ID)));
-        assertThat(firstMatching.get().getProsecutionWithReferenceData().getProsecution().getDefendants(), hasSize(1));
-        assertThat(firstMatching.get().getProsecutionWithReferenceData().getProsecution().getDefendants().get(0).getId(), is(DEFENDANT_ID));
-        assertThat(firstMatching.get().getProsecutionWithReferenceData().getProsecution().getDefendants().get(0).getIndividual().getPersonalInformation().getFirstName(), is(FORENAME));
-        assertThat(firstMatching.get().getProsecutionWithReferenceData().getProsecution().getDefendants().get(0).getIndividual().getPersonalInformation().getLastName(), is(updatedSurname));
         assertThat(getFirstMatching(eventList, DefendantsParkedForSummonsApplicationApproval.class).isPresent(), is(false));
         final Optional<CaseValidationFailed> caseValidationFailed = getFirstMatching(eventList, CaseValidationFailed.class);
         assertThat(caseValidationFailed.isPresent(), is(true));
         assertThat(caseValidationFailed.get().getExternalId(), is(EXTERNAL_ID_2));
         assertThat(caseValidationFailed.get().getProblems(), hasSize(1));
         assertThat(caseValidationFailed.get().getProblems().get(0).getCode(), is(ProblemCode.DUPLICATED_PROSECUTION.name()));
-
     }
 
     @Test
@@ -1501,33 +1481,15 @@ public class ProsecutionCaseFileTest {
         final String updatedSurname = STRING.next();
         final ProsecutionWithReferenceData secondMessage = getProsecutionWithReferenceData(
                 of(buildDefendant(FORENAME, updatedSurname, BIRTH_DATE, THIRD_DEFENDANT_ID, randomAlphabetic(10))), SPI, SUMMONS_INITIATION_CODE, EXTERNAL_ID_2);
-        Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(secondMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(secondMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        List<Object> eventList = objectStream.collect(toList());
-        assertThat(eventList, hasSize(2));
-        final Optional<DefendantsParkedForSummonsApplicationApproval> firstMatching = getFirstMatching(eventList, DefendantsParkedForSummonsApplicationApproval.class);
-        assertThat(firstMatching.isPresent(), is(true));
-        final UUID applicationId2 = firstMatching.get().getApplicationId();
-        assertThat(applicationId2, is(not(APPLICATION_ID)));
-        assertThat(firstMatching.get().getProsecutionWithReferenceData().getProsecution().getDefendants(), hasSize(1));
-        assertThat(firstMatching.get().getProsecutionWithReferenceData().getProsecution().getDefendants().get(0).getId(), is(THIRD_DEFENDANT_ID));
-
-        objectStream = prosecutionCaseFile.approveCaseDefendants(getSummonsApplicationApprovedDetails(applicationId2), of(), of(), isCivil);
-
-        eventList = objectStream.collect(toList());
-        assertThat(eventList, hasSize(1));
-        final Optional<CcCaseReceived> firstMatchingCaseReceived = getFirstMatching(eventList, CcCaseReceived.class);
-        assertThat(firstMatchingCaseReceived.isPresent(), is(true));
-        assertThat(firstMatchingCaseReceived.get().getProsecutionWithReferenceData().getExternalId(), is(EXTERNAL_ID_2));
-        assertThat(firstMatching.get().getProsecutionWithReferenceData().getProsecution().getDefendants(), hasSize(1));
-        assertThat(firstMatching.get().getProsecutionWithReferenceData().getProsecution().getDefendants().get(0).getId(), is(THIRD_DEFENDANT_ID));
+        final List<Object> eventList = objectStream.collect(toList());
         assertThat(getFirstMatching(eventList, DefendantsParkedForSummonsApplicationApproval.class).isPresent(), is(false));
         final Optional<CaseValidationFailed> caseValidationFailed = getFirstMatching(eventList, CaseValidationFailed.class);
         assertThat(caseValidationFailed.isPresent(), is(true));
         assertThat(caseValidationFailed.get().getExternalId(), is(EXTERNAL_ID_2));
         assertThat(caseValidationFailed.get().getProblems(), hasSize(1));
         assertThat(caseValidationFailed.get().getProblems().get(0).getCode(), is(ProblemCode.DUPLICATED_PROSECUTION.name()));
-
     }
 
     @Test
@@ -1688,8 +1650,7 @@ public class ProsecutionCaseFileTest {
         final Optional<CcProsecutionRejected> duplicateRejection = getFirstMatching(subsequentCaseMessageEventList, CcProsecutionRejected.class);
         assertThat(duplicateRejection.isPresent(), is(true));
         assertThat(duplicateRejection.get().getCaseErrors().get(0).getCode(), is(ProblemCode.DUPLICATED_PROSECUTION.name()));
-        assertThat(subsequentCaseMessageEventList.get(0), is(instanceOf(DefendantsParkedForSummonsApplicationApproval.class)));
-        assertThat(prosecutionCaseFile.getDefendants(), hasSize(1));
+        assertThat(prosecutionCaseFile.getDefendants(), empty());
     }
 
     @Test

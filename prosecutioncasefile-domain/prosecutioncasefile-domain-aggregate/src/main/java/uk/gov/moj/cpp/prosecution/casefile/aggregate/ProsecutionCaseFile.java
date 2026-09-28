@@ -527,7 +527,7 @@ public class ProsecutionCaseFile implements Aggregate {
 
         final List<DefendantProblem> defendantErrors = validateDefendantErrors(prosecution.getCaseDetails(), prosecutionChannel, defendantsWithReferenceData, referenceDataQueryService, builder, Boolean.FALSE, isMCCWithListNewHearing,isStandaloneCaseWithoutHearing, isCivil);
 
-        if ((messageFromCppiOrMccOrCivil && prosecutionReceived) || !noDefendantsParkedForSummonsApplicationApproval|| summonsApplicationAlreadyExistsForUrn()) {
+        if ((messageFromCppiOrMccOrCivil && prosecutionReceived) || summonsApplicationAlreadyExistsForUrn()) {
             caseProblems.add(newProblem(DUPLICATED_PROSECUTION, "urn", prosecution.getCaseDetails().getProsecutorCaseReference()));
         }
 

@@ -31,7 +31,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * legal-adviser approval, the box hearing is raised at the found hearing's court, and on approval
  * the case is listed at the slot the user picked.
  *
- * <p>Covers DD-43173 AC-001, AC-002, AC-003, AC-007, AC-008.
+ * <p>Covers DD-43173 AC-001, AC-002, AC-003, AC-007, AC-008 and DD-43709 AC-022.
  */
 @SuppressWarnings("java:S2699")
 @ExtendWith(MockitoExtension.class)
@@ -109,5 +109,18 @@ class InitiateFindAHearingSummonsProsecutionIT extends BaseIT {
 
         assertThat(listedDefendantIds, hasSize(helper.getDefendantIds().size()));
         assertThat(listedDefendantIds, containsInAnyOrder(helper.getDefendantIds().toArray(new String[0])));
+
+        // DD-43709 AC-022: each approved defendant is marked for a first-hearing summons carrying the
+        // legal adviser's approval outcome, so Progression generates the summons document.
+        listHearingRequest.getJsonArray("listDefendantRequests").forEach(value -> {
+            final JsonObject listDefendantRequest = (JsonObject) value;
+            assertThat(listDefendantRequest.getString("summonsRequired"), is("FIRST_HEARING"));
+
+            final JsonObject summonsApprovedOutcome = listDefendantRequest.getJsonObject("summonsApprovedOutcome");
+            assertThat(summonsApprovedOutcome, notNullValue());
+            assertThat(summonsApprovedOutcome.getString("prosecutorCost"), is(helper.getProsecutorCost()));
+            assertThat(summonsApprovedOutcome.getBoolean("summonsSuppressed"), is(helper.isSummonsSuppressed()));
+            assertThat(summonsApprovedOutcome.getBoolean("personalService"), is(helper.isPersonalService()));
+        });
     }
 }

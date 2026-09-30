@@ -21,14 +21,15 @@ import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.CourtRoom.courtRo
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.OrganisationUnitWithCourtroomReferenceData.organisationUnitWithCourtroomReferenceData;
 
 import uk.gov.justice.core.courts.CourtCentre;
+import uk.gov.justice.core.courts.InitiationCode;
 import uk.gov.justice.core.courts.JudicialRole;
 import uk.gov.justice.core.courts.JurisdictionType;
 import uk.gov.justice.core.courts.ListDefendantRequest;
 import uk.gov.justice.core.courts.ListHearingRequest;
 import uk.gov.justice.core.courts.RotaSlot;
 import uk.gov.justice.core.courts.SummonsApprovedOutcome;
+import uk.gov.justice.core.courts.SummonsType;
 import uk.gov.justice.core.courts.WeekCommencingDate;
-import uk.gov.justice.cps.prosecutioncasefile.InitialHearing;
 import uk.gov.justice.services.test.utils.core.random.RandomGenerator;
 import uk.gov.moj.cpp.prosecution.casefile.domain.ParamsVO;
 import uk.gov.moj.cpp.prosecution.casefile.event.CcCaseReceived;
@@ -45,6 +46,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -206,6 +209,153 @@ public class ProsecutionCaseFileInitialHearingToCCHearingRequestConverterTest {
 
         assertThat(listHearingRequests.get(0).getSpecialRequirements(), is(notNullValue()));
         assertThat(listHearingRequests.get(0).getSpecialRequirements(), hasItem("tea on Arrival"));
+    }
+
+    /**
+     * DD-43709 (pcf-fah-06): a find-a-hearing listing request marks each defendant for a first-hearing
+     * summons only for an approved Summons case, so Progression generates the summons document.
+     */
+    @Nested
+    @DisplayName("convertMCCWC summons marking")
+    class ConvertMCCWCSummonsMarking {
+
+        private final SummonsApprovedOutcome approvedOutcome = SummonsApprovedOutcome.summonsApprovedOutcome()
+                .withProsecutorCost("£300.00")
+                .withPersonalService(true)
+                .withSummonsSuppressed(false)
+                .withProsecutorEmailAddress(PROSECUTOR_EMAIL_ADDRESS)
+                .build();
+
+        @Test
+        @DisplayName("AC-022: approved Summons case marks every defendant FIRST_HEARING with the approval outcome")
+        void convertMCCWC_approvedSummonsCase_should_markEveryDefendantForFirstHearingSummons() {
+            final ParamsVO paramsVO = findAHearingParams(InitiationCode.S, approvedOutcome,
+                    externalRequest(randomUUID()), externalRequest(randomUUID()));
+
+            final List<ListDefendantRequest> listDefendantRequests = listDefendantRequestsOf(paramsVO);
+
+            assertThat(listDefendantRequests, hasSize(2));
+            listDefendantRequests.forEach(request -> {
+                assertThat(request.getSummonsRequired(), is(FIRST_HEARING));
+                assertThat(request.getSummonsApprovedOutcome(), is(approvedOutcome));
+            });
+        }
+
+        @Test
+        @DisplayName("AC-024: initiation code O without an approval outcome adds neither field")
+        void convertMCCWC_initiationCodeO_should_addNoSummonsFields() {
+            final ParamsVO paramsVO = findAHearingParams(InitiationCode.O, null, externalRequest(randomUUID()));
+
+            final ListDefendantRequest request = listDefendantRequestsOf(paramsVO).get(0);
+
+            assertThat(request.getSummonsRequired(), is(nullValue()));
+            assertThat(request.getSummonsApprovedOutcome(), is(nullValue()));
+        }
+
+        @Test
+        @DisplayName("AC-024: initiation code O adds neither field even when an outcome is present")
+        void convertMCCWC_initiationCodeOWithOutcome_should_addNoSummonsFields() {
+            final ParamsVO paramsVO = findAHearingParams(InitiationCode.O, approvedOutcome, externalRequest(randomUUID()));
+
+            final ListDefendantRequest request = listDefendantRequestsOf(paramsVO).get(0);
+
+            assertThat(request.getSummonsRequired(), is(nullValue()));
+            assertThat(request.getSummonsApprovedOutcome(), is(nullValue()));
+        }
+
+        @Test
+        @DisplayName("AC-025: Summons case with no approval outcome requests no summons")
+        void convertMCCWC_summonsCaseWithoutApproval_should_notSetSummonsRequired() {
+            final ParamsVO paramsVO = findAHearingParams(InitiationCode.S, null, externalRequest(randomUUID()));
+
+            final ListDefendantRequest request = listDefendantRequestsOf(paramsVO).get(0);
+
+            assertThat(request.getSummonsRequired(), is(nullValue()));
+            assertThat(request.getSummonsApprovedOutcome(), is(nullValue()));
+        }
+
+        @Test
+        @DisplayName("AC-026: values already on the request are passed through unchanged")
+        void convertMCCWC_requestCarriesBothFields_should_passThemThroughUnchanged() {
+            final SummonsApprovedOutcome requestOutcome = SummonsApprovedOutcome.summonsApprovedOutcome()
+                    .withProsecutorCost("£10.00")
+                    .withPersonalService(false)
+                    .withSummonsSuppressed(true)
+                    .build();
+            final ParamsVO paramsVO = findAHearingParams(InitiationCode.S, approvedOutcome,
+                    externalRequest(randomUUID(), SummonsType.YOUTH, requestOutcome));
+
+            final ListDefendantRequest request = listDefendantRequestsOf(paramsVO).get(0);
+
+            assertThat(request.getSummonsRequired(), is(SummonsType.YOUTH));
+            assertThat(request.getSummonsApprovedOutcome(), is(requestOutcome));
+        }
+
+        @Test
+        @DisplayName("AC-026: a field the request carries is kept while the omitted one is defaulted")
+        void convertMCCWC_requestCarriesOnlySummonsRequired_should_keepItAndDefaultTheOutcome() {
+            final ParamsVO paramsVO = findAHearingParams(InitiationCode.S, approvedOutcome,
+                    externalRequest(randomUUID(), SummonsType.YOUTH, null));
+
+            final ListDefendantRequest request = listDefendantRequestsOf(paramsVO).get(0);
+
+            assertThat(request.getSummonsRequired(), is(SummonsType.YOUTH));
+            assertThat(request.getSummonsApprovedOutcome(), is(approvedOutcome));
+        }
+
+        @Test
+        @DisplayName("AC-026: an outcome the request carries is kept while summonsRequired is defaulted")
+        void convertMCCWC_requestCarriesOnlyOutcome_should_keepItAndDefaultSummonsRequired() {
+            final SummonsApprovedOutcome requestOutcome = SummonsApprovedOutcome.summonsApprovedOutcome()
+                    .withProsecutorCost("£10.00")
+                    .withPersonalService(false)
+                    .withSummonsSuppressed(true)
+                    .build();
+            final ParamsVO paramsVO = findAHearingParams(InitiationCode.S, approvedOutcome,
+                    externalRequest(randomUUID(), null, requestOutcome));
+
+            final ListDefendantRequest request = listDefendantRequestsOf(paramsVO).get(0);
+
+            assertThat(request.getSummonsRequired(), is(FIRST_HEARING));
+            assertThat(request.getSummonsApprovedOutcome(), is(requestOutcome));
+        }
+
+        private List<ListDefendantRequest> listDefendantRequestsOf(final ParamsVO paramsVO) {
+            final List<ListHearingRequest> listHearingRequests = prosecutionCaseFileInitialHearingToCCHearingRequestConverter.convertMCCWC(null, paramsVO);
+            assertThat(listHearingRequests, hasSize(1));
+            return listHearingRequests.get(0).getListDefendantRequests();
+        }
+
+        private ParamsVO findAHearingParams(final InitiationCode initiationCode,
+                                            final SummonsApprovedOutcome summonsApprovedOutcome,
+                                            final uk.gov.moj.cpp.prosecution.casefile.json.schemas.ListDefendantRequest... externalRequests) {
+            final ParamsVO paramsVO = new ParamsVO();
+            paramsVO.setCaseId(randomUUID());
+            paramsVO.setChannel(Channel.MCC);
+            paramsVO.setInitiationCode(initiationCode.name());
+            paramsVO.setSummonsApprovedOutcome(summonsApprovedOutcome);
+            paramsVO.setListNewHearing(HearingRequest.hearingRequest()
+                    .withCourtCentre(CourtCentre.courtCentre().withId(randomUUID()).build())
+                    .withJurisdictionType(JurisdictionType.MAGISTRATES)
+                    .withListDefendantRequests(asList(externalRequests))
+                    .build());
+            return paramsVO;
+        }
+
+        private uk.gov.moj.cpp.prosecution.casefile.json.schemas.ListDefendantRequest externalRequest(final UUID defendantId) {
+            return externalRequest(defendantId, null, null);
+        }
+
+        private uk.gov.moj.cpp.prosecution.casefile.json.schemas.ListDefendantRequest externalRequest(final UUID defendantId,
+                                                                                                     final SummonsType summonsRequired,
+                                                                                                     final SummonsApprovedOutcome summonsApprovedOutcome) {
+            return uk.gov.moj.cpp.prosecution.casefile.json.schemas.ListDefendantRequest.listDefendantRequest()
+                    .withDefendantId(defendantId)
+                    .withDefendantOffences(asList(randomUUID()))
+                    .withSummonsRequired(summonsRequired)
+                    .withSummonsApprovedOutcome(summonsApprovedOutcome)
+                    .build();
+        }
     }
 
     HearingRequest createHearingRequest(UUID hearingTypeId,String startDate){

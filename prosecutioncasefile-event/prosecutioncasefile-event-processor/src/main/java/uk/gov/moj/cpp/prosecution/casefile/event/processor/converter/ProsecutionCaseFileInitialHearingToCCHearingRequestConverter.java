@@ -12,6 +12,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.event.processor.utils.PCFEnumM
 
 import uk.gov.justice.core.courts.CourtCentre;
 import uk.gov.justice.core.courts.HearingType;
+import uk.gov.justice.core.courts.InitiationCode;
 import uk.gov.justice.core.courts.JurisdictionType;
 import uk.gov.justice.core.courts.ListDefendantRequest;
 import uk.gov.justice.core.courts.ListHearingRequest;
@@ -144,6 +145,11 @@ public class ProsecutionCaseFileInitialHearingToCCHearingRequestConverter implem
 
         final List<ListHearingRequest> hearingRequests = new ArrayList<>();
         final HearingRequest hearingRequest = paramsVO.getListNewHearing();
+        // The UI's listDefendantRequests never carry the summons fields, so an approved Summons case is
+        // marked here for Progression to generate the summons. The add-defendant ParamsVO carries no
+        // initiation code, so this does not apply there.
+        final boolean summonsApproved = InitiationCode.S.name().equalsIgnoreCase(paramsVO.getInitiationCode())
+                && nonNull(paramsVO.getSummonsApprovedOutcome());
         if(nonNull(hearingRequest)){
             final  ListHearingRequest.Builder listhearingRequestBuilder = listHearingRequest()
                     .withCourtCentre(hearingRequest.getCourtCentre())
@@ -170,8 +176,10 @@ public class ProsecutionCaseFileInitialHearingToCCHearingRequestConverter implem
                                                     .withHearingLanguageNeeds(external.getHearingLanguageNeeds())
                                                     .withProsecutionCaseId(paramsVO.getCaseId())
                                                     .withReferralReason(external.getReferralReason())
-                                                    .withSummonsApprovedOutcome(external.getSummonsApprovedOutcome())
-                                                    .withSummonsRequired(external.getSummonsRequired())
+                                                    .withSummonsApprovedOutcome(Optional.ofNullable(external.getSummonsApprovedOutcome())
+                                                            .orElse(summonsApproved ? paramsVO.getSummonsApprovedOutcome() : null))
+                                                    .withSummonsRequired(Optional.ofNullable(external.getSummonsRequired())
+                                                            .orElse(summonsApproved ? SummonsType.FIRST_HEARING : null))
                                                     .build())
                                             .collect(Collectors.toList()))
                                     .orElse(null)

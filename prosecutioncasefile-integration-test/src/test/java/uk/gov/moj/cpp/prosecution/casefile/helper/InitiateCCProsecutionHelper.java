@@ -595,6 +595,18 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
         return this.defendantIds;
     }
 
+    public String getProsecutorCost() {
+        return prosecutorCost;
+    }
+
+    public boolean isSummonsSuppressed() {
+        return summonsSuppressed;
+    }
+
+    public boolean isPersonalService() {
+        return personalService;
+    }
+
     public String getCaseUrn() {
         return caseUrn;
     }

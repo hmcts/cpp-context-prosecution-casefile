@@ -1,0 +1,477 @@
+{
+  "id": "",
+  "initiateCourtProceedings": {
+    "listHearingRequests": [
+      {
+        "bookedSlots": [
+          {
+            "courtCentreId": "89592405-c29b-3706-b1d3-b1dd3a08b227",
+            "duration": 60,
+            "oucode": "C55BN00",
+            "roomId": "60853c27-8a9d-349a-aeb5-7f5049a774dd",
+            "startTime": "2050-10-03T09:00:00.000Z"
+          }
+        ],
+        "courtCentre": {
+          "id": "89592405-c29b-3706-b1d3-b1dd3a08b227",
+          "name": "Port Talbot",
+          "roomId": "60853c27-8a9d-349a-aeb5-7f5049a774dd",
+          "roomName": "Courtroom 02"
+        },
+        "earliestStartDateTime": "2050-10-03T09:00:00.000Z",
+        "estimateMinutes": 60,
+        "hearingType": {
+          "description": "First hearing",
+          "id": "bf8155e1-90b9-4080-b133-bfbad895d6e4"
+        },
+        "listDefendantRequests": [
+          {
+            "defendantId": "ed9d804c-ca79-4b4e-b0cd-96a2f87e7b9f",
+            "defendantOffences": [
+              "9cd5e813-0201-442d-a13f-14e2d158c25e",
+              "9abc4f7f-50da-42da-a75f-ea19610381e4"
+            ],
+            "prosecutionCaseId": "c9c39a5c-455e-4dd2-8e2e-371a7413501e",
+            "summonsApprovedOutcome": {
+              "summonsSuppressed": SUMMONS_SUPPRESSED,
+              "prosecutorCost": "PROSECUTOR_COST",
+              "personalService": PERSONAL_SERVICE,
+              "prosecutorEmailAddress": "prosecutor@mail.com"
+            },
+            "summonsRequired": "FIRST_HEARING"
+          },
+          {
+            "defendantId": "fe3a3047-fbd8-44fa-a17c-fb29d68fba9e",
+            "defendantOffences": [
+              "b4a44991-cd91-4966-b8b7-728a45d9e3ba",
+              "7d8b8dce-4f1f-4296-bf90-0fe4329b7dc1"
+            ],
+            "prosecutionCaseId": "c9c39a5c-455e-4dd2-8e2e-371a7413501e",
+            "summonsApprovedOutcome": {
+              "summonsSuppressed": SUMMONS_SUPPRESSED,
+              "prosecutorCost": "PROSECUTOR_COST",
+              "personalService": PERSONAL_SERVICE,
+              "prosecutorEmailAddress": "prosecutor@mail.com"
+            },
+            "summonsRequired": "FIRST_HEARING"
+          },
+          {
+            "defendantId": "44f377b1-96c5-440c-845f-10e90bdbb249",
+            "defendantOffences": [
+              "1eac9be4-425f-4984-9f4e-9498d28e1bc0",
+              "3a5a8a7e-f264-4ea5-8baa-ba4f0cde5053"
+            ],
+            "prosecutionCaseId": "c9c39a5c-455e-4dd2-8e2e-371a7413501e",
+            "summonsApprovedOutcome": {
+              "summonsSuppressed": SUMMONS_SUPPRESSED,
+              "prosecutorCost": "PROSECUTOR_COST",
+              "personalService": PERSONAL_SERVICE,
+              "prosecutorEmailAddress": "prosecutor@mail.com"
+            },
+            "summonsRequired": "FIRST_HEARING"
+          }
+        ]
+      }
+    ],
+    "prosecutionCases": [
+      {
+        "caseMarkers": [],
+        "cpsOrganisation": "A30AB00",
+        "defendants": [
+          {
+            "aliases": [
+              {
+                "firstName": "FirstName",
+                "lastName": "LastName",
+                "middleName": "GivenName2 GivenName3",
+                "title": "Baron"
+              },
+              {
+                "firstName": "FirstName",
+                "lastName": "LastName",
+                "middleName": "GivenName2",
+                "title": "Lady"
+              },
+              {
+                "firstName": "FirstName",
+                "lastName": "LastName",
+                "middleName": "GivenName3",
+                "title": "Baroness"
+              },
+              {
+                "firstName": "FirstName",
+                "lastName": "LastName",
+                "title": "Baroness"
+              }
+            ],
+            "associatedPersons": [
+              {
+                "person": {
+                  "address": {
+                    "address1": "ParentGuardian Address Line 1",
+                    "address2": "ParentGuardian Address Line 2",
+                    "address3": "ParentGuardian Address Line 3",
+                    "address4": "ParentGuardian Address Line 4",
+                    "address5": "ParentGuardian Address Line 5",
+                    "postcode": "PG0 1XX"
+                  },
+                  "contact": {
+                    "home": "9991231230",
+                    "mobile": "9991231230",
+                    "primaryEmail": "999aer@test.com",
+                    "secondaryEmail": "999aer@test.com",
+                    "work": "9991231230"
+                  },
+                  "dateOfBirth": "1979-05-23",
+                  "ethnicity": {
+                    "observedEthnicityCode": "1",
+                    "observedEthnicityDescription": "White - North European",
+                    "observedEthnicityId": "4aaecac5-222b-402d-9047-84803679edac",
+                    "selfDefinedEthnicityCode": "W1",
+                    "selfDefinedEthnicityDescription": "British",
+                    "selfDefinedEthnicityId": "1daefec3-2f76-8109-82d9-2e60544a6c01"
+                  },
+                  "firstName": "parentGuardianJack",
+                  "gender": "MALE",
+                  "lastName": "parentGuardianReaper",
+                  "middleName": "parentGuardianAaron Sr",
+                  "title": "Baron"
+                },
+                "role": "ParentGuardian"
+              }
+            ],
+            "courtProceedingsInitiated": "2026-10-01T16:34:19.837Z",
+            "croNumber": "123456/20L",
+            "id": "ed9d804c-ca79-4b4e-b0cd-96a2f87e7b9f",
+            "initiationCode": "S",
+            "masterDefendantId": "ed9d804c-ca79-4b4e-b0cd-96a2f87e7b9f",
+            "numberOfPreviousConvictionsCited": 3,
+            "offences": [
+              {
+                "count": 0,
+                "dvlaOffenceCode": "ABC123",
+                "endDate": "2020-06-11",
+                "id": "9cd5e813-0201-442d-a13f-14e2d158c25e",
+                "maxPenalty": "Max Penalty",
+                "modeOfTrial": "Summary",
+                "offenceCode": "OFCODE12",
+                "offenceDateCode": 4,
+                "offenceDefinitionId": "04c099cc-eba2-4c80-9eed-7c1ef21d706a",
+                "offenceFacts": {
+                  "alcoholReadingAmount": 3,
+                  "alcoholReadingMethodCode": "B",
+                  "alcoholReadingMethodDescription": "Breath",
+                  "vehicleCode": "OTHER",
+                  "vehicleRegistration": "AA11 ABC"
+                },
+                "offenceLegislation": "Contrary to regulations 32(a) & 34(3) of the Animals and Animal Products (Import and Export) (England) Regulations 2006",
+                "offenceTitle": "Obstruct person executing search warrant for TV receiver",
+                "orderIndex": 1,
+                "startDate": "2019-06-11",
+                "wording": "Test Prosecution charge wording",
+                "wordingWelsh": "Test Prosecution charge wording in Welsh"
+              },
+              {
+                "count": 0,
+                "dvlaOffenceCode": "ABC123",
+                "endDate": "2019-06-12",
+                "id": "9abc4f7f-50da-42da-a75f-ea19610381e4",
+                "maxPenalty": "Max Penalty",
+                "modeOfTrial": "Summary",
+                "offenceCode": "OFCODE12",
+                "offenceDateCode": 4,
+                "offenceDefinitionId": "04c099cc-eba2-4c80-9eed-7c1ef21d706a",
+                "offenceFacts": {
+                  "alcoholReadingAmount": 3,
+                  "alcoholReadingMethodCode": "A",
+                  "alcoholReadingMethodDescription": "Blood",
+                  "vehicleCode": "OTHER",
+                  "vehicleRegistration": "BB11 ABC"
+                },
+                "offenceLegislation": "Contrary to regulations 32(a) & 34(3) of the Animals and Animal Products (Import and Export) (England) Regulations 2006",
+                "offenceTitle": "Obstruct person executing search warrant for TV receiver",
+                "orderIndex": 2,
+                "startDate": "2017-06-12",
+                "wording": "Second OFfence - Test Prosecution charge wording",
+                "wordingWelsh": "Second OFfence - Test Prosecution charge wording in Welsh"
+              }
+            ],
+            "personDefendant": {
+              "arrestSummonsNumber": "SummonsNumber001",
+              "driverNumber": "AS",
+              "perceivedBirthYear": 1970,
+              "personDetails": {
+                "additionalNationalityCode": "POL",
+                "additionalNationalityDescription": "Polish",
+                "additionalNationalityId": "ca2438ed-2eba-4c1b-967d-3fa7c46f24d4",
+                "address": {
+                  "address1": "Address Line 1",
+                  "address2": "Address Line 2",
+                  "address3": "Address Line 3",
+                  "address4": "Address Line 4",
+                  "address5": "Address Line 5",
+                  "postcode": "CR0 1XX"
+                },
+                "contact": {
+                  "home": "1231231230",
+                  "mobile": "1231231230",
+                  "primaryEmail": "aer@af.com",
+                  "secondaryEmail": "aer@af.com",
+                  "work": "1231231230"
+                },
+                "dateOfBirth": "1970-02-03",
+                "documentationLanguageNeeds": "ENGLISH",
+                "ethnicity": {
+                  "selfDefinedEthnicityCode": "W1",
+                  "selfDefinedEthnicityDescription": "British",
+                  "selfDefinedEthnicityId": "1daefec3-2f76-8109-82d9-2e60544a6c01"
+                },
+                "firstName": "John",
+                "gender": "MALE",
+                "hearingLanguageNeeds": "ENGLISH",
+                "interpreterLanguageNeeds": "no special language needs",
+                "lastName": "SMITH",
+                "middleName": "Adam Theodore",
+                "nationalInsuranceNumber": "SN123456C",
+                "nationalityCode": "GBR",
+                "nationalityDescription": "British",
+                "nationalityId": "22ef7a73-df50-4349-8c72-ca3b9ace6363",
+                "occupation": "TA",
+                "occupationCode": "666",
+                "specificRequirements": "no special needs",
+                "title": "Baron"
+              }
+            },
+            "pncId": "2099/1234567L",
+            "prosecutionAuthorityReference": "TFLDEF001",
+            "prosecutionCaseId": "c9c39a5c-455e-4dd2-8e2e-371a7413501e"
+          },
+          {
+            "aliases": [
+              {
+                "firstName": "AliasJack",
+                "lastName": "AliasReaper",
+                "middleName": "AliasAaron Sr Sr",
+                "title": "Baron"
+              }
+            ],
+            "courtProceedingsInitiated": "2026-10-01T16:34:19.839Z",
+            "croNumber": "123456/20M",
+            "id": "fe3a3047-fbd8-44fa-a17c-fb29d68fba9e",
+            "initiationCode": "S",
+            "masterDefendantId": "fe3a3047-fbd8-44fa-a17c-fb29d68fba9e",
+            "numberOfPreviousConvictionsCited": 3,
+            "offences": [
+              {
+                "count": 0,
+                "dvlaOffenceCode": "ABC123",
+                "endDate": "2020-06-11",
+                "id": "b4a44991-cd91-4966-b8b7-728a45d9e3ba",
+                "maxPenalty": "Max Penalty",
+                "modeOfTrial": "Summary",
+                "offenceCode": "OFCODE12",
+                "offenceDateCode": 4,
+                "offenceDefinitionId": "04c099cc-eba2-4c80-9eed-7c1ef21d706a",
+                "offenceFacts": {
+                  "alcoholReadingAmount": 3,
+                  "alcoholReadingMethodCode": "B",
+                  "alcoholReadingMethodDescription": "Breath",
+                  "vehicleCode": "OTHER",
+                  "vehicleRegistration": "CC11 ABC"
+                },
+                "offenceLegislation": "Contrary to regulations 32(a) & 34(3) of the Animals and Animal Products (Import and Export) (England) Regulations 2006",
+                "offenceTitle": "Obstruct person executing search warrant for TV receiver",
+                "orderIndex": 1,
+                "startDate": "2019-06-11",
+                "wording": "Test Prosecution charge wording",
+                "wordingWelsh": "Test Prosecution charge wording in Welsh"
+              },
+              {
+                "count": 0,
+                "dvlaOffenceCode": "ABC123",
+                "endDate": "2019-06-12",
+                "id": "7d8b8dce-4f1f-4296-bf90-0fe4329b7dc1",
+                "maxPenalty": "Max Penalty",
+                "modeOfTrial": "Summary",
+                "offenceCode": "OFCODE12",
+                "offenceDateCode": 4,
+                "offenceDefinitionId": "04c099cc-eba2-4c80-9eed-7c1ef21d706a",
+                "offenceFacts": {
+                  "alcoholReadingAmount": 3,
+                  "alcoholReadingMethodCode": "A",
+                  "alcoholReadingMethodDescription": "Blood",
+                  "vehicleCode": "OTHER",
+                  "vehicleRegistration": "DD11 ABC"
+                },
+                "offenceLegislation": "Contrary to regulations 32(a) & 34(3) of the Animals and Animal Products (Import and Export) (England) Regulations 2006",
+                "offenceTitle": "Obstruct person executing search warrant for TV receiver",
+                "orderIndex": 2,
+                "startDate": "2017-06-12",
+                "wording": "Second OFfence - Test Prosecution charge wording",
+                "wordingWelsh": "Second OFfence - Test Prosecution charge wording in Welsh"
+              }
+            ],
+            "personDefendant": {
+              "arrestSummonsNumber": "SummonsNumber001",
+              "driverNumber": "AS",
+              "perceivedBirthYear": 1970,
+              "personDetails": {
+                "additionalNationalityCode": "ITA",
+                "additionalNationalityDescription": "Italian",
+                "additionalNationalityId": "ca2438fd-2eba-4c1b-967d-3fa7c46f24d4",
+                "address": {
+                  "address1": "Address Line 1",
+                  "address2": "Address Line 2",
+                  "address3": "Address Line 3",
+                  "address4": "Address Line 4",
+                  "address5": "Address Line 5",
+                  "postcode": "CR0 1XX"
+                },
+                "contact": {
+                  "home": "1231231230",
+                  "mobile": "1231231230",
+                  "primaryEmail": "aer@af.com",
+                  "secondaryEmail": "aer@af.com",
+                  "work": "1231231230"
+                },
+                "dateOfBirth": "1970-02-03",
+                "documentationLanguageNeeds": "ENGLISH",
+                "ethnicity": {
+                  "selfDefinedEthnicityCode": "W1",
+                  "selfDefinedEthnicityDescription": "British",
+                  "selfDefinedEthnicityId": "1daefec3-2f76-8109-82d9-2e60544a6c01"
+                },
+                "firstName": "John",
+                "gender": "MALE",
+                "hearingLanguageNeeds": "ENGLISH",
+                "interpreterLanguageNeeds": "no special language needs",
+                "lastName": "SMITH",
+                "middleName": "Adam Theodore",
+                "nationalInsuranceNumber": "SN123456C",
+                "nationalityCode": "GBR",
+                "nationalityDescription": "British",
+                "nationalityId": "22ef7a73-df50-4349-8c72-ca3b9ace6363",
+                "occupation": "TA",
+                "occupationCode": "666",
+                "specificRequirements": "no special needs",
+                "title": "Baron"
+              }
+            },
+            "pncId": "2099/1234567M",
+            "prosecutionAuthorityReference": "TFLDEF002",
+            "prosecutionCaseId": "c9c39a5c-455e-4dd2-8e2e-371a7413501e"
+          },
+          {
+            "aliases": [
+              {
+                "legalEntityName": "Minstry Of Justice"
+              },
+              {
+                "legalEntityName": "Ministry Of Justice 2"
+              }
+            ],
+            "courtProceedingsInitiated": "2026-10-01T16:34:19.840Z",
+            "croNumber": "SF20/123456M",
+            "id": "44f377b1-96c5-440c-845f-10e90bdbb249",
+            "initiationCode": "S",
+            "legalEntityDefendant": {
+              "organisation": {
+                "address": {
+                  "address1": "Address Line 1",
+                  "address2": "Address Line 2",
+                  "address3": "Address Line 3",
+                  "address4": "Address Line 4",
+                  "address5": "Address Line 5",
+                  "postcode": "CR0 1XX"
+                },
+                "contact": {
+                  "work": "07894278021"
+                },
+                "name": "HMCTS"
+              }
+            },
+            "masterDefendantId": "44f377b1-96c5-440c-845f-10e90bdbb249",
+            "numberOfPreviousConvictionsCited": 3,
+            "offences": [
+              {
+                "count": 0,
+                "dvlaOffenceCode": "ABC123",
+                "endDate": "2020-06-11",
+                "id": "1eac9be4-425f-4984-9f4e-9498d28e1bc0",
+                "maxPenalty": "Max Penalty",
+                "modeOfTrial": "Summary",
+                "offenceCode": "OFCODE12",
+                "offenceDateCode": 4,
+                "offenceDefinitionId": "04c099cc-eba2-4c80-9eed-7c1ef21d706a",
+                "offenceFacts": {
+                  "alcoholReadingAmount": 3,
+                  "alcoholReadingMethodCode": "B",
+                  "alcoholReadingMethodDescription": "Breath",
+                  "vehicleCode": "OTHER",
+                  "vehicleRegistration": "EE11 ABC"
+                },
+                "offenceLegislation": "Contrary to regulations 32(a) & 34(3) of the Animals and Animal Products (Import and Export) (England) Regulations 2006",
+                "offenceTitle": "Obstruct person executing search warrant for TV receiver",
+                "orderIndex": 1,
+                "startDate": "2019-06-11",
+                "wording": "Test Prosecution charge wording",
+                "wordingWelsh": "Test Prosecution charge wording in Welsh"
+              },
+              {
+                "count": 0,
+                "dvlaOffenceCode": "ABC123",
+                "endDate": "2019-06-12",
+                "id": "3a5a8a7e-f264-4ea5-8baa-ba4f0cde5053",
+                "maxPenalty": "Max Penalty",
+                "modeOfTrial": "Summary",
+                "offenceCode": "OFCODE12",
+                "offenceDateCode": 4,
+                "offenceDefinitionId": "04c099cc-eba2-4c80-9eed-7c1ef21d706a",
+                "offenceFacts": {
+                  "alcoholReadingAmount": 3,
+                  "alcoholReadingMethodCode": "A",
+                  "alcoholReadingMethodDescription": "Blood",
+                  "vehicleCode": "OTHER",
+                  "vehicleRegistration": "FF11 ABC"
+                },
+                "offenceLegislation": "Contrary to regulations 32(a) & 34(3) of the Animals and Animal Products (Import and Export) (England) Regulations 2006",
+                "offenceTitle": "Obstruct person executing search warrant for TV receiver",
+                "orderIndex": 2,
+                "startDate": "2017-06-12",
+                "wording": "Second OFfence - Test Prosecution charge wording",
+                "wordingWelsh": "Second OFfence - Test Prosecution charge wording in Welsh"
+              }
+            ],
+            "pncId": "2099/1234567K",
+            "prosecutionAuthorityReference": "TFLDEF003",
+            "prosecutionCaseId": "c9c39a5c-455e-4dd2-8e2e-371a7413501e"
+          }
+        ],
+        "id": "c9c39a5c-455e-4dd2-8e2e-371a7413501e",
+        "initiationCode": "S",
+        "isCivil": true,
+        "originatingOrganisation": "B01BH00",
+        "prosecutionCaseIdentifier": {
+          "address": {
+            "address1": "6th Floor Windsor House",
+            "address2": "42-50 Victoria Street",
+            "address3": "London",
+            "postcode": "SW1H 0TL"
+          },
+          "contact": {
+            "primaryEmail": "contact@cpp.com"
+          },
+          "majorCreditorCode": "TFL2",
+          "prosecutionAuthorityCode": "TFL",
+          "prosecutionAuthorityId": "0534ee76-88f6-40e0-ba8f-53588e146675",
+          "prosecutionAuthorityName": "Transport for London",
+          "prosecutionAuthorityOUCode": "GAFTL00",
+          "caseURN": "QUwUAtftmk"
+        },
+        "statementOfFacts": "1Test Prosecution statements of facts",
+        "statementOfFactsWelsh": "1Welsh -Test Prosecution statements of facts",
+        "summonsCode": "A"
+      }
+    ]
+  }
+}

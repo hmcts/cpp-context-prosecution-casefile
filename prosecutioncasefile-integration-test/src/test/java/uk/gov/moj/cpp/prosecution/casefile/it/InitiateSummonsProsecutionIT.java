@@ -44,6 +44,8 @@ class InitiateSummonsProsecutionIT extends BaseIT {
     private static final String COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_SPI = "command-json/prosecutioncasefile.command.initiate-spi-summons-prosecution.json";
     private static final String EXPECTED_INITIATE_SUMMONS_APPLICATION_FOR_SPI = "expected/initiate-summons-application-for-spi.json";
     private static final String COMMAND_PAYLOAD_FOR_SUBSEQUENT_INITIATE_SUMMONS_FOR_SPI = "command-json/prosecutioncasefile.command.subsequent_initiate-spi-summons-prosecution.json";
+    private static final String COMMAND_PAYLOAD_FOR_MCC_FIND_A_HEARING_SUMMONS = "command-json/prosecutioncasefile.command.initiate-mcc-find-a-hearing-summons-prosecution.json";
+    private static final String EXPECTED_INITIATE_SUMMONS_APPLICATION_FOR_MCC_FIND_A_HEARING = "expected/initiate-summons-application-for-mcc-find-a-hearing.json";
 
     static Stream<Arguments> channelToPayloadMappingForSummonsInitiation() {
         return Stream.of(
@@ -188,5 +190,23 @@ class InitiateSummonsProsecutionIT extends BaseIT {
 
         helper.whenInitiateSummonsCaseIsRaisedByChannel(MCC, COMMAND_PAYLOAD_FOR_SUBSEQUENT_INITIATE_SUMMONS_FOR_MCC);
 
+    }
+
+    /**
+     * MCC find-a-hearing summons: the box hearing is raised at the found hearing's court and, once approved, the case
+     * is listed at the found hearing with every defendant marked for a first-hearing summons
+     * (DD-43173 AC-001/002/003/007/008, DD-43709 AC-022).
+     */
+    @Test
+    void shouldListMccFindAHearingSummonsCaseAtTheFoundHearingWhenSummonsApplicationIsApproved() {
+        final InitiateCCProsecutionHelper helper = new InitiateCCProsecutionHelper();
+        helper.initiateSummonsCaseForChannelAndVerifyApplicationCreatedInstead(MCC, COMMAND_PAYLOAD_FOR_MCC_FIND_A_HEARING_SUMMONS, EXPECTED_INITIATE_SUMMONS_APPLICATION_FOR_MCC_FIND_A_HEARING);
+
+        helper.whenSummonsApplicationIsApprovedForDefendants();
+
+        helper.thenEventsShouldBeRaised(new String[]{EVENT_SELECTOR_CC_PROSECUTION_RECEIVED});
+        helper.thenEventsShouldBeRaised(new String[]{PUBLIC_PROSECUTIONCASEFILE_CC_CASE_RECEIVED});
+        final String expectedPayload = readFile("expected/initiate_cc_expected_output_mcc_find_a_hearing_summons.json");
+        helper.verifyCourtProceedingsForCaseCreationHasBeenInitiated(helper.getCaseUrn(), expectedPayload);
     }
 }

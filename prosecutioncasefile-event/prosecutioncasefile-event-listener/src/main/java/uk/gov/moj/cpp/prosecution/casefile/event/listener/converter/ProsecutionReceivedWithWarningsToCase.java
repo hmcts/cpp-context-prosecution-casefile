@@ -36,6 +36,9 @@ public class ProsecutionReceivedWithWarningsToCase implements Converter<SjpProse
     }
 
    private Set<CivilFees> getCivilFees(final Prosecution prosecution) {
+       if (!Boolean.TRUE.equals(prosecution.getIsCivil())) {
+           return null;
+       }
        return caseDetailsToCivilFees.convert(prosecution.getCaseDetails());
    }
 }

@@ -48,11 +48,7 @@ class InitiateFindAHearingSummonsProsecutionIT extends BaseIT {
 
     /**
      * DD-43173 AC-001: the command is accepted and the application is parked instead of the case being
-     * created outright — no NullPointerException on the box-hearing conversion.
-     * <p>
-     * DD-43173 AC-002 / AC-003: the box hearing carries the reference-data-enriched court centre for the
-     * booked slot's OU code — postal address and courtHearingLocation included, not the thin court
-     * centre the UI supplies — and an application due date of the found hearing minus 14 days.
+     * created outright.
      */
     @Test
     void shouldParkAnMccFindAHearingSummonsAndRaiseTheBoxHearingAtTheFoundHearingCourt() {

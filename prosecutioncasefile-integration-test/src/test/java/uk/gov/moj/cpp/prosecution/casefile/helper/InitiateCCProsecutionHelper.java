@@ -88,10 +88,6 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
     private static final String PROGRESSION_INITIATE_COURT_PROCEEDINGS = "progression.initiate-court-proceedings";
     private static final String CASE_MARKER_CODE = "ABC";
 
-    /**
-     * The slot the user picks in the magistrates' "find a hearing" journey. Fixed and comfortably
-     * more than 14 days ahead so the derived application due date is deterministic.
-     */
     public static final String FIND_A_HEARING_EARLIEST_START = "2050-10-03T09:00:00Z";
     public static final String FIND_A_HEARING_BOOKED_SLOT_OU_CODE = "C55BN00";
 
@@ -387,6 +383,16 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
     }
 
     public void initiateSummonsCaseForChannelAndVerifyApplicationCreatedInstead(final Channel channel, final String payloadPath, final String expectedPayloadPath) {
+        initiateSummonsCaseForChannelAndCaptureApplication(channel, payloadPath);
+        verifyCourtProceedingsForSummonsApplicationHasBeenInitiated(expectedPayloadPath);
+    }
+
+    /**
+     * Raises a summons case and captures the parked application (id + defendant ids) so the
+     * approval/rejection public events can be driven, without asserting the whole outbound payload.
+     * Used where the assertions are targeted rather than whole-document.
+     */
+    public void initiateSummonsCaseForChannelAndCaptureApplication(final Channel channel, final String payloadPath) {
         whenInitiateSummonsCaseIsRaisedByChannel(channel, payloadPath);
 
         final Optional<JsonEnvelope> jsonEnvelope = retrieveEvent(EVENT_DEFENDANTS_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL);
@@ -397,8 +403,6 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
         this.defendantIds = payload.getProsecutionWithReferenceData().getProsecution().getDefendants().stream()
                 .map(Defendant::getId)
                 .collect(toList());
-
-        verifyCourtProceedingsForSummonsApplicationHasBeenInitiated(expectedPayloadPath);
     }
 
     /**

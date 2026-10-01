@@ -16,6 +16,7 @@ import static java.util.stream.Collectors.toList;
 import static uk.gov.justice.services.messaging.JsonObjects.createReader;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
@@ -51,12 +52,14 @@ import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PR
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PROSECUTIONCASEFILE_CASE_VALIDATION_FAILED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PROSECUTIONCASEFILE_DEFENDANT_VALIDATION_FAILED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.FileUtil.readJsonResource;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.SPI;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ProgressionStub.stubForQueryApplication;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForOffenceCodeWithEitherWayModeOfTrial;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubGetCaseMarkersWithCode;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubGetOrganisationUnitsReturnsEmptyList;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubProsecutorsReturns404;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.TestUtils.readFile;
+import static uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode.DUPLICATED_PROSECUTION;
 
 import uk.gov.justice.services.common.converter.LocalDates;
 import uk.gov.justice.services.messaging.DefaultJsonObjectEnvelopeConverter;
@@ -85,12 +88,7 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
     private static final String PROGRESSION_INITIATE_COURT_PROCEEDINGS = "progression.initiate-court-proceedings";
     private static final String CASE_MARKER_CODE = "ABC";
 
-    /**
-     * The slot the user picks in the magistrates' "find a hearing" journey. Fixed and comfortably
-     * more than 14 days ahead so the derived application due date is deterministic.
-     */
-    public static final String FIND_A_HEARING_EARLIEST_START = "2050-10-03T09:00:00Z";
-    public static final String FIND_A_HEARING_BOOKED_SLOT_OU_CODE = "C55BN00";
+    private static final String FIND_A_HEARING_EARLIEST_START = "2050-10-03T09:00:00Z";
 
     private final UUID caseId;
     private final String caseUrn;
@@ -113,9 +111,7 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
     private final boolean personalService;
 
     private UUID applicationId;
-    private UUID applicationId2;
     private List<String> defendantIds;
-    private List<String> defendantIds2;
 
     public InitiateCCProsecutionHelper() {
         caseId = randomUUID();
@@ -401,35 +397,16 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
     }
 
     /**
-     * Raises a summons case and captures the parked application (id + defendant ids) so the
-     * approval/rejection public events can be driven, without asserting the whole outbound payload.
-     * Used where the assertions are targeted rather than whole-document.
+     * A rejected summons application keeps its claim on the URN, so a later creation attempt on the same URN is a
+     * duplicate. On SPI that rejection surfaces as {@code case-validation-failed} (problems), on MCC and CPPI as
+     * {@code cc-prosecution-rejected} (caseErrors).
      */
-    public void initiateSummonsCaseForChannelAndCaptureApplication(final Channel channel, final String payloadPath) {
-        whenInitiateSummonsCaseIsRaisedByChannel(channel, payloadPath);
+    public void thenCaseShouldBeRejectedAsDuplicateUrnByChannel(final Channel channel) {
+        final boolean isSpi = SPI.equals(channel);
+        final JsonEnvelope rejectionEvent = verifyEventRaised(isSpi ? EVENT_SELECTOR_CASE_VALIDATION_FAILED : EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
 
-        final Optional<JsonEnvelope> jsonEnvelope = retrieveEvent(EVENT_DEFENDANTS_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL);
-        assertThat(jsonEnvelope.isPresent(), is(true));
-        final DefendantsParkedForSummonsApplicationApproval payload = jsonObjectToObjectConverter.convert(jsonEnvelope.get().payloadAsJsonObject(), DefendantsParkedForSummonsApplicationApproval.class);
-        this.applicationId = payload.getApplicationId();
-        stubForQueryApplication(applicationId);
-        this.defendantIds = payload.getProsecutionWithReferenceData().getProsecution().getDefendants().stream()
-                .map(Defendant::getId)
-                .collect(toList());
-    }
-
-    public void initiateSubsequentSummonsCaseForChannelAndVerifyApplicationCreatedInstead(final Channel channel, final String payloadPath, final String expectedPayloadPath) {
-        whenInitiateSummonsCaseIsRaisedByChannel(channel, payloadPath);
-
-        final Optional<JsonEnvelope> jsonEnvelope = retrieveEvent(EVENT_DEFENDANTS_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL);
-        assertThat(jsonEnvelope.isPresent(), is(true));
-        final DefendantsParkedForSummonsApplicationApproval payload = jsonObjectToObjectConverter.convert(jsonEnvelope.get().payloadAsJsonObject(), DefendantsParkedForSummonsApplicationApproval.class);
-        this.applicationId2 = payload.getApplicationId();
-        this.defendantIds2 = payload.getProsecutionWithReferenceData().getProsecution().getDefendants().stream()
-                .map(Defendant::getId)
-                .collect(toList());
-
-        verifyCourtProceedingsForSummonsApplicationHasBeenInitiated(applicationId2.toString(), expectedPayloadPath);
+        assertThat(rejectionEvent.payloadAsJsonObject().get(isSpi ? "problems" : "caseErrors").toString(),
+                containsString(DUPLICATED_PROSECUTION.name()));
     }
 
     public void whenInitiateSummonsCaseIsRaisedByChannel(final Channel channel, final String payloadPath) {
@@ -511,10 +488,7 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
     private String replaceValues(final String payload, final String channel) {
         String resultPayload = payload;
 
-        //only 1 application ID should be updated
-        if (nonNull(this.applicationId2)) {
-            resultPayload = payload.replace("APPLICATION_ID_2", this.applicationId2.toString());
-        } else if (nonNull(this.applicationId)) {
+        if (nonNull(this.applicationId)) {
             resultPayload = payload.replace("APPLICATION_ID", this.applicationId.toString());
         }
 
@@ -547,64 +521,6 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
         final Optional<JsonEnvelope> jsonEnvelope = retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_RECEIVED);
         assertThat(jsonEnvelope.isPresent(), is(true));
         return jsonEnvelope.get();
-    }
-
-    /**
-     * The raw InitiateCourtApplicationProceedings payload last sent to Progression for this case's
-     * summons application (the box hearing).
-     */
-    public JsonObject getLastSummonsApplicationPayload() {
-        return extractPayload(getLastLoggedRequestForSummonsApplicationApproval(this.caseUrn));
-    }
-
-    /**
-     * The raw InitiateCourtProceedings payload last sent to Progression for this case (the listing).
-     */
-    public JsonObject getLastCourtProceedingsPayload() {
-        return extractPayload(getLastLoggedRequest(this.caseUrn));
-    }
-
-    public void awaitCourtProceedingsInitiated() {
-        await().timeout(35, SECONDS)
-                .pollInterval(500, MILLISECONDS)
-                .pollDelay(500, MILLISECONDS)
-                .until(() -> findAll(postRequestedFor(urlMatching("/progression-service/command/api/rest/progression/initiatecourtproceedings"))
-                        .withRequestBody(containing(this.caseUrn))).size(), is(1));
-    }
-
-    public void awaitSummonsApplicationInitiated() {
-        await().timeout(35, SECONDS)
-                .pollInterval(500, MILLISECONDS)
-                .pollDelay(500, MILLISECONDS)
-                .until(() -> findAll(postRequestedFor(urlMatching("/progression-service/command/api/rest/progression/initiate-application"))
-                        .withRequestBody(containing(this.caseUrn))).size(), is(1));
-    }
-
-    private JsonObject extractPayload(final String loggedRequestBody) {
-        final JsonObject jsonObject;
-        try (final JsonReader jsonReader = createReader(new StringReader(loggedRequestBody))) {
-            jsonObject = jsonReader.readObject();
-        }
-        final String payload = new DefaultJsonObjectEnvelopeConverter().extractPayloadFromEnvelope(jsonObject).toString();
-        try (final JsonReader payloadReader = createReader(new StringReader(payload))) {
-            return payloadReader.readObject();
-        }
-    }
-
-    public List<String> getDefendantIds() {
-        return this.defendantIds;
-    }
-
-    public String getProsecutorCost() {
-        return prosecutorCost;
-    }
-
-    public boolean isSummonsSuppressed() {
-        return summonsSuppressed;
-    }
-
-    public boolean isPersonalService() {
-        return personalService;
     }
 
     public String getCaseUrn() {

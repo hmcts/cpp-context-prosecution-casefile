@@ -1,6 +1,6 @@
 package uk.gov.moj.cpp.prosecution.casefile.it;
 
-import com.jayway.awaitility.Duration;
+import org.awaitility.Durations;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +23,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.findAll;
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
-import static com.jayway.awaitility.Awaitility.await;
+import static org.awaitility.Awaitility.await;
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.withJsonPath;
 import static jakarta.ws.rs.core.Response.Status.OK;
 import static java.lang.ClassLoader.getSystemResourceAsStream;
@@ -141,7 +141,7 @@ public class SubmitCCApplicationIT extends BaseIT {
     }
 
     public void verifyNotificationNotifyAPICalled(final String url, final int expectedServiceCallCount) {
-        await().timeout(Duration.FIVE_SECONDS)
+        await().timeout(Durations.FIVE_SECONDS)
                 .pollInterval(100, TimeUnit.MILLISECONDS)
                 .pollDelay(50, TimeUnit.MILLISECONDS)
                 .until(

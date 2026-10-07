@@ -31,7 +31,7 @@ import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.Response;
 
 import com.google.common.base.Joiner;
-import com.jayway.awaitility.Awaitility;
+import org.awaitility.Awaitility;
 import org.hamcrest.Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -32,10 +32,7 @@
         <defence.version>17.0.87</defence.version>
         <criminal-court-public-model.version>${coredomain.version}</criminal-court-public-model.version>
         <notification.notify.version>17.0.24</notification.notify.version>
-        <commons-text.version>1.10.0</commons-text.version>
-        <awaility.version>1.7.0</awaility.version>
         <sjp.version>17.104.192</sjp.version>
-        <byte-buddy.version>1.18.8</byte-buddy.version>
         <domain.dsl.test.version>0.3.1</domain.dsl.test.version>
         <material.version>17.0.75</material.version>
         <stream-transformation-tool.version>6.4.5</stream-transformation-tool.version>
@@ -70,11 +67,6 @@
                 <version>${coredomain.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-text</artifactId>
-                <version>${commons-text.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>uk.gov.moj.cpp.core.domain</groupId>
                 <artifactId>criminal-court-public-model</artifactId>
                 <version>${coredomain.version}</version>
@@ -97,12 +89,6 @@
                 <version>${stream-transformation-tool.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.jayway.awaitility</groupId>
-                <artifactId>awaitility</artifactId>
-                <version>${awaility.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
                 <groupId>uk.gov.moj.cpp.sjp</groupId>
                 <artifactId>sjp-query-api</artifactId>
                 <version>${sjp.version}</version>
@@ -113,12 +99,6 @@
                 <artifactId>progression-query-api</artifactId>
                 <version>${progression.version}</version>
                 <classifier>raml</classifier>
-            </dependency>
-            <dependency>
-                <groupId>net.bytebuddy</groupId>
-                <artifactId>byte-buddy</artifactId>
-                <version>${byte-buddy.version}</version>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>uk.gov.justice</groupId>

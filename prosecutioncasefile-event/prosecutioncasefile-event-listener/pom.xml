@@ -97,6 +97,9 @@
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
+                            <!-- mireportdata-prosecutioncasefile-event-listener:RELEASE:tests is still a javax build;
+                                 re-enable once MI publishes a jakarta (25.104.x) test-jar -->
+                            <skip>true</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>uk.gov.moj.cpp.mi.reportdata</groupId>

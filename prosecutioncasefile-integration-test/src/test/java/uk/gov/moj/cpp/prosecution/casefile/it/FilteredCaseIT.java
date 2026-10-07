@@ -12,7 +12,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.helper.AddMaterialHelper.PENDI
 import static uk.gov.moj.cpp.prosecution.casefile.helper.AddMaterialHelper.buildAddMaterialCommandPayloadForCpsCaseDocument;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.AddMaterialHelper.uploadFile;
 
-import com.jayway.awaitility.Awaitility;
+import org.awaitility.Awaitility;
 import uk.gov.justice.services.common.converter.StringToJsonObjectConverter;
 import uk.gov.justice.services.integrationtest.utils.jms.JmsMessageConsumerClient;
 import uk.gov.moj.cpp.prosecution.casefile.helper.ActivitiHelper;

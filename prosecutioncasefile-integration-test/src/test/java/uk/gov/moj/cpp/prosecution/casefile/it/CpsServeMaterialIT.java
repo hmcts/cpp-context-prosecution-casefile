@@ -71,7 +71,7 @@ import java.util.concurrent.TimeUnit;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 
-import com.jayway.awaitility.Awaitility;
+import org.awaitility.Awaitility;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

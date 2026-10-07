@@ -84,7 +84,7 @@ import jakarta.json.JsonReader;
 
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import com.google.common.collect.ImmutableMap;
-import com.jayway.awaitility.Awaitility;
+import org.awaitility.Awaitility;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;

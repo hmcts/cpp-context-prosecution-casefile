@@ -4,7 +4,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.findAll;
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
-import static com.jayway.awaitility.Awaitility.await;
+import static org.awaitility.Awaitility.await;
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath;
 import static java.lang.String.format;
 import static jakarta.ws.rs.core.HttpHeaders.CONTENT_TYPE;

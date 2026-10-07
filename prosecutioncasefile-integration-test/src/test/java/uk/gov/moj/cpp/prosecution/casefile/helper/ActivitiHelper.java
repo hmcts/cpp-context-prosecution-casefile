@@ -1,6 +1,6 @@
 package uk.gov.moj.cpp.prosecution.casefile.helper;
 
-import static com.jayway.awaitility.Awaitility.await;
+import static org.awaitility.Awaitility.await;
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.withJsonPath;
 import static java.util.Optional.empty;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -24,7 +24,7 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import com.jayway.awaitility.core.ConditionTimeoutException;
+import org.awaitility.core.ConditionTimeoutException;
 import org.hamcrest.Matcher;
 
 public class ActivitiHelper {

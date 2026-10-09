@@ -12,7 +12,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.helper.AddMaterialHelper.PENDI
 import static uk.gov.moj.cpp.prosecution.casefile.helper.AddMaterialHelper.buildAddMaterialCommandPayloadForCpsCaseDocument;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.AddMaterialHelper.uploadFile;
 
-import com.jayway.awaitility.Awaitility;
+import org.awaitility.Awaitility;
 import uk.gov.justice.services.common.converter.StringToJsonObjectConverter;
 import uk.gov.justice.services.integrationtest.utils.jms.JmsMessageConsumerClient;
 import uk.gov.moj.cpp.prosecution.casefile.helper.ActivitiHelper;
@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import javax.json.JsonObject;
+import jakarta.json.JsonObject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -14,8 +14,8 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.GroupProsecution;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Offence;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.PersonalInformation;
 
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
+import jakarta.json.JsonArrayBuilder;
+import jakarta.json.JsonObject;
 
 public class GroupCasesSummonsTemplateHelper {
 

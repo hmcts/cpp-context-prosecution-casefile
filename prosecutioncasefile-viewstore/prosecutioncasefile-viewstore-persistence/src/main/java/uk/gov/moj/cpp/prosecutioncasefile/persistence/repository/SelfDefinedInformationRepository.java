@@ -4,9 +4,27 @@ import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.SelfDefinedInformat
 
 import java.util.UUID;
 
-import org.apache.deltaspike.data.api.EntityRepository;
-import org.apache.deltaspike.data.api.Repository;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
-@Repository
-public interface SelfDefinedInformationRepository extends EntityRepository<SelfDefinedInformationDetails, UUID> {
+@ApplicationScoped
+public class SelfDefinedInformationRepository {
+
+    @PersistenceContext(unitName = "prosecutioncasefile-persistence-unit")
+    EntityManager entityManager;
+
+    public SelfDefinedInformationDetails findBy(final UUID id) {
+        return entityManager.find(SelfDefinedInformationDetails.class, id.toString());
+    }
+
+    public SelfDefinedInformationDetails save(final SelfDefinedInformationDetails entity) {
+        return entityManager.merge(entity);
+    }
+
+    public void remove(final SelfDefinedInformationDetails entity) {
+        final SelfDefinedInformationDetails managed =
+                entityManager.contains(entity) ? entity : entityManager.merge(entity);
+        entityManager.remove(managed);
+    }
 }

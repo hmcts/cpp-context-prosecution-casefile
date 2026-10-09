@@ -30,9 +30,9 @@ import uk.gov.moj.cps.prosecutioncasefile.command.handler.UpdateCaseDetails;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
-import javax.json.JsonValue;
+import jakarta.enterprise.inject.Instance;
+import jakarta.inject.Inject;
+import jakarta.json.JsonValue;
 
 @ServiceComponent(COMMAND_HANDLER)
 public class SummonsApplicationHandler extends BaseProsecutionCaseFileHandler {

@@ -10,20 +10,28 @@ import static uk.gov.justice.core.courts.ProsecutionCase.prosecutionCase;
 import static uk.gov.justice.services.messaging.JsonObjects.createArrayBuilder;
 import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 import static uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.FinancialMeans.financialMeans;
+import static uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.LegalEntityDefendant.legalEntityDefendant;
+import static uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.LegalEntityFinancialMeans.legalEntityFinancialMeans;
 import static uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.Offence.offence;
 import static uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.PersonalDetails.personalDetails;
 import static uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.PleaType.GUILTY;
+import static uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.PleaType.NOT_GUILTY;
 import static uk.gov.moj.cps.prosecutioncasefile.command.api.PleadOnline.pleadOnline;
 
 import uk.gov.justice.core.courts.Offence;
 import uk.gov.justice.core.courts.ProsecutionCase;
 import uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.Benefits;
+import uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.Income;
+import uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.LegalEntityDefendant;
+import uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.LegalEntityFinancialMeans;
 import uk.gov.moj.cps.prosecutioncasefile.command.api.PleadOnline;
+
+import java.math.BigDecimal;
 
 import java.util.List;
 import java.util.Map;
 
-import javax.json.JsonObject;
+import jakarta.json.JsonObject;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -214,5 +222,63 @@ public class PleadOnlineValidatorTest {
         assertThat(result.values(), hasSize(0));
     }
 
+    @Test
+    public void shouldReturnEmptyMapWhenPleadOnlineHasNoGuiltyPlea() {
+        final PleadOnline pleadOnline = pleadOnline()
+                .withOffences(asList(offence()
+                        .withPlea(NOT_GUILTY)
+                        .build()))
+                .withPersonalDetails(personalDetails().build())
+                .build();
+
+        final Map<String, List<String>> result = pleadOnlineValidator.validate(pleadOnline);
+        assertThat(result.values(), hasSize(0));
+    }
+
+    @Test
+    public void shouldReturnEmptyMapWhenPleadOnlineHasGuiltyPleaWithCompleteFinancialMeans() {
+        final PleadOnline pleadOnline = pleadOnline()
+                .withOffences(asList(offence().withPlea(GUILTY).build()))
+                .withPersonalDetails(personalDetails().build())
+                .withFinancialMeans(financialMeans()
+                        .withBenefits(Benefits.benefits().build())
+                        .withIncome(Income.income().build())
+                        .withEmploymentStatus("Employed")
+                        .build())
+                .build();
+
+        final Map<String, List<String>> result = pleadOnlineValidator.validate(pleadOnline);
+        assertThat(result.values(), hasSize(0));
+    }
+
+    @Test
+    public void shouldReturnErrorWhenLegalEntityDefendantPleadsGuiltyWithoutFinancialMeans() {
+        final PleadOnline pleadOnline = pleadOnline()
+                .withOffences(asList(offence().withPlea(GUILTY).build()))
+                .withLegalEntityDefendant(legalEntityDefendant().build())
+                .build();
+
+        final Map<String, List<String>> result = pleadOnlineValidator.validate(pleadOnline);
+        assertThat(result.values(), hasSize(1));
+        assertThat(result.get("FinancialMeansRequiredWhenPleadingGuilty"), hasSize(1));
+    }
+
+    @Test
+    public void shouldReturnEmptyMapWhenLegalEntityDefendantPleadsGuiltyWithCompleteFinancialMeans() {
+        final PleadOnline pleadOnline = pleadOnline()
+                .withOffences(asList(offence().withPlea(GUILTY).build()))
+                .withLegalEntityDefendant(legalEntityDefendant().build())
+                .withLegalEntityFinancialMeans(legalEntityFinancialMeans()
+                        .withOutstandingFines(false)
+                        .withGrossTurnover(BigDecimal.TEN)
+                        .withTradingMoreThan12Months(true)
+                        .withNetTurnover(BigDecimal.ONE)
+                        .withNumberOfEmployees(5)
+                        .build())
+                .build();
+
+        final Map<String, List<String>> result = pleadOnlineValidator.validate(pleadOnline);
+        assertThat(result.values(), hasSize(0));
+    }
 
 }

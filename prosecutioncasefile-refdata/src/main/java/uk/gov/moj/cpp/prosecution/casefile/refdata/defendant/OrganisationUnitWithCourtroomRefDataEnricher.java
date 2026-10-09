@@ -7,7 +7,7 @@ import uk.gov.moj.cpp.prosecution.casefile.domain.DefendantsWithReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.OrganisationUnitWithCourtroomReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

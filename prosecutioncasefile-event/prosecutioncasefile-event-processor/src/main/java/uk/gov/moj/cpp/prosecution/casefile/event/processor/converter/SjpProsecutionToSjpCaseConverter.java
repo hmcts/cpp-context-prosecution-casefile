@@ -9,7 +9,7 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecution;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ProsecutorsReferenceData;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.SjpProsecutionInitiated;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 public class SjpProsecutionToSjpCaseConverter implements Converter<SjpProsecutionInitiated, CreateSjpCase> {
 

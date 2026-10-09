@@ -14,7 +14,7 @@ public class QueueUtil {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(QueueUtil.class);
 
-    private static final long RETRIEVE_TIMEOUT = 20000;
+    private static final long RETRIEVE_TIMEOUT = 30000;
 
     public static JsonPath retrieveMessage(final JmsMessageConsumerClient consumer) {
         return retrieveMessage(consumer, RETRIEVE_TIMEOUT).orElse(null);

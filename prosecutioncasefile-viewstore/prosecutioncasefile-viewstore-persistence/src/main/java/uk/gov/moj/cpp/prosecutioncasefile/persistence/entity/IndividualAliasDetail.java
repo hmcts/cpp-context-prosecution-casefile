@@ -2,8 +2,8 @@ package uk.gov.moj.cpp.prosecutioncasefile.persistence.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class IndividualAliasDetail implements Serializable {

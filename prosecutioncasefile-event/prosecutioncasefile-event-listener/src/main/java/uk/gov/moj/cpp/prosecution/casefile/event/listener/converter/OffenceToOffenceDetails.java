@@ -9,7 +9,7 @@ import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.OffenceDetails;
 
 import java.util.UUID;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 public class OffenceToOffenceDetails implements Converter<Offence, OffenceDetails> {
 

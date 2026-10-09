@@ -5,8 +5,8 @@ import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.CaseDetails;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.repository.CaseDetailsRepository;
 import uk.gov.moj.cpp.prosecutioncasefile.query.view.response.CaseDetailsView;
 
-import javax.inject.Inject;
-import javax.persistence.EntityNotFoundException;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;

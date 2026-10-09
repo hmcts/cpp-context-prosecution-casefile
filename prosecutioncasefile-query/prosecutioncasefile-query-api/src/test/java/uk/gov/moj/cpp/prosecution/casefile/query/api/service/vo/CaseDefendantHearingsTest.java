@@ -49,14 +49,14 @@ public class CaseDefendantHearingsTest {
 
         assertThat(caseDefendantHearings.getCaseId(), is(caseId));
         assertThat(caseDefendantHearings.getDefendantId(), is(defendantId));
-        assertThat(caseDefendantHearings.getHearings().get(0).getHearingDays().get(0).getSittingDay(), is(sittingDay));
+        assertThat(caseDefendantHearings.getHearings().get(0).getHearingDays().get(0).getSittingDay().toInstant(), is(sittingDay.toInstant()));
     }
 
     @Test
     public void shouldGetEarliestHearingDayAndEvaluateIfEarliestHearingDayInThePast() {
         final CaseDefendantHearings caseDefendantHearings = jsonObjectToObjectConverter.convert(readJsonResource(JSON_RESPONSE_FILE, caseId, defendantId, sittingDay.format(ZONE_DATETIME_FORMATTER)), CaseDefendantHearings.class);
 
-        assertThat(caseDefendantHearings.getEarliestHearingDay(), is(sittingDay));
+        assertThat(caseDefendantHearings.getEarliestHearingDay().toInstant(), is(sittingDay.toInstant()));
         assertThat(caseDefendantHearings.isEarliestHearingDayInThePast(), is(true));
     }
 

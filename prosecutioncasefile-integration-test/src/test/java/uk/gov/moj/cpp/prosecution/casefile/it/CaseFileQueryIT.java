@@ -1,8 +1,8 @@
 package uk.gov.moj.cpp.prosecution.casefile.it;
 
 import static java.util.UUID.randomUUID;
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
-import static javax.ws.rs.core.Response.Status.OK;
+import static jakarta.ws.rs.core.Response.Status.BAD_REQUEST;
+import static jakarta.ws.rs.core.Response.Status.OK;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -19,7 +19,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.stub.SjpStub.stubCaseByUrnPost
 
 import uk.gov.justice.services.common.converter.StringToJsonObjectConverter;
 
-import javax.json.JsonObject;
+import jakarta.json.JsonObject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

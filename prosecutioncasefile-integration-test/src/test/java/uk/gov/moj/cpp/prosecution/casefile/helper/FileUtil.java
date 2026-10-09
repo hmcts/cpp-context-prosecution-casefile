@@ -15,8 +15,8 @@ import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
 import java.util.Map;
 
-import javax.json.JsonObject;
-import javax.json.JsonReader;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
 
 import com.google.common.io.Resources;
 import org.apache.commons.io.IOUtils;

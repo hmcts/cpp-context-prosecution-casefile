@@ -1,6 +1,6 @@
 package uk.gov.moj.cpp.prosecution.casefile.validation.rules.forms;
 
-import javax.json.JsonObject;
+import jakarta.json.JsonObject;
 
 public class DefendantInfo {
 

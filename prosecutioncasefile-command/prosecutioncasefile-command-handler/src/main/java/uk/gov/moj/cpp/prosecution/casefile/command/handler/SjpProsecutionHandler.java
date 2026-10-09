@@ -15,8 +15,8 @@ import uk.gov.moj.cps.prosecutioncasefile.command.handler.AssignCase;
 import uk.gov.moj.cps.prosecutioncasefile.command.handler.AssociateEnterpriseId;
 import uk.gov.moj.cps.prosecutioncasefile.command.handler.UnassignCase;
 
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
+import jakarta.enterprise.inject.Instance;
+import jakarta.inject.Inject;
 
 @ServiceComponent(COMMAND_HANDLER)
 public class SjpProsecutionHandler extends BaseProsecutionCaseFileHandler {

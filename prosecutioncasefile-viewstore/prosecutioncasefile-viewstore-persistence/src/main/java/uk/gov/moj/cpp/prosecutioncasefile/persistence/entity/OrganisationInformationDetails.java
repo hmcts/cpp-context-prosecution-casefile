@@ -4,14 +4,11 @@ import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -22,11 +19,6 @@ public class OrganisationInformationDetails implements Serializable {
     @Id
     @Column(name = "organisation_information_id", unique = true, nullable = false)
     private String organisationInformationId;
-
-    @MapsId
-    @OneToOne(mappedBy = "organisationInformation")
-    @JoinColumn(name = "organisation_information_id")
-    private DefendantDetails defendantDetails;
 
     @Column(name = "organisation_name")
     private String organisationName;
@@ -65,14 +57,6 @@ public class OrganisationInformationDetails implements Serializable {
 
     public void setAddress(final AddressDetails address) {
         this.address = address;
-    }
-
-    public DefendantDetails getDefendantDetails() {
-        return defendantDetails;
-    }
-
-    public void setDefendantDetails(final DefendantDetails defendantDetails) {
-        this.defendantDetails = defendantDetails;
     }
 
     @Override

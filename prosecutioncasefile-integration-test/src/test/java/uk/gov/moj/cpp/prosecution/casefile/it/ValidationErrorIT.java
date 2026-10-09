@@ -62,6 +62,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.g
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.queryAndVerifyCaseErrors;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.queryAndVerifyCaseErrorsEmpty;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.queryAndVerifyCaseErrorsForDefendants;
+import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.queryAndVerifyCaseErrorsWithCaseMarkersErrors;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.queryAndVerifyCasesAreEmptyCollection;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.replaceExpectedValues;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub.stubOffencesForGenericOffence;
@@ -151,6 +152,10 @@ class ValidationErrorIT extends BaseIT {
         final String ccPayLoad = replaceValues(staticPayLoad, caseId.toString());
         final String expectedErrorsPayload = readFile("expected/expected_case_errors_whenInvalidAlcoholLevelMethod.json").replace("OFFENCE_ID1", offenceId1);
         initiateCCProsecutionHelper.initiateCCProsecution(ccPayLoad);
+
+        final Optional<JsonEnvelope> defendantValidationFailedEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_DEFENDANT_VALIDATION_FAILED);
+        assertThat(defendantValidationFailedEvent.isPresent(), is(true));
+
         initiateCCProsecutionHelper.thenEventsShouldBeRaised(new String[]{ PUBLIC_PROSECUTIONCASEFILE_DEFENDANT_VALIDATION_FAILED });
 
         ArrayValueMatcher<Object> arrayValueMatcher = new ArrayValueMatcher<>(new CustomComparator(
@@ -183,7 +188,7 @@ class ValidationErrorIT extends BaseIT {
         initiateCCProsecutionHelper.thenEventsShouldBeRaised(new String[]{PUBLIC_PROSECUTIONCASEFILE_DEFENDANT_VALIDATION_FAILED, PUBLIC_PROSECUTIONCASEFILE_CASE_VALIDATION_FAILED });
 
         final String expectedErrorsPayload = readFile("expected/expected_case_invalid_custody_status_errors.json");
-        queryAndVerifyCaseErrors(caseId, expectedErrorsPayload, getCustomComparator(caseId.toString(), "A", "2015-04-04", "032575aa-85e7-11e9-bc42-526af7764f64", "CASE_MARKER_IS_INVALID", "DEFENDANT_CUSTODY_STATUS_INVALID"));
+        queryAndVerifyCaseErrorsWithCaseMarkersErrors(caseId, expectedErrorsPayload, getCustomComparator(caseId.toString(), "A", "2015-04-04", "032575aa-85e7-11e9-bc42-526af7764f64", "CASE_MARKER_IS_INVALID", "DEFENDANT_CUSTODY_STATUS_INVALID"));
 
     }
 
@@ -252,7 +257,7 @@ class ValidationErrorIT extends BaseIT {
         initiateCCProsecutionHelper.thenEventsShouldBeRaised(new String[]{ PUBLIC_PROSECUTIONCASEFILE_DEFENDANT_VALIDATION_FAILED, PUBLIC_PROSECUTIONCASEFILE_CASE_VALIDATION_FAILED });
 
         final String expectedErrorsPayload = readFile("expected/expected_case_invalid_statement_of_facts.json");
-        queryAndVerifyCaseErrors(caseId, expectedErrorsPayload, getCustomComparator(caseId.toString(), "C", "2015-04-04", "032575aa-85e7-11e9-bc42-526af7764f64", "CASE_MARKER_IS_INVALID", "STATEMENT_OF_FACTS_REQUIRED"));
+        queryAndVerifyCaseErrorsWithCaseMarkersErrors(caseId, expectedErrorsPayload, getCustomComparator(caseId.toString(), "C", "2015-04-04", "032575aa-85e7-11e9-bc42-526af7764f64", "CASE_MARKER_IS_INVALID", "STATEMENT_OF_FACTS_REQUIRED"));
 
     }
 
@@ -331,7 +336,7 @@ class ValidationErrorIT extends BaseIT {
         assertErrorsExpected("expected/invalid_statement_of_facts_welsh_problem.json", privateEvent.get());
 
         final String expectedErrorsPayload = readFile("expected/case_invalid_statement_of_facts_welsh.json");
-        queryAndVerifyCaseErrors(caseId, expectedErrorsPayload, getCustomComparator(caseId.toString(), "C", "2015-04-04", "032575aa-85e7-11e9-bc42-526af7764f64", "CASE_MARKER_IS_INVALID", "STATEMENT_OF_FACTS_WELSH_REQUIRED"));
+        queryAndVerifyCaseErrorsWithCaseMarkersErrors(caseId, expectedErrorsPayload, getCustomComparator(caseId.toString(), "C", "2015-04-04", "032575aa-85e7-11e9-bc42-526af7764f64", "CASE_MARKER_IS_INVALID", "STATEMENT_OF_FACTS_WELSH_REQUIRED"));
 
     }
 
@@ -349,7 +354,7 @@ class ValidationErrorIT extends BaseIT {
         initiateCCProsecutionHelper.thenEventsShouldBeRaised(new String[]{ PUBLIC_PROSECUTIONCASEFILE_DEFENDANT_VALIDATION_FAILED });
 
         final String expectedErrorsPayload = readFile("expected/case_invalid_bail_condition.json");
-        queryAndVerifyCaseErrors(caseId, expectedErrorsPayload, getCustomComparator(caseId.toString(), "B", "2015-04-04", "", "BAIL_CONDITIONS_REQUIRED", "CASE_MARKER_IS_INVALID"));
+        queryAndVerifyCaseErrorsWithCaseMarkersErrors(caseId, expectedErrorsPayload, getCustomComparator(caseId.toString(), "B", "2015-04-04", "", "BAIL_CONDITIONS_REQUIRED", "CASE_MARKER_IS_INVALID"));
     }
 
     @Test
@@ -526,6 +531,9 @@ class ValidationErrorIT extends BaseIT {
 
         initiateCCProsecutionHelper.initiateCCProsecution(ccPayLoad);
 
+        final Optional<JsonEnvelope> defendantValidationFailedEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_DEFENDANT_VALIDATION_FAILED);
+        assertThat(defendantValidationFailedEvent.isPresent(), is(true));
+
         ArrayValueMatcher<Object> arrayValueMatcher = new ArrayValueMatcher<>(new CustomComparator(
                 JSONCompareMode.LENIENT,
                 new Customization("cases[0].id", (o1, o2) -> true),
@@ -557,6 +565,8 @@ class ValidationErrorIT extends BaseIT {
 
         initiateCCProsecutionHelper.initiateCCProsecution(ccPayLoad);
 
+        assertThat("command payload should target the case under test", ccPayLoad, CoreMatchers.containsString(caseId.toString()));
+
         queryAndVerifyCaseErrorsEmpty(caseId, expectedErrorsPayload, new CustomComparator(LENIENT,
                 new Customization("cases", (o1, o2) -> true)));
     }
@@ -572,6 +582,9 @@ class ValidationErrorIT extends BaseIT {
         final String expectedErrorsPayload = readFile("expected/expected_case_errors_whenInvalidDefendantDOB.json");
 
         initiateCCProsecutionHelper.initiateCCProsecution(ccPayLoad);
+
+        final Optional<JsonEnvelope> defendantValidationFailedEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_DEFENDANT_VALIDATION_FAILED);
+        assertThat(defendantValidationFailedEvent.isPresent(), is(true));
 
         ArrayValueMatcher<Object> arrayValueMatcher = new ArrayValueMatcher<>(new CustomComparator(
                 JSONCompareMode.LENIENT,
@@ -728,6 +741,8 @@ class ValidationErrorIT extends BaseIT {
 
         initiateCCProsecutionHelper.initiateCCProsecution(ccPayLoad);
 
+        final Optional<JsonEnvelope> defendantValidationFailedEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_DEFENDANT_VALIDATION_FAILED);
+        assertThat(defendantValidationFailedEvent.isPresent(), is(true));
 
         ArrayValueMatcher<Object> arrayValueMatcher = new ArrayValueMatcher<>(new CustomComparator(
                 JSONCompareMode.LENIENT,

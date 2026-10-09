@@ -11,7 +11,7 @@ import static uk.gov.justice.services.messaging.JsonObjects.createObjectBuilder;
 
 import java.util.function.Function;
 import java.util.stream.Stream;
-import javax.json.JsonValue;
+import jakarta.json.JsonValue;
 import uk.gov.justice.core.courts.AddCaseCourtDocument;
 import uk.gov.justice.core.courts.AddApplicationCourtDocument;
 import uk.gov.justice.core.courts.CaseDocument;
@@ -41,8 +41,8 @@ import uk.gov.moj.cps.prosecutioncasefile.domain.event.Defendant;
 
 import java.util.UUID;
 
-import javax.inject.Inject;
-import javax.json.JsonObject;
+import jakarta.inject.Inject;
+import jakarta.json.JsonObject;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.MaterialAddedV2;
 
 

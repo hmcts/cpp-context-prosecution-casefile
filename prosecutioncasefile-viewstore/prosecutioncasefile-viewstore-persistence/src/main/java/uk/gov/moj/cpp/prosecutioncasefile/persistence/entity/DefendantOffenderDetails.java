@@ -2,7 +2,7 @@ package uk.gov.moj.cpp.prosecutioncasefile.persistence.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.Embeddable;
+import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class DefendantOffenderDetails implements Serializable {

@@ -15,19 +15,19 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -91,7 +91,7 @@ public class DefendantDetails implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "defendant")
     private Set<OffenceDetails> offences;
 
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "defendant_individual_aliases", joinColumns = @JoinColumn(name = "defendant_id"))
     private List<IndividualAliasDetail> individualAliases;
 
@@ -142,13 +142,13 @@ public class DefendantDetails implements Serializable {
         this.defendantInitiationCode=defendantInitiationCode;
         setOffences(offences);
         if (personalInformation != null) {
-            personalInformation.setDefendantDetails(this);
+            personalInformation.setPersonalInformationId(defendantId);
         }
         if (selfDefinedInformation != null) {
-            selfDefinedInformation.setDefendantDetails(this);
+            selfDefinedInformation.setSelfDefinedInformationId(defendantId);
         }
-        if(organisationInformation !=null) {
-            organisationInformation.setDefendantDetails(this);
+        if (organisationInformation != null) {
+            organisationInformation.setOrganisationInformationId(defendantId);
         }
     }
 

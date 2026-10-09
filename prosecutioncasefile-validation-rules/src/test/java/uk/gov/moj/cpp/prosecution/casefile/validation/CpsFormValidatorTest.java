@@ -41,9 +41,9 @@ import uk.gov.moj.cps.prosecutioncasefile.domain.event.SubmissionStatus;
 
 import java.util.List;
 
-import javax.enterprise.inject.Instance;
-import javax.json.JsonArray;
-import javax.json.JsonObject;
+import jakarta.enterprise.inject.Instance;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonObject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -4,7 +4,7 @@ import uk.gov.justice.services.common.converter.Converter;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.PersonalInformation;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.PersonalInformationDetails;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 public class PersonalInformationToPersonalInformationDetails implements Converter<PersonalInformation, PersonalInformationDetails> {
 

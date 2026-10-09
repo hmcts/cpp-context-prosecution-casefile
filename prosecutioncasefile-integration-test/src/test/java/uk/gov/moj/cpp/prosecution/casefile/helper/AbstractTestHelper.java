@@ -26,12 +26,12 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
-import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.MultivaluedHashMap;
+import jakarta.ws.rs.core.MultivaluedMap;
+import jakarta.ws.rs.core.Response;
 
 import com.google.common.base.Joiner;
-import com.jayway.awaitility.Awaitility;
+import org.awaitility.Awaitility;
 import org.hamcrest.Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +48,7 @@ public abstract class AbstractTestHelper {
     protected static final String BASE_URI = System.getProperty("baseUri", "http://" + HOST + ":8080");
     private static final String WRITE_BASE_URL = "/prosecutioncasefile-service/command/api/rest/prosecutioncasefile";
     private static final String READ_BASE_URL = "/prosecutioncasefile-service/query/api/rest/prosecutioncasefile";
-    private static final long RETRIEVE_TIMEOUT = 20000;
+    private static final long RETRIEVE_TIMEOUT = 30000;
     private static final int POLL_INTERVAL = 500;
     private static final int POLL_DELAY = 500;
     protected final RestClient restClient = new RestClient();

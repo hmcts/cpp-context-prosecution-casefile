@@ -4,7 +4,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.containing;
 import static com.github.tomakehurst.wiremock.client.WireMock.findAll;
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
-import static com.jayway.awaitility.Awaitility.await;
+import static org.awaitility.Awaitility.await;
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.withJsonPath;
 import static java.lang.String.format;
 import static java.util.Objects.nonNull;
@@ -13,7 +13,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
-import static uk.gov.justice.services.messaging.JsonObjects.createReader;
+import static jakarta.json.Json.createReader;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -76,8 +76,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import javax.json.JsonObject;
-import javax.json.JsonReader;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
 
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import org.hamcrest.Matcher;
@@ -275,6 +275,7 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
         customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[0].offences[0].verdict.verdictType.description", (o1, o2) -> true));
         customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[0].offences[1].id", (o1, o2) -> true));
         customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[1].offences[0].id", (o1, o2) -> true));
+        customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[1].offences[0].verdict.offenceId", (o1, o2) -> true));
         customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[1].offences[1].id", (o1, o2) -> true));
         customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[1].offences[1].civilOffence", (o1, o2) -> true));
         customizedAsserts.add(new Customization("initiateCourtProceedings.prosecutionCases[0].defendants[2].offences[0].id", (o1, o2) -> true));

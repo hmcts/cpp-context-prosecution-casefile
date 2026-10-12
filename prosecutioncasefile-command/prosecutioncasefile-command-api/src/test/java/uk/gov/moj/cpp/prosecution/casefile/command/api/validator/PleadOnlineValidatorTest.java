@@ -252,6 +252,23 @@ public class PleadOnlineValidatorTest {
     }
 
     @Test
+    public void shouldReturnErrorWhenPleadOnlineHasGuiltyPleaWithWhitespaceOnlyEmploymentStatus() {
+        final PleadOnline pleadOnline = pleadOnline()
+                .withOffences(asList(offence().withPlea(GUILTY).build()))
+                .withPersonalDetails(personalDetails().build())
+                .withFinancialMeans(financialMeans()
+                        .withBenefits(Benefits.benefits().build())
+                        .withIncome(Income.income().build())
+                        .withEmploymentStatus(" \t ")
+                        .build())
+                .build();
+
+        final Map<String, List<String>> result = pleadOnlineValidator.validate(pleadOnline);
+        assertThat(result.values(), hasSize(1));
+        assertThat(result.get("FinancialMeansRequiredWhenPleadingGuilty"), hasSize(1));
+    }
+
+    @Test
     public void shouldReturnErrorWhenLegalEntityDefendantPleadsGuiltyWithoutFinancialMeans() {
         final PleadOnline pleadOnline = pleadOnline()
                 .withOffences(asList(offence().withPlea(GUILTY).build()))

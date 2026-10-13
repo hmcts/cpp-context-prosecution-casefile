@@ -9,5 +9,11 @@
 
         <jta-data-source>java:/DS.prosecutioncasefile</jta-data-source>
 
+        <properties>
+            <!-- SJP prosecutions legitimately share OffenceDetails entities across defendants.
+                 Hibernate 6 strict merge validation must be relaxed for this persistence unit. -->
+            <property name="hibernate.event.merge.entity_copy_observer" value="allow"/>
+        </properties>
+
     </persistence-unit>
 </persistence>

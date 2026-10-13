@@ -18,6 +18,7 @@ import static uk.gov.moj.cps.prosecutioncasefile.command.api.PleadOnline.pleadOn
 import uk.gov.justice.core.courts.Offence;
 import uk.gov.justice.core.courts.ProsecutionCase;
 import uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.Benefits;
+import uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.Income;
 import uk.gov.moj.cps.prosecutioncasefile.command.api.PleadOnline;
 
 import java.util.List;
@@ -27,6 +28,8 @@ import javax.json.JsonObject;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -214,5 +217,34 @@ public class PleadOnlineValidatorTest {
         assertThat(result.values(), hasSize(0));
     }
 
+    @Test
+    public void shouldReturnErrorWhenGuiltyPleaHasEmptyEmploymentStatus() {
+        final Map<String, List<String>> result = pleadOnlineValidator.validate(guiltyPleaWithEmploymentStatus(""));
+
+        assertThat(result.values(), hasSize(1));
+        assertThat(result.get("FinancialMeansRequiredWhenPleadingGuilty"), hasSize(1));
+    }
+
+    // J17 used org.drools.core.util.StringUtils.isEmpty, which treats whitespace-only as empty (isBlank semantics)
+    @ParameterizedTest
+    @ValueSource(strings = {" ", "   ", "\t", "\n", " \t\n "})
+    public void shouldReturnErrorWhenGuiltyPleaHasBlankEmploymentStatus(final String employmentStatus) {
+        final Map<String, List<String>> result = pleadOnlineValidator.validate(guiltyPleaWithEmploymentStatus(employmentStatus));
+
+        assertThat(result.values(), hasSize(1));
+        assertThat(result.get("FinancialMeansRequiredWhenPleadingGuilty"), hasSize(1));
+    }
+
+    private static PleadOnline guiltyPleaWithEmploymentStatus(final String employmentStatus) {
+        return pleadOnline()
+                .withOffences(asList(offence().withPlea(GUILTY).build()))
+                .withPersonalDetails(personalDetails().build())
+                .withFinancialMeans(financialMeans()
+                        .withBenefits(Benefits.benefits().build())
+                        .withIncome(Income.income().build())
+                        .withEmploymentStatus(employmentStatus)
+                        .build())
+                .build();
+    }
 
 }

@@ -8,6 +8,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.OrganisationUnitWithCourtroomReferenceData;
 
+import java.util.Map;
+
 import jakarta.json.JsonObject;
 
 import org.junit.jupiter.api.Test;
@@ -136,5 +138,52 @@ public class RefDataHelperTest {
         final OrganisationUnitWithCourtroomReferenceData result = RefDataHelper.asOrganisationUnitWithCourtroomRefData().apply(json);
 
         assertThat(result.getIsWelsh(), is(nullValue()));
+    }
+
+    @Test
+    public void shouldCarryNonSchemaFieldsInAdditionalProperties() {
+        final JsonObject json = createObjectBuilder()
+                .add("id", "abc")
+                .add("oucode", "C55BN00")
+                .add("courtLocationCode", "0423")
+                .add("courtRoom", createObjectBuilder()
+                        .add("id", "9e4932f7-97b2-3010-b942-ddd2624e4dd8")
+                        .add("courtroomId", 2330)
+                        .add("venueId", 180))
+                .build();
+
+        final OrganisationUnitWithCourtroomReferenceData result = RefDataHelper.asOrganisationUnitWithCourtroomRefData().apply(json);
+
+        assertThat(result.getAdditionalProperties(), is(Map.of("courtLocationCode", "0423")));
+        assertThat(result.getCourtRoom().getAdditionalProperties(), is(Map.of("venueId", 180)));
+    }
+
+    @Test
+    public void shouldCoerceStringCourtroomIdAndNumericOucode() {
+        final JsonObject json = createObjectBuilder()
+                .add("id", "abc")
+                .add("oucode", 123)
+                .add("courtRoom", createObjectBuilder()
+                        .add("id", "9e4932f7-97b2-3010-b942-ddd2624e4dd8")
+                        .add("courtroomId", "2330"))
+                .build();
+
+        final OrganisationUnitWithCourtroomReferenceData result = RefDataHelper.asOrganisationUnitWithCourtroomRefData().apply(json);
+
+        assertThat(result.getOucode(), is("123"));
+        assertThat(result.getCourtRoom().getCourtroomId(), is(2330));
+    }
+
+    @Test
+    public void shouldReturnNullWhenPayloadCannotBeMapped() {
+        final JsonObject json = createObjectBuilder()
+                .add("id", "abc")
+                .add("oucode", "C55BN00")
+                .add("courtRoom", "Courtroom 01")
+                .build();
+
+        final OrganisationUnitWithCourtroomReferenceData result = RefDataHelper.asOrganisationUnitWithCourtroomRefData().apply(json);
+
+        assertThat(result, is(nullValue()));
     }
 }

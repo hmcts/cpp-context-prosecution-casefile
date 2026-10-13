@@ -21,6 +21,7 @@ import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import jakarta.persistence.EntityManager;
@@ -37,15 +38,16 @@ import org.junit.jupiter.api.Test;
  * J17/J25 parity test for PR #172 review findings PCF-02 and PCF-03.
  *
  * The same scenarios exist on the J17 copy (main, Hibernate 5, DeltaSpike, production persistence unit).
- * Here the test persistence unit is opened with the J25 production persistence.xml properties, because the
- * shared test persistence unit does not carry them. Run with -Dpcf.entityCopyObserver=disallow to see the
- * Hibernate 6 behaviour without the PCF-02 setting.
+ * Here the test persistence unit is used. Like the J25 production persistence.xml it does not set
+ * hibernate.event.merge.entity_copy_observer, so Hibernate's default (disallow) applies, as it does on J17.
+ * Run with -Dpcf.entityCopyObserver=allow to see the Hibernate 6 behaviour with the relaxed PCF-02 setting.
  */
 public class CaseGraphPersistenceParityTest {
 
     private static final String TEST_PERSISTENCE_UNIT = "prosecutioncasefile-test-persistence-unit";
-    private static final Map<String, String> PRODUCTION_PERSISTENCE_UNIT_PROPERTIES = Map.of(
-            "hibernate.event.merge.entity_copy_observer", System.getProperty("pcf.entityCopyObserver", "allow"));
+    private static final Map<String, String> PRODUCTION_PERSISTENCE_UNIT_PROPERTIES = Optional.ofNullable(System.getProperty("pcf.entityCopyObserver"))
+            .map(entityCopyObserver -> Map.of("hibernate.event.merge.entity_copy_observer", entityCopyObserver))
+            .orElse(Map.of());
 
     private static EntityManagerFactory entityManagerFactory;
 

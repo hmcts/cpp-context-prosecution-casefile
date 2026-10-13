@@ -32,6 +32,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 import jakarta.persistence.EntityManager;
@@ -55,8 +56,9 @@ import org.junit.jupiter.api.Test;
 public class ViewstoreMappingParityTest {
 
     private static final String TEST_PERSISTENCE_UNIT = "prosecutioncasefile-test-persistence-unit";
-    private static final Map<String, String> PRODUCTION_PERSISTENCE_UNIT_PROPERTIES = Map.of(
-            "hibernate.event.merge.entity_copy_observer", System.getProperty("pcf.entityCopyObserver", "allow"));
+    private static final Map<String, String> PRODUCTION_PERSISTENCE_UNIT_PROPERTIES = Optional.ofNullable(System.getProperty("pcf.entityCopyObserver"))
+            .map(entityCopyObserver -> Map.of("hibernate.event.merge.entity_copy_observer", entityCopyObserver))
+            .orElse(Map.of());
 
     private static EntityManagerFactory entityManagerFactory;
 

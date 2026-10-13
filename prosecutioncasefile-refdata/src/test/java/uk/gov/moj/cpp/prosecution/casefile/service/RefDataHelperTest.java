@@ -1,11 +1,5 @@
 package uk.gov.moj.cpp.prosecution.casefile.service;
 
-import static jakarta.json.Json.createObjectBuilder;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.OrganisationUnitWithCourtroomReferenceData;
 
 import java.util.Map;
@@ -14,10 +8,16 @@ import jakarta.json.JsonObject;
 
 import org.junit.jupiter.api.Test;
 
-public class RefDataHelperTest {
+import static jakarta.json.Json.createObjectBuilder;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+class RefDataHelperTest {
 
     @Test
-    public void shouldMapAllRequiredFieldsFromJsonToOrganisationUnitWithCourtroomReferenceData() {
+    void shouldMapAllRequiredFieldsFromJsonToOrganisationUnitWithCourtroomReferenceData() {
         final JsonObject json = createObjectBuilder()
                 .add("id", "f8254db1-1683-483e-afb3-b87fde5a0a26")
                 .add("oucode", "C55BN00")
@@ -53,7 +53,7 @@ public class RefDataHelperTest {
     }
 
     @Test
-    public void shouldMapNestedCourtRoomWhenPresent() {
+    void shouldMapNestedCourtRoomWhenPresent() {
         final JsonObject json = createObjectBuilder()
                 .add("id", "f8254db1-1683-483e-afb3-b87fde5a0a26")
                 .add("oucode", "C55BN00")
@@ -80,7 +80,7 @@ public class RefDataHelperTest {
     }
 
     @Test
-    public void shouldLeaveCourtRoomNullWhenAbsentFromJson() {
+    void shouldLeaveCourtRoomNullWhenAbsentFromJson() {
         final JsonObject json = createObjectBuilder()
                 .add("id", "f8254db1-1683-483e-afb3-b87fde5a0a26")
                 .add("oucode", "C55BN00")
@@ -100,7 +100,7 @@ public class RefDataHelperTest {
     }
 
     @Test
-    public void shouldMapIsWelshWhenPresent() {
+    void shouldMapIsWelshWhenPresent() {
         final JsonObject json = createObjectBuilder()
                 .add("id", "abc")
                 .add("oucode", "C55BN00")
@@ -121,7 +121,7 @@ public class RefDataHelperTest {
     }
 
     @Test
-    public void shouldLeaveIsWelshNullWhenAbsentFromJson() {
+    void shouldLeaveIsWelshNullWhenAbsentFromJson() {
         final JsonObject json = createObjectBuilder()
                 .add("id", "abc")
                 .add("oucode", "C55BN00")
@@ -141,7 +141,7 @@ public class RefDataHelperTest {
     }
 
     @Test
-    public void shouldCarryNonSchemaFieldsInAdditionalProperties() {
+    void shouldCarryNonSchemaFieldsInAdditionalProperties() {
         final JsonObject json = createObjectBuilder()
                 .add("id", "abc")
                 .add("oucode", "C55BN00")
@@ -159,7 +159,7 @@ public class RefDataHelperTest {
     }
 
     @Test
-    public void shouldCoerceStringCourtroomIdAndNumericOucode() {
+    void shouldCoerceStringCourtroomIdAndNumericOucode() {
         final JsonObject json = createObjectBuilder()
                 .add("id", "abc")
                 .add("oucode", 123)
@@ -175,7 +175,7 @@ public class RefDataHelperTest {
     }
 
     @Test
-    public void shouldReturnNullWhenPayloadCannotBeMapped() {
+    void shouldReturnNullWhenPayloadCannotBeMapped() {
         final JsonObject json = createObjectBuilder()
                 .add("id", "abc")
                 .add("oucode", "C55BN00")

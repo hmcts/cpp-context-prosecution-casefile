@@ -252,7 +252,7 @@ public class PleadOnlineValidatorTest {
     }
 
     @Test
-    public void shouldReturnErrorWhenPleadOnlineHasGuiltyPleaWithWhitespaceOnlyEmploymentStatus() {
+    void shouldReturnErrorWhenPleadOnlineHasGuiltyPleaWithWhitespaceOnlyEmploymentStatus() {
         final PleadOnline pleadOnline = pleadOnline()
                 .withOffences(asList(offence().withPlea(GUILTY).build()))
                 .withPersonalDetails(personalDetails().build())

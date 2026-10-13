@@ -5,7 +5,6 @@ import static java.nio.file.StandardOpenOption.APPEND;
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -25,6 +24,7 @@ import static uk.gov.moj.cpp.systemidmapper.client.ResultCode.OK;
 import uk.gov.justice.services.core.dispatcher.SystemUserProvider;
 import uk.gov.moj.cpp.enterpriseid.generator.EnterpriseIdGenerator;
 import uk.gov.moj.cpp.enterpriseid.generator.EnterpriseIdGeneratorImpl;
+import uk.gov.moj.cpp.enterpriseid.mapper.EnterpriseIdAllocationException;
 import uk.gov.moj.cpp.enterpriseid.mapper.EnterpriseIdServiceImpl;
 import uk.gov.moj.cpp.systemidmapper.client.AdditionResponse;
 import uk.gov.moj.cpp.systemidmapper.client.ResultCode;
@@ -43,7 +43,6 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -64,8 +63,10 @@ import org.slf4j.Logger;
  * PCF-08 parity characterisation (J17 golden master) of the enterprise-id allocation used by
  * {@link SjpProsecutionProcessor}. J17 runs the released {@code system-enterprise-id:0.0.3} jar;
  * J25 runs the vendored {@code prosecutioncasefile-system-enterprise-id} module (same packages and
- * API). Every assertion encodes the J17 result. The method bodies between the SCENARIOS markers are
- * identical in the J17 and J25 copies.
+ * API). Every assertion encodes the J17 result, except the tests marked "Intended J25 deviation":
+ * the vendored module bounds retries at 10, uses SecureRandom, fails fast without a system user and is
+ * @ApplicationScoped. Those tests assert the J25 result and their comments record the J17 one; all
+ * other method bodies between the SCENARIOS markers are identical in the J17 and J25 copies.
  */
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -162,14 +163,15 @@ public class EnterpriseIdParityTest {
         verify(logger, times(3)).info(anyString());
     }
 
+    // Intended J25 deviation. J17: the system user was read once per attempt (4 times here).
     @Test
-    public void allocation_threeConflictsThenOk_readsTheSystemUserOncePerAttempt() {
+    public void allocation_threeConflictsThenOk_readsTheSystemUserOnce() {
         when(idMapperClient.add(any(SystemIdMap.class), any(UUID.class)))
                 .thenReturn(response(CONFLICT), response(CONFLICT), response(CONFLICT), response(OK));
 
         enterpriseIdService.enterpriseIdForCase(CASE_ID);
 
-        verify(systemUserProvider, times(4)).getContextSystemUserId();
+        verify(systemUserProvider, times(1)).getContextSystemUserId();
     }
 
     @Test
@@ -184,8 +186,9 @@ public class EnterpriseIdParityTest {
         verify(idGenerator, times(10)).enterpriseId();
     }
 
+    // Intended J25 deviation. J17: retries were unbounded, so this succeeded on the eleventh attempt.
     @Test
-    public void allocation_tenConflictsThenOk_succeedsOnTheEleventhAttempt() {
+    public void allocation_tenConflictsThenOk_failsAfterTenAttempts() {
         when(idMapperClient.add(any(SystemIdMap.class), any(UUID.class))).thenReturn(response(CONFLICT),
                 response(CONFLICT), response(CONFLICT), response(CONFLICT), response(CONFLICT), response(CONFLICT),
                 response(CONFLICT), response(CONFLICT), response(CONFLICT), response(CONFLICT), response(OK));
@@ -193,12 +196,13 @@ public class EnterpriseIdParityTest {
         final Throwable outcome = outcomeOf(() -> enterpriseIdService.enterpriseIdForCase(CASE_ID));
         record("tenConflictsThenOk", outcome, generated.get());
 
-        assertThat(String.valueOf(outcome), outcome == null, is(true));
-        verify(idGenerator, times(11)).enterpriseId();
+        assertThat(String.valueOf(outcome), outcome, instanceOf(EnterpriseIdAllocationException.class));
+        verify(idGenerator, times(10)).enterpriseId();
     }
 
+    // Intended J25 deviation. J17: still retrying when the 1000-attempt budget ran out.
     @Test
-    public void allocation_alwaysConflict_isStillRetryingAfterOneThousandAttempts() {
+    public void allocation_alwaysConflict_stopsAfterTenAttempts() {
         when(idMapperClient.add(any(SystemIdMap.class), any(UUID.class))).thenReturn(response(CONFLICT));
         doAnswer(invocation -> {
             if (generated.incrementAndGet() > ATTEMPT_BUDGET) {
@@ -211,37 +215,40 @@ public class EnterpriseIdParityTest {
                 () -> outcomeOf(() -> enterpriseIdService.enterpriseIdForCase(CASE_ID)));
         record("alwaysConflictBudget" + ATTEMPT_BUDGET, outcome, generated.get());
 
-        assertThat(String.valueOf(outcome), outcome, instanceOf(AttemptBudgetExhausted.class));
-        assertThat(generated.get(), is(ATTEMPT_BUDGET + 1));
-        verify(idMapperClient, times(ATTEMPT_BUDGET)).add(any(SystemIdMap.class), any(UUID.class));
+        assertThat(String.valueOf(outcome), outcome, instanceOf(EnterpriseIdAllocationException.class));
+        assertThat(generated.get(), is(10));
+        verify(idMapperClient, times(10)).add(any(SystemIdMap.class), any(UUID.class));
     }
 
+    // Intended J25 deviation. J17: the retry recursed without a bound and ended in StackOverflowError.
     @Test
-    public void allocation_alwaysConflict_unbounded_endsInStackOverflowError() {
+    public void allocation_alwaysConflict_unbounded_failsWithEnterpriseIdAllocationException() {
         when(idMapperClient.add(any(SystemIdMap.class), any(UUID.class))).thenReturn(response(CONFLICT));
 
         final Throwable outcome = assertTimeoutPreemptively(Duration.ofSeconds(120),
                 () -> outcomeOf(() -> enterpriseIdService.enterpriseIdForCase(CASE_ID)));
         record("alwaysConflictUnbounded", outcome, generated.get());
 
-        assertThat(String.valueOf(outcome), outcome, instanceOf(StackOverflowError.class));
-        assertThat(generated.get(), greaterThan(ATTEMPT_BUDGET));
+        assertThat(String.valueOf(outcome), outcome, instanceOf(EnterpriseIdAllocationException.class));
+        assertThat(outcome.getMessage(), is("Failed to allocate a unique enterprise ID for case '" + CASE_ID + "' after 10 attempts"));
     }
 
+    // Intended J25 deviation. J17: generated one id, then Optional.get() threw NoSuchElementException.
     @Test
-    public void allocation_noContextSystemUser_throwsNoSuchElementExceptionAfterGeneratingOneId() {
+    public void allocation_noContextSystemUser_throwsIllegalStateExceptionBeforeGeneratingAnId() {
         doReturn(Optional.empty()).when(systemUserProvider).getContextSystemUserId();
 
-        assertThrows(NoSuchElementException.class, () -> enterpriseIdService.enterpriseIdForCase(CASE_ID));
+        assertThrows(IllegalStateException.class, () -> enterpriseIdService.enterpriseIdForCase(CASE_ID));
 
-        verify(idGenerator, times(1)).enterpriseId();
+        verifyNoInteractions(idGenerator);
         verifyNoInteractions(idMapperClient);
     }
 
+    // Intended J25 deviation. J17: no class annotations.
     @Test
-    public void cdi_serviceAndGeneratorDeclareNoClassAnnotations() {
-        assertThat(annotationNames(EnterpriseIdServiceImpl.class), is(Collections.<String>emptyList()));
-        assertThat(annotationNames(EnterpriseIdGeneratorImpl.class), is(Collections.<String>emptyList()));
+    public void cdi_serviceAndGeneratorAreApplicationScoped() {
+        assertThat(annotationNames(EnterpriseIdServiceImpl.class), is(asList("jakarta.enterprise.context.ApplicationScoped")));
+        assertThat(annotationNames(EnterpriseIdGeneratorImpl.class), is(asList("jakarta.enterprise.context.ApplicationScoped")));
     }
 
     @Test
@@ -253,9 +260,10 @@ public class EnterpriseIdParityTest {
                 "systemUserProvider:SystemUserProvider")));
     }
 
+    // Intended J25 deviation. J17: one java.util.Random field.
     @Test
-    public void cdi_generatorHoldsOneJavaUtilRandom() {
-        assertThat(instanceFields(EnterpriseIdGeneratorImpl.class), is(asList("random:Random")));
+    public void cdi_generatorHoldsOneSecureRandom() {
+        assertThat(instanceFields(EnterpriseIdGeneratorImpl.class), is(asList("secureRandom:SecureRandom")));
     }
 
     @Test

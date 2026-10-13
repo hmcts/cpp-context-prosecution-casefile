@@ -284,7 +284,7 @@ public class PleadOnlineValidatorTest {
     }
 
     @Test
-    void shouldReturnErrorWhenGuiltyPleaHasEmptyEmploymentStatus() {
+    public void shouldReturnErrorWhenGuiltyPleaHasEmptyEmploymentStatus() {
         final Map<String, List<String>> result = pleadOnlineValidator.validate(guiltyPleaWithEmploymentStatus(""));
 
         assertThat(result.values(), hasSize(1));
@@ -294,7 +294,7 @@ public class PleadOnlineValidatorTest {
     // J17 used org.drools.core.util.StringUtils.isEmpty, which treats whitespace-only as empty (isBlank semantics)
     @ParameterizedTest
     @ValueSource(strings = {" ", "   ", "\t", "\n", " \t\n "})
-    void shouldReturnErrorWhenGuiltyPleaHasBlankEmploymentStatus(final String employmentStatus) {
+    public void shouldReturnErrorWhenGuiltyPleaHasBlankEmploymentStatus(final String employmentStatus) {
         final Map<String, List<String>> result = pleadOnlineValidator.validate(guiltyPleaWithEmploymentStatus(employmentStatus));
 
         assertThat(result.values(), hasSize(1));

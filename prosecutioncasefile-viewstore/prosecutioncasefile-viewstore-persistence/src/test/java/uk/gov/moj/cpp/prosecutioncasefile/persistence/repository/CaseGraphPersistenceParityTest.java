@@ -1,27 +1,5 @@
 package uk.gov.moj.cpp.prosecutioncasefile.persistence.repository;
 
-import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.CaseDetails;
-import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.DefendantDetails;
-import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.IndividualAliasDetail;
-import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.OffenceDetails;
-
-import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
-
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
-
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.UUID.randomUUID;
@@ -34,20 +12,40 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
+import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.CaseDetails;
+import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.DefendantDetails;
+import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.IndividualAliasDetail;
+import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.OffenceDetails;
+
+import java.lang.reflect.Field;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 /**
  * J17/J25 parity test for PR #172 review findings PCF-02 and PCF-03.
  *
  * The same scenarios exist on the J17 copy (main, Hibernate 5, DeltaSpike, production persistence unit).
- * Here the test persistence unit is used. Like the J25 production persistence.xml it does not set
- * hibernate.event.merge.entity_copy_observer, so Hibernate's default (disallow) applies, as it does on J17.
- * Run with -Dpcf.entityCopyObserver=allow to see the Hibernate 6 behaviour with the relaxed PCF-02 setting.
+ * Here the test persistence unit is opened with the J25 production persistence.xml properties, because the
+ * shared test persistence unit does not carry them. Run with -Dpcf.entityCopyObserver=disallow to see the
+ * Hibernate 6 behaviour without the PCF-02 setting.
  */
-class CaseGraphPersistenceParityTest {
+public class CaseGraphPersistenceParityTest {
 
     private static final String TEST_PERSISTENCE_UNIT = "prosecutioncasefile-test-persistence-unit";
-    private static final Map<String, String> PRODUCTION_PERSISTENCE_UNIT_PROPERTIES = Optional.ofNullable(System.getProperty("pcf.entityCopyObserver"))
-            .map(entityCopyObserver -> Map.of("hibernate.event.merge.entity_copy_observer", entityCopyObserver))
-            .orElse(Map.of());
+    private static final Map<String, String> PRODUCTION_PERSISTENCE_UNIT_PROPERTIES = Map.of(
+            "hibernate.event.merge.entity_copy_observer", System.getProperty("pcf.entityCopyObserver", "allow"));
 
     private static EntityManagerFactory entityManagerFactory;
 
@@ -57,17 +55,17 @@ class CaseGraphPersistenceParityTest {
     private final BusinessValidationErrorRepository businessValidationErrorRepository = new BusinessValidationErrorRepository();
 
     @BeforeAll
-    static void createEntityManagerFactory() {
+    public static void createEntityManagerFactory() {
         entityManagerFactory = Persistence.createEntityManagerFactory(TEST_PERSISTENCE_UNIT, PRODUCTION_PERSISTENCE_UNIT_PROPERTIES);
     }
 
     @AfterAll
-    static void closeEntityManagerFactory() {
+    public static void closeEntityManagerFactory() {
         entityManagerFactory.close();
     }
 
     @BeforeEach
-    void beginTransaction() throws Exception {
+    public void beginTransaction() throws Exception {
         entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
         injectEntityManagerInto(caseDetailsRepository);
@@ -76,7 +74,7 @@ class CaseGraphPersistenceParityTest {
     }
 
     @AfterEach
-    void rollbackTransaction() {
+    public void rollbackTransaction() {
         if (entityManager.getTransaction().isActive()) {
             entityManager.getTransaction().rollback();
         }
@@ -85,7 +83,7 @@ class CaseGraphPersistenceParityTest {
 
     // PCF-03: individualAliases became an EAGER bag next to the EAGER offences set (J17: LAZY)
     @Test
-    void pcf03_shouldNotDuplicateAliasesWhenCaseIsReloaded() {
+    public void pcf03_shouldNotDuplicateAliasesWhenCaseIsReloaded() {
         final UUID caseId = randomUUID();
         caseDetailsRepository.save(caseWith(caseId, defendant("D1-" + caseId, asList(alias("ALIAS-A"), alias("ALIAS-B")),
                 offence(randomUUID(), "CODE-1"), offence(randomUUID(), "CODE-2"))));
@@ -100,7 +98,7 @@ class CaseGraphPersistenceParityTest {
 
     // PCF-03: same check through DefendantRepository.findBy (DefendantChangedListener, DefendantIdpcAddedListener)
     @Test
-    void pcf03_shouldNotDuplicateAliasesWhenDefendantIsReloaded() {
+    public void pcf03_shouldNotDuplicateAliasesWhenDefendantIsReloaded() {
         final UUID caseId = randomUUID();
         final String defendantId = "D1-" + caseId;
         caseDetailsRepository.save(caseWith(caseId, defendant(defendantId, asList(alias("ALIAS-A"), alias("ALIAS-B")),
@@ -115,7 +113,7 @@ class CaseGraphPersistenceParityTest {
 
     // PCF-03: same check through the JPQL load path (findCaseDetailsByProsecutionCaseReference)
     @Test
-    void pcf03_shouldNotDuplicateAliasesWhenCaseIsQueriedByProsecutionReference() {
+    public void pcf03_shouldNotDuplicateAliasesWhenCaseIsQueriedByProsecutionReference() {
         final UUID caseId = randomUUID();
         final String prosecutionCaseReference = "URN-" + caseId;
         final CaseDetails caseDetails = caseWith(caseId, defendant("D1-" + caseId, asList(alias("ALIAS-A"), alias("ALIAS-B")),
@@ -134,7 +132,7 @@ class CaseGraphPersistenceParityTest {
     // PCF-02: the persistence.xml comment says SJP prosecutions share OffenceDetails across defendants.
     // One offence row can only belong to one defendant, so a successful merge means one defendant silently loses it.
     @Test
-    void pcf02_shouldFailLoudlyWhenTwoDefendantsCarryTheSameOffenceId() {
+    public void pcf02_shouldFailLoudlyWhenTwoDefendantsCarryTheSameOffenceId() {
         final UUID caseId = randomUUID();
         final UUID sharedOffenceId = randomUUID();
         final CaseDetails caseDetails = caseWith(caseId,
@@ -153,7 +151,7 @@ class CaseGraphPersistenceParityTest {
 
     // PCF-02: SjpProsecutionReceivedListener re-receive path - find, remove defendants and case, save the new graph, in one transaction
     @Test
-    void pcf02_shouldReplaceExistingCaseWhenSjpProsecutionIsReceivedAgain() {
+    public void pcf02_shouldReplaceExistingCaseWhenSjpProsecutionIsReceivedAgain() {
         final UUID caseId = randomUUID();
         final UUID offenceId = randomUUID();
         final String defendantId = "D1-" + caseId;
@@ -182,7 +180,7 @@ class CaseGraphPersistenceParityTest {
     // existing defendant already owns, as ResolvedCasesIT.shouldResolveCaseWhenInvalidOffenceAlcoholLevelMethodAndErrorCorrectionSubmitted sends.
     // This path cascades a persist on flush, not a merge, so entity_copy_observer does not apply.
     @Test
-    void pcf02_shouldFailWhenAddedDefendantReusesAnExistingOffenceId() {
+    public void pcf02_shouldFailWhenAddedDefendantReusesAnExistingOffenceId() {
         final UUID caseId = randomUUID();
         final UUID sharedOffenceId = randomUUID();
         caseDetailsRepository.save(caseWith(caseId, defendant(randomUUID().toString(), emptyList(), offence(sharedOffenceId, "CODE-D1"))));

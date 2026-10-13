@@ -1,5 +1,15 @@
 package uk.gov.moj.cpp.prosecution.casefile.event.listener;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.nio.file.StandardOpenOption.APPEND;
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.time.ZonedDateTime.now;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.not;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static uk.gov.justice.services.test.utils.core.matchers.JsonSchemaValidationMatcher.isValidJsonEnvelopeForSchema;
+import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithRandomUUID;
+
 import uk.gov.justice.schema.catalog.CatalogObjectFactory;
 import uk.gov.justice.schema.catalog.RawCatalog;
 import uk.gov.justice.services.messaging.JsonEnvelope;
@@ -34,16 +44,6 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.nio.file.StandardOpenOption.APPEND;
-import static java.nio.file.StandardOpenOption.CREATE;
-import static java.time.ZonedDateTime.now;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.not;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static uk.gov.justice.services.test.utils.core.matchers.JsonSchemaValidationMatcher.isValidJsonEnvelopeForSchema;
-import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithRandomUUID;
-
 /**
  * PCF-05 parity probe (J17 golden vs J25). Jakarta stand-in for MI's
  * {@code ProsecutionCaseFileSchemaContractValidationTest} (mireportdata-prosecutioncasefile-event-listener
@@ -57,7 +57,7 @@ import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderF
  * workspace, else the classpath {@code /schema.validation/} (present on J17 via the unpack). With none of
  * them the test is skipped, not passed.
  */
-class MiSchemaContractParityTest {
+public class MiSchemaContractParityTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MiSchemaContractParityTest.class);
     private static final String PAYLOAD_DIR_PROPERTY = "mi.contract.payload.dir";
@@ -77,42 +77,42 @@ class MiSchemaContractParityTest {
     private static final Pattern ID = Pattern.compile("\"\\$?id\"\\s*:\\s*\"(https?://[^\"]+)\"");
 
     @Test
-    void miSamplePayloadShouldValidateAgainstPcfSchema_ProsecutionCaseReceived() throws IOException {
+    public void miSamplePayloadShouldValidateAgainstPcfSchema_ProsecutionCaseReceived() throws IOException {
         shouldValidateMiSamplePayload("prosecutioncasefile.events.cc-case-received");
     }
 
     @Test
-    void miSamplePayloadShouldValidateAgainstPcfSchema_ProsecutionCaseReceivedWithWarnings() throws IOException {
+    public void miSamplePayloadShouldValidateAgainstPcfSchema_ProsecutionCaseReceivedWithWarnings() throws IOException {
         shouldValidateMiSamplePayload("prosecutioncasefile.events.cc-case-received-with-warnings");
     }
 
     @Test
-    void miSamplePayloadShouldValidateAgainstPcfSchema_SjpProsecutionReceived() throws IOException {
+    public void miSamplePayloadShouldValidateAgainstPcfSchema_SjpProsecutionReceived() throws IOException {
         shouldValidateMiSamplePayload("prosecutioncasefile.events.sjp-prosecution-received");
     }
 
     @Test
-    void miSamplePayloadShouldValidateAgainstPcfSchema_SjpProsecutionReceivedWithWarnings() throws IOException {
+    public void miSamplePayloadShouldValidateAgainstPcfSchema_SjpProsecutionReceivedWithWarnings() throws IOException {
         shouldValidateMiSamplePayload("prosecutioncasefile.events.sjp-prosecution-received-with-warnings");
     }
 
     @Test
-    void miSamplePayloadShouldValidateAgainstPcfSchema_CaseValidationFailed() throws IOException {
+    public void miSamplePayloadShouldValidateAgainstPcfSchema_CaseValidationFailed() throws IOException {
         shouldValidateMiSamplePayload("prosecutioncasefile.events.case-validation-failed");
     }
 
     @Test
-    void miSamplePayloadShouldValidateAgainstPcfSchema_SjpValidationFailed() throws IOException {
+    public void miSamplePayloadShouldValidateAgainstPcfSchema_SjpValidationFailed() throws IOException {
         shouldValidateMiSamplePayload("prosecutioncasefile.events.sjp-validation-failed");
     }
 
     @Test
-    void miSamplePayloadShouldValidateAgainstPcfSchema_DefendantValidationFailed() throws IOException {
+    public void miSamplePayloadShouldValidateAgainstPcfSchema_DefendantValidationFailed() throws IOException {
         shouldValidateMiSamplePayload("prosecutioncasefile.events.defendant-validation-failed");
     }
 
     @Test
-    void miSamplePayloadShouldValidateAgainstPcfSchema_CaseFiltered() throws IOException {
+    public void miSamplePayloadShouldValidateAgainstPcfSchema_CaseFiltered() throws IOException {
         shouldValidateMiSamplePayload("prosecutioncasefile.events.case-filtered");
     }
 
@@ -123,14 +123,14 @@ class MiSchemaContractParityTest {
     }
 
     @Test
-    void schemaCheckShouldRejectPayloadMissingRequiredField() throws IOException {
+    public void schemaCheckShouldRejectPayloadMissingRequiredField() throws IOException {
         final JsonObject withoutRequired = copyExcept(miPayload("prosecutioncasefile.events.cc-case-received"), "prosecutionWithReferenceData").build();
 
         assertThat(envelope("prosecutioncasefile.events.cc-case-received", withoutRequired), not(isValidJsonEnvelopeForSchema()));
     }
 
     @Test
-    void schemaCheckShouldResolveExternalUuidDefinition() throws IOException {
+    public void schemaCheckShouldResolveExternalUuidDefinition() throws IOException {
         // caseId is "$ref": http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid
         final JsonObject badCaseId = copyExcept(miPayload("prosecutioncasefile.events.case-filtered"), "caseId")
                 .add("caseId", "not-a-uuid")
@@ -145,7 +145,7 @@ class MiSchemaContractParityTest {
      * so the J17 and J25 closures can be compared with diff -r.
      */
     @Test
-    void dumpResolvedSchemaClosureForCrossVersionDiff() throws Exception {
+    public void dumpResolvedSchemaClosureForCrossVersionDiff() throws Exception {
         final RawCatalog rawCatalog = new CatalogObjectFactory().rawCatalog();
         final Path out = Paths.get("target", "mi-contract-closure");
         Files.createDirectories(out);

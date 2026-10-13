@@ -1,5 +1,18 @@
 package uk.gov.moj.cpp.prosecutioncasefile.query.view.service;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.nio.file.StandardOpenOption.APPEND;
+import static java.nio.file.StandardOpenOption.CREATE;
+import static java.util.Optional.empty;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.repository.BusinessValidationErrorRepository;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.repository.ResolvedCasesRepository;
 
@@ -21,19 +34,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.nio.file.StandardOpenOption.APPEND;
-import static java.nio.file.StandardOpenOption.CREATE;
-import static java.util.Optional.empty;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.anyOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 /**
  * PCF-10 parity probe (J17 golden vs J25), count side. Identical source in both copies.
  *
@@ -42,7 +42,7 @@ import static org.mockito.Mockito.when;
  * target/pcf10-zone-parity.txt.
  */
 @ExtendWith(MockitoExtension.class)
-class ResolvedCaseCountDateZoneParityTest {
+public class ResolvedCaseCountDateZoneParityTest {
 
     private static final ZoneId UTC_PLUS_14 = ZoneId.of("Pacific/Kiritimati");
     private static final ZoneId UTC_MINUS_12 = ZoneId.of("Etc/GMT+12");
@@ -63,17 +63,17 @@ class ResolvedCaseCountDateZoneParityTest {
     private TimeZone originalDefaultZone;
 
     @BeforeEach
-    void rememberDefaultZone() {
+    public void rememberDefaultZone() {
         originalDefaultZone = TimeZone.getDefault();
     }
 
     @AfterEach
-    void restoreDefaultZone() {
+    public void restoreDefaultZone() {
         TimeZone.setDefault(originalDefaultZone);
     }
 
     @Test
-    void resolvedTodayCountShouldUseJvmDefaultZoneDate() throws Exception {
+    public void resolvedTodayCountShouldUseJvmDefaultZoneDate() throws Exception {
         when(businessValidationErrorRepository.countOfCasesWithOutstandingErrors(empty(), empty())).thenReturn(0L);
 
         final LocalDate east = countDateWithDefaultZone(UTC_PLUS_14);

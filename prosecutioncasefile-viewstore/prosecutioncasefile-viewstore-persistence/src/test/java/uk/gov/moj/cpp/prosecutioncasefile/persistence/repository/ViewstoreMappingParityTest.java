@@ -1,20 +1,5 @@
 package uk.gov.moj.cpp.prosecutioncasefile.persistence.repository;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptySet;
-import static java.util.Collections.singletonList;
-import static java.util.UUID.randomUUID;
-import static java.util.stream.Collectors.toList;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
-
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.AddressDetails;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.CaseDetails;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.DefendantDetails;
@@ -45,6 +30,21 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptySet;
+import static java.util.Collections.singletonList;
+import static java.util.UUID.randomUUID;
+import static java.util.stream.Collectors.toList;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+
 /**
  * J17/J25 parity test for PR #172 review findings PCF-17 (@MapsId removal, IN without parentheses) and
  * PCF-18 (BC-04, primitive OffenceLegacy.orderIndex on a nullable column).
@@ -53,7 +53,7 @@ import org.junit.jupiter.api.Test;
  * properties (as CaseGraphPersistenceParityTest does). Everything from the first @Test down is identical to the J17 copy;
  * only this harness and the jakarta imports differ.
  */
-public class ViewstoreMappingParityTest {
+class ViewstoreMappingParityTest {
 
     private static final String TEST_PERSISTENCE_UNIT = "prosecutioncasefile-test-persistence-unit";
     private static final Map<String, String> PRODUCTION_PERSISTENCE_UNIT_PROPERTIES = Optional.ofNullable(System.getProperty("pcf.entityCopyObserver"))
@@ -69,17 +69,17 @@ public class ViewstoreMappingParityTest {
     private final DefendantLegacyRepository defendantLegacyRepository = new DefendantLegacyRepository();
 
     @BeforeAll
-    public static void createEntityManagerFactory() {
+    static void createEntityManagerFactory() {
         entityManagerFactory = Persistence.createEntityManagerFactory(TEST_PERSISTENCE_UNIT, PRODUCTION_PERSISTENCE_UNIT_PROPERTIES);
     }
 
     @AfterAll
-    public static void closeEntityManagerFactory() {
+    static void closeEntityManagerFactory() {
         entityManagerFactory.close();
     }
 
     @BeforeEach
-    public void beginTransaction() throws Exception {
+    void beginTransaction() throws Exception {
         entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
         injectEntityManagerInto(caseDetailsRepository);
@@ -89,7 +89,7 @@ public class ViewstoreMappingParityTest {
     }
 
     @AfterEach
-    public void rollbackTransaction() {
+    void rollbackTransaction() {
         if (entityManager.getTransaction().isActive()) {
             entityManager.getTransaction().rollback();
         }
@@ -106,7 +106,7 @@ public class ViewstoreMappingParityTest {
     // J17 golden: Hibernate 5.4 does NOT default the NULL to 0; find fails with a PersistenceException carrying PropertyAccessException
     // <- IllegalArgumentException "Can not set int field ...OffenceLegacy.orderIndex to null value".
     @Test
-    public void pcf18_shouldFailToLoadOffenceLegacyWhoseOrderIndexIsNull() {
+    void pcf18_shouldFailToLoadOffenceLegacyWhoseOrderIndexIsNull() {
         makeOrderIndexNullableAsInLiquibase();
         final UUID offenceId = randomUUID();
         final String code = "PCF18-" + offenceId;
@@ -123,7 +123,7 @@ public class ViewstoreMappingParityTest {
 
     // PCF-18 / BC-04: same NULL reached through DefendantLegacy.offences (EAGER, @OrderBy("orderIndex ASC"))
     @Test
-    public void pcf18_shouldFailToLoadDefendantLegacyWhoseOffenceOrderIndexIsNull() {
+    void pcf18_shouldFailToLoadDefendantLegacyWhoseOffenceOrderIndexIsNull() {
         makeOrderIndexNullableAsInLiquibase();
         final UUID defendantId = randomUUID();
         final String code = "PCF18-" + defendantId;
@@ -141,7 +141,7 @@ public class ViewstoreMappingParityTest {
 
     // PCF-17 / P-4: production path DefendantToDefendantDetails (constructor) -> CaseDetailsRepository.save (ProsecutionReceivedListener:95, SjpProsecutionReceivedListener:51)
     @Test
-    public void pcf17_shouldKeyInformationRowsByDefendantIdWhenIndividualDefendantsAreSaved() {
+    void pcf17_shouldKeyInformationRowsByDefendantIdWhenIndividualDefendantsAreSaved() {
         final UUID caseId = randomUUID();
         final String firstDefendantId = randomUUID().toString();
         final String secondDefendantId = randomUUID().toString();
@@ -168,7 +168,7 @@ public class ViewstoreMappingParityTest {
 
     // PCF-17 / P-4: corporate branch of DefendantToDefendantDetails (OrganisationInformationDetails)
     @Test
-    public void pcf17_shouldKeyOrganisationInformationRowByDefendantIdWhenCorporateDefendantIsSaved() {
+    void pcf17_shouldKeyOrganisationInformationRowByDefendantIdWhenCorporateDefendantIsSaved() {
         final UUID caseId = randomUUID();
         final String defendantId = randomUUID().toString();
         caseDetailsRepository.save(caseWith(caseId, corporateDefendant(defendantId, "Acme Ltd")));
@@ -186,7 +186,7 @@ public class ViewstoreMappingParityTest {
 
     // PCF-17 / P-4: DefendantChangedListener:43-51 - find defendant, replace personal information keeping its id, change DOB, save
     @Test
-    public void pcf17_shouldReplacePersonalInformationWhenDefendantChanges() {
+    void pcf17_shouldReplacePersonalInformationWhenDefendantChanges() {
         final UUID caseId = randomUUID();
         final String changedDefendantId = randomUUID().toString();
         final String otherDefendantId = randomUUID().toString();
@@ -218,7 +218,7 @@ public class ViewstoreMappingParityTest {
 
     // PCF-17 / P-4: SjpProsecutionReceivedListener:43-51 - re-receive removes the defendants and the case, then saves the new graph (same ids) in one transaction
     @Test
-    public void pcf17_shouldReplaceInformationRowsWhenSjpProsecutionIsReceivedAgain() {
+    void pcf17_shouldReplaceInformationRowsWhenSjpProsecutionIsReceivedAgain() {
         final UUID caseId = randomUUID();
         final String individualId = randomUUID().toString();
         final String corporateId = randomUUID().toString();
@@ -256,7 +256,7 @@ public class ViewstoreMappingParityTest {
 
     // PCF-17 / P-4: ProsecutionReceivedListener:110-112 / 121-123 - find the case, add new defendants, cascade on flush
     @Test
-    public void pcf17_shouldKeyInformationRowsByDefendantIdWhenDefendantIsAddedToExistingCase() {
+    void pcf17_shouldKeyInformationRowsByDefendantIdWhenDefendantIsAddedToExistingCase() {
         final UUID caseId = randomUUID();
         final String existingId = randomUUID().toString();
         final String addedId = randomUUID().toString();
@@ -282,7 +282,7 @@ public class ViewstoreMappingParityTest {
     // J17 golden: fails too - a PersistenceException carrying IdentifierGenerationException "attempted to assign id from null one-to-one property
     // [...PersonalInformationDetails.defendantDetails]" (the @MapsId derivation needs the back-reference that only the constructor sets).
     @Test
-    public void pcf17_shouldRejectInformationEntityAttachedThroughSetterWithoutId() {
+    void pcf17_shouldRejectInformationEntityAttachedThroughSetterWithoutId() {
         final UUID caseId = randomUUID();
         final DefendantDetails defendant = new DefendantDetails();
         defendant.setDefendantId(randomUUID().toString());
@@ -302,7 +302,7 @@ public class ViewstoreMappingParityTest {
 
     // PCF-17 / P-4: the generated DDL keeps the same columns after @MapsId removal (J17: the mappedBy side adds no column and no FK)
     @Test
-    public void pcf17_shouldGenerateTheSameColumnsForDefendantAndInformationTables() {
+    void pcf17_shouldGenerateTheSameColumnsForDefendantAndInformationTables() {
         assertThat(columnsOf("DEFENDANT"), containsInAnyOrder("applied_prosecutor_costs", "asn", "case_id", "defendant_id",
                 "defendant_initiation_code", "documentation_language", "driver_number", "hearing_language", "idpc_material_id",
                 "language_requirement", "national_insurance_number", "number_previous_convictions", "organisation_information_id",
@@ -319,7 +319,7 @@ public class ViewstoreMappingParityTest {
 
     // PCF-17 / P-9.3: J25 wrote IN :prosecutionCaseReferences without parentheses (J17: in (:prosecutionCaseReferences)); SubmitCCApplicationApi:84
     @Test
-    public void pcf17_shouldFindCasesByTwoProsecutionCaseReferences() {
+    void pcf17_shouldFindCasesByTwoProsecutionCaseReferences() {
         final List<UUID> caseIds = saveCasesWithReferences("REF-A", "REF-B", "REF-C");
         entityManager.flush();
         entityManager.clear();
@@ -331,7 +331,7 @@ public class ViewstoreMappingParityTest {
     }
 
     @Test
-    public void pcf17_shouldFindCaseBySingleProsecutionCaseReference() {
+    void pcf17_shouldFindCaseBySingleProsecutionCaseReference() {
         final List<UUID> caseIds = saveCasesWithReferences("REF-A", "REF-B");
         entityManager.flush();
         entityManager.clear();

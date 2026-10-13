@@ -1,17 +1,5 @@
 package uk.gov.moj.cpp.prosecution.casefile.event.listener;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.nio.file.StandardOpenOption.APPEND;
-import static java.nio.file.StandardOpenOption.CREATE;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.anyOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.ResolvedCases;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.repository.ResolvedCasesRepository;
@@ -37,6 +25,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.nio.file.StandardOpenOption.APPEND;
+import static java.nio.file.StandardOpenOption.CREATE;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 /**
  * PCF-10 parity probe (J17 golden vs J25). Identical source in both copies.
  *
@@ -47,7 +47,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * Findings are written to target/pcf10-zone-parity.txt.
  */
 @ExtendWith(MockitoExtension.class)
-public class ResolvedCaseDateZoneParityTest {
+class ResolvedCaseDateZoneParityTest {
 
     private static final ZoneId UTC_PLUS_14 = ZoneId.of("Pacific/Kiritimati");
     private static final ZoneId UTC_MINUS_12 = ZoneId.of("Etc/GMT+12");
@@ -73,17 +73,17 @@ public class ResolvedCaseDateZoneParityTest {
     private TimeZone originalDefaultZone;
 
     @BeforeEach
-    public void rememberDefaultZone() {
+    void rememberDefaultZone() {
         originalDefaultZone = TimeZone.getDefault();
     }
 
     @AfterEach
-    public void restoreDefaultZone() {
+    void restoreDefaultZone() {
         TimeZone.setDefault(originalDefaultZone);
     }
 
     @Test
-    public void resolutionDateShouldFollowJvmDefaultZone() throws Exception {
+    void resolutionDateShouldFollowJvmDefaultZone() throws Exception {
         when(resolvedCaseEnvelope.payload()).thenReturn(resolvedCase);
 
         final LocalDate east = resolutionDateWrittenWithDefaultZone(UTC_PLUS_14);
@@ -98,7 +98,7 @@ public class ResolvedCaseDateZoneParityTest {
     }
 
     @Test
-    public void frameworkEntityManagerProducerShouldResetJvmDefaultZoneToUtc() throws Exception {
+    void frameworkEntityManagerProducerShouldResetJvmDefaultZoneToUtc() throws Exception {
         TimeZone.setDefault(TimeZone.getTimeZone(UTC_PLUS_14));
         final Class<?> producerClass = Class.forName(FRAMEWORK_ENTITY_MANAGER_PRODUCER);
         final Object producer = producerClass.getDeclaredConstructor().newInstance();
@@ -114,7 +114,7 @@ public class ResolvedCaseDateZoneParityTest {
     }
 
     @Test
-    public void resolvedCasesRepositoryEntityManagerSourceShouldBeKnown() throws Exception {
+    void resolvedCasesRepositoryEntityManagerSourceShouldBeKnown() throws Exception {
         final String source = entityManagerSource(ResolvedCasesRepository.class);
 
         report("ResolvedCasesRepository (" + codeSource(ResolvedCasesRepository.class) + ") EntityManager source: " + source);

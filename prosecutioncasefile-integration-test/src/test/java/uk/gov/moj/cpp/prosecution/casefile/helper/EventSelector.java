@@ -1,6 +1,6 @@
 package uk.gov.moj.cpp.prosecution.casefile.helper;
 
-import javax.jms.MessageConsumer;
+import jakarta.jms.MessageConsumer;
 
 
 public class EventSelector {

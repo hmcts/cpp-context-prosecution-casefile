@@ -2,8 +2,8 @@ package uk.gov.moj.cpp.prosecution.casefile.helper;
 
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import com.google.common.base.Joiner;
-import com.jayway.awaitility.Awaitility;
-import com.jayway.awaitility.Duration;
+import org.awaitility.Awaitility;
+import org.awaitility.Durations;
 import org.hamcrest.CoreMatchers;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -14,9 +14,9 @@ import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.test.utils.core.rest.RestClient;
 import uk.gov.moj.cpp.prosecution.casefile.stub.DocumentGeneratorStub;
 
-import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.MultivaluedHashMap;
+import jakarta.ws.rs.core.MultivaluedMap;
+import jakarta.ws.rs.core.Response;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -27,9 +27,9 @@ import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.findAll;
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
-import static com.jayway.awaitility.Awaitility.waitAtMost;
+import static org.awaitility.Awaitility.waitAtMost;
 import static java.util.UUID.randomUUID;
-import static javax.ws.rs.core.HttpHeaders.CONTENT_TYPE;
+import static jakarta.ws.rs.core.HttpHeaders.CONTENT_TYPE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_GROUP_CASES_PARKED_FOR_APPROVAL;
@@ -91,7 +91,7 @@ public class InitiateGroupProsecutionHelper extends AbstractTestHelper {
     public void verifyInitiateCourtProceedingsForGroupCasesCommand(final String caseId){
 
         try {
-            waitAtMost(Duration.ONE_MINUTE).until(() ->
+            waitAtMost(Durations.ONE_MINUTE).until(() ->
                     getInitiateCourtProceedingsForGroupCasesCommand(caseId)
                             .anyMatch(payload -> payload.has("courtReferral"))
             );
@@ -105,7 +105,7 @@ public class InitiateGroupProsecutionHelper extends AbstractTestHelper {
     public void verifyInitiateCourtProceedingsForApplicationCommand(){
 
         try {
-            waitAtMost(Duration.ONE_MINUTE).until(() ->
+            waitAtMost(Durations.ONE_MINUTE).until(() ->
                     getInitiateCourtProceedingsForApplicationCommand()
                     .anyMatch(payload -> payload.has("courtApplication"))
             );
@@ -119,7 +119,7 @@ public class InitiateGroupProsecutionHelper extends AbstractTestHelper {
     public void verifyUploadMaterialCommandCalled(){
 
         try {
-            waitAtMost(Duration.ONE_MINUTE).until(() ->
+            waitAtMost(Durations.ONE_MINUTE).until(() ->
                     getUploadMaterialCommand()
                             .anyMatch(payload -> payload.has("materialId"))
             );

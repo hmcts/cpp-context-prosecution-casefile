@@ -45,7 +45,7 @@ import uk.gov.moj.cps.prosecutioncasefile.command.handler.UpdateCaseDetails;
 
 import java.util.UUID;
 
-import javax.enterprise.inject.Instance;
+import jakarta.enterprise.inject.Instance;
 
 import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.Test;

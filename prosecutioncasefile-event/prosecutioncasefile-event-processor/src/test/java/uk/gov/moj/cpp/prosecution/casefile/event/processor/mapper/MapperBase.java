@@ -12,7 +12,7 @@ import uk.gov.moj.cps.prosecutioncasefile.domain.event.SubmitApplicationAccepted
 import java.nio.charset.Charset;
 import java.util.UUID;
 
-import javax.json.JsonObject;
+import jakarta.json.JsonObject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.Resources;

@@ -35,8 +35,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.json.JsonObject;
-import javax.json.JsonValue;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonValue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

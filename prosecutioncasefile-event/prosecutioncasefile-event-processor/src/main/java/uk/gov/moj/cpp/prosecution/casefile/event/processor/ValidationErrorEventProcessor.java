@@ -8,7 +8,7 @@ import uk.gov.moj.cpp.prosecution.casefile.event.CaseValidationFailed;
 import uk.gov.moj.cpp.prosecution.casefile.event.DefendantValidationFailed;
 import uk.gov.moj.cpp.prosecution.casefile.event.SjpValidationFailed;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import static uk.gov.justice.services.core.annotation.Component.EVENT_PROCESSOR;
 import static uk.gov.justice.services.core.enveloper.Enveloper.envelop;

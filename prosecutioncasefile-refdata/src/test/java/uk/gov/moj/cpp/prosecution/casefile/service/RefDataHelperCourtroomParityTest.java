@@ -1,12 +1,5 @@
 package uk.gov.moj.cpp.prosecution.casefile.service;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import uk.gov.justice.services.common.converter.jackson.ObjectMapperProducer;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CourtRoom;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.OrganisationUnitWithCourtroomReferenceData;
@@ -27,6 +20,13 @@ import jakarta.json.JsonValue;
 
 import org.junit.jupiter.api.Test;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 /**
  * PCF-06 parity characterisation (J17 golden master) for
  * {@link RefDataHelper#asOrganisationUnitWithCourtroomRefData()}.
@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
  * hand with JSON-P. Every assertion below encodes the J17 result. The method bodies between the
  * SCENARIOS markers are identical in the J17 and J25 copies; only imports and the harness differ.
  */
-public class RefDataHelperCourtroomParityTest {
+class RefDataHelperCourtroomParityTest {
 
     // ---- SCENARIOS-BEGIN ----
 
@@ -77,7 +77,7 @@ public class RefDataHelperCourtroomParityTest {
             """;
 
     @Test
-    public void scenarioD_happyPath_fullPayload_mapsEverySchemaField() {
+    void scenarioD_happyPath_fullPayload_mapsEverySchemaField() {
         final OrganisationUnitWithCourtroomReferenceData result = map(json(FULL_REFDATA_PAYLOAD));
 
         assertThat(result, is(notNullValue()));
@@ -108,7 +108,7 @@ public class RefDataHelperCourtroomParityTest {
     }
 
     @Test
-    public void scenarioA_fullPayload_carriesTopLevelNonSchemaFieldsInAdditionalProperties() {
+    void scenarioA_fullPayload_carriesTopLevelNonSchemaFieldsInAdditionalProperties() {
         final OrganisationUnitWithCourtroomReferenceData result = map(json(FULL_REFDATA_PAYLOAD));
 
         final Map<String, Object> expected = new HashMap<>();
@@ -120,7 +120,7 @@ public class RefDataHelperCourtroomParityTest {
     }
 
     @Test
-    public void scenarioA_fullPayload_carriesCourtRoomNonSchemaFieldsInAdditionalProperties() {
+    void scenarioA_fullPayload_carriesCourtRoomNonSchemaFieldsInAdditionalProperties() {
         final CourtRoom courtRoom = map(json(FULL_REFDATA_PAYLOAD)).getCourtRoom();
 
         final Map<String, Object> expected = new HashMap<>();
@@ -130,7 +130,7 @@ public class RefDataHelperCourtroomParityTest {
     }
 
     @Test
-    public void scenarioA_itStubPayloads_nonSchemaKeysCarriedThrough() throws IOException {
+    void scenarioA_itStubPayloads_nonSchemaKeysCarriedThrough() throws IOException {
         final OrganisationUnitWithCourtroomReferenceData noCourtroom = map(json(stub("referencedata.ou-no-courtroom.json")));
         assertThat(keysOf(noCourtroom.getAdditionalProperties()), is(keys("defaultDuration")));
         assertThat(noCourtroom.getCourtRoom(), is(nullValue()));
@@ -153,7 +153,7 @@ public class RefDataHelperCourtroomParityTest {
     }
 
     @Test
-    public void scenarioB_stringIsWelsh_isCoercedToBoolean() {
+    void scenarioB_stringIsWelsh_isCoercedToBoolean() {
         final OrganisationUnitWithCourtroomReferenceData result = map(json("""
                 {"id": "x", "oucode": "C50EX00", "isWelsh": "true"}
                 """));
@@ -162,7 +162,7 @@ public class RefDataHelperCourtroomParityTest {
     }
 
     @Test
-    public void scenarioB_stringCourtroomId_isCoercedToInteger() {
+    void scenarioB_stringCourtroomId_isCoercedToInteger() {
         final OrganisationUnitWithCourtroomReferenceData result = map(json("""
                 {"id": "x", "oucode": "C50EX00", "courtRoom": {"id": "r", "courtroomId": "905", "courtroomName": "Courtroom 01"}}
                 """));
@@ -171,7 +171,7 @@ public class RefDataHelperCourtroomParityTest {
     }
 
     @Test
-    public void scenarioB_numericDefaultDurationHrs_isCoercedToString() {
+    void scenarioB_numericDefaultDurationHrs_isCoercedToString() {
         final OrganisationUnitWithCourtroomReferenceData result = map(json("""
                 {"id": "x", "oucode": "C50EX00", "defaultDurationHrs": 6}
                 """));
@@ -180,7 +180,7 @@ public class RefDataHelperCourtroomParityTest {
     }
 
     @Test
-    public void scenarioB_numericOucode_isCoercedToString() {
+    void scenarioB_numericOucode_isCoercedToString() {
         final OrganisationUnitWithCourtroomReferenceData result = map(json("""
                 {"id": "x", "oucode": 123}
                 """));
@@ -189,7 +189,7 @@ public class RefDataHelperCourtroomParityTest {
     }
 
     @Test
-    public void scenarioC_nonNumericCourtroomId_returnsNullSoCallerGetsEmpty() {
+    void scenarioC_nonNumericCourtroomId_returnsNullSoCallerGetsEmpty() {
         final OrganisationUnitWithCourtroomReferenceData result = map(json("""
                 {"id": "x", "oucode": "C50EX00", "courtRoom": {"id": "r", "courtroomId": "abc"}}
                 """));
@@ -198,7 +198,7 @@ public class RefDataHelperCourtroomParityTest {
     }
 
     @Test
-    public void scenarioC_courtRoomNotAnObject_returnsNullSoCallerGetsEmpty() {
+    void scenarioC_courtRoomNotAnObject_returnsNullSoCallerGetsEmpty() {
         final OrganisationUnitWithCourtroomReferenceData result = map(json("""
                 {"id": "x", "oucode": "C50EX00", "courtRoom": "Courtroom 01"}
                 """));
@@ -207,7 +207,7 @@ public class RefDataHelperCourtroomParityTest {
     }
 
     @Test
-    public void scenarioC_nonBooleanIsWelsh_returnsNullSoCallerGetsEmpty() {
+    void scenarioC_nonBooleanIsWelsh_returnsNullSoCallerGetsEmpty() {
         final OrganisationUnitWithCourtroomReferenceData result = map(json("""
                 {"id": "x", "oucode": "C50EX00", "isWelsh": "yes"}
                 """));
@@ -216,14 +216,14 @@ public class RefDataHelperCourtroomParityTest {
     }
 
     @Test
-    public void scenarioC_jsonNullValue_returnsNull() {
+    void scenarioC_jsonNullValue_returnsNull() {
         final OrganisationUnitWithCourtroomReferenceData result = map(JsonValue.NULL);
 
         assertThat(result, is(nullValue()));
     }
 
     @Test
-    public void scenarioC_emptyObject_mapsToAllNullFields() {
+    void scenarioC_emptyObject_mapsToAllNullFields() {
         final OrganisationUnitWithCourtroomReferenceData result = map(json("{}"));
 
         assertThat(result, is(notNullValue()));
@@ -235,7 +235,7 @@ public class RefDataHelperCourtroomParityTest {
     }
 
     @Test
-    public void scenarioC_explicitJsonNulls_mapToNullFields() {
+    void scenarioC_explicitJsonNulls_mapToNullFields() {
         final OrganisationUnitWithCourtroomReferenceData result = map(json("""
                 {"id": "x", "oucode": "C50EX00", "address3": null, "isWelsh": null, "courtRoom": null}
                 """));
@@ -247,7 +247,7 @@ public class RefDataHelperCourtroomParityTest {
     }
 
     @Test
-    public void control_frameworkJacksonMapper_carriesNonSchemaFieldsAndCoerces() throws IOException {
+    void control_frameworkJacksonMapper_carriesNonSchemaFieldsAndCoerces() throws IOException {
         final OrganisationUnitWithCourtroomReferenceData full = jackson(FULL_REFDATA_PAYLOAD);
         assertThat(keysOf(full.getAdditionalProperties()), is(keys("courtLocationCode", "courtId", "phone", "email")));
         assertThat(keysOf(full.getCourtRoom().getAdditionalProperties()), is(keys("welshCourtroomName", "venueId")));
@@ -258,7 +258,7 @@ public class RefDataHelperCourtroomParityTest {
     }
 
     @Test
-    public void control_frameworkJacksonMapper_rejectsNonNumericCourtroomIdWithIOException() {
+    void control_frameworkJacksonMapper_rejectsNonNumericCourtroomIdWithIOException() {
         assertThrows(IOException.class, () -> jackson("{\"courtRoom\": {\"courtroomId\": \"abc\"}}"));
     }
 

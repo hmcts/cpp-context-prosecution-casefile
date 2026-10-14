@@ -1,17 +1,5 @@
 package uk.gov.moj.cpp.prosecutioncasefile.persistence.repository;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
-import static java.util.UUID.randomUUID;
-import static java.util.stream.Collectors.toList;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
-
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.CaseDetails;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.DefendantDetails;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.IndividualAliasDetail;
@@ -34,6 +22,18 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.UUID.randomUUID;
+import static java.util.stream.Collectors.toList;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+
 /**
  * J17/J25 parity test for PR #172 review findings PCF-02 and PCF-03.
  *
@@ -42,7 +42,7 @@ import org.junit.jupiter.api.Test;
  * hibernate.event.merge.entity_copy_observer, so Hibernate's default (disallow) applies, as it does on J17.
  * Run with -Dpcf.entityCopyObserver=allow to see the Hibernate 6 behaviour with the relaxed PCF-02 setting.
  */
-public class CaseGraphPersistenceParityTest {
+class CaseGraphPersistenceParityTest {
 
     private static final String TEST_PERSISTENCE_UNIT = "prosecutioncasefile-test-persistence-unit";
     private static final Map<String, String> PRODUCTION_PERSISTENCE_UNIT_PROPERTIES = Optional.ofNullable(System.getProperty("pcf.entityCopyObserver"))
@@ -57,17 +57,17 @@ public class CaseGraphPersistenceParityTest {
     private final BusinessValidationErrorRepository businessValidationErrorRepository = new BusinessValidationErrorRepository();
 
     @BeforeAll
-    public static void createEntityManagerFactory() {
+    static void createEntityManagerFactory() {
         entityManagerFactory = Persistence.createEntityManagerFactory(TEST_PERSISTENCE_UNIT, PRODUCTION_PERSISTENCE_UNIT_PROPERTIES);
     }
 
     @AfterAll
-    public static void closeEntityManagerFactory() {
+    static void closeEntityManagerFactory() {
         entityManagerFactory.close();
     }
 
     @BeforeEach
-    public void beginTransaction() throws Exception {
+    void beginTransaction() throws Exception {
         entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
         injectEntityManagerInto(caseDetailsRepository);
@@ -76,7 +76,7 @@ public class CaseGraphPersistenceParityTest {
     }
 
     @AfterEach
-    public void rollbackTransaction() {
+    void rollbackTransaction() {
         if (entityManager.getTransaction().isActive()) {
             entityManager.getTransaction().rollback();
         }
@@ -85,7 +85,7 @@ public class CaseGraphPersistenceParityTest {
 
     // PCF-03: individualAliases became an EAGER bag next to the EAGER offences set (J17: LAZY)
     @Test
-    public void pcf03_shouldNotDuplicateAliasesWhenCaseIsReloaded() {
+    void pcf03_shouldNotDuplicateAliasesWhenCaseIsReloaded() {
         final UUID caseId = randomUUID();
         caseDetailsRepository.save(caseWith(caseId, defendant("D1-" + caseId, asList(alias("ALIAS-A"), alias("ALIAS-B")),
                 offence(randomUUID(), "CODE-1"), offence(randomUUID(), "CODE-2"))));
@@ -100,7 +100,7 @@ public class CaseGraphPersistenceParityTest {
 
     // PCF-03: same check through DefendantRepository.findBy (DefendantChangedListener, DefendantIdpcAddedListener)
     @Test
-    public void pcf03_shouldNotDuplicateAliasesWhenDefendantIsReloaded() {
+    void pcf03_shouldNotDuplicateAliasesWhenDefendantIsReloaded() {
         final UUID caseId = randomUUID();
         final String defendantId = "D1-" + caseId;
         caseDetailsRepository.save(caseWith(caseId, defendant(defendantId, asList(alias("ALIAS-A"), alias("ALIAS-B")),
@@ -115,7 +115,7 @@ public class CaseGraphPersistenceParityTest {
 
     // PCF-03: same check through the JPQL load path (findCaseDetailsByProsecutionCaseReference)
     @Test
-    public void pcf03_shouldNotDuplicateAliasesWhenCaseIsQueriedByProsecutionReference() {
+    void pcf03_shouldNotDuplicateAliasesWhenCaseIsQueriedByProsecutionReference() {
         final UUID caseId = randomUUID();
         final String prosecutionCaseReference = "URN-" + caseId;
         final CaseDetails caseDetails = caseWith(caseId, defendant("D1-" + caseId, asList(alias("ALIAS-A"), alias("ALIAS-B")),
@@ -134,7 +134,7 @@ public class CaseGraphPersistenceParityTest {
     // PCF-02: the persistence.xml comment says SJP prosecutions share OffenceDetails across defendants.
     // One offence row can only belong to one defendant, so a successful merge means one defendant silently loses it.
     @Test
-    public void pcf02_shouldFailLoudlyWhenTwoDefendantsCarryTheSameOffenceId() {
+    void pcf02_shouldFailLoudlyWhenTwoDefendantsCarryTheSameOffenceId() {
         final UUID caseId = randomUUID();
         final UUID sharedOffenceId = randomUUID();
         final CaseDetails caseDetails = caseWith(caseId,
@@ -153,7 +153,7 @@ public class CaseGraphPersistenceParityTest {
 
     // PCF-02: SjpProsecutionReceivedListener re-receive path - find, remove defendants and case, save the new graph, in one transaction
     @Test
-    public void pcf02_shouldReplaceExistingCaseWhenSjpProsecutionIsReceivedAgain() {
+    void pcf02_shouldReplaceExistingCaseWhenSjpProsecutionIsReceivedAgain() {
         final UUID caseId = randomUUID();
         final UUID offenceId = randomUUID();
         final String defendantId = "D1-" + caseId;
@@ -182,7 +182,7 @@ public class CaseGraphPersistenceParityTest {
     // existing defendant already owns, as ResolvedCasesIT.shouldResolveCaseWhenInvalidOffenceAlcoholLevelMethodAndErrorCorrectionSubmitted sends.
     // This path cascades a persist on flush, not a merge, so entity_copy_observer does not apply.
     @Test
-    public void pcf02_shouldFailWhenAddedDefendantReusesAnExistingOffenceId() {
+    void pcf02_shouldFailWhenAddedDefendantReusesAnExistingOffenceId() {
         final UUID caseId = randomUUID();
         final UUID sharedOffenceId = randomUUID();
         caseDetailsRepository.save(caseWith(caseId, defendant(randomUUID().toString(), emptyList(), offence(sharedOffenceId, "CODE-D1"))));

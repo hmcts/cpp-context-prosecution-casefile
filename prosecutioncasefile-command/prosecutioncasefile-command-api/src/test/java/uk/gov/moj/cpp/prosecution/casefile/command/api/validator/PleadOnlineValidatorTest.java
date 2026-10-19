@@ -35,6 +35,8 @@ import jakarta.json.JsonObject;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -296,6 +298,36 @@ public class PleadOnlineValidatorTest {
 
         final Map<String, List<String>> result = pleadOnlineValidator.validate(pleadOnline);
         assertThat(result.values(), hasSize(0));
+    }
+
+    @Test
+    void shouldReturnErrorWhenGuiltyPleaHasEmptyEmploymentStatus() {
+        final Map<String, List<String>> result = pleadOnlineValidator.validate(guiltyPleaWithEmploymentStatus(""));
+
+        assertThat(result.values(), hasSize(1));
+        assertThat(result.get("FinancialMeansRequiredWhenPleadingGuilty"), hasSize(1));
+    }
+
+    // J17 used org.drools.core.util.StringUtils.isEmpty, which treats whitespace-only as empty (isBlank semantics)
+    @ParameterizedTest
+    @ValueSource(strings = {" ", "   ", "\t", "\n", " \t\n "})
+    void shouldReturnErrorWhenGuiltyPleaHasBlankEmploymentStatus(final String employmentStatus) {
+        final Map<String, List<String>> result = pleadOnlineValidator.validate(guiltyPleaWithEmploymentStatus(employmentStatus));
+
+        assertThat(result.values(), hasSize(1));
+        assertThat(result.get("FinancialMeansRequiredWhenPleadingGuilty"), hasSize(1));
+    }
+
+    private static PleadOnline guiltyPleaWithEmploymentStatus(final String employmentStatus) {
+        return pleadOnline()
+                .withOffences(asList(offence().withPlea(GUILTY).build()))
+                .withPersonalDetails(personalDetails().build())
+                .withFinancialMeans(financialMeans()
+                        .withBenefits(Benefits.benefits().build())
+                        .withIncome(Income.income().build())
+                        .withEmploymentStatus(employmentStatus)
+                        .build())
+                .build();
     }
 
 }

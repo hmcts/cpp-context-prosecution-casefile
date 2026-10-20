@@ -18,7 +18,7 @@ import uk.gov.justice.service.wiremock.testutil.InternalEndpointMockUtils;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 
 public class ReferenceDataStub extends StubUtil {
 

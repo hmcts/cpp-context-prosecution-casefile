@@ -18,7 +18,7 @@ import uk.gov.moj.cpp.prosecution.casefile.validation.ValidationError;
 import java.util.List;
 import java.util.Optional;
 
-import javax.enterprise.inject.Instance;
+import jakarta.enterprise.inject.Instance;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

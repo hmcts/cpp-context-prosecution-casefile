@@ -10,7 +10,7 @@ import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 
 public class ObservedEthnicityRefDataEnricher implements DefendantRefDataEnricher {

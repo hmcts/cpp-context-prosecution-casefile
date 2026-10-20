@@ -10,7 +10,7 @@ import uk.gov.justice.services.messaging.JsonEnvelope;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.json.JsonObject;
+import jakarta.json.JsonObject;
 
 import io.restassured.path.json.JsonPath;
 

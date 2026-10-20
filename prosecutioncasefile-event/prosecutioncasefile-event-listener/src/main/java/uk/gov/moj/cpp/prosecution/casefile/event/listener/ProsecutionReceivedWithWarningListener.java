@@ -11,7 +11,7 @@ import uk.gov.moj.cpp.prosecutioncasefile.persistence.repository.BusinessValidat
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.repository.BusinessValidationErrorRepository;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.repository.CaseDetailsRepository;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.Objects;
 
 import static uk.gov.justice.services.core.annotation.Component.EVENT_LISTENER;

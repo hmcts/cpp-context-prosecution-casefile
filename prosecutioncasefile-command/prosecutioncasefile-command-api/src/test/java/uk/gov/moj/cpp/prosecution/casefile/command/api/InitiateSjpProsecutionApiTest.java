@@ -40,8 +40,8 @@ import uk.gov.moj.cps.prosecutioncasefile.command.api.InitiateProsecution;
 import java.util.List;
 import java.util.UUID;
 
-import javax.enterprise.inject.Instance;
-import javax.json.JsonObject;
+import jakarta.enterprise.inject.Instance;
+import jakarta.json.JsonObject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;

@@ -16,7 +16,7 @@ import uk.gov.moj.cpp.prosecutioncasefile.persistence.repository.BusinessValidat
 import java.util.List;
 import java.util.UUID;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 @ServiceComponent(EVENT_LISTENER)
 public class SummonsApplicationApprovalListener {

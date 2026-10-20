@@ -16,9 +16,9 @@ import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 
 import java.util.UUID;
 
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
-import javax.json.JsonObject;
+import jakarta.enterprise.inject.Instance;
+import jakarta.inject.Inject;
+import jakarta.json.JsonObject;
 
 @ServiceComponent(COMMAND_HANDLER)
 public class ResolveErrorsHandler extends BaseProsecutionCaseFileHandler {

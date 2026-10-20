@@ -1,7 +1,7 @@
 package uk.gov.moj.cpp.prosecution.casefile.event.processor.converter;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static uk.gov.justice.core.courts.FeeStatus.NOT_APPLICABLE;
 import static uk.gov.justice.core.courts.FeeType.INITIAL;
 
@@ -13,7 +13,7 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseDetails;
 import java.util.List;
 import java.util.UUID;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class CaseDetailsToCivilFeesConverterTest {
 

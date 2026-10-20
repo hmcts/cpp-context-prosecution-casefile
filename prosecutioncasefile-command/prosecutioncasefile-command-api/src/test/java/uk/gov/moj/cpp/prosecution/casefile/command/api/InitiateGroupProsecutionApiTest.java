@@ -30,7 +30,7 @@ import uk.gov.moj.cps.prosecutioncasefile.command.api.InitiateGroupProsecution;
 
 import java.util.UUID;
 
-import javax.enterprise.inject.Instance;
+import jakarta.enterprise.inject.Instance;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mockito.ArgumentCaptor;

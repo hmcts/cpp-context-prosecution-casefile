@@ -7,7 +7,7 @@ import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.GroupProsecutionRejected;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicGroupProsecutionRejected;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.UUID;
 
 import static uk.gov.justice.services.core.annotation.Component.EVENT_PROCESSOR;

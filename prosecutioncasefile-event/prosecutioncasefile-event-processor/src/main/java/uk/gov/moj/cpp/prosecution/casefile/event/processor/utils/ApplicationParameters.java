@@ -2,7 +2,7 @@ package uk.gov.moj.cpp.prosecution.casefile.event.processor.utils;
 
 import uk.gov.justice.services.common.configuration.Value;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 @SuppressWarnings("squid:S1488")
 public class ApplicationParameters {

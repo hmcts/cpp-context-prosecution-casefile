@@ -4,7 +4,7 @@ import uk.gov.justice.core.courts.CourtApplication;
 
 import java.util.UUID;
 
-import javax.json.JsonObject;
+import jakarta.json.JsonObject;
 
 public interface ProgressionService {
 

@@ -48,8 +48,8 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
-import javax.json.JsonObject;
-import javax.json.JsonReader;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
 
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import org.hamcrest.Matchers;

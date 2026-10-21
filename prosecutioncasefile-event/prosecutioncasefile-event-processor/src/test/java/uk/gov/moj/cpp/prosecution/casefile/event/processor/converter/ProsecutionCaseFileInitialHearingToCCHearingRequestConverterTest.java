@@ -1,6 +1,8 @@
 package uk.gov.moj.cpp.prosecution.casefile.event.processor.converter;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static java.util.Optional.of;
 import static java.util.UUID.randomUUID;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -77,6 +79,7 @@ public class ProsecutionCaseFileInitialHearingToCCHearingRequestConverterTest {
             final OrganisationUnitWithCourtroomReferenceData inputOrganisationUnitReferenceData = ccCaseReceived.getProsecutionWithReferenceData().getReferenceDataVO().getOrganisationUnitWithCourtroomReferenceData().get();
 
             assertThat(inputOrganisationUnitReferenceData.getId(), equalTo(listHearingRequests.get(0).getCourtCentre().getId().toString()));
+            assertThat(inputOrganisationUnitReferenceData.getOucode(), equalTo(listHearingRequests.get(0).getCourtCentre().getCode()));
             assertThat(inputOrganisationUnitReferenceData.getOucodeL3WelshName(), equalTo(listHearingRequests.get(0).getCourtCentre().getWelshName()));
             assertThat(inputOrganisationUnitReferenceData.getOucodeL3Name(), equalTo(listHearingRequests.get(0).getCourtCentre().getName()));
             assertThat(inputOrganisationUnitReferenceData.getCourtRoom().getId(), equalTo(listHearingRequests.get(0).getCourtCentre().getRoomId().toString()));
@@ -237,6 +240,7 @@ public class ProsecutionCaseFileInitialHearingToCCHearingRequestConverterTest {
         ccCaseReceived.getProsecutionWithReferenceData().getReferenceDataVO().setOrganisationUnitWithCourtroomReferenceData(
                 of(organisationUnitWithCourtroomReferenceData()
                         .withId(randomUUID().toString())
+                        .withOucode("B01LY00")
                         .withOucodeL3Name("South Western (Lavender Hill)")
                         .withOucodeL3WelshName("Welsh Name")
                         .withCourtRoom(getCourtroom())
@@ -258,6 +262,46 @@ public class ProsecutionCaseFileInitialHearingToCCHearingRequestConverterTest {
                         .withProsecutorEmailAddress(PROSECUTOR_EMAIL_ADDRESS)
                         .build())
                 .build();
+    }
+
+    @Test
+    public void shouldParseDateOnlyEndDateAsEndOfDayUtc() {
+        final CcCaseReceived ccCaseReceived = buildCcCaseReceived();
+        final List<Defendant> defendants = singletonList(
+                Defendant.defendant()
+                        .withId(randomUUID().toString())
+                        .withOffences(emptyList())
+                        .withInitialHearing(InitialHearing.initialHearing()
+                                .withEndDate("2026-07-28")
+                                .build())
+                        .build());
+        final ParamsVO paramsVO = new ParamsVO();
+        paramsVO.setReferenceDataVO(ccCaseReceived.getProsecutionWithReferenceData().getReferenceDataVO());
+        paramsVO.setCaseId(randomUUID());
+
+        final List<ListHearingRequest> result = prosecutionCaseFileInitialHearingToCCHearingRequestConverter.convert(defendants, paramsVO);
+
+        assertThat(result.get(0).getListedEndDateTime().toString(), is("2026-07-28T00:00Z"));
+    }
+
+    @Test
+    public void shouldReturnNullListedEndDateTimeWhenEndDateCannotBeParsed() {
+        final CcCaseReceived ccCaseReceived = buildCcCaseReceived();
+        final List<Defendant> defendants = singletonList(
+                Defendant.defendant()
+                        .withId(randomUUID().toString())
+                        .withOffences(emptyList())
+                        .withInitialHearing(InitialHearing.initialHearing()
+                                .withEndDate("not-a-date")
+                                .build())
+                        .build());
+        final ParamsVO paramsVO = new ParamsVO();
+        paramsVO.setReferenceDataVO(ccCaseReceived.getProsecutionWithReferenceData().getReferenceDataVO());
+        paramsVO.setCaseId(randomUUID());
+
+        final List<ListHearingRequest> result = prosecutionCaseFileInitialHearingToCCHearingRequestConverter.convert(defendants, paramsVO);
+
+        assertThat(result.get(0).getListedEndDateTime(), is(nullValue()));
     }
 
     private CourtRoom getCourtroom() {

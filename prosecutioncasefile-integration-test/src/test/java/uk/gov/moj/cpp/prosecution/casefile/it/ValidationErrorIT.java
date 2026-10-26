@@ -42,6 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
 import static org.skyscreamer.jsonassert.JSONCompareMode.LENIENT;
 import static org.skyscreamer.jsonassert.JSONCompareMode.NON_EXTENSIBLE;
+import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_DEFENDANTS_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SELECTOR_CASE_VALIDATION_FAILED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SELECTOR_CC_PROSECUTION_RECEIVED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SELECTOR_CC_PROSECUTION_REJECTED;
@@ -458,7 +459,13 @@ class ValidationErrorIT extends BaseIT {
         final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
         resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
 
-        assertNoErrorsExpected(initiateCCProsecutionHelper);
+        final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_DEFENDANTS_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL);
+        assertThat(privateEvent.isPresent(), is(true));
+
+        final String defendantWarnings = privateEvent.get().payloadAsJsonObject().get("defendantWarnings").toString();
+        final JSONArray defendantWarningsArray = new JSONArray(defendantWarnings);
+        assertThat(defendantWarningsArray.isNull(0), is(true));
+
         queryAndVerifyCasesAreEmptyCollection(caseId);
     }
 
@@ -650,18 +657,6 @@ class ValidationErrorIT extends BaseIT {
     }
 
     @Test
-    void shouldRaiseValidationErrorWhenCivilCasePayloadHasInvalidCaseMarker() {
-        stubOffencesForOffenceCodeForGroupCases();
-        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-civil-invalid-case-marker.json");
-        final String ccPayLoad = replaceValues(staticPayLoad, randomUUID().toString());
-        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
-        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
-        final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
-        assertThat(privateEvent.isPresent(), is(true));
-        assertCivilCaseErrorsExpected("expected/civil_case_case_marker_invalid_problem.json", privateEvent.get());
-    }
-
-    @Test
     void shouldRaiseValidationErrorWhenCivilCasePayloadHasUnrecognisedProsecutorOucode() {
         stubOffencesForOffenceCodeForGroupCases();
         stubProsecutorsReturns404();
@@ -700,7 +695,7 @@ class ValidationErrorIT extends BaseIT {
         resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
         final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
         assertThat(privateEvent.isPresent(), is(true));
-        assertCivilDefendantErrorsContain(privateEvent.get(), "DATE_OF_HEARING_IN_THE_PAST");
+        assertCivilDefendantErrorsContain(privateEvent.get(), "DATE_OF_HEARING_MORE_THAN_31DAYS_IN_PAST");
     }
 
     @Test

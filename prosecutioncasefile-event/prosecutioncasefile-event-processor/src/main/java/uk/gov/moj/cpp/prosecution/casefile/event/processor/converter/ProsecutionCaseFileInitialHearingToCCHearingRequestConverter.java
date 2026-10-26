@@ -28,10 +28,14 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.HearingRequest;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Offence;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.OrganisationUnitWithCourtroomReferenceData;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -191,11 +195,21 @@ public class ProsecutionCaseFileInitialHearingToCCHearingRequestConverter implem
         return hearingRequests;
     }
 
-    private  ZonedDateTime getZonedDateTime(final String endDateISO) {
+    private ZonedDateTime getZonedDateTime(final String endDateISO) {
         if (isBlank(endDateISO)) {
             return null;
         }
-        return ZonedDateTime.parse(endDateISO);
+        try {
+            if (!endDateISO.contains("T")) {
+                return LocalDate.parse(endDateISO, DateTimeFormatter.ISO_LOCAL_DATE)
+                        .atTime(LocalTime.MIN)
+                        .atZone(ZoneOffset.UTC);
+            }
+            return ZonedDateTime.parse(endDateISO);
+        } catch (DateTimeParseException e) {
+            LOGGER.warn("Could not parse endDate '{}' as a date or datetime, treating as absent", endDateISO);
+            return null;
+        }
     }
 
     private JurisdictionType determineJurisdictionType(final Channel channel, final String oucodeL1Code) {
@@ -261,6 +275,7 @@ public class ProsecutionCaseFileInitialHearingToCCHearingRequestConverter implem
             roomId = getRoomId(roomId, courtRoom);
             roomName = getRoomName(roomName, courtRoom);
             courtCentreBuilder.withId(fromString(organisationUnitWithCourtroomReferenceData.getId()));
+            courtCentreBuilder.withCode(organisationUnitWithCourtroomReferenceData.getOucode());
             courtCentreBuilder.withName(organisationUnitWithCourtroomReferenceData.getOucodeL3Name());
             courtCentreBuilder.withWelshName(organisationUnitWithCourtroomReferenceData.getOucodeL3WelshName());
             courtCentreBuilder.withRoomId(roomId);

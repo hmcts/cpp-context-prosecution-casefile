@@ -17,7 +17,7 @@
   "required": [
     "caseId"
   ],
-  "oneOf": [
+  "anyOf": [
     {
       "required": [
         "documentId"

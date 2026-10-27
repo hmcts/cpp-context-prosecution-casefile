@@ -12,6 +12,7 @@ import uk.gov.justice.core.courts.BoxHearingRequest;
 import uk.gov.justice.core.courts.CourtApplication;
 import uk.gov.justice.core.courts.CourtApplicationParty;
 import uk.gov.justice.core.courts.CourtApplicationType;
+import uk.gov.justice.core.courts.FeeStatus;
 import uk.gov.justice.core.courts.InitiateCourtApplicationProceedings;
 import uk.gov.justice.core.courts.LinkType;
 import uk.gov.justice.core.courts.ProsecutionCaseIdentifier;
@@ -151,9 +152,58 @@ public class GroupCasesParkedForApprovalToCourtApplicationProceedingsConverterTe
         assertThat(courtApplication.getCourtCivilApplication(), is(notNullValue()));
         assertThat(courtApplication.getCourtCivilApplication().getIsCivil(), is(true));
 
+        assertThat(courtApplication.getCourtApplicationPayment(), nullValue());
+
         final ArgumentCaptor<ParamsVO> paramsCaptor = ArgumentCaptor.forClass(ParamsVO.class);
         verify(prosecutionCaseFileOffenceToCourtApplicationOffenceConverter).convert(anyList(), paramsCaptor.capture());
         assertThat(paramsCaptor.getValue().getCivil(), is(true));
+    }
+
+    @Test
+    public void shouldNotSetCourtApplicationPayment_whenNoPaymentReferenceOrFeeStatus() {
+        givenApplicationPartsAreConverted();
+
+        final CourtApplication courtApplication = converter.convert(buildGroupCasesParkedForApproval(true, null, null), buildMetadata()).getCourtApplication();
+
+        assertThat(courtApplication.getCourtApplicationPayment(), nullValue());
+    }
+
+    @Test
+    public void shouldSetOnlyPaymentReference_whenNoFeeStatus() {
+        givenApplicationPartsAreConverted();
+
+        final CourtApplication courtApplication = converter.convert(buildGroupCasesParkedForApproval(true, "PAYREF-123", null), buildMetadata()).getCourtApplication();
+
+        assertThat(courtApplication.getCourtApplicationPayment().getPaymentReference(), is("PAYREF-123"));
+        assertThat(courtApplication.getCourtApplicationPayment().getFeeStatus(), nullValue());
+    }
+
+    @Test
+    public void shouldSetOnlyFeeStatus_whenNoPaymentReference() {
+        givenApplicationPartsAreConverted();
+
+        final CourtApplication courtApplication = converter.convert(buildGroupCasesParkedForApproval(true, null, "OUTSTANDING"), buildMetadata()).getCourtApplication();
+
+        assertThat(courtApplication.getCourtApplicationPayment().getFeeStatus(), is(FeeStatus.OUTSTANDING));
+        assertThat(courtApplication.getCourtApplicationPayment().getPaymentReference(), nullValue());
+    }
+
+    @Test
+    public void shouldSetFeeStatusAndPaymentReference_whenBothProvided() {
+        givenApplicationPartsAreConverted();
+
+        final CourtApplication courtApplication = converter.convert(buildGroupCasesParkedForApproval(true, "PAYREF-123", "SATISFIED"), buildMetadata()).getCourtApplication();
+
+        assertThat(courtApplication.getCourtApplicationPayment().getFeeStatus(), is(FeeStatus.SATISFIED));
+        assertThat(courtApplication.getCourtApplicationPayment().getPaymentReference(), is("PAYREF-123"));
+    }
+
+    private void givenApplicationPartsAreConverted() {
+        given(prosecutionToBoxHearingRequestConverter.convert(any())).willReturn(boxHearingRequest());
+        given(prosecutionCaseFileCaseDetailsToProsecutionCaseIdentifierConverter.convert(any(CaseDetails.class), any(Metadata.class))).willReturn(prosecutionCaseIdentifier());
+        given(prosecutionCaseFileOffenceToCourtApplicationOffenceConverter.convert(anyList(), any(ParamsVO.class))).willReturn(courtApplicationOffences());
+        given(prosecutionCaseFileDefendantToCourtApplicationPartyConverter.convert(anyList(), any(ReferenceDataVO.class), any(Channel.class))).willReturn(respondents());
+        given(prosecutionCaseFileProsecutorToCourtApplicationPartyConverter.convert(any(), any(ParamsVO.class), any(Metadata.class))).willReturn(applicant());
     }
 
     @Test
@@ -195,9 +245,13 @@ public class GroupCasesParkedForApprovalToCourtApplicationProceedingsConverterTe
     }
 
     private GroupCasesParkedForApproval buildGroupCasesParkedForApproval(final Boolean masterCaseIsCivil) {
+        return buildGroupCasesParkedForApproval(masterCaseIsCivil, null, null);
+    }
+
+    private GroupCasesParkedForApproval buildGroupCasesParkedForApproval(final Boolean masterCaseIsCivil, final String paymentReference, final String feeStatus) {
         final List<GroupProsecutionWithReferenceData> groupProsecutions = asList(
-                createGroupProsecutionWithReferenceData(CASE_ID1, DEFENDANT_ID1, masterCaseIsCivil),
-                createGroupProsecutionWithReferenceData(CASE_ID2, DEFENDANT_ID2, true));
+                createGroupProsecutionWithReferenceData(CASE_ID1, DEFENDANT_ID1, masterCaseIsCivil, paymentReference, feeStatus),
+                createGroupProsecutionWithReferenceData(CASE_ID2, DEFENDANT_ID2, true, paymentReference, feeStatus));
 
         return GroupCasesParkedForApproval.groupCasesParkedForApproval()
                 .withApplicationId(UUID.randomUUID())
@@ -205,10 +259,13 @@ public class GroupCasesParkedForApprovalToCourtApplicationProceedingsConverterTe
                 .build();
     }
 
-    private GroupProsecutionWithReferenceData createGroupProsecutionWithReferenceData(final UUID caseId, final String defendantId, final Boolean isCivil){
+    private GroupProsecutionWithReferenceData createGroupProsecutionWithReferenceData(final UUID caseId, final String defendantId, final Boolean isCivil,
+                                                                                      final String paymentReference, final String feeStatus){
         return new GroupProsecutionWithReferenceData(GroupProsecution.groupProsecution()
+                .withPaymentReference(paymentReference)
                 .withCaseDetails(caseDetails()
                         .withCaseId(caseId)
+                        .withFeeStatus(feeStatus)
                         .withInitiationCode(INITIATION_CODE)
                         .withProsecutorCaseReference(PROSECUTOR_CASE_REFERENCE)
                         .withOriginatingOrganisation(ORIGINATING_ORGANISATION)

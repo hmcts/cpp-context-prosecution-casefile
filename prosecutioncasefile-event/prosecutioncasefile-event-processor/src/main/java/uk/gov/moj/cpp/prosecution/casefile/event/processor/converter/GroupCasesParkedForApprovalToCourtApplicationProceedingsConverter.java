@@ -2,6 +2,7 @@ package uk.gov.moj.cpp.prosecution.casefile.event.processor.converter;
 
 import static com.google.common.collect.ImmutableList.of;
 import static java.lang.Boolean.TRUE;
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
@@ -14,8 +15,10 @@ import static uk.gov.justice.services.common.converter.LocalDates.to;
 
 import uk.gov.justice.core.courts.CourtApplication;
 import uk.gov.justice.core.courts.CourtApplicationParty;
+import uk.gov.justice.core.courts.CourtApplicationPayment;
 import uk.gov.justice.core.courts.CourtApplicationType;
 import uk.gov.justice.core.courts.CourtCivilApplication;
+import uk.gov.justice.core.courts.FeeStatus;
 import uk.gov.justice.core.courts.InitiateCourtApplicationProceedings;
 import uk.gov.justice.core.courts.ProsecutionCaseIdentifier;
 import uk.gov.justice.services.messaging.Metadata;
@@ -109,9 +112,21 @@ public class GroupCasesParkedForApprovalToCourtApplicationProceedingsConverter i
                 .withApplicationStatus(LISTED)
                 .withRespondents(respondents)
                 .withIsGroupCaseApplication(true)
+                .withCourtApplicationPayment(getCourtApplicationPayment(caseDetails.getFeeStatus(), groupProsecutionWithReferenceData.getGroupProsecution().getPaymentReference()))
                 .withCourtCivilApplication(CourtCivilApplication.courtCivilApplication()
                         .withIsCivil(isCivil)
                         .build())
+                .build();
+    }
+
+    // the fee status and payment reference are set only when provided; the payment reference is held on the group prosecution
+    private CourtApplicationPayment getCourtApplicationPayment(final String feeStatus, final String paymentReference) {
+        if (isNull(feeStatus) && isNull(paymentReference)) {
+            return null;
+        }
+        return CourtApplicationPayment.courtApplicationPayment()
+                .withFeeStatus(nonNull(feeStatus) ? FeeStatus.valueOf(feeStatus) : null)
+                .withPaymentReference(paymentReference)
                 .build();
     }
 

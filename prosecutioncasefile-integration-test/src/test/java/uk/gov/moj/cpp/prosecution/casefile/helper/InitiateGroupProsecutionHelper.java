@@ -148,6 +148,33 @@ public class InitiateGroupProsecutionHelper extends AbstractTestHelper {
 
     }
 
+    public void verifyInitiateCourtProceedingsForApplicationCommandHasCivilFee(final String masterCaseId, final String expectedFeeStatus, final String expectedPaymentReference) {
+        try {
+            waitAtMost(Duration.ONE_MINUTE).until(() ->
+                    getInitiateCourtProceedingsForApplicationCommand()
+                            .filter(payload -> isApplicationForCase(payload, masterCaseId))
+                            .anyMatch(payload -> hasCivilFee(payload.getJSONObject("courtApplication"), expectedFeeStatus, expectedPaymentReference))
+            );
+        } catch (Exception e) {
+            throw new AssertionError("verifyInitiateCourtProceedingsForApplicationCommandHasCivilFee failed with: " + e);
+        }
+    }
+
+    private static boolean isApplicationForCase(final JSONObject payload, final String caseId) {
+        return payload.has("courtApplication")
+                && caseId.equals(payload.getJSONObject("courtApplication").getJSONArray("courtApplicationCases").getJSONObject(0).optString("prosecutionCaseId"));
+    }
+
+    private static boolean hasCivilFee(final JSONObject courtApplication, final String expectedFeeStatus, final String expectedPaymentReference) {
+        if (!courtApplication.has("courtApplicationPayment") || !courtApplication.has("courtCivilApplication")) {
+            return false;
+        }
+        final JSONObject courtApplicationPayment = courtApplication.getJSONObject("courtApplicationPayment");
+        return expectedFeeStatus.equals(courtApplicationPayment.optString("feeStatus"))
+                && expectedPaymentReference.equals(courtApplicationPayment.optString("paymentReference"))
+                && courtApplication.getJSONObject("courtCivilApplication").optBoolean("isCivil");
+    }
+
     public void verifyUploadMaterialCommandCalled(){
 
         try {

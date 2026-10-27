@@ -114,6 +114,8 @@ public class InitiateGroupProsecutionIT extends BaseIT {
         initiateGroupProsecutionHelper.thenPrivateGroupCasesParkedForApprovalEventShouldBeRaised();
         initiateGroupProsecutionHelper.thenPrivateGroupIdRecorderdForSummonsApplicationEventShouldBeRaised();
         initiateGroupProsecutionHelper.verifyInitiateCourtProceedingsForApplicationCommand();
+        // fee status and payment reference as submitted for the master case
+        initiateGroupProsecutionHelper.verifyInitiateCourtProceedingsForApplicationCommandHasCivilFee(caseId1.toString(), "OUTSTANDING", "payment_reference_number");
         initiateGroupProsecutionHelper.verifyCreateDocumentCalled(asList("dateReceived"));
         initiateGroupProsecutionHelper.verifyUploadMaterialCommandCalled();
         initiateGroupProsecutionHelper.verifyAddCourtDocumentCalled(caseId1.toString());

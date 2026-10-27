@@ -152,7 +152,8 @@ public class GroupCasesParkedForApprovalToCourtApplicationProceedingsConverterTe
         assertThat(courtApplication.getCourtCivilApplication(), is(notNullValue()));
         assertThat(courtApplication.getCourtCivilApplication().getIsCivil(), is(true));
 
-        assertThat(courtApplication.getCourtApplicationPayment(), nullValue());
+        assertThat(courtApplication.getCourtApplicationPayment().getFeeStatus(), is(FeeStatus.OUTSTANDING));
+        assertThat(courtApplication.getCourtApplicationPayment().getPaymentReference(), nullValue());
 
         final ArgumentCaptor<ParamsVO> paramsCaptor = ArgumentCaptor.forClass(ParamsVO.class);
         verify(prosecutionCaseFileOffenceToCourtApplicationOffenceConverter).convert(anyList(), paramsCaptor.capture());
@@ -160,39 +161,20 @@ public class GroupCasesParkedForApprovalToCourtApplicationProceedingsConverterTe
     }
 
     @Test
-    public void shouldNotSetCourtApplicationPayment_whenNoPaymentReferenceOrFeeStatus() {
+    public void shouldSetInitialFeeOutstanding_whenNoPaymentReference() {
         givenApplicationPartsAreConverted();
 
-        final CourtApplication courtApplication = converter.convert(buildGroupCasesParkedForApproval(true, null, null), buildMetadata()).getCourtApplication();
-
-        assertThat(courtApplication.getCourtApplicationPayment(), nullValue());
-    }
-
-    @Test
-    public void shouldSetOnlyPaymentReference_whenNoFeeStatus() {
-        givenApplicationPartsAreConverted();
-
-        final CourtApplication courtApplication = converter.convert(buildGroupCasesParkedForApproval(true, "PAYREF-123", null), buildMetadata()).getCourtApplication();
-
-        assertThat(courtApplication.getCourtApplicationPayment().getPaymentReference(), is("PAYREF-123"));
-        assertThat(courtApplication.getCourtApplicationPayment().getFeeStatus(), nullValue());
-    }
-
-    @Test
-    public void shouldSetOnlyFeeStatus_whenNoPaymentReference() {
-        givenApplicationPartsAreConverted();
-
-        final CourtApplication courtApplication = converter.convert(buildGroupCasesParkedForApproval(true, null, "OUTSTANDING"), buildMetadata()).getCourtApplication();
+        final CourtApplication courtApplication = converter.convert(buildGroupCasesParkedForApproval(true, null), buildMetadata()).getCourtApplication();
 
         assertThat(courtApplication.getCourtApplicationPayment().getFeeStatus(), is(FeeStatus.OUTSTANDING));
         assertThat(courtApplication.getCourtApplicationPayment().getPaymentReference(), nullValue());
     }
 
     @Test
-    public void shouldSetFeeStatusAndPaymentReference_whenBothProvided() {
+    public void shouldSetInitialFeeSatisfied_whenPaymentReferenceProvided() {
         givenApplicationPartsAreConverted();
 
-        final CourtApplication courtApplication = converter.convert(buildGroupCasesParkedForApproval(true, "PAYREF-123", "SATISFIED"), buildMetadata()).getCourtApplication();
+        final CourtApplication courtApplication = converter.convert(buildGroupCasesParkedForApproval(true, "PAYREF-123"), buildMetadata()).getCourtApplication();
 
         assertThat(courtApplication.getCourtApplicationPayment().getFeeStatus(), is(FeeStatus.SATISFIED));
         assertThat(courtApplication.getCourtApplicationPayment().getPaymentReference(), is("PAYREF-123"));
@@ -245,13 +227,13 @@ public class GroupCasesParkedForApprovalToCourtApplicationProceedingsConverterTe
     }
 
     private GroupCasesParkedForApproval buildGroupCasesParkedForApproval(final Boolean masterCaseIsCivil) {
-        return buildGroupCasesParkedForApproval(masterCaseIsCivil, null, null);
+        return buildGroupCasesParkedForApproval(masterCaseIsCivil, null);
     }
 
-    private GroupCasesParkedForApproval buildGroupCasesParkedForApproval(final Boolean masterCaseIsCivil, final String paymentReference, final String feeStatus) {
+    private GroupCasesParkedForApproval buildGroupCasesParkedForApproval(final Boolean masterCaseIsCivil, final String paymentReference) {
         final List<GroupProsecutionWithReferenceData> groupProsecutions = asList(
-                createGroupProsecutionWithReferenceData(CASE_ID1, DEFENDANT_ID1, masterCaseIsCivil, paymentReference, feeStatus),
-                createGroupProsecutionWithReferenceData(CASE_ID2, DEFENDANT_ID2, true, paymentReference, feeStatus));
+                createGroupProsecutionWithReferenceData(CASE_ID1, DEFENDANT_ID1, masterCaseIsCivil, paymentReference),
+                createGroupProsecutionWithReferenceData(CASE_ID2, DEFENDANT_ID2, true, paymentReference));
 
         return GroupCasesParkedForApproval.groupCasesParkedForApproval()
                 .withApplicationId(UUID.randomUUID())
@@ -260,12 +242,11 @@ public class GroupCasesParkedForApprovalToCourtApplicationProceedingsConverterTe
     }
 
     private GroupProsecutionWithReferenceData createGroupProsecutionWithReferenceData(final UUID caseId, final String defendantId, final Boolean isCivil,
-                                                                                      final String paymentReference, final String feeStatus){
+                                                                                      final String paymentReference){
         return new GroupProsecutionWithReferenceData(GroupProsecution.groupProsecution()
                 .withPaymentReference(paymentReference)
                 .withCaseDetails(caseDetails()
                         .withCaseId(caseId)
-                        .withFeeStatus(feeStatus)
                         .withInitiationCode(INITIATION_CODE)
                         .withProsecutorCaseReference(PROSECUTOR_CASE_REFERENCE)
                         .withOriginatingOrganisation(ORIGINATING_ORGANISATION)

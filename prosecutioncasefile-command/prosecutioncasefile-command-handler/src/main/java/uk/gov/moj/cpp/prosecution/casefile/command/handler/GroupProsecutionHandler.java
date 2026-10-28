@@ -14,11 +14,13 @@ import uk.gov.justice.services.eventsourcing.source.core.exception.EventStreamEx
 import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.moj.cpp.prosecution.casefile.aggregate.GroupProsecutionCaseFile;
+import uk.gov.moj.cpp.prosecution.casefile.aggregate.GroupProsecutionReceiver;
 import uk.gov.moj.cpp.prosecution.casefile.domain.GroupProsecutionList;
 import uk.gov.moj.cpp.prosecution.casefile.refdata.defendant.DefendantRefDataEnricher;
 import uk.gov.moj.cpp.prosecution.casefile.refdata.proscase.GroupCasesReferenceDataEnricher;
 import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -53,9 +55,12 @@ public class GroupProsecutionHandler {
         final GroupProsecutionList groupProsecutionList = envelope.payload();
         final UUID groupId = groupProsecutionList.getGroupProsecutionWithReferenceDataList().get(0).getGroupProsecution().getGroupId();
         LOGGER.info("prosecutioncasefile.command.initiate-group-prosecution-with-reference-data for submission id {} and GroupId {}", groupProsecutionList.getExternalId(), groupId);
+        // Enrich and validate before loading the aggregate: for large groups this takes long enough that an
+        // event-store connection opened first sits idle in the transaction and is closed by Postgres.
+        final List<Object> evaluatedEvents = GroupProsecutionReceiver.evaluate(groupProsecutionList, newArrayList(this.groupCasesReferenceDataEnrichers.iterator()), newArrayList(this.defendantRefDataEnrichers.iterator()), this.referenceDataQueryService);
         final EventStream eventStream = this.eventSource.getStreamById(groupId);
         final GroupProsecutionCaseFile groupProsecution = this.aggregateService.get(eventStream, GroupProsecutionCaseFile.class);
-        final Stream<Object> events = groupProsecution.receiveGroupProsecution(groupProsecutionList,  newArrayList(this.groupCasesReferenceDataEnrichers.iterator()), newArrayList(this.defendantRefDataEnrichers.iterator()), this.referenceDataQueryService);
+        final Stream<Object> events = groupProsecution.receiveGroupProsecution(evaluatedEvents);
         final JsonEnvelope jsonEnvelope = JsonEnvelope.envelopeFrom(envelope.metadata(), JsonValue.NULL);
         eventStream.append(events.map(toEnvelopeWithMetadataFrom(jsonEnvelope)));
     }

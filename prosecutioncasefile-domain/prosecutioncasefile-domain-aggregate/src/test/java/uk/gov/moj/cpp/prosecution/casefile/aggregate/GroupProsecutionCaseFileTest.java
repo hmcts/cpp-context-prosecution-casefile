@@ -9,6 +9,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 import static uk.gov.moj.cpp.prosecution.casefile.aggregate.GroupProsecutionCaseFile.INITIATION_CODE_CIVIL_CASE;
 import static uk.gov.moj.cpp.prosecution.casefile.aggregate.GroupProsecutionCaseFile.INITIATION_CODE_FOR_SUMMONS;
+import static uk.gov.moj.cpp.prosecution.casefile.aggregate.GroupProsecutionReceiver.evaluate;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -81,7 +82,7 @@ public class GroupProsecutionCaseFileTest {
         groupProsecutionWithReferenceDataList.add(groupProsecutionWithReferenceData2);
         final GroupProsecutionList groupProsecutionList = new GroupProsecutionList(groupProsecutionWithReferenceDataList);
 
-        final Stream<Object> eventStream = groupProsecutionCaseFile.receiveGroupProsecution(groupProsecutionList, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
+        final Stream<Object> eventStream = groupProsecutionCaseFile.receiveGroupProsecution(evaluate(groupProsecutionList, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService));
         assertThat(eventStream.findFirst().get(), is(instanceOf(GroupCasesParkedForApproval.class)));
 
     }
@@ -105,7 +106,7 @@ public class GroupProsecutionCaseFileTest {
         groupProsecutionWithReferenceDataList.add(groupProsecutionWithReferenceData2);
         final GroupProsecutionList groupProsecutionList = new GroupProsecutionList(groupProsecutionWithReferenceDataList);
 
-        final Stream<Object> eventStream = groupProsecutionCaseFile.receiveGroupProsecution(groupProsecutionList, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
+        final Stream<Object> eventStream = groupProsecutionCaseFile.receiveGroupProsecution(evaluate(groupProsecutionList, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService));
         assertThat(eventStream.findFirst().get(), is(instanceOf(GroupProsecutionRejected.class)));
 
     }
@@ -130,7 +131,7 @@ public class GroupProsecutionCaseFileTest {
         final GroupProsecutionList groupProsecutionList = new GroupProsecutionList(groupProsecutionWithReferenceDataList);
         groupProsecutionList.setChannel(Channel.CIVIL);
 
-        final Stream<Object> eventStream = groupProsecutionCaseFile.receiveGroupProsecution(groupProsecutionList, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
+        final Stream<Object> eventStream = groupProsecutionCaseFile.receiveGroupProsecution(evaluate(groupProsecutionList, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService));
         Object object = eventStream.findFirst().get();
         assertThat(object, is(instanceOf(GroupCasesReceived.class)));
         GroupCasesReceived groupCasesReceived = (GroupCasesReceived) object;
@@ -154,7 +155,7 @@ public class GroupProsecutionCaseFileTest {
         groupProsecutionWithReferenceDataList.add(groupProsecutionWithReferenceData);
         final GroupProsecutionList groupProsecutionList = new GroupProsecutionList(groupProsecutionWithReferenceDataList);
 
-        final Stream<Object> eventStream = groupProsecutionCaseFile.receiveGroupProsecution(groupProsecutionList, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
+        final Stream<Object> eventStream = groupProsecutionCaseFile.receiveGroupProsecution(evaluate(groupProsecutionList, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService));
         assertThat(eventStream.findFirst().get(), is(instanceOf(GroupProsecutionRejected.class)));
 
     }
@@ -186,7 +187,7 @@ public class GroupProsecutionCaseFileTest {
         final GroupProsecutionList groupProsecutionList = new GroupProsecutionList(groupProsecutionWithReferenceDataList);
         groupProsecutionList.setChannel(Channel.CIVIL);
 
-        final Stream<Object> eventStream = groupProsecutionCaseFile.receiveGroupProsecution(groupProsecutionList, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
+        final Stream<Object> eventStream = groupProsecutionCaseFile.receiveGroupProsecution(evaluate(groupProsecutionList, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService));
 
         final Object event = eventStream.findFirst().get();
         assertThat(event, is(instanceOf(GroupProsecutionRejected.class)));
@@ -340,7 +341,7 @@ public class GroupProsecutionCaseFileTest {
         final GroupProsecutionList groupProsecutionList = new GroupProsecutionList(groupProsecutionWithReferenceDataList);
         groupProsecutionList.setChannel(Channel.CIVIL);
 
-        final Stream<Object> eventStream = groupProsecutionCaseFile.receiveGroupProsecution(groupProsecutionList, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
+        final Stream<Object> eventStream = groupProsecutionCaseFile.receiveGroupProsecution(evaluate(groupProsecutionList, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService));
         assertThat(eventStream.findFirst().get(), is(instanceOf(GroupCasesReceived.class)));
     }
 

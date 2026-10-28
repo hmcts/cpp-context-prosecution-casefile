@@ -2,6 +2,7 @@ package uk.gov.moj.cpp.prosecution.casefile.event.processor.converter;
 
 import static com.google.common.collect.ImmutableList.of;
 import static java.lang.Boolean.TRUE;
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
@@ -111,19 +112,31 @@ public class GroupCasesParkedForApprovalToCourtApplicationProceedingsConverter i
                 .withApplicationStatus(LISTED)
                 .withRespondents(respondents)
                 .withIsGroupCaseApplication(true)
-                .withCourtApplicationPayment(getCourtApplicationPayment(groupProsecutionWithReferenceData.getGroupProsecution().getPaymentReference()))
+                .withCourtApplicationPayment(getCourtApplicationPayment(caseDetails.getFeeStatus(), groupProsecutionWithReferenceData.getGroupProsecution().getPaymentReference(), isCivil))
                 .withCourtCivilApplication(CourtCivilApplication.courtCivilApplication()
                         .withIsCivil(isCivil)
                         .build())
                 .build();
     }
 
-    // the initial fee is satisfied when a payment reference is provided on the group prosecution, otherwise it is outstanding
-    private CourtApplicationPayment getCourtApplicationPayment(final String paymentReference) {
+    private CourtApplicationPayment getCourtApplicationPayment(final String feeStatus, final String paymentReference, final boolean isCivil) {
+        final FeeStatus initialFeeStatus = getInitialFeeStatus(feeStatus, paymentReference, isCivil);
+        if (isNull(initialFeeStatus) && isNull(paymentReference)) {
+            return null;
+        }
         return CourtApplicationPayment.courtApplicationPayment()
-                .withFeeStatus(nonNull(paymentReference) ? FeeStatus.SATISFIED : FeeStatus.OUTSTANDING)
+                .withFeeStatus(initialFeeStatus)
                 .withPaymentReference(paymentReference)
                 .build();
+    }
+
+    private static FeeStatus getInitialFeeStatus(final String feeStatus, final String paymentReference, final boolean isCivil) {
+        if (nonNull(feeStatus)) {
+            return FeeStatus.valueOf(feeStatus);
+        } else if (!isCivil) {
+            return null;
+        }
+        return nonNull(paymentReference) ? FeeStatus.SATISFIED : FeeStatus.OUTSTANDING;
     }
 
     @SuppressWarnings({"Duplicates", "duplicates"})

@@ -1,17 +1,11 @@
 package uk.gov.moj.cpp.prosecution.casefile.aggregate;
 
-import static java.util.Optional.ofNullable;
 import static java.util.stream.Stream.builder;
-import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static uk.gov.justice.domain.aggregate.matcher.EventSwitcher.match;
 import static uk.gov.justice.domain.aggregate.matcher.EventSwitcher.otherwiseDoNothing;
 import static uk.gov.justice.domain.aggregate.matcher.EventSwitcher.when;
 import static uk.gov.moj.cpp.prosecution.casefile.ProsecutionCaseFileHelper.buildDefendantWithReferenceData;
-import static uk.gov.moj.cpp.prosecution.casefile.ProsecutionCaseFileHelper.validateDefendantErrors;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseProblem.caseProblem;
-import static uk.gov.moj.cpp.prosecution.casefile.validation.ValidationRuleExecutor.validate;
-import static uk.gov.moj.cpp.prosecution.casefile.validation.provider.CcProsecutionValidationRuleProvider.getCaseValidationRulesForCivil;
-import static uk.gov.moj.cpp.prosecution.casefile.validation.provider.CcProsecutionValidationRuleProvider.getGroupCasesValidationRules;
 
 import uk.gov.justice.domain.aggregate.Aggregate;
 import uk.gov.moj.cpp.prosecution.casefile.domain.DefendantsWithReferenceData;
@@ -22,13 +16,11 @@ import uk.gov.moj.cpp.prosecution.casefile.event.GroupCasesParkedForApproval;
 import uk.gov.moj.cpp.prosecution.casefile.event.GroupCasesReceived;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseProblem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel;
-import uk.gov.moj.cpp.prosecution.casefile.json.schemas.DefendantProblem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.GroupProsecution;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Problem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecution;
 import uk.gov.moj.cpp.prosecution.casefile.refdata.defendant.DefendantRefDataEnricher;
 import uk.gov.moj.cpp.prosecution.casefile.refdata.proscase.GroupCasesReferenceDataEnricher;
-import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.GroupCasesCreatedSuccessfully;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.GroupProsecutionRejected;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.GroupSummonsApplicationRejected;
@@ -37,13 +29,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @SuppressWarnings({"java:S1068", "java:S3740"})
 public class GroupProsecutionCaseFile implements Aggregate {
@@ -52,7 +39,6 @@ public class GroupProsecutionCaseFile implements Aggregate {
 
     public static final String INITIATION_CODE_CIVIL_CASE = "O";
     public static final String INITIATION_CODE_FOR_SUMMONS = "S";
-    private static final Logger LOGGER = LoggerFactory.getLogger(GroupProsecutionCaseFile.class);
 
     private List<GroupProsecution> groupProsecutions;
     private UUID externalId;
@@ -84,80 +70,12 @@ public class GroupProsecutionCaseFile implements Aggregate {
                 otherwiseDoNothing());
     }
 
-    public Stream<Object> receiveGroupProsecution(final GroupProsecutionList groupProsecutionList, final List<GroupCasesReferenceDataEnricher> groupCasesReferenceDataEnrichers, final List<DefendantRefDataEnricher> defendantRefDataEnrichers, final ReferenceDataQueryService referenceDataQueryService) {
-
-        final Stream.Builder<Object> builder = builder();
-
-        final Optional<GroupProsecutionWithReferenceData> masterCaseData = groupProsecutionList.getGroupProsecutionWithReferenceDataList().stream()
-                .filter(p -> p.getGroupProsecution().getIsGroupMaster())
-                .findFirst();
-        final Boolean isCivil = masterCaseData.isPresent() && ofNullable(masterCaseData.get().getGroupProsecution().getIsCivil()).orElse(false);
-        String receivedInitiationCode = null;
-        if (masterCaseData.isPresent() && masterCaseData.get().getGroupProsecution() != null &&
-                masterCaseData.get().getGroupProsecution().getCaseDetails() != null &&
-                masterCaseData.get().getGroupProsecution().getCaseDetails().getInitiationCode() != null) {
-
-            receivedInitiationCode = masterCaseData.get().getGroupProsecution().getCaseDetails().getInitiationCode();
-            LOGGER.info("receivedInitiationCode {} for submissionId {}  ", receivedInitiationCode, groupProsecutionList.getExternalId());
-        } else {
-            LOGGER.error("Cannot proceed as group cases need to have a master case.");
-            return builder.build();
-        }
-
-        final List<Problem> groupCaseProblems = validate(groupProsecutionList, referenceDataQueryService, getGroupCasesValidationRules());
-
-        LOGGER.info("groupCaseProblems validated for submissionId {} with count {} ", groupProsecutionList.getExternalId(), groupCaseProblems.size());
-
-        final List<CaseProblem> caseProblems = new ArrayList<>();
-
-        final List<ProsecutionWithReferenceData> prosecutionWithReferenceDataList = groupProsecutionList.getGroupProsecutionWithReferenceDataList().stream()
-                .map(groupProsecutionWithReferenceData -> convertToProsecutionWithReferenceData(groupProsecutionWithReferenceData, groupProsecutionList.getChannel(), groupProsecutionList.getExternalId()))
-                .toList();
-
-        groupCasesReferenceDataEnrichers.forEach(x -> x.enrich(prosecutionWithReferenceDataList));
-
-        prosecutionWithReferenceDataList.forEach(prosecutionWithReferenceData -> {
-            final List<Problem> problemsForCase = validate(prosecutionWithReferenceData, referenceDataQueryService, getCaseValidationRulesForCivil(prosecutionWithReferenceData.getProsecution().getCaseDetails().getInitiationCode()));
-            if (isNotEmpty(problemsForCase)) {
-                caseProblems.add(caseProblem()
-                        .withProblems(problemsForCase)
-                        .withProsecutorCaseReference(prosecutionWithReferenceData.getProsecution().getCaseDetails().getProsecutorCaseReference())
-                        .build());
-            }
-        });
-        LOGGER.info("caseProblems validated for submissionId {} with count {} ", groupProsecutionList.getExternalId(), caseProblems.size());
-        final List<DefendantProblem> defendantProblems = validateDefendants(groupProsecutionList, defendantRefDataEnrichers, referenceDataQueryService, builder,isCivil);
-
-        final boolean hasErrors = isNotEmpty(groupCaseProblems) || isNotEmpty(caseProblems) || isNotEmpty(defendantProblems);
-
-        if (hasErrors) {
-            return apply(builder.add(GroupProsecutionRejected.groupProsecutionRejected()
-                    .withGroupProsecutions(groupProsecutionList.getGroupProsecutionWithReferenceDataList().stream().map(GroupProsecutionWithReferenceData::getGroupProsecution).toList())
-                    .withChannel(groupProsecutionList.getChannel())
-                    .withGroupCaseErrors(toGroupCaseErrors(groupCaseProblems))
-                    .withCaseErrors(caseProblems)
-                    .withDefendantErrors(defendantProblems)
-                    .withExternalId(groupProsecutionList.getExternalId()).build())
-                    .build());
-        }
-        LOGGER.info("defendantProblems validated for submission Id {} with count {} ", groupProsecutionList.getExternalId(), defendantProblems.size());
-        if (Objects.equals(receivedInitiationCode, INITIATION_CODE_FOR_SUMMONS)) {
-            LOGGER.info("GroupCasesParkedForApproval for groupId {} and submissionId {} ", masterCaseData.get().getGroupProsecution().getGroupId(), groupProsecutionList.getExternalId());
-            return apply(builder.add(GroupCasesParkedForApproval.groupCasesParkedForApproval()
-                    .withApplicationId(UUID.randomUUID())
-                    .withGroupProsecutionList(groupProsecutionList).build())
-                    .build());
-
-        } else if (Objects.equals(receivedInitiationCode, INITIATION_CODE_CIVIL_CASE)) {
-            LOGGER.info("GroupCasesReceived for groupId {}  with  submissionId {} and masterCaseId {}", masterCaseData.get().getGroupProsecution().getGroupId(), groupProsecutionList.getExternalId(), masterCaseData.get().getGroupProsecution().getCaseDetails().getCaseId());
-            return apply(builder.add(GroupCasesReceived.groupCasesReceived()
-                    .withGroupProsecutionList(groupProsecutionList)
-                    .withDefendantWarnings(defendantProblems).build())
-                    .build());
-        }
-
-        return Stream.empty();
-
+    /**
+     * Applies the events decided by {@link GroupProsecutionReceiver#evaluate}, which runs before
+     * this aggregate is loaded so the event-store connection is not held during enrichment.
+     */
+    public Stream<Object> receiveGroupProsecution(final List<Object> events) {
+        return apply(events.stream());
     }
 
     public Stream<Object> approveGroupProsecution(final List<GroupCasesReferenceDataEnricher> groupCasesReferenceDataEnrichers, final List<DefendantRefDataEnricher> defendantRefDataEnrichers){
@@ -211,7 +129,7 @@ public class GroupProsecutionCaseFile implements Aggregate {
      * no-arg rejectGroupProsecution()) returns null so the field is omitted from the event rather than
      * published as an empty list, preserving the previous wire shape for that path.
      */
-    private static List<CaseProblem> toGroupCaseErrors(final List<Problem> groupProblems) {
+    static List<CaseProblem> toGroupCaseErrors(final List<Problem> groupProblems) {
         if (groupProblems == null) {
             return null;
         }
@@ -226,18 +144,7 @@ public class GroupProsecutionCaseFile implements Aggregate {
         return groupCaseErrors;
     }
 
-    private List<DefendantProblem> validateDefendants(final GroupProsecutionList groupProsecutionList, final List<DefendantRefDataEnricher> defendantRefDataEnrichers, final ReferenceDataQueryService referenceDataQueryService, final Stream.Builder builder,final Boolean isCivil) {
-        final Map<UUID, DefendantsWithReferenceData> defendantsWithReferenceDataMap = buildDefendantsWithReferenceDataByCaseId(groupProsecutionList.getGroupProsecutionWithReferenceDataList(), groupProsecutionList.getChannel(), groupProsecutionList.getExternalId(), defendantRefDataEnrichers);
-
-        return groupProsecutionList.getGroupProsecutionWithReferenceDataList().stream()
-                .flatMap(groupProsecutionWithReferenceData -> {
-                    final DefendantsWithReferenceData defendantsWithReferenceData = defendantsWithReferenceDataMap.get(groupProsecutionWithReferenceData.getGroupProsecution().getCaseDetails().getCaseId());
-                    final List<DefendantProblem> errors = validateDefendantErrors(groupProsecutionWithReferenceData.getGroupProsecution().getCaseDetails(), groupProsecutionList.getChannel(), defendantsWithReferenceData, referenceDataQueryService, builder, Boolean.TRUE, false, false,isCivil);
-                    return errors.stream();
-                }).toList();
-    }
-
-    private Map<UUID, DefendantsWithReferenceData> buildDefendantsWithReferenceDataByCaseId(final List<GroupProsecutionWithReferenceData> groupProsecutions, final Channel channel, final UUID externalId, final List<DefendantRefDataEnricher> defendantRefDataEnrichers) {
+    static Map<UUID, DefendantsWithReferenceData> buildDefendantsWithReferenceDataByCaseId(final List<GroupProsecutionWithReferenceData> groupProsecutions, final Channel channel, final UUID externalId, final List<DefendantRefDataEnricher> defendantRefDataEnrichers) {
         final List<DefendantsWithReferenceData> defendantsWithReferenceDataList = groupProsecutions.stream()
                 .map(prosecutionWithReferenceData -> buildDefendantWithReferenceData(convertToProsecutionWithReferenceData(prosecutionWithReferenceData, channel, externalId), defendantRefDataEnrichers))
                 .toList();
@@ -254,7 +161,7 @@ public class GroupProsecutionCaseFile implements Aggregate {
         return defendantsWithReferenceDataMap;
     }
 
-    private ProsecutionWithReferenceData convertToProsecutionWithReferenceData(final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData, final Channel channel, final UUID externalId) {
+    static ProsecutionWithReferenceData convertToProsecutionWithReferenceData(final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData, final Channel channel, final UUID externalId) {
         final Prosecution prosecution = Prosecution.prosecution()
                 .withCaseDetails(groupProsecutionWithReferenceData.getGroupProsecution().getCaseDetails())
                 .withDefendants(groupProsecutionWithReferenceData.getGroupProsecution().getDefendants())

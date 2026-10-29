@@ -43,6 +43,9 @@ public class GroupProsecutionCaseFile implements Aggregate {
     private List<GroupProsecution> groupProsecutions;
     private UUID externalId;
     private Channel channel;
+    // reference data looked up when a summons group was parked, reused on approval; null for groups
+    // not parked for approval and for aggregates restored from a snapshot taken before it was kept
+    private GroupProsecutionList parkedGroupProsecutionList;
 
     @Override
     public Object apply(final Object event) {
@@ -53,11 +56,13 @@ public class GroupProsecutionCaseFile implements Aggregate {
                             .toList();
                     this.externalId = e.getGroupProsecutionList().getExternalId();
                     this.channel = e.getGroupProsecutionList().getChannel();
+                    this.parkedGroupProsecutionList = null;
                 }),
                 when(GroupProsecutionRejected.class).apply(e -> {
                     this.groupProsecutions = e.getGroupProsecutions();
                     this.externalId = e.getExternalId();
                     this.channel = e.getChannel();
+                    this.parkedGroupProsecutionList = null;
                 }),
                 when(GroupCasesParkedForApproval.class).apply(e -> {
                     this.groupProsecutions = e.getGroupProsecutionList().getGroupProsecutionWithReferenceDataList().stream()
@@ -65,7 +70,7 @@ public class GroupProsecutionCaseFile implements Aggregate {
                             .toList();
                     this.externalId = e.getGroupProsecutionList().getExternalId();
                     this.channel = e.getGroupProsecutionList().getChannel();
-
+                    this.parkedGroupProsecutionList = e.getGroupProsecutionList();
                 }),
                 otherwiseDoNothing());
     }
@@ -78,7 +83,21 @@ public class GroupProsecutionCaseFile implements Aggregate {
         return apply(events.stream());
     }
 
+    /**
+     * Reuses the reference data looked up when the group was parked, so approving a large group makes no
+     * REST calls while the event-store connection is open. Enriches again only when that data isn't held.
+     */
     public Stream<Object> approveGroupProsecution(final List<GroupCasesReferenceDataEnricher> groupCasesReferenceDataEnrichers, final List<DefendantRefDataEnricher> defendantRefDataEnrichers){
+        final GroupProsecutionList groupProsecutionList = this.parkedGroupProsecutionList != null
+                ? this.parkedGroupProsecutionList
+                : enrichGroupProsecutions(groupCasesReferenceDataEnrichers, defendantRefDataEnrichers);
+
+        return apply(builder().add(GroupCasesReceived.groupCasesReceived()
+                .withGroupProsecutionList(groupProsecutionList).build())
+                .build());
+    }
+
+    private GroupProsecutionList enrichGroupProsecutions(final List<GroupCasesReferenceDataEnricher> groupCasesReferenceDataEnrichers, final List<DefendantRefDataEnricher> defendantRefDataEnrichers) {
         final List<GroupProsecutionWithReferenceData> groupProsecutionWithReferenceDataList = this.groupProsecutions.stream()
                 .map(GroupProsecutionWithReferenceData::new)
                 .toList();
@@ -92,11 +111,7 @@ public class GroupProsecutionCaseFile implements Aggregate {
 
         buildDefendantsWithReferenceDataByCaseId(groupProsecutionWithReferenceDataList, this.channel, this.externalId, defendantRefDataEnrichers);
 
-        final GroupProsecutionList groupProsecutionList = new GroupProsecutionList(groupProsecutionWithReferenceDataList, this.externalId, this.channel);
-
-        return apply(builder().add(GroupCasesReceived.groupCasesReceived()
-                .withGroupProsecutionList(groupProsecutionList).build())
-                .build());
+        return new GroupProsecutionList(groupProsecutionWithReferenceDataList, this.externalId, this.channel);
     }
 
 

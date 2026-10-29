@@ -1,6 +1,6 @@
 package uk.gov.moj.cpp.prosecution.casefile.domain;
 
-import static java.util.Optional.empty;
+import static java.util.Optional.ofNullable;
 
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.AlcoholLevelMethodReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.BailStatusReferenceData;
@@ -19,12 +19,16 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.SelfdefinedEthnicityRefe
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.SummonsCodeReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.VehicleCodeReferenceData;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @SuppressWarnings("squid:S2384")
-public class ReferenceDataVO {
+public class ReferenceDataVO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
 
     private final List<ReferenceDataCountryNationality> countryNationalityReferenceData = new ArrayList<>();
     private final List<SelfdefinedEthnicityReferenceData> selfdefinedEthnicityReferenceData = new ArrayList<>();
@@ -34,7 +38,8 @@ public class ReferenceDataVO {
     private List<CaseMarker> caseMarkers = new ArrayList<>();
     private List<ObservedEthnicityReferenceData> observedEthnicityReferenceData = new ArrayList<>();
     private List<VehicleCodeReferenceData> vehicleCodesReferenceData = new ArrayList<>();
-    private Optional<OrganisationUnitWithCourtroomReferenceData> organisationUnitWithCourtroomReferenceData = empty();
+    // held as a nullable value rather than an Optional so the aggregate snapshot can serialize it
+    private OrganisationUnitWithCourtroomReferenceData organisationUnitWithCourtroomReferenceData;
     private List<AlcoholLevelMethodReferenceData> alcoholLevelMethodReferenceData;
     private List<OffenderCodeReferenceData> offenderCodeReferenceData = new ArrayList<>();
     private List<BailStatusReferenceData> bailStatusReferenceData = new ArrayList<>();
@@ -129,11 +134,11 @@ public class ReferenceDataVO {
     }
 
     public Optional<OrganisationUnitWithCourtroomReferenceData> getOrganisationUnitWithCourtroomReferenceData() {
-        return organisationUnitWithCourtroomReferenceData;
+        return ofNullable(organisationUnitWithCourtroomReferenceData);
     }
 
     public void setOrganisationUnitWithCourtroomReferenceData(final Optional<OrganisationUnitWithCourtroomReferenceData> organisationUnitWithCourtroomReferenceData) {
-        this.organisationUnitWithCourtroomReferenceData = organisationUnitWithCourtroomReferenceData;
+        this.organisationUnitWithCourtroomReferenceData = organisationUnitWithCourtroomReferenceData == null ? null : organisationUnitWithCourtroomReferenceData.orElse(null);
     }
 
     public List<OrganisationUnitReferenceData> getOrganisationUnitReferenceData() {

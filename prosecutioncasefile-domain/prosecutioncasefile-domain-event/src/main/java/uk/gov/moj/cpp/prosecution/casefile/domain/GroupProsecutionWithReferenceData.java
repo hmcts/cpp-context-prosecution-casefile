@@ -2,7 +2,11 @@ package uk.gov.moj.cpp.prosecution.casefile.domain;
 
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.GroupProsecution;
 
-public class GroupProsecutionWithReferenceData {
+import java.io.Serializable;
+
+public class GroupProsecutionWithReferenceData implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private final GroupProsecution groupProsecution;
 

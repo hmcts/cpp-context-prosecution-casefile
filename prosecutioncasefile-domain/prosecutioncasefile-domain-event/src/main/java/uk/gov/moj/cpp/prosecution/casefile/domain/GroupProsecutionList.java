@@ -2,12 +2,16 @@ package uk.gov.moj.cpp.prosecution.casefile.domain;
 
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public class GroupProsecutionList {
+public class GroupProsecutionList implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private List<GroupProsecutionWithReferenceData> groupProsecutionWithReferenceDataList;
 
     private UUID externalId;

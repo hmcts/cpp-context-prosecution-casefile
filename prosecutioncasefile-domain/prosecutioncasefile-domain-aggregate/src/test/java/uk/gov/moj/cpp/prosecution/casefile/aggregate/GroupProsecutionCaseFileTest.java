@@ -6,6 +6,9 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static uk.gov.moj.cpp.prosecution.casefile.aggregate.GroupProsecutionCaseFile.INITIATION_CODE_CIVIL_CASE;
 import static uk.gov.moj.cpp.prosecution.casefile.aggregate.GroupProsecutionCaseFile.INITIATION_CODE_FOR_SUMMONS;
@@ -34,11 +37,18 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.OrganisationUnitWithCour
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ParentGuardianInformation;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Problem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.SelfDefinedInformation;
+import uk.gov.moj.cpp.prosecution.casefile.refdata.defendant.DefendantRefDataEnricher;
+import uk.gov.moj.cpp.prosecution.casefile.refdata.proscase.GroupCasesReferenceDataEnricher;
 import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 import uk.gov.moj.cpp.prosecution.casefile.validation.ProblemCode;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.GroupProsecutionRejected;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.GroupSummonsApplicationRejected;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.SummonsCodeReferenceData;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,6 +66,12 @@ public class GroupProsecutionCaseFileTest {
 
     @Mock
     private ReferenceDataQueryService referenceDataQueryService;
+
+    @Mock
+    private GroupCasesReferenceDataEnricher groupCasesReferenceDataEnricher;
+
+    @Mock
+    private DefendantRefDataEnricher defendantRefDataEnricher;
 
     @InjectMocks
     private GroupProsecutionCaseFile groupProsecutionCaseFile;
@@ -261,6 +277,82 @@ public class GroupProsecutionCaseFileTest {
 
         assertThat(events, Matchers.hasSize(1));
         assertThat(events.get(0), is(instanceOf(GroupProsecutionRejected.class)));
+    }
+
+    @Test
+    void shouldApproveParkedGroupFromItsStoredReferenceDataWithoutEnrichingAgain() {
+        final UUID externalId = randomUUID();
+        groupProsecutionCaseFile.apply(parkedForApproval(externalId));
+
+        final List<Object> events = groupProsecutionCaseFile.approveGroupProsecution(asList(groupCasesReferenceDataEnricher), asList(defendantRefDataEnricher)).toList();
+
+        verifyNoInteractions(groupCasesReferenceDataEnricher, defendantRefDataEnricher);
+        assertReceivedFromParkedReferenceData(events, externalId);
+    }
+
+    @Test
+    void shouldApproveParkedGroupFromItsStoredReferenceDataAfterTheAggregateIsSnapshotted() throws Exception {
+        final UUID externalId = randomUUID();
+        groupProsecutionCaseFile.apply(parkedForApproval(externalId));
+
+        final GroupProsecutionCaseFile restored = serializeAndDeserialize(groupProsecutionCaseFile);
+        final List<Object> events = restored.approveGroupProsecution(asList(groupCasesReferenceDataEnricher), asList(defendantRefDataEnricher)).toList();
+
+        verifyNoInteractions(groupCasesReferenceDataEnricher, defendantRefDataEnricher);
+        assertReceivedFromParkedReferenceData(events, externalId);
+    }
+
+    @Test
+    void shouldEnrichOnApprovalWhenNoParkedReferenceDataIsHeld() {
+        groupProsecutionCaseFile.apply(GroupProsecutionRejected.groupProsecutionRejected()
+                .withGroupProsecutions(asList(buildGroupProsecutionWithReferenceData(INITIATION_CODE_FOR_SUMMONS, randomUUID(), true, URN_1, "A").getGroupProsecution()))
+                .withExternalId(randomUUID())
+                .withChannel(Channel.CIVIL)
+                .build());
+
+        final List<Object> events = groupProsecutionCaseFile.approveGroupProsecution(asList(groupCasesReferenceDataEnricher), asList(defendantRefDataEnricher)).toList();
+
+        verify(groupCasesReferenceDataEnricher).enrich(anyList());
+        verify(defendantRefDataEnricher).enrich(anyList());
+        assertThat(events, Matchers.hasSize(1));
+        assertThat(events.get(0), is(instanceOf(GroupCasesReceived.class)));
+    }
+
+    private GroupCasesParkedForApproval parkedForApproval(final UUID externalId) {
+        final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
+        referenceDataVO.setInitiationTypes(asList(INITIATION_CODE_FOR_SUMMONS));
+        referenceDataVO.setOrganisationUnitWithCourtroomReferenceData(Optional.of(OrganisationUnitWithCourtroomReferenceData.organisationUnitWithCourtroomReferenceData().build()));
+        final GroupProsecutionWithReferenceData master = buildGroupProsecutionWithReferenceData(INITIATION_CODE_FOR_SUMMONS, randomUUID(), true, URN_1, "A");
+        master.setReferenceDataVO(referenceDataVO);
+        final GroupProsecutionWithReferenceData member = buildGroupProsecutionWithReferenceData(INITIATION_CODE_FOR_SUMMONS, randomUUID(), false, URN_2, "A");
+        member.setReferenceDataVO(referenceDataVO);
+        return GroupCasesParkedForApproval.groupCasesParkedForApproval()
+                .withApplicationId(randomUUID())
+                .withGroupProsecutionList(new GroupProsecutionList(new ArrayList<>(asList(master, member)), externalId, Channel.CIVIL))
+                .build();
+    }
+
+    private void assertReceivedFromParkedReferenceData(final List<Object> events, final UUID externalId) {
+        assertThat(events, Matchers.hasSize(1));
+        assertThat(events.get(0), is(instanceOf(GroupCasesReceived.class)));
+        final GroupProsecutionList received = ((GroupCasesReceived) events.get(0)).getGroupProsecutionList();
+        assertThat(received.getExternalId(), is(externalId));
+        assertThat(received.getChannel(), is(Channel.CIVIL));
+        assertThat(received.getGroupProsecutionWithReferenceDataList(), Matchers.hasSize(2));
+        received.getGroupProsecutionWithReferenceDataList().forEach(caseWithReferenceData -> {
+            assertThat(caseWithReferenceData.getReferenceDataVO().getInitiationTypes(), is(asList(INITIATION_CODE_FOR_SUMMONS)));
+            assertThat(caseWithReferenceData.getReferenceDataVO().getOrganisationUnitWithCourtroomReferenceData().isPresent(), is(true));
+        });
+    }
+
+    private static GroupProsecutionCaseFile serializeAndDeserialize(final GroupProsecutionCaseFile aggregate) throws IOException, ClassNotFoundException {
+        final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        try (ObjectOutputStream out = new ObjectOutputStream(bytes)) {
+            out.writeObject(aggregate);
+        }
+        try (ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(bytes.toByteArray()))) {
+            return (GroupProsecutionCaseFile) in.readObject();
+        }
     }
 
     private void seedAggregateWithMasterCase() {

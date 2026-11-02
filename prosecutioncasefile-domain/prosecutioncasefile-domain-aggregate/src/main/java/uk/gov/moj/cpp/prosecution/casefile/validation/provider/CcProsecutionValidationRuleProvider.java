@@ -290,8 +290,8 @@ public class CcProsecutionValidationRuleProvider {
     ));
 
     private static final Map<String, List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>>> defendantValidationMapForSingleCivilCases = of(
-            SUMMONS.getCode(), Stream.of(SINGLE_CIVIL_CASE_ONLY_RULE_SET_FOR_SUMMONS, COMMON_DEFENDANT_RULE_SET, SPI_DEFENDANT_RULE_SET).flatMap(Collection::stream).toList(),
-            OTHER.getCode(), Stream.of(SINGLE_CIVIL_CASE_ONLY_RULE_SET_FOR_OTHER, COMMON_DEFENDANT_RULE_SET, SPI_DEFENDANT_RULE_SET).flatMap(Collection::stream).toList());
+            SUMMONS.getCode(), Stream.of(SINGLE_CIVIL_CASE_ONLY_RULE_SET_FOR_SUMMONS, COMMON_DEFENDANT_RULE_SET, NON_POLICE_DEFENDANT_RULE_SET).flatMap(Collection::stream).toList(),
+            OTHER.getCode(), Stream.of(SINGLE_CIVIL_CASE_ONLY_RULE_SET_FOR_OTHER, COMMON_DEFENDANT_RULE_SET, NON_POLICE_DEFENDANT_RULE_SET).flatMap(Collection::stream).toList());
 
     private static final Map<String, List<ValidationRule<DefendantWithReferenceData, ReferenceDataQueryService>>> defendantValidationMapMCCCivil = of(
             SUMMONS.getCode(), Stream.of(GROUP_CIVIL_DEFENDANT_RULE_SET,COMMON_DEFENDANT_RULE_SET, NON_POLICE_DEFENDANT_RULE_SET, SUMMONS_DEFENDANT_RULE_MCC_SET).flatMap(Collection::stream).toList(),
@@ -350,6 +350,7 @@ public class CcProsecutionValidationRuleProvider {
         }
         return unmodifiableList(asList(
                 new CaseInitiationValidationRule(),
+                new CaseMarkersValidationAndEnricherRule(),
                 new ProsecutorReferenceDataValidationRule()
         ));
     }

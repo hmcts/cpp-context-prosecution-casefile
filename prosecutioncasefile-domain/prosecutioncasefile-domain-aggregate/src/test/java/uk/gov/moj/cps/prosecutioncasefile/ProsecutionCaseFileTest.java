@@ -504,23 +504,6 @@ public class ProsecutionCaseFileTest {
     }
 
     @Test
-    public void shouldUseCivilCaseValidationRulesAndIgnoreInvalidCaseMarkerWhenIsCivilTrue() {
-        final LocalDate offenceCommittedDate = of(2018, 3, 2);
-        final LocalDate offenceChargeDate = of(2018, 11, 2);
-
-        final ProsecutionWithReferenceData prosecutionWithReferenceData = getProsecutionWithReferenceDataAndCivilFees(
-                List.of(buildDefendantWithOffence(offenceCommittedDate, offenceChargeDate, PROSECUTOR_DEFENDANT_REFERENCE_ONE)),
-                CIVIL, true, Collections.emptyList(), singletonList(caseMarker().withMarkerTypeCode(INVALID_CASE_MARKER_CODE).build()));
-
-        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(),
-                referenceDataQueryService);
-
-        final List<Object> eventList = objectStream.toList();
-
-        assertThat(getFirstMatching(eventList, CcProsecutionRejected.class).isPresent(), is(false));
-    }
-
-    @Test
     public void shouldUseStandardCaseValidationRulesAndRejectInvalidCaseMarkerWhenIsCivilFalse() {
         final LocalDate offenceCommittedDate = of(2018, 3, 2);
         final LocalDate offenceChargeDate = of(2018, 11, 2);

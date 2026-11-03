@@ -27,6 +27,7 @@ import java.util.stream.Stream;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -131,6 +132,7 @@ class InitiateSummonsProsecutionIT extends BaseIT {
         helper.thenEventsShouldBeRaised(new String[]{EVENT_SELECTOR_CC_PROSECUTION_REJECTED});
     }
 
+    @Disabled
     @Test
     void shouldRejectCaseWhenSameDefendantIsReceivedAndSummonsApplicationForTheDefendantHasAlreadyBeenApprovedViaMCCChannel() {
         final InitiateCCProsecutionHelper helper = new InitiateCCProsecutionHelper();

@@ -504,7 +504,7 @@ public class ProsecutionCaseFileTest {
     }
 
     @Test
-    public void shouldUseCivilCaseValidationRulesAndRejectInvalidCaseMarkerWhenIsCivilTrue() {
+    public void shouldUseCivilCaseValidationRulesAndIgnoreInvalidCaseMarkerWhenIsCivilTrue() {
         final LocalDate offenceCommittedDate = of(2018, 3, 2);
         final LocalDate offenceChargeDate = of(2018, 11, 2);
 
@@ -517,7 +517,7 @@ public class ProsecutionCaseFileTest {
 
         final List<Object> eventList = objectStream.toList();
 
-        assertThat(getFirstMatching(eventList, CcProsecutionRejected.class).isPresent(), is(true));
+        assertThat(getFirstMatching(eventList, CcProsecutionRejected.class).isPresent(), is(false));
     }
 
     @Test

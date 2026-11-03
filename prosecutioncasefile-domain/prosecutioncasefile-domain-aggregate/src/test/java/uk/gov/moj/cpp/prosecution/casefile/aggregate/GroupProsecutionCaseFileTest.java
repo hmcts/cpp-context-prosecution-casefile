@@ -238,7 +238,7 @@ public class GroupProsecutionCaseFileTest {
                 .withGroupProsecutionList(groupProsecutionList)
                 .build());
 
-        final List<Object> events = groupProsecutionCaseFile.rejectGroupProsecution().collect(java.util.stream.Collectors.toList());
+        final List<Object> events = groupProsecutionCaseFile.rejectGroupProsecution().toList();
 
         // The no-arg path (SA/SR box rejection) now raises ONLY GroupSummonsApplicationRejected —
         // GroupProsecutionRejected is reserved for the List<Problem> path (e.g. duplicate-URN rejection).
@@ -256,7 +256,7 @@ public class GroupProsecutionCaseFileTest {
         seedAggregateWithMasterCase();
 
         final Problem problem = Problem.problem().withCode("DUPLICATED_PROSECUTION").build();
-        final List<Object> events = groupProsecutionCaseFile.rejectGroupProsecution(asList(problem)).collect(java.util.stream.Collectors.toList());
+        final List<Object> events = groupProsecutionCaseFile.rejectGroupProsecution(asList(problem)).toList();
 
         assertThat(events, Matchers.hasSize(1));
         assertThat(events.get(0), is(instanceOf(GroupProsecutionRejected.class)));

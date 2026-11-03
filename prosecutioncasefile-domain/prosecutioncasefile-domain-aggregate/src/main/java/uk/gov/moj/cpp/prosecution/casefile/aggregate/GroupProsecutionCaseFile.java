@@ -45,7 +45,7 @@ import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@SuppressWarnings({"java:S1068", "java:S3740"})
+@SuppressWarnings({"java:S1068", "java:S3740","java:S1168"})
 public class GroupProsecutionCaseFile implements Aggregate {
 
     private static final long serialVersionUID = 7500527201134194465L;

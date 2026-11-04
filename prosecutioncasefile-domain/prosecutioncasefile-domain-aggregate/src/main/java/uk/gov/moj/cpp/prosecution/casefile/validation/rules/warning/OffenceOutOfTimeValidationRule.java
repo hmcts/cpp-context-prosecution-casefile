@@ -45,6 +45,10 @@ public class OffenceOutOfTimeValidationRule implements ValidationRule<Defendant,
         final LocalDate offenceCommittedDate = offence.getOffenceCommittedDate();
         final LocalDate offenceChargeDate = offence.getChargeDate();
 
+        if (offenceChargeDate == null) {
+            return Optional.empty();
+        }
+
         final Optional<Integer> prosecutionTimeLimitMonths = referenceDataValidationContext.getOffenceCodeReferenceData().stream()
                 .filter(referenceData -> offence.getOffenceCode().equals(referenceData.getCjsOffenceCode()))
                 .map(OffenceReferenceData::getProsecutionTimeLimit)

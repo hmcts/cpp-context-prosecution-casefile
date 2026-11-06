@@ -20,7 +20,10 @@ import static uk.gov.moj.cpp.prosecution.casefile.event.CcCaseReceivedWithWarnin
 import static uk.gov.moj.cpp.prosecution.casefile.event.processor.utils.CaseReceivedHelper.buildProsecutionWithReferenceData;
 import static uk.gov.moj.cpp.prosecution.casefile.event.processor.utils.CaseReceivedHelper.buildProsecutionWithReferenceDataWithChannel;
 import static uk.gov.moj.cpp.prosecution.casefile.event.processor.utils.CaseReceivedHelper.readResourcesFile;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseDetails.caseDetails;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CIVIL;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.MCC;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecution.prosecution;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.ProblemValue.problemValue;
 
 import uk.gov.justice.core.courts.CourtCentre;
@@ -38,6 +41,7 @@ import uk.gov.justice.services.core.sender.Sender;
 import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.Metadata;
+import uk.gov.moj.cpp.prosecution.casefile.domain.ProsecutionWithReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.event.CcCaseReceived;
 import uk.gov.moj.cpp.prosecution.casefile.event.CcCaseReceivedWithWarnings;
 import uk.gov.moj.cpp.prosecution.casefile.event.processor.converter.CCCaseToProsecutionCaseConverter;
@@ -47,12 +51,14 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.DefenceDefendant;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.DefendantProblem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Problem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ProblemValue;
+import uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicSubmissionApproved;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.ValidationCompleted;
 
 import java.io.StringReader;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import javax.json.JsonObject;
 import javax.json.JsonReader;
@@ -75,6 +81,7 @@ public class ProsecutionReceivedProcessorTest {
     private static final String PUBLIC_PROSECUTIONCASEFILE_EVENTS_VALIDATION_COMPLETE = "public.prosecutioncasefile.events.validation-completed";
     private static final String PROSECUTIONCASEFILE_HANDLER_CASE_UPDATED_INITIATE_IDPC_MATCH = "prosecutioncasefile.handler.case-updated-initiate-idpc-match";
     private static final String PUBLIC_PROSECUTIONCASEFILE_CC_CASE_RECEIVED = "public.prosecutioncasefile.cc-case-received";
+    private static final String PUBLIC_EVENT_PROSECUTIONCASEFILE_SUBMISSION_APPROVED = "public.prosecutioncasefile.submission-approved";
 
     @Mock
     private ObjectToJsonObjectConverter objectToJsonObjectConverter;
@@ -133,7 +140,7 @@ public class ProsecutionReceivedProcessorTest {
 
         final CcCaseReceived ccCaseReceived = ccCaseReceived().withProsecutionWithReferenceData(buildProsecutionWithReferenceData("Either Way")).build();
 
-        final List<Envelope> envelopeList = setUpTestEnvelopeListForCCCase(ccCaseReceived);
+        final List<Envelope> envelopeList = setUpTestEnvelopeListForCCCase(ccCaseReceived, 2);
         assertThat(envelopeList.get(0).metadata().name(), is(PROSECUTIONCASEFILE_HANDLER_CASE_UPDATED_INITIATE_IDPC_MATCH));
         assertThat(envelopeList.get(1).metadata().name(), is(PUBLIC_PROSECUTIONCASEFILE_CC_CASE_RECEIVED));
     }
@@ -143,13 +150,57 @@ public class ProsecutionReceivedProcessorTest {
 
         final CcCaseReceived ccCaseReceived = ccCaseReceived().withProsecutionWithReferenceData(buildProsecutionWithReferenceDataWithChannel(MCC)).build();
 
-        final List<Envelope> envelopeList = setUpTestEnvelopeListForCCCase(ccCaseReceived);
+        final List<Envelope> envelopeList = setUpTestEnvelopeListForCCCase(ccCaseReceived, 2);
 
         assertThat(envelopeList.get(0).metadata().name(), is(PUBLIC_PROSECUTIONCASEFILE_CC_CASE_RECEIVED));
         assertThat(envelopeList.get(1).metadata().name(), is(PUBLIC_PROSECUTIONCASEFILE_MANUAL_CASE_RECEIVED));
     }
 
-    private List<Envelope> setUpTestEnvelopeListForCCCase(final CcCaseReceived ccCaseReceived) {
+    @Test
+    public void shouldEmitSubmissionApprovedPublicEventWhenCcCaseReceivedForCivilSummons() {
+        final UUID externalId = randomUUID();
+        final CcCaseReceived ccCaseReceived = ccCaseReceived().withProsecutionWithReferenceData(buildCivilSummonsProsecutionWithReferenceData(externalId)).build();
+
+        // CIVIL is neither SPI nor MCC, so the only other send is the cc-case-received echo —
+        // submission-approved must be sent FIRST (before that echo), per its dedicated assertion below.
+        final List<Envelope> envelopeList = setUpTestEnvelopeListForCCCase(ccCaseReceived, 2);
+
+        final Envelope<PublicSubmissionApproved> submissionApprovedEnvelope = envelopeList.get(0);
+        assertThat(submissionApprovedEnvelope.metadata().name(), is(PUBLIC_EVENT_PROSECUTIONCASEFILE_SUBMISSION_APPROVED));
+        final PublicSubmissionApproved payload = submissionApprovedEnvelope.payload();
+        assertThat(payload.getChannel(), is(CIVIL));
+        assertThat(payload.getExternalId(), is(externalId));
+        assertThat(envelopeList.get(1).metadata().name(), is(PUBLIC_PROSECUTIONCASEFILE_CC_CASE_RECEIVED));
+    }
+
+    @Test
+    public void shouldNotEmitSubmissionApprovedPublicEventWhenCcCaseReceivedForNonSummonsCivilCase() {
+        // buildProsecutionWithReferenceDataWithChannel hardcodes initiationCode "Z" — not a summons application.
+        final CcCaseReceived ccCaseReceived = ccCaseReceived().withProsecutionWithReferenceData(buildProsecutionWithReferenceDataWithChannel(CIVIL)).build();
+
+        setUpTestEnvelopeListForCCCase(ccCaseReceived, 1);
+    }
+
+    private ProsecutionWithReferenceData buildCivilSummonsProsecutionWithReferenceData(final UUID externalId) {
+        final ProsecutionWithReferenceData base = buildProsecutionWithReferenceDataWithChannel(CIVIL);
+        final uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecution civilSummonsProsecution = prosecution()
+                .withCaseDetails(caseDetails()
+                        .withInitiationCode("S")
+                        .withCaseId(base.getProsecution().getCaseDetails().getCaseId())
+                        .withProsecutorCaseReference(base.getProsecution().getCaseDetails().getProsecutorCaseReference())
+                        .withProsecutor(base.getProsecution().getCaseDetails().getProsecutor())
+                        .build())
+                .withChannel(CIVIL)
+                .withDefendants(base.getProsecution().getDefendants())
+                .build();
+
+        final ProsecutionWithReferenceData prosecutionWithReferenceData = new ProsecutionWithReferenceData(civilSummonsProsecution);
+        prosecutionWithReferenceData.setReferenceDataVO(base.getReferenceDataVO());
+        prosecutionWithReferenceData.setExternalId(externalId);
+        return prosecutionWithReferenceData;
+    }
+
+    private List<Envelope> setUpTestEnvelopeListForCCCase(final CcCaseReceived ccCaseReceived, final int expectedSendCount) {
         final Metadata metadata = metadataBuilder()
                 .withName("prosecutioncasefile.events.cc-case-received")
                 .withId(randomUUID())
@@ -172,7 +223,7 @@ public class ProsecutionReceivedProcessorTest {
         prosecutionReceivedProcessor.handleCcCaseReceived(envelopeFrom(metadata, ccCaseReceived));
 
         verify(sender).sendAsAdmin(captorAdmin.capture());
-        verify(sender, times(2)).send(captor.capture());
+        verify(sender, times(expectedSendCount)).send(captor.capture());
 
         final JsonEnvelope jsonEnvelope = captorAdmin.getValue();
         assertThat(jsonEnvelope, is(envelope1));
@@ -225,6 +276,24 @@ public class ProsecutionReceivedProcessorTest {
         final List<Envelope> envelopeList = captor.getAllValues();
 
         assertThat(envelopeList.get(0).metadata().name(), is(PUBLIC_PROSECUTIONCASEFILE_MANUAL_CASE_RECEIVED));
+        assertThat(envelopeList.get(1).metadata().name(), is(PUBLIC_PROSECUTIONCASEFILE_CC_CASE_RECEIVED));
+    }
+
+    @Test
+    public void shouldEmitSubmissionApprovedPublicEventWhenCcCaseReceivedWithWarningsForCivilSummons() {
+        final UUID externalId = randomUUID();
+        final CcCaseReceivedWithWarnings ccCaseReceivedWithWarnings = ccCaseReceivedWithWarnings().withProsecutionWithReferenceData(buildCivilSummonsProsecutionWithReferenceData(externalId)).build();
+        getJsonEnvelope(PROSECUTION_CASE_REFERENCE, ccCaseReceivedWithWarnings);
+
+        verify(sender).sendAsAdmin(captorAdmin.capture());
+        verify(sender, times(2)).send(captor.capture());
+
+        final List<Envelope> envelopeList = captor.getAllValues();
+        final Envelope<PublicSubmissionApproved> submissionApprovedEnvelope = envelopeList.get(0);
+        assertThat(submissionApprovedEnvelope.metadata().name(), is(PUBLIC_EVENT_PROSECUTIONCASEFILE_SUBMISSION_APPROVED));
+        final PublicSubmissionApproved payload = submissionApprovedEnvelope.payload();
+        assertThat(payload.getChannel(), is(CIVIL));
+        assertThat(payload.getExternalId(), is(externalId));
         assertThat(envelopeList.get(1).metadata().name(), is(PUBLIC_PROSECUTIONCASEFILE_CC_CASE_RECEIVED));
     }
 

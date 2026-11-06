@@ -3,8 +3,10 @@ package uk.gov.moj.cpp.prosecution.casefile.event.processor;
 import static uk.gov.justice.services.core.annotation.Component.EVENT_PROCESSOR;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;
 import static uk.gov.justice.services.messaging.Envelope.metadataFrom;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CIVIL;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.MCC;
 import static uk.gov.moj.cps.prosecutioncasefile.domain.event.ManualCaseReceived.manualCaseReceived;
+import static uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicParkedForSummonsApplicationApproval.publicParkedForSummonsApplicationApproval;
 
 import uk.gov.justice.core.courts.InitiateCourtApplicationProceedings;
 import uk.gov.justice.services.core.annotation.Handles;
@@ -13,11 +15,13 @@ import uk.gov.justice.services.core.sender.Sender;
 import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.Metadata;
+import uk.gov.moj.cpp.prosecution.casefile.domain.ProsecutionWithReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.event.DefendantsParkedForSummonsApplicationApproval;
 import uk.gov.moj.cpp.prosecution.casefile.event.processor.converter.DefendantsParkedToCourtApplicationProceedingsConverter;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseDetails;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecution;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.ManualCaseReceived;
+import uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicParkedForSummonsApplicationApproval;
 
 import java.util.UUID;
 
@@ -28,6 +32,7 @@ public class SummonsApplicationEventProcessor {
 
     private static final String PROGRESSION_COMMAND_INITIATE_COURT_PROCEEDINGS_FOR_APPLICATION = "progression.initiate-court-proceedings-for-application";
     private static final String PUBLIC_EVENT_PROSECUTIONCASEFILE_MANUAL_CASE_RECEIVED = "public.prosecutioncasefile.manual-case-received";
+    private static final String PUBLIC_EVENT_PROSECUTIONCASEFILE_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL = "public.prosecutioncasefile.parked-for-summons-application-approval";
 
     @Inject
     private Sender sender;
@@ -49,6 +54,8 @@ public class SummonsApplicationEventProcessor {
         if (MCC == prosecution.getChannel()) {
             final CaseDetails caseDetails = prosecution.getCaseDetails();
             emitPublicEventForMCC(envelope.metadata(), caseDetails.getCaseId(), payload.getApplicationId(), caseDetails.getProsecutorCaseReference());
+        } else if (CIVIL == prosecution.getChannel()) {
+            emitPublicEventForCivil(envelope.metadata(), payload);
         }
     }
 
@@ -63,5 +70,22 @@ public class SummonsApplicationEventProcessor {
                 .withProsecutorCaseReference(prosecutorCaseReference)
                 .build();
         this.sender.send(envelopeFrom(publicEventMetadata, manualCaseReceived));
+    }
+
+    private void emitPublicEventForCivil(final Metadata metadata, final DefendantsParkedForSummonsApplicationApproval payload) {
+        final ProsecutionWithReferenceData prosecutionWithReferenceData = payload.getProsecutionWithReferenceData();
+        final Prosecution prosecution = prosecutionWithReferenceData.getProsecution();
+
+        final Metadata publicEventMetadata = JsonEnvelope.metadataFrom(metadata)
+                .withName(PUBLIC_EVENT_PROSECUTIONCASEFILE_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL)
+                .build();
+
+        final PublicParkedForSummonsApplicationApproval publicParkedForSummonsApplicationApproval = publicParkedForSummonsApplicationApproval()
+                .withCaseId(prosecution.getCaseDetails().getCaseId())
+                .withApplicationId(payload.getApplicationId())
+                .withExternalId(prosecutionWithReferenceData.getExternalId())
+                .withChannel(prosecution.getChannel())
+                .build();
+        this.sender.send(envelopeFrom(publicEventMetadata, publicParkedForSummonsApplicationApproval));
     }
 }

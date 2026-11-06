@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -44,6 +45,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static uk.gov.justice.core.courts.BreachType.NOT_APPLICABLE;
 import static uk.gov.justice.core.courts.CourtApplicationType.courtApplicationType;
 import static uk.gov.justice.core.courts.Jurisdiction.EITHER;
@@ -146,12 +148,56 @@ public class GroupCasesParkedForApprovalToCourtApplicationProceedingsConverterTe
         assertThat(courtApplication.getType(), is(notNullValue()));
         assertThat(courtApplication.getType().getLinkType(), is(LinkType.FIRST_HEARING));
 
+        assertThat(courtApplication.getCourtCivilApplication(), is(notNullValue()));
+        assertThat(courtApplication.getCourtCivilApplication().getIsCivil(), is(true));
+
+        final ArgumentCaptor<ParamsVO> paramsCaptor = ArgumentCaptor.forClass(ParamsVO.class);
+        verify(prosecutionCaseFileOffenceToCourtApplicationOffenceConverter).convert(anyList(), paramsCaptor.capture());
+        assertThat(paramsCaptor.getValue().getCivil(), is(true));
+    }
+
+    @Test
+    public void shouldSetCourtCivilApplicationIsCivilFalse_whenMasterCaseIsNotCivil() {
+        assertIsCivilPropagatesAsFalse(false);
+    }
+
+    @Test
+    public void shouldSetCourtCivilApplicationIsCivilFalse_whenMasterCaseIsCivilIsNull() {
+        assertIsCivilPropagatesAsFalse(null);
+    }
+
+    private void assertIsCivilPropagatesAsFalse(final Boolean masterCaseIsCivil) {
+        final GroupCasesParkedForApproval source = buildGroupCasesParkedForApproval(masterCaseIsCivil);
+        final CourtApplicationParty applicant = applicant();
+        final List<CourtApplicationParty> respondents = respondents();
+        final ProsecutionCaseIdentifier prosecutionCaseIdentifier = prosecutionCaseIdentifier();
+        final List<uk.gov.justice.core.courts.Offence> courtApplicationOffences = courtApplicationOffences();
+
+        given(prosecutionToBoxHearingRequestConverter.convert(any())).willReturn(boxHearingRequest());
+        given(prosecutionCaseFileCaseDetailsToProsecutionCaseIdentifierConverter.convert(any(CaseDetails.class), any(Metadata.class))).willReturn(prosecutionCaseIdentifier);
+        given(prosecutionCaseFileOffenceToCourtApplicationOffenceConverter.convert(anyList(), any(ParamsVO.class))).willReturn(courtApplicationOffences);
+        given(prosecutionCaseFileDefendantToCourtApplicationPartyConverter.convert(anyList(), any(ReferenceDataVO.class), any(Channel.class))).willReturn(respondents);
+        given(prosecutionCaseFileProsecutorToCourtApplicationPartyConverter.convert(any(), any(ParamsVO.class), any(Metadata.class))).willReturn(applicant);
+
+        final InitiateCourtApplicationProceedings applicationProceedings = converter.convert(source, buildMetadata());
+
+        final CourtApplication courtApplication = applicationProceedings.getCourtApplication();
+        assertThat(courtApplication.getCourtCivilApplication(), is(notNullValue()));
+        assertThat(courtApplication.getCourtCivilApplication().getIsCivil(), is(false));
+
+        final ArgumentCaptor<ParamsVO> paramsCaptor = ArgumentCaptor.forClass(ParamsVO.class);
+        verify(prosecutionCaseFileOffenceToCourtApplicationOffenceConverter).convert(anyList(), paramsCaptor.capture());
+        assertThat(paramsCaptor.getValue().getCivil(), nullValue());
     }
 
     private GroupCasesParkedForApproval buildGroupCasesParkedForApproval() {
+        return buildGroupCasesParkedForApproval(true);
+    }
+
+    private GroupCasesParkedForApproval buildGroupCasesParkedForApproval(final Boolean masterCaseIsCivil) {
         final List<GroupProsecutionWithReferenceData> groupProsecutions = asList(
-                createGroupProsecutionWithReferenceData(CASE_ID1, DEFENDANT_ID1),
-                createGroupProsecutionWithReferenceData(CASE_ID2, DEFENDANT_ID2));
+                createGroupProsecutionWithReferenceData(CASE_ID1, DEFENDANT_ID1, masterCaseIsCivil),
+                createGroupProsecutionWithReferenceData(CASE_ID2, DEFENDANT_ID2, true));
 
         return GroupCasesParkedForApproval.groupCasesParkedForApproval()
                 .withApplicationId(UUID.randomUUID())
@@ -159,7 +205,7 @@ public class GroupCasesParkedForApprovalToCourtApplicationProceedingsConverterTe
                 .build();
     }
 
-    private GroupProsecutionWithReferenceData createGroupProsecutionWithReferenceData(final UUID caseId, final String defendantId){
+    private GroupProsecutionWithReferenceData createGroupProsecutionWithReferenceData(final UUID caseId, final String defendantId, final Boolean isCivil){
         return new GroupProsecutionWithReferenceData(GroupProsecution.groupProsecution()
                 .withCaseDetails(caseDetails()
                         .withCaseId(caseId)
@@ -200,7 +246,7 @@ public class GroupCasesParkedForApprovalToCourtApplicationProceedingsConverterTe
                 .withGroupId(randomUUID())
                 .withIsGroupMaster(caseId.equals(CASE_ID1))
                 .withIsGroupMember(true)
-                .withIsCivil(true)
+                .withIsCivil(isCivil)
                 .build());
     }
 

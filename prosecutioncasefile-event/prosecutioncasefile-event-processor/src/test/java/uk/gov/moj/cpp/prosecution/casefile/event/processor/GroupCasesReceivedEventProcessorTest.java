@@ -2,9 +2,13 @@ package uk.gov.moj.cpp.prosecution.casefile.event.processor;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithRandomUUID;
@@ -23,16 +27,22 @@ import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.moj.cpp.prosecution.casefile.domain.GroupProsecutionList;
 import uk.gov.moj.cpp.prosecution.casefile.domain.GroupProsecutionWithReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.event.GroupCasesReceived;
+import uk.gov.moj.cpp.prosecution.casefile.casemanagement.model.CreateGroupCaseRequest;
+import uk.gov.moj.cpp.prosecution.casefile.event.processor.converter.GroupCasesReceivedToCreateGroupCaseRequestConverter;
 import uk.gov.moj.cpp.prosecution.casefile.event.processor.converter.GroupCasesReceivedToInitiateCourtProceedingsConverter;
+import uk.gov.moj.cpp.prosecution.casefile.event.processor.service.CaseManagementException;
+import uk.gov.moj.cpp.prosecution.casefile.event.processor.service.CaseManagementService;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.GroupProsecution;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicGroupSubmissionApproved;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
@@ -50,8 +60,62 @@ public class GroupCasesReceivedEventProcessorTest {
     @Mock
     private GroupCasesReceivedToInitiateCourtProceedingsConverter groupCasesReceivedToInitiateCourtProceedingsConverter;
 
+    @Mock
+    private GroupCasesReceivedToCreateGroupCaseRequestConverter groupCasesReceivedToCreateGroupCaseRequestConverter;
+
+    @Mock
+    private CaseManagementService caseManagementService;
+
     @InjectMocks
     private GroupCasesReceivedEventProcessor groupCasesReceivedEventProcessor;
+
+    @Test
+    void handleGroupCasesReceived_withLeadCase_should_createGroupCaseBeforeSendingProgressionCommand() {
+        final Envelope<GroupCasesReceived> requestEnvelope = envelopeFrom(
+                metadataWithRandomUUID("prosecutioncasefile.events.group-cases-received"),
+                createGroupCasesReceived());
+        final CreateGroupCaseRequest createGroupCaseRequest = new CreateGroupCaseRequest().groupId(UUID.randomUUID());
+        when(groupCasesReceivedToCreateGroupCaseRequestConverter.convert(any())).thenReturn(Optional.of(createGroupCaseRequest));
+        when(groupCasesReceivedToInitiateCourtProceedingsConverter.convert(any())).thenReturn(createInitiateCourtProceedingsForGroupCases());
+
+        groupCasesReceivedEventProcessor.handleGroupCasesReceived(requestEnvelope);
+
+        final InOrder inOrder = inOrder(caseManagementService, sender);
+        inOrder.verify(caseManagementService).createGroupCase(createGroupCaseRequest, requestEnvelope.metadata());
+        inOrder.verify(sender).send(senderArgCaptor.capture());
+        assertThat(senderArgCaptor.getValue().metadata().name(), is(PROGRESSION_COMMAND_INITIATE_COURT_PROCEEDINGS_FOR_GROUP_CASES));
+    }
+
+    @Test
+    void handleGroupCasesReceived_caseManagementFails_should_propagateAndSendNothing() {
+        final Envelope<GroupCasesReceived> requestEnvelope = envelopeFrom(
+                metadataWithRandomUUID("prosecutioncasefile.events.group-cases-received"),
+                GroupCasesReceived.groupCasesReceived()
+                        .withGroupProsecutionList(buildCivilSummonsGroupProsecutionList(UUID.randomUUID(), UUID.randomUUID()))
+                        .build());
+        final CreateGroupCaseRequest createGroupCaseRequest = new CreateGroupCaseRequest().groupId(UUID.randomUUID());
+        when(groupCasesReceivedToCreateGroupCaseRequestConverter.convert(any())).thenReturn(Optional.of(createGroupCaseRequest));
+        doThrow(new CaseManagementException("create group case failed", 500))
+                .when(caseManagementService).createGroupCase(any(), any());
+
+        assertThrows(CaseManagementException.class, () -> groupCasesReceivedEventProcessor.handleGroupCasesReceived(requestEnvelope));
+
+        verifyNoInteractions(sender);
+    }
+
+    @Test
+    void handleGroupCasesReceived_noLeadCase_should_notCallCaseManagement() {
+        final Envelope<GroupCasesReceived> requestEnvelope = envelopeFrom(
+                metadataWithRandomUUID("prosecutioncasefile.events.group-cases-received"),
+                createGroupCasesReceived());
+        when(groupCasesReceivedToCreateGroupCaseRequestConverter.convert(any())).thenReturn(Optional.empty());
+        when(groupCasesReceivedToInitiateCourtProceedingsConverter.convert(any())).thenReturn(createInitiateCourtProceedingsForGroupCases());
+
+        groupCasesReceivedEventProcessor.handleGroupCasesReceived(requestEnvelope);
+
+        verifyNoInteractions(caseManagementService);
+        verify(sender, times(1)).send(senderArgCaptor.capture());
+    }
 
     @Test
     public void shouldHandleGroupCasesReceived() {

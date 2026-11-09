@@ -44,6 +44,8 @@
         <stream-transformation-tool.version>6.4.5</stream-transformation-tool.version>
         <json-smart.version>2.4.8</json-smart.version>
         <stream-transformation-tool-anonymise>7.0.0</stream-transformation-tool-anonymise>
+        <casemanagement-api-spec.version>0.0-api-civil-bulk-03</casemanagement-api-spec.version>
+        <openapi-generator-maven-plugin.version>7.23.0</openapi-generator-maven-plugin.version>
         <sonar.coverage.exclusions>
             **/uk/gov/moj/cpp/prosecutioncasefile/persistence/entity/**/*
             **/uk/gov/justice/api/**/*

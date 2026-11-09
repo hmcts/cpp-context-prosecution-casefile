@@ -15,7 +15,9 @@ import uk.gov.justice.services.messaging.Metadata;
 import uk.gov.moj.cpp.prosecution.casefile.domain.GroupProsecutionList;
 import uk.gov.moj.cpp.prosecution.casefile.domain.GroupProsecutionWithReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.event.GroupCasesReceived;
+import uk.gov.moj.cpp.prosecution.casefile.event.processor.converter.GroupCasesReceivedToCreateGroupCaseRequestConverter;
 import uk.gov.moj.cpp.prosecution.casefile.event.processor.converter.GroupCasesReceivedToInitiateCourtProceedingsConverter;
+import uk.gov.moj.cpp.prosecution.casefile.event.processor.service.CaseManagementService;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.GroupProsecution;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicGroupSubmissionApproved;
 
@@ -40,10 +42,22 @@ public class GroupCasesReceivedEventProcessor {
     @Inject
     private GroupCasesReceivedToInitiateCourtProceedingsConverter groupCasesReceivedToInitiateCourtProceedingsConverter;
 
+    @Inject
+    private GroupCasesReceivedToCreateGroupCaseRequestConverter groupCasesReceivedToCreateGroupCaseRequestConverter;
+
+    @Inject
+    private CaseManagementService caseManagementService;
+
     @Handles("prosecutioncasefile.events.group-cases-received")
     public void handleGroupCasesReceived(final Envelope<GroupCasesReceived> envelope) {
 
         final GroupCasesReceived payload = envelope.payload();
+
+        // CAD-1850: case management records the group before anything else is sent. If it fails the
+        // exception propagates, nothing below is sent, and the event is redelivered then dead-lettered.
+        // A redelivery after success gets 409 from case management, which counts as created.
+        groupCasesReceivedToCreateGroupCaseRequestConverter.convert(payload)
+                .ifPresent(request -> caseManagementService.createGroupCase(request, envelope.metadata()));
 
         emitGroupSubmissionApprovedIfCivilSummons(payload.getGroupProsecutionList(), envelope);
 

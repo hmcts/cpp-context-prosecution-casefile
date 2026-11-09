@@ -83,6 +83,11 @@
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
+        <!-- HTTP client for the case management REST call (CAD-1850) -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
 
         <!-- Test dependencies -->
         <dependency>
@@ -139,6 +144,78 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
+            </plugin>
+            <!-- CAD-1850: models for the case management POST /groupcases request, generated from the
+                 published api-cp-crime-caseadmin-case-management contract (same setup as Hearing's
+                 results-validator models in hearing-domain-common). -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-casemanagement-spec</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>uk.gov.hmcts.cp</groupId>
+                                    <artifactId>api-cp-crime-caseadmin-case-management</artifactId>
+                                    <version>${casemanagement-api-spec.version}</version>
+                                    <type>jar</type>
+                                    <includes>openapi/openapi-spec.yml</includes>
+                                    <outputDirectory>${project.build.directory}/casemanagement-spec</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${openapi-generator-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>generate-casemanagement-models</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.build.directory}/casemanagement-spec/openapi/openapi-spec.yml</inputSpec>
+                            <generatorName>java</generatorName>
+                            <library>native</library>
+                            <generateApis>false</generateApis>
+                            <generateModels>true</generateModels>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                            <generateModelTests>false</generateModelTests>
+                            <generateModelDocumentation>false</generateModelDocumentation>
+                            <generateApiTests>false</generateApiTests>
+                            <generateApiDocumentation>false</generateApiDocumentation>
+                            <modelPackage>uk.gov.moj.cpp.prosecution.casefile.casemanagement.model</modelPackage>
+                            <configOptions>
+                                <serializableModel>true</serializableModel>
+                                <serializationLibrary>jackson</serializationLibrary>
+                                <dateLibrary>java8</dateLibrary>
+                                <useBeanValidation>false</useBeanValidation>
+                                <useJakartaEe>false</useJakartaEe>
+                                <annotationLibrary>none</annotationLibrary>
+                                <documentationProvider>none</documentationProvider>
+                                <openApiNullable>false</openApiNullable>
+                                <hideGenerationTimestamp>true</hideGenerationTimestamp>
+                                <!-- library=native emits toUrlQueryString() referencing the ApiClient
+                                     supporting file, which is not generated. These DTOs are only
+                                     serialised with Jackson, so drop that method. -->
+                                <supportUrlQuery>false</supportUrlQuery>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>uk.gov.justice.framework-generators</groupId>

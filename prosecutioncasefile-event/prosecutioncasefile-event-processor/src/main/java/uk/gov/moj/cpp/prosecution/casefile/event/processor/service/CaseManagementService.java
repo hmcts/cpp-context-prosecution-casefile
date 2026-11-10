@@ -47,7 +47,7 @@ public class CaseManagementService {
     private static final int CONFLICT = 409;
 
     @Inject
-    @Value(key = "casemanagement.base.url", defaultValue = "http://localhost:8080/casemanagement")
+    @Value(key = "casemanagement.base.url", defaultValue = "http://localhost:8080/casemanagement-service")
     String baseUrl;
 
     @Inject

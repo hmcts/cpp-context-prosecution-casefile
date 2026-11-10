@@ -134,6 +134,20 @@ public class InitiateGroupProsecutionHelper extends AbstractTestHelper {
 
     }
 
+    /**
+     * Polls for the given period and fails as soon as the group cases command for the case reaches
+     * Progression.
+     */
+    public void verifyNoInitiateCourtProceedingsForGroupCasesCommand(final String caseId, final long seconds) throws InterruptedException {
+        final long deadline = System.currentTimeMillis() + seconds * 1000;
+        while (System.currentTimeMillis() < deadline) {
+            if (getInitiateCourtProceedingsForGroupCasesCommand(caseId).findAny().isPresent()) {
+                throw new AssertionError("initiate-court-proceedings-for-group-cases was sent for case " + caseId);
+            }
+            Thread.sleep(1000);
+        }
+    }
+
     public void verifyInitiateCourtProceedingsForApplicationCommand(){
 
         try {

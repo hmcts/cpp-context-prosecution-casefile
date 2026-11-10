@@ -14,6 +14,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.github.tomakehurst.wiremock.verification.LoggedRequest;
+import org.json.JSONObject;
+
 import static java.util.Arrays.asList;
 import static java.util.UUID.randomUUID;
 import static org.hamcrest.Matchers.contains;
@@ -26,7 +29,12 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static uk.gov.justice.services.messaging.JsonEnvelope.envelopeFrom;
 import static uk.gov.justice.services.messaging.JsonEnvelope.metadataBuilder;
+import static org.apache.http.HttpStatus.SC_CONFLICT;
+import static org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR;
+import static org.apache.http.HttpStatus.SC_OK;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.WiremockTestHelper.createCommonMockEndpoints;
+import static uk.gov.moj.cpp.prosecution.casefile.stub.CaseManagementStub.stubCreateGroupCase;
+import static uk.gov.moj.cpp.prosecution.casefile.stub.CaseManagementStub.waitForCreateGroupCaseRequest;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.DocumentGeneratorStub.stubDocumentCreate;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.MaterialStub.stubForUploadFileCommand;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ProgressionStub.stubForAddCourtDocument;
@@ -86,6 +94,8 @@ public class InitiateGroupProsecutionIT extends BaseIT {
         offenceId2 = randomUUID().toString();
         offenceId3 = randomUUID().toString();
         externalId = randomUUID();
+        // CAD-1850: every group that reaches group-cases-received now calls case management first
+        stubCreateGroupCase(SC_OK);
     }
 
 
@@ -168,6 +178,55 @@ public class InitiateGroupProsecutionIT extends BaseIT {
         initiateGroupProsecutionHelper.initiateGroupProsecution(payload);
         initiateGroupProsecutionHelper.thenPrivateGroupCasesReceivedEventShouldBeRaised();
         initiateGroupProsecutionHelper.verifyInitiateCourtProceedingsForGroupCasesCommand(caseId1.toString());
+    }
+
+    @Test
+    void shouldCreateGroupCaseInCaseManagementThenInitiateCourtProceedingsForGroupCases() {
+        final String payload = replaceValues(readFile("command-json/prosecutioncasefile.command.initiate-group-prosecution.json"), "O");
+        final InitiateGroupProsecutionHelper initiateGroupProsecutionHelper = new InitiateGroupProsecutionHelper();
+
+        initiateGroupProsecutionHelper.initiateGroupProsecution(payload);
+
+        final LoggedRequest createGroupCase = waitForCreateGroupCaseRequest(groupId);
+        assertThat(createGroupCase.getHeader("CJSCPPUID").isEmpty(), is(false));
+        final JSONObject body = new JSONObject(createGroupCase.getBodyAsString());
+        assertThat(body.getString("groupId"), is(groupId.toString()));
+        assertThat(body.getInt("caseCount"), is(3));
+        assertThat(body.getJSONObject("leadCase").getString("leadCaseId"), is(caseId1.toString()));
+        assertThat(body.getJSONObject("leadCase").getString("caseUrn"), is(caseUrn1));
+        assertThat(body.getString("dateOfHearing"), is("2050-02-04"));
+        assertThat(body.getString("courtHearingLocation"), is("C55BN00"));
+        assertThat(body.has("courtCentreId"), is(true));
+        assertThat(body.getString("prosecutingAuthority"), is("GAFTL00"));
+        assertThat(body.getString("prosecutingAuthorityName"), is("Transport for London"));
+        assertThat(body.getString("offenceType"), is("Obstruct person executing search warrant for TV receiver"));
+        assertThat(body.getString("resultingIntent"), is("GRANT"));
+
+        initiateGroupProsecutionHelper.verifyInitiateCourtProceedingsForGroupCasesCommand(caseId1.toString());
+    }
+
+    @Test
+    void shouldInitiateCourtProceedingsForGroupCasesWhenCaseManagementAlreadyHasTheGroup() {
+        stubCreateGroupCase(SC_CONFLICT);
+        final String payload = replaceValues(readFile("command-json/prosecutioncasefile.command.initiate-group-prosecution.json"), "O");
+        final InitiateGroupProsecutionHelper initiateGroupProsecutionHelper = new InitiateGroupProsecutionHelper();
+
+        initiateGroupProsecutionHelper.initiateGroupProsecution(payload);
+
+        waitForCreateGroupCaseRequest(groupId);
+        initiateGroupProsecutionHelper.verifyInitiateCourtProceedingsForGroupCasesCommand(caseId1.toString());
+    }
+
+    @Test
+    void shouldNotInitiateCourtProceedingsForGroupCasesWhenCaseManagementFails() throws InterruptedException {
+        stubCreateGroupCase(SC_INTERNAL_SERVER_ERROR);
+        final String payload = replaceValues(readFile("command-json/prosecutioncasefile.command.initiate-group-prosecution.json"), "O");
+        final InitiateGroupProsecutionHelper initiateGroupProsecutionHelper = new InitiateGroupProsecutionHelper();
+
+        initiateGroupProsecutionHelper.initiateGroupProsecution(payload);
+
+        waitForCreateGroupCaseRequest(groupId);
+        initiateGroupProsecutionHelper.verifyNoInitiateCourtProceedingsForGroupCasesCommand(caseId1.toString(), 15);
     }
 
     @Test

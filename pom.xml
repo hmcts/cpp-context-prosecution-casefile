@@ -30,7 +30,7 @@
         <referencedata.offences.version>17.104.52</referencedata.offences.version>
         <system.enterprise-id.version>0.0.3</system.enterprise-id.version>
         <resulting.version>17.0.42</resulting.version>
-        <progression.version>17.104.306</progression.version>
+        <progression.version>17.104.308</progression.version>
         <defence.version>17.0.87</defence.version>
         <criminal-court-public-model.version>${coredomain.version}</criminal-court-public-model.version>
         <notification.notify.version>17.0.24</notification.notify.version>
@@ -44,6 +44,8 @@
         <stream-transformation-tool.version>6.4.5</stream-transformation-tool.version>
         <json-smart.version>2.4.8</json-smart.version>
         <stream-transformation-tool-anonymise>7.0.0</stream-transformation-tool-anonymise>
+        <casemanagement-api-spec.version>0.0-api-civil-bulk-03</casemanagement-api-spec.version>
+        <openapi-generator-maven-plugin.version>7.23.0</openapi-generator-maven-plugin.version>
         <sonar.coverage.exclusions>
             **/uk/gov/moj/cpp/prosecutioncasefile/persistence/entity/**/*
             **/uk/gov/justice/api/**/*

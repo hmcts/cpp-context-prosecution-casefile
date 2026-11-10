@@ -250,7 +250,7 @@ public class ProsecutionCaseFileInitialHearingToCCHearingRequestConverter implem
         if (organisationUnitWithCourtroomReferenceDataOptional.isPresent()) {
             final OrganisationUnitWithCourtroomReferenceData organisationUnitWithCourtroomReferenceData = organisationUnitWithCourtroomReferenceDataOptional.get();
             final CourtRoom courtRoom = organisationUnitWithCourtroomReferenceData.getCourtRoom();
-            roomId = getRoomId(roomId, courtRoom);
+            roomId = CourtRoomIdResolver.resolveRoomId(roomId, courtRoom);
             roomName = getRoomName(roomName, courtRoom);
             courtCentreBuilder.withId(fromString(organisationUnitWithCourtroomReferenceData.getId()));
             courtCentreBuilder.withName(organisationUnitWithCourtroomReferenceData.getOucodeL3Name());
@@ -260,18 +260,6 @@ public class ProsecutionCaseFileInitialHearingToCCHearingRequestConverter implem
         }
 
         return courtCentreBuilder.build();
-    }
-
-    private UUID getRoomId(final UUID roomId, final CourtRoom courtRoom) {
-        if (nonNull(roomId)) {
-            return roomId;
-        } else {
-            if (nonNull(courtRoom)) {
-                return fromString(courtRoom.getId());
-            } else {
-                return null;
-            }
-        }
     }
 
     private String getRoomName(final String roomName, final CourtRoom courtRoom) {

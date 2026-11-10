@@ -5,6 +5,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.findAll;
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 import static com.jayway.awaitility.Awaitility.await;
+import static com.jayway.jsonpath.matchers.JsonPathMatchers.isJson;
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.withJsonPath;
 import static java.lang.String.format;
 import static java.util.Objects.nonNull;
@@ -40,12 +41,18 @@ import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SEL
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SELECTOR_DEFENDANT_VALIDATION_FAILED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SELECTOR_PROSECUTION_CASE_UNSUPPORTED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PROSECUTIONCASEFILE_HANDLER_CASE_UPDATED_INITIATE_IDPC_MATCH;
+import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL_EVENT;
+import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_SUBMISSION_APPROVED_EVENT;
+import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_SUBMISSION_REJECTED_EVENT;
+import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_CIVIL_PROSECUTION_REJECTED_EVENT;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_EVENT_SELECTOR_PROSECUTION_REJECTED;
+import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PROGRESSION_CASE_CREATED_EVENT;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PROGRESSION_CASE_DEFENDANT_CHANGED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PROGRESSION_COURT_APPLICATION_SUMMONS_APPROVED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PROGRESSION_COURT_APPLICATION_SUMMONS_REJECTED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PROSECUTIONCASEFILE_CC_CASE_RECEIVED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PROSECUTIONCASEFILE_CC_CASE_RECEIVED_WITH_WARNINGS;
+import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PROSECUTIONCASEFILE_CIVIL_PROSECUTION_SUBMISSION_SUCCEEDED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PROSECUTIONCASEFILE_MANUAL_CASE_RECEIVED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PROSECUTIONCASEFILE_PROSECUTION_DEFENDANTS_ADDED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PROSECUTIONCASEFILE_PROSECUTION_SUBMISSION_SUCCEEDED;
@@ -156,7 +163,12 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
                 PUBLIC_PROSECUTIONCASEFILE_DEFENDANT_VALIDATION_FAILED,
                 PUBLIC_PROSECUTIONCASEFILE_MANUAL_CASE_RECEIVED,
                 PUBLIC_PROSECUTIONCASEFILE_PROSECUTION_DEFENDANTS_ADDED,
-                PUBLIC_PROSECUTIONCASEFILE_PROSECUTION_SUBMISSION_SUCCEEDED);
+                PUBLIC_CIVIL_PROSECUTION_REJECTED_EVENT,
+                PUBLIC_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL_EVENT,
+                PUBLIC_SUBMISSION_APPROVED_EVENT,
+                PUBLIC_SUBMISSION_REJECTED_EVENT,
+                PUBLIC_PROSECUTIONCASEFILE_PROSECUTION_SUBMISSION_SUCCEEDED,
+                PUBLIC_PROSECUTIONCASEFILE_CIVIL_PROSECUTION_SUBMISSION_SUCCEEDED);
     }
 
     public static String getLastLoggedRequest(final String caseUrn) {
@@ -454,6 +466,11 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
                 this.applicationId.toString(), this.caseId.toString(), this.prosecutorCost, String.valueOf(this.summonsSuppressed), String.valueOf(this.personalService));
     }
 
+    public void whenProsecutionCaseIsConfirmedCreatedByProgression() {
+        sendPublicEvent(PUBLIC_PROGRESSION_CASE_CREATED_EVENT,
+                "stub-data/public.progression.prosecution-case-created.json", this.caseId.toString());
+    }
+
     public void whenCaseDefendantChanged(final String defendantId) {
         sendPublicEvent(PUBLIC_PROGRESSION_CASE_DEFENDANT_CHANGED,
                 "stub-data/public.progression.case-defendant-changed.json", defendantId);
@@ -532,6 +549,55 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
                 .replaceAll("EARLIEST_START_DATE_TIME", FIND_A_HEARING_EARLIEST_START)
                 .replaceAll("DATE_OF_HEARING", LocalDates.to(LocalDate.now()))
                 .replaceAll("APPLICATION_DUE_DATE", LocalDates.to(LocalDate.now()));
+    }
+
+    /**
+     * The public civil-prosecution-rejected subscription is shared across the tests in a class, so
+     * select the message for this specific case rather than taking whatever is next on the topic.
+     */
+    public JsonEnvelope thenPublicCivilProsecutionRejectedEventShouldBeRaised(final UUID rejectedCaseId) {
+        final Matcher<Object> caseIdMatcher = isJson(withJsonPath("$.caseId", is(rejectedCaseId.toString())));
+        final Optional<JsonEnvelope> jsonEnvelope = retrieveMessageWithMatchers(PUBLIC_CIVIL_PROSECUTION_REJECTED_EVENT, caseIdMatcher);
+        assertThat("Expected public event " + PUBLIC_CIVIL_PROSECUTION_REJECTED_EVENT + " to be raised for case " + rejectedCaseId,
+                jsonEnvelope.isPresent(), is(true));
+        return jsonEnvelope.get();
+    }
+
+    /**
+     * The public parked-for-summons-application-approval subscription is shared across the tests in a
+     * class, so select the message for this specific case rather than taking whatever is next on
+     * the topic.
+     */
+    public JsonEnvelope thenPublicParkedForSummonsApplicationApprovalEventShouldBeRaised(final UUID parkedCaseId) {
+        final Matcher<Object> caseIdMatcher = isJson(withJsonPath("$.caseId", is(parkedCaseId.toString())));
+        final Optional<JsonEnvelope> jsonEnvelope = retrieveMessageWithMatchers(PUBLIC_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL_EVENT, caseIdMatcher);
+        assertThat("Expected public event " + PUBLIC_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL_EVENT + " to be raised for case " + parkedCaseId,
+                jsonEnvelope.isPresent(), is(true));
+        return jsonEnvelope.get();
+    }
+
+    public JsonEnvelope thenPublicSubmissionApprovedEventShouldBeRaised(final UUID approvedCaseId) {
+        final Matcher<Object> caseIdMatcher = isJson(withJsonPath("$.caseId", is(approvedCaseId.toString())));
+        final Optional<JsonEnvelope> jsonEnvelope = retrieveMessageWithMatchers(PUBLIC_SUBMISSION_APPROVED_EVENT, caseIdMatcher);
+        assertThat("Expected public event " + PUBLIC_SUBMISSION_APPROVED_EVENT + " to be raised for case " + approvedCaseId,
+                jsonEnvelope.isPresent(), is(true));
+        return jsonEnvelope.get();
+    }
+
+    public JsonEnvelope thenPublicSubmissionRejectedEventShouldBeRaised(final UUID rejectedCaseId) {
+        final Matcher<Object> caseIdMatcher = isJson(withJsonPath("$.caseId", is(rejectedCaseId.toString())));
+        final Optional<JsonEnvelope> jsonEnvelope = retrieveMessageWithMatchers(PUBLIC_SUBMISSION_REJECTED_EVENT, caseIdMatcher);
+        assertThat("Expected public event " + PUBLIC_SUBMISSION_REJECTED_EVENT + " to be raised for case " + rejectedCaseId,
+                jsonEnvelope.isPresent(), is(true));
+        return jsonEnvelope.get();
+    }
+
+    public JsonEnvelope thenPublicCivilProsecutionSubmissionSucceededEventShouldBeRaised(final UUID succeededCaseId) {
+        final Matcher<Object> caseIdMatcher = isJson(withJsonPath("$.caseId", is(succeededCaseId.toString())));
+        final Optional<JsonEnvelope> jsonEnvelope = retrieveMessageWithMatchers(PUBLIC_PROSECUTIONCASEFILE_CIVIL_PROSECUTION_SUBMISSION_SUCCEEDED, caseIdMatcher);
+        assertThat("Expected public event " + PUBLIC_PROSECUTIONCASEFILE_CIVIL_PROSECUTION_SUBMISSION_SUCCEEDED + " to be raised for case " + succeededCaseId,
+                jsonEnvelope.isPresent(), is(true));
+        return jsonEnvelope.get();
     }
 
     public JsonEnvelope thenProsecutionReceivedEventShouldBeRaised() {

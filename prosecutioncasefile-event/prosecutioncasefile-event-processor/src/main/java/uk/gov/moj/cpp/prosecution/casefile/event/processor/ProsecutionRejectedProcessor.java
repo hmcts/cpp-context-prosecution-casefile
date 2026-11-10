@@ -5,6 +5,7 @@ import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static uk.gov.justice.services.core.annotation.Component.EVENT_PROCESSOR;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;
 import static uk.gov.justice.services.messaging.JsonEnvelope.metadataFrom;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseProblem.caseProblem;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CIVIL;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.MCC;
 import static uk.gov.moj.cps.prosecutioncasefile.domain.event.ManualCaseReceived.manualCaseReceived;
@@ -15,6 +16,7 @@ import uk.gov.justice.services.core.annotation.ServiceComponent;
 import uk.gov.justice.services.core.sender.Sender;
 import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.justice.services.messaging.Metadata;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseProblem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.DefendantProblem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Problem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecution;
@@ -83,7 +85,7 @@ public class ProsecutionRejectedProcessor {
                     metadataFrom(ccProsecutionRejectedEnvelope.metadata()).withName(PUBLIC_CIVIL_PROSECUTION_REJECTED_EVENT),
                     PublicCivilProsecutionRejected.publicCivilProsecutionRejected()
                             .withCaseId(ccProsecutionRejected.getProsecution().getCaseDetails().getCaseId())
-                            .withCaseErrors(ccProsecutionRejected.getCaseErrors())
+                            .withCaseErrors(resolveCivilCaseErrors(ccProsecutionRejected))
                             .withDefendantErrors(ccProsecutionRejected.getDefendantErrors())
                             .withExternalId(ccProsecutionRejected.getExternalId())
                             .withChannel(ccProsecutionRejected.getProsecution().getChannel())
@@ -101,6 +103,29 @@ public class ProsecutionRejectedProcessor {
                             .build()
             ));
         }
+    }
+
+    /**
+     * civilCaseErrors is only populated by cases raised after this field was introduced. CIVIL-channel
+     * cases where isCivil is falsy, and replay of historical cc-prosecution-rejected events written
+     * before this change, still carry their case-level problems in the legacy caseErrors field only —
+     * fall back to wrapping that so the public event's required caseErrors is never silently dropped.
+     * When neither field holds anything an empty list is returned rather than null, because caseErrors
+     * is a required property of public.prosecutioncasefile.civil-prosecution-rejected.
+     */
+    private List<CaseProblem> resolveCivilCaseErrors(final CcProsecutionRejected ccProsecutionRejected) {
+        final List<CaseProblem> civilCaseErrors = ccProsecutionRejected.getCivilCaseErrors();
+        if (isNotEmpty(civilCaseErrors)) {
+            return civilCaseErrors;
+        }
+        final List<Problem> caseErrors = ccProsecutionRejected.getCaseErrors();
+        if (!isNotEmpty(caseErrors)) {
+            return List.of();
+        }
+        return List.of(caseProblem()
+                .withProblems(caseErrors)
+                .withProsecutorCaseReference(ccProsecutionRejected.getProsecution().getCaseDetails().getProsecutorCaseReference())
+                .build());
     }
 
     private void emitMCCPublicEvent(Metadata metadata, UUID caseId, String prosecutorCaseReference, List<Problem> errors) {

@@ -11,6 +11,7 @@ import static org.mockito.Mockito.verify;
 import static uk.gov.justice.services.messaging.spi.DefaultJsonMetadata.metadataBuilder;
 import static uk.gov.moj.cpp.prosecution.casefile.event.DefendantsParkedForSummonsApplicationApproval.defendantsParkedForSummonsApplicationApproval;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseDetails.caseDetails;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CIVIL;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CPPI;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.MCC;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.SPI;
@@ -31,6 +32,7 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseDetails;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecution;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.ManualCaseReceived;
+import uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicParkedForSummonsApplicationApproval;
 
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -72,9 +74,10 @@ public class SummonsApplicationEventProcessorTest {
     private SummonsApplicationEventProcessor target;
     private UUID caseId;
     private UUID applicationId;
+    private UUID externalId;
     private String prosecutorCaseReference;
 
-    public static Stream<Arguments> nonMccChannels() {
+    public static Stream<Arguments> channelsWithNoPublicEvent() {
         return Stream.of(
                 Arguments.of(CPPI),
                 Arguments.of(SPI)
@@ -86,6 +89,7 @@ public class SummonsApplicationEventProcessorTest {
         metadata = getMetaData();
         caseId = randomUUID();
         applicationId = randomUUID();
+        externalId = randomUUID();
         prosecutorCaseReference = RandomStringUtils.random(10);
 
     }
@@ -111,9 +115,9 @@ public class SummonsApplicationEventProcessorTest {
         assertThat(secondResultEnvelope.payload().getProsecutorCaseReference(), is(prosecutorCaseReference));
     }
 
-    @MethodSource("nonMccChannels")
+    @MethodSource("channelsWithNoPublicEvent")
     @ParameterizedTest
-    public void shouldIssueCommandToProgressionWhenDefendantsParkedForSummonsApplicationApprovalAndNoPublicEventEmittedForNonMCCChannels(final Channel channel) {
+    public void shouldIssueCommandToProgressionWhenDefendantsParkedForSummonsApplicationApprovalAndNoPublicEventEmittedForChannel(final Channel channel) {
         given(envelope.metadata()).willReturn(metadata);
         final DefendantsParkedForSummonsApplicationApproval payload = getPayload(channel);
         given(envelope.payload()).willReturn(payload);
@@ -176,6 +180,28 @@ public class SummonsApplicationEventProcessorTest {
                 .build();
     }
 
+    @Test
+    public void shouldIssueCommandToProgressionWhenDefendantsParkedForSummonsApplicationApprovalAndEmitPublicEventForCivil() {
+        given(envelope.metadata()).willReturn(metadata);
+        final DefendantsParkedForSummonsApplicationApproval payload = getCivilPayload();
+        given(envelope.payload()).willReturn(payload);
+        given(defendantsParkedToCourtApplicationProceedingsConverter.convert(payload, metadata)).willReturn(outgoingPayload);
+
+        target.handleDefendantsParkedForSummonsApplicationApproval(envelope);
+
+        verify(sender, times(2)).send(envelopeArgumentCaptor.capture());
+        final Envelope<InitiateCourtApplicationProceedings> firstResultEnvelope = envelopeArgumentCaptor.getAllValues().get(0);
+        assertThat(firstResultEnvelope.metadata().name(), is("progression.initiate-court-proceedings-for-application"));
+        assertThat(firstResultEnvelope.payload(), is(outgoingPayload));
+
+        final Envelope<PublicParkedForSummonsApplicationApproval> secondResultEnvelope = envelopeArgumentCaptor.getAllValues().get(1);
+        assertThat(secondResultEnvelope.metadata().name(), is("public.prosecutioncasefile.parked-for-summons-application-approval"));
+        assertThat(secondResultEnvelope.payload().getApplicationId(), is(applicationId));
+        assertThat(secondResultEnvelope.payload().getCaseId(), is(caseId));
+        assertThat(secondResultEnvelope.payload().getExternalId(), is(externalId));
+        assertThat(secondResultEnvelope.payload().getChannel(), is(CIVIL));
+    }
+
     private Metadata getMetaData() {
         return metadataBuilder()
                 .createdAt(now())
@@ -194,6 +220,20 @@ public class SummonsApplicationEventProcessorTest {
         return defendantsParkedForSummonsApplicationApproval()
                 .withApplicationId(applicationId)
                 .withProsecutionWithReferenceData(new ProsecutionWithReferenceData(prosecution))
+                .build();
+    }
+
+    private DefendantsParkedForSummonsApplicationApproval getCivilPayload() {
+        final CaseDetails caseDetails = caseDetails().withCaseId(caseId).withProsecutorCaseReference(prosecutorCaseReference).build();
+        final Prosecution prosecution = prosecution()
+                .withChannel(CIVIL)
+                .withCaseDetails(caseDetails)
+                .build();
+        final ProsecutionWithReferenceData prosecutionWithReferenceData = new ProsecutionWithReferenceData(prosecution);
+        prosecutionWithReferenceData.setExternalId(externalId);
+        return defendantsParkedForSummonsApplicationApproval()
+                .withApplicationId(applicationId)
+                .withProsecutionWithReferenceData(prosecutionWithReferenceData)
                 .build();
     }
 

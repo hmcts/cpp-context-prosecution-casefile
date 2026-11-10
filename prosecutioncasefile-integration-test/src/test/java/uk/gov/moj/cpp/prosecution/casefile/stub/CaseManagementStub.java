@@ -21,7 +21,7 @@ import com.jayway.awaitility.Duration;
  */
 public class CaseManagementStub {
 
-    public static final String CREATE_GROUP_CASE_PATH = "/casemanagement/groupcases";
+    public static final String CREATE_GROUP_CASE_PATH = "/casemanagement-service/groupcases";
 
     private CaseManagementStub() {
     }

@@ -7,6 +7,7 @@ import static uk.gov.justice.domain.aggregate.matcher.EventSwitcher.when;
 import static uk.gov.moj.cpp.prosecution.casefile.ProsecutionCaseFileHelper.buildDefendantWithReferenceData;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseProblem.caseProblem;
 
+import uk.gov.justice.core.courts.SummonsApprovedOutcome;
 import uk.gov.justice.domain.aggregate.Aggregate;
 import uk.gov.moj.cpp.prosecution.casefile.domain.DefendantsWithReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.domain.GroupProsecutionList;
@@ -86,14 +87,17 @@ public class GroupProsecutionCaseFile implements Aggregate {
     /**
      * Reuses the reference data looked up when the group was parked, so approving a large group makes no
      * REST calls while the event-store connection is open. Enriches again only when that data isn't held.
+     * The summons approved outcome is carried on to progression for the bulk civil prosecutor notification.
      */
-    public Stream<Object> approveGroupProsecution(final List<GroupCasesReferenceDataEnricher> groupCasesReferenceDataEnrichers, final List<DefendantRefDataEnricher> defendantRefDataEnrichers){
+    public Stream<Object> approveGroupProsecution(final List<GroupCasesReferenceDataEnricher> groupCasesReferenceDataEnrichers, final List<DefendantRefDataEnricher> defendantRefDataEnrichers,
+                                                  final SummonsApprovedOutcome summonsApprovedOutcome){
         final GroupProsecutionList groupProsecutionList = this.parkedGroupProsecutionList != null
                 ? this.parkedGroupProsecutionList
                 : enrichGroupProsecutions(groupCasesReferenceDataEnrichers, defendantRefDataEnrichers);
 
         return apply(builder().add(GroupCasesReceived.groupCasesReceived()
-                .withGroupProsecutionList(groupProsecutionList).build())
+                .withGroupProsecutionList(groupProsecutionList)
+                .withSummonsApprovedOutcome(summonsApprovedOutcome).build())
                 .build());
     }
 

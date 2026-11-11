@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import static java.util.Arrays.asList;
@@ -259,13 +260,71 @@ public class InitiateGroupProsecutionIT extends BaseIT {
         initiateGroupProsecutionHelper.thenPublicGroupProsecutionRejectedEventShouldBeRaised();
     }
 
+    @Test
+    void shouldPassSummonsApprovedOutcomeToProgressionWhenCivilGroupSummonsApplicationApproved() {
+        final String prosecutorEmailAddress = "prosecutor@example.com";
+        final InitiateGroupProsecutionHelper initiateGroupProsecutionHelper = parkCivilGroupForSummonsApplicationApproval();
+
+        final UUID applicationId = randomUUID();
+        stubForQueryApplication(applicationId, true);
+        sendPublicEventCourtApplicationSummonsApproved(caseId1, applicationId, prosecutorEmailAddress);
+
+        final JsonObject groupCasesReceived = initiateGroupProsecutionHelper.thenPrivateGroupCasesReceivedEventShouldBeRaised().payloadAsJsonObject();
+        assertThat(groupCasesReceived.getJsonObject("summonsApprovedOutcome").getString("prosecutorEmailAddress"), is(prosecutorEmailAddress));
+
+        final JSONArray listDefendantRequests = getListDefendantRequestsSentToProgression(initiateGroupProsecutionHelper);
+        assertThat(listDefendantRequests.length() > 0, is(true));
+        for (int i = 0; i < listDefendantRequests.length(); i++) {
+            assertThat(listDefendantRequests.getJSONObject(i).getJSONObject("summonsApprovedOutcome").getString("prosecutorEmailAddress"), is(prosecutorEmailAddress));
+        }
+    }
+
+    @Test
+    void shouldNotPassSummonsApprovedOutcomeToProgressionWhenNonCivilGroupSummonsApplicationApproved() {
+        final InitiateGroupProsecutionHelper initiateGroupProsecutionHelper = parkCivilGroupForSummonsApplicationApproval();
+
+        final UUID applicationId = randomUUID();
+        stubForQueryApplication(applicationId, false);
+        sendPublicEventCourtApplicationSummonsApproved(caseId1, applicationId, "prosecutor@example.com");
+
+        final JsonObject groupCasesReceived = initiateGroupProsecutionHelper.thenPrivateGroupCasesReceivedEventShouldBeRaised().payloadAsJsonObject();
+        assertThat(groupCasesReceived.containsKey("summonsApprovedOutcome"), is(false));
+
+        final JSONArray listDefendantRequests = getListDefendantRequestsSentToProgression(initiateGroupProsecutionHelper);
+        assertThat(listDefendantRequests.length() > 0, is(true));
+        for (int i = 0; i < listDefendantRequests.length(); i++) {
+            assertThat(listDefendantRequests.getJSONObject(i).has("summonsApprovedOutcome"), is(false));
+        }
+    }
+
+    private InitiateGroupProsecutionHelper parkCivilGroupForSummonsApplicationApproval() {
+        final String payload = replaceValues(readFile("command-json/prosecutioncasefile.command.initiate-group-prosecution.json"), "S"); //"S" = SUMMONS
+        final InitiateGroupProsecutionHelper initiateGroupProsecutionHelper = new InitiateGroupProsecutionHelper();
+        initiateGroupProsecutionHelper.initiateGroupProsecution(payload);
+        initiateGroupProsecutionHelper.thenPrivateGroupCasesParkedForApprovalEventShouldBeRaised();
+        initiateGroupProsecutionHelper.thenPublicGroupParkedForSummonsApplicationApprovalEventShouldBeRaised();
+        return initiateGroupProsecutionHelper;
+    }
+
+    private JSONArray getListDefendantRequestsSentToProgression(final InitiateGroupProsecutionHelper initiateGroupProsecutionHelper) {
+        return initiateGroupProsecutionHelper.getInitiateCourtProceedingsForGroupCasesCommandPayload(caseId1.toString())
+                .getJSONObject("courtReferral")
+                .getJSONArray("listHearingRequests")
+                .getJSONObject(0)
+                .getJSONArray("listDefendantRequests");
+    }
+
     private void sendPublicEventCourtApplicationSummonsApproved(final UUID caseId, final UUID applicationId) {
+        sendPublicEventCourtApplicationSummonsApproved(caseId, applicationId, "a");
+    }
+
+    private void sendPublicEventCourtApplicationSummonsApproved(final UUID caseId, final UUID applicationId, final String prosecutorEmailAddress) {
         final JsonObject payload = createObjectBuilder()
                 .add("id", applicationId.toString())
                 .add("prosecutionCaseId", caseId.toString())
                 .add("summonsApprovedOutcome", createObjectBuilder()
                         .add("prosecutorCost", "1")
-                        .add("prosecutorEmailAddress", "a")
+                        .add("prosecutorEmailAddress", prosecutorEmailAddress)
                         .add("summonsSuppressed", false)
                         .add("personalService", true))
                 .build();

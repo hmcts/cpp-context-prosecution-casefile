@@ -6,6 +6,7 @@ import static java.util.UUID.randomUUID;
 import static java.util.stream.Stream.empty;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.nullValue;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
@@ -33,11 +34,13 @@ import uk.gov.justice.services.eventsourcing.source.core.EventSource;
 import uk.gov.justice.services.eventsourcing.source.core.EventStream;
 import uk.gov.justice.services.eventsourcing.source.core.exception.EventStreamException;
 import uk.gov.justice.services.messaging.Envelope;
+import uk.gov.moj.cpp.prosecution.casefile.aggregate.GroupProsecutionCaseFile;
 import uk.gov.moj.cpp.prosecution.casefile.aggregate.ProsecutionCaseFile;
 import uk.gov.moj.cpp.prosecution.casefile.domain.SummonsApplicationApprovedDetails;
 import uk.gov.moj.cpp.prosecution.casefile.domain.SummonsApplicationRejectedDetails;
 import uk.gov.moj.cpp.prosecution.casefile.refdata.defendant.DefendantRefDataEnricher;
 import uk.gov.moj.cpp.prosecution.casefile.refdata.proscase.CaseRefDataEnricher;
+import uk.gov.moj.cpp.prosecution.casefile.refdata.proscase.GroupCasesReferenceDataEnricher;
 import uk.gov.moj.cpp.prosecution.casefile.service.ProgressionService;
 import uk.gov.moj.cps.prosecutioncasefile.command.handler.ApproveCaseDefendantsAsSummonsApplicationApproved;
 import uk.gov.moj.cps.prosecutioncasefile.command.handler.RejectCaseDefendantsAsSummonsApplicationRejected;
@@ -61,6 +64,8 @@ public class SummonsApplicationHandlerTest {
 
     private static final UUID CASE_ID = randomUUID();
     private static final UUID APPLICATION_ID = randomUUID();
+    private static final UUID GROUP_ID = randomUUID();
+    private static final String PROSECUTOR_EMAIL_ADDRESS = "prosecutor@example.com";
     private static final Boolean PERSONAL_SERVICE = BOOLEAN.next();
     private static final Boolean SUMMONS_SUPPRESSED = BOOLEAN.next();
     private static final String PROSECUTOR_COST = "£600";
@@ -87,6 +92,18 @@ public class SummonsApplicationHandlerTest {
 
     @Mock
     private Instance<DefendantRefDataEnricher> defendantRefDataEnrichers;
+
+    @Mock
+    private Instance<GroupCasesReferenceDataEnricher> groupCasesReferenceDataEnrichers;
+
+    @Mock
+    private EventStream groupEventStream;
+
+    @Mock
+    private GroupProsecutionCaseFile groupAggregate;
+
+    @Captor
+    private ArgumentCaptor<SummonsApprovedOutcome> summonsApprovedOutcomeArgumentCaptor;
 
     @Captor
     private ArgumentCaptor<SummonsApplicationApprovedDetails> summonsApplicationApprovedArgumentCaptor;
@@ -131,6 +148,32 @@ public class SummonsApplicationHandlerTest {
     }
 
     @Test
+    public void shouldPassSummonsApprovedOutcomeToGroupAggregateWhenApprovingCivilGroupCase() throws EventStreamException {
+        givenGroupCaseWithSummonsApplication(true);
+
+        summonsApplicationHandler.approveCaseDefendantsAsSummonsApplicationApproved(envelopeFrom(metadataFor(
+                "prosecutioncasefile.command.approve-case-defendants-as-summons-application-approved"), buildSummonsApplicationApprovedCommandPayload()));
+
+        verify(groupAggregate).approveGroupProsecution(anyList(), anyList(), summonsApprovedOutcomeArgumentCaptor.capture());
+        final SummonsApprovedOutcome result = summonsApprovedOutcomeArgumentCaptor.getValue();
+        assertThat(result.getProsecutorEmailAddress(), is(PROSECUTOR_EMAIL_ADDRESS));
+        assertThat(result.getPersonalService(), is(PERSONAL_SERVICE));
+        assertThat(result.getSummonsSuppressed(), is(SUMMONS_SUPPRESSED));
+        assertThat(result.getProsecutorCost(), is(PROSECUTOR_COST));
+    }
+
+    @Test
+    public void shouldNotPassSummonsApprovedOutcomeToGroupAggregateWhenApprovingNonCivilGroupCase() throws EventStreamException {
+        givenGroupCaseWithSummonsApplication(false);
+
+        summonsApplicationHandler.approveCaseDefendantsAsSummonsApplicationApproved(envelopeFrom(metadataFor(
+                "prosecutioncasefile.command.approve-case-defendants-as-summons-application-approved"), buildSummonsApplicationApprovedCommandPayload()));
+
+        verify(groupAggregate).approveGroupProsecution(anyList(), anyList(), summonsApprovedOutcomeArgumentCaptor.capture());
+        assertThat(summonsApprovedOutcomeArgumentCaptor.getValue(), is(nullValue()));
+    }
+
+    @Test
     public void shouldCallAggregateToRejectCaseDefendants() throws EventStreamException {
         given(eventSource.getStreamById(CASE_ID)).willReturn(eventStream);
         given(aggregateService.get(eventStream, ProsecutionCaseFile.class)).willReturn(aggregate);
@@ -170,6 +213,20 @@ public class SummonsApplicationHandlerTest {
                 ));
     }
 
+    private void givenGroupCaseWithSummonsApplication(final boolean isCivil) {
+        given(eventSource.getStreamById(CASE_ID)).willReturn(eventStream);
+        given(aggregateService.get(eventStream, ProsecutionCaseFile.class)).willReturn(aggregate);
+        given(aggregate.getGroupId()).willReturn(GROUP_ID);
+        given(eventSource.getStreamById(GROUP_ID)).willReturn(groupEventStream);
+        given(aggregateService.get(groupEventStream, GroupProsecutionCaseFile.class)).willReturn(groupAggregate);
+        given(groupCasesReferenceDataEnrichers.iterator()).willReturn(emptyIterator());
+        given(defendantRefDataEnrichers.iterator()).willReturn(emptyIterator());
+        given(progressionService.getApplicationOnly(any())).willReturn(CourtApplication.courtApplication()
+                .withCourtCivilApplication(CourtCivilApplication.courtCivilApplication().withIsCivil(isCivil).build())
+                .withType(CourtApplicationType.courtApplicationType().build()).build());
+        given(groupAggregate.approveGroupProsecution(anyList(), anyList(), any())).willReturn(empty());
+    }
+
     private ApproveCaseDefendantsAsSummonsApplicationApproved buildSummonsApplicationApprovedCommandPayload() {
         return approveCaseDefendantsAsSummonsApplicationApproved()
                 .withApplicationId(APPLICATION_ID)
@@ -178,6 +235,7 @@ public class SummonsApplicationHandlerTest {
                         .withPersonalService(PERSONAL_SERVICE)
                         .withSummonsSuppressed(SUMMONS_SUPPRESSED)
                         .withProsecutorCost(PROSECUTOR_COST)
+                        .withProsecutorEmailAddress(PROSECUTOR_EMAIL_ADDRESS)
                         .build())
                 .build();
     }

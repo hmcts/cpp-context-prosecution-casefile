@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
@@ -19,7 +20,9 @@ import uk.gov.justice.core.courts.ListDefendantRequest;
 import uk.gov.justice.core.courts.ListHearingRequest;
 import uk.gov.justice.core.courts.Offence;
 import uk.gov.justice.core.courts.ProsecutionCase;
+import uk.gov.justice.core.courts.SummonsApprovedOutcome;
 import uk.gov.justice.services.common.converter.jackson.ObjectMapperProducer;
+import uk.gov.moj.cpp.prosecution.casefile.domain.ParamsVO;
 import uk.gov.moj.cpp.prosecution.casefile.event.GroupCasesReceived;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant;
 
@@ -37,8 +40,10 @@ import static org.codehaus.groovy.runtime.InvokerHelper.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
+import static org.hamcrest.core.IsNull.nullValue;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -114,6 +119,37 @@ public class GroupCasesReceivedToInitiateCourtProceedingsConverterTest {
         assertThat(prosecutionCase2.getDefendants().get(0).getOffences().size(), is(1));
         assertThat(prosecutionCase2.getDefendants().get(0).getOffences().get(0).getId(), is(offenceId2));
         assertCivilFees(prosecutionCase2, FeeStatus.OUTSTANDING, null);
+    }
+
+    @Test
+    void shouldPassSummonsApprovedOutcomeToHearingRequestConverter() throws IOException {
+        final GroupCasesReceived groupCasesReceivedWithoutOutcome = objectMapper.readValue(
+                replaceVariables(resourceToString("payloads/GroupCasesReceivedToInitiateCourtProceedingsConverterTest.json")), GroupCasesReceived.class);
+        final SummonsApprovedOutcome summonsApprovedOutcome = SummonsApprovedOutcome.summonsApprovedOutcome()
+                .withProsecutorEmailAddress("prosecutor@example.com")
+                .build();
+        final GroupCasesReceived groupCasesReceived = GroupCasesReceived.groupCasesReceived()
+                .withGroupProsecutionList(groupCasesReceivedWithoutOutcome.getGroupProsecutionList())
+                .withSummonsApprovedOutcome(summonsApprovedOutcome)
+                .build();
+        final ArgumentCaptor<ParamsVO> paramsVOCaptor = ArgumentCaptor.forClass(ParamsVO.class);
+
+        groupCasesToProsecutionCaseConverter.convert(groupCasesReceived);
+
+        verify(prosecutionCaseFileInitialHearingToCCHearingRequestConverter).convert(any(), paramsVOCaptor.capture());
+        assertThat(paramsVOCaptor.getValue().getSummonsApprovedOutcome(), is(summonsApprovedOutcome));
+    }
+
+    @Test
+    void shouldNotPassSummonsApprovedOutcomeToHearingRequestConverterWhenAbsent() throws IOException {
+        final GroupCasesReceived groupCasesReceived = objectMapper.readValue(
+                replaceVariables(resourceToString("payloads/GroupCasesReceivedToInitiateCourtProceedingsConverterTest.json")), GroupCasesReceived.class);
+        final ArgumentCaptor<ParamsVO> paramsVOCaptor = ArgumentCaptor.forClass(ParamsVO.class);
+
+        groupCasesToProsecutionCaseConverter.convert(groupCasesReceived);
+
+        verify(prosecutionCaseFileInitialHearingToCCHearingRequestConverter).convert(any(), paramsVOCaptor.capture());
+        assertThat(paramsVOCaptor.getValue().getSummonsApprovedOutcome(), is(nullValue()));
     }
 
     @Test

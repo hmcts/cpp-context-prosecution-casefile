@@ -21,6 +21,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.empty;
@@ -37,12 +38,14 @@ import static uk.gov.justice.cps.prosecutioncasefile.InitialHearing.initialHeari
 import static uk.gov.justice.services.test.utils.core.random.RandomGenerator.INTEGER;
 import static uk.gov.justice.services.test.utils.core.random.RandomGenerator.STRING;
 import static uk.gov.justice.services.test.utils.core.random.RandomGenerator.values;
+import static uk.gov.moj.cpp.prosecution.casefile.CaseType.CC;
 import static uk.gov.moj.cpp.prosecution.casefile.domain.SummonsApplicationApprovedDetails.summonsApplicationApprovedDetails;
 import static uk.gov.moj.cpp.prosecution.casefile.domain.SummonsApplicationRejectedDetails.summonsApplicationRejectedDetails;
 import static uk.gov.moj.cpp.prosecution.casefile.event.CcCaseReceived.ccCaseReceived;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.BailStatusReferenceData.bailStatusReferenceData;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseDetails.caseDetails;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseMarker.caseMarker;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseProblem.caseProblem;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CIVIL;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CPPI;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.MCC;
@@ -104,6 +107,7 @@ import static uk.gov.moj.cps.prosecutioncasefile.TestConstants.THIRD_DEFENDANT_I
 import static uk.gov.moj.cps.prosecutioncasefile.TestConstants.THIRD_FORENAME;
 import static uk.gov.moj.cps.prosecutioncasefile.TestConstants.THIRD_SURNAME;
 import static uk.gov.moj.cps.prosecutioncasefile.TestConstants.URN;
+import static uk.gov.moj.cps.prosecutioncasefile.domain.event.CaseCreatedSuccessfullyWithWarnings.caseCreatedSuccessfullyWithWarnings;
 
 import com.google.common.collect.Lists;
 import uk.gov.justice.core.courts.FeeStatus;
@@ -122,6 +126,7 @@ import uk.gov.moj.cpp.prosecution.casefile.event.CcCaseReceivedWithWarnings;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.BailStatusReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseDetails;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseMarker;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseProblem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CivilFees;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CpsPersonDefendantDetails;
@@ -314,7 +319,7 @@ public class ProsecutionCaseFileTest {
                         buildDefendantWithOffence(offenceCommittedDate, offenceChargeDate.minusMonths(4), PROSECUTOR_DEFENDANT_REFERENCE_TWO))), new ArrayList<>(), new ArrayList<>(),
                 referenceDataQueryService);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         assertThat(eventList.size(), is(1));
 
         final Optional<CcCaseReceivedWithWarnings> firstMatchingEvent = getFirstMatching(eventList, CcCaseReceivedWithWarnings.class);
@@ -332,7 +337,7 @@ public class ProsecutionCaseFileTest {
                         ARREST_SUMMON_NUMBER))),
                 new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         assertThat(eventList.size(), is(1));
 
         final Optional<CcCaseReceivedWithWarnings> firstMatchingEvent = getFirstMatching(eventList, CcCaseReceivedWithWarnings.class);
@@ -351,7 +356,7 @@ public class ProsecutionCaseFileTest {
                 of(buildDefendantWithOffence(offenceCommittedDate, now().plusYears(1), PROSECUTOR_DEFENDANT_REFERENCE_TWO)), CPPI, "C");
 
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(subsequentReferenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
 
         final Optional<CcProsecutionRejected> ccProsecutionRejected = getFirstMatching(eventList, CcProsecutionRejected.class);
 
@@ -359,6 +364,84 @@ public class ProsecutionCaseFileTest {
         assertThat(ccProsecutionRejected.get().getCaseErrors(), hasSize(1));
         assertThat(ccProsecutionRejected.get().getDefendantErrors().size(), is(1));
         assertThat(ccProsecutionRejected.get().getDefendantErrors().get(0).getProsecutorDefendantReference(), is(PROSECUTOR_DEFENDANT_REFERENCE_TWO));
+    }
+
+    @Test
+    public void shouldRaiseCaseRejectedWithCivilCaseErrorsWrappingCaseProblemsForCivilCase() {
+        final LocalDate offenceCommittedDate = of(2018, 3, 2);
+        final ProsecutionWithReferenceData referenceData = getProsecutionWithReferenceDataAndCivilFees(
+                of(buildDefendant(SECOND_FORENAME, SECOND_SURNAME, SECOND_BIRTH_DATE, SECOND_DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE)), CIVIL, true, emptyList());
+        prosecutionCaseFile.apply(ccCaseReceived().withProsecutionWithReferenceData(referenceData).build());
+
+        final ProsecutionWithReferenceData subsequentReferenceData = getProsecutionWithReferenceDataAndCivilFees(
+                of(buildDefendantWithOffence(offenceCommittedDate, now().plusYears(1), PROSECUTOR_DEFENDANT_REFERENCE_TWO)), CIVIL, true, emptyList());
+
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(subsequentReferenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
+        final List<Object> eventList = objectStream.toList();
+
+        final Optional<CcProsecutionRejected> ccProsecutionRejected = getFirstMatching(eventList, CcProsecutionRejected.class);
+
+        assertThat(ccProsecutionRejected.isPresent(), is(true));
+
+        final List<CaseProblem> civilCaseErrors = ccProsecutionRejected.get().getCivilCaseErrors();
+        assertThat(civilCaseErrors, hasSize(1));
+        assertThat(civilCaseErrors.get(0).getProsecutorCaseReference(), is(PROSECUTOR_CASE_REFERENCE));
+        assertThat(civilCaseErrors.get(0).getProblems(), hasSize(1));
+        assertThat(civilCaseErrors.get(0).getProblems().get(0).getCode(), is(ProblemCode.DUPLICATED_PROSECUTION.name()));
+
+        // a civil case must not populate the legacy flat caseErrors field
+        assertThat(ccProsecutionRejected.get().getCaseErrors(), is(nullValue()));
+    }
+
+    @Test
+    public void shouldRaiseCaseRejectedWithFlatCaseErrorsAndNoCivilCaseErrorsForNonCivilCase() {
+        final LocalDate offenceCommittedDate = of(2018, 3, 2);
+        final ProsecutionWithReferenceData referenceData = getProsecutionWithReferenceDataAndCivilFees(
+                of(buildDefendant(SECOND_FORENAME, SECOND_SURNAME, SECOND_BIRTH_DATE, SECOND_DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE)), CPPI, false, emptyList());
+        prosecutionCaseFile.apply(ccCaseReceived().withProsecutionWithReferenceData(referenceData).build());
+
+        final ProsecutionWithReferenceData subsequentReferenceData = getProsecutionWithReferenceDataAndCivilFees(
+                of(buildDefendantWithOffence(offenceCommittedDate, now().plusYears(1), PROSECUTOR_DEFENDANT_REFERENCE_TWO)), CPPI, false, emptyList());
+
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(subsequentReferenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
+        final List<Object> eventList = objectStream.toList();
+
+        final Optional<CcProsecutionRejected> ccProsecutionRejected = getFirstMatching(eventList, CcProsecutionRejected.class);
+
+        assertThat(ccProsecutionRejected.isPresent(), is(true));
+
+        final List<Problem> caseErrors = ccProsecutionRejected.get().getCaseErrors();
+        assertThat(caseErrors, hasSize(1));
+        assertThat(caseErrors.get(0).getCode(), is(ProblemCode.DUPLICATED_PROSECUTION.name()));
+
+        // a non-civil case must not populate the new civilCaseErrors field
+        assertThat(ccProsecutionRejected.get().getCivilCaseErrors(), is(nullValue()));
+    }
+
+    @Test
+    public void shouldRaiseCaseRejectedWithFlatCaseErrorsForMCCCaseFlaggedAsCivil() {
+        // isCivil can be true for MCC-channel cases (a separate migrated-case path); the civil-only
+        // branch must not intercept them, since ProsecutionRejectedProcessor's MCC branch reads
+        // getCaseErrors() unconditionally and would NPE / silently drop errors otherwise.
+        final LocalDate offenceCommittedDate = of(2018, 3, 2);
+        final ProsecutionWithReferenceData referenceData = getProsecutionWithReferenceDataAndCivilFees(
+                of(buildDefendant(SECOND_FORENAME, SECOND_SURNAME, SECOND_BIRTH_DATE, SECOND_DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE)), MCC, true, emptyList());
+        prosecutionCaseFile.apply(ccCaseReceived().withProsecutionWithReferenceData(referenceData).build());
+
+        final ProsecutionWithReferenceData subsequentReferenceData = getProsecutionWithReferenceDataAndCivilFees(
+                of(buildDefendantWithOffence(offenceCommittedDate, now().plusYears(1), PROSECUTOR_DEFENDANT_REFERENCE_TWO)), MCC, true, emptyList());
+
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(subsequentReferenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
+        final List<Object> eventList = objectStream.toList();
+
+        final Optional<CcProsecutionRejected> ccProsecutionRejected = getFirstMatching(eventList, CcProsecutionRejected.class);
+
+        assertThat(ccProsecutionRejected.isPresent(), is(true));
+
+        final List<Problem> caseErrors = ccProsecutionRejected.get().getCaseErrors();
+        assertThat(caseErrors, hasSize(1));
+        assertThat(caseErrors.get(0).getCode(), is(ProblemCode.DUPLICATED_PROSECUTION.name()));
+        assertThat(ccProsecutionRejected.get().getCivilCaseErrors(), is(nullValue()));
     }
 
     @Test
@@ -370,7 +453,7 @@ public class ProsecutionCaseFileTest {
                 buildDefendantWithOffence(offenceCommittedDate, offenceChargeDate.minusMonths(4), PROSECUTOR_DEFENDANT_REFERENCE_TWO)), CPPI, false, Collections.emptyList()), new ArrayList<>(), new ArrayList<>(),
                 referenceDataQueryService);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         assertThat(eventList.size(), is(1));
 
         final Optional<CcCaseReceivedWithWarnings> firstMatchingEvent = getFirstMatching(eventList, CcCaseReceivedWithWarnings.class);
@@ -396,7 +479,7 @@ public class ProsecutionCaseFileTest {
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(prosecutionWithReferenceDataAndCivilFees, new ArrayList<>(), new ArrayList<>(),
                 referenceDataQueryService);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         assertThat(eventList.size(), is(1));
 
         final Optional<CcCaseReceivedWithWarnings> firstMatchingEvent = getFirstMatching(eventList, CcCaseReceivedWithWarnings.class);
@@ -421,6 +504,84 @@ public class ProsecutionCaseFileTest {
     }
 
     @Test
+    public void shouldUseStandardCaseValidationRulesAndRejectInvalidCaseMarkerWhenIsCivilFalse() {
+        final LocalDate offenceCommittedDate = of(2018, 3, 2);
+        final LocalDate offenceChargeDate = of(2018, 11, 2);
+
+        final ProsecutionWithReferenceData prosecutionWithReferenceData = getProsecutionWithReferenceDataAndCivilFees(
+                of(buildDefendantWithOffence(offenceCommittedDate, offenceChargeDate, PROSECUTOR_DEFENDANT_REFERENCE_ONE)),
+                CPPI, false, Collections.emptyList(), singletonList(caseMarker().withMarkerTypeCode(INVALID_CASE_MARKER_CODE).build()));
+
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(),
+                referenceDataQueryService);
+
+        final List<Object> eventList = objectStream.toList();
+
+        final Optional<CcProsecutionRejected> ccProsecutionRejected = getFirstMatching(eventList, CcProsecutionRejected.class);
+        assertThat(ccProsecutionRejected.isPresent(), is(true));
+        assertThat(ccProsecutionRejected.get().getCaseErrors().get(0).getCode(), is(ProblemCode.CASE_MARKER_IS_INVALID.name()));
+    }
+
+    @Test
+    public void shouldNotRejectSingleNonManualCivilCaseForFutureChargeDate() {
+        final ProsecutionWithReferenceData prosecutionWithReferenceData =
+                getCivilProsecutionWithReferenceDataForSingleCase("O", now().plusDays(5));
+
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(),
+                referenceDataQueryService);
+
+        final List<Object> eventList = objectStream.toList();
+
+        assertThat(getFirstMatching(eventList, CcProsecutionRejected.class).isPresent(), is(false));
+    }
+
+    @Test
+    public void shouldRejectSingleNonManualCivilCaseForHearingDateMoreThan31DaysInPast() {
+        final ProsecutionWithReferenceData prosecutionWithReferenceData =
+                getCivilProsecutionWithReferenceDataForSingleCase("O", now().minusDays(2), now().minusDays(40).toString());
+
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(),
+                referenceDataQueryService);
+
+        final List<Object> eventList = objectStream.toList();
+
+        final Optional<CcProsecutionRejected> ccProsecutionRejected = getFirstMatching(eventList, CcProsecutionRejected.class);
+        assertThat(ccProsecutionRejected.isPresent(), is(true));
+        assertThat(ccProsecutionRejected.get().getDefendantErrors().get(0).getProblems().stream()
+                .anyMatch(problem -> problem.getCode().equals(ProblemCode.DATE_OF_HEARING_MORE_THAN_31DAYS_IN_PAST.name())), is(true));
+        assertThat(ccProsecutionRejected.get().getDefendantErrors().get(0).getProblems().stream()
+                .anyMatch(problem -> problem.getCode().equals(ProblemCode.DATE_OF_HEARING_IN_THE_PAST.name())), is(false));
+    }
+
+    @Test
+    public void shouldNotRejectSingleNonManualCivilCaseForHearingDateWithin31DaysInPast() {
+        final ProsecutionWithReferenceData prosecutionWithReferenceData =
+                getCivilProsecutionWithReferenceDataForSingleCase("O", now().minusDays(2), now().minusDays(10).toString());
+
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(),
+                referenceDataQueryService);
+
+        final List<Object> eventList = objectStream.toList();
+
+        assertThat(getFirstMatching(eventList, CcProsecutionRejected.class).isPresent(), is(false));
+    }
+
+    @Test
+    public void shouldNotRaiseOffenceOutOfTimeWarningForMccChannelCase() {
+        final ProsecutionWithReferenceData prosecutionWithReferenceData =
+                getCivilProsecutionWithReferenceDataForSingleCase("O", now(), now().plusDays(5).toString(), now().minusMonths(10), MCC);
+
+        final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(),
+                referenceDataQueryService);
+
+        final List<Object> eventList = objectStream.toList();
+
+        assertThat(getFirstMatching(eventList, CcProsecutionRejected.class).isPresent(), is(false));
+        final Optional<CcCaseReceivedWithWarnings> ccCaseReceivedWithWarnings = getFirstMatching(eventList, CcCaseReceivedWithWarnings.class);
+        assertThat(ccCaseReceivedWithWarnings.isPresent(), is(false));
+    }
+
+    @Test
     public void shouldCreateCCCaseWithWarningsForCPPIWithMultipleDefendants() {
         final LocalDate offenceCommittedDate = of(2018, 3, 2);
         final LocalDate offenceChargeDate = of(2018, 11, 2);
@@ -429,7 +590,7 @@ public class ProsecutionCaseFileTest {
                         buildDefendantWithOffence(offenceCommittedDate, offenceChargeDate.plusMonths(8), PROSECUTOR_DEFENDANT_REFERENCE_TWO))), new ArrayList<>(), new ArrayList<>(),
                 referenceDataQueryService);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         assertThat(eventList.size(), is(1));
         assertThat(eventList.get(0), is(instanceOf(CcCaseReceivedWithWarnings.class)));
 
@@ -453,7 +614,7 @@ public class ProsecutionCaseFileTest {
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(),
                 referenceDataQueryService);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         assertThat(eventList.size(), is(1));
         assertThat(eventList.get(0), is(instanceOf(CcCaseReceivedWithWarnings.class)));
 
@@ -472,7 +633,7 @@ public class ProsecutionCaseFileTest {
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(getProsecutionWithReferenceData(of(buildDefendantWithOffence(offenceCommittedDate, offenceChargeDate, PROSECUTOR_DEFENDANT_REFERENCE_ONE),
                         buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_TWO)), "C"), new ArrayList<>(), new ArrayList<>(),
                 referenceDataQueryService);
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         assertThat(eventList.size(), is(3));
         assertThat(eventList.get(0), is(instanceOf(DefendantValidationPassed.class)));
         assertThat(eventList.get(1), is(instanceOf(DefendantValidationPassed.class)));
@@ -494,7 +655,7 @@ public class ProsecutionCaseFileTest {
                 of(buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, randomAlphabetic(10))), SPI, SUMMONS_INITIATION_CODE, externalIdForSecondMessage);
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(secondMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         final Optional<DefendantsParkedForSummonsApplicationApproval> firstMatchingEvent = getFirstMatching(eventList, DefendantsParkedForSummonsApplicationApproval.class);
         assertThat(eventList.size(), is(2));
         assertThat(firstMatchingEvent.isPresent(), is(true));
@@ -514,7 +675,7 @@ public class ProsecutionCaseFileTest {
         prosecutionCaseFile.addIdpcCaseMaterial(CASE_ID, URN, materialId, materialType, defendant);
 
         final Stream<Object> objectStream = prosecutionCaseFile.caseUpdated();
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         assertThat(eventList.size(), is(0));
     }
 
@@ -531,7 +692,7 @@ public class ProsecutionCaseFileTest {
 
         prosecutionCaseFile.addIdpcCaseMaterial(CASE_ID, URN, materialId, materialType, defendant);
         final Stream<Object> objectStream = prosecutionCaseFile.expirePendingIdpcMaterial(materialId, ZonedDateTime.now());
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         assertThat(eventList.size(), is(1));
         assertThat(eventList.get(0), is(instanceOf(IdpcMaterialRejected.class)));
 
@@ -798,7 +959,7 @@ public class ProsecutionCaseFileTest {
                 of(buildDefendantWithOffence(offenceCommittedDate, offenceChargeDate, PROSECUTOR_DEFENDANT_REFERENCE_ONE),
                         buildDefendant(FORENAME, SURNAME, BIRTH_DATE, SECOND_DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_TWO)), validChannel, SUMMONS_INITIATION_CODE), newArrayList(), newArrayList(), referenceDataQueryService);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         assertThat(eventList.size(), is(SPI == validChannel ? 3 : 1));
         final Optional<DefendantsParkedForSummonsApplicationApproval> firstMatching = getFirstMatching(eventList, DefendantsParkedForSummonsApplicationApproval.class);
         assertThat(firstMatching.get(), notNullValue());
@@ -809,7 +970,7 @@ public class ProsecutionCaseFileTest {
     public void shouldRaiseProsecutionCaseUnSupportedEventWhenMultipleDefendantsProsecutionReceivedForSjpCaseViaSpiChannel() {
         final ProsecutionWithReferenceData prosecutionWithReferenceData = getProsecutionWithReferenceData(SPI, true);
         final Stream<Object> objectStream = prosecutionCaseFile.receiveSjpProsecution(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         assertThat(eventList.size(), is(1));
         assertThat(eventList.get(0), is(instanceOf(ProsecutionCaseUnsupported.class)));
         final ProsecutionCaseUnsupported eventObject = (ProsecutionCaseUnsupported) eventList.get(0);
@@ -823,13 +984,13 @@ public class ProsecutionCaseFileTest {
         final ProsecutionWithReferenceData prosecutionWithReferenceData = getSjpProsecutionWithReferenceData(initialInitiationCode);
 
         final Stream<Object> objectStream = prosecutionCaseFile.receiveSjpProsecution(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
-        final List<Object> events = objectStream.collect(toList());
+        final List<Object> events = objectStream.toList();
         assertThat(events.size(), is(1));
 
         final ProsecutionWithReferenceData subsequentProsecutionWithReferenceData = getProsecutionWithReferenceData(
                 of(buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_TWO)), newInitiationCode);
         final Stream<Object> newObjectStream = prosecutionCaseFile.receiveCCCase(subsequentProsecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
-        final List<Object> eventList = newObjectStream.collect(toList());
+        final List<Object> eventList = newObjectStream.toList();
         final ProsecutionCaseUnsupported eventObject = (ProsecutionCaseUnsupported) eventList.get(0);
 
         assertThat(eventList.size(), is(1));
@@ -848,13 +1009,13 @@ public class ProsecutionCaseFileTest {
         final ProsecutionWithReferenceData prosecutionWithReferenceData = getSjpProsecutionWithReferenceData("J");
 
         final Stream<Object> objectStream = prosecutionCaseFile.receiveSjpProsecution(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
-        final List<Object> events = objectStream.collect(toList());
+        final List<Object> events = objectStream.toList();
         assertThat(events.size(), is(1));
 
         final ProsecutionWithReferenceData subsequentProsecutionWithReferenceData = getProsecutionWithReferenceData(
                 of(buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_TWO)), "J");
         final Stream<Object> newObjectStream = prosecutionCaseFile.receiveSjpProsecution(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
-        final List<Object> eventList = newObjectStream.collect(toList());
+        final List<Object> eventList = newObjectStream.toList();
         final ProsecutionCaseUnsupported eventObject = (ProsecutionCaseUnsupported) eventList.get(0);
 
         assertThat(eventList.size(), is(1));
@@ -870,13 +1031,13 @@ public class ProsecutionCaseFileTest {
         final ProsecutionWithReferenceData prosecutionWithReferenceData = getSjpProsecutionWithReferenceData(initialInitiationCode);
 
         final Stream<Object> objectStream = prosecutionCaseFile.receiveSjpProsecution(prosecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
-        final List<Object> events = objectStream.collect(toList());
+        final List<Object> events = objectStream.toList();
         assertThat(events.size(), is(1));
 
         final ProsecutionWithReferenceData subsequentProsecutionWithReferenceData = getProsecutionWithReferenceData(
                 of(buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_TWO)), newInitiationCode);
         final Stream<Object> newObjectStream = prosecutionCaseFile.receiveCCCase(subsequentProsecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
-        final List<Object> eventList = newObjectStream.collect(toList());
+        final List<Object> eventList = newObjectStream.toList();
         final ProsecutionCaseUnsupported eventObject = (ProsecutionCaseUnsupported) eventList.get(0);
 
         assertThat(eventList.size(), is(1));
@@ -900,7 +1061,7 @@ public class ProsecutionCaseFileTest {
         final ProsecutionWithReferenceData subsequentProsecutionWithReferenceData = getProsecutionWithReferenceData(
                 of(buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_TWO)), newInitiationCode);
         final Stream<Object> objectStream = prosecutionCaseFile.receiveSjpProsecution(subsequentProsecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         final ProsecutionCaseUnsupported eventObject = (ProsecutionCaseUnsupported) eventList.get(0);
 
         assertThat(eventList.size(), is(1));
@@ -924,7 +1085,7 @@ public class ProsecutionCaseFileTest {
         final ProsecutionWithReferenceData subsequentProsecutionWithReferenceData = getProsecutionWithReferenceData(
                 of(buildDefendant(SECOND_FORENAME, SECOND_SURNAME, SECOND_BIRTH_DATE, SECOND_DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_TWO)), newInitiationCode);
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(subsequentProsecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         assertThat(eventList.size(), is(2));
     }
 
@@ -941,7 +1102,7 @@ public class ProsecutionCaseFileTest {
                 of(buildDefendantWithInitiationCode(SECOND_FORENAME, SECOND_SURNAME, SECOND_BIRTH_DATE, SECOND_DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_TWO, newInitiationCode)), newInitiationCode);
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(subsequentProsecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         assertThat(eventList.size(), is(2));
         ProsecutionDefendantsAdded prosecutionDefendantsAdded = (ProsecutionDefendantsAdded) eventList.get(1);
         assertThat(prosecutionDefendantsAdded.getDefendants().size(), is(1));
@@ -961,7 +1122,7 @@ public class ProsecutionCaseFileTest {
 
         //when
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(subsequentProsecutionWithReferenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
 
         //then
         assertThat(eventList.size(), is(2));
@@ -989,14 +1150,14 @@ public class ProsecutionCaseFileTest {
         assertThat(defendantsParkedForSummonsApplicationApproval.getProsecutionWithReferenceData().getProsecution().getDefendants().size(), is(1));
 
         prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID, referenceData, emptyList()));
-        prosecutionCaseFile.apply(new SummonsApplicationRejected(APPLICATION_ID, CASE_ID, newArrayList(fromString(SECOND_DEFENDANT_ID)), summonsRejectedOutcome().withReasons(ImmutableList.of("Rejection Reason")).build()));
+        prosecutionCaseFile.apply(SummonsApplicationRejected.summonsApplicationRejected().withApplicationId(APPLICATION_ID).withCaseId(CASE_ID).withDefendantIds(newArrayList(fromString(SECOND_DEFENDANT_ID))).withSummonsRejectedOutcome(summonsRejectedOutcome().withReasons(ImmutableList.of("Rejection Reason")).build()).build());
 
         final String updatedSurname = STRING.next();
         final ProsecutionWithReferenceData subsequentReferenceDataForSameDefendant = getProsecutionWithReferenceData(
                 of(buildDefendantWithInitiationCode(FORENAME, updatedSurname, BIRTH_DATE, SECOND_DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_TWO, newInitiationCode)), SPI, newInitiationCode, EXTERNAL_ID_2);
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(subsequentReferenceDataForSameDefendant, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         assertThat(eventList.size(), is(2));
         ProsecutionDefendantsAdded prosecutionDefendantsAdded = (ProsecutionDefendantsAdded) eventList.get(1);
         assertThat(prosecutionDefendantsAdded.getDefendants().size(), is(1));
@@ -1018,7 +1179,7 @@ public class ProsecutionCaseFileTest {
         final SummonsApplicationApprovedDetails secondSummonsApplicationApprovedDetails = getSummonsApplicationApprovedDetails(defendantsParkedForSummonsApplicationApproval.getApplicationId());
         final Stream<Object> objectStream = prosecutionCaseFile.approveCaseDefendants(secondSummonsApplicationApprovedDetails, of(), of(), isCivil);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         assertThat(eventList, hasSize(1));
 
 
@@ -1038,14 +1199,14 @@ public class ProsecutionCaseFileTest {
         final ProsecutionWithReferenceData referenceData = getProsecutionWithReferenceData(
                 of(buildDefendantWithInitiationCode(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE, "S")), SPI, "S");
         prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID, referenceData, emptyList()));
-        prosecutionCaseFile.apply(new SummonsApplicationRejected(APPLICATION_ID, CASE_ID, newArrayList(fromString(DEFENDANT_ID)), summonsRejectedOutcome().withReasons(ImmutableList.of("Rejection Reason")).build()));
+        prosecutionCaseFile.apply(SummonsApplicationRejected.summonsApplicationRejected().withApplicationId(APPLICATION_ID).withCaseId(CASE_ID).withDefendantIds(newArrayList(fromString(DEFENDANT_ID))).withSummonsRejectedOutcome(summonsRejectedOutcome().withReasons(ImmutableList.of("Rejection Reason")).build()).build());
 
         final String updatedSurname = STRING.next();
         final ProsecutionWithReferenceData subsequentReferenceDataForSameDefendant = getProsecutionWithReferenceData(
                 of(buildDefendantWithInitiationCode(FORENAME, updatedSurname, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE, "Q")), SPI, "Q", EXTERNAL_ID_2);
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(subsequentReferenceDataForSameDefendant, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         assertThat(getFirstMatching(eventList, CcCaseReceived.class).isPresent(), is(false));
         final Optional<CaseValidationFailed> caseValidationFailed = getFirstMatching(eventList, CaseValidationFailed.class);
         assertThat(caseValidationFailed.isPresent(), is(true));
@@ -1065,7 +1226,7 @@ public class ProsecutionCaseFileTest {
                 of(buildDefendant(SECOND_FORENAME, SECOND_SURNAME, SECOND_BIRTH_DATE, SECOND_DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_TWO),
                         buildDefendant(FORENAME, SURNAME, BIRTH_DATE, thirdDefendantId, PROSECUTOR_DEFENDANT_REFERENCE_ONE)), SPI, "C");
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(subsequentCaseMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
 
         final Optional<ProsecutionDefendantsAdded> newDefendantMatchingEvent = getFirstMatching(eventList, ProsecutionDefendantsAdded.class);
         assertThat(newDefendantMatchingEvent.isPresent(), is(true));
@@ -1086,7 +1247,7 @@ public class ProsecutionCaseFileTest {
         final ProsecutionWithReferenceData subsequentReferenceData = getProsecutionWithReferenceData(
                 of(buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE)), SPI, "C");
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(subsequentReferenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         assertThat(eventList.get(0), is(instanceOf(CaseReceivedWithDuplicateDefendants.class)));
     }
 
@@ -1097,7 +1258,7 @@ public class ProsecutionCaseFileTest {
                         buildDefendant(SECOND_FORENAME, SECOND_SURNAME, SECOND_BIRTH_DATE, SECOND_DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE)
                 ), CPPI, "C");
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(referenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         assertThat(eventList.get(0), is(instanceOf(CcCaseReceived.class)));
 
         final CcCaseReceived ccCaseReceived = (CcCaseReceived) eventList.get(0);
@@ -1116,7 +1277,7 @@ public class ProsecutionCaseFileTest {
         final ProsecutionWithReferenceData subsequentReferenceData = getProsecutionWithReferenceData(
                 of(buildDefendantWithOffence(offenceCommittedDate, now().plusYears(1), PROSECUTOR_DEFENDANT_REFERENCE_TWO)), SPI, "C");
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(subsequentReferenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         assertThat(eventList.get(0), is(instanceOf(DefendantValidationFailed.class)));
     }
 
@@ -1128,7 +1289,7 @@ public class ProsecutionCaseFileTest {
                 of(buildDefendantWithOffence(offenceCommittedDate, now().plusYears(1), PROSECUTOR_DEFENDANT_REFERENCE_TWO)), channel, "C");
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(firstMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         final Optional<CcProsecutionRejected> eventObject = getFirstMatching(eventList, CcProsecutionRejected.class);
 
         assertThat(eventObject.isPresent(), is(true));
@@ -1145,7 +1306,7 @@ public class ProsecutionCaseFileTest {
         final ProsecutionWithReferenceData subsequentReferenceData = getProsecutionWithReferenceData(
                 of(buildDefendantWithOffence(offenceCommittedDate, now().plusYears(1), PROSECUTOR_DEFENDANT_REFERENCE_TWO)), CPPI, "C");
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(subsequentReferenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
 
         final Optional<CcProsecutionRejected> event = getFirstMatching(eventList, CcProsecutionRejected.class);
 
@@ -1161,7 +1322,7 @@ public class ProsecutionCaseFileTest {
                 of(buildDefendantWithOffence(offenceCommittedDate, now().plusYears(1), PROSECUTOR_DEFENDANT_REFERENCE_TWO)), SPI, "C");
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(firstMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         final Optional<CaseValidationFailed> caseValidationFailedEvent = getFirstMatching(eventList, CaseValidationFailed.class);
         final Optional<DefendantValidationFailed> defendantValidationFailedEvent = getFirstMatching(eventList, DefendantValidationFailed.class);
         assertThat(caseValidationFailedEvent.isPresent(), is(true));
@@ -1179,7 +1340,7 @@ public class ProsecutionCaseFileTest {
 
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(subsequentReferenceData, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         assertThat(eventList.get(0), is(instanceOf(DefendantValidationPassed.class)));
         assertThat(eventList.get(1), is(instanceOf(DefendantsReceivedNotAdded.class)));
     }
@@ -1197,7 +1358,7 @@ public class ProsecutionCaseFileTest {
 
         final Stream<Object> receiveCCCaseObjectStream = prosecutionCaseFile.receiveCCCase(secondMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        List<Object> eventList = receiveCCCaseObjectStream.collect(toList());
+        List<Object> eventList = receiveCCCaseObjectStream.toList();
         assertThat(eventList, hasSize(2));
         assertThat(eventList.get(0), is(instanceOf(DefendantValidationPassed.class)));
         assertThat(eventList.get(1), is(instanceOf(DefendantsReceivedNotAdded.class)));
@@ -1206,7 +1367,7 @@ public class ProsecutionCaseFileTest {
         final Stream<Object> receiveErrorCorrectionsObjectStream = prosecutionCaseFile.receiveErrorCorrections(getCaseMarkerCorrectedField(), objectToJsonObjectConverter,
                 jsonObjectToObjectConverter, of(initiationTypesRefDataEnricher), new ArrayList<>(), referenceDataQueryService);
 
-        eventList = receiveErrorCorrectionsObjectStream.collect(toList());
+        eventList = receiveErrorCorrectionsObjectStream.toList();
         assertThat(eventList, hasSize(5));
         assertThat(eventList.get(0), is(instanceOf(DefendantValidationPassed.class)));
         assertThat(((DefendantValidationPassed) eventList.get(0)).getDefendantId().toString(), is(DEFENDANT_ID));
@@ -1232,7 +1393,7 @@ public class ProsecutionCaseFileTest {
                 ), SPI, SUMMONS_INITIATION_CODE, EXTERNAL_ID_2);
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(secondMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        List<Object> eventList = objectStream.collect(toList());
+        List<Object> eventList = objectStream.toList();
         assertThat(eventList.size(), is(4));
         Optional<DefendantsParkedForSummonsApplicationApproval> firstMatchingEvent = getFirstMatching(eventList, DefendantsParkedForSummonsApplicationApproval.class);
         assertThat(firstMatchingEvent.isPresent(), is(true));
@@ -1243,7 +1404,7 @@ public class ProsecutionCaseFileTest {
         final Stream<Object> receiveErrorCorrectionsObjectStream = prosecutionCaseFile.receiveErrorCorrections(getDefendantDateOfHearingCorrectedField(), objectToJsonObjectConverter,
                 jsonObjectToObjectConverter, of(initiationTypesRefDataEnricher), of(offenceDataRefDataEnricher), referenceDataQueryService);
 
-        eventList = receiveErrorCorrectionsObjectStream.collect(toList());
+        eventList = receiveErrorCorrectionsObjectStream.toList();
         assertThat(eventList.size(), is(4));
         firstMatchingEvent = getFirstMatching(eventList, DefendantsParkedForSummonsApplicationApproval.class);
         assertThat(firstMatchingEvent.isPresent(), is(true));
@@ -1266,7 +1427,7 @@ public class ProsecutionCaseFileTest {
 
         final Stream<Object> receiveErrorCorrectionsObjectStream = prosecutionCaseFile.receiveErrorCorrections(offenceChargeDateCorrectlySet(), objectToJsonObjectConverter,
                 jsonObjectToObjectConverter, of(initiationTypesRefDataEnricher), of(offenceDataRefDataEnricher), referenceDataQueryService);
-        List<Object> eventList = receiveErrorCorrectionsObjectStream.collect(toList());
+        List<Object> eventList = receiveErrorCorrectionsObjectStream.toList();
         assertThat(eventList.size(), is(3));
         Optional<SjpProsecutionReceived> sjpProsecutionReceived = getFirstMatching(eventList, SjpProsecutionReceived.class);
         assertThat(sjpProsecutionReceived.isPresent(), is(true));
@@ -1288,7 +1449,7 @@ public class ProsecutionCaseFileTest {
                 ), SPI, SUMMONS_INITIATION_CODE, EXTERNAL_ID_2);
         Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(secondMessageWithValidAndInvalidDefendants, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        List<Object> eventList = objectStream.collect(toList());
+        List<Object> eventList = objectStream.toList();
         assertThat(eventList.size(), is(3));
         Optional<DefendantsParkedForSummonsApplicationApproval> firstMatchingForParkedDefendant = getFirstMatching(eventList, DefendantsParkedForSummonsApplicationApproval.class);
         assertThat(firstMatchingForParkedDefendant.isPresent(), is(true));
@@ -1304,7 +1465,7 @@ public class ProsecutionCaseFileTest {
                 of(buildDefendant(FORENAME, FITH_SURNAME, BIRTH_DATE, FIFTH_DEFENDANT_ID, randomAlphabetic(10))), SPI, SUMMONS_INITIATION_CODE, EXTERNAL_ID_3);
         objectStream = prosecutionCaseFile.receiveCCCase(thirdMessageWithValidDefendant, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        eventList = objectStream.collect(toList());
+        eventList = objectStream.toList();
         assertThat(eventList.size(), is(2));
         firstMatchingForParkedDefendant = getFirstMatching(eventList, DefendantsParkedForSummonsApplicationApproval.class);
         assertThat(firstMatchingForParkedDefendant.isPresent(), is(true));
@@ -1331,15 +1492,38 @@ public class ProsecutionCaseFileTest {
                 .build();
         final Stream<Object> objectStream = prosecutionCaseFile.rejectCaseDefendants(summonsApplicationRejectedDetails);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         final uk.gov.moj.cps.prosecutioncasefile.domain.event.SummonsApplicationRejected applicationRejected = (uk.gov.moj.cps.prosecutioncasefile.domain.event.SummonsApplicationRejected) eventList.get(0);
         assertThat(applicationRejected, is(instanceOf(uk.gov.moj.cps.prosecutioncasefile.domain.event.SummonsApplicationRejected.class)));
         assertThat(applicationRejected.getDefendantIds(), contains(fromString(DEFENDANT_ID)));
         assertThat(applicationRejected.getDefendantIds(), not(contains(fromString(SECOND_DEFENDANT_ID))));
         assertThat(applicationRejected.getSummonsRejectedOutcome().getReasons(), contains("Rejection Reason"));
+        assertThat(applicationRejected.getChannel(), is(SPI));
         assertThat(prosecutionCaseFile.isProsecutionReceived(), is(false));
         assertThat(prosecutionCaseFile.getDefendants(), hasSize(1));
         assertThat(prosecutionCaseFile.getDefendants().get(0).getId(), is(SECOND_DEFENDANT_ID));
+    }
+
+    @Test
+    public void shouldRaiseSummonsApplicationRejectedEventWithChannelAndExternalId() {
+        final ProsecutionWithReferenceData referenceData = getProsecutionWithReferenceData(
+                of(buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE)), CIVIL, "S", EXTERNAL_ID);
+        prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID, referenceData, emptyList()));
+
+        final SummonsApplicationRejectedDetails summonsApplicationRejectedDetails = summonsApplicationRejectedDetails()
+                .withApplicationId(APPLICATION_ID)
+                .withCaseId(CASE_ID)
+                .withSummonsRejectedOutcome(summonsRejectedOutcome()
+                        .withReasons(ImmutableList.of("Rejection Reason"))
+                        .build())
+                .build();
+        final Stream<Object> objectStream = prosecutionCaseFile.rejectCaseDefendants(summonsApplicationRejectedDetails);
+
+        final List<Object> eventList = objectStream.toList();
+        final uk.gov.moj.cps.prosecutioncasefile.domain.event.SummonsApplicationRejected applicationRejected =
+                (uk.gov.moj.cps.prosecutioncasefile.domain.event.SummonsApplicationRejected) eventList.get(0);
+        assertThat(applicationRejected.getChannel(), is(CIVIL));
+        assertThat(applicationRejected.getExternalId(), is(EXTERNAL_ID));
     }
 
     @Test
@@ -1348,14 +1532,14 @@ public class ProsecutionCaseFileTest {
                 of(buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE),
                         buildDefendant(SECOND_FORENAME, SECOND_SURNAME, SECOND_BIRTH_DATE, SECOND_DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_TWO)), SPI, "S");
         prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID, referenceData, emptyList()));
-        prosecutionCaseFile.apply(new SummonsApplicationRejected(APPLICATION_ID, CASE_ID, newArrayList(fromString(DEFENDANT_ID), fromString(SECOND_DEFENDANT_ID)), summonsRejectedOutcome().withReasons(ImmutableList.of("Rejection Reason")).build()));
+        prosecutionCaseFile.apply(SummonsApplicationRejected.summonsApplicationRejected().withApplicationId(APPLICATION_ID).withCaseId(CASE_ID).withDefendantIds(newArrayList(fromString(DEFENDANT_ID), fromString(SECOND_DEFENDANT_ID))).withSummonsRejectedOutcome(summonsRejectedOutcome().withReasons(ImmutableList.of("Rejection Reason")).build()).build());
 
         final String updatedSurname = STRING.next();
         final ProsecutionWithReferenceData subsequentReferenceDataForSameDefendant = getProsecutionWithReferenceData(
                 of(buildDefendant(FORENAME, updatedSurname, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE)), SPI, "S", EXTERNAL_ID_2);
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(subsequentReferenceDataForSameDefendant, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         assertThat(getFirstMatching(eventList, DefendantsParkedForSummonsApplicationApproval.class).isPresent(), is(false));
         final Optional<CaseValidationFailed> caseValidationFailed = getFirstMatching(eventList, CaseValidationFailed.class);
         assertThat(caseValidationFailed.isPresent(), is(true));
@@ -1370,14 +1554,14 @@ public class ProsecutionCaseFileTest {
                 of(buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE),
                         buildDefendant(SECOND_FORENAME, SECOND_SURNAME, SECOND_BIRTH_DATE, SECOND_DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_TWO)), SPI, SUMMONS_INITIATION_CODE);
         prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID, firstMessage, emptyList()));
-        prosecutionCaseFile.apply(new SummonsApplicationRejected(APPLICATION_ID, CASE_ID, newArrayList(fromString(DEFENDANT_ID), fromString(SECOND_DEFENDANT_ID)), summonsRejectedOutcome().withReasons(newArrayList("Rejection Reason")).build()));
+        prosecutionCaseFile.apply(SummonsApplicationRejected.summonsApplicationRejected().withApplicationId(APPLICATION_ID).withCaseId(CASE_ID).withDefendantIds(newArrayList(fromString(DEFENDANT_ID), fromString(SECOND_DEFENDANT_ID))).withSummonsRejectedOutcome(summonsRejectedOutcome().withReasons(newArrayList("Rejection Reason")).build()).build());
 
         final String updatedSurname = STRING.next();
         final ProsecutionWithReferenceData secondMessage = getProsecutionWithReferenceData(
                 of(buildDefendant(FORENAME, updatedSurname, BIRTH_DATE, THIRD_DEFENDANT_ID, randomAlphabetic(10))), SPI, SUMMONS_INITIATION_CODE, EXTERNAL_ID_2);
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(secondMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         assertThat(getFirstMatching(eventList, DefendantsParkedForSummonsApplicationApproval.class).isPresent(), is(false));
         final Optional<CaseValidationFailed> caseValidationFailed = getFirstMatching(eventList, CaseValidationFailed.class);
         assertThat(caseValidationFailed.isPresent(), is(true));
@@ -1396,13 +1580,17 @@ public class ProsecutionCaseFileTest {
                 of(buildDefendant(FORENAME, updatedSurname, BIRTH_DATE, THIRD_DEFENDANT_ID, randomAlphabetic(10))), SPI, SUMMONS_INITIATION_CODE, EXTERNAL_ID_2);
         prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID, firstMessage, emptyList()));
         prosecutionCaseFile.apply(new CcCaseReceived(firstMessage, summonsApprovedOutcome().withPersonalService(true).withProsecutorCost("£300.00").withSummonsSuppressed(false).build(), randomUUID()));
-        prosecutionCaseFile.apply(new CaseCreatedSuccessfully(CASE_ID, SPI, EXTERNAL_ID));
+        prosecutionCaseFile.apply(CaseCreatedSuccessfully.caseCreatedSuccessfully()
+                .withCaseId(CASE_ID)
+                .withChannel(SPI)
+                .withExternalId(EXTERNAL_ID)
+                .build());
         prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID_2, secondMessage, emptyList()));
 
         final SummonsApplicationApprovedDetails secondSummonsApplicationApprovedDetails = getSummonsApplicationApprovedDetails(APPLICATION_ID_2);
         final Stream<Object> objectStream = prosecutionCaseFile.approveCaseDefendants(secondSummonsApplicationApprovedDetails, of(), of(), isCivil);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         assertThat(eventList, hasSize(1));
         final Optional<ProsecutionDefendantsAdded> defendantAdded = getFirstMatching(eventList, ProsecutionDefendantsAdded.class);
         assertThat(defendantAdded.isPresent(), is(true));
@@ -1425,12 +1613,16 @@ public class ProsecutionCaseFileTest {
         prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID, firstMessage, emptyList()));
         prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID_2, secondMessage, emptyList()));
         prosecutionCaseFile.apply(new CcCaseReceived(firstMessage, summonsApprovedOutcome().withPersonalService(true).withProsecutorCost("£300.00").withSummonsSuppressed(false).build(), randomUUID()));
-        prosecutionCaseFile.apply(new CaseCreatedSuccessfully(CASE_ID, SPI, EXTERNAL_ID));
+        prosecutionCaseFile.apply(CaseCreatedSuccessfully.caseCreatedSuccessfully()
+                .withCaseId(CASE_ID)
+                .withChannel(SPI)
+                .withExternalId(EXTERNAL_ID)
+                .build());
 
         final SummonsApplicationApprovedDetails secondSummonsApplicationApprovedDetails = getSummonsApplicationApprovedDetails(APPLICATION_ID_2);
         final Stream<Object> objectStream = prosecutionCaseFile.approveCaseDefendants(secondSummonsApplicationApprovedDetails, of(), of(), isCivil);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         assertThat(eventList, hasSize(1));
         final Optional<ProsecutionDefendantsAdded> defendantAdded = getFirstMatching(eventList, ProsecutionDefendantsAdded.class);
         assertThat(defendantAdded.isPresent(), is(true));
@@ -1455,12 +1647,20 @@ public class ProsecutionCaseFileTest {
         final DefendantProblem secondDefendantWarning = defendantProblem().withProsecutorDefendantReference(PROSECUTOR_DEFENDANT_REFERENCE_TWO).withProblems(of(problem().withCode(OFFENCE_NOT_IN_EFFECT_ON_OFFENCE_COMMITTED_DATE).build())).build();
         prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID_2, secondMessage, of(secondDefendantWarning)));
         prosecutionCaseFile.apply(new CcCaseReceivedWithWarnings(firstMessage, emptyList(), of(firstDefendantWarning), summonsApprovedOutcome().withPersonalService(true).withProsecutorCost("£300.00").withSummonsSuppressed(false).build(), randomUUID()));
-        prosecutionCaseFile.apply(new CaseCreatedSuccessfullyWithWarnings(CASE_ID, emptyList(), SPI, of(firstDefendantWarning), EXTERNAL_ID, firstDefendantWarning.getProblems()));
+        prosecutionCaseFile.apply(caseCreatedSuccessfullyWithWarnings()
+                .withCaseId(CASE_ID)
+                .withCaseWarnings(emptyList())
+                .withChannel(SPI)
+                .withCivilCaseWarnings(emptyList())
+                .withDefendantWarnings(of(firstDefendantWarning))
+                .withExternalId(EXTERNAL_ID)
+                .withWarnings(firstDefendantWarning.getProblems())
+                .build());
 
         final SummonsApplicationApprovedDetails secondSummonsApplicationApprovedDetails = getSummonsApplicationApprovedDetails(APPLICATION_ID_2);
         final Stream<Object> objectStream = prosecutionCaseFile.approveCaseDefendants(secondSummonsApplicationApprovedDetails, of(), of(), isCivil);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         assertThat(eventList, hasSize(1));
         final Optional<ProsecutionDefendantsAdded> defendantAdded = getFirstMatching(eventList, ProsecutionDefendantsAdded.class);
         assertThat(defendantAdded.isPresent(), is(true));
@@ -1488,7 +1688,7 @@ public class ProsecutionCaseFileTest {
                 of(buildDefendant(SECOND_FORENAME, SECOND_SURNAME, SECOND_BIRTH_DATE, SECOND_DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_TWO)), SPI, "S", EXTERNAL_ID_2);
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(subsequentReferenceDataForSameDefendant, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         assertThat(eventList, hasSize(1));
         final CaseReceivedWithDuplicateDefendants caseReceivedWithDuplicateDefendants = (CaseReceivedWithDuplicateDefendants) eventList.get(0);
         assertThat(caseReceivedWithDuplicateDefendants.getCaseId(), is(CASE_ID));
@@ -1531,6 +1731,36 @@ public class ProsecutionCaseFileTest {
         assertThat(prosecutionCaseFile.getDefendants(), empty());
     }
 
+    @Test
+    public void shouldRaiseProsecutionCaseRejectedForCivilChannel() {
+        final SummonsApplicationRejectedDetails applicationRejectedCommandPayload = summonsApplicationRejectedDetails()
+                .withApplicationId(APPLICATION_ID)
+                .withCaseId(CASE_ID)
+                .withSummonsRejectedOutcome(summonsRejectedOutcome()
+                        .withReasons(ImmutableList.of("First Reason"))
+                        .build())
+                .build();
+        final ProsecutionWithReferenceData prosecutionWithReferenceData = getProsecutionWithReferenceData(
+                of(buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE)), CIVIL, "S");
+        prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID, prosecutionWithReferenceData, emptyList()));
+
+        final Stream<Object> objectStreamPostApplicationRejection = prosecutionCaseFile.rejectCaseDefendants(applicationRejectedCommandPayload);
+
+        final List<Object> rejectionEventList = objectStreamPostApplicationRejection.collect(toList());
+        // CIVIL no longer raises CcProsecutionRejected here — only SummonsApplicationRejected, which now
+        // carries channel/externalId directly (public.prosecutioncasefile.submission-rejected derives from
+        // this event instead of civil-prosecution-rejected for the SA/SR box-rejection path).
+        assertThat(rejectionEventList, hasSize(1));
+        assertThat(rejectionEventList.get(0), is(instanceOf(uk.gov.moj.cps.prosecutioncasefile.domain.event.SummonsApplicationRejected.class)));
+        final uk.gov.moj.cps.prosecutioncasefile.domain.event.SummonsApplicationRejected applicationRejected = (uk.gov.moj.cps.prosecutioncasefile.domain.event.SummonsApplicationRejected) rejectionEventList.get(0);
+        assertThat(applicationRejected.getDefendantIds(), contains(fromString(DEFENDANT_ID)));
+        assertThat(applicationRejected.getSummonsRejectedOutcome().getReasons(), contains("First Reason"));
+        assertThat(applicationRejected.getChannel(), is(CIVIL));
+        assertThat(applicationRejected.getExternalId(), is(EXTERNAL_ID));
+        assertThat(prosecutionCaseFile.isProsecutionReceived(), is(false));
+        assertThat(prosecutionCaseFile.getDefendants(), empty());
+    }
+
     @MethodSource("nonSpiChannels")
     @ParameterizedTest
     public void shouldRejectNewSummonsApplicationWithDuplicatedProsecutionWhenExistingUnapprovedSummonsAlreadyExistsForSameUrn(final Channel nonSpiChannel) {
@@ -1542,7 +1772,7 @@ public class ProsecutionCaseFileTest {
                 of(buildDefendant(SECOND_FORENAME, SECOND_SURNAME, SECOND_BIRTH_DATE, SECOND_DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_TWO)), nonSpiChannel, SUMMONS_INITIATION_CODE);
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(secondMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         final Optional<CcProsecutionRejected> ccProsecutionRejected = getFirstMatching(eventList, CcProsecutionRejected.class);
         assertThat(ccProsecutionRejected.isPresent(), is(true));
         assertThat(ccProsecutionRejected.get().getCaseErrors(), hasSize(1));
@@ -1560,7 +1790,7 @@ public class ProsecutionCaseFileTest {
                 of(buildDefendant(SECOND_FORENAME, SECOND_SURNAME, SECOND_BIRTH_DATE, SECOND_DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_TWO)), nonSpiChannel, "C");
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(ccMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         final Optional<CcProsecutionRejected> ccProsecutionRejected = getFirstMatching(eventList, CcProsecutionRejected.class);
         assertThat(ccProsecutionRejected.isPresent(), is(true));
         assertThat(ccProsecutionRejected.get().getCaseErrors(), hasSize(1));
@@ -1576,7 +1806,7 @@ public class ProsecutionCaseFileTest {
         final ProsecutionWithReferenceData sjpMessage = getSjpProsecutionWithReferenceData("J");
         final Stream<Object> objectStream = prosecutionCaseFile.receiveSjpProsecution(sjpMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         final Optional<SjpProsecutionRejected> sjpRejected = getFirstMatching(eventList, SjpProsecutionRejected.class);
         assertThat(sjpRejected.isPresent(), is(true));
         assertThat(sjpRejected.get().getErrors().get(0).getCode(), is(ProblemCode.DUPLICATED_PROSECUTION.name()));
@@ -1589,7 +1819,7 @@ public class ProsecutionCaseFileTest {
                 of(buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE)), nonSpiChannel, SUMMONS_INITIATION_CODE);
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(firstMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         final Optional<DefendantsParkedForSummonsApplicationApproval> parkedEvent = getFirstMatching(eventList, DefendantsParkedForSummonsApplicationApproval.class);
         assertThat(parkedEvent.isPresent(), is(true));
         assertThat(parkedEvent.get().getProsecutionWithReferenceData().getExternalId(), is(EXTERNAL_ID));
@@ -1613,7 +1843,7 @@ public class ProsecutionCaseFileTest {
                 of(buildDefendant(SECOND_FORENAME, SECOND_SURNAME, SECOND_BIRTH_DATE, SECOND_DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_TWO)), nonSpiChannel, SUMMONS_INITIATION_CODE);
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(secondMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         final Optional<CcProsecutionRejected> ccProsecutionRejected = getFirstMatching(eventList, CcProsecutionRejected.class);
         assertThat(ccProsecutionRejected.isPresent(), is(true));
         assertThat(ccProsecutionRejected.get().getCaseErrors(), hasSize(1));
@@ -1638,7 +1868,7 @@ public class ProsecutionCaseFileTest {
                 of(buildDefendant(SECOND_FORENAME, SECOND_SURNAME, SECOND_BIRTH_DATE, SECOND_DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_TWO)), nonSpiChannel, "C");
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(ccMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         final Optional<CcProsecutionRejected> ccProsecutionRejected = getFirstMatching(eventList, CcProsecutionRejected.class);
         assertThat(ccProsecutionRejected.isPresent(), is(true));
         assertThat(ccProsecutionRejected.get().getCaseErrors(), hasSize(1));
@@ -1661,7 +1891,7 @@ public class ProsecutionCaseFileTest {
         final ProsecutionWithReferenceData sjpMessage = getSjpProsecutionWithReferenceData("J");
         final Stream<Object> objectStream = prosecutionCaseFile.receiveSjpProsecution(sjpMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        final List<Object> eventList = objectStream.collect(toList());
+        final List<Object> eventList = objectStream.toList();
         final Optional<SjpProsecutionRejected> sjpRejected = getFirstMatching(eventList, SjpProsecutionRejected.class);
         assertThat(sjpRejected.isPresent(), is(true));
         assertThat(sjpRejected.get().getErrors().get(0).getCode(), is(ProblemCode.DUPLICATED_PROSECUTION.name()));
@@ -1671,8 +1901,48 @@ public class ProsecutionCaseFileTest {
     public void shouldNotRaiseAnyEventWhenAcceptCaseIsCalledAndCaseNotReceivedForSJP() {
         final Stream<Object> resultObjectStream = prosecutionCaseFile.acceptCase(CASE_ID, null, referenceDataQueryService);
 
-        final List<Object> resultEventList = resultObjectStream.collect(toList());
+        final List<Object> resultEventList = resultObjectStream.toList();
         assertThat(resultEventList, hasSize(0));
+    }
+
+    @Test
+    public void shouldIncludeCivilCaseWarningsOnCaseCreatedSuccessfullyWithWarningsForCivilChannel() {
+        final List<CaseProblem> civilCaseWarnings = of(caseProblem()
+                .withProsecutorCaseReference(PROSECUTOR_CASE_REFERENCE)
+                .withProblems(of(problem().withCode(OFFENCE_NOT_IN_EFFECT_ON_OFFENCE_COMMITTED_DATE).build()))
+                .build());
+
+        seedAcceptCaseWithWarnings(CIVIL, civilCaseWarnings);
+
+        final List<Object> eventList = prosecutionCaseFile.acceptCase(CASE_ID, of(fromString(DEFENDANT_ID)), referenceDataQueryService).collect(toList());
+
+        final Optional<CaseCreatedSuccessfullyWithWarnings> caseCreated = getFirstMatching(eventList, CaseCreatedSuccessfullyWithWarnings.class);
+        assertThat(caseCreated.isPresent(), is(true));
+        assertThat(caseCreated.get().getCivilCaseWarnings(), is(civilCaseWarnings));
+    }
+
+    @Test
+    public void shouldNotIncludeCivilCaseWarningsOnCaseCreatedSuccessfullyWithWarningsForNonCivilChannel() {
+        final List<CaseProblem> civilCaseWarnings = of(caseProblem()
+                .withProsecutorCaseReference(PROSECUTOR_CASE_REFERENCE)
+                .withProblems(of(problem().withCode(OFFENCE_NOT_IN_EFFECT_ON_OFFENCE_COMMITTED_DATE).build()))
+                .build());
+
+        seedAcceptCaseWithWarnings(CPPI, civilCaseWarnings);
+
+        final List<Object> eventList = prosecutionCaseFile.acceptCase(CASE_ID, of(fromString(DEFENDANT_ID)), referenceDataQueryService).collect(toList());
+
+        final Optional<CaseCreatedSuccessfullyWithWarnings> caseCreated = getFirstMatching(eventList, CaseCreatedSuccessfullyWithWarnings.class);
+        assertThat(caseCreated.isPresent(), is(true));
+        assertThat(caseCreated.get().getCivilCaseWarnings(), empty());
+    }
+
+    private void seedAcceptCaseWithWarnings(final Channel channel, final List<CaseProblem> civilCaseWarnings) {
+        ReflectionUtil.setField(prosecutionCaseFile, "prosecutionReceived", TRUE);
+        ReflectionUtil.setField(prosecutionCaseFile, "caseType", CC);
+        ReflectionUtil.setField(prosecutionCaseFile, "channel", channel);
+        ReflectionUtil.setField(prosecutionCaseFile, "warnings", of(problem().withCode(OFFENCE_NOT_IN_EFFECT_ON_OFFENCE_COMMITTED_DATE).build()));
+        ReflectionUtil.setField(prosecutionCaseFile, "civilCaseWarnings", civilCaseWarnings);
     }
 
 
@@ -1746,11 +2016,11 @@ public class ProsecutionCaseFileTest {
                 of(buildDefendant(FORENAME, SURNAME, BIRTH_DATE, DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_ONE),
                         buildDefendant(SECOND_FORENAME, SECOND_SURNAME, SECOND_BIRTH_DATE, SECOND_DEFENDANT_ID, PROSECUTOR_DEFENDANT_REFERENCE_TWO)), SPI, SUMMONS_INITIATION_CODE);
         prosecutionCaseFile.apply(new DefendantsParkedForSummonsApplicationApproval(APPLICATION_ID, firstMessage, emptyList()));
-        prosecutionCaseFile.apply(new SummonsApplicationRejected(APPLICATION_ID, CASE_ID, newArrayList(fromString(DEFENDANT_ID), fromString(SECOND_DEFENDANT_ID)), summonsRejectedOutcome().withReasons(newArrayList("Rejection Reason")).build()));
+        prosecutionCaseFile.apply(SummonsApplicationRejected.summonsApplicationRejected().withApplicationId(APPLICATION_ID).withCaseId(CASE_ID).withDefendantIds(newArrayList(fromString(DEFENDANT_ID), fromString(SECOND_DEFENDANT_ID))).withSummonsRejectedOutcome(summonsRejectedOutcome().withReasons(newArrayList("Rejection Reason")).build()).build());
 
         Stream<Object> objectStream = prosecutionCaseFile.approveCaseDefendants(getSummonsApplicationApprovedDetails(APPLICATION_ID), of(), of(), isCivil);
 
-        List<Object> eventList = objectStream.collect(toList());
+        List<Object> eventList = objectStream.toList();
         assertThat(eventList, hasSize(1));
         final Optional<CcCaseReceived> firstMatchingCaseReceived = getFirstMatching(eventList, CcCaseReceived.class);
         assertThat(firstMatchingCaseReceived.isPresent(), is(true));
@@ -1780,7 +2050,7 @@ public class ProsecutionCaseFileTest {
 
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(secondMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        List<Object> eventList = objectStream.collect(toList());
+        List<Object> eventList = objectStream.toList();
         assertThat(eventList.size(), is(1));
         Optional<CaseReceivedWithDuplicateDefendants> caseReceivedWithDuplicateDefendants = getFirstMatching(eventList, CaseReceivedWithDuplicateDefendants.class);
         List<uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant> defendants = caseReceivedWithDuplicateDefendants.get().getDefendants();
@@ -1809,7 +2079,7 @@ public class ProsecutionCaseFileTest {
 
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(secondMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        List<Object> eventList = objectStream.collect(toList());
+        List<Object> eventList = objectStream.toList();
         assertThat(eventList.size(), is(1));
         Optional<CaseReceivedWithDuplicateDefendants> caseReceivedWithDuplicateDefendants = getFirstMatching(eventList, CaseReceivedWithDuplicateDefendants.class);
         List<uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant> defendants = caseReceivedWithDuplicateDefendants.get().getDefendants();
@@ -1841,7 +2111,7 @@ public class ProsecutionCaseFileTest {
 
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(secondMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        List<Object> eventList = objectStream.collect(toList());
+        List<Object> eventList = objectStream.toList();
         assertThat(eventList.size(), is(1));
         Optional<CaseReceivedWithDuplicateDefendants> caseReceivedWithDuplicateDefendants = getFirstMatching(eventList, CaseReceivedWithDuplicateDefendants.class);
         List<uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant> defendants = caseReceivedWithDuplicateDefendants.get().getDefendants();
@@ -1868,7 +2138,7 @@ public class ProsecutionCaseFileTest {
 
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(secondMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        List<Object> eventList = objectStream.collect(toList());
+        List<Object> eventList = objectStream.toList();
         assertThat(eventList.size(), is(1));
         Optional<CaseReceivedWithDuplicateDefendants> caseReceivedWithDuplicateDefendants = getFirstMatching(eventList, CaseReceivedWithDuplicateDefendants.class);
         List<uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant> defendants = caseReceivedWithDuplicateDefendants.get().getDefendants();
@@ -1894,7 +2164,7 @@ public class ProsecutionCaseFileTest {
 
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(secondMessage, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
 
-        List<Object> eventList = objectStream.collect(toList());
+        List<Object> eventList = objectStream.toList();
         assertThat(eventList.size(), is(1));
         Optional<CaseReceivedWithDuplicateDefendants> caseReceivedWithDuplicateDefendants = getFirstMatching(eventList, CaseReceivedWithDuplicateDefendants.class);
         List<uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant> defendants = caseReceivedWithDuplicateDefendants.get().getDefendants();
@@ -1920,7 +2190,7 @@ public class ProsecutionCaseFileTest {
                 );
         ProsecutionWithReferenceData messageWithDuplicateDefendants = getProsecutionWithReferenceData(defendantList2, SPI, SUMMONS_INITIATION_CODE, EXTERNAL_ID);
         final Stream<Object> objectStream = prosecutionCaseFile.receiveCCCase(messageWithDuplicateDefendants, new ArrayList<>(), new ArrayList<>(), referenceDataQueryService);
-        List<Object> eventList = objectStream.collect(toList());
+        List<Object> eventList = objectStream.toList();
 
         Optional<CaseReceivedWithDuplicateDefendants> caseReceivedWithDuplicateDefendants = getFirstMatching(eventList, CaseReceivedWithDuplicateDefendants.class);
         List<uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant> defendants = caseReceivedWithDuplicateDefendants.get().getDefendants();
@@ -1990,6 +2260,10 @@ public class ProsecutionCaseFileTest {
     }
 
     private ProsecutionWithReferenceData getProsecutionWithReferenceDataAndCivilFees(final List<uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant> defendantList, final Channel channel, boolean isCivil, List<CivilFees> civilFees) {
+        return getProsecutionWithReferenceDataAndCivilFees(defendantList, channel, isCivil, civilFees, null);
+    }
+
+    private ProsecutionWithReferenceData getProsecutionWithReferenceDataAndCivilFees(final List<uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant> defendantList, final Channel channel, boolean isCivil, List<CivilFees> civilFees, List<CaseMarker> caseMarkers) {
         final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
         referenceDataVO.setOffenceReferenceData(singletonList(offenceReferenceData().withCjsOffenceCode(OFFENCE_CODE).withProsecutionTimeLimit("6").withOffenceStartDate(OFFENCE_START_DATE).build()));
         referenceDataVO.addCountryNationalityReferenceData(referenceDataCountryNationality().build());
@@ -2007,10 +2281,66 @@ public class ProsecutionCaseFileTest {
                         .withCpsOrganisation(CPS_ORGANISATION)
                         .withFeeStatus(CollectionUtils.isNotEmpty(civilFees) ? civilFees.get(0).getFeeStatus(): null)
                         .withPaymentReference(CollectionUtils.isNotEmpty(civilFees) ? civilFees.get(0).getPaymentReference(): null)
+                        .withCaseMarkers(caseMarkers)
                         .build())
                 .withDefendants(defendantList)
                 .withChannel(channel)
                 .withIsCivil(isCivil)
+                .build());
+        prosecutionWithReferenceData.setReferenceDataVO(referenceDataVO);
+        prosecutionWithReferenceData.setExternalId(EXTERNAL_ID);
+        return prosecutionWithReferenceData;
+    }
+
+    private ProsecutionWithReferenceData getCivilProsecutionWithReferenceDataForSingleCase(final String initiationCode, final LocalDate chargeDate) {
+        return getCivilProsecutionWithReferenceDataForSingleCase(initiationCode, chargeDate, DATE_OF_HEARING);
+    }
+
+    private ProsecutionWithReferenceData getCivilProsecutionWithReferenceDataForSingleCase(final String initiationCode, final LocalDate chargeDate, final String dateOfHearing) {
+        return getCivilProsecutionWithReferenceDataForSingleCase(initiationCode, chargeDate, dateOfHearing, now().minusDays(30), CIVIL);
+    }
+
+    private ProsecutionWithReferenceData getCivilProsecutionWithReferenceDataForSingleCase(final String initiationCode, final LocalDate chargeDate, final String dateOfHearing, final LocalDate offenceCommittedDate, final Channel channel) {
+        final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
+        referenceDataVO.setOffenceReferenceData(singletonList(offenceReferenceData().withCjsOffenceCode(OFFENCE_CODE).withProsecutionTimeLimit("6").withOffenceStartDate(OFFENCE_START_DATE).build()));
+        referenceDataVO.addCountryNationalityReferenceData(referenceDataCountryNationality().build());
+        referenceDataVO.setInitiationTypes(asList("J", "C", initiationCode));
+        referenceDataVO.setProsecutorsReferenceData(prosecutorsReferenceData()
+                .withId(randomUUID())
+                .build());
+
+        final uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant civilDefendant = defendant()
+                .withId(DEFENDANT_ID)
+                .withProsecutorDefendantReference(PROSECUTOR_DEFENDANT_REFERENCE_ONE)
+                .withIndividual(individual()
+                        .withPersonalInformation(personalInformation().withFirstName(FORENAME).withLastName(SURNAME).build())
+                        .withSelfDefinedInformation(selfDefinedInformation().withDateOfBirth(BIRTH_DATE).build())
+                        .build())
+                .withInitialHearing(initialHearing()
+                        .withDateOfHearing(dateOfHearing)
+                        .withCourtHearingLocation(COURT_HEARING_LOCATION)
+                        .build())
+                .withOffences(singletonList(offence()
+                        .withArrestDate(ARREST_DATE)
+                        .withOffenceCode(OFFENCE_CODE)
+                        .withOffenceSequenceNumber(1)
+                        .withOffenceId(offenceId)
+                        .withOffenceCommittedDate(offenceCommittedDate)
+                        .withChargeDate(chargeDate)
+                        .build()))
+                .build();
+
+        final ProsecutionWithReferenceData prosecutionWithReferenceData = new ProsecutionWithReferenceData(prosecution()
+                .withCaseDetails(caseDetails()
+                        .withCaseId(CASE_ID)
+                        .withInitiationCode(initiationCode)
+                        .withProsecutorCaseReference(PROSECUTOR_CASE_REFERENCE)
+                        .withOriginatingOrganisation(ORIGINATING_ORGANISATION)
+                        .withCpsOrganisation(CPS_ORGANISATION)
+                        .build())
+                .withDefendants(singletonList(civilDefendant))
+                .withChannel(channel)
+                .withIsCivil(true)
                 .build());
         prosecutionWithReferenceData.setReferenceDataVO(referenceDataVO);
         prosecutionWithReferenceData.setExternalId(EXTERNAL_ID);

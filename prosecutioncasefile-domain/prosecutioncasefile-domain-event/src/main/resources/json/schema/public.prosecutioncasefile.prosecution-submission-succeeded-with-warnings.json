@@ -18,6 +18,12 @@
         "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/problem.json"
       }
     },
+    "civilCaseWarnings": {
+      "type": "array",
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/case-problem.json"
+      }
+    },
     "defendantWarnings": {
       "type": "array",
       "items": {

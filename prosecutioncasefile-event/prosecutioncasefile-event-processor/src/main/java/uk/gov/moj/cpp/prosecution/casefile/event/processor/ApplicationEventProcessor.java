@@ -6,6 +6,9 @@ import static uk.gov.justice.services.core.annotation.Component.EVENT_PROCESSOR;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;
 import static uk.gov.justice.services.messaging.Envelope.metadataFrom;
 import static uk.gov.justice.services.messaging.JsonEnvelope.envelopeFrom;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CIVIL;
+import static uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicGroupSubmissionRejected.publicGroupSubmissionRejected;
+import static uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicSubmissionRejected.publicSubmissionRejected;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +21,11 @@ import uk.gov.justice.services.messaging.Metadata;
 import uk.gov.moj.cpp.prosecution.casefile.event.processor.converter.ApplicationAcceptedToCourtApplicationProceedingsConverter;
 import uk.gov.moj.cpp.prosecution.casefile.event.processor.utils.ApplicationParameters;
 import uk.gov.moj.cpp.prosecution.casefile.event.processor.utils.EnvelopeHelper;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel;
+import uk.gov.moj.cps.prosecutioncasefile.domain.event.GroupSummonsApplicationRejected;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.SubmitApplicationAccepted;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.SubmitApplicationValidationFailed;
+import uk.gov.moj.cps.prosecutioncasefile.domain.event.SummonsApplicationRejected;
 
 import javax.inject.Inject;
 import javax.json.JsonObjectBuilder;
@@ -37,6 +43,8 @@ public class ApplicationEventProcessor {
     private static final String SENDER_ADDRESS = "sendToAddress";
     private static final String PERSONALISATION = "personalisation";
     private static final String SUBJECT = "subject";
+    private static final String PUBLIC_SUBMISSION_REJECTED_EVENT = "public.prosecutioncasefile.submission-rejected";
+    private static final String PUBLIC_GROUP_SUBMISSION_REJECTED_EVENT = "public.prosecutioncasefile.group-submission-rejected";
 
     @Inject
     private ApplicationAcceptedToCourtApplicationProceedingsConverter converter;
@@ -75,6 +83,44 @@ public class ApplicationEventProcessor {
                     .build();
 
             sender.send(Envelope.envelopeFrom(metadata, envelope.payload()));
+        }
+    }
+
+    @Handles("prosecutioncasefile.events.summons-application-rejected")
+    public void handleSummonsApplicationRejected(final Envelope<SummonsApplicationRejected> envelope) {
+        final SummonsApplicationRejected payload = envelope.payload();
+        emitSubmissionRejectedIfCivilSummons(payload.getCaseId(), payload.getExternalId(), payload.getChannel(), envelope);
+    }
+
+    @Handles("prosecutioncasefile.events.group-summons-application-rejected")
+    public void handleGroupSummonsApplicationRejected(final Envelope<GroupSummonsApplicationRejected> envelope) {
+        final GroupSummonsApplicationRejected payload = envelope.payload();
+        emitGroupSubmissionRejectedIfCivilSummons(payload.getGroupId(), payload.getExternalId(), payload.getChannel(), envelope);
+    }
+
+    private void emitSubmissionRejectedIfCivilSummons(final UUID caseId, final UUID externalId, final Channel channel, final Envelope<?> envelope) {
+        if (CIVIL == channel) {
+            sender.send(envelopeFrom(
+                    metadataFrom(envelope.metadata()).withName(PUBLIC_SUBMISSION_REJECTED_EVENT),
+                    publicSubmissionRejected()
+                            .withCaseId(caseId)
+                            .withExternalId(externalId)
+                            .withChannel(channel)
+                            .build()
+            ));
+        }
+    }
+
+    private void emitGroupSubmissionRejectedIfCivilSummons(final UUID groupId, final UUID externalId, final Channel channel, final Envelope<?> envelope) {
+        if (CIVIL == channel) {
+            sender.send(envelopeFrom(
+                    metadataFrom(envelope.metadata()).withName(PUBLIC_GROUP_SUBMISSION_REJECTED_EVENT),
+                    publicGroupSubmissionRejected()
+                            .withGroupId(groupId)
+                            .withExternalId(externalId)
+                            .withChannel(channel)
+                            .build()
+            ));
         }
     }
 

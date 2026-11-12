@@ -363,6 +363,7 @@ public class CcProsecutionValidationRuleProvider {
         }
         return unmodifiableList(asList(
                 new CaseInitiationValidationRule(),
+                new CaseMarkersValidationAndEnricherRule(),
                 new ProsecutorReferenceDataValidationRule()
         ));
     }

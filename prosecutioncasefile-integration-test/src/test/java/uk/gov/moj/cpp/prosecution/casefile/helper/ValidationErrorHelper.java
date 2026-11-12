@@ -1,6 +1,7 @@
 package uk.gov.moj.cpp.prosecution.casefile.helper;
 
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.withJsonPath;
+import static java.lang.String.format;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static javax.ws.rs.core.Response.Status.OK;
@@ -38,6 +39,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import javax.json.JsonObject;
 
 import org.json.JSONArray;
 import org.skyscreamer.jsonassert.ArrayValueMatcher;
@@ -107,10 +110,40 @@ public class ValidationErrorHelper {
         assertEquals(expectedErrorsPayloadWithReplaceValues, actualPayload, LENIENT);
     }
 
-    public static void assertCivilCaseErrorsExpected(final String filename, final JsonEnvelope actualValidationErrors) {
-        final String expectedErrorsPayload = readFile(filename);
-        final String actualPayload = actualValidationErrors.payloadAsJsonObject().get("caseErrors").toString();
+    /**
+     * Civil (isCivil + CIVIL channel) case-level problems now live on the private
+     * cc-prosecution-rejected event's {@code civilCaseErrors} field as case-problem.json wrappers
+     * ({@code prosecutorCaseReference} + {@code problems}) rather than as a flat list of
+     * problem.json objects on the legacy {@code caseErrors} field. The legacy field must stay
+     * unpopulated for civil cases so that non-civil consumers see no behaviour change.
+     */
+    public static void assertCivilCaseErrorsExpected(final String filename, final JsonEnvelope actualValidationErrors, final String expectedProsecutorCaseReference) {
+        assertCaseProblemsExpected(filename, actualValidationErrors, "civilCaseErrors", expectedProsecutorCaseReference);
+        assertLegacyCaseErrorsNotPopulated(actualValidationErrors);
+    }
+
+    /**
+     * The public civil-prosecution-rejected event carries the same case-problem.json wrappers,
+     * but on its own {@code caseErrors} field (retyped in place).
+     */
+    public static void assertPublicCivilCaseErrorsExpected(final String filename, final JsonEnvelope actualPublicEvent, final String expectedProsecutorCaseReference) {
+        assertCaseProblemsExpected(filename, actualPublicEvent, "caseErrors", expectedProsecutorCaseReference);
+    }
+
+    private static void assertCaseProblemsExpected(final String filename, final JsonEnvelope actualEvent, final String fieldName, final String expectedProsecutorCaseReference) {
+        final String expectedErrorsPayload = readFile(filename).replace("CASE-URN", expectedProsecutorCaseReference);
+        final JsonObject payload = actualEvent.payloadAsJsonObject();
+        assertThat(format("Expected [%s] to be present on payload %s", fieldName, payload), payload.containsKey(fieldName), is(true));
+        final String actualPayload = payload.get(fieldName).toString();
         assertEquals(expectedErrorsPayload, actualPayload, LENIENT);
+    }
+
+    private static void assertLegacyCaseErrorsNotPopulated(final JsonEnvelope actualValidationErrors) {
+        final JsonObject payload = actualValidationErrors.payloadAsJsonObject();
+        if (payload.containsKey("caseErrors") && !payload.isNull("caseErrors")) {
+            assertThat("Legacy caseErrors must stay unpopulated for civil-channel cases, was " + payload.get("caseErrors"),
+                    payload.getJsonArray("caseErrors").isEmpty(), is(true));
+        }
     }
 
     public static void assertCivilDefendantErrorsContain(final JsonEnvelope actualValidationErrors, final String... errorCodes) {

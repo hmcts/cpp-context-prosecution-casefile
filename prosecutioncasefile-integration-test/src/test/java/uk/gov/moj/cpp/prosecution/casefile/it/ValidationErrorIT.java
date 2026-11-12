@@ -59,6 +59,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.a
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.assertErrorsExpectedForCivil;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.assertExpctedErrorPayload;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.assertNoErrorsExpected;
+import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.assertPublicCivilCaseErrorsExpected;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.getCustomComparator;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.queryAndVerifyCaseErrors;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.queryAndVerifyCaseErrorsEmpty;
@@ -657,6 +658,99 @@ class ValidationErrorIT extends BaseIT {
     }
 
     @Test
+    void shouldRaiseValidationErrorWhenCivilCasePayloadHasInvalidCaseMarker() {
+        stubOffencesForOffenceCodeForGroupCases();
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-civil-invalid-case-marker.json");
+        final String ccPayLoad = replaceValues(staticPayLoad, randomUUID().toString());
+        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
+        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
+        final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
+        assertThat(privateEvent.isPresent(), is(true));
+        assertCivilCaseErrorsExpected("expected/civil_case_case_marker_invalid_problem.json", privateEvent.get(), caseUrn);
+    }
+
+    @Test
+    void shouldRaisePublicCivilProsecutionRejectedWithCaseProblemShapedCaseErrorsWhenCaseMarkerIsInvalid() {
+        stubOffencesForOffenceCodeForGroupCases();
+        final UUID caseId = randomUUID();
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-civil-invalid-case-marker.json");
+        final String ccPayLoad = replaceValues(staticPayLoad, caseId.toString());
+        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
+        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
+
+        final JsonEnvelope publicEvent = initiateCCProsecutionHelper.thenPublicCivilProsecutionRejectedEventShouldBeRaised(caseId);
+
+        assertThat(publicEvent.payloadAsJsonObject().getString("channel"), is("CIVIL"));
+        assertPublicCivilCaseErrorsExpected("expected/civil_case_case_marker_invalid_problem.json", publicEvent, caseUrn);
+    }
+
+    @Test
+    void shouldRaisePublicCivilProsecutionRejectedWithEmptyCaseErrorsWhenOnlyDefendantLevelProblemsExist() {
+        stubOffencesForOffenceCodeForGroupCases();
+        final UUID caseId = randomUUID();
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-with-civil-defendant-level-errors.json");
+        final String ccPayLoad = replaceValues(staticPayLoad, caseId.toString());
+        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
+        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
+
+        final JsonEnvelope publicEvent = initiateCCProsecutionHelper.thenPublicCivilProsecutionRejectedEventShouldBeRaised(caseId);
+
+        // caseErrors is a required property of public.prosecutioncasefile.civil-prosecution-rejected,
+        // so it must still be emitted (as an empty array) when only defendant-level problems exist.
+        assertThat(publicEvent.payloadAsJsonObject().containsKey("caseErrors"), is(true));
+        assertThat(publicEvent.payloadAsJsonObject().getJsonArray("caseErrors").isEmpty(), is(true));
+        assertThat(publicEvent.payloadAsJsonObject().getJsonArray("defendantErrors").isEmpty(), is(false));
+    }
+
+    /**
+     * Covers the PENDING -> FAILED status transition for a civil single-case submission rejected
+     * for OFFENCE_CODE_NOT_SUPPORTED (an offence code reference data doesn't recognise) — CPCI's
+     * business-validation-failure scenario. No offence stub is registered for this test, so "XX"
+     * is deliberately never resolved by reference data, matching the existing non-civil precedent
+     * in shouldRaiseValidationErrorWhenPayloadHasOffenceCodeErrors.
+     */
+    @Test
+    void shouldRaisePublicCivilProsecutionRejectedWhenOffenceCodeIsNotSupported() {
+        final UUID caseId = randomUUID();
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-civil-invalid-offence-code.json");
+        final String ccPayLoad = replaceValues(staticPayLoad, caseId.toString());
+        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
+        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
+
+        final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
+        assertThat(privateEvent.isPresent(), is(true));
+        assertCivilDefendantErrorsContain(privateEvent.get(), "OFFENCE_CODE_NOT_SUPPORTED");
+
+        final JsonEnvelope publicEvent = initiateCCProsecutionHelper.thenPublicCivilProsecutionRejectedEventShouldBeRaised(caseId);
+        assertThat(publicEvent.payloadAsJsonObject().getString("channel"), is("CIVIL"));
+        assertThat(publicEvent.payloadAsJsonObject().getJsonArray("defendantErrors").isEmpty(), is(false));
+        assertThat(publicEvent.payloadAsJsonObject().getJsonArray("defendantErrors").toString(), CoreMatchers.containsString("OFFENCE_CODE_NOT_SUPPORTED"));
+    }
+
+    /**
+     * Same business-validation-failure scenario as shouldRaisePublicCivilProsecutionRejectedWhenOffenceCodeIsNotSupported
+     * but for a civil SUMMONS submission (initiationCode "S") rather than a plain civil case (initiationCode "O") —
+     * offence-code validation runs before the S/O initiation-code branch, so it should reject identically.
+     */
+    @Test
+    void shouldRaisePublicCivilProsecutionRejectedWhenOffenceCodeIsNotSupportedForSummonsApplication() {
+        final UUID caseId = randomUUID();
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-civil-summons-invalid-offence-code.json");
+        final String ccPayLoad = replaceValues(staticPayLoad, caseId.toString());
+        final ResolveCaseErrorsHelper resolveCaseErrorsHelper = new ResolveCaseErrorsHelper(initiateCCProsecutionHelper);
+        resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
+
+        final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
+        assertThat(privateEvent.isPresent(), is(true));
+        assertCivilDefendantErrorsContain(privateEvent.get(), "OFFENCE_CODE_NOT_SUPPORTED");
+
+        final JsonEnvelope publicEvent = initiateCCProsecutionHelper.thenPublicCivilProsecutionRejectedEventShouldBeRaised(caseId);
+        assertThat(publicEvent.payloadAsJsonObject().getString("channel"), is("CIVIL"));
+        assertThat(publicEvent.payloadAsJsonObject().getJsonArray("defendantErrors").isEmpty(), is(false));
+        assertThat(publicEvent.payloadAsJsonObject().getJsonArray("defendantErrors").toString(), CoreMatchers.containsString("OFFENCE_CODE_NOT_SUPPORTED"));
+    }
+
+    @Test
     void shouldRaiseValidationErrorWhenCivilCasePayloadHasUnrecognisedProsecutorOucode() {
         stubOffencesForOffenceCodeForGroupCases();
         stubProsecutorsReturns404();
@@ -666,7 +760,7 @@ class ValidationErrorIT extends BaseIT {
         resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
         final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
         assertThat(privateEvent.isPresent(), is(true));
-        assertCivilCaseErrorsExpected("expected/civil_case_prosecutor_oucode_not_recognised_problem.json", privateEvent.get());
+        assertCivilCaseErrorsExpected("expected/civil_case_prosecutor_oucode_not_recognised_problem.json", privateEvent.get(), caseUrn);
     }
 
     @Test
@@ -682,7 +776,10 @@ class ValidationErrorIT extends BaseIT {
         resolveCaseErrorsHelper.initiateCCProsecution(ccPayLoad);
         final Optional<JsonEnvelope> privateEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
         assertThat(privateEvent.isPresent(), is(true));
-        assertCivilCaseErrorsExpected("expected/civil_case_duplicated_prosecution_problem.json", privateEvent.get());
+        assertCivilCaseErrorsExpected("expected/civil_case_duplicated_prosecution_problem.json", privateEvent.get(), caseUrn);
+
+        final JsonEnvelope publicEvent = initiateCCProsecutionHelper.thenPublicCivilProsecutionRejectedEventShouldBeRaised(caseId);
+        assertPublicCivilCaseErrorsExpected("expected/civil_case_duplicated_prosecution_problem.json", publicEvent, caseUrn);
     }
 
     @Test

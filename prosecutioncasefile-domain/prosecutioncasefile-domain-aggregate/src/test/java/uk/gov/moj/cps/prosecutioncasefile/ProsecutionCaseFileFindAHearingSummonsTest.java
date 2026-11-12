@@ -149,8 +149,8 @@ class ProsecutionCaseFileFindAHearingSummonsTest {
                 APPLICATION_ID, findAHearingProsecution(allThree, foundHearingForAllThree), emptyList()));
 
         // the legal adviser rejects the second defendant
-        prosecutionCaseFile.apply(new SummonsApplicationRejected(APPLICATION_ID, CASE_ID,
-                newArrayList(fromString(SECOND_DEFENDANT_ID)),
+        prosecutionCaseFile.apply(new SummonsApplicationRejected(APPLICATION_ID, CASE_ID, null,
+                newArrayList(fromString(SECOND_DEFENDANT_ID)), null,
                 summonsRejectedOutcome().withReasons(of("Rejection Reason")).build()));
 
         // the remaining two are re-submitted as their own application, still carrying the case's

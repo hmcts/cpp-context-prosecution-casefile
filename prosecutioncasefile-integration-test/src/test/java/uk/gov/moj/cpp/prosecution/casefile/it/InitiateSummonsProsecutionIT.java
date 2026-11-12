@@ -2,12 +2,15 @@ package uk.gov.moj.cpp.prosecution.casefile.it;
 
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.isJson;
 import static com.jayway.jsonpath.matchers.JsonPathMatchers.withJsonPath;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SELECTOR_CASE_RECEIVED_WITH_DUPLICATE_DEFENDANTS;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SELECTOR_CC_PROSECUTION_RECEIVED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SELECTOR_CC_PROSECUTION_REJECTED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_EVENT_SELECTOR_PROSECUTION_REJECTED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PROSECUTIONCASEFILE_CC_CASE_RECEIVED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PROSECUTIONCASEFILE_MANUAL_CASE_RECEIVED;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CIVIL;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CPPI;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.MCC;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.SPI;
@@ -15,6 +18,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataOffencesStub
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubGetOrganisationUnits;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.TestUtils.readFile;
 
+import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.moj.cpp.prosecution.casefile.helper.InitiateCCProsecutionHelper;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel;
 
@@ -23,7 +27,6 @@ import java.util.stream.Stream;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -36,6 +39,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class InitiateSummonsProsecutionIT extends BaseIT {
 
     private static final String COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_MCC_OR_CPPI = "command-json/prosecutioncasefile.command.initiate-channel-parametric-summons-prosecution.json";
+    private static final String COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_CIVIL = "command-json/prosecutioncasefile.command.initiate-channel-civil-summons-prosecution.json";
     private static final String COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_MCC = "command-json/prosecutioncasefile.command.initiate-channel-mcc-summons-prosecution.json";
     private static final String COMMAND_PAYLOAD_FOR_SUBSEQUENT_INITIATE_SUMMONS_FOR_MCC_OR_CPPI = "command-json/prosecutioncasefile.command.subsequent_initiate-channel-parametric-summons-prosecution.json";
     private static final String COMMAND_PAYLOAD_FOR_SUBSEQUENT_INITIATE_SUMMONS_FOR_MCC = "command-json/prosecutioncasefile.command.subsequent_initiate-channel-parametric-summons-prosecution.json";
@@ -130,7 +134,6 @@ class InitiateSummonsProsecutionIT extends BaseIT {
         helper.thenEventsShouldBeRaised(new String[]{EVENT_SELECTOR_CC_PROSECUTION_REJECTED});
     }
 
-    @Disabled
     @Test
     void shouldRejectCaseWhenSameDefendantIsReceivedAndSummonsApplicationForTheDefendantHasAlreadyBeenApprovedViaMCCChannel() {
         final InitiateCCProsecutionHelper helper = new InitiateCCProsecutionHelper();
@@ -168,6 +171,49 @@ class InitiateSummonsProsecutionIT extends BaseIT {
 
         helper.whenInitiateSummonsCaseIsRaisedByChannel(SPI, COMMAND_PAYLOAD_FOR_SUBSEQUENT_INITIATE_SUMMONS_FOR_SPI);
         helper.thenEventsShouldBeRaised(new String[]{EVENT_SELECTOR_CASE_RECEIVED_WITH_DUPLICATE_DEFENDANTS});
+    }
+
+    @Test
+    void shouldRaiseCivilPublicEventsForParkedForSummonsApplicationApprovalThenRejectedForSingleCaseSummonsApplication() {
+        final InitiateCCProsecutionHelper helper = new InitiateCCProsecutionHelper();
+        helper.initiateSummonsCaseForChannelAndVerifyApplicationCreatedInstead(CIVIL, COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_CIVIL, EXPECTED_INITIATE_SUMMONS_APPLICATION_FOR_MCC_OR_CPPI);
+
+        final JsonEnvelope parkedForSummonsApplicationApprovalEvent = helper.thenPublicParkedForSummonsApplicationApprovalEventShouldBeRaised(helper.getCaseId());
+        assertThat(parkedForSummonsApplicationApprovalEvent.payloadAsJsonObject().getString("channel"), is("CIVIL"));
+        assertThat(parkedForSummonsApplicationApprovalEvent.payloadAsJsonObject().containsKey("applicationId"), is(true));
+
+        helper.whenSummonsApplicationIsRejectedForDefendants();
+
+        // The SA/SR box-rejection path now raises only submission-rejected — civil-prosecution-rejected
+        // is reserved for business-validation failures at initial submission (a different rejection reason).
+        final JsonEnvelope submissionRejectedEvent = helper.thenPublicSubmissionRejectedEventShouldBeRaised(helper.getCaseId());
+        assertThat(submissionRejectedEvent.payloadAsJsonObject().getString("channel"), is("CIVIL"));
+    }
+
+    @Test
+    void shouldRaiseSubmissionApprovedPublicEventForCivilSingleCaseSummonsApplication() {
+        final InitiateCCProsecutionHelper helper = new InitiateCCProsecutionHelper();
+        helper.initiateSummonsCaseForChannelAndVerifyApplicationCreatedInstead(CIVIL, COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_CIVIL, EXPECTED_INITIATE_SUMMONS_APPLICATION_FOR_MCC_OR_CPPI);
+
+        helper.whenSummonsApplicationIsApprovedForDefendants();
+
+        helper.thenEventsShouldBeRaised(new String[]{EVENT_SELECTOR_CC_PROSECUTION_RECEIVED});
+
+        final JsonEnvelope submissionApprovedEvent = helper.thenPublicSubmissionApprovedEventShouldBeRaised(helper.getCaseId());
+        assertThat(submissionApprovedEvent.payloadAsJsonObject().getString("channel"), is("CIVIL"));
+    }
+
+    @Test
+    void shouldRaiseCivilProsecutionSubmissionSucceededWhenCaseCreationConfirmedForCivilSingleCaseSummonsApplication() {
+        final InitiateCCProsecutionHelper helper = new InitiateCCProsecutionHelper();
+        helper.initiateSummonsCaseForChannelAndVerifyApplicationCreatedInstead(CIVIL, COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_CIVIL, EXPECTED_INITIATE_SUMMONS_APPLICATION_FOR_MCC_OR_CPPI);
+        helper.whenSummonsApplicationIsApprovedForDefendants();
+        helper.thenEventsShouldBeRaised(new String[]{EVENT_SELECTOR_CC_PROSECUTION_RECEIVED});
+
+        helper.whenProsecutionCaseIsConfirmedCreatedByProgression();
+
+        final JsonEnvelope civilSubmissionSucceededEvent = helper.thenPublicCivilProsecutionSubmissionSucceededEventShouldBeRaised(helper.getCaseId());
+        assertThat(civilSubmissionSucceededEvent.payloadAsJsonObject().getString("channel"), is("CIVIL"));
     }
 
     @Test

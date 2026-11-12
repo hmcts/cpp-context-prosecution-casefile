@@ -1,6 +1,7 @@
 package uk.gov.moj.cpp.prosecution.casefile.command.handler;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static java.lang.Boolean.TRUE;
 import static java.util.Objects.isNull;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_HANDLER;
 import static uk.gov.justice.services.core.enveloper.Enveloper.toEnvelopeWithMetadataFrom;
@@ -11,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.gov.justice.core.courts.CourtApplication;
+import uk.gov.justice.core.courts.SummonsApprovedOutcome;
 import uk.gov.justice.services.core.annotation.Handles;
 import uk.gov.justice.services.core.annotation.ServiceComponent;
 import uk.gov.justice.services.eventsourcing.source.core.EventStream;
@@ -76,7 +78,10 @@ public class SummonsApplicationHandler extends BaseProsecutionCaseFileHandler {
         } else {
             final EventStream eventStreamForGroupCases = eventSource.getStreamById(prosecutionCaseFile.getGroupId());
             final GroupProsecutionCaseFile groupProsecutionCaseFile = aggregateService.get(eventStreamForGroupCases, GroupProsecutionCaseFile.class);
-            final Stream<Object> events = groupProsecutionCaseFile.approveGroupProsecution(newArrayList(groupCasesReferenceDataEnrichers.iterator()), newArrayList(defendantRefDataEnrichers.iterator()));
+            // only civil groups need the outcome, for the bulk civil summons notification to the prosecutor
+            final SummonsApprovedOutcome summonsApprovedOutcome = TRUE.equals(isCivil) ? commandPayload.getSummonsApprovedOutcome() : null;
+            final Stream<Object> events = groupProsecutionCaseFile.approveGroupProsecution(newArrayList(groupCasesReferenceDataEnrichers.iterator()), newArrayList(defendantRefDataEnrichers.iterator()),
+                    summonsApprovedOutcome);
             final JsonEnvelope jsonEnvelope = JsonEnvelope.envelopeFrom(envelope.metadata(), JsonValue.NULL);
             eventStreamForGroupCases.append(events.map(toEnvelopeWithMetadataFrom(jsonEnvelope)));
         }

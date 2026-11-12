@@ -134,6 +134,14 @@ public class InitiateGroupProsecutionHelper extends AbstractTestHelper {
 
     }
 
+    public JSONObject getInitiateCourtProceedingsForGroupCasesCommandPayload(final String caseId) {
+        verifyInitiateCourtProceedingsForGroupCasesCommand(caseId);
+        return getInitiateCourtProceedingsForGroupCasesCommand(caseId)
+                .filter(payload -> payload.has("courtReferral"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("initiate-court-proceedings-for-group-cases was not sent for case " + caseId));
+    }
+
     /**
      * Polls for the given period and fails as soon as the group cases command for the case reaches
      * Progression.

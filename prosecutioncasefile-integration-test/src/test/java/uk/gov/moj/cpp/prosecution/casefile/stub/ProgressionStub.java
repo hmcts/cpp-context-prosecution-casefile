@@ -54,6 +54,10 @@ public class ProgressionStub {
     }
 
     public static void stubForQueryApplication(final UUID applicationId) {
+        stubForQueryApplication(applicationId, true);
+    }
+
+    public static void stubForQueryApplication(final UUID applicationId, final boolean isCivil) {
         stubPingFor("progression-service");
 
         stubFor(get(urlPathEqualTo(QUERY_APPLICATION + applicationId.toString()))
@@ -61,7 +65,7 @@ public class ProgressionStub {
                         .withHeader("CPPID", randomUUID().toString())
                         .withHeader("Content-Type", "application/vnd.progression.query.application-only+json")
                         .withBody("{\"courtApplication\" : {\"id\" : \"" + applicationId + "\", \"type\" : {\"code\" : \"AAAA\"}, \"courtCivilApplication\": {\n" +
-                                "      \"isCivil\": true\n" +
+                                "      \"isCivil\": " + isCivil + "\n" +
                                 "    } }}")));
 
         waitForStubToBeReady(QUERY_APPLICATION + applicationId, "application/vnd.progression.query.application-only+json");

@@ -20,6 +20,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.justice.core.courts.SummonsApprovedOutcome;
 import uk.gov.justice.cps.prosecutioncasefile.InitialHearing;
 import uk.gov.moj.cpp.prosecution.casefile.domain.GroupProsecutionList;
 import uk.gov.moj.cpp.prosecution.casefile.domain.GroupProsecutionWithReferenceData;
@@ -284,7 +285,7 @@ public class GroupProsecutionCaseFileTest {
         final UUID externalId = randomUUID();
         groupProsecutionCaseFile.apply(parkedForApproval(externalId));
 
-        final List<Object> events = groupProsecutionCaseFile.approveGroupProsecution(asList(groupCasesReferenceDataEnricher), asList(defendantRefDataEnricher)).toList();
+        final List<Object> events = groupProsecutionCaseFile.approveGroupProsecution(asList(groupCasesReferenceDataEnricher), asList(defendantRefDataEnricher), null).toList();
 
         verifyNoInteractions(groupCasesReferenceDataEnricher, defendantRefDataEnricher);
         assertReceivedFromParkedReferenceData(events, externalId);
@@ -296,7 +297,7 @@ public class GroupProsecutionCaseFileTest {
         groupProsecutionCaseFile.apply(parkedForApproval(externalId));
 
         final GroupProsecutionCaseFile restored = serializeAndDeserialize(groupProsecutionCaseFile);
-        final List<Object> events = restored.approveGroupProsecution(asList(groupCasesReferenceDataEnricher), asList(defendantRefDataEnricher)).toList();
+        final List<Object> events = restored.approveGroupProsecution(asList(groupCasesReferenceDataEnricher), asList(defendantRefDataEnricher), null).toList();
 
         verifyNoInteractions(groupCasesReferenceDataEnricher, defendantRefDataEnricher);
         assertReceivedFromParkedReferenceData(events, externalId);
@@ -310,12 +311,35 @@ public class GroupProsecutionCaseFileTest {
                 .withChannel(Channel.CIVIL)
                 .build());
 
-        final List<Object> events = groupProsecutionCaseFile.approveGroupProsecution(asList(groupCasesReferenceDataEnricher), asList(defendantRefDataEnricher)).toList();
+        final List<Object> events = groupProsecutionCaseFile.approveGroupProsecution(asList(groupCasesReferenceDataEnricher), asList(defendantRefDataEnricher), null).toList();
 
         verify(groupCasesReferenceDataEnricher).enrich(anyList());
         verify(defendantRefDataEnricher).enrich(anyList());
         assertThat(events, Matchers.hasSize(1));
         assertThat(events.get(0), is(instanceOf(GroupCasesReceived.class)));
+    }
+
+    @Test
+    void shouldCarrySummonsApprovedOutcomeOnGroupCasesReceivedWhenApprovingGroup() {
+        groupProsecutionCaseFile.apply(parkedForApproval(randomUUID()));
+        final SummonsApprovedOutcome summonsApprovedOutcome = SummonsApprovedOutcome.summonsApprovedOutcome()
+                .withProsecutorEmailAddress("prosecutor@example.com")
+                .build();
+
+        final List<Object> events = groupProsecutionCaseFile.approveGroupProsecution(asList(groupCasesReferenceDataEnricher), asList(defendantRefDataEnricher), summonsApprovedOutcome).toList();
+
+        assertThat(events, Matchers.hasSize(1));
+        assertThat(((GroupCasesReceived) events.get(0)).getSummonsApprovedOutcome(), is(summonsApprovedOutcome));
+    }
+
+    @Test
+    void shouldNotCarrySummonsApprovedOutcomeOnGroupCasesReceivedWhenNoneProvided() {
+        groupProsecutionCaseFile.apply(parkedForApproval(randomUUID()));
+
+        final List<Object> events = groupProsecutionCaseFile.approveGroupProsecution(asList(groupCasesReferenceDataEnricher), asList(defendantRefDataEnricher), null).toList();
+
+        assertThat(events, Matchers.hasSize(1));
+        assertThat(((GroupCasesReceived) events.get(0)).getSummonsApprovedOutcome(), is(nullValue()));
     }
 
     private GroupCasesParkedForApproval parkedForApproval(final UUID externalId) {

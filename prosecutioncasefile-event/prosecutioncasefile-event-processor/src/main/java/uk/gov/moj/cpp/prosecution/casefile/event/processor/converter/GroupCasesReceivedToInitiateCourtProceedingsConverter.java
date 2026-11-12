@@ -10,6 +10,7 @@ import uk.gov.justice.core.courts.ListHearingRequest;
 import uk.gov.justice.core.courts.Marker;
 import uk.gov.justice.core.courts.ProsecutionCase;
 import uk.gov.justice.core.courts.ProsecutionCaseIdentifier;
+import uk.gov.justice.core.courts.SummonsApprovedOutcome;
 import uk.gov.justice.services.common.converter.Converter;
 import uk.gov.moj.cpp.prosecution.casefile.domain.GroupProsecutionWithReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.domain.ParamsVO;
@@ -65,7 +66,7 @@ public class GroupCasesReceivedToInitiateCourtProceedingsConverter implements Co
             return null;
         }
 
-        final List<ListHearingRequest> listHearingRequests = convertToListHearingRequest(masterCase.get(), channel);
+        final List<ListHearingRequest> listHearingRequests = convertToListHearingRequest(masterCase.get(), channel, groupCasesCreated.getSummonsApprovedOutcome());
 
         return InitiateCourtProceedingsForGroupCases.initiateCourtProceedingsForGroupCases()
                 .withGroupId(prosecutionCases.get(0).getGroupId())
@@ -76,9 +77,11 @@ public class GroupCasesReceivedToInitiateCourtProceedingsConverter implements Co
                 .build();
     }
 
-    private List<ListHearingRequest> convertToListHearingRequest(final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData, final Channel channel){
+    private List<ListHearingRequest> convertToListHearingRequest(final GroupProsecutionWithReferenceData groupProsecutionWithReferenceData, final Channel channel,
+                                                                 final SummonsApprovedOutcome summonsApprovedOutcome){
         final GroupProsecution groupProsecution = groupProsecutionWithReferenceData.getGroupProsecution();
         final ParamsVO paramsVO = buildParamV0(groupProsecutionWithReferenceData, channel);
+        paramsVO.setSummonsApprovedOutcome(summonsApprovedOutcome);
 
         return prosecutionCaseFileInitialHearingToCCHearingRequestConverter.convert(
                 groupProsecution.getDefendants(),

@@ -41,6 +41,9 @@
       "items": {
         "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/defendant-problem.json"
       }
+    },
+    "summonsApprovedOutcome": {
+      "$ref": "http://justice.gov.uk/core/courts/summonsApprovedOutcome.json"
     }
   },
   "required": [

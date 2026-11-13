@@ -1,5 +1,6 @@
 package uk.gov.moj.cpp.prosecution.casefile.it;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,9 +35,11 @@ import static org.apache.http.HttpStatus.SC_CONFLICT;
 import static org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR;
 import static org.apache.http.HttpStatus.SC_OK;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.WiremockTestHelper.createCommonMockEndpoints;
+import static uk.gov.moj.cpp.prosecution.casefile.stub.CaseManagementStub.createGroupCaseRequestsFor;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.CaseManagementStub.stubCreateGroupCase;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.CaseManagementStub.waitForCreateGroupCaseRequest;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.DocumentGeneratorStub.stubDocumentCreate;
+import static uk.gov.moj.cpp.prosecution.casefile.stub.FeatureToggleStub.setFeatureToggle;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.MaterialStub.stubForUploadFileCommand;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ProgressionStub.stubForAddCourtDocument;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ProgressionStub.stubForInitiateCourtProceedings;
@@ -57,6 +60,7 @@ public class InitiateGroupProsecutionIT extends BaseIT {
     private static final String PUBLIC_COURT_APPLICATION_SUMMONS_APPROVED = "public.progression.court-application-summons-approved";
     private static final String PUBLIC_COURT_APPLICATION_SUMMONS_REJECTED = "public.progression.court-application-summons-rejected";
     private static final String PUBLIC_GROUP_PROSECUTION_CASES_CREATED = "public.progression.group-prosecution-cases-created";
+    private static final String CREATE_GROUP_CASE_FEATURE = "create-or-result-bulk-complaints-lists";
 
     private UUID groupId;
     private UUID externalId;
@@ -95,8 +99,16 @@ public class InitiateGroupProsecutionIT extends BaseIT {
         offenceId2 = randomUUID().toString();
         offenceId3 = randomUUID().toString();
         externalId = randomUUID();
-        // CAD-1850: every group that reaches group-cases-received now calls case management first
+        // CAD-1850: every group that reaches group-cases-received calls case management first,
+        // when the CAD-1874 toggle is on
         stubCreateGroupCase(SC_OK);
+        setFeatureToggle(CREATE_GROUP_CASE_FEATURE, true);
+    }
+
+    @AfterAll
+    public static void tearDownOnce() {
+        // leave the toggle off (the default) for any IT that runs after this one
+        setFeatureToggle(CREATE_GROUP_CASE_FEATURE, false);
     }
 
 
@@ -228,6 +240,20 @@ public class InitiateGroupProsecutionIT extends BaseIT {
 
         waitForCreateGroupCaseRequest(groupId);
         initiateGroupProsecutionHelper.verifyNoInitiateCourtProceedingsForGroupCasesCommand(caseId1.toString(), 15);
+    }
+
+    @Test
+    void shouldNotCallCaseManagementButStillInitiateCourtProceedingsForGroupCasesWhenToggleIsOff() {
+        setFeatureToggle(CREATE_GROUP_CASE_FEATURE, false);
+        final String payload = replaceValues(readFile("command-json/prosecutioncasefile.command.initiate-group-prosecution.json"), "O");
+        final InitiateGroupProsecutionHelper initiateGroupProsecutionHelper = new InitiateGroupProsecutionHelper();
+
+        initiateGroupProsecutionHelper.initiateGroupProsecution(payload);
+
+        // case management would be called before the Progression command, so once the command is seen
+        // no case management request can still be on its way for this group
+        initiateGroupProsecutionHelper.verifyInitiateCourtProceedingsForGroupCasesCommand(caseId1.toString());
+        assertThat(createGroupCaseRequestsFor(groupId).isEmpty(), is(true));
     }
 
     @Test

@@ -27,7 +27,6 @@ import java.util.stream.Stream;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -40,6 +39,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class InitiateSummonsProsecutionIT extends BaseIT {
 
     private static final String COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_MCC_OR_CPPI = "command-json/prosecutioncasefile.command.initiate-channel-parametric-summons-prosecution.json";
+    private static final String COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_CIVIL = "command-json/prosecutioncasefile.command.initiate-channel-civil-summons-prosecution.json";
     private static final String COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_MCC = "command-json/prosecutioncasefile.command.initiate-channel-mcc-summons-prosecution.json";
     private static final String COMMAND_PAYLOAD_FOR_SUBSEQUENT_INITIATE_SUMMONS_FOR_MCC_OR_CPPI = "command-json/prosecutioncasefile.command.subsequent_initiate-channel-parametric-summons-prosecution.json";
     private static final String COMMAND_PAYLOAD_FOR_SUBSEQUENT_INITIATE_SUMMONS_FOR_MCC = "command-json/prosecutioncasefile.command.subsequent_initiate-channel-parametric-summons-prosecution.json";
@@ -132,7 +132,6 @@ class InitiateSummonsProsecutionIT extends BaseIT {
         helper.thenEventsShouldBeRaised(new String[]{EVENT_SELECTOR_CC_PROSECUTION_REJECTED});
     }
 
-    @Disabled
     @Test
     void shouldRejectCaseWhenSameDefendantIsReceivedAndSummonsApplicationForTheDefendantHasAlreadyBeenApprovedViaMCCChannel() {
         final InitiateCCProsecutionHelper helper = new InitiateCCProsecutionHelper();
@@ -175,7 +174,7 @@ class InitiateSummonsProsecutionIT extends BaseIT {
     @Test
     void shouldRaiseCivilPublicEventsForParkedForSummonsApplicationApprovalThenRejectedForSingleCaseSummonsApplication() {
         final InitiateCCProsecutionHelper helper = new InitiateCCProsecutionHelper();
-        helper.initiateSummonsCaseForChannelAndVerifyApplicationCreatedInstead(CIVIL, COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_MCC_OR_CPPI, EXPECTED_INITIATE_SUMMONS_APPLICATION_FOR_MCC_OR_CPPI);
+        helper.initiateSummonsCaseForChannelAndVerifyApplicationCreatedInstead(CIVIL, COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_CIVIL, EXPECTED_INITIATE_SUMMONS_APPLICATION_FOR_MCC_OR_CPPI);
 
         final JsonEnvelope parkedForSummonsApplicationApprovalEvent = helper.thenPublicParkedForSummonsApplicationApprovalEventShouldBeRaised(helper.getCaseId());
         assertThat(parkedForSummonsApplicationApprovalEvent.payloadAsJsonObject().getString("channel"), is("CIVIL"));
@@ -192,7 +191,7 @@ class InitiateSummonsProsecutionIT extends BaseIT {
     @Test
     void shouldRaiseSubmissionApprovedPublicEventForCivilSingleCaseSummonsApplication() {
         final InitiateCCProsecutionHelper helper = new InitiateCCProsecutionHelper();
-        helper.initiateSummonsCaseForChannelAndVerifyApplicationCreatedInstead(CIVIL, COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_MCC_OR_CPPI, EXPECTED_INITIATE_SUMMONS_APPLICATION_FOR_MCC_OR_CPPI);
+        helper.initiateSummonsCaseForChannelAndVerifyApplicationCreatedInstead(CIVIL, COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_CIVIL, EXPECTED_INITIATE_SUMMONS_APPLICATION_FOR_MCC_OR_CPPI);
 
         helper.whenSummonsApplicationIsApprovedForDefendants();
 
@@ -205,7 +204,7 @@ class InitiateSummonsProsecutionIT extends BaseIT {
     @Test
     void shouldRaiseCivilProsecutionSubmissionSucceededWhenCaseCreationConfirmedForCivilSingleCaseSummonsApplication() {
         final InitiateCCProsecutionHelper helper = new InitiateCCProsecutionHelper();
-        helper.initiateSummonsCaseForChannelAndVerifyApplicationCreatedInstead(CIVIL, COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_MCC_OR_CPPI, EXPECTED_INITIATE_SUMMONS_APPLICATION_FOR_MCC_OR_CPPI);
+        helper.initiateSummonsCaseForChannelAndVerifyApplicationCreatedInstead(CIVIL, COMMAND_PAYLOAD_FOR_INITIATE_SUMMONS_FOR_CIVIL, EXPECTED_INITIATE_SUMMONS_APPLICATION_FOR_MCC_OR_CPPI);
         helper.whenSummonsApplicationIsApprovedForDefendants();
         helper.thenEventsShouldBeRaised(new String[]{EVENT_SELECTOR_CC_PROSECUTION_RECEIVED});
 

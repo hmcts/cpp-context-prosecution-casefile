@@ -5,7 +5,11 @@ import static uk.gov.justice.domain.aggregate.matcher.EventSwitcher.match;
 import static uk.gov.justice.domain.aggregate.matcher.EventSwitcher.otherwiseDoNothing;
 import static uk.gov.justice.domain.aggregate.matcher.EventSwitcher.when;
 import static uk.gov.moj.cpp.prosecution.casefile.ProsecutionCaseFileHelper.buildDefendantWithReferenceData;
+import static uk.gov.moj.cpp.prosecution.casefile.ProsecutionCaseFileHelper.validateDefendantErrors;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseProblem.caseProblem;
+import static uk.gov.moj.cpp.prosecution.casefile.validation.ValidationRuleExecutor.validate;
+import static uk.gov.moj.cpp.prosecution.casefile.validation.provider.CcProsecutionValidationRuleProvider.getCaseValidationRulesForCivil;
+import static uk.gov.moj.cpp.prosecution.casefile.validation.provider.CcProsecutionValidationRuleProvider.getGroupCasesValidationRules;
 
 import uk.gov.justice.core.courts.SummonsApprovedOutcome;
 import uk.gov.justice.domain.aggregate.Aggregate;
@@ -33,7 +37,10 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-@SuppressWarnings({"java:S1068", "java:S3740"})
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@SuppressWarnings({"java:S1068", "java:S3740","java:S1168"})
 public class GroupProsecutionCaseFile implements Aggregate {
 
     private static final long serialVersionUID = 7500527201134194465L;

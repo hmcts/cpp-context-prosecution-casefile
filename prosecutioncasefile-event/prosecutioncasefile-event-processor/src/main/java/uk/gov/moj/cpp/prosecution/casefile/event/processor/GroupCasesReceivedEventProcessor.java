@@ -9,6 +9,7 @@ import static uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicGroupSubmiss
 import uk.gov.justice.core.courts.InitiateCourtProceedingsForGroupCases;
 import uk.gov.justice.services.core.annotation.Handles;
 import uk.gov.justice.services.core.annotation.ServiceComponent;
+import uk.gov.justice.services.core.featurecontrol.FeatureControlGuard;
 import uk.gov.justice.services.core.sender.Sender;
 import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.justice.services.messaging.Metadata;
@@ -35,6 +36,7 @@ public class GroupCasesReceivedEventProcessor {
     public static final String PROGRESSION_COMMAND_INITIATE_COURT_PROCEEDINGS_FOR_GROUP_CASES = "progression.initiate-court-proceedings-for-group-cases";
     private static final String PUBLIC_EVENT_PROSECUTIONCASEFILE_GROUP_SUBMISSION_APPROVED = "public.prosecutioncasefile.group-submission-approved";
     private static final String SUMMONS_INITIATION_CODE = "S";
+    public static final String CREATE_GROUP_CASE_FEATURE = "create-or-result-bulk-complaints-lists";
 
     @Inject
     private Sender sender;
@@ -48,6 +50,9 @@ public class GroupCasesReceivedEventProcessor {
     @Inject
     private CaseManagementService caseManagementService;
 
+    @Inject
+    private FeatureControlGuard featureControlGuard;
+
     @Handles("prosecutioncasefile.events.group-cases-received")
     public void handleGroupCasesReceived(final Envelope<GroupCasesReceived> envelope) {
 
@@ -56,8 +61,11 @@ public class GroupCasesReceivedEventProcessor {
         // CAD-1850: case management records the group before anything else is sent. If it fails the
         // exception propagates, nothing below is sent, and the event is redelivered then dead-lettered.
         // A redelivery after success gets 409 from case management, which counts as created.
-        groupCasesReceivedToCreateGroupCaseRequestConverter.convert(payload)
-                .ifPresent(request -> caseManagementService.createGroupCase(request, envelope.metadata()));
+        // CAD-1874: only when the toggle is on; otherwise go straight to Progression as before.
+        if (isCreateGroupCaseEnabled(payload.getGroupProsecutionList().getExternalId())) {
+            groupCasesReceivedToCreateGroupCaseRequestConverter.convert(payload)
+                    .ifPresent(request -> caseManagementService.createGroupCase(request, envelope.metadata()));
+        }
 
         emitGroupSubmissionApprovedIfCivilSummons(payload.getGroupProsecutionList(), envelope);
 
@@ -68,6 +76,22 @@ public class GroupCasesReceivedEventProcessor {
 
         final Envelope<InitiateCourtProceedingsForGroupCases> commandEnvelope = envelopeFrom(metadata, this.groupCasesReceivedToInitiateCourtProceedingsConverter.convert(payload));
         this.sender.send(commandEnvelope);
+    }
+
+    /**
+     * Release toggle for the case management call (CAD-1874). A failed toggle lookup counts as off,
+     * so a feature store problem never blocks a group submission.
+     */
+    private boolean isCreateGroupCaseEnabled(final UUID externalId) {
+        try {
+            if (featureControlGuard.isFeatureEnabled(CREATE_GROUP_CASE_FEATURE)) {
+                return true;
+            }
+            LOGGER.info("Feature {} is off, not creating group case in case management for submission id {}", CREATE_GROUP_CASE_FEATURE, externalId);
+        } catch (final RuntimeException e) {
+            LOGGER.warn("Feature {} lookup failed, treating it as off and not creating group case in case management for submission id {}", CREATE_GROUP_CASE_FEATURE, externalId, e);
+        }
+        return false;
     }
 
     private void emitGroupSubmissionApprovedIfCivilSummons(final GroupProsecutionList groupProsecutionList, final Envelope<?> envelope) {

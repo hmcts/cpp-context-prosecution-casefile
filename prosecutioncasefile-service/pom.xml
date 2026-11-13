@@ -67,6 +67,12 @@
             <artifactId>prosecutioncasefile-healthchecks</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- Reads feature toggles from Azure App Configuration (CAD-1874). Without it every toggle reads as off. -->
+        <dependency>
+            <groupId>uk.gov.moj.platform.libraries</groupId>
+            <artifactId>feature-control</artifactId>
+            <version>${cpp.platform-libraries.version}</version>
+        </dependency>
 
         <!-- Test dependencies -->
         <dependency>

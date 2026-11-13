@@ -112,6 +112,24 @@
             <version>${framework.version}</version>
             <scope>test</scope>
         </dependency>
+        <!-- FeatureStubber: switches Azure feature toggles on/off in ITs (CAD-1874) -->
+        <dependency>
+            <groupId>uk.gov.moj.cpp.common.library.utils</groupId>
+            <artifactId>cpp-platform-test-utils</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jboss-logging</artifactId>
+                    <groupId>org.jboss.logging</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- remote+http JMX transport used by FeatureStubber to clear the feature cache -->
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-client-all</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <profiles>

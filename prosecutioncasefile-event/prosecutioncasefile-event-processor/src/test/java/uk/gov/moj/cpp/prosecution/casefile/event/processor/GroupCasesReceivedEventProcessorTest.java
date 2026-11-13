@@ -12,6 +12,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;
 import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderFactory.metadataWithRandomUUID;
+import static uk.gov.moj.cpp.prosecution.casefile.event.processor.GroupCasesReceivedEventProcessor.CREATE_GROUP_CASE_FEATURE;
 import static uk.gov.moj.cpp.prosecution.casefile.event.processor.GroupCasesReceivedEventProcessor.PROGRESSION_COMMAND_INITIATE_COURT_PROCEEDINGS_FOR_GROUP_CASES;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseDetails.caseDetails;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CIVIL;
@@ -22,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.justice.core.courts.InitiateCourtProceedingsForGroupCases;
+import uk.gov.justice.services.core.featurecontrol.FeatureControlGuard;
 import uk.gov.justice.services.core.sender.Sender;
 import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.moj.cpp.prosecution.casefile.domain.GroupProsecutionList;
@@ -66,11 +68,15 @@ public class GroupCasesReceivedEventProcessorTest {
     @Mock
     private CaseManagementService caseManagementService;
 
+    @Mock
+    private FeatureControlGuard featureControlGuard;
+
     @InjectMocks
     private GroupCasesReceivedEventProcessor groupCasesReceivedEventProcessor;
 
     @Test
     void handleGroupCasesReceived_withLeadCase_should_createGroupCaseBeforeSendingProgressionCommand() {
+        when(featureControlGuard.isFeatureEnabled(CREATE_GROUP_CASE_FEATURE)).thenReturn(true);
         final Envelope<GroupCasesReceived> requestEnvelope = envelopeFrom(
                 metadataWithRandomUUID("prosecutioncasefile.events.group-cases-received"),
                 createGroupCasesReceived());
@@ -88,6 +94,7 @@ public class GroupCasesReceivedEventProcessorTest {
 
     @Test
     void handleGroupCasesReceived_caseManagementFails_should_propagateAndSendNothing() {
+        when(featureControlGuard.isFeatureEnabled(CREATE_GROUP_CASE_FEATURE)).thenReturn(true);
         final Envelope<GroupCasesReceived> requestEnvelope = envelopeFrom(
                 metadataWithRandomUUID("prosecutioncasefile.events.group-cases-received"),
                 GroupCasesReceived.groupCasesReceived()
@@ -105,6 +112,7 @@ public class GroupCasesReceivedEventProcessorTest {
 
     @Test
     void handleGroupCasesReceived_noLeadCase_should_notCallCaseManagement() {
+        when(featureControlGuard.isFeatureEnabled(CREATE_GROUP_CASE_FEATURE)).thenReturn(true);
         final Envelope<GroupCasesReceived> requestEnvelope = envelopeFrom(
                 metadataWithRandomUUID("prosecutioncasefile.events.group-cases-received"),
                 createGroupCasesReceived());
@@ -115,6 +123,59 @@ public class GroupCasesReceivedEventProcessorTest {
 
         verifyNoInteractions(caseManagementService);
         verify(sender, times(1)).send(senderArgCaptor.capture());
+    }
+
+    @Test
+    void handleGroupCasesReceived_toggleOff_should_notCallCaseManagementAndStillSendProgressionCommand() {
+        final Envelope<GroupCasesReceived> requestEnvelope = envelopeFrom(
+                metadataWithRandomUUID("prosecutioncasefile.events.group-cases-received"),
+                createGroupCasesReceived());
+        when(featureControlGuard.isFeatureEnabled(CREATE_GROUP_CASE_FEATURE)).thenReturn(false);
+        when(groupCasesReceivedToInitiateCourtProceedingsConverter.convert(any())).thenReturn(createInitiateCourtProceedingsForGroupCases());
+
+        groupCasesReceivedEventProcessor.handleGroupCasesReceived(requestEnvelope);
+
+        verifyNoInteractions(groupCasesReceivedToCreateGroupCaseRequestConverter, caseManagementService);
+        verify(sender, times(1)).send(senderArgCaptor.capture());
+        assertThat(senderArgCaptor.getValue().metadata().name(), is(PROGRESSION_COMMAND_INITIATE_COURT_PROCEEDINGS_FOR_GROUP_CASES));
+    }
+
+    @Test
+    void handleGroupCasesReceived_toggleOffForCivilSummons_should_stillEmitPublicEventAndSendProgressionCommand() {
+        final Envelope<GroupCasesReceived> requestEnvelope = envelopeFrom(
+                metadataWithRandomUUID("prosecutioncasefile.events.group-cases-received"),
+                GroupCasesReceived.groupCasesReceived()
+                        .withGroupProsecutionList(buildCivilSummonsGroupProsecutionList(UUID.randomUUID(), UUID.randomUUID()))
+                        .build());
+        when(featureControlGuard.isFeatureEnabled(CREATE_GROUP_CASE_FEATURE)).thenReturn(false);
+        when(groupCasesReceivedToInitiateCourtProceedingsConverter.convert(any())).thenReturn(createInitiateCourtProceedingsForGroupCases());
+
+        groupCasesReceivedEventProcessor.handleGroupCasesReceived(requestEnvelope);
+
+        verifyNoInteractions(groupCasesReceivedToCreateGroupCaseRequestConverter, caseManagementService);
+        verify(sender, times(2)).send(genericSenderArgCaptor.capture());
+        assertThat(genericSenderArgCaptor.getAllValues().get(0).metadata().name(), is("public.prosecutioncasefile.group-submission-approved"));
+        assertThat(genericSenderArgCaptor.getAllValues().get(1).metadata().name(), is(PROGRESSION_COMMAND_INITIATE_COURT_PROCEEDINGS_FOR_GROUP_CASES));
+    }
+
+    @Test
+    void handleGroupCasesReceived_toggleCheckFails_should_treatAsOffAndStillSendProgressionCommand() {
+        final Envelope<GroupCasesReceived> requestEnvelope = envelopeFrom(
+                metadataWithRandomUUID("prosecutioncasefile.events.group-cases-received"),
+                createGroupCasesReceived());
+        when(featureControlGuard.isFeatureEnabled(CREATE_GROUP_CASE_FEATURE)).thenThrow(new IllegalStateException("feature store unavailable"));
+        when(groupCasesReceivedToInitiateCourtProceedingsConverter.convert(any())).thenReturn(createInitiateCourtProceedingsForGroupCases());
+
+        groupCasesReceivedEventProcessor.handleGroupCasesReceived(requestEnvelope);
+
+        verifyNoInteractions(groupCasesReceivedToCreateGroupCaseRequestConverter, caseManagementService);
+        verify(sender, times(1)).send(senderArgCaptor.capture());
+        assertThat(senderArgCaptor.getValue().metadata().name(), is(PROGRESSION_COMMAND_INITIATE_COURT_PROCEEDINGS_FOR_GROUP_CASES));
+    }
+
+    @Test
+    void createGroupCaseFeature_should_matchStaticDataAndAzureFlagName() {
+        assertThat(CREATE_GROUP_CASE_FEATURE, is("create-or-result-bulk-complaints-lists"));
     }
 
     @Test

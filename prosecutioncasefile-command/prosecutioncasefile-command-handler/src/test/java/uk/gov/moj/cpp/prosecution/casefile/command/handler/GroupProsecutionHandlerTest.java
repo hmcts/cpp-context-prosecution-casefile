@@ -22,7 +22,6 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.GroupProsecution;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Individual;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Offence;
-import uk.gov.moj.cpp.prosecution.casefile.json.schemas.OrganisationUnitWithCourtroomReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.SelfDefinedInformation;
 import uk.gov.moj.cpp.prosecution.casefile.refdata.defendant.DefendantRefDataEnricher;
 import uk.gov.moj.cpp.prosecution.casefile.refdata.proscase.GroupCasesReferenceDataEnricher;
@@ -31,7 +30,6 @@ import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import javax.enterprise.inject.Instance;
@@ -95,8 +93,6 @@ public class GroupProsecutionHandlerTest {
 
         when(groupCasesReferenceDataEnrichers.iterator()).thenReturn(List.of(groupCasesReferenceDataEnricher).iterator());
         when(defendantRefDataEnrichers.iterator()).thenReturn(Collections.emptyIterator());
-        when(referenceDataQueryService.retrieveOrganisationUnitWithCourtroom(COURT_HEARING_LOCATION))
-                .thenReturn(Optional.of(OrganisationUnitWithCourtroomReferenceData.organisationUnitWithCourtroomReferenceData().build()));
         when(eventSource.getStreamById(groupId)).thenReturn(eventStream);
         when(aggregateService.get(eventStream, GroupProsecutionCaseFile.class)).thenReturn(new GroupProsecutionCaseFile());
 

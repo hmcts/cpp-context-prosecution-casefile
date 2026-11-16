@@ -75,6 +75,7 @@ import static uk.gov.moj.cps.prosecutioncasefile.domain.event.UploadCaseDocument
 import uk.gov.justice.core.courts.CourtDocumentAdded;
 import uk.gov.justice.core.courts.MigrationCaseStatus;
 import uk.gov.justice.core.courts.MigrationSourceSystem;
+import uk.gov.justice.core.courts.RotaSlot;
 import uk.gov.justice.core.courts.SummonsApprovedOutcome;
 import uk.gov.justice.cps.prosecutioncasefile.InitialHearing;
 import uk.gov.justice.domain.aggregate.Aggregate;
@@ -114,8 +115,10 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.DefendantProblem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.DefendantSubject;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.DocumentCategory;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.HearingRequest;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Individual;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Language;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ListDefendantRequest;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Material;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.OffenceReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.PersonalInformation;
@@ -201,6 +204,7 @@ public class ProsecutionCaseFile implements Aggregate {
     private static final String EXPIRED_AT = "expiredAt";
     private static final String SUMMONS_INITIATION_CODE = "S";
     private static final String SJP_INITIATION_CODE = "J";
+    private static final String LIBRA_MIGRATION_SOURCE_SYSTEM = "LIBRA";
     public static final String METLI = "GALMT00";
     public static final String GM_00001 = "GM00001";
 
@@ -239,6 +243,12 @@ public class ProsecutionCaseFile implements Aggregate {
     private String initiationCode;
     private boolean isSummonsCaseRejected;
     private UUID groupId;
+    /**
+     * The case-level hearing picked in the magistrates' "find a hearing" journey. Null for every
+     * historical event stream and for every case that carries per-defendant initial hearings
+     * instead, so replay of a pre-change stream reaches identical state.
+     */
+    private HearingRequest listNewHearing;
 
     private static final String OFFENCE_CODE = "GM00001";
     public static final String OFFENCES_CHARGE_DATE = "offence_chargeDate";
@@ -404,8 +414,21 @@ public class ProsecutionCaseFile implements Aggregate {
 
     private String retrieveCourtLocation(final List<Defendant> defendants) {
         final List<String> courtLocations = new ArrayList<>();
-        defendants.forEach(defendant -> courtLocations.add(defendant.getInitialHearing().getCourtHearingLocation()));
+        // A find-a-hearing case has no per-defendant initialHearing; its court comes from the
+        // booked slot instead.
+        defendants.forEach(defendant -> courtLocations.add(nonNull(defendant.getInitialHearing())
+                ? defendant.getInitialHearing().getCourtHearingLocation()
+                : foundHearingCourtLocation()));
         return courtLocations.get(0);
+    }
+
+    private String foundHearingCourtLocation() {
+        return Optional.ofNullable(this.listNewHearing)
+                .map(HearingRequest::getBookedSlots)
+                .filter(slots -> !slots.isEmpty())
+                .map(slots -> slots.get(0))
+                .map(RotaSlot::getOucode)
+                .orElse(null);
     }
 
     private boolean resolveCaseHasNoErrors(final List<Object> eventStream) {
@@ -514,7 +537,11 @@ public class ProsecutionCaseFile implements Aggregate {
 
         final Boolean isCivil = Optional.ofNullable(receivedProsecutionWithReferenceData.getProsecution().getIsCivil()).orElse(false);
 
-        final List<Problem> caseProblems = validate(prosecutionWithReferenceData, referenceDataQueryService, getCaseValidationRules(receivedInitiationCode, isCivil));
+        final boolean isLibraMigratedCase = Optional.ofNullable(prosecution.getMigrationSourceSystem())
+                .map(MigrationSourceSystem::getMigrationSourceSystemName)
+                .filter(LIBRA_MIGRATION_SOURCE_SYSTEM::equalsIgnoreCase)
+                .isPresent();
+        final List<Problem> caseProblems = validate(prosecutionWithReferenceData, referenceDataQueryService, getCaseValidationRules(receivedInitiationCode, isCivil, isLibraMigratedCase));
         boolean isMCCWithListNewHearing = MCC.equals(prosecutionChannel) && Objects.nonNull(prosecutionWithReferenceData.getProsecution().getListNewHearing());
 
         //ACTIVE // INACTIVE
@@ -786,7 +813,7 @@ public class ProsecutionCaseFile implements Aggregate {
         final Channel prosecutionChannel = prosecution.getChannel();
         final List<DefendantProblem> defendantWarningsForIncomingMessage = prosecutionChannel == SPI ? List.of() : validateDefendantWarnings(defendantsWithReferenceData, incomingInitiationCode, prosecutionChannel);
 
-        if (incomingInitiationCode.equals(SUMMONS_INITIATION_CODE)) {
+        if (incomingInitiationCode.equals(SUMMONS_INITIATION_CODE) && !isMigratedLibraProsecution(prosecution)) {
             return apply(builder.add(defendantsParkedForSummonsApplicationApproval()
                     .withApplicationId(randomUUID())
                     .withProsecutionWithReferenceData(prosecutionWithReferenceData)
@@ -808,6 +835,14 @@ public class ProsecutionCaseFile implements Aggregate {
                 .withId(randomUUID())
                 .build();
         return apply(builder.add(ccCaseReceivedWithWarnings).build());
+    }
+
+    private boolean isMigratedLibraProsecution(final Prosecution prosecution) {
+        return MCC.equals(prosecution.getChannel())
+                && Optional.ofNullable(prosecution.getMigrationSourceSystem())
+                        .map(MigrationSourceSystem::getMigrationSourceSystemName)
+                        .filter(LIBRA_MIGRATION_SOURCE_SYSTEM::equals)
+                        .isPresent();
     }
 
     public Stream<Object> associateEnterpriseId(final String enterpriseId) {
@@ -1306,6 +1341,9 @@ public class ProsecutionCaseFile implements Aggregate {
                     this.initiationCode = caseDetails.getInitiationCode();
                     this.defendantWarnings = union(this.defendantWarnings, isNotEmpty(e.getDefendantWarnings()) ? e.getDefendantWarnings() : emptyList());
                     this.prosecutorCaseReference = caseDetails.getProsecutorCaseReference();
+                    if (nonNull(prosecution.getListNewHearing())) {
+                        this.listNewHearing = prosecution.getListNewHearing();
+                    }
                     this.defendants = union(this.defendants, getNewDefendantsFromProsecution(this.defendants, prosecution));
                     hydrateExternalIdToDefendantsMap(e.getProsecutionWithReferenceData().getExternalId(), prosecution.getDefendants());
                     if (isNotEmpty(e.getDefendantWarnings())) {
@@ -1775,6 +1813,7 @@ public class ProsecutionCaseFile implements Aggregate {
         final List<DefendantProblem> defendantWarningsForApprovedDefendants = getDefendantWarningsForDefendants(approvedDefendants);
         final SummonsApprovedOutcome summonsApprovedOutcome = summonsApplicationApprovedDetails.getSummonsApprovedOutcome();
         final UUID externalId = getExternalIdFromDefendants(approvedDefendants);
+        final HearingRequest approvedListNewHearing = listNewHearingForDefendants(approvedDefendants);
         final ProsecutionWithReferenceData prosecutionWithReferenceData = new ProsecutionWithReferenceData(prosecution()
                 .withCaseDetails(this.caseDetails)
                 .withDefendants(approvedDefendants)
@@ -1782,6 +1821,7 @@ public class ProsecutionCaseFile implements Aggregate {
                 .withIsCivil(isCivil)
                 .withIsGroupMaster(false)
                 .withIsGroupMember(false)
+                .withListNewHearing(approvedListNewHearing)
                 .build());
         prosecutionWithReferenceData.setExternalId(externalId);
 
@@ -1816,7 +1856,53 @@ public class ProsecutionCaseFile implements Aggregate {
                                 .withDefendantWarnings(defendantWarningsForApprovedDefendants)
                                 .withChannel(this.channel)
                                 .withSummonsApprovedOutcome(summonsApprovedOutcome)
+                                .withListNewHearing(approvedListNewHearing)
                                 .build())
+                .build();
+    }
+
+    /**
+     * The case's found hearing, with its listDefendantRequests restricted to the defendants in the
+     * application being approved.
+     * <p>
+     * This reproduces the existing semantics rather than introducing a new rule. Under an
+     * initialHearing there is no carried array at all — the listDefendantRequests are derived
+     * downstream from the prosecution's defendants, which are already filtered to the approved set.
+     * Under a found hearing the array is carried on the wire, so without this filter Progression
+     * would be asked to list defendants rejected earlier on the case, or defendants belonging to a
+     * different application.
+     * <p>
+     * Returns null when none of the defendants being approved are on the found hearing. That
+     * happens when a later application is parked on a case that already carries one — the
+     * aggregate still holds the first application's hearing, and it describes nobody in the
+     * second. Emitting it with an empty listDefendantRequests would breach
+     * listHearingRequest.json (minItems: 1), and the outbound Progression command would be
+     * rejected, rolling the event back into a redelivery loop.
+     */
+    private HearingRequest listNewHearingForDefendants(final List<Defendant> applicationDefendants) {
+        if (isNull(this.listNewHearing)) {
+            return null;
+        }
+        if (isNull(this.listNewHearing.getListDefendantRequests())) {
+            return this.listNewHearing;
+        }
+        final Set<String> applicationDefendantIds = applicationDefendants.stream()
+                .map(Defendant::getId)
+                .filter(Objects::nonNull)
+                .collect(toSet());
+
+        final List<ListDefendantRequest> filteredRequests = this.listNewHearing.getListDefendantRequests().stream()
+                .filter(request -> nonNull(request.getDefendantId())
+                        && applicationDefendantIds.contains(request.getDefendantId().toString()))
+                .collect(toList());
+
+        if (filteredRequests.isEmpty()) {
+            return null;
+        }
+
+        return HearingRequest.hearingRequest()
+                .withValuesFrom(this.listNewHearing)
+                .withListDefendantRequests(filteredRequests)
                 .build();
     }
 

@@ -145,7 +145,7 @@ public class DefendantsParkedToCourtApplicationProceedingsConverterTest {
         given(prosecutionToBoxHearingRequestConverter.convert(prosecution)).willReturn(boxHearingRequest);
         given(prosecutionCaseFileCaseDetailsToProsecutionCaseIdentifierConverter.convert(eq(caseDetails), any(Metadata.class))).willReturn(prosecutionCaseIdentifier);
         given(prosecutionCaseFileOffenceToCourtApplicationOffenceConverter.convert(eq(offences), any(ParamsVO.class))).willReturn(courtApplicationOffences);
-        given(prosecutionCaseFileDefendantToCourtApplicationPartyConverter.convert(eq(prosecution.getDefendants()), any(ReferenceDataVO.class), any(Channel.class))).willReturn(respondents);
+        given(prosecutionCaseFileDefendantToCourtApplicationPartyConverter.convert(eq(prosecution.getDefendants()), any(ReferenceDataVO.class), any(Channel.class), any())).willReturn(respondents);
         given(prosecutionCaseFileProsecutorToCourtApplicationPartyConverter.convert(eq(caseDetails.getProsecutor()), any(ParamsVO.class), any(Metadata.class))).willReturn(applicant);
 
         final InitiateCourtApplicationProceedings applicationProceedings = target.convert(source, buildMetadata());

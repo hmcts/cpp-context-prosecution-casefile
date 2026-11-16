@@ -20,9 +20,12 @@ import uk.gov.justice.core.courts.AllocationDecision;
 import uk.gov.justice.core.courts.CommittingCourt;
 import uk.gov.justice.core.courts.CourtCentre;
 import uk.gov.justice.core.courts.CustodyTimeLimit;
+import uk.gov.justice.core.courts.IndicatedPlea;
+import uk.gov.justice.core.courts.IndicatedPleaValue;
 import uk.gov.justice.core.courts.LjaDetails;
 import uk.gov.justice.core.courts.OffenceFacts;
 import uk.gov.justice.core.courts.Plea;
+import uk.gov.justice.core.courts.Source;
 import uk.gov.justice.core.courts.VehicleCode;
 import uk.gov.justice.core.courts.Verdict;
 import uk.gov.justice.core.courts.VerdictType;
@@ -54,7 +57,9 @@ public class ProsecutionCaseFileOffenceToCourtsOffenceConverter implements Param
     private static final String SUMMARY_ONLY_MODE_OF_TRIAL = "Summary";
     private static final String EITHER_WAY = "Either Way";
     private static final String INDICATED_GUILTY = "INDICATED_GUILTY";
+    private static final String INDICATED_NOT_GUILTY = "INDICATED_NOT_GUILTY";
     private static final String GUILTY = "GUILTY";
+    private static final String LIBRA = "LIBRA";
 
     @Inject
     private ReferenceDataQueryService referenceDataQueryService;
@@ -72,6 +77,13 @@ public class ProsecutionCaseFileOffenceToCourtsOffenceConverter implements Param
         CourtCentre convictingCourt = getConvictingCourt(offence, paramsVO);
 
         final boolean isCivil = nonNull(offence.getCivilOffence());
+
+        final String pleaValue = offence.getPlea() != null ? offence.getPlea().getPleaValue() : null;
+        final IndicatedPleaValue indicatedPleaValue = toIndicatedPleaValue(pleaValue);
+        final boolean isIndicatedPlea = indicatedPleaValue != null && LIBRA.equalsIgnoreCase(migrationSourceSystemName(paramsVO));
+
+        final Plea plea = isIndicatedPlea ? null : convertPlea(offence);
+        final IndicatedPlea indicatedPlea = isIndicatedPlea ? convertIndicatedPlea(offence, indicatedPleaValue) : null;
 
         return offence()
                 .withId(offence.getOffenceId())
@@ -94,7 +106,8 @@ public class ProsecutionCaseFileOffenceToCourtsOffenceConverter implements Param
                 .withOffenceLegislationWelsh(getOffenceLegislationWelsh(offence.getOffenceCode(), referenceDataVO))
                 .withOffenceDateCode(offence.getOffenceDateCode())
                 .withCommittingCourt(getCommittingCourtFromReferenceData(paramsVO))
-                .withPlea(convertPlea(offence))
+                .withPlea(plea)
+                .withIndicatedPlea(indicatedPlea)
                 .withVerdict(convertVerdict(offence))
                 .withConvictionDate(resolveConvictionDate(offence, paramsVO, isCivil))
                 .withAllocationDecision(buildAllocationDecision(offence, paramsVO))
@@ -372,6 +385,33 @@ public class ProsecutionCaseFileOffenceToCourtsOffenceConverter implements Param
         }
 
         return convertedPlea;
+    }
+
+    private String migrationSourceSystemName(final ParamsVO paramsVO) {
+        return paramsVO.getMigrationSourceSystem() != null
+                ? paramsVO.getMigrationSourceSystem().getMigrationSourceSystemName()
+                : null;
+    }
+
+    private IndicatedPleaValue toIndicatedPleaValue(final String pleaValue) {
+        if (INDICATED_GUILTY.equalsIgnoreCase(pleaValue)) {
+            return IndicatedPleaValue.INDICATED_GUILTY;
+        }
+        if (INDICATED_NOT_GUILTY.equalsIgnoreCase(pleaValue)) {
+            return IndicatedPleaValue.INDICATED_NOT_GUILTY;
+        }
+        return null;
+    }
+
+    private IndicatedPlea convertIndicatedPlea(final Offence offence, final IndicatedPleaValue indicatedPleaValue) {
+        final uk.gov.moj.cpp.prosecution.casefile.json.schemas.Plea plea = offence.getPlea();
+
+        return IndicatedPlea.indicatedPlea()
+                .withOffenceId(offence.getOffenceId())
+                .withIndicatedPleaValue(indicatedPleaValue)
+                .withIndicatedPleaDate(plea.getPleaDate().toString())
+                .withSource(Source.IN_COURT)
+                .build();
     }
 
     /**

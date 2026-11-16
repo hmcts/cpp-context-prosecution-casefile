@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import uk.gov.moj.cpp.prosecution.casefile.domain.ProsecutionWithReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.*;
-import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 
 import java.util.List;
 

@@ -1,0 +1,95 @@
+{
+  "caseDetails": {
+    "originatingOrganisation": "B01NM00",
+    "cpsOrganisation": "A30AB00",
+    "cpsOrganisationId": "2013c181-7458-4fb2-a637-b596fbe0e781",
+    "summonsCode": "A",
+    "caseId": "CASE-ID",
+    "initiationCode": "INITIATION_CODE",
+    "prosecutorCaseReference": "CASE-URN",
+    "policeSystemId": "00101PoliceCaseSystem",
+    "caseMarkers": [
+      {
+        "markerTypeCode": "ABC",
+        "markerTypeDescription": "",
+        "markerTypeId": "2013c181-7458-4fb2-a637-b596fbe0e781"
+      }
+    ],
+    "prosecutor": {
+      "informant": "informant",
+      "prosecutingAuthority": "prosAut"
+    },
+    "dateReceived": "DATE_RECEIVED"
+  },
+  "defendants": [
+    {
+      "id": "DEFENDANT_ID1",
+      "prosecutorDefendantReference": "DEFENDANT_REFERENCE1",
+      "pncIdentifier": "2099/1234567L",
+      "croNumber": "123456/20L",
+      "documentationLanguage": "W",
+      "hearingLanguage": "W",
+      "custodyStatus": "B",
+      "numPreviousConvictions": 3,
+      "initialHearing": {
+        "courtHearingLocation": "C55BN00",
+        "dateOfHearing": "2050-02-04",
+        "timeOfHearing": "09:05:01.001",
+        "endDate": "2050-02-04T10:05:01.001Z",
+        "courtScheduleId": "test-courtScheduleId"
+      },
+      "individual": {
+        "personalInformation": {
+          "title": "Baron",
+          "firstName": "John",
+          "lastName": "Smith",
+          "occupation": "Software Developer",
+          "occupationCode": 43,
+          "address": {
+            "address1": "66 Exeter Street",
+            "address2": "line 2",
+            "address3": "line 3",
+            "address4": "line 4",
+            "address5": "line 5",
+            "postcode": "M60 1NW"
+          },
+          "contactDetails": {
+            "work": "020111222",
+            "home": "020111223",
+            "mobile": "07572222943",
+            "primaryEmail": "scrooge.mcduck@mail.com",
+            "secondaryEmail": "scrooge.mcduck2@mail.com"
+          }
+        },
+        "selfDefinedInformation": {
+          "gender": "MALE"
+        }
+      },
+      "offences": [
+        {
+          "offenceCode": "OFCODE12",
+          "offenceId": "OFFENCE_ID1",
+          "offenceSequenceNumber": 1,
+          "offenceCommittedDate": "2018-09-10",
+          "offenceCommittedEndDate": "2018-10-10",
+          "offenceDateCode": 1,
+          "offenceLocation": "Croydon",
+          "alcoholRelatedOffence": {
+            "alcoholLevelAmount": 3,
+            "alcoholLevelMethod": "B"
+          },
+          "offenceWording": "TV Licence not paid",
+          "chargeDate": "2018-12-04",
+          "arrestDate": "2018-12-04"
+        }
+      ],
+      "postingDate": "2018-09-10"
+    }
+  ],
+  "channel": "MCC",
+  "externalId": "EXTERNAL_ID",
+  "migrationSourceSystem": {
+    "migrationSourceSystemName": "LIBRA",
+    "migrationSourceSystemCaseIdentifier": "LIBRA-CASE-0001"
+  }
+}

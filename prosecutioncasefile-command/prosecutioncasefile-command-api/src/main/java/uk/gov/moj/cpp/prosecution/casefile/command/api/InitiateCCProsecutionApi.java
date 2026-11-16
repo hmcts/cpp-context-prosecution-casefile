@@ -6,7 +6,9 @@ import static java.util.Objects.nonNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static uk.gov.justice.core.courts.IndicatedPleaValue.INDICATED_GUILTY;
+import static uk.gov.justice.core.courts.InitiationCode.J;
 import static uk.gov.justice.core.courts.InitiationCode.O;
+import static uk.gov.justice.core.courts.InitiationCode.S;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_API;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;
 import static uk.gov.justice.services.messaging.Envelope.metadataFrom;
@@ -74,6 +76,7 @@ public class InitiateCCProsecutionApi {
     private CaseDetailsEnrichmentService caseDetailsEnrichmentService;
 
     public static final String SOW_REF_VALUE = "MoJ";
+    private static final String LIBRA_MIGRATION_SOURCE_SYSTEM = "LIBRA";
 
     @SuppressWarnings("java:S1541")
     @Handles("prosecutioncasefile.command.initiate-cc-prosecution")
@@ -106,13 +109,23 @@ public class InitiateCCProsecutionApi {
             throw new BadRequestException(LIST_NEW_HEARING_AND_INITIAL_HEARING_ARE_MUTUALLY_EXCLUSIVE);
         }
 
-        if (MCC.equals(channel) && O.name().equalsIgnoreCase(envelope.payload().getCaseDetails().getInitiationCode())) {
-            if (nonNull(listNewHearing)) {
-                validateWcdAndFixedDate(listNewHearing);
-            }
-            if (!isCivil) {
-                validatePleaAndVerdictInOffences(envelope);
-            }
+        final String initiationCode = envelope.payload().getCaseDetails().getInitiationCode();
+
+        // Found-hearing dates are validated for every MCC find-a-hearing route: Other (O) and
+        // Summons (S). Only reachable when a listNewHearing is present, so initialHearing-only
+        // payloads are unaffected.
+        if (MCC.equals(channel) && nonNull(listNewHearing)
+                && (O.name().equalsIgnoreCase(initiationCode) || S.name().equalsIgnoreCase(initiationCode))) {
+            validateWcdAndFixedDate(listNewHearing);
+        }
+
+        final boolean isLibraSjpCase = J.name().equalsIgnoreCase(initiationCode)
+                && nonNull(envelope.payload().getMigrationSourceSystem())
+                && LIBRA_MIGRATION_SOURCE_SYSTEM.equalsIgnoreCase(envelope.payload().getMigrationSourceSystem().getMigrationSourceSystemName());
+
+        if (MCC.equals(channel) && !isCivil
+                && (O.name().equalsIgnoreCase(initiationCode) || isLibraSjpCase)) {
+            validatePleaAndVerdictInOffences(envelope);
         }
 
 

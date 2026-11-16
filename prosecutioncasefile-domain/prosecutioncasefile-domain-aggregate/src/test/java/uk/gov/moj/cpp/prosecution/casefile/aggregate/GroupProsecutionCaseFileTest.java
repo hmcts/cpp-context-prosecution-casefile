@@ -82,6 +82,10 @@ public class GroupProsecutionCaseFileTest {
     @Test
     public void shouldRaiseGroupCasesParkedForApproval() {
 
+        final Optional<OrganisationUnitWithCourtroomReferenceData> optionalOrganisationUnitWithCourtroomReferenceData =
+                Optional.of(OrganisationUnitWithCourtroomReferenceData.organisationUnitWithCourtroomReferenceData().build());
+
+        when(referenceDataQueryService.retrieveOrganisationUnitWithCourtroom("C55BN00")).thenReturn(optionalOrganisationUnitWithCourtroomReferenceData);
         final List<GroupProsecutionWithReferenceData> groupProsecutionWithReferenceDataList = new ArrayList<>();
         final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
         referenceDataVO.setInitiationTypes(Arrays.asList("S"));
@@ -122,6 +126,10 @@ public class GroupProsecutionCaseFileTest {
     @Test
     public void shouldRaiseGroupCasesReceived() {
 
+        final Optional<OrganisationUnitWithCourtroomReferenceData> optionalOrganisationUnitWithCourtroomReferenceData =
+                Optional.of(OrganisationUnitWithCourtroomReferenceData.organisationUnitWithCourtroomReferenceData().build());
+
+        when(referenceDataQueryService.retrieveOrganisationUnitWithCourtroom("C55BN00")).thenReturn(optionalOrganisationUnitWithCourtroomReferenceData);
         final List<GroupProsecutionWithReferenceData> groupProsecutionWithReferenceDataList = new ArrayList<>();
         final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
         referenceDataVO.setInitiationTypes(Arrays.asList("O"));
@@ -412,6 +420,11 @@ public class GroupProsecutionCaseFileTest {
 
         final UUID prosecutionCaseId = randomUUID();
 
+        final Optional<OrganisationUnitWithCourtroomReferenceData> optionalOrganisationUnitWithCourtroomReferenceData =
+                Optional.of(OrganisationUnitWithCourtroomReferenceData.organisationUnitWithCourtroomReferenceData().build());
+
+        when(referenceDataQueryService.retrieveOrganisationUnitWithCourtroom("C55BN00")).thenReturn(optionalOrganisationUnitWithCourtroomReferenceData);
+
         final List<GroupProsecutionWithReferenceData> groupProsecutionWithReferenceDataList = new ArrayList<>();
 
         final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
@@ -483,6 +496,10 @@ public class GroupProsecutionCaseFileTest {
     @Test
     public void shouldNotRejectGroupCivilCaseForFutureChargeDate() {
 
+        final Optional<OrganisationUnitWithCourtroomReferenceData> optionalOrganisationUnitWithCourtroomReferenceData =
+                Optional.of(OrganisationUnitWithCourtroomReferenceData.organisationUnitWithCourtroomReferenceData().build());
+
+        when(referenceDataQueryService.retrieveOrganisationUnitWithCourtroom("C55BN00")).thenReturn(optionalOrganisationUnitWithCourtroomReferenceData);
         final List<GroupProsecutionWithReferenceData> groupProsecutionWithReferenceDataList = new ArrayList<>();
         final ReferenceDataVO referenceDataVO = new ReferenceDataVO();
         referenceDataVO.setInitiationTypes(Arrays.asList("O"));

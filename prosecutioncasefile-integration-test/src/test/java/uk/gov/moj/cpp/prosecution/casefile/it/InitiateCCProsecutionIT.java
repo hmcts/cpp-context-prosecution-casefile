@@ -1,5 +1,6 @@
 package uk.gov.moj.cpp.prosecution.casefile.it;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.containing;
 import static com.github.tomakehurst.wiremock.client.WireMock.findAll;
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
@@ -27,6 +28,7 @@ import static uk.gov.justice.services.test.utils.core.matchers.ResponseStatusMat
 import static uk.gov.moj.cpp.prosecution.casefile.helper.DefaultRequests.getCaseDetailsByProsecutionReferenceIdBuilder;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_DEFENDANTS_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SELECTOR_CC_PROSECUTION_RECEIVED;
+import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SELECTOR_CC_PROSECUTION_REJECTED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SELECTOR_CC_PROSECUTION_RECEIVED_WITH_WARNINGS;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SELECTOR_DEFENDANT_ADDED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PUBLIC_PROSECUTIONCASEFILE_CC_CASE_RECEIVED;
@@ -66,9 +68,11 @@ import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.Customization;
 import org.skyscreamer.jsonassert.comparator.CustomComparator;
 
+@SuppressWarnings("java:S2699")
 public class InitiateCCProsecutionIT extends BaseIT {
 
     private static final String ADD_DEFENDANT_TO_COURT_PROCEEDING = "/progression-service/command/api/rest/progression/adddefendantstocourtproceedings";
+    private static final String INITIATE_COURT_PROCEEDINGS = "/progression-service/command/api/rest/progression/initiatecourtproceedings";
 
     private static final String CASE_MARKER_CODE = "ABC";
     private static final String EITHER_WAY_MOT_REASON_ID = "78efce20-8a52-3272-9d22-2e7e6e3e565e";
@@ -122,6 +126,29 @@ public class InitiateCCProsecutionIT extends BaseIT {
         initiateCCProsecutionHelper.thenProsecutionReceivedEventShouldBeRaised();
         initiateCCProsecutionHelper.verifyCourtProceedingsForCaseCreationHasBeenInitiated(caseUrn, expectedPayload);
         initiateCCProsecutionHelper.thenEventsShouldBeRaised(new String[]{PUBLIC_PROSECUTIONCASEFILE_CC_CASE_RECEIVED});
+    }
+
+    @Test
+    void initiateLibraSjpCcProsecutionCreatesCaseInProgression() {
+        stubGetOrganisationUnitWithOneCourtroom();
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-mcc.json");
+        final String libraPayLoad = replaceValues(staticPayLoad)
+                .replace("\"initiationCode\": \"C\"", "\"initiationCode\": \"J\"")
+                .replace("\"channel\": \"MCC\"",
+                        "\"migrationSourceSystem\": { \"migrationSourceSystemName\": \"LIBRA\" },\n  \"channel\": \"MCC\"");
+
+        final InitiateCCProsecutionHelper initiateCCProsecutionHelper = new InitiateCCProsecutionHelper();
+        initiateCCProsecutionHelper.initiateCCProsecution(libraPayLoad);
+        initiateCCProsecutionHelper.thenProsecutionReceivedEventShouldBeRaised();
+        initiateCCProsecutionHelper.thenEventsShouldBeRaised(new String[]{
+                PUBLIC_PROSECUTIONCASEFILE_CC_CASE_RECEIVED,
+                PUBLIC_PROSECUTIONCASEFILE_MANUAL_CASE_RECEIVED});
+
+        await().timeout(35, TimeUnit.SECONDS)
+                .pollInterval(500, TimeUnit.MILLISECONDS)
+                .pollDelay(500, TimeUnit.MILLISECONDS)
+                .until(() -> findAll(postRequestedFor(urlMatching(INITIATE_COURT_PROCEEDINGS))
+                        .withRequestBody(containing(defendantId1))).size(), is(1));
     }
 
     @Test
@@ -331,6 +358,15 @@ public class InitiateCCProsecutionIT extends BaseIT {
     }
 
     @Test
+    void initiateCCProsecutionForMCCAndTrialWithIndicatedGuiltyPleaForLibraSetsIndicatedPlea() {
+        stubGetOrganisationUnitWithOneCourtroomForMags();
+        stubGetLocalJusticeAreas();
+        final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-mcc-trial-indicated-guilty-plea-libra.json");
+        final String expectedPayload = readFile("expected/initiate_cc_expected_output-mcc-trial-indicated-guilty-plea-libra.json");
+        verifyCCEventAndProgressionCommandForMCC(staticPayLoad, expectedPayload);
+    }
+
+    @Test
     void initiateCCProsecutionForPostalRequisitionWithCorporateDefendant() {
         final String staticPayLoad = readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-requisition-corporate.json");
         final String expectedPayload = readFile("expected/initiate_cc_expected_output_requisition_corporate.json");
@@ -513,6 +549,50 @@ public class InitiateCCProsecutionIT extends BaseIT {
                         withJsonPath("$.applicationId", notNullValue()),
                         withJsonPath("$.prosecutionWithReferenceData.prosecution.defendants[*].id", hasItems(defendantId3))
                 ))));
+    }
+
+    @Test
+    void shouldDirectCreateMigratedLibraSummonsAndSendMarkerToProgression() {
+        stubGetOrganisationUnitWithOneCourtroom();
+        final InitiateCCProsecutionHelper initiateCCProsecutionHelper = new InitiateCCProsecutionHelper();
+        final String ccPayLoad = replaceValues(
+                readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-migrated-libra-mcc-summons.json"), "S", "MCC");
+        initiateCCProsecutionHelper.initiateCCProsecution(ccPayLoad);
+
+        assertThat(initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_RECEIVED).isPresent(), is(true));
+        assertThat(initiateCCProsecutionHelper.retrieveEvent(EVENT_DEFENDANTS_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL).isPresent(), is(false));
+
+        initiateCCProsecutionHelper.thenEventsShouldBeRaised(new String[]{
+                PUBLIC_PROSECUTIONCASEFILE_CC_CASE_RECEIVED,
+                PUBLIC_PROSECUTIONCASEFILE_MANUAL_CASE_RECEIVED
+        });
+
+        await().timeout(35, TimeUnit.SECONDS)
+                .pollInterval(500, TimeUnit.MILLISECONDS)
+                .until(() -> findAll(postRequestedFor(urlMatching(INITIATE_COURT_PROCEEDINGS))
+                        .withRequestBody(containing(caseUrn))).size(), is(1));
+
+        final String progressionRequest = InitiateCCProsecutionHelper.getLastLoggedRequest(caseUrn);
+        assertThat(progressionRequest.contains("LIBRA"), is(true));
+        assertThat(progressionRequest.contains("LIBRA-CASE-0001"), is(true));
+    }
+
+    @Test
+    void shouldRejectResubmittedMigratedLibraSummonsAsDuplicate() {
+        stubGetOrganisationUnitWithOneCourtroom();
+        final InitiateCCProsecutionHelper initiateCCProsecutionHelper = new InitiateCCProsecutionHelper();
+        final String ccPayLoad = replaceValues(
+                readFile("command-json/prosecutioncasefile.command.initiate-cc-prosecution-migrated-libra-mcc-summons.json"), "S", "MCC");
+
+        initiateCCProsecutionHelper.initiateCCProsecution(ccPayLoad);
+        assertThat(initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_RECEIVED).isPresent(), is(true));
+
+        initiateCCProsecutionHelper.initiateCCProsecution(ccPayLoad);
+        final Optional<JsonEnvelope> rejectedEvent = initiateCCProsecutionHelper.retrieveEvent(EVENT_SELECTOR_CC_PROSECUTION_REJECTED);
+        assertThat(rejectedEvent.isPresent(), is(true));
+        assertThat(rejectedEvent.get(), jsonEnvelope(
+                metadata().withName(EVENT_SELECTOR_CC_PROSECUTION_REJECTED),
+                payload().isJson(withJsonPath("$.caseErrors[*].code", hasItems("DUPLICATED_PROSECUTION")))));
     }
 
     private void verifyCCEventAndProgressionCommand(final String staticPayLoad,

@@ -96,6 +96,8 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
     private static final String PROGRESSION_INITIATE_COURT_PROCEEDINGS = "progression.initiate-court-proceedings";
     private static final String CASE_MARKER_CODE = "ABC";
 
+    private static final String FIND_A_HEARING_EARLIEST_START = "2050-10-03T09:00:00Z";
+
     private final UUID caseId;
     private final String caseUrn;
     private final String defendantId1;
@@ -544,6 +546,7 @@ public class InitiateCCProsecutionHelper extends AbstractTestHelper {
                 .replace("DATE_RECEIVED", LocalDates.to(LocalDate.now()))
                 .replace("EXTERNAL_ID_2", this.externalId2.toString())
                 .replace("EXTERNAL_ID", this.externalId.toString())
+                .replaceAll("EARLIEST_START_DATE_TIME", FIND_A_HEARING_EARLIEST_START)
                 .replaceAll("DATE_OF_HEARING", LocalDates.to(LocalDate.now()))
                 .replaceAll("APPLICATION_DUE_DATE", LocalDates.to(LocalDate.now()));
     }

@@ -21,6 +21,10 @@ public class ProsecutionToCCAddDefendantConverter implements Converter<Prosecuti
         paramsVO.setReferenceDataVO(source.getReferenceDataVO());
         paramsVO.setCaseId(source.getCaseId());
         paramsVO.setSummonsApprovedOutcome(source.getSummonsApprovedOutcome());
+        // channel + listNewHearing are the two fields ProsecutionCaseFileInitialHearingToCCHearingRequestConverter
+        // needs to list a later-added defendant at the case's found hearing ("find a hearing").
+        paramsVO.setChannel(source.getChannel());
+        paramsVO.setListNewHearing(source.getListNewHearing());
 
         return AddDefendantsToCourtProceedings.addDefendantsToCourtProceedings()
                 .withDefendants(prosecutionCaseFileDefendantToCCDefendantConverter.convert(source.getDefendants(), paramsVO))

@@ -33,6 +33,7 @@ import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.Metadata;
 import uk.gov.moj.cpp.progression.events.ApplicationProceedingsEdited;
+import uk.gov.moj.cpp.prosecution.casefile.event.processor.converter.ProsecutionCaseToRecordMigratedCaseConverter;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Address;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ContactDetails;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.PersonalInformation;
@@ -64,6 +65,8 @@ public class ProgressionPublicEventProcessor {
     private static final String FIELD_CASE_URN = "caseUrn";
     private static final String FIELD_REFERRAL_REASON_ID = "referralReasonId";
     private static final String COURT_APPLICATION = "courtApplication";
+    private static final String MIGRATION_SOURCE_SYSTEM = "migrationSourceSystem";
+    private static final String LIBRA_MIGRATION_SOURCE_SYSTEM = "LIBRA";
 
     @Inject
     private Sender sender;
@@ -73,6 +76,9 @@ public class ProgressionPublicEventProcessor {
 
     @Inject
     JsonObjectToObjectConverter jsonObjectToObjectConverter;
+
+    @Inject
+    private ProsecutionCaseToRecordMigratedCaseConverter prosecutionCaseToRecordMigratedCaseConverter;
 
     private static final Logger LOGGER = getLogger(ProgressionPublicEventProcessor.class);
 
@@ -85,9 +91,17 @@ public class ProgressionPublicEventProcessor {
         final List<UUID> defendantIds = prosecutionCase.getJsonArray("defendants").getValuesAs(JsonObject.class).stream()
                 .map(defendant -> fromString(defendant.getString(FIELD_ID))).collect(toList());
 
-        final boolean hasMigrationSourceSystem = prosecutionCase.containsKey("migrationSourceSystem")
-                && prosecutionCase.getJsonObject("migrationSourceSystem") != null;
-        if (!hasMigrationSourceSystem) {
+        final boolean hasMigrationSourceSystem = prosecutionCase.containsKey(MIGRATION_SOURCE_SYSTEM)
+                && prosecutionCase.getJsonObject(MIGRATION_SOURCE_SYSTEM) != null;
+        if (hasMigrationSourceSystem) {
+            if (isLibraMigratedCase(prosecutionCase)) {
+                final Metadata metadata = metadataFrom(prosecutionCaseCreated.metadata())
+                        .withName("prosecutioncasefile.command.record-migrated-case")
+                        .build();
+
+                this.sender.send(envelopeFrom(metadata, prosecutionCaseToRecordMigratedCaseConverter.convert(prosecutionCase)));
+            }
+        } else {
             final AcceptCase acceptCase = acceptCase()
                     .withCaseId(caseId)
                     .withDefendantIds(defendantIds)
@@ -99,6 +113,10 @@ public class ProgressionPublicEventProcessor {
 
             this.sender.send(envelopeFrom(metadata, acceptCase));
         }
+    }
+
+    private boolean isLibraMigratedCase(final JsonObject prosecutionCase) {
+        return LIBRA_MIGRATION_SOURCE_SYSTEM.equals(prosecutionCase.getJsonObject(MIGRATION_SOURCE_SYSTEM).getString("migrationSourceSystemName", null));
     }
 
     @Handles("public.progression.group-prosecution-cases-created")

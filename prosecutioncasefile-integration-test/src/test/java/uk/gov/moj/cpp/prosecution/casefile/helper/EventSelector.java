@@ -23,6 +23,7 @@ public class EventSelector {
     public static final String EVENT_SELECTOR_MATERIAL_ADDED_V2 = "prosecutioncasefile.events.material-added-v2";
     public static final String EVENT_SELECTOR_MATERIAL_ADDED_WITH_WARNINGS = "prosecutioncasefile.events.material-added-with-warnings";
     public static final String EVENT_SELECTOR_MATERIAL_PENDING = "prosecutioncasefile.events.material-pending";
+    public static final String EVENT_SELECTOR_MIGRATED_CASE_RECORDED = "prosecutioncasefile.events.migrated-case-recorded";
     public static final String EVENT_SELECTOR_MATERIAL_PENDING_V2 = "prosecutioncasefile.events.material-pending-v2";
     public static final String EVENT_SELECTOR_MATERIAL_REJECTED = "prosecutioncasefile.events.material-rejected";
     public static final String EVENT_SELECTOR_MATERIAL_REJECTED_V2 = "prosecutioncasefile.events.material-rejected-v2";

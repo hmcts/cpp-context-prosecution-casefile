@@ -51,12 +51,14 @@ import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.Metadata;
 import uk.gov.justice.services.test.utils.core.random.RandomGenerator;
 import uk.gov.moj.cpp.progression.events.ApplicationProceedingsEdited;
+import uk.gov.moj.cpp.prosecution.casefile.event.processor.converter.ProsecutionCaseToRecordMigratedCaseConverter;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Address;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ContactDetails;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.PersonalInformation;
 import uk.gov.moj.cps.prosecutioncasefile.command.handler.AcceptCase;
 import uk.gov.moj.cps.prosecutioncasefile.command.handler.AcceptGroupCases;
 import uk.gov.moj.cps.prosecutioncasefile.command.handler.CaseDefendantChangedCommand;
+import uk.gov.moj.cps.prosecutioncasefile.command.handler.RecordMigratedCase;
 import uk.gov.moj.cps.prosecutioncasefile.command.handler.RejectGroupCases;
 
 import java.io.IOException;
@@ -97,11 +99,17 @@ class ProgressionPublicEventProcessorTest {
     @Spy
     private final ObjectToJsonObjectConverter objectToJsonObjectConverter = new ObjectToJsonObjectConverter(objectMapper);
 
+    @Spy
+    private ProsecutionCaseToRecordMigratedCaseConverter prosecutionCaseToRecordMigratedCaseConverter = new ProsecutionCaseToRecordMigratedCaseConverter();
+
     @InjectMocks
     private ProgressionPublicEventProcessor progressionPublicEventProcessor;
 
     @Captor
     private ArgumentCaptor<Envelope<AcceptCase>> acceptCaseEnvelopeCaptor;
+
+    @Captor
+    private ArgumentCaptor<Envelope<RecordMigratedCase>> recordMigratedCaseEnvelopeCaptor;
 
     @Captor
     private ArgumentCaptor<Envelope> caseDefendantChangedCommandCaptor;
@@ -184,6 +192,81 @@ class ProgressionPublicEventProcessorTest {
         progressionPublicEventProcessor.handleProsecutionCaseCreated(envelope);
 
         verify(sender, times(0)).send(acceptCaseEnvelopeCaptor.capture());
+    }
+
+    @Test
+    void shouldSendRecordMigratedCaseWhenCaseCreatedForLibraMigratedCase() {
+        final UUID caseId = randomUUID();
+        final UUID defendantId1 = randomUUID();
+        final UUID defendantId2 = randomUUID();
+        final JsonEnvelope envelope = envelopeFrom(
+                metadataWithIdpcProcessId(metadataWithRandomUUID("public.progression.prosecution-case-created").build(), randomUUID().toString()),
+                createObjectBuilder()
+                        .add("prosecutionCase", createObjectBuilder()
+                                .add("id", caseId.toString())
+                                .add("prosecutionCaseIdentifier", createObjectBuilder()
+                                        .add("prosecutionAuthorityId", randomUUID().toString())
+                                        .add("prosecutionAuthorityCode", "CPS")
+                                        .add("caseURN", "20GD0001234"))
+                                .add("originatingOrganisation", "G01FT01AB")
+                                .add("initiationCode", "J")
+                                .add("defendants", createArrayBuilder()
+                                        .add(createObjectBuilder()
+                                                .add("id", defendantId1.toString()))
+                                        .add(createObjectBuilder()
+                                                .add("id", defendantId2.toString())))
+                                .add("migrationSourceSystem", createObjectBuilder()
+                                        .add("migrationSourceSystemName", "LIBRA")
+                                        .add("migrationSourceSystemCaseIdentifier", "LIB-100002"))
+                                .build())
+                        .build());
+
+        progressionPublicEventProcessor.handleProsecutionCaseCreated(envelope);
+
+        verify(sender).send(recordMigratedCaseEnvelopeCaptor.capture());
+
+        final Envelope<RecordMigratedCase> envelopeToSender = recordMigratedCaseEnvelopeCaptor.getValue();
+        assertThat(envelopeToSender.metadata().name(), is("prosecutioncasefile.command.record-migrated-case"));
+        assertThat(envelopeToSender.metadata().clientCorrelationId(), is(envelope.metadata().clientCorrelationId()));
+
+        final RecordMigratedCase payload = envelopeToSender.payload();
+        assertThat(payload.getCaseId(), is(caseId));
+        assertThat(payload.getProsecutionCaseReference(), is("20GD0001234"));
+        assertThat(payload.getMigrationSourceSystemName(), is("LIBRA"));
+        assertThat(payload.getMigrationSourceSystemCaseIdentifier(), is("LIB-100002"));
+        assertThat(payload.getDefendants(), hasSize(2));
+        assertThat(payload.getDefendants().get(0).getId(), is(defendantId1));
+        assertThat(payload.getDefendants().get(1).getId(), is(defendantId2));
+    }
+
+    @Test
+    void shouldUseProsecutionAuthorityReferenceWhenLibraMigratedCaseHasNoCaseUrn() {
+        final UUID caseId = randomUUID();
+        final JsonEnvelope envelope = envelopeFrom(
+                metadataWithRandomUUID("public.progression.prosecution-case-created").build(),
+                createObjectBuilder()
+                        .add("prosecutionCase", createObjectBuilder()
+                                .add("id", caseId.toString())
+                                .add("prosecutionCaseIdentifier", createObjectBuilder()
+                                        .add("prosecutionAuthorityId", randomUUID().toString())
+                                        .add("prosecutionAuthorityCode", "CPS")
+                                        .add("prosecutionAuthorityReference", "PAR-100003"))
+                                .add("defendants", createArrayBuilder()
+                                        .add(createObjectBuilder()
+                                                .add("id", randomUUID().toString())))
+                                .add("migrationSourceSystem", createObjectBuilder()
+                                        .add("migrationSourceSystemName", "LIBRA")
+                                        .add("migrationSourceSystemCaseIdentifier", "LIB-100003"))
+                                .build())
+                        .build());
+
+        progressionPublicEventProcessor.handleProsecutionCaseCreated(envelope);
+
+        verify(sender).send(recordMigratedCaseEnvelopeCaptor.capture());
+
+        final RecordMigratedCase payload = recordMigratedCaseEnvelopeCaptor.getValue().payload();
+        assertThat(payload.getCaseId(), is(caseId));
+        assertThat(payload.getProsecutionCaseReference(), is("PAR-100003"));
     }
 
     @Test

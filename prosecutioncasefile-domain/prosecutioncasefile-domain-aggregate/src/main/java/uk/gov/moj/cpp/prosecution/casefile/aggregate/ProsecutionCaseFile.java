@@ -120,6 +120,7 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Individual;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Language;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ListDefendantRequest;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Material;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.MigratedCaseDefendant;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.OffenceReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.PersonalInformation;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Problem;
@@ -155,6 +156,7 @@ import uk.gov.moj.cps.prosecutioncasefile.domain.event.MaterialPending;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.MaterialPendingV2;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.MaterialRejected;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.MaterialRejectedV2;
+import uk.gov.moj.cps.prosecutioncasefile.domain.event.MigratedCaseRecorded;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.OnlinePleaPcqVisitedSubmitted;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.OnlinePleaSubmitted;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.ResolvedCase;
@@ -200,7 +202,7 @@ import org.slf4j.LoggerFactory;
 public class ProsecutionCaseFile implements Aggregate {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProsecutionCaseFile.class);
 
-    private static final long serialVersionUID = 8155753984190031446L;
+    private static final long serialVersionUID = 6485823102856576293L;
     private static final String EXPIRED_AT = "expiredAt";
     private static final String SUMMONS_INITIATION_CODE = "S";
     private static final String SJP_INITIATION_CODE = "J";
@@ -1317,6 +1319,14 @@ public class ProsecutionCaseFile implements Aggregate {
                     this.caseType = CC;
                     this.prosecutionReceived = true;
                 }),
+                when(MigratedCaseRecorded.class).apply(e -> {
+                    this.caseId = e.getCaseId();
+                    this.caseType = CC;
+                    this.prosecutionReceived = true;
+                    this.prosecutionAccepted = true;
+                    this.prosecutorCaseReference = e.getProsecutionCaseReference();
+                    this.defendants = e.getDefendants().stream().map(ProsecutionCaseFile::toDefendant).collect(toList());
+                }),
                 when(CcCaseReceived.class).apply(e -> {
                     this.prosecutionFoundWithErrors = false;
                     this.prosecutionReceived = true;
@@ -1539,6 +1549,41 @@ public class ProsecutionCaseFile implements Aggregate {
             return false;
         }
         return defendantWarning1.getProsecutorDefendantReference().equals(defendantWarning2.getProsecutorDefendantReference());
+    }
+
+    public Stream<Object> recordMigratedCase(final UUID caseId, final String prosecutionCaseReference, final String migrationSourceSystemName,
+                                             final String migrationSourceSystemCaseIdentifier, final List<MigratedCaseDefendant> defendants) {
+        if (prosecutionReceived || prosecutionAccepted) {
+            LOGGER.info("Case {} already known to prosecutioncasefile, migrated case not recorded", caseId);
+            return Stream.empty();
+        }
+
+        return apply(of(MigratedCaseRecorded.migratedCaseRecorded()
+                .withCaseId(caseId)
+                .withProsecutionCaseReference(prosecutionCaseReference)
+                .withMigrationSourceSystemName(migrationSourceSystemName)
+                .withMigrationSourceSystemCaseIdentifier(migrationSourceSystemCaseIdentifier)
+                .withDefendants(defendants)
+                .build()));
+    }
+
+    private static Defendant toDefendant(final MigratedCaseDefendant migratedCaseDefendant) {
+        final Defendant.Builder builder = Defendant.defendant()
+                .withId(migratedCaseDefendant.getId().toString())
+                .withProsecutorDefendantReference(migratedCaseDefendant.getProsecutorDefendantReference())
+                .withAsn(migratedCaseDefendant.getAsn())
+                .withOrganisationName(migratedCaseDefendant.getOrganisationName());
+
+        if (nonNull(migratedCaseDefendant.getFirstName()) || nonNull(migratedCaseDefendant.getLastName())) {
+            builder.withIndividual(Individual.individual()
+                    .withPersonalInformation(PersonalInformation.personalInformation()
+                            .withFirstName(migratedCaseDefendant.getFirstName())
+                            .withLastName(migratedCaseDefendant.getLastName())
+                            .build())
+                    .withSelfDefinedInformation(SelfDefinedInformation.selfDefinedInformation().build())
+                    .build());
+        }
+        return builder.build();
     }
 
     public Stream<Object> recordDecisionToReferCaseForCaseHearing(final UUID caseId, final UUID referralReasonId) {

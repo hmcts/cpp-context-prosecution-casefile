@@ -253,9 +253,14 @@ public class ProsecutionCaseFile implements Aggregate {
         final Prosecution prosecution = prosecutionWithReferenceData.getProsecution();
         final Channel prosecutionChannel = prosecution.getChannel();
         if (SPI.equals(prosecutionChannel) && (this.prosecutionReceived || prosecution.getDefendants().size() > 1)) {
+            final String errorMessage = prosecution.getDefendants().size() > 1
+                    ? "Multiple Defendants Found"
+                    : "Duplicate SPI prosecution submission for case";
+            LOGGER.warn("receiveSjpProsecution rejected SPI prosecution. errorMessage={}, defendantSize={}, prosecutionChannel={}, prosecutionReceived={}",
+                    errorMessage, prosecution.getDefendants().size(), prosecutionChannel, this.prosecutionReceived);
             builder.accept(prosecutionCaseUnsupported()
                     .withChannel(SPI)
-                    .withErrorMessage("Multiple Defendants Found")
+                    .withErrorMessage(errorMessage)
                     .withExternalId(prosecutionWithReferenceData.getExternalId())
                     .withPoliceSystemId(prosecutionWithReferenceData.getProsecution().getCaseDetails().getPoliceSystemId())
                     .withUrn(prosecutionWithReferenceData.getProsecution().getCaseDetails().getProsecutorCaseReference())

@@ -1,0 +1,15 @@
+{
+  "caseId": "51cac7fb-387c-4d19-9c80-8963fa8cf222",
+  "prosecutionCaseReference": "20GD0001234",
+  "migrationSourceSystemName": "LIBRA",
+  "migrationSourceSystemCaseIdentifier": "LIB-100002",
+  "defendants": [
+    {
+      "id": "2e9b2e31-a41f-4f8e-8e34-507237e4f4cf",
+      "prosecutorDefendantReference": "DEF-REF-1",
+      "asn": "ASN-0001",
+      "firstName": "Jane",
+      "lastName": "Doe"
+    }
+  ]
+}

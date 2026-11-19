@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://moj.gov.uk/cps/prosecutioncasefile/command/handler/record-migrated-case.json",
+  "type": "object",
+  "properties": {
+    "caseId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid",
+      "description": "The Id of the migrated case to record"
+    },
+    "prosecutionCaseReference": {
+      "type": "string"
+    },
+    "migrationSourceSystemName": {
+      "type": "string"
+    },
+    "migrationSourceSystemCaseIdentifier": {
+      "type": "string"
+    },
+    "defendants": {
+      "type": "array",
+      "items": {
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/migrated-case-defendant.json"
+      }
+    }
+  },
+  "required": [
+    "caseId",
+    "prosecutionCaseReference",
+    "migrationSourceSystemName",
+    "defendants"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,20 @@
+{
+  "caseId": "fd223cb5-8676-4897-8c19-f8aa7428b5e6",
+  "prosecutionCaseReference": "TFL12345",
+  "migrationSourceSystemName": "LIBRA",
+  "migrationSourceSystemCaseIdentifier": "LEGACY-0001",
+  "defendants": [
+    {
+      "id": "e1d32d9d-29ec-4934-a932-22a50f223966",
+      "prosecutorDefendantReference": "DEFENDANT_REFERENCE1",
+      "asn": "ASN0000000000000001",
+      "firstName": "John",
+      "lastName": "Smith"
+    },
+    {
+      "id": "3e0d7c46-1c55-4a3f-9f47-5b1d0c9d2a11",
+      "asn": "ASN0000000000000002",
+      "organisationName": "Example Organisation Ltd"
+    }
+  ]
+}

@@ -68,6 +68,9 @@
                                     raml/json/schema/prosecutioncasefile.command.accept-case.json
                                 </include>
                                 <include>
+                                    raml/json/schema/prosecutioncasefile.command.record-migrated-case.json
+                                </include>
+                                <include>
                                     raml/json/schema/prosecutioncasefile.command.check-pending-events-for-new-defendants.json
                                 </include>
                                 <include>

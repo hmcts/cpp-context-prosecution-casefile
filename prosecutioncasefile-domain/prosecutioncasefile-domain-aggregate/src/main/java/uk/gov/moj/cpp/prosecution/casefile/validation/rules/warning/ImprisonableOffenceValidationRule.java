@@ -3,6 +3,7 @@ package uk.gov.moj.cpp.prosecution.casefile.validation.rules.warning;
 import static java.lang.Boolean.FALSE;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class ImprisonableOffenceValidationRule implements ValidationRule<Defenda
     private static boolean isImprisonable(final ReferenceDataValidationContext referenceDataValidationContext, final Offence offence) {
         return referenceDataValidationContext
                 .getReferenceDataByOffenceCode(offence.getOffenceCode())
+                .filter(offenceReferenceData -> !isBlank(offenceReferenceData.getModeOfTrial()))
                 .map(offenceReferenceData -> isImprisonable(offenceReferenceData.getModeOfTrial()))
                 .orElse(FALSE);
 

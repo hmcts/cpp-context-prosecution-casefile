@@ -3,6 +3,7 @@ package uk.gov.moj.cpp.prosecution.casefile.validation.provider;
 
 import static java.util.Collections.emptyList;
 
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant;
 import uk.gov.moj.cpp.prosecution.casefile.validation.context.ReferenceDataValidationContext;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.ValidationRule;
@@ -23,8 +24,8 @@ public class CcProsecutionWarningRuleProvider {
     private CcProsecutionWarningRuleProvider() {
     }
 
-    public static List<ValidationRule<Defendant, ReferenceDataValidationContext>> getWarningRules(final String caseInitiationCode) {
-        if("C".equals(caseInitiationCode) || "Q".equals(caseInitiationCode)) {
+    public static List<ValidationRule<Defendant, ReferenceDataValidationContext>> getWarningRules(final String caseInitiationCode, final Channel channel) {
+        if ("C".equals(caseInitiationCode) || "Q".equals(caseInitiationCode)) {
             return WARNING_RULES;
         } else {
             return emptyList();

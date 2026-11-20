@@ -15,6 +15,7 @@ import static uk.gov.justice.services.common.converter.LocalDates.to;
 import uk.gov.justice.core.courts.CourtApplication;
 import uk.gov.justice.core.courts.CourtApplicationParty;
 import uk.gov.justice.core.courts.CourtApplicationType;
+import uk.gov.justice.core.courts.CourtCivilApplication;
 import uk.gov.justice.core.courts.InitiateCourtApplicationProceedings;
 import uk.gov.justice.core.courts.ProsecutionCaseIdentifier;
 import uk.gov.justice.services.messaging.Metadata;
@@ -69,6 +70,7 @@ public class GroupCasesParkedForApprovalToCourtApplicationProceedingsConverter i
                 .withCaseDetails(masterCaseProsecution.get().getGroupProsecution().getCaseDetails())
                 .withChannel(source.getGroupProsecutionList().getChannel())
                 .withDefendants(masterCaseProsecution.get().getGroupProsecution().getDefendants())
+                .withIsCivil(masterCaseProsecution.get().getGroupProsecution().getIsCivil())
                 .build();
 
         return initiateCourtApplicationProceedings()
@@ -89,6 +91,7 @@ public class GroupCasesParkedForApprovalToCourtApplicationProceedingsConverter i
         final ProsecutionCaseIdentifier prosecutionCaseIdentifier = prosecutionCaseFileCaseDetailsToProsecutionCaseIdentifierConverter.convert(caseDetails, metadata);
         final List<uk.gov.justice.core.courts.Offence> courtApplicationOffences = prosecutionCaseFileOffenceToCourtApplicationOffenceConverter.convert(offences, paramsVO);
         final CourtApplicationParty applicant = prosecutionCaseFileProsecutorToCourtApplicationPartyConverter.convert(caseDetails.getProsecutor(), paramsVO, metadata);
+        final boolean isCivil = nonNull(prosecution.getIsCivil()) && prosecution.getIsCivil();
 
         return courtApplication()
                 .withId(applicationId)
@@ -106,6 +109,9 @@ public class GroupCasesParkedForApprovalToCourtApplicationProceedingsConverter i
                 .withApplicationStatus(LISTED)
                 .withRespondents(respondents)
                 .withIsGroupCaseApplication(true)
+                .withCourtCivilApplication(CourtCivilApplication.courtCivilApplication()
+                        .withIsCivil(isCivil)
+                        .build())
                 .build();
     }
 

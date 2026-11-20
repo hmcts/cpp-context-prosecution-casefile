@@ -14,6 +14,24 @@ subscriptions_descriptor:
         - name: public.prosecutioncasefile.group-prosecution-rejected
           schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/public-group-prosecution-rejected.json
 
+        - name: public.prosecutioncasefile.parked-for-summons-application-approval
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/public-parked-for-summons-application-approval.json
+
+        - name: public.prosecutioncasefile.group-parked-for-summons-application-approval
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/public-group-parked-for-summons-application-approval.json
+
+        - name: public.prosecutioncasefile.submission-approved
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/public-submission-approved.json
+
+        - name: public.prosecutioncasefile.group-submission-approved
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/public-group-submission-approved.json
+
+        - name: public.prosecutioncasefile.submission-rejected
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/public-submission-rejected.json
+
+        - name: public.prosecutioncasefile.group-submission-rejected
+          schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/public-group-submission-rejected.json
+
         - name: public.prosecutioncasefile.prosecution-submission-succeeded
           schema_uri: http://moj.gov.uk/cps/prosecutioncasefile/domain/event/prosecution-submission-succeeded.json
 

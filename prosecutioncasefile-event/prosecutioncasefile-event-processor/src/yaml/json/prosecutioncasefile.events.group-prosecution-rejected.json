@@ -142,35 +142,39 @@
   ],
   "groupCaseErrors": [
     {
-      "code": "SUMMONS_CODE_INVALID",
-      "values": [
+      "problems": [
         {
-          "key": "summonsCode",
-          "value": "summonsCode"
-        }
-      ]
-    },
-    {
-      "code": "PROSECUTOR_OUCODE_NOT_RECOGNISED",
-      "values": [
-        {
-          "key": "originatingOrganisation",
-          "value": "123"
-        }
-      ]
-    },
-    {
-      "code": "CASE_MARKERS_INVALID",
-      "values": [
-        {
-          "id": "0",
-          "key": "caseMarkers",
-          "value": "ABC"
+          "code": "SUMMONS_CODE_INVALID",
+          "values": [
+            {
+              "key": "summonsCode",
+              "value": "summonsCode"
+            }
+          ]
         },
         {
-          "id": "1",
-          "key": "caseMarkers",
-          "value": "BCD"
+          "code": "PROSECUTOR_OUCODE_NOT_RECOGNISED",
+          "values": [
+            {
+              "key": "originatingOrganisation",
+              "value": "123"
+            }
+          ]
+        },
+        {
+          "code": "CASE_MARKERS_INVALID",
+          "values": [
+            {
+              "id": "0",
+              "key": "caseMarkers",
+              "value": "ABC"
+            },
+            {
+              "id": "1",
+              "key": "caseMarkers",
+              "value": "BCD"
+            }
+          ]
         }
       ]
     }

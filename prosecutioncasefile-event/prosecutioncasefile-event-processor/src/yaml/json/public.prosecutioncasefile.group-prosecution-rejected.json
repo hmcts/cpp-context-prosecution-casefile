@@ -2,11 +2,16 @@
   "groupId": "abc78e29-f6a5-44ee-a9e9-feaa049e949f",
   "caseErrors": [
     {
-      "code": "DEFENDANT_DOB_IN_FUTURE",
-      "values": [
+      "prosecutorCaseReference": "abc78e29",
+      "problems": [
         {
-          "key": "dateOfBirth",
-          "value": "2000-01-01"
+          "code": "DEFENDANT_DOB_IN_FUTURE",
+          "values": [
+            {
+              "key": "dateOfBirth",
+              "value": "2000-01-01"
+            }
+          ]
         }
       ]
     }

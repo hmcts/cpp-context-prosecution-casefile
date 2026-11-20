@@ -55,6 +55,7 @@ import org.slf4j.Logger;
 @ServiceComponent(EVENT_PROCESSOR)
 public class ProgressionPublicEventProcessor {
 
+
     public static final String APPLICATION_ID = "applicationId";
     private static final String FIELD_ID = "id";
     private static final String FIELD_GROUP_ID = "groupId";

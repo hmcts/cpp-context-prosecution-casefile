@@ -17,7 +17,7 @@
     "caseErrors": {
       "type": "array",
       "items": {
-        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/problem.json"
+        "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/case-problem.json"
       }
     },
     "defendantErrors": {

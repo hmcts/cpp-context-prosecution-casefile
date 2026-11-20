@@ -55,6 +55,7 @@ public class CaseCreatedEventProcessor {
                 .withDefendantWarnings(caseCreatedSuccessfullyWithWarnings.getDefendantWarnings())
                 .withExternalId(caseCreatedSuccessfullyWithWarnings.getExternalId())
                 .withChannel(caseCreatedSuccessfullyWithWarnings.getChannel())
+                .withCivilCaseWarnings(caseCreatedSuccessfullyWithWarnings.getCivilCaseWarnings())
                 .build();
 
         sender.send(envelopeFrom(metadata, payload));

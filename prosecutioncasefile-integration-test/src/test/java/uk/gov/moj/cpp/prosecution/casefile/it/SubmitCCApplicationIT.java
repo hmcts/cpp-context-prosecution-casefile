@@ -1,6 +1,6 @@
 package uk.gov.moj.cpp.prosecution.casefile.it;
 
-import com.jayway.awaitility.Duration;
+import org.awaitility.Durations;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,13 +23,20 @@ import static com.github.tomakehurst.wiremock.client.WireMock.findAll;
 import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlPathMatching;
-import static com.jayway.awaitility.Awaitility.await;
+import static org.awaitility.Awaitility.await;
+import static com.jayway.jsonpath.matchers.JsonPathMatchers.withJsonPath;
+import static jakarta.ws.rs.core.Response.Status.OK;
 import static java.lang.ClassLoader.getSystemResourceAsStream;
 import static java.lang.String.format;
 import static java.util.UUID.randomUUID;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
+import static org.hamcrest.Matchers.notNullValue;
+import static uk.gov.justice.services.test.utils.core.http.RestPoller.poll;
+import static uk.gov.justice.services.test.utils.core.matchers.ResponsePayloadMatcher.payload;
+import static uk.gov.justice.services.test.utils.core.matchers.ResponseStatusMatcher.status;
 import static uk.gov.justice.services.test.utils.core.random.RandomGenerator.BOOLEAN;
 import static uk.gov.justice.services.test.utils.core.random.RandomGenerator.bigDecimal;
+import static uk.gov.moj.cpp.prosecution.casefile.helper.DefaultRequests.getCaseDetailsByProsecutionReferenceIdBuilder;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SELECTOR_INITIATE_APPLICATION_ACCEPTED;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.PROSECUTIONCASEFILE_EVENTS_SUBMIT_APPLICATION_VALIDATION_FAILED;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.NotifyStub.stubNotificationForEmail;
@@ -99,7 +106,7 @@ public class SubmitCCApplicationIT extends BaseIT {
 
     @Test
     public void shouldRaiseSubmitApplicationAcceptedWhenApiRequestMadeToSubmitCCApplicationWithPocaDetail() throws SQLException, FileServiceException {
-        stubForQueryApplication(UUID.fromString("381e06a5-14bb-4ae0-ac71-b7e63d52f3bb"));
+        stubForQueryApplication(applicationId);
         stubGetDocumentsTypeAccess("stub-data/referencedata.get-all-document-type-access.json");
         final String caseUrn = randomAlphanumeric(10);
         final UUID caseId = randomUUID();
@@ -134,7 +141,7 @@ public class SubmitCCApplicationIT extends BaseIT {
     }
 
     public void verifyNotificationNotifyAPICalled(final String url, final int expectedServiceCallCount) {
-        await().timeout(Duration.FIVE_SECONDS)
+        await().timeout(Durations.FIVE_SECONDS)
                 .pollInterval(100, TimeUnit.MILLISECONDS)
                 .pollDelay(50, TimeUnit.MILLISECONDS)
                 .until(
@@ -213,6 +220,7 @@ public class SubmitCCApplicationIT extends BaseIT {
 
     private String replaceValues(final String payload ,final String caseUrn, final UUID pocaFileId ) {
         return payload
+                .replaceAll("APPLICATION_ID", this.applicationId.toString())
                 .replaceAll("POCA_FILE_ID", pocaFileId.toString())
                 .replaceAll("SOME-RANDOM-APP-CODE", applicationTypeCode)
                 .replaceAll("APPLICATION_DUE_DATE", LocalDate.now().plusDays(2).toString())
@@ -235,9 +243,17 @@ public class SubmitCCApplicationIT extends BaseIT {
                         CoreMatchers.is(1));
 
         sendProgressionCaseCreatedPublicEvent(caseId);
+        waitForCaseInViewstore(caseUrn);
     }
 
     private void sendProgressionCaseCreatedPublicEvent(final UUID caseId) {
         sendPublicEvent(EventSelector.PUBLIC_PROGRESSION_CASE_CREATED_EVENT, "stub-data/public.progression.prosecution-case-created.json", caseId.toString());
+    }
+
+    private void waitForCaseInViewstore(final String caseUrn) {
+        poll(getCaseDetailsByProsecutionReferenceIdBuilder(caseUrn))
+                .timeout(30L, TimeUnit.SECONDS)
+                .pollInterval(1L, TimeUnit.SECONDS)
+                .until(status().is(OK), payload().isJson(withJsonPath("$.caseId", notNullValue())));
     }
 }

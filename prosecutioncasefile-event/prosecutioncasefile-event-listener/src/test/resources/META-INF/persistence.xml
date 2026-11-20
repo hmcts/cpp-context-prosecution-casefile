@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+
+    <!-- Same Hibernate merge settings as the production persistence unit: no entity_copy_observer override -->
+    <persistence-unit name="prosecutioncasefile-listener-test-persistence-unit" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.AddressDetails</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.AlcoholOffenceDetail</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.BusinessValidationErrorCaseDetails</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.BusinessValidationErrorDetails</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.BusinessValidationErrorSummary</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.CPRDetails</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.CaseDetails</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.CivilFees</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.ContactDetails</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.DefendantDetails</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.DefendantLegacy</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.DefendantOffenderDetails</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.Hearing</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.IndividualAliasDetail</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.OffenceDetails</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.OffenceLegacy</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.OrganisationInformationDetails</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.PersonalInformationDetails</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.ResolvedCases</class>
+        <class>uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.SelfDefinedInformationDetails</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <properties>
+            <property name="jakarta.persistence.jdbc.driver" value="org.h2.Driver"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:h2:mem:prosecutioncasefilelistenertest;DB_CLOSE_DELAY=-1;NON_KEYWORDS=VALUE"/>
+            <property name="jakarta.persistence.jdbc.user" value="sa"/>
+            <property name="jakarta.persistence.jdbc.password" value=""/>
+            <property name="hibernate.hbm2ddl.auto" value="create"/>
+            <property name="hibernate.show_sql" value="false"/>
+        </properties>
+    </persistence-unit>
+</persistence>

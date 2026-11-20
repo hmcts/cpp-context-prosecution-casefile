@@ -6,17 +6,44 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.deltaspike.data.api.EntityRepository;
-import org.apache.deltaspike.data.api.Query;
-import org.apache.deltaspike.data.api.QueryParam;
-import org.apache.deltaspike.data.api.Repository;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
-@Repository
-public interface CaseDetailsRepository extends EntityRepository<CaseDetails, UUID> {
+@ApplicationScoped
+public class CaseDetailsRepository {
 
-    @Query(value = "FROM CaseDetails cd WHERE cd.prosecutionCaseReference = :prosecutionCaseReference")
-    CaseDetails findCaseDetailsByProsecutionCaseReference(@QueryParam("prosecutionCaseReference") final String prosecutionCaseReference);
+    @PersistenceContext(unitName = "prosecutioncasefile-persistence-unit")
+    EntityManager entityManager;
 
-    @Query(value = "FROM CaseDetails cd WHERE cd.prosecutionCaseReference in (:prosecutionCaseReferences) ")
-    List<CaseDetails> findAllCaseDetailsByProsecutionCaseReferences(@QueryParam("prosecutionCaseReferences") final Collection<String> caseIds);
+    public CaseDetails findBy(final UUID id) {
+        return entityManager.find(CaseDetails.class, id);
+    }
+
+    public CaseDetails findCaseDetailsByProsecutionCaseReference(
+            final String prosecutionCaseReference) {
+        return entityManager.createQuery(
+                        "SELECT cd FROM CaseDetails cd WHERE cd.prosecutionCaseReference = :prosecutionCaseReference",
+                        CaseDetails.class)
+                .setParameter("prosecutionCaseReference", prosecutionCaseReference)
+                .getSingleResult();
+    }
+
+    public List<CaseDetails> findAllCaseDetailsByProsecutionCaseReferences(
+            final Collection<String> prosecutionCaseReferences) {
+        return entityManager.createQuery(
+                        "SELECT cd FROM CaseDetails cd WHERE cd.prosecutionCaseReference IN :prosecutionCaseReferences",
+                        CaseDetails.class)
+                .setParameter("prosecutionCaseReferences", prosecutionCaseReferences)
+                .getResultList();
+    }
+
+    public CaseDetails save(final CaseDetails entity) {
+        return entityManager.merge(entity);
+    }
+
+    public void remove(final CaseDetails entity) {
+        final CaseDetails managed = entityManager.contains(entity) ? entity : entityManager.merge(entity);
+        entityManager.remove(managed);
+    }
 }

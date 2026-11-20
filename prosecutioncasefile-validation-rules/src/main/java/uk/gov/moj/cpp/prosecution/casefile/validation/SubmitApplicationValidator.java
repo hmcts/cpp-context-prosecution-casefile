@@ -4,8 +4,8 @@ import uk.gov.moj.cpp.prosecution.casefile.application.json.schemas.SubmitApplic
 import uk.gov.moj.cpp.prosecution.casefile.domain.AdditionalInformation;
 import uk.gov.moj.cpp.prosecution.casefile.validation.rules.SubmitApplicationValidationRule;
 
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
+import jakarta.enterprise.inject.Instance;
+import jakarta.inject.Inject;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;

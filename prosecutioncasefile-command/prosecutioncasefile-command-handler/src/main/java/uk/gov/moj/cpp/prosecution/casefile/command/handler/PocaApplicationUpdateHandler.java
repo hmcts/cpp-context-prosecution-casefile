@@ -12,7 +12,7 @@ import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.moj.cpp.prosecution.casefile.aggregate.ApplicationAggregate;
 import uk.gov.moj.cps.prosecutioncasefile.command.handler.PocaCourtApplication;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import static java.util.Objects.nonNull;
 import static uk.gov.justice.services.core.annotation.Component.COMMAND_HANDLER;

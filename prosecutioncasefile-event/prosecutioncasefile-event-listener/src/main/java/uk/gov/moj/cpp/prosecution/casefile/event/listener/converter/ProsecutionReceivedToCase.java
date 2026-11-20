@@ -8,7 +8,7 @@ import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.CaseDetails;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.CivilFees;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.DefendantDetails;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import java.util.List;
 import java.util.Set;

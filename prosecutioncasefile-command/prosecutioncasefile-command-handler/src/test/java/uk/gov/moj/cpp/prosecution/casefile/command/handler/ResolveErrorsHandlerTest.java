@@ -27,8 +27,8 @@ import java.util.Collections;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import javax.enterprise.inject.Instance;
-import javax.json.JsonObject;
+import jakarta.enterprise.inject.Instance;
+import jakarta.json.JsonObject;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

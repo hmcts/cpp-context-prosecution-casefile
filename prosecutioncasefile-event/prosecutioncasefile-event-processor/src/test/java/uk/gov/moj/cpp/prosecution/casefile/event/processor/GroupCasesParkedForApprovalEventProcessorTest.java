@@ -2,6 +2,9 @@ package uk.gov.moj.cpp.prosecution.casefile.event.processor;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
@@ -20,6 +23,7 @@ import uk.gov.moj.cpp.prosecution.casefile.event.GroupCasesParkedForApproval;
 import uk.gov.moj.cpp.prosecution.casefile.event.processor.converter.GroupCasesParkedForApprovalToCourtApplicationProceedingsConverter;
 import uk.gov.moj.cpp.prosecution.casefile.event.processor.service.DocumentGeneratorService;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseDetails;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Defendant;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.GroupProsecution;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Individual;
@@ -27,8 +31,11 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Offence;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.OffenceReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.PersonalInformation;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecutor;
+import uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicGroupParkedForSummonsApplicationApproval;
 
 import java.time.LocalDate;
+import java.util.UUID;
+import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -45,6 +52,10 @@ import static uk.gov.justice.services.test.utils.core.messaging.MetadataBuilderF
 import static uk.gov.moj.cpp.prosecution.casefile.event.processor.GroupCasesParkedForApprovalEventProcessor.PROGRESSION_COMMAND_ADD_COURT_DOCUMENT;
 import static uk.gov.moj.cpp.prosecution.casefile.event.processor.GroupCasesParkedForApprovalEventProcessor.PROGRESSION_COMMAND_INITIATE_COURT_PROCEEDINGS_FOR_APPLICATION;
 import static uk.gov.moj.cpp.prosecution.casefile.event.processor.GroupCasesParkedForApprovalEventProcessor.PROSECUTIONCASEFILE_COMMAND_RECORD_GROUP_ID_FOR_SUMMONS_APPLICATION;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CIVIL;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CPPI;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.MCC;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.SPI;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -96,14 +107,69 @@ public class GroupCasesParkedForApprovalEventProcessorTest {
 
     }
 
+    @Test
+    void shouldEmitPublicEventWhenGroupCasesParkedForApprovalIsForCivilChannel() {
+        final UUID groupId = randomUUID();
+        final UUID externalId = randomUUID();
+        final GroupCasesParkedForApproval groupCasesParkedForApproval = createGroupCasesParkedForApproval(groupId, CIVIL, externalId);
+
+        final Envelope<GroupCasesParkedForApproval> requestEnvelope = envelopeFrom(
+                metadataWithRandomUUID("prosecutioncasefile.events.group-cases-parked-for-approval"),
+                groupCasesParkedForApproval);
+
+        final InitiateCourtApplicationProceedings initiateCourtApplicationProceedings = createInitiateCourtApplicationProceedings();
+
+        when(converter.convert(eq(groupCasesParkedForApproval), any())).thenReturn(initiateCourtApplicationProceedings);
+        when(documentGeneratorService.generateGroupCasesSummonsDocument(any(), any(), any())).thenReturn("FileName");
+        groupCasesParkedForApprovalEventProcessor.handleGroupCasesParkedForApproval(requestEnvelope);
+
+        verify(sender, times(4)).send(senderArgCaptor.capture());
+
+        final Envelope<Object> publicEventEnvelope = senderArgCaptor.getAllValues().get(3);
+        assertThat(publicEventEnvelope.metadata().name(), is("public.prosecutioncasefile.group-parked-for-summons-application-approval"));
+        final PublicGroupParkedForSummonsApplicationApproval publicGroupParkedForSummonsApplicationApproval = (PublicGroupParkedForSummonsApplicationApproval) publicEventEnvelope.payload();
+        assertThat(publicGroupParkedForSummonsApplicationApproval.getGroupId(), is(groupId));
+        assertThat(publicGroupParkedForSummonsApplicationApproval.getApplicationId(), is(groupCasesParkedForApproval.getApplicationId()));
+        assertThat(publicGroupParkedForSummonsApplicationApproval.getExternalId(), is(externalId));
+        assertThat(publicGroupParkedForSummonsApplicationApproval.getChannel(), is(CIVIL));
+    }
+
+    public static Stream<Arguments> nonCivilChannels() {
+        return Stream.of(
+                Arguments.of(MCC),
+                Arguments.of(CPPI),
+                Arguments.of(SPI)
+        );
+    }
+
+    @MethodSource("nonCivilChannels")
+    @ParameterizedTest
+    void shouldNotEmitPublicEventWhenGroupCasesParkedForApprovalIsForNonCivilChannel(final Channel channel) {
+        final GroupCasesParkedForApproval groupCasesParkedForApproval = createGroupCasesParkedForApproval(randomUUID(), channel, randomUUID());
+
+        final Envelope<GroupCasesParkedForApproval> requestEnvelope = envelopeFrom(
+                metadataWithRandomUUID("prosecutioncasefile.events.group-cases-parked-for-approval"),
+                groupCasesParkedForApproval);
+
+        final InitiateCourtApplicationProceedings initiateCourtApplicationProceedings = createInitiateCourtApplicationProceedings();
+
+        when(converter.convert(eq(groupCasesParkedForApproval), any())).thenReturn(initiateCourtApplicationProceedings);
+        when(documentGeneratorService.generateGroupCasesSummonsDocument(any(), any(), any())).thenReturn("FileName");
+        groupCasesParkedForApprovalEventProcessor.handleGroupCasesParkedForApproval(requestEnvelope);
+
+        verify(sender, times(3)).send(senderArgCaptor.capture());
+    }
+
     private static GroupCasesParkedForApproval createGroupCasesParkedForApproval() {
-        return GroupCasesParkedForApproval.groupCasesParkedForApproval()
-                .withApplicationId(randomUUID())
-                .withGroupProsecutionList(new GroupProsecutionList(asList(
+        return createGroupCasesParkedForApproval(randomUUID(), null, null);
+    }
+
+    private static GroupCasesParkedForApproval createGroupCasesParkedForApproval(final UUID groupId, final Channel channel, final UUID externalId) {
+        final GroupProsecutionList groupProsecutionList = new GroupProsecutionList(asList(
                         new GroupProsecutionWithReferenceData(
                                 GroupProsecution.groupProsecution()
                                         .withIsGroupMaster(true)
-                                        .withGroupId(randomUUID())
+                                        .withGroupId(groupId)
                                         .withPaymentReference("PAYMENTREF")
                                         .withCaseDetails(CaseDetails.caseDetails()
                                                 .withCaseId(randomUUID())
@@ -129,7 +195,13 @@ public class GroupCasesParkedForApprovalEventProcessorTest {
                                                                 .build())
                                                         .build()))
                                                 .build()))
-                        .build()))))
+                        .build())));
+        groupProsecutionList.setExternalId(externalId);
+        groupProsecutionList.setChannel(channel);
+
+        return GroupCasesParkedForApproval.groupCasesParkedForApproval()
+                .withApplicationId(randomUUID())
+                .withGroupProsecutionList(groupProsecutionList)
                 .build();
     }
 

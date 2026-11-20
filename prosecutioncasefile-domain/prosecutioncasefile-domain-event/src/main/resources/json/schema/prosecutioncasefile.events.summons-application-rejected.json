@@ -19,6 +19,14 @@
     },
     "summonsRejectedOutcome": {
       "$ref": "http://justice.gov.uk/core/courts/summonsRejectedOutcome.json"
+    },
+    "channel": {
+      "type": "string",
+      "$ref": "http://cpp.moj.gov.uk/prosecution/casefile/json/schemas/pcf-definitions.json#/definitions/channel"
+    },
+    "externalId": {
+      "$ref": "http://justice.gov.uk/domain/core/common/definitions.json#/definitions/uuid",
+      "description": "ID originating from the client for referencing the original message"
     }
   },
   "required": [

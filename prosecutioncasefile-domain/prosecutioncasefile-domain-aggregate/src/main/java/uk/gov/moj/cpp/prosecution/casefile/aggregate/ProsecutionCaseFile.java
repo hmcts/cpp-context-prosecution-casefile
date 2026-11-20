@@ -45,6 +45,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.event.CcCaseReceived.ccCaseRec
 import static uk.gov.moj.cpp.prosecution.casefile.event.CcCaseReceivedWithWarnings.ccCaseReceivedWithWarnings;
 import static uk.gov.moj.cpp.prosecution.casefile.event.DefendantsParkedForSummonsApplicationApproval.defendantsParkedForSummonsApplicationApproval;
 import static uk.gov.moj.cpp.prosecution.casefile.event.ProsecutionDefendantsAdded.prosecutionDefendantsAdded;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseProblem.caseProblem;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CIVIL;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CPPI;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.MCC;
@@ -59,6 +60,8 @@ import static uk.gov.moj.cpp.prosecution.casefile.validation.provider.CcProsecut
 import static uk.gov.moj.cpp.prosecution.casefile.validation.provider.CcProsecutionValidationRuleProvider.getDefendantValidationRules;
 import static uk.gov.moj.cpp.prosecution.casefile.validation.provider.SjpProsecutionWarningRuleProvider.getWarningRules;
 import static uk.gov.moj.cps.prosecutioncasefile.domain.event.BulkscanMaterialRejected.bulkscanMaterialRejected;
+import static uk.gov.moj.cps.prosecutioncasefile.domain.event.CaseCreatedSuccessfully.caseCreatedSuccessfully;
+import static uk.gov.moj.cps.prosecutioncasefile.domain.event.CaseCreatedSuccessfullyWithWarnings.caseCreatedSuccessfullyWithWarnings;
 import static uk.gov.moj.cps.prosecutioncasefile.domain.event.CcProsecutionRejected.ccProsecutionRejected;
 import static uk.gov.moj.cps.prosecutioncasefile.domain.event.IdpcDefendantMatched.idpcDefendantMatched;
 import static uk.gov.moj.cps.prosecutioncasefile.domain.event.IdpcMaterialReceived.idpcMaterialReceived;
@@ -103,6 +106,7 @@ import uk.gov.moj.cpp.prosecution.casefile.event.SjpCaseUnAssigned;
 import uk.gov.moj.cpp.prosecution.casefile.event.SjpValidationFailed;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.AddMaterialSubmissionV2;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseDetails;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseProblem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CmsDocumentIdentifier;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CourtDocument;
@@ -134,6 +138,7 @@ import uk.gov.moj.cps.prosecutioncasefile.domain.event.CaseDocumentReviewRequire
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.CaseFiltered;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.CaseReferredToCourtRecorded;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.CaseUpdatedWithDefendant;
+import uk.gov.moj.cps.prosecutioncasefile.domain.event.CcProsecutionRejected;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.DefendantsReceivedNotAdded;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.DocumentType;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.GroupIdRecordedForSummonsApplication;
@@ -220,6 +225,7 @@ public class ProsecutionCaseFile implements Aggregate {
     private List<Defendant> rejectedApplicationDefendants = new ArrayList<>();
     private List<Problem> warnings = new ArrayList<>();
     private List<DefendantProblem> defendantWarnings = new ArrayList<>();
+    private List<CaseProblem> civilCaseWarnings = new ArrayList<>();
     private final Map<String, UUID> validDefendantIds = new HashMap<>();
     private CaseDetails caseDetails;
     private boolean caseReferredToCourt;
@@ -272,12 +278,11 @@ public class ProsecutionCaseFile implements Aggregate {
         defendantsWithReferenceData.setReferenceDataVO(referenceDataVO);
         defendantRefDataEnrichers.forEach(x -> x.enrich(defendantsWithReferenceData));
         final List<Problem> caseProblems = validate(prosecutionWithReferenceData, referenceDataQueryService, getCaseValidationRules(caseInitiationCode));
-
-        if (this.prosecutionReceived  || summonsApplicationAlreadyExistsForUrn()) {
+        if (this.prosecutionReceived || summonsApplicationAlreadyExistsForUrn()) {
             caseProblems.add(newProblem(DUPLICATED_PROSECUTION, "urn", prosecution.getCaseDetails().getProsecutorCaseReference()));
         }
         final Boolean isCivil = prosecution.getIsCivil();
-        final List<Problem> defendantProblems = validate(defendantWithReferenceData, referenceDataQueryService, getDefendantValidationRules(caseInitiationCode, prosecutionChannel,isCivil));
+        final List<Problem> defendantProblems = validate(defendantWithReferenceData, referenceDataQueryService, getDefendantValidationRules(caseInitiationCode, prosecutionChannel,isCivil, Boolean.FALSE));
         final List<Problem> rejections = newArrayList(concat(caseProblems, defendantProblems));
         if (!rejections.isEmpty()) {
             builder.accept(new SjpProsecutionRejected(rejections, prosecutionWithReferenceData.getExternalId(), prosecution));
@@ -509,7 +514,7 @@ public class ProsecutionCaseFile implements Aggregate {
 
         final Boolean isCivil = Optional.ofNullable(receivedProsecutionWithReferenceData.getProsecution().getIsCivil()).orElse(false);
 
-        final List<Problem> caseProblems = validate(prosecutionWithReferenceData, referenceDataQueryService, getCaseValidationRules(receivedInitiationCode));
+        final List<Problem> caseProblems = validate(prosecutionWithReferenceData, referenceDataQueryService, getCaseValidationRules(receivedInitiationCode, isCivil));
         boolean isMCCWithListNewHearing = MCC.equals(prosecutionChannel) && Objects.nonNull(prosecutionWithReferenceData.getProsecution().getListNewHearing());
 
         //ACTIVE // INACTIVE
@@ -520,7 +525,7 @@ public class ProsecutionCaseFile implements Aggregate {
                                 .filter(status -> MigrationCaseStatus.INACTIVE == status)
                                 .isPresent();
 
-        final List<DefendantProblem> defendantErrors = validateDefendantErrors(prosecution.getCaseDetails(), prosecutionChannel, defendantsWithReferenceData, referenceDataQueryService, builder, Boolean.FALSE, isMCCWithListNewHearing,isStandaloneCaseWithoutHearing, isCivil);
+        final List<DefendantProblem> defendantErrors = validateDefendantErrors(prosecution.getCaseDetails(), prosecutionChannel, defendantsWithReferenceData, referenceDataQueryService, builder, isMCCWithListNewHearing,isStandaloneCaseWithoutHearing, isCivil, Boolean.FALSE);
 
         if ((messageFromCppiOrMccOrCivil && prosecutionReceived) || summonsApplicationAlreadyExistsForUrn()) {
             caseProblems.add(newProblem(DUPLICATED_PROSECUTION, "urn", prosecution.getCaseDetails().getProsecutorCaseReference()));
@@ -539,12 +544,31 @@ public class ProsecutionCaseFile implements Aggregate {
             return apply(builder.add(buildCaseValidationFailedEvent(prosecution, externalId, caseProblems, defendantsWithReferenceData)).build());
         }
 
-        return apply(builder.add(ccProsecutionRejected()
-                        .withCaseErrors(caseProblems)
-                        .withProsecution(prosecution)
-                        .withDefendantErrors(defendantErrors)
-                        .withExternalId(externalId).build())
+        final CcProsecutionRejected.Builder ccProsecutionRejectedBuilder = ccProsecutionRejected()
+                .withProsecution(prosecution)
+                .withDefendantErrors(defendantErrors)
+                .withExternalId(externalId);
+
+        if (isCivil && CIVIL.equals(prosecutionChannel)) {
+            ccProsecutionRejectedBuilder.withCivilCaseErrors(toCivilCaseErrors(caseProblems, prosecution.getCaseDetails().getProsecutorCaseReference()));
+        } else {
+            ccProsecutionRejectedBuilder.withCaseErrors(caseProblems);
+        }
+
+        return apply(builder.add(ccProsecutionRejectedBuilder.build())
                 .build());
+    }
+
+    private static List<CaseProblem> toCivilCaseErrors(final List<Problem> caseProblems, final String prosecutorCaseReference) {
+        final List<CaseProblem> civilCaseErrors = new ArrayList<>();
+        if (isEmpty(caseProblems)) {
+            return civilCaseErrors;
+        }
+        civilCaseErrors.add(caseProblem()
+                .withProblems(caseProblems)
+                .withProsecutorCaseReference(prosecutorCaseReference)
+                .build());
+        return civilCaseErrors;
     }
 
     private boolean summonsApplicationAlreadyExistsForUrn() {
@@ -760,7 +784,7 @@ public class ProsecutionCaseFile implements Aggregate {
         final Prosecution prosecution = prosecutionWithReferenceData.getProsecution();
         final String incomingInitiationCode = prosecution.getCaseDetails().getInitiationCode();
         final Channel prosecutionChannel = prosecution.getChannel();
-        final List<DefendantProblem> defendantWarningsForIncomingMessage = prosecutionChannel == SPI ? List.of() : validateDefendantWarnings(defendantsWithReferenceData, incomingInitiationCode);
+        final List<DefendantProblem> defendantWarningsForIncomingMessage = prosecutionChannel == SPI ? List.of() : validateDefendantWarnings(defendantsWithReferenceData, incomingInitiationCode, prosecutionChannel);
 
         if (incomingInitiationCode.equals(SUMMONS_INITIATION_CODE)) {
             return apply(builder.add(defendantsParkedForSummonsApplicationApproval()
@@ -791,7 +815,7 @@ public class ProsecutionCaseFile implements Aggregate {
     }
 
     private Stream<Object> addDefendants(final UUID caseId, final UUID externalId, final DefendantsWithReferenceData defendantsWithReferenceData, List<DefendantProblem> defendantProblemList, final Builder<Object> builder) {
-        final List<DefendantProblem> defendantWarningsList = channel == CPPI ? validateDefendantWarnings(defendantsWithReferenceData, this.caseDetails.getInitiationCode()) : null;
+        final List<DefendantProblem> defendantWarningsList = channel == CPPI ? validateDefendantWarnings(defendantsWithReferenceData, this.caseDetails.getInitiationCode(), channel) : null;
         final List<Defendant> validDefendantList = channel == SPI ? validDefendants(defendantsWithReferenceData, defendantProblemList) : defendantsWithReferenceData.getDefendants();
         final String initiationCodeForSameCaseWithNewDefendant = defendantsWithReferenceData.getCaseDetails().getInitiationCode();
         if (!validDefendantList.isEmpty()) {
@@ -844,7 +868,7 @@ public class ProsecutionCaseFile implements Aggregate {
 
     public Stream<Object> addErrorCorrectedDefendantsForSPI(final UUID caseId, final UUID externalId, final DefendantsWithReferenceData defendantsWithReferenceData, final ReferenceDataQueryService referenceDataQueryService,final Boolean isCivil) {
         final Builder<Object> builder = builder();
-        final List<DefendantProblem> defendantErrors = validateDefendantErrors(this.caseDetails, SPI, defendantsWithReferenceData, referenceDataQueryService, builder, Boolean.FALSE, false, false,isCivil);
+        final List<DefendantProblem> defendantErrors = validateDefendantErrors(this.caseDetails, SPI, defendantsWithReferenceData, referenceDataQueryService, builder, false, false,isCivil, Boolean.FALSE);
         return addDefendants(caseId, externalId, defendantsWithReferenceData, defendantErrors, builder);
     }
 
@@ -864,7 +888,26 @@ public class ProsecutionCaseFile implements Aggregate {
             final UUID externalId = getExternalIdFromDefendantIds(defendantIds);
 
             if (this.caseType.equals(CC)) {
-                builder.accept(this.warnings.isEmpty() ? new CaseCreatedSuccessfully(caseId, this.channel, externalId) : new CaseCreatedSuccessfullyWithWarnings(caseId, EMPTY_LIST, this.channel, this.defendantWarnings, externalId, this.warnings));
+                // Channel-only guard (no isCivil flag available here, unlike the civilCaseErrors guard above) —
+                // whoever adds the rule that populates civilCaseWarnings should confirm this is still sufficient.
+                // currently there are no casewarnings for criminal or civil hence all caseWarnings lists will be empty.
+                final List<CaseProblem> civilCaseWarningsForEvent = CIVIL.equals(this.channel) ? this.civilCaseWarnings : EMPTY_LIST;
+
+                builder.accept(this.warnings.isEmpty()
+                        ? caseCreatedSuccessfully()
+                                .withCaseId(caseId)
+                                .withChannel(this.channel)
+                                .withExternalId(externalId)
+                                .build()
+                        : caseCreatedSuccessfullyWithWarnings()
+                                .withCaseId(caseId)
+                                .withCaseWarnings(EMPTY_LIST)
+                                .withChannel(this.channel)
+                                .withCivilCaseWarnings(civilCaseWarningsForEvent)
+                                .withDefendantWarnings(this.defendantWarnings)
+                                .withExternalId(externalId)
+                                .withWarnings(this.warnings)
+                                .build());
             } else {
                 builder.accept(this.warnings.isEmpty() ? new SjpCaseCreatedSuccessfully(caseId, this.channel, externalId) : new SjpCaseCreatedSuccessfullyWithWarnings(caseId, this.channel, externalId, this.warnings));
             }
@@ -1870,6 +1913,8 @@ public class ProsecutionCaseFile implements Aggregate {
                 .withApplicationId(summonsApplicationRejectedDetails.getApplicationId())
                 .withDefendantIds(defendantIds)
                 .withSummonsRejectedOutcome(summonsApplicationRejectedDetails.getSummonsRejectedOutcome())
+                .withChannel(this.channel)
+                .withExternalId(getExternalIdFromDefendantIds(defendantIds))
                 .build()
         );
 
@@ -1881,6 +1926,7 @@ public class ProsecutionCaseFile implements Aggregate {
                             .withChannel(this.channel)
                             .withDefendants(rejectedDefendants).build())
                     .withCaseErrors(ImmutableList.of(newProblem(SUMMONS_APPLICATION_REJECTED, "rejectionReasons", summonsApplicationRejectedDetails.getSummonsRejectedOutcome().getReasons())))
+                    .withExternalId(getExternalIdFromDefendantIds(defendantIds))
                     .build()
             );
         }

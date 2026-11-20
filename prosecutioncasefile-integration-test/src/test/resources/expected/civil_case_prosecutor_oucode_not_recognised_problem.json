@@ -1,10 +1,15 @@
 [
   {
-    "code": "PROSECUTOR_OUCODE_NOT_RECOGNISED",
-    "values": [
+    "prosecutorCaseReference": "CASE-URN",
+    "problems": [
       {
-        "key": "prosecutingAuthority",
-        "value": "123"
+        "code": "PROSECUTOR_OUCODE_NOT_RECOGNISED",
+        "values": [
+          {
+            "key": "prosecutingAuthority",
+            "value": "123"
+          }
+        ]
       }
     ]
   }

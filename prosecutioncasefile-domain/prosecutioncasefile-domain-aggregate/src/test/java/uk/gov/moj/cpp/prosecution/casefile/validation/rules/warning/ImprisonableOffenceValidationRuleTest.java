@@ -64,12 +64,28 @@ public class ImprisonableOffenceValidationRuleTest {
         ));
     }
 
+    @Test
+    public void shouldNotReturnProblemWhenModeOfTrialIsNullOrEmptyOrBlank() {
+        final ValidationResult validationResult = ImprisonableOffenceValidationRule.INSTANCE.validate(
+                getProsecutionWithMultiOffences(asList(of("CODE5"), of("CODE6"), of("CODE7"))), getReferenceDataContextWithMissingModeOfTrial());
+
+        assertThat(validationResult.isValid(), is(true));
+    }
+
     private ReferenceDataValidationContext getArbitraryReferenceDataContext() {
         return withOffenceCodeReferenceDataOnly(asList(
                 offenceReferenceData().withCjsOffenceCode("CODE1").withModeOfTrial("STRAFF").build(),
                 offenceReferenceData().withCjsOffenceCode("CODE2").withModeOfTrial("SNONIMP").build(),
                 offenceReferenceData().withCjsOffenceCode("CODE3").withModeOfTrial("SIMP").build(),
                 offenceReferenceData().withCjsOffenceCode("CODE4").withModeOfTrial("SIMP").build()
+        ));
+    }
+
+    private ReferenceDataValidationContext getReferenceDataContextWithMissingModeOfTrial() {
+        return withOffenceCodeReferenceDataOnly(asList(
+                offenceReferenceData().withCjsOffenceCode("CODE5").build(),
+                offenceReferenceData().withCjsOffenceCode("CODE6").withModeOfTrial("").build(),
+                offenceReferenceData().withCjsOffenceCode("CODE7").withModeOfTrial("   ").build()
         ));
     }
 

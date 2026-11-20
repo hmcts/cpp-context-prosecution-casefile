@@ -4,6 +4,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.UUID.randomUUID;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.verify;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;
@@ -17,6 +18,7 @@ import static uk.gov.moj.cps.prosecutioncasefile.domain.event.CaseCreatedSuccess
 import uk.gov.justice.services.core.sender.Sender;
 import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.justice.services.messaging.Metadata;
+import uk.gov.moj.cpp.prosecution.casefile.json.schemas.CaseProblem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.DefendantProblem;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Problem;
@@ -47,6 +49,7 @@ public class CaseCreatedEventProcessorTest {
     private static final String CIVIL_PROSECUTION_SUBMISSION_SUCCEEDED = "public.prosecutioncasefile.civil.prosecution-submission-succeeded";
     private static final String PROSECUTION_SUBMISSION_SUCCEEDED_WITH_WARNINGS = "public.prosecutioncasefile.prosecution-submission-succeeded-with-warnings";
     private static final String DEFENDANT_REFERENCE = "TF12345";
+    private static final String PROSECUTOR_CASE_REFERENCE = "TEST-CASE-REF";
     private final static String PROBLEM_VALUE_KEY_1 = "daysOverdue";
     private final static String PROBLEM_VALUE_KEY_2 = "daysOverdue";
     private final static String PROBLEM_VALUE_1 = "4";
@@ -124,6 +127,28 @@ public class CaseCreatedEventProcessorTest {
         assertThat(payload.getDefendantWarnings().get(0).getProsecutorDefendantReference(), is(DEFENDANT_REFERENCE));
         assertThat(payload.getExternalId(), is(envelope.payload().getExternalId()));
         assertThat(payload.getChannel(), is(CHANNEL));
+        assertThat(payload.getCivilCaseWarnings(), hasSize(1));
+        assertThat(payload.getCivilCaseWarnings(), is(envelope.payload().getCivilCaseWarnings()));
+    }
+
+    @Test
+    public void shouldEmitSameEventNameAndPropagateCivilCaseWarningsForCivilChannelOnProsecutionCreatedWithWarnings() {
+        // handleProsecutionCreatedWithWarnings has no channel branch (unlike its non-warnings sibling) —
+        // this pins that a CIVIL-channel case still gets the one shared event name, with civilCaseWarnings passed through.
+        final UUID id = randomUUID();
+        final Envelope<CaseCreatedSuccessfullyWithWarnings> envelope = buildCaseCreatedSuccessfullyWithWarningsEnvelope(id, CIVIL);
+
+        caseCreatedEventProcessor.handleProsecutionCreatedWithWarnings(envelope);
+
+        verify(sender).send(captorWithWarnings.capture());
+
+        final Envelope<ProsecutionSubmissionSucceededWithWarnings> receivedEnvelope = captorWithWarnings.getValue();
+        final ProsecutionSubmissionSucceededWithWarnings payload = receivedEnvelope.payload();
+        assertThat(receivedEnvelope.metadata().name(), is(PROSECUTION_SUBMISSION_SUCCEEDED_WITH_WARNINGS));
+        assertThat(payload.getCaseId(), is(id));
+        assertThat(payload.getChannel(), is(CIVIL));
+        assertThat(payload.getCivilCaseWarnings(), hasSize(1));
+        assertThat(payload.getCivilCaseWarnings(), is(envelope.payload().getCivilCaseWarnings()));
     }
 
     private Envelope<CaseCreatedSuccessfully> buildCaseCreatedSuccessfullyEnvelope(final UUID generatedRandomUUID) {
@@ -157,6 +182,10 @@ public class CaseCreatedEventProcessorTest {
     }
 
     private Envelope<CaseCreatedSuccessfullyWithWarnings> buildCaseCreatedSuccessfullyWithWarningsEnvelope(final UUID generatedRandomUUID) {
+        return buildCaseCreatedSuccessfullyWithWarningsEnvelope(generatedRandomUUID, CHANNEL);
+    }
+
+    private Envelope<CaseCreatedSuccessfullyWithWarnings> buildCaseCreatedSuccessfullyWithWarningsEnvelope(final UUID generatedRandomUUID, final Channel channel) {
         final Metadata metadata = metadataBuilder()
                 .withName(CASE_CREATED_SUCCESSFULLY_WITH_WARNINGS)
                 .withId(randomUUID())
@@ -168,11 +197,19 @@ public class CaseCreatedEventProcessorTest {
                         .withProblems(getProblems())
                         .withProsecutorDefendantReference(DEFENDANT_REFERENCE)
                         .build()))
+                .withCivilCaseWarnings(getCivilCaseWarnings())
                 .withExternalId(randomUUID())
-                .withChannel(CHANNEL)
+                .withChannel(channel)
                 .build();
 
         return envelopeFrom(metadata, caseCreatedSuccessfullyWithWarnings);
+    }
+
+    private List<CaseProblem> getCivilCaseWarnings() {
+        return singletonList(CaseProblem.caseProblem()
+                .withProsecutorCaseReference(PROSECUTOR_CASE_REFERENCE)
+                .withProblems(getProblems())
+                .build());
     }
 
     private List<Problem> getProblems() {

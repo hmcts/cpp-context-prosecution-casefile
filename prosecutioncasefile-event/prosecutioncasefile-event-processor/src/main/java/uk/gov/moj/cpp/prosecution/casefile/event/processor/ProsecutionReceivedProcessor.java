@@ -5,6 +5,7 @@ import static uk.gov.justice.services.core.enveloper.Enveloper.envelop;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;
 import static uk.gov.justice.services.messaging.JsonEnvelope.envelopeFrom;
 import static uk.gov.justice.services.messaging.JsonEnvelope.metadataFrom;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CIVIL;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.MCC;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.SPI;
 import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.DefenceCaseDetails.defenceCaseDetails;
@@ -12,6 +13,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecutor.prosec
 import static uk.gov.moj.cps.prosecutioncasefile.command.handler.AcceptCase.acceptCase;
 import static uk.gov.moj.cps.prosecutioncasefile.domain.event.CcCaseReceived.ccCaseReceived;
 import static uk.gov.moj.cps.prosecutioncasefile.domain.event.ManualCaseReceived.manualCaseReceived;
+import static uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicSubmissionApproved.publicSubmissionApproved;
 
 import uk.gov.justice.core.courts.InitiateCourtProceedings;
 import uk.gov.justice.services.common.converter.ObjectToJsonObjectConverter;
@@ -34,6 +36,7 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecution;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ProsecutorsReferenceData;
 import uk.gov.moj.cps.prosecutioncasefile.command.handler.AcceptCase;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.ManualCaseReceived;
+import uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicSubmissionApproved;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.ValidationCompleted;
 
 import java.util.List;
@@ -52,6 +55,8 @@ public class ProsecutionReceivedProcessor {
     private static final String PROGRESSION_INITIATE_COURT_PROCEEDINGS = "progression.initiate-court-proceedings";
     private static final String PROSECUTIONCASEFILE_HANDLER_CASE_UPDATED_INITIATE_IDPC_MATCH = "prosecutioncasefile.handler.case-updated-initiate-idpc-match";
     private static final String PUBLIC_PROSECUTIONCASEFILE_CC_CASE_RECEIVED = "public.prosecutioncasefile.cc-case-received";
+    private static final String PUBLIC_EVENT_PROSECUTIONCASEFILE_SUBMISSION_APPROVED = "public.prosecutioncasefile.submission-approved";
+    private static final String SUMMONS_INITIATION_CODE = "S";
 
     @Inject
     private Sender sender;
@@ -76,6 +81,11 @@ public class ProsecutionReceivedProcessor {
         LOGGER.info("Received prosecutioncasefile.events.cc-case-received- {} ", envelope.payload());
         final CcCaseReceived ccCaseReceived = envelope.payload();
         final Prosecution prosecution = ccCaseReceived.getProsecutionWithReferenceData().getProsecution();
+        final Channel channel = prosecution.getChannel();
+        final UUID caseId = prosecution.getCaseDetails().getCaseId();
+
+        emitSubmissionApprovedIfCivilSummons(prosecution, ccCaseReceived.getProsecutionWithReferenceData().getExternalId(), channel, caseId, envelope);
+
         final InitiateCourtProceedings initiateCourtProceedings = ccCaseToProsecutionCaseConverter.convert(ccCaseReceived);
 
         final JsonEnvelope envelope1 = envelopeHelper.withMetadataInPayload(
@@ -86,10 +96,8 @@ public class ProsecutionReceivedProcessor {
         sender.sendAsAdmin(envelope1);
 
         final AcceptCase acceptCase = acceptCase()
-                .withCaseId(prosecution.getCaseDetails().getCaseId())
+                .withCaseId(caseId)
                 .build();
-
-        final Channel channel = prosecution.getChannel();
 
         if (channel == SPI) {
             final Metadata metadata = envelope.metadata();
@@ -97,7 +105,6 @@ public class ProsecutionReceivedProcessor {
             sender.send(envelopeFrom(sjpCaseUpdateMetadata, acceptCase));
         }
 
-        final UUID caseId = prosecution.getCaseDetails().getCaseId();
         final String prosecutorCaseReference = prosecution.getCaseDetails().getProsecutorCaseReference();
 
         final uk.gov.moj.cps.prosecutioncasefile.domain.event.CcCaseReceived publicEvent = getCcCaseReceived(prosecution, channel, caseId, prosecutorCaseReference, ccCaseReceived.getProsecutionWithReferenceData().getReferenceDataVO().getProsecutorsReferenceData());
@@ -115,6 +122,10 @@ public class ProsecutionReceivedProcessor {
     public void handleCcCaseReceivedWithWarnings(final Envelope<CcCaseReceivedWithWarnings> envelope) {
         final ProsecutionWithReferenceData prosecutionWithReferenceData = envelope.payload().getProsecutionWithReferenceData();
         final Prosecution prosecution = prosecutionWithReferenceData.getProsecution();
+        final Channel channel = prosecution.getChannel();
+        final UUID caseId = prosecution.getCaseDetails().getCaseId();
+
+        emitSubmissionApprovedIfCivilSummons(prosecution, prosecutionWithReferenceData.getExternalId(), channel, caseId, envelope);
 
         final InitiateCourtProceedings initiateCourtProceedings = ccCaseToProsecutionCaseConverter.convert(
                 CcCaseReceived.ccCaseReceived().withProsecutionWithReferenceData(prosecutionWithReferenceData)
@@ -126,11 +137,9 @@ public class ProsecutionReceivedProcessor {
         sender.sendAsAdmin(envelope1);
 
         final AcceptCase acceptCase = acceptCase()
-                .withCaseId(prosecution.getCaseDetails().getCaseId())
+                .withCaseId(caseId)
                 .build();
 
-        final Channel channel = prosecution.getChannel();
-        final UUID caseId = prosecution.getCaseDetails().getCaseId();
         final String prosecutorCaseReference = prosecution.getCaseDetails().getProsecutorCaseReference();
 
         if (channel == SPI) {
@@ -193,5 +202,21 @@ public class ProsecutionReceivedProcessor {
         sender.send(envelop(publicEvent)
                 .withName(PUBLIC_PROSECUTIONCASEFILE_CC_CASE_RECEIVED)
                 .withMetadataFrom(envelope));
+    }
+
+    private void emitSubmissionApprovedIfCivilSummons(final Prosecution prosecution, final UUID externalId, final Channel channel, final UUID caseId, final Envelope<?> envelope) {
+        if (CIVIL == channel && SUMMONS_INITIATION_CODE.equals(prosecution.getCaseDetails().getInitiationCode())) {
+            final Metadata publicEventMetadata = metadataFrom(envelope.metadata())
+                    .withName(PUBLIC_EVENT_PROSECUTIONCASEFILE_SUBMISSION_APPROVED)
+                    .build();
+
+            final PublicSubmissionApproved publicSubmissionApproved = publicSubmissionApproved()
+                    .withCaseId(caseId)
+                    .withExternalId(externalId)
+                    .withChannel(channel)
+                    .build();
+
+            sender.send(envelopeFrom(publicEventMetadata, publicSubmissionApproved));
+        }
     }
 }

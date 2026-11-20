@@ -8,6 +8,8 @@ import static uk.gov.justice.services.core.annotation.Component.EVENT_PROCESSOR;
 import static uk.gov.justice.services.messaging.Envelope.envelopeFrom;
 import static uk.gov.justice.services.messaging.Envelope.metadataFrom;
 import static uk.gov.moj.cpp.prosecution.casefile.event.processor.utils.GroupCasesSummonsTemplateHelper.createTemplatePayload;
+import static uk.gov.moj.cpp.prosecution.casefile.json.schemas.Channel.CIVIL;
+import static uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicGroupParkedForSummonsApplicationApproval.publicGroupParkedForSummonsApplicationApproval;
 
 import uk.gov.justice.core.courts.ApplicationDocument;
 import uk.gov.justice.core.courts.CourtDocument;
@@ -20,10 +22,12 @@ import uk.gov.justice.services.core.annotation.ServiceComponent;
 import uk.gov.justice.services.core.sender.Sender;
 import uk.gov.justice.services.messaging.Envelope;
 import uk.gov.justice.services.messaging.Metadata;
+import uk.gov.moj.cpp.prosecution.casefile.domain.GroupProsecutionList;
 import uk.gov.moj.cpp.prosecution.casefile.domain.GroupProsecutionWithReferenceData;
 import uk.gov.moj.cpp.prosecution.casefile.event.GroupCasesParkedForApproval;
 import uk.gov.moj.cpp.prosecution.casefile.event.processor.converter.GroupCasesParkedForApprovalToCourtApplicationProceedingsConverter;
 import uk.gov.moj.cpp.prosecution.casefile.event.processor.service.DocumentGeneratorService;
+import uk.gov.moj.cps.prosecutioncasefile.domain.event.PublicGroupParkedForSummonsApplicationApproval;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -43,6 +47,7 @@ public class GroupCasesParkedForApprovalEventProcessor {
     public static final String PROGRESSION_COMMAND_INITIATE_COURT_PROCEEDINGS_FOR_APPLICATION = "progression.initiate-court-proceedings-for-application";
     public static final String PROSECUTIONCASEFILE_COMMAND_RECORD_GROUP_ID_FOR_SUMMONS_APPLICATION = "prosecutioncasefile.command.record-group-id-for-summons-application";
     public static final String PROGRESSION_COMMAND_ADD_COURT_DOCUMENT = "progression.add-court-document";
+    public static final String PUBLIC_EVENT_PROSECUTIONCASEFILE_GROUP_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL = "public.prosecutioncasefile.group-parked-for-summons-application-approval";
 
     public static final String MATERIAL_ID = "materialId";
     public static final String COURT_DOCUMENT = "courtDocument";
@@ -84,6 +89,27 @@ public class GroupCasesParkedForApprovalEventProcessor {
 
         final String filename = this.documentGeneratorService.generateGroupCasesSummonsDocument(envelope, documentPayload, materialId);
         sendCommandProgressionAddDocument(envelope, payload, masterCaseId, materialId, filename);
+
+        final GroupProsecutionList groupProsecutionList = payload.getGroupProsecutionList();
+        if (CIVIL == groupProsecutionList.getChannel()) {
+            emitPublicEventForCivil(envelope.metadata(), payload, masterCase.get());
+        }
+    }
+
+    private void emitPublicEventForCivil(final Metadata metadata, final GroupCasesParkedForApproval payload, final GroupProsecutionWithReferenceData masterCase) {
+        final GroupProsecutionList groupProsecutionList = payload.getGroupProsecutionList();
+
+        final Metadata publicEventMetadata = metadataFrom(metadata)
+                .withName(PUBLIC_EVENT_PROSECUTIONCASEFILE_GROUP_PARKED_FOR_SUMMONS_APPLICATION_APPROVAL)
+                .build();
+
+        final PublicGroupParkedForSummonsApplicationApproval publicGroupParkedForSummonsApplicationApproval = publicGroupParkedForSummonsApplicationApproval()
+                .withGroupId(masterCase.getGroupProsecution().getGroupId())
+                .withApplicationId(payload.getApplicationId())
+                .withExternalId(groupProsecutionList.getExternalId())
+                .withChannel(groupProsecutionList.getChannel())
+                .build();
+        this.sender.send(envelopeFrom(publicEventMetadata, publicGroupParkedForSummonsApplicationApproval));
     }
 
     private void sendCommandProgressionAddDocument(final Envelope<GroupCasesParkedForApproval> envelope, final GroupCasesParkedForApproval payload, final UUID masterCaseId, final UUID materialId, final String filename) {

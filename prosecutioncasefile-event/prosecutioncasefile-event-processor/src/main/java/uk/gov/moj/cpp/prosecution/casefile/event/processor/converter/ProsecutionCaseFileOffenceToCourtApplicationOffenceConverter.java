@@ -6,7 +6,7 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Offence;
 
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 public class ProsecutionCaseFileOffenceToCourtApplicationOffenceConverter implements ParameterisedConverter<List<Offence>, List<uk.gov.justice.core.courts.Offence>, ParamsVO> {
 

@@ -4,7 +4,7 @@ import uk.gov.moj.cpp.prosecutioncasefile.query.view.response.CountsCasesErrorsV
 
 import java.util.Optional;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 public class CountsCasesErrorsService {
 

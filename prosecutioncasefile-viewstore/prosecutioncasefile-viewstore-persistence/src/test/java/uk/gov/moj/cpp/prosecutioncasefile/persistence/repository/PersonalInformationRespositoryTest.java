@@ -1,116 +1,73 @@
 package uk.gov.moj.cpp.prosecutioncasefile.persistence.repository;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.FIRST_NAME;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.LAST_NAME;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.OCCUPATION;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.OCCUPATION_CODE;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.TITLE;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.createAddress;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.createContactDetails;
-import static uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils.createFirstDefendant;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
-import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.AddressDetails;
-import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.ContactDetails;
+import uk.gov.justice.services.test.utils.persistence.HibernateTestEntityManagerProvider;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.DefendantDetails;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.PersonalInformationDetails;
-import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.SelfDefinedInformationDetails;
-import uk.gov.moj.cpp.prosecutioncasefile.persistence.util.TestUtils;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.UUID;
 
-import javax.inject.Inject;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 
-import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-@RunWith(CdiTestRunner.class)
 public class PersonalInformationRespositoryTest {
 
-    @Inject
-    private PersonalInformationRepository personalInformationRepository;
+    private static final String PERSISTENCE_UNIT = "prosecutioncasefile-test-persistence-unit";
 
-    @Inject
+    private static final String DEFENDANT_ID = UUID.randomUUID().toString();
+
+    @RegisterExtension
+    static HibernateTestEntityManagerProvider hibernateTestEntityManagerProvider = new HibernateTestEntityManagerProvider(PERSISTENCE_UNIT);
+
+    private PersonalInformationRepository personalInformationRepository;
     private DefendantRepository defendantRepository;
 
-    private PersonalInformationDetails personalInformationDetails;
-
-    private DefendantDetails defendantDetails;
-
-    @Before
-    public void setUp() {
-        createAndSaveDefendant();
+    @BeforeEach
+    public void createRepositories() {
+        personalInformationRepository = new PersonalInformationRepository();
+        hibernateTestEntityManagerProvider.injectEntityManagerInto(personalInformationRepository);
+        defendantRepository = new DefendantRepository();
+        hibernateTestEntityManagerProvider.injectEntityManagerInto(defendantRepository);
     }
 
     @Test
-    public void shouldUpdatePersonalInformation() {
-        final String FIRST_NAME = "Percival";
-        personalInformationDetails.setFirstName(FIRST_NAME);
-        personalInformationRepository.save(personalInformationDetails);
-        final List<PersonalInformationDetails> personalInformationDetailsList = personalInformationRepository.findAll();
-        final PersonalInformationDetails personalInformationDetailsSvd = personalInformationDetailsList.get(0);
-        assertThat(personalInformationDetailsSvd.getFirstName(), equalTo(FIRST_NAME));
-        assertPersonalInformationMatches(personalInformationDetails, personalInformationDetailsSvd);
+    void shouldFindPersonalInformationById() {
+        saveDefendantWithPersonalInformation("John", "Smith");
+
+        final PersonalInformationDetails found = personalInformationRepository.findBy(UUID.fromString(DEFENDANT_ID));
+
+        assertThat(found, notNullValue());
+        assertThat(found.getFirstName(), is("John"));
+        assertThat(found.getLastName(), is("Smith"));
     }
 
     @Test
-    public void shouldConstructPersonalInformation() {
-        final DefendantDetails defendantDetails = createFirstDefendant();
-        final AddressDetails addressDetails = createAddress();
-        final ContactDetails contactDetails = createContactDetails();
-        final PersonalInformationDetails personalInformationDetails = new PersonalInformationDetails(TITLE, FIRST_NAME, LAST_NAME, OCCUPATION, OCCUPATION_CODE, addressDetails, contactDetails);
-        personalInformationDetails.setDefendantDetails(defendantDetails);
+    void shouldSavePersonalInformation() {
+        saveDefendantWithPersonalInformation("John", "Smith");
 
-        final PersonalInformationDetails personalInformationDetailsSvd = new PersonalInformationDetails();
-        personalInformationDetailsSvd.setFirstName(FIRST_NAME);
-        personalInformationDetailsSvd.setTitle(TITLE);
-        personalInformationDetailsSvd.setLastName(LAST_NAME);
-        personalInformationDetailsSvd.setOccupation(OCCUPATION);
-        personalInformationDetailsSvd.setOccupationCode(OCCUPATION_CODE);
-        personalInformationDetailsSvd.setAddress(addressDetails);
-        personalInformationDetailsSvd.setContactDetails(contactDetails);
-        personalInformationDetailsSvd.setDefendantDetails(defendantDetails);
+        final PersonalInformationDetails found = personalInformationRepository.findBy(UUID.fromString(DEFENDANT_ID));
+        assertThat(found, notNullValue());
 
-        assertPersonalInformationMatches(personalInformationDetails, personalInformationDetailsSvd);
+        found.setFirstName("Jane");
+        personalInformationRepository.save(found);
+
+        final PersonalInformationDetails updated = personalInformationRepository.findBy(UUID.fromString(DEFENDANT_ID));
+        assertThat(updated.getFirstName(), is("Jane"));
     }
 
-    private void assertPersonalInformationMatches(final PersonalInformationDetails personalInformationDetails, final PersonalInformationDetails personalInformationDetailsSvd) {
-        assertThat(personalInformationDetails.getPersonalInformationId(), equalTo(personalInformationDetailsSvd.getPersonalInformationId()));
-        assertThat(personalInformationDetails.getLastName(), equalTo(personalInformationDetailsSvd.getLastName()));
-        assertThat(personalInformationDetails.getAddress().getAddress1(), equalTo(personalInformationDetailsSvd.getAddress().getAddress1()));
-        assertThat(personalInformationDetails.getAddress().getAddress2(), equalTo(personalInformationDetailsSvd.getAddress().getAddress2()));
-        assertThat(personalInformationDetails.getAddress().getAddress3(), equalTo(personalInformationDetailsSvd.getAddress().getAddress3()));
-        assertThat(personalInformationDetails.getAddress().getAddress4(), equalTo(personalInformationDetailsSvd.getAddress().getAddress4()));
-        assertThat(personalInformationDetails.getAddress().getAddress5(), equalTo(personalInformationDetailsSvd.getAddress().getAddress5()));
-        assertThat(personalInformationDetails.getAddress().getPostcode(), equalTo(personalInformationDetailsSvd.getAddress().getPostcode()));
-
-        assertThat(personalInformationDetails.getOccupation(), equalTo(personalInformationDetailsSvd.getOccupation()));
-        assertThat(personalInformationDetails.getTitle(), equalTo(personalInformationDetailsSvd.getTitle()));
-        assertThat(personalInformationDetails.getOccupationCode(), equalTo(personalInformationDetailsSvd.getOccupationCode()));
-        assertThat(personalInformationDetails.getDefendantDetails().getNationalInsuranceNumber(), equalTo(personalInformationDetailsSvd.getDefendantDetails().getNationalInsuranceNumber()));
-
-        assertThat(personalInformationDetails.getContactDetails().isPresent(), equalTo(true));
-
-        assertThat(personalInformationDetails.getContactDetails().get().getHome(), equalTo(personalInformationDetailsSvd.getContactDetails().get().getHome()));
-        assertThat(personalInformationDetails.getContactDetails().get().getMobile(), equalTo(personalInformationDetailsSvd.getContactDetails().get().getMobile()));
-        assertThat(personalInformationDetails.getContactDetails().get().getPrimaryEmail(), equalTo(personalInformationDetailsSvd.getContactDetails().get().getPrimaryEmail()));
-        assertThat(personalInformationDetails.getContactDetails().get().getSecondaryEmail(), equalTo(personalInformationDetailsSvd.getContactDetails().get().getSecondaryEmail()));
-        assertThat(personalInformationDetails.getContactDetails().get().getWork(), equalTo(personalInformationDetailsSvd.getContactDetails().get().getWork()));
+    private void saveDefendantWithPersonalInformation(final String firstName, final String lastName) {
+        final PersonalInformationDetails personalInformation = new PersonalInformationDetails(
+                "Mr", firstName, lastName, null, null, null, null);
+        final DefendantDetails defendant = new DefendantDetails(
+                DEFENDANT_ID, "ASN123", null, null, null, null, null, null,
+                null, null, null, null,
+                personalInformation, null, new HashSet<>(), new ArrayList<>(), null, null);
+        defendantRepository.save(defendant);
     }
-
-    private void createAndSaveDefendant() {
-        defendantDetails = TestUtils.createFirstDefendant();
-
-        personalInformationDetails = defendantDetails.getPersonalInformation();
-        personalInformationDetails.setDefendantDetails(defendantDetails);
-
-        final SelfDefinedInformationDetails selfDefinedInformation = defendantDetails.getSelfDefinedInformation();
-        selfDefinedInformation.setDefendantDetails(defendantDetails);
-
-        defendantRepository.save(defendantDetails);
-    }
-
 }

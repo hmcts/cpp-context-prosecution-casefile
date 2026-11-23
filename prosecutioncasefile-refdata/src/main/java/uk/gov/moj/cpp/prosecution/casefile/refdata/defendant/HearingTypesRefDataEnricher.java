@@ -6,7 +6,7 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.HearingType;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.HearingTypes;
 import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 

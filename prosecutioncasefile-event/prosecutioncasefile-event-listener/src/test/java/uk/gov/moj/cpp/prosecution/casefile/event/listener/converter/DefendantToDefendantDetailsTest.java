@@ -3,8 +3,11 @@ package uk.gov.moj.cpp.prosecution.casefile.event.listener.converter;
 import static uk.gov.moj.cpp.prosecution.casefile.event.listener.converter.TestDataProvider.createCorporateDefendant;
 import static uk.gov.moj.cpp.prosecution.casefile.event.listener.converter.TestDataProvider.createDefendant;
 
+import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.setField;
+
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.DefendantDetails;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,7 +24,6 @@ public class DefendantToDefendantDetailsTest extends ConverterBaseTest {
     private SelfDefinedInformationToSelfDefinedInformationDetails selfDefinedInformationToSelfDefinedInformationDetails;
 
     @Spy
-    @InjectMocks
     private PersonalInformationToPersonalInformationDetails personalInformationToPersonalInformationDetails;
 
     @Spy
@@ -32,6 +34,12 @@ public class DefendantToDefendantDetailsTest extends ConverterBaseTest {
 
     @Spy
     private ContactDetailsToContactDetailsEntity contactDetailsToContactDetailsEntity;
+
+    @BeforeEach
+    void setup() {
+        setField(personalInformationToPersonalInformationDetails, "addressToAddressDetails", addressToAddressDetails);
+        setField(personalInformationToPersonalInformationDetails, "contactDetailsToContactDetailsDetails", contactDetailsToContactDetailsEntity);
+    }
 
     @Test
     public void testConvertDefendantToDefendantDetails() {

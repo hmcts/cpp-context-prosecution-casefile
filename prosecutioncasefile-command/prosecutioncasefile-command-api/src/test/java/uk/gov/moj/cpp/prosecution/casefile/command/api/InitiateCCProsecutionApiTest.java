@@ -72,7 +72,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import javax.enterprise.inject.Instance;
+import jakarta.enterprise.inject.Instance;
 
 import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.Disabled;

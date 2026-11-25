@@ -6,10 +6,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil.setField;
 import static uk.gov.moj.cpp.prosecution.casefile.event.listener.converter.TestDataProvider.createProsecution;
 import static uk.gov.moj.cpp.prosecution.casefile.event.listener.converter.TestDataProvider.createProsecutionWithFeeStatus;
 import static uk.gov.moj.cpp.prosecution.casefile.event.listener.converter.TestDataProvider.createProsecutionWithLanguage;
 
+import uk.gov.justice.services.test.utils.core.reflection.ReflectionUtil;
 import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Language;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.CaseDetails;
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.CivilFees;
@@ -17,6 +19,7 @@ import uk.gov.moj.cps.prosecutioncasefile.domain.event.SjpProsecutionReceived;
 
 import java.util.Set;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,18 +33,15 @@ public class ProsecutionReceivedToCaseTest extends ConverterBaseTest{
     private ProsecutionReceivedToCase converter;
 
     @Spy
-    @InjectMocks
     private DefendantToDefendantDetails defendantToDefendantDetail;
 
     @Spy
     private OffenceToOffenceDetails offenceToOffenceDetails;
 
     @Spy
-    @InjectMocks
     private CaseDetailsToCivilFees caseDetailsToCivilFees;
 
     @Spy
-    @InjectMocks
     private PersonalInformationToPersonalInformationDetails personalInformationToPersonalInformationDetails;
 
     @Spy
@@ -52,6 +52,16 @@ public class ProsecutionReceivedToCaseTest extends ConverterBaseTest{
 
     @Spy
     private ContactDetailsToContactDetailsEntity contactDetailsToContactDetailsEntity;
+
+    @BeforeEach
+    void setup() {
+        setField(personalInformationToPersonalInformationDetails, "addressToAddressDetails", addressToAddressDetails);
+        setField(personalInformationToPersonalInformationDetails, "contactDetailsToContactDetailsDetails", contactDetailsToContactDetailsEntity);
+        setField(defendantToDefendantDetail, "personalInformationToPersonalInformationDetails", personalInformationToPersonalInformationDetails);
+        setField(defendantToDefendantDetail, "selfDefinedInformationToSelfDefinedInformationDetails", selfDefinedInformationToSelfDefinedInformationDetails);
+        setField(defendantToDefendantDetail, "offenceToOffenceDetails", offenceToOffenceDetails);
+        setField(defendantToDefendantDetail, "addressToAddressDetails", addressToAddressDetails);
+    }
 
     @Test
     void testConvertSelfDefinedInformationToSelfDefinedInformationDetails() {

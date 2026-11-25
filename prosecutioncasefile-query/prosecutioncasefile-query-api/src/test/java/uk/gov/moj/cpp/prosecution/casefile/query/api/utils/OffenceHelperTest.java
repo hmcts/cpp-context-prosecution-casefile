@@ -6,7 +6,7 @@ import static org.hamcrest.Matchers.is;
 
 import java.util.stream.Stream;
 
-import javax.json.JsonObjectBuilder;
+import jakarta.json.JsonObjectBuilder;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;

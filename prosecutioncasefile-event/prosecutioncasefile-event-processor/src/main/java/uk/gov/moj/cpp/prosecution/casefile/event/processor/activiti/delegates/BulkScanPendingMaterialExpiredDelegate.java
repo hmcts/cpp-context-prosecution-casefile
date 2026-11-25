@@ -15,8 +15,8 @@ import uk.gov.moj.cps.prosecutioncasefile.command.handler.ExpirePendingMaterial;
 
 import java.util.UUID;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.JavaDelegate;

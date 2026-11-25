@@ -45,8 +45,8 @@ import java.util.Collections;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import javax.enterprise.inject.Instance;
-import javax.json.JsonValue;
+import jakarta.enterprise.inject.Instance;
+import jakarta.json.JsonValue;
 
 import org.apache.commons.collections.iterators.ArrayListIterator;
 import org.junit.jupiter.api.Test;

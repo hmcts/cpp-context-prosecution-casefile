@@ -8,7 +8,7 @@ import static uk.gov.moj.cpp.prosecution.casefile.validation.rules.forms.FormCon
 import uk.gov.moj.cpp.prosecution.casefile.application.json.schemas.Organisation;
 import uk.gov.moj.cpp.prosecution.casefile.application.json.schemas.Person;
 
-import jakarta.json.JsonObject;
+import javax.json.JsonObject;
 
 public class ValidationRuleHelper {
 

@@ -4,7 +4,7 @@
     <parent>
         <groupId>uk.gov.moj.cpp.prosecution.casefile</groupId>
         <artifactId>prosecutioncasefile-event</artifactId>
-        <version>25.0.108-SNAPSHOT</version>
+        <version>17.0.105-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -17,18 +17,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>jakarta.platform</groupId>
-            <artifactId>jakarta.jakartaee-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate.orm</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.ejb3</groupId>
-            <artifactId>jboss-ejb3-ext-api</artifactId>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -61,35 +51,15 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>uk.gov.moj.cpp.core.domain</groupId>
             <artifactId>criminal-court-public-model</artifactId>
             <version>${coredomain.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.json</groupId>
-            <artifactId>jakarta.json-api</artifactId>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <!-- External MI test jar compiled against javax.json; incompatible with Jakarta migration -->
-                        <exclude>**/ProsecutionCaseFileSchemaContractValidationTest.java</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
             <!-- MI schema contract validation tests jar dependency-->
            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -102,9 +72,6 @@
                             <goal>unpack</goal>
                         </goals>
                         <configuration>
-                            <!-- mireportdata-prosecutioncasefile-event-listener:RELEASE:tests is still a javax build;
-                                 re-enable once MI publishes a jakarta (25.104.x) test-jar -->
-                            <skip>true</skip>
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>uk.gov.moj.cpp.mi.reportdata</groupId>

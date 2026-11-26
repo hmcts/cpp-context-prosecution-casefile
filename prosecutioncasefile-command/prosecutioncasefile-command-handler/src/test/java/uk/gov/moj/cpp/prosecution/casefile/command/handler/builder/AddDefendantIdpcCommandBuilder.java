@@ -14,7 +14,7 @@ import uk.gov.justice.services.messaging.Metadata;
 
 import java.util.UUID;
 
-import jakarta.json.JsonObjectBuilder;
+import javax.json.JsonObjectBuilder;
 
 public class AddDefendantIdpcCommandBuilder {
 

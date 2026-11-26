@@ -15,7 +15,7 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Welsh;
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 

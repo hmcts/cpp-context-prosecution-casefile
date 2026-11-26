@@ -36,7 +36,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 public class CCCaseToProsecutionCaseConverter implements Converter<CcCaseReceived, InitiateCourtProceedings> {
 

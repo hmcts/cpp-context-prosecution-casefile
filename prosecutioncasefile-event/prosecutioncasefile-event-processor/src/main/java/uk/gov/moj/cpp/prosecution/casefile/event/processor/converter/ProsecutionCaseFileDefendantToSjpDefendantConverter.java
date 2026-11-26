@@ -11,7 +11,7 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.PersonalInformation;
 
 import java.util.UUID;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 public class ProsecutionCaseFileDefendantToSjpDefendantConverter implements Converter<Defendant, uk.gov.justice.json.schemas.domains.sjp.commands.Defendant> {
     @Inject

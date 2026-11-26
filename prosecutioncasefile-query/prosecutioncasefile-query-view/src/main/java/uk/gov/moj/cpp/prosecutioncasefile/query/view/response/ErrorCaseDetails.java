@@ -1,6 +1,6 @@
 package uk.gov.moj.cpp.prosecutioncasefile.query.view.response;
 
-import jakarta.json.JsonArray;
+import javax.json.JsonArray;
 
 @SuppressWarnings("squid:S2384")
 public class ErrorCaseDetails {

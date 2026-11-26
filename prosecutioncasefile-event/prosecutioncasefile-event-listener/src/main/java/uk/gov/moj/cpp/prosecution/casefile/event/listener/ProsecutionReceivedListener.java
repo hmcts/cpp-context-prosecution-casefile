@@ -52,8 +52,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import jakarta.inject.Inject;
-import jakarta.json.JsonObject;
+import javax.inject.Inject;
+import javax.json.JsonObject;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;

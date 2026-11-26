@@ -4,14 +4,13 @@ import static com.jayway.jsonpath.matchers.JsonPathMatchers.withJsonPath;
 import static java.lang.String.format;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static jakarta.ws.rs.core.Response.Status.OK;
+import static javax.ws.rs.core.Response.Status.OK;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.skyscreamer.jsonassert.JSONAssert.assertEquals;
@@ -41,7 +40,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import jakarta.json.JsonObject;
+import javax.json.JsonObject;
+
 import org.json.JSONArray;
 import org.skyscreamer.jsonassert.ArrayValueMatcher;
 import org.skyscreamer.jsonassert.Customization;
@@ -185,25 +185,6 @@ public class ValidationErrorHelper {
 
                         ))
                 );
-        assertEquals(expectedCaseErrorsPayload, responseData.getPayload(), customComparator);
-    }
-
-    public static void queryAndVerifyCaseErrorsWithCaseLevelErrors(final UUID caseId, final String expectedCaseErrorsPayload, final JSONComparator customComparator) {
-        final ResponseData responseData = verifyCaseErrors(caseId, allOf(
-                withJsonPath("$.cases[0].id", equalTo(caseId.toString())),
-                withJsonPath("$.cases[0].errorDescription", containsString("Error")),
-                withJsonPath("$.cases[0].errors", hasSize(greaterThan(0))),
-                withJsonPath("$.cases[0].caseMarkersErrors", hasSize(greaterThan(0)))
-        ));
-        assertEquals(expectedCaseErrorsPayload, responseData.getPayload(), customComparator);
-    }
-
-    public static void queryAndVerifyCaseErrorsWithCaseMarkersErrors(final UUID caseId, final String expectedCaseErrorsPayload, final JSONComparator customComparator) {
-        final ResponseData responseData = verifyCaseErrors(caseId, allOf(
-                withJsonPath("$.cases[0].id", equalTo(caseId.toString())),
-                withJsonPath("$.cases[0].errorDescription", containsString("Error")),
-                withJsonPath("$.cases[0].caseMarkersErrors", hasSize(greaterThan(0)))
-        ));
         assertEquals(expectedCaseErrorsPayload, responseData.getPayload(), customComparator);
     }
 

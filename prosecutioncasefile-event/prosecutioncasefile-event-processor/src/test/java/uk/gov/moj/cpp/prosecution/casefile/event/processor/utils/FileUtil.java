@@ -9,8 +9,8 @@ import static uk.gov.justice.services.messaging.JsonObjects.createReader;
 import java.io.InputStream;
 import java.io.StringReader;
 
-import jakarta.json.JsonObject;
-import jakarta.json.JsonReader;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;

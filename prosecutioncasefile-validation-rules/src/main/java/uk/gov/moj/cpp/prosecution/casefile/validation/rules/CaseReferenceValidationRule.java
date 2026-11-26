@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 public class CaseReferenceValidationRule extends AbstractValidationRule implements SubmitApplicationValidationRule {
 

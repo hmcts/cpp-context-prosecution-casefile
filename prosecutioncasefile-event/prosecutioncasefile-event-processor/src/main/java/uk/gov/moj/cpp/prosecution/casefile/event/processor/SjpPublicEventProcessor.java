@@ -18,7 +18,7 @@ import uk.gov.moj.cps.prosecutioncasefile.command.handler.AcceptCase;
 import uk.gov.moj.cps.prosecutioncasefile.command.handler.AssignCase;
 import uk.gov.moj.cps.prosecutioncasefile.command.handler.UnassignCase;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 @ServiceComponent(EVENT_PROCESSOR)
 public class SjpPublicEventProcessor {

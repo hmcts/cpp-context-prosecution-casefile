@@ -11,7 +11,7 @@ import uk.gov.justice.services.healthcheck.api.DefaultIgnoredHealthcheckNamesPro
 
 import java.util.List;
 
-import jakarta.enterprise.inject.Specializes;
+import javax.enterprise.inject.Specializes;
 
 @Specializes
 public class ProsecutionCaseFileIgnoredHealthcheckNamesProvider extends DefaultIgnoredHealthcheckNamesProvider {

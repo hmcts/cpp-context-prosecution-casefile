@@ -67,7 +67,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import jakarta.json.JsonObject;
+import javax.json.JsonObject;
 
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.io.IOUtils;

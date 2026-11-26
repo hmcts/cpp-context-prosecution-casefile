@@ -77,7 +77,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import jakarta.enterprise.inject.Instance;
+import javax.enterprise.inject.Instance;
 
 import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.Disabled;

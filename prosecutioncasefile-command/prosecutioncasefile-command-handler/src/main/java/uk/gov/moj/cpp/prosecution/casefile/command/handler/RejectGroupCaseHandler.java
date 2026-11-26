@@ -22,8 +22,8 @@ import uk.gov.moj.cps.prosecutioncasefile.command.handler.RejectGroupCases;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import jakarta.inject.Inject;
-import jakarta.json.JsonValue;
+import javax.inject.Inject;
+import javax.json.JsonValue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

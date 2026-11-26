@@ -1,6 +1,7 @@
 package uk.gov.moj.cpp.prosecution.casefile.event.processor.activiti;
 
 import static java.util.UUID.randomUUID;
+import static org.activiti.engine.impl.test.JobTestHelper.waitForJobExecutorToProcessAllJobs;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -17,17 +18,19 @@ import java.util.UUID;
 
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.JavaDelegate;
+import org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.test.ActivitiRule;
 import org.activiti.engine.test.Deployment;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.extension.RegisterExtension;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.MockitoJUnitRunner;
 
-@ExtendWith(MockitoExtension.class)
+@RunWith(MockitoJUnitRunner.class)
 public class PendingMaterialExpirationTest {
 
     private static final String TIMEOUT_PROCESS_PATH = "processes/pendingMaterialExpired.bpmn20.xml";
@@ -37,19 +40,20 @@ public class PendingMaterialExpirationTest {
     private JavaDelegate pendingMaterialExpiredDelegate;
     private Metadata metadata;
 
-    @RegisterExtension
-    public final ActivitiJUnit5Extension activitiExtension = new ActivitiJUnit5Extension();
+    @Rule
+    public ActivitiRule rule = new ActivitiRule();
 
     @Captor
     private ArgumentCaptor<DelegateExecution> delegateExecutionCaptor;
 
-    @BeforeEach
+    @Before
     public void init() {
+        final StandaloneProcessEngineConfiguration configuration = (StandaloneProcessEngineConfiguration) rule.getProcessEngine().getProcessEngineConfiguration();
         caseId = randomUUID();
         fileStoreId = randomUUID();
         metadata = metadataWithRandomUUID("test").build();
-        pendingMaterialExpiration = new PendingMaterialExpiration(activitiExtension.getRuntimeService(), Duration.ofSeconds(1).toString());
-        pendingMaterialExpiredDelegate = (JavaDelegate) activitiExtension.getProcessEngineConfiguration().getBeans().get("pendingMaterialExpiredDelegate");
+        pendingMaterialExpiration = new PendingMaterialExpiration(rule.getRuntimeService(), Duration.ofSeconds(1).toString());
+        pendingMaterialExpiredDelegate = (JavaDelegate) configuration.getBeans().get("pendingMaterialExpiredDelegate");
         reset(pendingMaterialExpiredDelegate);
     }
 
@@ -81,14 +85,15 @@ public class PendingMaterialExpirationTest {
     }
 
     private void waitForAllJobs() {
-        activitiExtension.waitForJobExecutorToProcessAllJobs(10000, 500);
+        waitForJobExecutorToProcessAllJobs(rule, 10000, 500);
     }
 
     private boolean isProcessFinished(final ProcessInstance processInstance) {
-        return activitiExtension.getProcessEngine()
+        final ProcessInstance refreshedProcessInstance = rule.getProcessEngine()
                 .getRuntimeService()
                 .createProcessInstanceQuery()
                 .processInstanceId(processInstance.getProcessInstanceId())
-                .singleResult() == null;
+                .singleResult();
+        return refreshedProcessInstance == null;
     }
 }

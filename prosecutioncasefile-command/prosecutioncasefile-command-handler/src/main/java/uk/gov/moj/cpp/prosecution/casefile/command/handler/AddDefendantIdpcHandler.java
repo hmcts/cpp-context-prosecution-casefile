@@ -21,8 +21,8 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import jakarta.inject.Inject;
-import jakarta.json.JsonObject;
+import javax.inject.Inject;
+import javax.json.JsonObject;
 
 @SuppressWarnings("WeakerAccess")
 @ServiceComponent(Component.COMMAND_HANDLER)

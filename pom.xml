@@ -45,19 +45,24 @@
         <json-smart.version>2.4.8</json-smart.version>
         <stream-transformation-tool-anonymise>7.0.0</stream-transformation-tool-anonymise>
         <sonar.coverage.exclusions>
-            **/uk/gov/moj/cpp/prosecutioncasefile/persistence/entity/**/*
-            **/uk/gov/justice/api/**/*
-            **/uk/gov/moj/cps/prosecutioncasefile/command/api/**/*
-            **/uk/gov/moj/cpp/prosecution/casefile/json/schemas/**/*
-            **/uk/gov/moj/cpp/prosecution/casefile/plea/json/schemas/**/*
-            **/uk/gov/justice/api/resource/**/*
-            **/uk/gov/justice/cps/prosecutioncasefile/**/*
-            **/uk/gov/justice/core/courts/**/*
-            **/uk/gov/moj/cpp/prosecution/casefile/application/json/schemas/**/*
-            **/uk/gov/moj/cps/prosecutioncasefile/command/handler/**/*
-            **/uk/gov/moj/cpp/cps/prosecutioncasefile/command/handler/staging/**/*
-            **/uk/gov/moj/cps/prosecutioncasefile/domain/event/**/*
-            **/uk/gov/moj/cpp/prosecution/casefile/event/**/*
+            **/uk/gov/moj/cpp/prosecutioncasefile/persistence/entity/**/*,
+            **/uk/gov/justice/api/**/*,
+            **/uk/gov/moj/cps/prosecutioncasefile/command/api/**/*,
+            **/uk/gov/moj/cpp/prosecution/casefile/json/schemas/**/*,
+            **/uk/gov/moj/cpp/prosecution/casefile/plea/json/schemas/**/*,
+            **/uk/gov/justice/api/resource/**/*,
+            **/uk/gov/justice/cps/prosecutioncasefile/**/*,
+            **/uk/gov/justice/core/courts/**/*,
+            **/uk/gov/moj/cpp/prosecution/casefile/application/json/schemas/**/*,
+            **/uk/gov/moj/cps/prosecutioncasefile/command/handler/**/*,
+            **/uk/gov/moj/cpp/cps/prosecutioncasefile/command/handler/staging/**/*,
+            **/uk/gov/moj/cps/prosecutioncasefile/domain/event/**/*,
+            **/uk/gov/moj/cpp/prosecution/casefile/event/**/*,
+            <!-- CIMD-4110 revert: lines restored by the Java 25 revert; remove once covered -->
+            **/BusinessValidationErrorSummaryRepository.java,
+            **/BusinessValidationErrorRepository.java,
+            **/PleadOnlineValidator.java,
+            **/PaginationService.java
         </sonar.coverage.exclusions>
     </properties>
 

@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import jakarta.json.JsonObjectBuilder;
+import javax.json.JsonObjectBuilder;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 

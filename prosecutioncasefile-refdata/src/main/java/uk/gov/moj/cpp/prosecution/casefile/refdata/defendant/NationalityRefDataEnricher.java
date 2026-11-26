@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 public class NationalityRefDataEnricher implements DefendantRefDataEnricher {
 

@@ -29,7 +29,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 public class ProsecutionToBoxHearingRequestConverter implements Converter<Prosecution, BoxHearingRequest> {
 

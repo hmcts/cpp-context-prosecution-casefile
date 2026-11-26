@@ -5,7 +5,7 @@ import uk.gov.justice.services.common.converter.Converter;
 import uk.gov.moj.cpp.prosecution.casefile.domain.ParamsVO;
 import uk.gov.moj.cpp.prosecution.casefile.event.ProsecutionDefendantsAdded;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 public class ProsecutionToCCAddDefendantConverter implements Converter<ProsecutionDefendantsAdded, AddDefendantsToCourtProceedings> {
 

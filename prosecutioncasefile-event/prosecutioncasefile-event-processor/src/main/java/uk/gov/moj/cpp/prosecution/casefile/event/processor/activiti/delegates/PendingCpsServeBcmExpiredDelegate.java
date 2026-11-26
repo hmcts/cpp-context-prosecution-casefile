@@ -13,8 +13,8 @@ import uk.gov.justice.services.messaging.Metadata;
 
 import java.util.UUID;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.JavaDelegate;

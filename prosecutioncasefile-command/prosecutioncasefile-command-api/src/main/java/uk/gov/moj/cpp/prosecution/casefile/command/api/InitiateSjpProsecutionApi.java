@@ -36,8 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.enterprise.inject.Instance;
-import jakarta.inject.Inject;
+import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
 
 @ServiceComponent(COMMAND_API)
 public class InitiateSjpProsecutionApi {

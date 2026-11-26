@@ -14,7 +14,7 @@ import uk.gov.justice.services.test.utils.persistence.DatabaseCleaner;
 import uk.gov.moj.cpp.prosecution.casefile.helper.InitiateCCProsecutionHelper;
 import uk.gov.moj.cpp.prosecution.casefile.helper.ResolveCaseErrorsHelper;
 
-import jakarta.json.JsonObject;
+import javax.json.JsonObject;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;

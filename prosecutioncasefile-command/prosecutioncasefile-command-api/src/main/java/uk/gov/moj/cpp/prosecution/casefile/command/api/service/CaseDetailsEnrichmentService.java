@@ -5,7 +5,7 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Prosecutor;
 
 import java.util.Optional;
 import java.util.UUID;
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 public class CaseDetailsEnrichmentService {
     @Inject

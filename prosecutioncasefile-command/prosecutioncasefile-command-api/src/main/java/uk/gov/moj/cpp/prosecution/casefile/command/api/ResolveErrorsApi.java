@@ -10,7 +10,7 @@ import uk.gov.justice.services.core.sender.Sender;
 import uk.gov.justice.services.messaging.JsonEnvelope;
 import uk.gov.justice.services.messaging.Metadata;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 @ServiceComponent(COMMAND_API)
 public class ResolveErrorsApi {

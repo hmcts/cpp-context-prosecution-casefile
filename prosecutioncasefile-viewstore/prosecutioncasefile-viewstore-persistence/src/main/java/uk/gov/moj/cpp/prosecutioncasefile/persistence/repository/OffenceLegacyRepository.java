@@ -4,26 +4,9 @@ import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.OffenceLegacy;
 
 import java.util.UUID;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import org.apache.deltaspike.data.api.EntityRepository;
+import org.apache.deltaspike.data.api.Repository;
 
-@ApplicationScoped
-public class OffenceLegacyRepository {
-
-    @PersistenceContext(unitName = "prosecutioncasefile-persistence-unit")
-    EntityManager entityManager;
-
-    public OffenceLegacy findBy(final UUID id) {
-        return entityManager.find(OffenceLegacy.class, id);
-    }
-
-    public OffenceLegacy save(final OffenceLegacy entity) {
-        return entityManager.merge(entity);
-    }
-
-    public void remove(final OffenceLegacy entity) {
-        final OffenceLegacy managed = entityManager.contains(entity) ? entity : entityManager.merge(entity);
-        entityManager.remove(managed);
-    }
+@Repository
+public interface OffenceLegacyRepository extends EntityRepository<OffenceLegacy, UUID> {
 }

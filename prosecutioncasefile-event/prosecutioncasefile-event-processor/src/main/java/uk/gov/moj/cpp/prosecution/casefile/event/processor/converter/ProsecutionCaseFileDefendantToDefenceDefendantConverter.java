@@ -11,7 +11,7 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.Organisation;
 import java.time.LocalDate;
 import java.util.List;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 public class ProsecutionCaseFileDefendantToDefenceDefendantConverter implements Converter<List<Defendant>, List<DefenceDefendant>> {
     @Inject

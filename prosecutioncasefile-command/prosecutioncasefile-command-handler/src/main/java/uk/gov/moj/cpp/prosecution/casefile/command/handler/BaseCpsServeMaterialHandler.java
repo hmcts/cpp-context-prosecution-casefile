@@ -28,7 +28,7 @@ import uk.gov.moj.cps.prosecutioncasefile.domain.event.Witnesses;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 public class BaseCpsServeMaterialHandler {
 

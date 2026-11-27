@@ -40,8 +40,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 
-import jakarta.json.JsonArrayBuilder;
-import jakarta.json.JsonObject;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
 
 import com.jayway.jsonpath.ReadContext;
 import org.hamcrest.Matcher;

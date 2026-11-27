@@ -40,7 +40,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import jakarta.json.JsonObjectBuilder;
+import javax.json.JsonObjectBuilder;
 
 public class ReferenceDataQueryServiceStubImpl implements ReferenceDataQueryService {
     @Override

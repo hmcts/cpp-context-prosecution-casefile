@@ -1,4 +1,3 @@
-#!/bin/bash
 echo "Running Liquibase"
 dbServerName=$1
 dbUserName=$2

@@ -11,7 +11,7 @@ import uk.gov.moj.cpp.prosecutioncasefile.persistence.repository.DefendantReposi
 
 import java.util.UUID;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 @ServiceComponent(EVENT_LISTENER)
 public class DefendantIdpcAddedListener {

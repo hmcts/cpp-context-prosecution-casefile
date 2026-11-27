@@ -12,7 +12,7 @@ import uk.gov.moj.cpp.prosecutioncasefile.persistence.repository.BusinessValidat
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.repository.CaseDetailsRepository;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.SjpProsecutionReceivedWithWarnings;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 @ServiceComponent(EVENT_LISTENER)
 public class SjpProsecutionReceivedWithWarningsListener {

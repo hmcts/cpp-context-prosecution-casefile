@@ -81,7 +81,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.json.JsonObject;
+import javax.json.JsonObject;
 
 import com.google.common.collect.Lists;
 import org.junit.jupiter.api.BeforeEach;

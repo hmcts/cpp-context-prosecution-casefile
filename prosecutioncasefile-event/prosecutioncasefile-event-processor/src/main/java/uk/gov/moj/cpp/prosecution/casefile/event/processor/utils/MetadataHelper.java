@@ -15,9 +15,9 @@ import uk.gov.justice.services.messaging.Metadata;
 import java.io.StringReader;
 import java.util.Optional;
 
-import jakarta.json.JsonObject;
-import jakarta.json.JsonObjectBuilder;
-import jakarta.json.JsonReader;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonReader;
 
 public class MetadataHelper {
 

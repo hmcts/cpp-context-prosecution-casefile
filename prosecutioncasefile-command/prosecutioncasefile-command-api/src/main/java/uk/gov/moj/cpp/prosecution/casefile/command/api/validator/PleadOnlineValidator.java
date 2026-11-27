@@ -7,7 +7,7 @@ import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
-import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.drools.core.util.StringUtils.isEmpty;
 import static uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.CaseStatus.COMPLETED;
 import static uk.gov.moj.cpp.prosecution.casefile.plea.json.schemas.CaseStatus.REFERRED_FOR_COURT_HEARING;
 
@@ -26,7 +26,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import jakarta.json.JsonObject;
+import javax.json.JsonObject;
 
 public class PleadOnlineValidator {
 
@@ -69,7 +69,7 @@ public class PleadOnlineValidator {
         return financialMeans == null ||
                 financialMeans.getBenefits() == null ||
                 financialMeans.getIncome() == null ||
-                isBlank(financialMeans.getEmploymentStatus());
+                isEmpty(financialMeans.getEmploymentStatus());
     }
 
     private static boolean hasEmptyLegalEntityFinancialMeans(final LegalEntityFinancialMeans financialMeans) {

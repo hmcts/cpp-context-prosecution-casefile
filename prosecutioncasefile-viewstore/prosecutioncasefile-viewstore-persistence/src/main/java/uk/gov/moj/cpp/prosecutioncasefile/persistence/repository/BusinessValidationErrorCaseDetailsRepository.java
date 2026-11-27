@@ -5,35 +5,16 @@ import uk.gov.moj.cpp.prosecutioncasefile.persistence.entity.BusinessValidationE
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import org.apache.deltaspike.data.api.EntityRepository;
+import org.apache.deltaspike.data.api.Repository;
 
-@ApplicationScoped
-public class BusinessValidationErrorCaseDetailsRepository {
+@Repository
+public interface BusinessValidationErrorCaseDetailsRepository extends
+        EntityRepository<BusinessValidationErrorCaseDetails, UUID> {
 
-    @PersistenceContext(unitName = "prosecutioncasefile-persistence-unit")
-    EntityManager entityManager;
+    List<BusinessValidationErrorCaseDetails> findByCaseId(final UUID caseId);
 
-    public BusinessValidationErrorCaseDetails findBy(final UUID id) {
-        return entityManager.find(BusinessValidationErrorCaseDetails.class, id);
-    }
+    void deleteByCaseId(final UUID caseId);
 
-    public List<BusinessValidationErrorCaseDetails> findByCaseId(final UUID caseId) {
-        return entityManager.createQuery(
-                        "SELECT e FROM BusinessValidationErrorCaseDetails e WHERE e.caseId = :caseId",
-                        BusinessValidationErrorCaseDetails.class)
-                .setParameter("caseId", caseId)
-                .getResultList();
-    }
 
-    public void deleteByCaseId(final UUID caseId) {
-        entityManager.createQuery("DELETE FROM BusinessValidationErrorCaseDetails e WHERE e.caseId = :caseId")
-                .setParameter("caseId", caseId)
-                .executeUpdate();
-    }
-
-    public BusinessValidationErrorCaseDetails save(final BusinessValidationErrorCaseDetails entity) {
-        return entityManager.merge(entity);
-    }
 }

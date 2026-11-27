@@ -31,7 +31,7 @@ import uk.gov.moj.cps.prosecutioncasefile.domain.event.SjpProsecutionReceivedWit
 
 import java.util.UUID;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 @ServiceComponent(EVENT_PROCESSOR)
 public class SjpProsecutionProcessor {

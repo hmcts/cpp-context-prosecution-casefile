@@ -11,7 +11,7 @@ import uk.gov.justice.services.messaging.Metadata;
 import uk.gov.moj.cpp.prosecutioncasefile.command.handler.RecordDecisionToReferCaseForCourtHearingSaved;
 import uk.gov.moj.cpp.resulting.event.PublicDecisionToReferCaseForCourtHearingSaved;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 @ServiceComponent(EVENT_PROCESSOR)
 public class ResultingPublicEventProcessor {

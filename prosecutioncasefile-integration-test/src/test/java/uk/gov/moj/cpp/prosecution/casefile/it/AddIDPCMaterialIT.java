@@ -38,7 +38,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
-import jakarta.json.JsonObject;
+import javax.json.JsonObject;
 
 import com.google.common.collect.ImmutableMap;
 import org.json.JSONObject;

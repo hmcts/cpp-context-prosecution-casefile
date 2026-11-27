@@ -18,7 +18,7 @@ import uk.gov.moj.cps.prosecutioncasefile.domain.event.CaseCreatedSuccessfullyWi
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.ProsecutionSubmissionSucceeded;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.ProsecutionSubmissionSucceededWithWarnings;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 @ServiceComponent(EVENT_PROCESSOR)
 public class CaseCreatedEventProcessor {

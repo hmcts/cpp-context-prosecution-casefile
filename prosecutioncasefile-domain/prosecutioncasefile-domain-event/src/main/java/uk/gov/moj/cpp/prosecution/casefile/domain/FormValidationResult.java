@@ -6,7 +6,7 @@ import uk.gov.moj.cps.prosecutioncasefile.domain.event.SubmissionStatus;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.json.JsonObject;
+import javax.json.JsonObject;
 
 import org.apache.commons.collections.CollectionUtils;
 

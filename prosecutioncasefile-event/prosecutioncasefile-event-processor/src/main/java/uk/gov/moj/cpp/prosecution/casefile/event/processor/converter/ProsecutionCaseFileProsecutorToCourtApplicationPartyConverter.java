@@ -17,7 +17,7 @@ import uk.gov.moj.cpp.prosecution.casefile.json.schemas.ProsecutorsReferenceData
 import uk.gov.moj.cpp.prosecution.casefile.service.ReferenceDataQueryService;
 
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 public class ProsecutionCaseFileProsecutorToCourtApplicationPartyConverter implements DualParameterisedConverter<Prosecutor, CourtApplicationParty, ParamsVO, Metadata> {
 

@@ -1,7 +1,7 @@
 package uk.gov.moj.cpp.prosecution.casefile.it;
 
 
-import org.junit.jupiter.api.AfterAll;
+import org.junit.AfterClass;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,6 @@ import static uk.gov.moj.cpp.prosecution.casefile.helper.EventSelector.EVENT_SEL
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.assertErrorsExpected;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.getCustomComparator;
 import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.queryAndVerifyCaseErrors;
-import static uk.gov.moj.cpp.prosecution.casefile.helper.ValidationErrorHelper.queryAndVerifyCaseErrorsWithCaseLevelErrors;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubGetCaseMarkersWithCode;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubGetOrganisationUnitWithNotFound;
 import static uk.gov.moj.cpp.prosecution.casefile.stub.ReferenceDataStub.stubGetOrganisationUnitWithOneCourtroom;
@@ -61,7 +60,7 @@ public class ValidationErrorForNoProsecutorAndOrganisationUnitIT extends BaseIT 
         stubGetOrganisationUnitWithNotFound();
     }
 
-    @AfterAll
+    @AfterClass
     public static void resetProsecutorAndOrganisationUnit() {
         stubGetOrganisationUnits();
     }
@@ -98,7 +97,7 @@ public class ValidationErrorForNoProsecutorAndOrganisationUnitIT extends BaseIT 
         assertErrorsExpected("expected/case_validation_error_problems.json", privateEvent2.get());
 
         final String expectedErrorsPayload = readFile("expected/expected_case_errors.json");
-        queryAndVerifyCaseErrorsWithCaseLevelErrors(caseId, expectedErrorsPayload, getCustomComparator(caseId.toString(), "B", "2022-04-04", OFFENCE_ID,
+        queryAndVerifyCaseErrors(caseId, expectedErrorsPayload, getCustomComparator(caseId.toString(), "B", "2022-04-04", OFFENCE_ID,
                 ERROR_LIST.toArray(new String[0])));
 
 
@@ -163,7 +162,7 @@ public class ValidationErrorForNoProsecutorAndOrganisationUnitIT extends BaseIT 
         assertErrorsExpected("expected/case_validation_error_problems.json", privateEvent2.get());
 
         final String expectedErrorsPayload = readFile("expected/expected_case_errors_with_invalid_court_hearing_location.json");
-        queryAndVerifyCaseErrorsWithCaseLevelErrors(caseId, expectedErrorsPayload, getCustomComparator(caseId.toString(), "B", "2022-04-04", OFFENCE_ID,
+        queryAndVerifyCaseErrors(caseId, expectedErrorsPayload, getCustomComparator(caseId.toString(), "B", "2022-04-04", OFFENCE_ID,
                 ERROR_LIST.toArray(new String[0])));
 
     }

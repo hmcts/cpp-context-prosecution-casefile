@@ -12,7 +12,7 @@ import uk.gov.moj.cps.prosecutioncasefile.domain.event.SjpProsecutionUpdateOffen
 
 import java.util.UUID;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 @ServiceComponent(EVENT_LISTENER)
 public class SjpProsecutionUpdateOffenceCodeListener {

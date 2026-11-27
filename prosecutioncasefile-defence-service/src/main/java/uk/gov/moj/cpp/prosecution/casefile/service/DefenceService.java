@@ -2,7 +2,7 @@ package uk.gov.moj.cpp.prosecution.casefile.service;
 
 import java.util.UUID;
 
-import jakarta.json.JsonObject;
+import javax.json.JsonObject;
 
 public interface DefenceService {
 

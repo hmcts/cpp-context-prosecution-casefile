@@ -10,7 +10,7 @@ import uk.gov.moj.cps.prosecutioncasefile.domain.event.SjpProsecutionReceivedWit
 import java.util.Collections;
 import java.util.Set;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 
 public class ProsecutionReceivedWithWarningsToCase implements Converter<SjpProsecutionReceivedWithWarnings, CaseDetails> {

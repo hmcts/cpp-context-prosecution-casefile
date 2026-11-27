@@ -13,7 +13,7 @@ import uk.gov.moj.cpp.prosecutioncasefile.persistence.repository.CaseDetailsRepo
 import uk.gov.moj.cpp.prosecutioncasefile.persistence.repository.DefendantRepository;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.SjpProsecutionReceived;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 @ServiceComponent(EVENT_LISTENER)
 public class SjpProsecutionReceivedListener {
@@ -42,7 +42,7 @@ public class SjpProsecutionReceivedListener {
         businessValidationErrorCaseDetailsRepository.deleteByCaseId(caseDetails.getCaseId());
         final CaseDetails existingCase = caseDetailsRepository.findBy(caseDetails.getCaseId());
 
-        // Remove existing case and children before re-saving to avoid stale child record conflicts
+        // Deltaspike bug - It can't update existing child records
         if (existingCase != null){
             existingCase.getDefendants().stream().forEach(defendant -> defendantRepository.remove(defendant));
             caseDetailsRepository.remove(existingCase);

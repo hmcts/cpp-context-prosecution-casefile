@@ -30,7 +30,7 @@ import uk.gov.moj.cps.prosecutioncasefile.command.api.PleadOnlinePcqVisited;
 
 import java.util.UUID;
 
-import jakarta.json.JsonObject;
+import javax.json.JsonObject;
 
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;

@@ -14,9 +14,6 @@ public class GroupProsecutionList {
 
     private Channel channel;
 
-    public GroupProsecutionList() {
-    }
-
     public GroupProsecutionList(final List<GroupProsecutionWithReferenceData> groupProsecutionWithReferenceDataList) {
         if(groupProsecutionWithReferenceDataList != null) {
             this.groupProsecutionWithReferenceDataList = Collections.synchronizedList(groupProsecutionWithReferenceDataList);

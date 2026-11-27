@@ -27,8 +27,8 @@ import uk.gov.moj.cps.prosecutioncasefile.domain.event.SubmitApplicationAccepted
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.SubmitApplicationValidationFailed;
 import uk.gov.moj.cps.prosecutioncasefile.domain.event.SummonsApplicationRejected;
 
-import jakarta.inject.Inject;
-import jakarta.json.JsonObjectBuilder;
+import javax.inject.Inject;
+import javax.json.JsonObjectBuilder;
 import java.util.UUID;
 
 @ServiceComponent(EVENT_PROCESSOR)

@@ -16,7 +16,7 @@ import uk.gov.moj.cpp.systemidmapper.client.SystemIdMapping;
 import java.util.Optional;
 import java.util.UUID;
 
-import jakarta.inject.Inject;
+import javax.inject.Inject;
 
 import org.apache.commons.text.RandomStringGenerator;
 

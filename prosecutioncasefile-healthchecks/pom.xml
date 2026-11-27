@@ -3,7 +3,7 @@
     <parent>
         <artifactId>prosecutioncasefile-parent</artifactId>
         <groupId>uk.gov.moj.cpp.prosecution.casefile</groupId>
-        <version>25.0.107-LIBRA1-SNAPSHOT</version>
+        <version>17.0.107-LIBRA1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -11,8 +11,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>jakarta.platform</groupId>
-            <artifactId>jakarta.jakartaee-api</artifactId>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
